@@ -1,34 +1,45 @@
-﻿using System;
+﻿using GoblinFramework.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Common
+namespace GoblinFramework.Core
 {
     /// <summary>
     /// Goblin 对象，框架基础对象
     /// </summary>
     internal abstract class Goblin
     {
+        internal GameEngineEntity GameEngine;
+
         /// <summary>
         /// 创建一个 Goblin 对象
         /// </summary>
-        public virtual void Create(){ OnCreate(); }
+        /// <param name="goblin"></param>
+        internal virtual void Create(Goblin goblin)
+        {
+            this.GameEngine = goblin.GameEngine;
+            OnCreate();
+        }
 
         /// <summary>
         /// 销毁一个 Goblin 对象
         /// </summary>
-        public virtual void Destroy() { OnDestroy(); }
+        internal virtual void Destroy()
+        {
+            OnDestroy();
+        }
 
         /// <summary>
         /// 创建 Goblin 回调
         /// </summary>
-        public abstract void OnCreate();
+        protected abstract void OnCreate();
 
         /// <summary>
         /// 销毁 Goblin 回调
         /// </summary>
-        public abstract void OnDestroy();
+        protected abstract void OnDestroy();
     }
 }
