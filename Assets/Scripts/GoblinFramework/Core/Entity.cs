@@ -8,6 +8,6 @@ namespace GoblinFramework.Core
 {
     internal class Entity : Comp
     {
-        //protected int EntityID { get; set; }
+
     }
 }

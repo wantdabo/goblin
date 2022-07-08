@@ -17,16 +17,16 @@ public class Shell : MonoBehaviour
 
     private void Update()
     {
-        GameEngine.Location.EngineTick.Update(Time.deltaTime);
+        GameEngine.EngineTick.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        GameEngine.Location.EngineTick.LateUpdate(Time.deltaTime);
+        GameEngine.EngineTick.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        GameEngine.Location.EngineTick.FixedUpdate(Time.fixedDeltaTime);
+        GameEngine.EngineTick.FixedUpdate(Time.fixedDeltaTime);
     }
 }
