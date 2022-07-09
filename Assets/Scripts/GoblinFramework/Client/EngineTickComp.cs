@@ -49,20 +49,20 @@ namespace GoblinFramework.Client.Comps
 
         public void Update(float tick)
         {
-            if (0 > updates.Count) { return; }
-            foreach (var update in updates) { update.Update(tick); }
+            if (0 > updates.Count) return;
+            foreach (var update in updates) update.Update(tick);
         }
 
         public void LateUpdate(float tick)
         {
-            if (0 > lateUpdates.Count) { return; }
-            foreach (var lateUpdate in lateUpdates) { lateUpdate.LateUpdate(tick); }
+            if (0 > lateUpdates.Count) return;
+            foreach (var lateUpdate in lateUpdates) lateUpdate.LateUpdate(tick);
         }
 
         public void FixedUpdate(float tick)
         {
-            if (0 > fixedUpdates.Count) { return; }
-            foreach (var fixedUpdate in fixedUpdates) { fixedUpdate.FixedUpdate(tick); }
+            if (0 > fixedUpdates.Count) return;
+            foreach (var fixedUpdate in fixedUpdates) fixedUpdate.FixedUpdate(tick);
         }
     }
 }

@@ -8,23 +8,27 @@ namespace GoblinFramework.Core
 {
     internal abstract class Comp : Goblin
     {
-        private List<Comp> comps = null;
+        private List<Comp> compList = null;
+        private Dictionary<string, List<Comp>> compDict = new Dictionary<string, List<Comp>>();
 
         protected override void OnCreate()
         {
-            comps = new List<Comp>();
+            compList = new List<Comp>();
         }
 
         protected override void OnDestroy()
         {
-            foreach (var comp in comps) RmvComp(comp);
-            comps.Clear();
-            comps = null;
+            foreach (var comp in compList) RmvComp(comp);
+            compList.Clear();
+            compList = null;
+
+            compDict.Clear();
+            compDict = null;
         }
 
         internal List<T> GetComp<T>() where T : Comp
         {
-            if (null == comps) throw new Exception("comps is null.");
+            if (null == compList) throw new Exception("comps is null.");
 
             return null;
         }
@@ -32,7 +36,15 @@ namespace GoblinFramework.Core
         internal T AddComp<T>() where T : Comp, new()
         {
             T comp = new T();
-            if (comp is Entity) throw new Exception("plz don't add entity to entity.");
+
+            if (false == compDict.TryGetValue(nameof(comp), out List<Comp> comps))
+            {
+                comps = new List<Comp>();
+                compDict.Add(nameof(comp), comps);
+            }
+            comps.Add(comp);
+            compList.Add(comp);
+
             comp.Create(this);
 
             return comp;
@@ -40,14 +52,15 @@ namespace GoblinFramework.Core
 
         internal void RmvComp(Comp comp)
         {
-            if (false == comps.Contains(comp)) throw new Exception("donot has comp in this entity.");
             comp.Destroy();
-            comps.Remove(comp);
+
+            if (compDict.TryGetValue(nameof(comp), out List<Comp> comps)) comps.Remove(comp);
+            compList.Remove(comp);
         }
 
         internal void RmvComp<T>()
         {
-            for (int i = comps.Count; i > 0; i--) if (comps[i] is T) RmvComp(comps[i]);
+            if (compDict.TryGetValue(nameof(T), out List<Comp> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
         }
     }
 }

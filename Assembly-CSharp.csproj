@@ -56,14 +56,13 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GoblinFramework\Common\GameEngineEntity.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\GameEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\EngineTickComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Core\Entity.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Comps\EngineTickComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Comps\GameRes\GameResComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Comps\GameRes\YooGameResComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

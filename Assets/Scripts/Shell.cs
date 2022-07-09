@@ -6,27 +6,27 @@ using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
-    internal static GameEngineEntity GameEngine;
+    internal static GameEngineComp Engine;
 
     private void Start()
     {
-        GameEngine = new GameEngineEntity();
-        GameEngine.GameEngine = GameEngine;
-        GameEngine.Create(GameEngine);
+        Engine = new GameEngineComp();
+        Engine.Engine = Engine;
+        Engine.Create(Engine);
     }
 
     private void Update()
     {
-        GameEngine.EngineTick.Update(Time.deltaTime);
+        Engine.EngineTick.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        GameEngine.EngineTick.LateUpdate(Time.deltaTime);
+        Engine.EngineTick.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        GameEngine.EngineTick.FixedUpdate(Time.fixedDeltaTime);
+        Engine.EngineTick.FixedUpdate(Time.fixedDeltaTime);
     }
 }

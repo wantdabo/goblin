@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Common
 {
-    internal class GameEngineEntity : Entity
+    internal class GameEngineComp : Comp
     {
         internal EngineTickComp EngineTick = null;
         internal GameResComp GameRes = null;

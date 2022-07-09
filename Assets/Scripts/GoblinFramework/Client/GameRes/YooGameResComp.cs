@@ -12,6 +12,16 @@ namespace GoblinFramework.Client.Comps.GameRes
     /// </summary>
     internal class YooGameResComp : GameResComp
     {
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
         internal override void LoadAssetAsync<T>(string resName, Action<T> callback)
         {
             throw new NotImplementedException();

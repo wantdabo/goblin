@@ -12,7 +12,7 @@ namespace GoblinFramework.Core
     /// </summary>
     internal abstract class Goblin
     {
-        internal GameEngineEntity GameEngine;
+        internal GameEngineComp Engine;
 
         /// <summary>
         /// 创建一个 Goblin 对象
@@ -20,7 +20,7 @@ namespace GoblinFramework.Core
         /// <param name="goblin"></param>
         internal virtual void Create(Goblin goblin)
         {
-            this.GameEngine = goblin.GameEngine;
+            this.Engine = goblin.Engine;
             OnCreate();
         }
 
