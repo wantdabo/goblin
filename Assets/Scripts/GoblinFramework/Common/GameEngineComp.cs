@@ -12,13 +12,13 @@ namespace GoblinFramework.Common
 {
     internal class GameEngineComp : Comp
     {
-        internal EngineTickComp EngineTick = null;
+        internal ClientTickComp EngineTick = null;
         internal GameResComp GameRes = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            EngineTick = AddComp<EngineTickComp>();
+            EngineTick = AddComp<ClientTickComp>();
             GameRes = AddComp<YooGameResComp>();
         }
 

@@ -22,7 +22,7 @@ namespace GoblinFramework.Client.Comps
     /// </summary>
     internal interface IFixedUpdate { public void FixedUpdate(float tick); }
 
-    internal class EngineTickComp : Comp, IUpdate, ILateUpdate, IFixedUpdate
+    internal class ClientTickComp : ClientComp
     {
         private List<IUpdate> updates = null;
         private List<ILateUpdate> lateUpdates = null;
@@ -46,6 +46,13 @@ namespace GoblinFramework.Client.Comps
             fixedUpdates.Clear();
             fixedUpdates = null;
         }
+
+        public void AddUpdate(IUpdate update) { updates.Add(update); }
+        public void RmvUpdate(IUpdate update) { updates.Remove(update); }
+        public void AddLateUpdate(ILateUpdate lateUpdate) { lateUpdates.Add(lateUpdate); }
+        public void RmvLateUpdate(ILateUpdate lateUpdate) { lateUpdates.Remove(lateUpdate); }
+        public void AddFixedUpdate(IFixedUpdate fixedUpdate) { fixedUpdates.Add(fixedUpdate); }
+        public void RmvFixedUpdate(IFixedUpdate fixedUpdate) { fixedUpdates.Remove(fixedUpdate); }
 
         public void Update(float tick)
         {

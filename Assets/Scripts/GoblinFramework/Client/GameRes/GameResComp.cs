@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.Comps.GameRes
 {
-    internal abstract class GameResComp : Comp
+    internal abstract class GameResComp : ClientComp
     {
         internal abstract void LoadAssetAsync<T>(string resName, Action<T> callback) where T : UnityEngine.Object;
         internal abstract void LoadAssetSync<T>(string resName, Action<T> callback) where T : UnityEngine.Object;

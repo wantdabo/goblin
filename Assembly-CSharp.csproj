@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{D8AAC7AF-45DA-1FE2-19D2-E5144D87BA76}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -58,11 +59,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Common\GameEngineComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\EngineTickComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\ClientTickComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\ClientComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
