@@ -8,12 +8,11 @@ namespace GoblinFramework.Core
 {
     public abstract class Comp : Goblin
     {
-        private List<Comp> compList = null;
+        private List<Comp> compList = new List<Comp>();
         private Dictionary<string, List<Comp>> compDict = new Dictionary<string, List<Comp>>();
 
         protected override void OnCreate()
         {
-            compList = new List<Comp>();
         }
 
         protected override void OnDestroy()

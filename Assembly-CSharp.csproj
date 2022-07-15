@@ -56,17 +56,17 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseCell.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Common\GameEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\ClientTickComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseCell.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseWindow.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameUI.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseWindow.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\ClientComp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -634,6 +634,9 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.33f1c2\Editor\Data\NetStandard\compat\2.0.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
@@ -646,13 +649,13 @@
       <Project>{7B61C203-76B5-0E7E-9727-2A2D1B0A7565}</Project>
       <Name>YooAsset.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="YooAsset.csproj">
-      <Project>{34813E10-62EE-A55F-AD6B-C7C8E2E2CEDC}</Project>
-      <Name>YooAsset</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
       <Project>{EB269544-9C98-F422-B088-4265F255A903}</Project>
       <Name>Unity.VisualStudio.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="YooAsset.csproj">
+      <Project>{34813E10-62EE-A55F-AD6B-C7C8E2E2CEDC}</Project>
+      <Name>YooAsset</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

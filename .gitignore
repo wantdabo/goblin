@@ -2,3 +2,6 @@ Library
 Logs
 obj
 Temp
+Bundles
+Assets/StreamingAssets/
+Assets/StreamingAssets.meta

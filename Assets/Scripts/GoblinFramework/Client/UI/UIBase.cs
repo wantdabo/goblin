@@ -9,12 +9,7 @@ namespace GoblinFramework.Client.UI
     public abstract class UIBase : ClientComp
     {
         protected abstract string UIName { get; }
-        protected GameObject gameObject;
-
-        protected virtual void OnBuildUI() { }
-        protected virtual void OnBindEvent() { }
-        protected virtual void OnOpen() { }
-        protected virtual void OnClose() { }
+        public GameObject gameObject;
 
         public List<UIBaseCell> GetUICells<T>() where T : UIBaseCell
         {
@@ -43,5 +38,10 @@ namespace GoblinFramework.Client.UI
         {
             RmvComp<T>();
         }
+
+        protected virtual void OnBuildUI() { }
+        protected virtual void OnBindEvent() { }
+        protected virtual void OnOpen() { }
+        protected virtual void OnClose() { }
     }
 }

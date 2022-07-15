@@ -10,9 +10,12 @@ namespace GoblinFramework.Client.UI
 {
     public abstract class UIBaseWindow : UIBase
     {
-        protected abstract string UILayer { get; }
+        private UIState uiState = UIState.Free;
+        private int sorting = 0;
 
-        internal UIState uiState = UIState.Free;
+        public UIState UIState { get { return uiState; } private set { uiState = value; } }
+        public abstract UILayer UILayer { get; }
+        public int Sorting { get { return sorting; } set { sorting = value; } }
 
         protected override void OnCreate()
         {
@@ -22,33 +25,29 @@ namespace GoblinFramework.Client.UI
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            uiState = UIState.Free;
+            UIState = UIState.Free;
         }
 
-        public void Open()
+        public async void Open()
         {
-            //if (null == gameObject)
-            //{
-            //    Engine.GameRes.LoadAssetSync<GameObject>(UIName, (obj) =>
-            //    {
-            //        gameObject = GameObject.Instantiate(obj);
-            //        OnBuildUI();
-            //        OnBindEvent();
-            //        OnOpen();
-            //    });
-            //    uiState = UIState.Loading;
+            if (null == gameObject)
+            {
+                UIState = UIState.Loading;
+                gameObject = await Engine.GameRes.LoadAssetAsync<GameObject>(UIName);
+                gameObject.layer = LayerMask.NameToLayer(UILayer.ToString());
 
-            //    return;
-            //}
+                OnBuildUI();
+                OnBindEvent();
+            }
 
             OnOpen();
-            uiState = UIState.Open;
+            UIState = UIState.Open;
         }
 
         public void Close()
         {
             OnClose();
-            uiState = UIState.Close;
+            UIState = UIState.Close;
         }
     }
 }

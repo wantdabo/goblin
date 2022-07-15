@@ -6,10 +6,13 @@ using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
-    internal static GameEngineComp Engine;
+    public static Shell Instance;
+    public static GameEngineComp Engine;
 
     private void Start()
     {
+        Instance = this;
+
         Engine = new GameEngineComp();
         Engine.Engine = Engine;
         Engine.Create(Engine);
