@@ -10,19 +10,19 @@ namespace GoblinFramework.Client.Comps
     /// <summary>
     /// 对应 Unity Update
     /// </summary>
-    internal interface IUpdate { public void Update(float tick); }
+    public interface IUpdate { public void Update(float tick); }
 
     /// <summary>
     /// 对应 Unity LateUpdate
     /// </summary>
-    internal interface ILateUpdate { public void LateUpdate(float tick); }
+    public interface ILateUpdate { public void LateUpdate(float tick); }
 
     /// <summary>
     /// 对应 Unity FixedUpdate
     /// </summary>
-    internal interface IFixedUpdate { public void FixedUpdate(float tick); }
+    public interface IFixedUpdate { public void FixedUpdate(float tick); }
 
-    internal class ClientTickComp : ClientComp
+    public class ClientTickComp : ClientComp
     {
         private List<IUpdate> updates = null;
         private List<ILateUpdate> lateUpdates = null;

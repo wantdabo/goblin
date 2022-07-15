@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.Comps.GameRes
 {
-    internal abstract class GameResComp : ClientComp
+    public abstract class GameResComp : ClientComp
     {
-        internal abstract void LoadAssetAsync<T>(string resName, Action<T> callback) where T : UnityEngine.Object;
-        internal abstract void LoadAssetSync<T>(string resName, Action<T> callback) where T : UnityEngine.Object;
-        internal abstract void LoadRawFileAsync(string resName, Action<byte[]> callback);
-        internal abstract void LoadSceneASync(string resName, Action<Scene> callback);
+        public abstract Task<T> LoadAssetAsync<T>(string resName) where T : UnityEngine.Object;
+        public abstract T LoadAssetSync<T>(string resName) where T : UnityEngine.Object;
+        public abstract Task<byte[]> LoadRawFileAsync(string resName);
+        public abstract Task<Scene> LoadSceneASync(string resName);
     }
 }

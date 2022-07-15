@@ -10,15 +10,15 @@ namespace GoblinFramework.Core
     /// <summary>
     /// Goblin 对象，框架基础对象
     /// </summary>
-    internal abstract class Goblin
+    public abstract class Goblin
     {
-        internal GameEngineComp Engine;
+        public GameEngineComp Engine;
 
         /// <summary>
         /// 创建一个 Goblin 对象
         /// </summary>
         /// <param name="goblin"></param>
-        internal virtual void Create(Goblin goblin)
+        public virtual void Create(Goblin goblin)
         {
             this.Engine = goblin.Engine;
             OnCreate();
@@ -27,7 +27,7 @@ namespace GoblinFramework.Core
         /// <summary>
         /// 销毁一个 Goblin 对象
         /// </summary>
-        internal virtual void Destroy()
+        public virtual void Destroy()
         {
             OnDestroy();
         }

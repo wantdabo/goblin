@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client
 {
-    internal class ClientComp : Comp
+    public abstract class ClientComp : Comp
     {
         protected override void OnCreate()
         {

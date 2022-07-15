@@ -10,8 +10,9 @@ namespace GoblinFramework.Client.Comps.GameRes
     /// <summary>
     /// YooAsset 资源加载组件
     /// </summary>
-    internal class YooGameResComp : GameResComp
+    public class YooGameResComp : GameResComp
     {
+
         protected override void OnCreate()
         {
             base.OnCreate();
@@ -22,22 +23,22 @@ namespace GoblinFramework.Client.Comps.GameRes
             base.OnDestroy();
         }
 
-        internal override void LoadAssetAsync<T>(string resName, Action<T> callback)
+        public override Task<T> LoadAssetAsync<T>(string resName)
         {
             throw new NotImplementedException();
         }
 
-        internal override void LoadAssetSync<T>(string resName, Action<T> callback)
+        public override T LoadAssetSync<T>(string resName)
         {
             throw new NotImplementedException();
         }
 
-        internal override void LoadRawFileAsync(string resName, Action<byte[]> callback)
+        public override Task<byte[]> LoadRawFileAsync(string resName)
         {
             throw new NotImplementedException();
         }
 
-        internal override void LoadSceneASync(string resName, Action<Scene> callback)
+        public override Task<Scene> LoadSceneASync(string resName)
         {
             throw new NotImplementedException();
         }

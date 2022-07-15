@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Core
 {
-    internal abstract class Comp : Goblin
+    public abstract class Comp : Goblin
     {
         private List<Comp> compList = null;
         private Dictionary<string, List<Comp>> compDict = new Dictionary<string, List<Comp>>();
@@ -26,14 +26,14 @@ namespace GoblinFramework.Core
             compDict = null;
         }
 
-        internal List<T> GetComp<T>() where T : Comp
+        public virtual List<T> GetComp<T>() where T : Comp
         {
-            if (null == compList) throw new Exception("comps is null.");
+            if (compDict.TryGetValue(nameof(T), out List<Comp> comps)) return comps as List<T>;
 
             return null;
         }
 
-        internal T AddComp<T>() where T : Comp, new()
+        public virtual T AddComp<T>() where T : Comp, new()
         {
             T comp = new T();
 
@@ -50,7 +50,7 @@ namespace GoblinFramework.Core
             return comp;
         }
 
-        internal void RmvComp(Comp comp)
+        public virtual void RmvComp(Comp comp)
         {
             comp.Destroy();
 
@@ -58,7 +58,7 @@ namespace GoblinFramework.Core
             compList.Remove(comp);
         }
 
-        internal void RmvComp<T>()
+        public virtual void RmvComp<T>()
         {
             if (compDict.TryGetValue(nameof(T), out List<Comp> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
         }
