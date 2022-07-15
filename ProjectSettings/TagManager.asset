@@ -41,12 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: UIMainLayer
+  - name: UIMain
     uniqueID: 2455330387
     locked: 0
-  - name: UIAlertLayer
+  - name: UIAlert
     uniqueID: 997845605
     locked: 0
-  - name: UITopLayer
+  - name: UITop
     uniqueID: 4168467849
     locked: 0
