@@ -8,7 +8,7 @@ using static GoblinFramework.Client.UI.GameUI;
 
 namespace GoblinFramework.Client.UI
 {
-    public abstract class UIBaseWindow : UIBase
+    public abstract class UIBaseView : UIBase
     {
         private UIState uiState = UIState.Free;
         private int sorting = 0;

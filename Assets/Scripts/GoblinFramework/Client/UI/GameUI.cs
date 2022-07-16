@@ -53,7 +53,7 @@ namespace GoblinFramework.Client.UI
         }
 
         private Dictionary<UILayer, GameObject> uiLayerNodeDict = new Dictionary<UILayer, GameObject>();
-        private Dictionary<UILayer, Stack<UIBaseWindow>> windowStackDict = new Dictionary<UILayer, Stack<UIBaseWindow>>();
+        private Dictionary<UILayer, Stack<UIBaseView>> viewStackDict = new Dictionary<UILayer, Stack<UIBaseView>>();
         private void GenUILayerNode(UILayer layer)
         {
             var layerNode = new GameObject(layer.ToString());
@@ -75,26 +75,26 @@ namespace GoblinFramework.Client.UI
         }
 
         private int sortingSpacing = 10;
-        public T OpenWindow<T>() where T : UIBaseWindow, new()
+        public T OpenView<T>() where T : UIBaseView, new()
         {
-            var window = AddComp<T>();
+            var view = AddComp<T>();
 
             // 设置层级
-            if (uiLayerNodeDict.TryGetValue(window.UILayer, out var node)) window.gameObject.transform.SetParent(node.transform, true);
+            if (uiLayerNodeDict.TryGetValue(view.UILayer, out var node)) view.gameObject.transform.SetParent(node.transform, true);
 
-            if (windowStackDict.TryGetValue(window.UILayer, out var stack))
+            if (viewStackDict.TryGetValue(view.UILayer, out var stack))
             {
-                var topWindow = stack.Peek();
-                window.Sorting = (topWindow ?? window).Sorting + sortingSpacing;
-                stack.Push(window);
+                var topView = stack.Peek();
+                view.Sorting = (topView ?? view).Sorting + sortingSpacing;
+                stack.Push(view);
             }
 
-            return window;
+            return view;
         }
 
-        public void CloseWindow(UIBaseWindow window) 
+        public void CloseView(UIBaseView view) 
         {
-            if (false == windowStackDict.TryGetValue(window.UILayer, out var stack)) return;
+            if (false == viewStackDict.TryGetValue(view.UILayer, out var stack)) return;
         }
     }
 }
