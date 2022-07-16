@@ -50,13 +50,16 @@ namespace GoblinFramework.Client.UI
             base.OnDestroy();
         }
 
-        private Dictionary<UILayer, GameObject> uiLayerNodeDict = new Dictionary<UILayer, GameObject>();
-        private Dictionary<UILayer, Stack<UIBaseView>> viewStackDict = new Dictionary<UILayer, Stack<UIBaseView>>();
+        private Dictionary<UILayer, GameObject> layerNodeDict = new Dictionary<UILayer, GameObject>();
         private void GenUILayerNode(UILayer layer)
         {
+            if (layerNodeDict.ContainsKey(layer)) return;
+
             var layerNode = new GameObject(layer.ToString());
-            uiLayerNodeDict.Add(layer, layerNode);
             layerNode.transform.SetParent(UIRoot.transform, true);
+            
+            layerNodeDict.Add(layer, layerNode);
+            //viewStackDict.Add(layer, new Stack<UIBaseView>());
 
             // 设定 RectTransform
             var rtf = layerNode.AddComponent<RectTransform>();
@@ -72,30 +75,33 @@ namespace GoblinFramework.Client.UI
             cg.sortingLayerName = layer.ToString();
         }
 
+        public GameObject GetLayerNode(UILayer layer) 
+        {
+            layerNodeDict.TryGetValue(layer, out GameObject layerNode);
+
+            return layerNode;
+        }
+
+        /// <summary>
+        /// UI 当前最顶 Sorting
+        /// </summary>
+        private const int sorting = 0;
         /// <summary>
         /// UI 之间 Sorting 间距
         /// </summary>
-        private int sortingSpacing = 10;
+        private const int sortingSpacing = 10;
         public T OpenView<T>() where T : UIBaseView, new()
         {
             var view = AddComp<T>();
-
-            // 设置层级
-            if (uiLayerNodeDict.TryGetValue(view.UILayer, out var node)) view.gameObject.transform.SetParent(node.transform, true);
-
-            if (viewStackDict.TryGetValue(view.UILayer, out var stack))
-            {
-                var topView = stack.Peek();
-                view.Sorting = (topView ?? view).Sorting + sortingSpacing;
-                stack.Push(view);
-            }
+            view.Sorting = sorting + sortingSpacing;
+            view.Open();
 
             return view;
         }
 
         public void CloseView(UIBaseView view) 
         {
-            if (false == viewStackDict.TryGetValue(view.UILayer, out var stack)) return;
+            view.Close();
         }
     }
 }

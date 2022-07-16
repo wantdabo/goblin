@@ -19,9 +19,9 @@ namespace GoblinFramework.Core
         protected override void OnCreate()
         {
             base.OnCreate();
-            GameRes = AddComp<YooGameResComp>();
             CETick = AddComp<CETickComp>();
             GameUI = AddComp<GameUI>();
+            GameRes = AddComp<YooGameResComp>();
         }
 
         protected override void OnDestroy()

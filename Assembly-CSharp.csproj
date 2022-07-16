@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CETickComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\LobbyView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

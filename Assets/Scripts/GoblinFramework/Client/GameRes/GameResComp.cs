@@ -14,12 +14,12 @@ namespace GoblinFramework.Client.GameRes
         protected override void OnCreate()
         {
             base.OnCreate();
-
             Location = AddComp<GameResLocationComp>();
         }
 
         public abstract Task<T> LoadAssetAsync<T>(string resName) where T : Object;
         public abstract T LoadAssetSync<T>(string resName) where T : Object;
+        public abstract Task<byte[]> LoadRawFileAsync(string resName);
         public abstract Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
     }
 }

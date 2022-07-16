@@ -52,6 +52,14 @@ namespace GoblinFramework.Client.GameRes
             return handle.AssetObject as T;
         }
 
+        public override async Task<byte[]> LoadRawFileAsync(string resName)
+        {
+            var handle = YooAssets.GetRawFileAsync(resName);
+            await handle.Task;
+
+            return handle.LoadFileData();
+        }
+
         public override async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             var handle = YooAssets.LoadSceneAsync(resName, loadSceneMode);

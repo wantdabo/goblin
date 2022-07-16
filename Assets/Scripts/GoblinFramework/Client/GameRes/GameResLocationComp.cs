@@ -17,9 +17,9 @@ namespace GoblinFramework.Client.GameRes
         /// </summary>
         /// <param name="resName">资源地址</param>
         /// <returns>GameObject</returns>
-        public async Task<GameObject> LoadUIPrefabAsync(string resName)
+        public async Task<GameObject> LoadUIPrefabAsync(string resName, Transform parent = null)
         {
-            return GameObject.Instantiate(await Engine.GameRes.LoadAssetAsync<GameObject>(prefabsPath + resName));
+            return GameObject.Instantiate(await Engine.GameRes.LoadAssetAsync<GameObject>(prefabsPath + resName), parent ?? Engine.GameUI.UIRoot.transform);
         }
 
         /// <summary>

@@ -10,12 +10,28 @@ namespace GoblinFramework.Client.UI
 {
     public abstract class UIBaseView : UIBase
     {
-        private UIState uiState = UIState.Free;
-        private int sorting = 0;
-
-        public UIState UIState { get { return uiState; } private set { uiState = value; } }
         public abstract UILayer UILayer { get; }
-        public int Sorting { get { return sorting; } set { sorting = value; } }
+
+        private UIState uiState = UIState.Free;
+        public UIState UIState { get { return uiState; } private set { uiState = value; } }
+
+        private int sorting = 0;
+        public int Sorting
+        {
+            get
+            {
+                return sorting;
+            }
+            set
+            {
+                sorting = value;
+
+                if (null == canvas) return;
+                canvas.sortingOrder = sorting;
+            }
+        }
+
+        private Canvas canvas;
 
         protected override void OnCreate()
         {
@@ -33,8 +49,10 @@ namespace GoblinFramework.Client.UI
             if (null == gameObject)
             {
                 UIState = UIState.Loading;
-                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIName);
-                gameObject.layer = LayerMask.NameToLayer(UILayer.ToString());
+                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
+
+                canvas = gameObject.GetComponent<Canvas>();
+                Sorting = sorting;
 
                 OnBuildUI();
                 OnBindEvent();

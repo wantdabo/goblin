@@ -8,7 +8,7 @@ namespace GoblinFramework.Client.UI
 {
     public abstract class UIBase : ClientComp
     {
-        protected abstract string UIName { get; }
+        protected abstract string UIRes { get; }
         public GameObject gameObject;
 
         public List<UIBaseCell> GetUICells<T>() where T : UIBaseCell
