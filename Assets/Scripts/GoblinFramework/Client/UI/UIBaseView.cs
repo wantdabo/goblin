@@ -33,7 +33,7 @@ namespace GoblinFramework.Client.UI
             if (null == gameObject)
             {
                 UIState = UIState.Loading;
-                gameObject = await Engine.GameRes.LoadAssetAsync<GameObject>(UIName);
+                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIName);
                 gameObject.layer = LayerMask.NameToLayer(UILayer.ToString());
 
                 OnBuildUI();

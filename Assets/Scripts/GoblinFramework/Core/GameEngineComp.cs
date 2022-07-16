@@ -1,6 +1,5 @@
 ﻿using GoblinFramework.Client;
-using GoblinFramework.Client.Comps;
-using GoblinFramework.Client.Comps.GameRes;
+using GoblinFramework.Client.GameRes;
 using GoblinFramework.Client.UI;
 using GoblinFramework.Core;
 using System;
@@ -9,25 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Common
+namespace GoblinFramework.Core
 {
     public class GameEngineComp : Comp
     {
-        public ClientTickComp EngineTick = null;
+        public CETickComp CETick = null;
         public GameResComp GameRes = null;
         public GameUI GameUI = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            EngineTick = AddComp<ClientTickComp>();
-            GameUI = AddComp<GameUI>();
             GameRes = AddComp<YooGameResComp>();
+            CETick = AddComp<CETickComp>();
+            GameUI = AddComp<GameUI>();
         }
 
         protected override void OnDestroy()
         {
-            EngineTick = null;
+            CETick = null;
             GameRes = null;
             base.OnDestroy();
         }

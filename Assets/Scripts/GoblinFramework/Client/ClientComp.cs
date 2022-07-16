@@ -1,5 +1,4 @@
-﻿using GoblinFramework.Client.Comps;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +13,16 @@ namespace GoblinFramework.Client
         {
             base.OnCreate();
 
-            if (this is IUpdate) Engine.EngineTick.AddUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.EngineTick.AddLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.EngineTick.AddFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) Engine.CETick.AddUpdate(this as IUpdate);
+            if (this is ILateUpdate) Engine.CETick.AddLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) Engine.CETick.AddFixedUpdate(this as IFixedUpdate);
         }
 
         protected override void OnDestroy()
         {
-            if (this is IUpdate) Engine.EngineTick.RmvUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.EngineTick.RmvLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.EngineTick.RmvFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) Engine.CETick.RmvUpdate(this as IUpdate);
+            if (this is ILateUpdate) Engine.CETick.RmvLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) Engine.CETick.RmvFixedUpdate(this as IFixedUpdate);
 
             base.OnDestroy();
         }

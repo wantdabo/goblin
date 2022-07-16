@@ -32,14 +32,12 @@ namespace GoblinFramework.Client.UI
         }
         #endregion
 
-        public GameObject UINode;
         public GameObject UIRoot;
         public Camera UICamrea;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            UINode = GameObject.Find("UI");
             UIRoot = GameObject.Find("UI/UIRoot");
             UICamrea = GameObject.Find("UI/UICamera")?.GetComponent<Camera>();
 
@@ -74,6 +72,9 @@ namespace GoblinFramework.Client.UI
             cg.sortingLayerName = layer.ToString();
         }
 
+        /// <summary>
+        /// UI 之间 Sorting 间距
+        /// </summary>
         private int sortingSpacing = 10;
         public T OpenView<T>() where T : UIBaseView, new()
         {

@@ -1,17 +1,25 @@
-﻿using GoblinFramework.Core;
-using System;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace GoblinFramework.Client.Comps.GameRes
+namespace GoblinFramework.Client.GameRes
 {
     public abstract class GameResComp : ClientComp
     {
-        public abstract Task<T> LoadAssetAsync<T>(string resName) where T : UnityEngine.Object;
-        public abstract T LoadAssetSync<T>(string resName) where T : UnityEngine.Object;
+        /// <summary>
+        /// 资源加载定位器，具体的加载在这里实现
+        /// </summary>
+        public GameResLocationComp Location;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+
+            Location = AddComp<GameResLocationComp>();
+        }
+
+        public abstract Task<T> LoadAssetAsync<T>(string resName) where T : Object;
+        public abstract T LoadAssetSync<T>(string resName) where T : Object;
         public abstract Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
     }
 }

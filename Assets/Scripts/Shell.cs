@@ -1,4 +1,3 @@
-using GoblinFramework.Common;
 using GoblinFramework.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,16 +19,16 @@ public class Shell : MonoBehaviour
 
     private void Update()
     {
-        Engine.EngineTick.Update(Time.deltaTime);
+        Engine.CETick.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.EngineTick.LateUpdate(Time.deltaTime);
+        Engine.CETick.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.EngineTick.FixedUpdate(Time.fixedDeltaTime);
+        Engine.CETick.FixedUpdate(Time.fixedDeltaTime);
     }
 }

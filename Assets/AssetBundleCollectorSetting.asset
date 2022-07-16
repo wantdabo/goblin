@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
-  EnableAddressable: 1
+  EnableAddressable: 0
   AutoCollectShaders: 1
   ShadersBundleName: myshaders
   Groups:
-  - GroupName: UIPrefabs
+  - GroupName: GameRes
     GroupDesc: 
     AssetTags: 
     ActiveRuleName: EnableGroup
     Collectors:
-    - CollectPath: Assets/GameRes/UIPrefabs
+    - CollectPath: Assets/GameRes
       CollectorType: 0
       AddressRuleName: AddressByCollectorAndFileName
       PackRuleName: PackDirectory
-      FilterRuleName: CollectPrefab
+      FilterRuleName: CollectAll
       AssetTags: 

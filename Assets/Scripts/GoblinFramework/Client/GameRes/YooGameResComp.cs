@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
-namespace GoblinFramework.Client.Comps.GameRes
+namespace GoblinFramework.Client.GameRes
 {
     /// <summary>
     /// YooAsset 资源加载组件
@@ -29,7 +27,7 @@ namespace GoblinFramework.Client.Comps.GameRes
             initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
             initParameters.VerifyLevel = EVerifyLevel.High;
 #endif
-            initParameters.LocationServices = new AddressLocationServices();
+            initParameters.LocationServices = new DefaultLocationServices("Assets/GameRes");
             var handle = YooAssets.InitializeAsync(initParameters);
             await handle.Task;
         }
