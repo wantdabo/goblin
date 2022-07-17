@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI
+namespace GoblinFramework.Client.UI.Base
 {
     public abstract class UIBaseCell : UIBase
     {

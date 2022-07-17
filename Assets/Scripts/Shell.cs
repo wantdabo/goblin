@@ -19,16 +19,16 @@ public class Shell : MonoBehaviour
 
     private void Update()
     {
-        Engine.CETick.Update(Time.deltaTime);
+        Engine.CTEngine.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.CETick.LateUpdate(Time.deltaTime);
+        Engine.CTEngine.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.CETick.FixedUpdate(Time.fixedDeltaTime);
+        Engine.CTEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 }

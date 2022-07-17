@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static GoblinFramework.Client.UI.GameUI;
+using static GoblinFramework.Client.UI.Common.GameUI;
 
-namespace GoblinFramework.Client.UI
+namespace GoblinFramework.Client.UI.Base
 {
     public abstract class UIBaseView : UIBase
     {
@@ -25,7 +25,6 @@ namespace GoblinFramework.Client.UI
             set
             {
                 sorting = value;
-
                 if (null == canvas) return;
                 canvas.sortingOrder = sorting;
             }
@@ -46,12 +45,12 @@ namespace GoblinFramework.Client.UI
 
         public async void Open()
         {
-            if (null == gameObject)
+            if (null == go)
             {
                 UIState = UIState.Loading;
-                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
+                go = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
 
-                canvas = gameObject.GetComponent<Canvas>();
+                canvas = go.GetComponent<Canvas>();
                 Sorting = sorting;
 
                 OnBuildUI();

@@ -56,20 +56,22 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseCell.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Lobby\LobbyView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\GameUI.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngineComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameUI.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\ClientComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\UIBaseView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\CETickComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\LobbyView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\ClockComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTickComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTEngineComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

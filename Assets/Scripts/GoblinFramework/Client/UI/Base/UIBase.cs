@@ -1,15 +1,19 @@
-﻿using System;
+﻿using GoblinFramework.Client.Common;
+using GoblinFramework.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-namespace GoblinFramework.Client.UI
+
+namespace GoblinFramework.Client.UI.Base
 {
-    public abstract class UIBase : ClientComp
+    public abstract class UIBase : Comp
     {
+        public GameObject go;
+
         protected abstract string UIRes { get; }
-        public GameObject gameObject;
 
         public List<UIBaseCell> GetUICells<T>() where T : UIBaseCell
         {
@@ -18,7 +22,7 @@ namespace GoblinFramework.Client.UI
 
         public UIBaseCell AddUICell<T>(string node) where T : UIBaseCell, new()
         {
-            return AddUICell<T>(gameObject.transform.Find(node).gameObject);
+            return AddUICell<T>(go.transform.Find(node).gameObject);
         }
 
         public UIBaseCell AddUICell<T>(GameObject node) where T : UIBaseCell, new()

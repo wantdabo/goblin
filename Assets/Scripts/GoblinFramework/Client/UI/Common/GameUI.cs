@@ -1,13 +1,19 @@
-﻿using System;
+﻿using GoblinFramework.Client.Common;
+using GoblinFramework.Client.UI.Base;
+using GoblinFramework.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI
+namespace GoblinFramework.Client.UI.Common
 {
-    public class GameUI : ClientComp
+    /// <summary>
+    /// 游戏 UI 组件
+    /// </summary>
+    public class GameUI : Comp
     {
         #region 枚举
         /// <summary>
@@ -59,7 +65,6 @@ namespace GoblinFramework.Client.UI
             layerNode.transform.SetParent(UIRoot.transform, true);
             
             layerNodeDict.Add(layer, layerNode);
-            //viewStackDict.Add(layer, new Stack<UIBaseView>());
 
             // 设定 RectTransform
             var rtf = layerNode.AddComponent<RectTransform>();
@@ -86,6 +91,7 @@ namespace GoblinFramework.Client.UI
         /// UI 当前最顶 Sorting
         /// </summary>
         private const int sorting = 0;
+
         /// <summary>
         /// UI 之间 Sorting 间距
         /// </summary>

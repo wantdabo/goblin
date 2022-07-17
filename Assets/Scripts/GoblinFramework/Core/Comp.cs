@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Core
 {
+    /// <summary>
+    /// 组件，核心思想类
+    /// </summary>
     public abstract class Comp : Goblin
     {
         private List<Comp> compList = new List<Comp>();
         private Dictionary<string, List<Comp>> compDict = new Dictionary<string, List<Comp>>();
+
+        protected Comp parent;
 
         protected override void OnCreate()
         {
@@ -45,6 +50,7 @@ namespace GoblinFramework.Core
             compList.Add(comp);
 
             comp.Create(this);
+            parent = this;
 
             return comp;
         }

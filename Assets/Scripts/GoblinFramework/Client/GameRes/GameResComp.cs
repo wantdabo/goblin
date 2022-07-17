@@ -1,10 +1,11 @@
 ﻿using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine;
+using GoblinFramework.Client.Common;
 
 namespace GoblinFramework.Client.GameRes
 {
-    public abstract class GameResComp : ClientComp
+    public abstract class GameResComp : CTickComp
     {
         /// <summary>
         /// 资源加载定位器，具体的加载在这里实现

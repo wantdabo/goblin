@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using YooAsset;
 
 namespace GoblinFramework.Client.GameRes
@@ -30,6 +32,8 @@ namespace GoblinFramework.Client.GameRes
             initParameters.LocationServices = new DefaultLocationServices("Assets/GameRes");
             var handle = YooAssets.InitializeAsync(initParameters);
             await handle.Task;
+
+            Engine.GameUI.OpenView<UI.Lobby.LobbyView>();
         }
 
         protected override void OnDestroy()
