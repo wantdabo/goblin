@@ -29,9 +29,9 @@ namespace GoblinFramework.Core
         protected override void OnDestroy()
         {
             CTEngine = null;
-            GameRes = null;
-            U3D = null;
             GameUI = null;
+            U3D = null;
+            GameRes = null;
             base.OnDestroy();
         }
     }
