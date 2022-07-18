@@ -64,7 +64,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\GameUI.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Common\GameEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DComp.cs" />
@@ -73,6 +73,9 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTickComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CGEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\FiniteStateMachine\FSMComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\GGEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\FiniteStateMachine\FSMState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

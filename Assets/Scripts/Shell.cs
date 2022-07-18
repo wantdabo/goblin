@@ -1,4 +1,4 @@
-using GoblinFramework.Common;
+using GoblinFramework.Core;
 using GoblinFramework.Client;
 using System.Collections;
 using System.Collections.Generic;
