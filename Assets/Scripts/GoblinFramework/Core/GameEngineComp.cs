@@ -10,29 +10,23 @@ using UnityEngine;
 
 namespace GoblinFramework.Core
 {
-    public class GameEngineComp : Comp
+    /// <summary>
+    /// 通用游戏引擎组件
+    /// </summary>
+    /// <typeparam name="E">细节的引擎组件</typeparam>
+    public class GameEngineComp<E> : Comp<E> where E : GameEngineComp<E>, new()
     {
-        public CTEngineComp CTEngine = null;
-        public GameResComp GameRes = null;
-        public U3DComp U3D = null;
-        public GameUI GameUI = null;
-
-        protected override void OnCreate()
+        /// <summary>
+        /// 创建一个游戏引擎
+        /// </summary>
+        /// <returns>游戏引擎组件</returns>
+        public static E CreateGameEngine() 
         {
-            base.OnCreate();
-            CTEngine = AddComp<CTEngineComp>();
-            GameUI = AddComp<GameUI>();
-            U3D = AddComp<U3DComp>();
-            GameRes = AddComp<YooGameResComp>();
-        }
+            E engine = new E();
+            engine.Engine = engine;
+            engine.Create();
 
-        protected override void OnDestroy()
-        {
-            CTEngine = null;
-            GameUI = null;
-            U3D = null;
-            GameRes = null;
-            base.OnDestroy();
+            return engine;
         }
     }
 }

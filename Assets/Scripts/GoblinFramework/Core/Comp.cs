@@ -9,12 +9,26 @@ namespace GoblinFramework.Core
     /// <summary>
     /// 组件，核心思想类
     /// </summary>
-    public abstract class Comp : Goblin
+    public abstract class Comp<E> : Goblin where E : GameEngineComp<E>, new()
     {
-        private List<Comp> compList = new List<Comp>();
-        private Dictionary<string, List<Comp>> compDict = new Dictionary<string, List<Comp>>();
+        /// <summary>
+        /// 组件列表
+        /// </summary>
+        private List<Comp<E>> compList = new List<Comp<E>>();
+        /// <summary>
+        /// 组件字典，根据组件类型分类
+        /// </summary>
+        private Dictionary<string, List<Comp<E>>> compDict = new Dictionary<string, List<Comp<E>>>();
 
-        protected Comp parent;
+        /// <summary>
+        /// 父组件
+        /// </summary>
+        protected Comp<E> parent;
+
+        /// <summary>
+        /// 组件的引擎
+        /// </summary>
+        public E Engine;
 
         protected override void OnCreate()
         {
@@ -30,42 +44,62 @@ namespace GoblinFramework.Core
             compDict = null;
         }
 
-        public virtual List<T> GetComp<T>() where T : Comp
+        /// <summary>
+        /// 获取已挂载的指定类型的组件列表
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <returns>组件列表</returns>
+        public virtual List<T> GetComp<T>() where T : Comp<E>
         {
-            if (compDict.TryGetValue(nameof(T), out List<Comp> comps)) return comps as List<T>;
+            if (compDict.TryGetValue(nameof(T), out List<Comp<E>> comps)) return comps as List<T>;
 
             return null;
         }
 
-        public virtual T AddComp<T>() where T : Comp, new()
+        /// <summary>
+        /// 添加组件
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <returns>返回一个就绪的组件</returns>
+        public virtual T AddComp<T>() where T : Comp<E>, new()
         {
             T comp = new T();
 
-            if (false == compDict.TryGetValue(nameof(comp), out List<Comp> comps))
+            if (false == compDict.TryGetValue(nameof(comp), out List<Comp<E>> comps))
             {
-                comps = new List<Comp>();
+                comps = new List<Comp<E>>();
                 compDict.Add(nameof(comp), comps);
             }
             comps.Add(comp);
             compList.Add(comp);
 
-            comp.Create(this);
+            comp.Engine = Engine;
             parent = this;
+
+            comp.Create();
 
             return comp;
         }
 
-        public virtual void RmvComp(Comp comp)
+        /// <summary>
+        /// 移除组件
+        /// </summary>
+        /// <param name="comp">组件</param>
+        public virtual void RmvComp(Comp<E> comp)
         {
             comp.Destroy();
 
-            if (compDict.TryGetValue(nameof(comp), out List<Comp> comps)) comps.Remove(comp);
+            if (compDict.TryGetValue(nameof(comp), out List<Comp<E>> comps)) comps.Remove(comp);
             compList.Remove(comp);
         }
 
+        /// <summary>
+        /// 移除已挂载指定类型的所有组件
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
         public virtual void RmvComp<T>()
         {
-            if (compDict.TryGetValue(nameof(T), out List<Comp> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
+            if (compDict.TryGetValue(nameof(T), out List<Comp<E>> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
         }
     }
 }

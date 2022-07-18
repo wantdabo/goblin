@@ -12,15 +12,11 @@ namespace GoblinFramework.Core
     /// </summary>
     public abstract class Goblin
     {
-        public GameEngineComp Engine;
-
         /// <summary>
         /// 创建一个 Goblin 对象
         /// </summary>
-        /// <param name="goblin"></param>
-        public virtual void Create(Goblin goblin)
+        public virtual void Create()
         {
-            this.Engine = goblin.Engine;
             OnCreate();
         }
 

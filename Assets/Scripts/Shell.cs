@@ -1,3 +1,4 @@
+using GoblinFramework.Client.Common;
 using GoblinFramework.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,15 +7,13 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     public static Shell Instance;
-    public static GameEngineComp Engine;
+    public static CGEngineComp Engine;
 
     private void Start()
     {
         Instance = this;
 
-        Engine = new GameEngineComp();
-        Engine.Engine = Engine;
-        Engine.Create(Engine);
+        Engine = GameEngineComp<CGEngineComp>.CreateGameEngine();
     }
 
     private void Update()

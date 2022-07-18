@@ -11,7 +11,7 @@ namespace GoblinFramework.Client.Common
     /// <summary>
     /// Client-Tick-Comp
     /// </summary>
-    public abstract class CTickComp : Comp
+    public abstract class CTickComp : Comp<CGEngineComp>
     {
         protected override void OnCreate()
         {

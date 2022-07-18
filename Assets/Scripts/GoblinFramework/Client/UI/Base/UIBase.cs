@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.UI.Base
 {
-    public abstract class UIBase : Comp
+    public abstract class UIBase : Comp<CGEngineComp>
     {
         public GameObject go;
 
