@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Common
 {
     /// <summary>
-    /// 客户端计时器
+    /// Cliet-Timer-Comp 客户端计时器
     /// </summary>
-    public class ClockComp : CTickComp, IUpdate
+    public class CTimerComp : CTickComp, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }

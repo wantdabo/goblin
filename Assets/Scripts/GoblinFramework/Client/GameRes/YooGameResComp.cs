@@ -17,7 +17,7 @@ namespace GoblinFramework.Client.GameRes
         protected async override void OnCreate()
         {
             base.OnCreate();
-#if UNITY_EDITOR && YOOASSETS_OFFLINE
+#if YOOASSETS_OFFLINE
             var initParameters = new YooAssets.OfflinePlayModeParameters();
 #elif UNITY_EDITOR
             var initParameters = new YooAssets.EditorSimulateModeParameters();
