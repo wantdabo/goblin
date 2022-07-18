@@ -1,14 +1,11 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.GameRes;
-using GoblinFramework.Client.UI.Common;
+﻿using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
-namespace GoblinFramework.Core
+namespace GoblinFramework.Common
 {
     /// <summary>
     /// 通用游戏引擎组件

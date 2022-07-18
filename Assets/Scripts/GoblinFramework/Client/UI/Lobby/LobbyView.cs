@@ -19,7 +19,7 @@ namespace GoblinFramework.Client.UI.Lobby
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            Engine.U3D.SeekNode<Text>(go, "Title").text = "GoblinFramework";
+            Engine.U3D.SeekNode<Text>(go, "Title").text = "Goblin Framework";
 
             int counter = 0;
             var timer = AddComp<Client.Common.CTimerComp>();

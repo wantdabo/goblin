@@ -45,7 +45,7 @@ namespace GoblinFramework.Client.UI.Common
         {
             base.OnCreate();
             UIRoot = GameObject.Find("UI/UIRoot");
-            UICamrea = GameObject.Find("UI/UICamera")?.GetComponent<Camera>();
+            UICamrea = GameObject.Find("UI/UICamera").GetComponent<Camera>();
 
             // 批量生成 UILayer
             foreach (var name in Enum.GetNames(typeof(UILayer))) if (Enum.TryParse(name, out UILayer result)) GenUILayerNode(result);
