@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoblinFramework.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace GoblinFramework.Client.Common
     /// <summary>
     /// Cliet-Timer-Comp 客户端计时器
     /// </summary>
-    public class CTimerComp : CTickComp, IUpdate
+    public class CTimerComp : Comp<CGEngineComp>, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }

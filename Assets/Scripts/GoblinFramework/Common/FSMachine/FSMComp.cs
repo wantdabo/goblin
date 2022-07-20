@@ -13,10 +13,10 @@ namespace GoblinFramework.Common.FSMachine
     /// <typeparam name="E">引擎组件类型</typeparam>
     public abstract class FSMComp<E> : Comp<E> where E : GameEngineComp<E>, new()
     {
-        private FSMState<E> targetState;
-        public FSMState<E> State { get { return targetState; } private set { targetState = value; } }
+        protected FSMState<E> state;
+        public FSMState<E> State { get { return state; } private set { state = value; } }
 
-        private Dictionary<Type, FSMState<E>> stateDict = new Dictionary<Type, FSMState<E>>();
+        protected Dictionary<Type, FSMState<E>> stateDict = new Dictionary<Type, FSMState<E>>();
         public void AddState<T>() where T : FSMState<E>, new()
         {
             var type = typeof(T);
@@ -30,7 +30,7 @@ namespace GoblinFramework.Common.FSMachine
 
         public void EnterState<T>() where T : FSMState<E>
         {
-            stateDict.TryGetValue(typeof(T), out targetState);
+            stateDict.TryGetValue(typeof(T), out FSMState<E> targetState);
             if (null == targetState) new Exception($"can't turn to state -> {nameof(T)}, because this machine not found {nameof(T)} state.");
             State.Leave();
             State.Enter();

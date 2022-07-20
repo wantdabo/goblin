@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
+using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.GameRes
 {
-    public class GameResLocationComp : CTickComp
+    public class GameResLocationComp : Comp<CGEngineComp>
     {
         private const string prefabsPath = "UIPrefabs/";
         private const string spritesPath = "UISprites/";

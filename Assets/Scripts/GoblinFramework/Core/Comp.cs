@@ -1,4 +1,8 @@
-﻿using GoblinFramework.Common;
+﻿#if GOBLIN_CLIENT
+using GoblinFramework.Client;
+using GoblinFramework.Client.Common;
+#endif
+using GoblinFramework.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +38,28 @@ namespace GoblinFramework.Core
 
         protected override void OnCreate()
         {
+#if GOBLIN_CLIENT
+            if (Engine is CGEngineComp) 
+            {
+                var engine = Engine as CGEngineComp;
+                if (this is IUpdate) engine.CTEngine.AddUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.CTEngine.AddLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.CTEngine.AddFixedUpdate(this as IFixedUpdate);
+            }
+#endif
         }
 
         protected override void OnDestroy()
         {
+#if GOBLIN_CLIENT
+            if (Engine is CGEngineComp)
+            {
+                var engine = Engine as CGEngineComp;
+                if (this is IUpdate) engine.CTEngine.RmvUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.CTEngine.RmvLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.CTEngine.RmvFixedUpdate(this as IFixedUpdate);
+            }
+#endif
             foreach (var comp in compList) RmvComp(comp);
             compList.Clear();
             compList = null;
