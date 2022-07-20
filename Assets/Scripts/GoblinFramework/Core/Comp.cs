@@ -10,6 +10,7 @@ namespace GoblinFramework.Core
     /// <summary>
     /// 组件，核心思想类
     /// </summary>
+    /// <typeparam name="E">引擎组件类型</typeparam>
     public abstract class Comp<E> : Goblin where E : GameEngineComp<E>, new()
     {
         /// <summary>

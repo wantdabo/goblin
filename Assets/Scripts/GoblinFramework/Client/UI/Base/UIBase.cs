@@ -11,9 +11,9 @@ namespace GoblinFramework.Client.UI.Base
 {
     public abstract class UIBase : Comp<CGEngineComp>
     {
-        public GameObject go;
-
         protected abstract string UIRes { get; }
+
+        public GameObject go;
 
         public List<UIBaseCell> GetUICells<T>() where T : UIBaseCell
         {
