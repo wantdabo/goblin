@@ -23,8 +23,8 @@ namespace GoblinFramework.Client.UI.Lobby
             Engine.U3D.SeekNode<Text>(go, "Title").text = "Goblin Framework";
 
             int counter = 0;
-            var timer = AddComp<Client.Common.CTimerComp>();
-            timer.Start(() =>
+            var clock = AddComp<Client.Common.CClockComp>();
+            clock.Start(() =>
             {
                 counter++;
                 Engine.U3D.SeekNode<Text>(go, "ClockText").text = counter.ToString();
