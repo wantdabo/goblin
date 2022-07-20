@@ -669,7 +669,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: 
-    7: YOOASSETS_OFFLINE
+    7: YOOASSETS_OFFLINE;GOBLIN_CLIENT
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

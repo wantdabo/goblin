@@ -6,6 +6,9 @@ using GoblinFramework.Core;
 
 namespace GoblinFramework.Client.GameRes
 {
+    /// <summary>
+    /// Game-Resources-Comp 资源加载组件
+    /// </summary>
     public abstract class GameResComp : Comp<CGEngineComp>
     {
         /// <summary>

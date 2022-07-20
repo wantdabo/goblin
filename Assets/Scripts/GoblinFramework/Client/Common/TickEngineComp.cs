@@ -23,9 +23,9 @@ namespace GoblinFramework.Client.Common
     public interface IFixedUpdate { public void FixedUpdate(float tick); }
 
     /// <summary>
-    /// Client-Tick-Engine-Comp, 客户端 Tick 驱动组件
+    /// Tick-Engine-Comp, 客户端 Tick 驱动组件
     /// </summary>
-    public class CTEngineComp : Comp<CGEngineComp>
+    public class TickEngineComp : Comp<CGEngineComp>
     {
         private List<IUpdate> updates = new List<IUpdate>();
         private List<ILateUpdate> lateUpdates = new List<ILateUpdate>();
@@ -46,6 +46,7 @@ namespace GoblinFramework.Client.Common
 
             fixedUpdates.Clear();
             fixedUpdates = null;
+
             base.OnDestroy();
         }
 
@@ -59,19 +60,19 @@ namespace GoblinFramework.Client.Common
         public void Update(float tick)
         {
             if (0 > updates.Count) return;
-            foreach (var update in updates) update.Update(tick);
+            for (int i = updates.Count - 1; i >= 0; i--) updates[i].Update(tick);
         }
 
         public void LateUpdate(float tick)
         {
             if (0 > lateUpdates.Count) return;
-            foreach (var lateUpdate in lateUpdates) lateUpdate.LateUpdate(tick);
+            for (int i = lateUpdates.Count - 1; i >= 0; i--) lateUpdates[i].LateUpdate(tick);
         }
 
         public void FixedUpdate(float tick)
         {
             if (0 > fixedUpdates.Count) return;
-            foreach (var fixedUpdate in fixedUpdates) fixedUpdate.FixedUpdate(tick);
+            for (int i = fixedUpdates.Count - 1; i >= 0; i--) fixedUpdates[i].FixedUpdate(tick);
         }
     }
 }

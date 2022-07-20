@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static GoblinFramework.Client.UI.Common.GameUI;
+using static GoblinFramework.Client.UI.Common.GameUIComp;
 
 namespace GoblinFramework.Client.UI.Base
 {

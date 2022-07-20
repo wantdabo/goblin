@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.GameRes
 {
+    /// <summary>
+    /// 资源加载定位器，加载框架包装定位资源地址
+    /// </summary>
     public class GameResLocationComp : Comp<CGEngineComp>
     {
         private const string prefabsPath = "UIPrefabs/";
@@ -18,7 +21,7 @@ namespace GoblinFramework.Client.GameRes
         /// 异步加载预制体
         /// </summary>
         /// <param name="resName">资源地址</param>
-        /// <returns>GameObject</returns>
+        /// <returns>UIPrefab UI 预制体</returns>
         public async Task<GameObject> LoadUIPrefabAsync(string resName, Transform parent = null)
         {
             return GameObject.Instantiate(await Engine.GameRes.LoadAssetAsync<GameObject>(prefabsPath + resName), parent ?? Engine.GameUI.UIRoot.transform);
@@ -28,7 +31,7 @@ namespace GoblinFramework.Client.GameRes
         /// 同步加载预制体
         /// </summary>
         /// <param name="resName">资源地址</param>
-        /// <returns>GameObject</returns>
+        /// <returns>UIPrefab UI 预制体</returns>
         public GameObject LoadUIPrefabSync(string resName)
         {
             return Engine.GameRes.LoadAssetSync<GameObject>(prefabsPath + resName);
@@ -38,7 +41,7 @@ namespace GoblinFramework.Client.GameRes
         /// 异步加载 Sprite
         /// </summary>
         /// <param name="resName">资源地址</param>
-        /// <returns>Sprite</returns>
+        /// <returns>Sprite 精灵</returns>
         public async Task<Sprite> LoadSpriteAsync(string resName)
         {
             return await Engine.GameRes.LoadAssetAsync<Sprite>(spritesPath + resName);
@@ -48,7 +51,7 @@ namespace GoblinFramework.Client.GameRes
         /// 同步加载 Sprite
         /// </summary>
         /// <param name="resName">资源地址</param>
-        /// <returns>Sprite</returns>
+        /// <returns>Sprite 精灵</returns>
         public Sprite LoadSpriteSync(string resName)
         {
             return Engine.GameRes.LoadAssetSync<Sprite>(spritesPath + resName);

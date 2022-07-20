@@ -16,18 +16,24 @@ public class Shell : MonoBehaviour
         Engine = GameEngineComp<CGEngineComp>.CreateGameEngine();
     }
 
+    private void OnDestroy()
+    {
+        Engine?.Destroy();
+        Engine = null;
+    }
+
     private void Update()
     {
-        Engine.CTEngine.Update(Time.deltaTime);
+        Engine.TickEngine.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.CTEngine.LateUpdate(Time.deltaTime);
+        Engine.TickEngine.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.CTEngine.FixedUpdate(Time.fixedDeltaTime);
+        Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 }

@@ -16,24 +16,24 @@ namespace GoblinFramework.Client
     /// </summary>
     public class CGEngineComp : GameEngineComp<CGEngineComp>
     {
-        public CTEngineComp CTEngine = null;
+        public TickEngineComp TickEngine = null;
         public U3DComp U3D = null;
         public GameResComp GameRes = null;
-        public GameUI GameUI = null;
+        public GameUIComp GameUI = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            CTEngine = AddComp<CTEngineComp>();
+            TickEngine = AddComp<TickEngineComp>();
             U3D = AddComp<U3DComp>();
-            GameUI = AddComp<GameUI>();
+            GameUI = AddComp<GameUIComp>();
             GameRes = AddComp<YooGameResComp>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            CTEngine = null;
+            TickEngine = null;
             U3D = null;
             GameUI = null;
             GameRes = null;

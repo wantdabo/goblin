@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Common
 {
     /// <summary>
-    /// Cliet-Clock-Comp 客户端计时器
+    /// Clock-Comp 客户端计时器
     /// </summary>
-    public class CClockComp : Comp<CGEngineComp>, IUpdate
+    public class ClockComp : Comp<CGEngineComp>, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }
@@ -35,6 +35,7 @@ namespace GoblinFramework.Client.Common
         public void Stop()
         {
             IsRunning = false;
+            parent.RmvComp(this);
         }
 
         public void Update(float tick)

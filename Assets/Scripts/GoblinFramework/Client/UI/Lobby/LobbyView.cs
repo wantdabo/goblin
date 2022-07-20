@@ -15,7 +15,7 @@ namespace GoblinFramework.Client.UI.Lobby
     {
         protected override string UIRes => "Lobby/LobbyView";
 
-        public override GameUI.UILayer UILayer => GameUI.UILayer.UIMain;
+        public override GameUIComp.UILayer UILayer => GameUIComp.UILayer.UIMain;
 
         protected override void OnBuildUI()
         {
@@ -23,12 +23,13 @@ namespace GoblinFramework.Client.UI.Lobby
             Engine.U3D.SeekNode<Text>(go, "Title").text = "Goblin Framework";
 
             int counter = 0;
-            var clock = AddComp<Client.Common.CClockComp>();
+            var clock = AddComp<ClockComp>();
+            var textClock = Engine.U3D.SeekNode<Text>(go, "ClockText");
             clock.Start(() =>
             {
                 counter++;
-                Engine.U3D.SeekNode<Text>(go, "ClockText").text = counter.ToString();
-            }, 1, -1);
+                textClock.text = counter.ToString();
+            }, 0.0001f, -1);
         }
     }
 }
