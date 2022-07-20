@@ -43,10 +43,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d1796e0f67d36b244b07e2bde6156ca4, type: 3}
   - {fileID: 21300000, guid: 4a4a9a3f233162441945f417437ce82c, type: 3}
   m_PackedSpriteNamesToIndex:
-  - LobbyGoblin_04
-  - LobbyGoblin_02
-  - LobbyGoblin_01
-  - LobbyGoblin_03
+  - LoginGoblin_04
+  - LoginGoblin_02
+  - LoginGoblin_01
+  - LoginGoblin_03
   m_RenderDataMap: {}
   m_Tag: Lobby
   m_IsVariant: 0

@@ -24,7 +24,7 @@ namespace GoblinFramework.Core
         /// <summary>
         /// 组件字典，根据组件类型分类
         /// </summary>
-        private Dictionary<string, List<Comp<E>>> compDict = new Dictionary<string, List<Comp<E>>>();
+        private Dictionary<Type, List<Comp<E>>> compDict = new Dictionary<Type, List<Comp<E>>>();
 
         /// <summary>
         /// 父组件
@@ -32,7 +32,7 @@ namespace GoblinFramework.Core
         protected Comp<E> parent;
 
         /// <summary>
-        /// 组件的引擎
+        /// 引擎组件
         /// </summary>
         public E Engine;
 
@@ -75,7 +75,7 @@ namespace GoblinFramework.Core
         /// <returns>组件列表</returns>
         public virtual List<T> GetComp<T>() where T : Comp<E>
         {
-            if (compDict.TryGetValue(nameof(T), out List<Comp<E>> comps)) return comps as List<T>;
+            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) return comps as List<T>;
 
             return null;
         }
@@ -89,10 +89,10 @@ namespace GoblinFramework.Core
         {
             T comp = new T();
 
-            if (false == compDict.TryGetValue(nameof(comp), out List<Comp<E>> comps))
+            if (false == compDict.TryGetValue(typeof(T), out List<Comp<E>> comps))
             {
                 comps = new List<Comp<E>>();
-                compDict.Add(nameof(comp), comps);
+                compDict.Add(typeof(T), comps);
             }
             comps.Add(comp);
             compList.Add(comp);
@@ -113,7 +113,7 @@ namespace GoblinFramework.Core
         {
             comp.Destroy();
 
-            if (compDict.TryGetValue(nameof(comp), out List<Comp<E>> comps)) comps.Remove(comp);
+            if (compDict.TryGetValue(comp.GetType(), out List<Comp<E>> comps)) comps.Remove(comp);
             compList.Remove(comp);
         }
 
@@ -123,7 +123,7 @@ namespace GoblinFramework.Core
         /// <typeparam name="T">组件类型</typeparam>
         public virtual void RmvComp<T>()
         {
-            if (compDict.TryGetValue(nameof(T), out List<Comp<E>> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
+            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
         }
     }
 }

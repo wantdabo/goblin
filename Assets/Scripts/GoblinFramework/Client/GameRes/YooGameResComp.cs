@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoblinFramework.Client.GameStages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,8 @@ namespace GoblinFramework.Client.GameRes
             var handle = YooAssets.InitializeAsync(initParameters);
             await handle.Task;
 
-            Engine.GameUI.OpenView<UI.Lobby.LobbyView>();
+            // 直接进入登录状态
+            Engine.GameStage.EnterState<GameStageLoginState>();
         }
 
         protected override void OnDestroy()

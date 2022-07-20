@@ -1,5 +1,6 @@
 ﻿using GoblinFramework.Client.Common;
 using GoblinFramework.Client.GameRes;
+using GoblinFramework.Client.GameStages;
 using GoblinFramework.Client.UI.Common;
 using GoblinFramework.Common;
 using GoblinFramework.Core;
@@ -16,23 +17,28 @@ namespace GoblinFramework.Client
     /// </summary>
     public class CGEngineComp : GameEngineComp<CGEngineComp>
     {
+        public GameStageComp GameStage = null;
         public TickEngineComp TickEngine = null;
         public U3DComp U3D = null;
-        public GameResComp GameRes = null;
         public GameUIComp GameUI = null;
+        public GameResComp GameRes = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
+            GameStage = AddComp<GameStageComp>();
             TickEngine = AddComp<TickEngineComp>();
             U3D = AddComp<U3DComp>();
             GameUI = AddComp<GameUIComp>();
+
+            GameStage.EnterState<GameStageGameResState>();
             GameRes = AddComp<YooGameResComp>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            GameStage = null;
             TickEngine = null;
             U3D = null;
             GameUI = null;

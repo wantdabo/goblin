@@ -29,13 +29,11 @@ namespace GoblinFramework.Common.FSMachine
 
         public void SetState<T>() where T : ST, new()
         {
-            var type = typeof(T);
-
-            if (stateDict.ContainsKey(typeof(T))) new Exception("cant't add same state to this machine ->" + nameof(T));
-
             T state = new T();
             state.Create();
-            stateDict.Add(type, state);
+
+            state = AddComp<T>();
+            stateDict.Add(typeof(T), state);
         }
 
         /// <summary>
@@ -49,9 +47,9 @@ namespace GoblinFramework.Common.FSMachine
 
         protected void EnterState(ST targetState)
         {
-            if (null == targetState) new Exception($"can't turn to state -> {nameof(targetState)}, because this machine not found {nameof(targetState)} state.");
+            if (null != State) State.Leave();
 
-            State.Leave();
+            State = targetState;
             targetState.Enter();
         }
     }

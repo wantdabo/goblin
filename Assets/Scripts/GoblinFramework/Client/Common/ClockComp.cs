@@ -22,8 +22,6 @@ namespace GoblinFramework.Client.Common
 
         public void Start(Action action, float interval, int count = 1)
         {
-            if (0 == count) throw new Exception();
-
             this.action = action;
             this.interval = interval;
             this.count = count;

@@ -1,12 +1,11 @@
-﻿using GoblinFramework.Common.FSMachine;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.GoblinFramework.Common.FSMachine
+namespace GoblinFramework.Common.FSMachine
 {
     /// <summary>
     /// Finite-State-Machine-State，状态机，锁步状态

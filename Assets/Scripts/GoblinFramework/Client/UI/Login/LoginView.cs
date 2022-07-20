@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GoblinFramework.Client.UI.Lobby
+namespace GoblinFramework.Client.UI.Login
 {
-    public class LobbyView : UIBaseView
+    public class LoginView : UIBaseView
     {
-        protected override string UIRes => "Lobby/LobbyView";
+        protected override string UIRes => "Login/LoginView";
 
         public override GameUIComp.UILayer UILayer => GameUIComp.UILayer.UIMain;
 

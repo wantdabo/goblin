@@ -14,8 +14,11 @@ namespace GoblinFramework.Common.FSMachine
     /// <typeparam name="E">引擎组件类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<E, MT, ST> : Goblin where E : GameEngineComp<E>, new() where MT : FSMComp<E, MT, ST>, new() where ST : FSMState<E, MT, ST>, new()
+    public abstract class FSMState<E, MT, ST> : Comp<E> where E : GameEngineComp<E>, new() where MT : FSMComp<E, MT, ST>, new() where ST : FSMState<E, MT, ST>, new()
     {
+        /// <summary>
+        /// 状态机
+        /// </summary>
         public MT Machine;
 
         public void Enter()

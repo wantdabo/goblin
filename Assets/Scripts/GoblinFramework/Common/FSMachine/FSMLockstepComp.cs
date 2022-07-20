@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.GoblinFramework.Common.FSMachine;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +22,6 @@ namespace GoblinFramework.Common.FSMachine
         public new void EnterState<T>() where T : ST
         {
             var targetState = GetState<T>();
-            if (null == targetState) new Exception($"can't turn to state -> {nameof(targetState)}, because this machine not found {nameof(targetState)} state.");
 
             if (null == State)
             {
@@ -31,7 +29,12 @@ namespace GoblinFramework.Common.FSMachine
                 return;
             }
 
-            if (false == State.PassStates.Contains(typeof(T))) new Exception($"can't turn to state -> {nameof(T)}, because this state {nameof(State.GetType)} lock to turn to {nameof(T)} state.");
+            if (false == State.PassStates.Contains(typeof(T)))
+            {
+                GoblinDebug.LogError($"can't turn to {typeof(T)}. because cur state is {State}");
+                return;
+            }
+
             EnterState(targetState);
         }
     }
