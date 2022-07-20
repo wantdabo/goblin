@@ -72,9 +72,11 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Common\GGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTimerComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CClockComp.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\FSMachine\FSMLockstepComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\FSMachine\FSMLockstepState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
