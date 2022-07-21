@@ -21,10 +21,10 @@ namespace GoblinFramework.Client.UI.Login
         {
             base.OnBuildUI();
 
-            // 测试挂载速度
-            for (int i = 0; i < 1000; i++) { 
-                var cell = AddUICell<LoginEnterCell>("LoginEnterContent", false);
-            }
+            //// 测试挂载速度
+            //for (int i = 0; i < 1000; i++) { 
+            //    var cell = AddUICell<LoginEnterCell>("LoginEnterContent", false);
+            //}
 
             // 挂载一个 UI 组件
             AddUICell<LoginEnterCell>("LoginEnterContent");

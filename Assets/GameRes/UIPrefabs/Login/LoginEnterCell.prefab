@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 8694434652371485124}
   - component: {fileID: 568607698664820076}
   m_Layer: 5
-  m_Name: UserName
+  m_Name: Username
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 2039707394548223168}
   - component: {fileID: 4176537248993858394}
   m_Layer: 5
-  m_Name: UserNameDesc
+  m_Name: UsernameDesc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -831,7 +831,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Enter Usename
 --- !u!1 &8004435532464486296
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +910,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter text...
+  m_Text: Enter Password
 --- !u!1 &8718812046090755448
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 6557143867337950044}
   - component: {fileID: 3942393572772708185}
   m_Layer: 5
-  m_Name: UserNameText
+  m_Name: UsernameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
