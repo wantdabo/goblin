@@ -22,6 +22,7 @@ namespace GoblinFramework.Client.Common
 
         public void Start(Action action, float interval, int count = 1)
         {
+            if (0 == count) throw new Exception("clock count can't be zero(0)");
             this.action = action;
             this.interval = interval;
             this.count = count;

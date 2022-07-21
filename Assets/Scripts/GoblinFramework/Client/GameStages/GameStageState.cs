@@ -11,19 +11,15 @@ namespace GoblinFramework.Client.GameStages
     {
         public override List<Type> PassStates => throw new NotImplementedException();
 
-        protected override void OnCreate()
-        {
-        }
-
-        protected override void OnDestroy()
-        {
-        }
-
         protected override void OnEnter()
         {
         }
 
         protected override void OnLeave()
+        {
+        }
+
+        public override void OnStateTick(float tick)
         {
         }
     }

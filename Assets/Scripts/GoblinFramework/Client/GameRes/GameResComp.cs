@@ -12,6 +12,16 @@ namespace GoblinFramework.Client.GameRes
     public abstract class GameResComp : Comp<CGEngineComp>
     {
         /// <summary>
+        /// 资源组件就绪状态
+        /// </summary>
+        protected bool ready = false;
+
+        /// <summary>
+        /// 资源组件就绪状态
+        /// </summary>
+        public bool Ready { get { return ready; } protected set { ready = value; } }
+
+        /// <summary>
         /// 资源加载定位器，具体的加载在这里实现
         /// </summary>
         public GameResLocationComp Location;

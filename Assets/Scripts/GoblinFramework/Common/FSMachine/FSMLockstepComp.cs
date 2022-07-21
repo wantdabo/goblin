@@ -29,11 +29,7 @@ namespace GoblinFramework.Common.FSMachine
                 return;
             }
 
-            if (false == State.PassStates.Contains(typeof(T)))
-            {
-                GoblinDebug.LogError($"can't turn to {typeof(T)}. because cur state is {State}");
-                return;
-            }
+            if (false == State.PassStates.Contains(typeof(T))) throw new Exception($"can't turn to {typeof(T)}. because cur state is {State}");
 
             EnterState(targetState);
         }

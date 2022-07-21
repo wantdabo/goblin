@@ -46,7 +46,7 @@ namespace GoblinFramework.Client.Common
         /// 模糊查找 Unity3D 节点/组件
         /// </summary>
         /// <typeparam name="T">Unity 的类型，GameObject 或 Component</typeparam>
-        /// <param name="go">根节点</param>
+        /// <param name="go">预制体根节点</param>
         /// <param name="nodeName">匹配节点名</param>
         /// <returns>GameObject/Component</returns>
         public T SeekNode<T>(GameObject go, string nodeName) where T : UnityEngine.Object

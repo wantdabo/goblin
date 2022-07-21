@@ -34,8 +34,8 @@ namespace GoblinFramework.Client.GameRes
             var handle = YooAssets.InitializeAsync(initParameters);
             await handle.Task;
 
-            // 直接进入登录状态
-            Engine.GameStage.EnterState<GameStageLoginState>();
+            // 资源组件初始化就绪了
+            Ready = true;
         }
 
         protected override void OnDestroy()

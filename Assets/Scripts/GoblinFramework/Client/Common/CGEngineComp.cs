@@ -26,13 +26,15 @@ namespace GoblinFramework.Client
         protected override void OnCreate()
         {
             base.OnCreate();
-            GameStage = AddComp<GameStageComp>();
             TickEngine = AddComp<TickEngineComp>();
             U3D = AddComp<U3DComp>();
             GameUI = AddComp<GameUIComp>();
+            GameRes = Engine.AddComp<YooGameResComp>();
 
+            GameStage = AddComp<GameStageComp>();
+
+            // 进入资源检查阶段
             GameStage.EnterState<GameStageGameResState>();
-            GameRes = AddComp<YooGameResComp>();
         }
 
         protected override void OnDestroy()
