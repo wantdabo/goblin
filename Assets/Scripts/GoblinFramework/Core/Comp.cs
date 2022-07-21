@@ -123,7 +123,7 @@ namespace GoblinFramework.Core
         /// <typeparam name="T">组件类型</typeparam>
         public virtual void RmvComp<T>()
         {
-            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) for (int i = comps.Count; i > 0; i--) RmvComp(comps[i]);
+            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) for (int i = comps.Count - 1; i >= 0; i--) RmvComp(comps[i]);
         }
     }
 }
