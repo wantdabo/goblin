@@ -9,26 +9,47 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.UI.Base
 {
+    /// <summary>
+    /// UI 基础类
+    /// </summary>
     public abstract class UIBase : Comp<CGEngineComp>
     {
         protected abstract string UIRes { get; }
 
+        private bool active = true;
+        protected bool IsActive { get { return active; } private set { active = value; } }
+
         public GameObject go;
 
-        public List<UIBaseCell> GetUICells<T>() where T : UIBaseCell
+        public void SetActive(bool status)
         {
-            return GetComp<T>() as List<UIBaseCell>;
+            IsActive = status;
+            go.SetActive(IsActive);
+            OnActive();
         }
 
-        public UIBaseCell AddUICell<T>(string node) where T : UIBaseCell, new()
+        public List<T> GetUICells<T>() where T : UIBaseCell
         {
-            return AddUICell<T>(go.transform.Find(node).gameObject);
+            return GetComp<T>();
         }
 
-        public UIBaseCell AddUICell<T>(GameObject node) where T : UIBaseCell, new()
+        public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
+        {
+            var parentNode = Engine.U3D.GetNode<GameObject>(go, parentNodePath);
+            if (null == parentNode) Engine.U3D.SeekNode<GameObject>(go, parentNodePath);
+
+            return AddUICell<T>(parentNode, active);
+        }
+
+        private List<UIBaseCell> cellList = new List<UIBaseCell>();
+        public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
             var comp = AddComp<T>();
-            comp.Container = node;
+            cellList.Add(comp);
+
+            comp.Container = parentNode;
+            comp.Load();
+            comp.SetActive(active);
 
             return comp;
         }
@@ -36,16 +57,27 @@ namespace GoblinFramework.Client.UI.Base
         public void RmvUICell(UIBaseCell comp)
         {
             RmvComp(comp);
+            cellList.Remove(comp);
         }
 
         public void RmvUICell<T>() where T : UIBaseCell
         {
             RmvComp<T>();
+            for (int i = cellList.Count - 1; i >= 0; i--) cellList.RemoveAt(i);
+        }
+
+        protected virtual void OnOpen()
+        {
+            foreach (var cell in cellList) cell.OnOpen();
+        }
+
+        protected virtual void OnClose()
+        {
+            foreach (var cell in cellList) cell.OnClose();
         }
 
         protected virtual void OnBuildUI() { }
         protected virtual void OnBindEvent() { }
-        protected virtual void OnOpen() { }
-        protected virtual void OnClose() { }
+        protected virtual void OnActive() { }
     }
 }

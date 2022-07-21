@@ -20,8 +20,19 @@ namespace GoblinFramework.Client.UI.Login
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
+
+            // 测试挂载速度
+            for (int i = 0; i < 1000; i++) { 
+                var cell = AddUICell<LoginEnterCell>("LoginEnterContent", false);
+            }
+
+            // 挂载一个 UI 组件
+            AddUICell<LoginEnterCell>("LoginEnterContent");
+
+            // 测试 API，模糊查找组件
             Engine.U3D.SeekNode<Text>(go, "Title").text = "Goblin Framework";
 
+            // 测试定时器
             int counter = 0;
             var clock = AddComp<ClockComp>();
             var textClock = Engine.U3D.SeekNode<Text>(go, "ClockText");

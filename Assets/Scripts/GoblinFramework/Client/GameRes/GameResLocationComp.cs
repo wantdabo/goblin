@@ -21,6 +21,7 @@ namespace GoblinFramework.Client.GameRes
         /// 异步加载预制体
         /// </summary>
         /// <param name="resName">资源地址</param>
+        /// <param name="parent">挂载的父节点</param>
         /// <returns>UIPrefab UI 预制体</returns>
         public async Task<GameObject> LoadUIPrefabAsync(string resName, Transform parent = null)
         {
@@ -31,10 +32,11 @@ namespace GoblinFramework.Client.GameRes
         /// 同步加载预制体
         /// </summary>
         /// <param name="resName">资源地址</param>
+        /// <param name="parent">挂载的父节点</param>
         /// <returns>UIPrefab UI 预制体</returns>
-        public GameObject LoadUIPrefabSync(string resName)
+        public GameObject LoadUIPrefabSync(string resName, Transform parent = null)
         {
-            return Engine.GameRes.LoadAssetSync<GameObject>(prefabsPath + resName);
+            return GameObject.Instantiate(Engine.GameRes.LoadAssetSync<GameObject>(prefabsPath + resName), parent ?? Engine.GameUI.UIRoot.transform); 
         }
 
         /// <summary>

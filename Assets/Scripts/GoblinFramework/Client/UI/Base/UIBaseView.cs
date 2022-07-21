@@ -8,6 +8,9 @@ using static GoblinFramework.Client.UI.Common.GameUIComp;
 
 namespace GoblinFramework.Client.UI.Base
 {
+    /// <summary>
+    /// UI 界面，基础类
+    /// </summary>
     public abstract class UIBaseView : UIBase
     {
         public abstract UILayer UILayer { get; }

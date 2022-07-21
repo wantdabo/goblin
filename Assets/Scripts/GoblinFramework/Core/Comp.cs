@@ -72,12 +72,24 @@ namespace GoblinFramework.Core
         /// 获取已挂载的指定类型的组件列表
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
+        /// <param name="force">强制查询，如果字段快速查询未找到，并且 force 为 ture，将以高代价的查询方式获取</typeparam>
         /// <returns>组件列表</returns>
-        public virtual List<T> GetComp<T>() where T : Comp<E>
+        public virtual List<T> GetComp<T>(bool force = false) where T : Comp<E>
         {
             if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) return comps as List<T>;
+            if (false == force) return null;
 
-            return null;
+            List<T> list = null;
+            foreach (var comp in compList)
+            {
+                if (comp is T) 
+                {
+                    if(null == list) list = new List<T>();
+                    list.Add(comp as T);
+                }
+            }
+
+            return list;
         }
 
         /// <summary>

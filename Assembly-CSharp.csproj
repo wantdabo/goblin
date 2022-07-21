@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
