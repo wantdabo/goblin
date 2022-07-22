@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameInitializeState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\HotfixState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\GameConfigComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

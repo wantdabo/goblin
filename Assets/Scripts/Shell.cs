@@ -3,36 +3,37 @@ using GoblinFramework.Client;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GoblinFramework.Common;
 
 public class Shell : MonoBehaviour
 {
     public static Shell Instance;
-    public static CGEngineComp Engine;
+    public static CGEngineComp CEngine = null;
 
     private void Start()
     {
         Instance = this;
-        Engine = GameEngineComp<CGEngineComp>.CreateGameEngine();
+        CEngine = GameEngineComp<CGEngineComp>.CreateGameEngine();
     }
 
     private void OnDestroy()
     {
-        Engine?.Destroy();
-        Engine = null;
+        CEngine?.Destroy();
+        CEngine = null;
     }
 
     private void Update()
     {
-        Engine.TickEngine.Update(Time.deltaTime);
+        CEngine.TickEngine.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.TickEngine.LateUpdate(Time.deltaTime);
+        CEngine.TickEngine.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
+        CEngine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 }
