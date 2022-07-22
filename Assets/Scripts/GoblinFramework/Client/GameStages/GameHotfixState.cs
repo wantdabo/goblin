@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class HotfixState : GameStageState
+    public class GameHotfixState : GameStageState
     {
         public override List<Type> PassStates => new List<Type> { typeof(GameInitializeState) };
     }

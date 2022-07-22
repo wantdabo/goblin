@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{D8AAC7AF-45DA-1FE2-19D2-E5144D87BA76}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -76,7 +77,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Common\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamingState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Common\GGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DComp.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameInitializeState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\HotfixState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Common\GameConfigComp.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace GoblinFramework.Client.GameStages
 {
     public class GameInitializeState : GameStageState
     {
-        public override List<Type> PassStates => new List<Type> { typeof(HotfixState), typeof(StageLoginState) };
+        public override List<Type> PassStates => new List<Type> { typeof(GameHotfixState), typeof(StageLoginState) };
 
         private GameInitializeView view = null;
 

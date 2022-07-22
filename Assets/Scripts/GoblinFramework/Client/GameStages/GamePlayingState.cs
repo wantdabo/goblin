@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GamingState : GameStageState
+    public class GamePlayingState : GameStageState
     {
         public override List<Type> PassStates => new List<Type> { typeof(StageLoginState) };
     }

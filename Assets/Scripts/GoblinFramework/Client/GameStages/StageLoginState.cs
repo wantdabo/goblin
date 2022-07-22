@@ -8,7 +8,7 @@ namespace GoblinFramework.Client.GameStages
 {
     public class StageLoginState : GameStageState
     {
-        public override List<Type> PassStates => new List<Type> { typeof(GamingState) };
+        public override List<Type> PassStates => new List<Type> { typeof(GamePlayingState) };
 
         protected override void OnEnter()
         {
