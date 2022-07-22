@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
@@ -69,7 +70,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageGameResState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\GameUIComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngineComp.cs" />
@@ -84,7 +84,8 @@
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageGameInitializeState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

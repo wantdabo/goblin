@@ -19,12 +19,12 @@ namespace GoblinFramework.Client.UI.Base
         private bool active = true;
         protected bool IsActive { get { return active; } private set { active = value; } }
 
-        public GameObject go;
+        public GameObject gameObject;
 
         public void SetActive(bool status)
         {
             IsActive = status;
-            go.SetActive(IsActive);
+            gameObject.SetActive(IsActive);
             OnActive();
         }
 
@@ -35,8 +35,8 @@ namespace GoblinFramework.Client.UI.Base
 
         public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
-            var parentNode = Engine.U3D.GetNode<GameObject>(go, parentNodePath);
-            if (null == parentNode) Engine.U3D.SeekNode<GameObject>(go, parentNodePath);
+            var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
+            if (null == parentNode) Engine.U3D.SeekNode<GameObject>(gameObject, parentNodePath);
 
             return AddUICell<T>(parentNode, active);
         }

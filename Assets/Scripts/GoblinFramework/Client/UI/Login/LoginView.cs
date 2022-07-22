@@ -13,9 +13,9 @@ namespace GoblinFramework.Client.UI.Login
 {
     public class LoginView : UIBaseView
     {
-        protected override string UIRes => "Login/LoginView";
-
         public override GameUIComp.UILayer UILayer => GameUIComp.UILayer.UIMain;
+
+        protected override string UIRes => "Login/LoginView";
 
         protected override void OnBuildUI()
         {
@@ -30,12 +30,12 @@ namespace GoblinFramework.Client.UI.Login
             AddUICell<LoginEnterCell>("LoginEnterContent");
 
             // 测试 API，模糊查找组件
-            Engine.U3D.SeekNode<Text>(go, "Title").text = "Goblin Framework";
+            Engine.U3D.SeekNode<Text>(gameObject, "Title").text = "Goblin Framework";
 
             // 测试定时器
             int counter = 0;
             var clock = AddComp<ClockComp>();
-            var textClock = Engine.U3D.SeekNode<Text>(go, "ClockText");
+            var textClock = Engine.U3D.SeekNode<Text>(gameObject, "ClockText");
             clock.Start(() =>
             {
                 counter++;

@@ -48,12 +48,12 @@ namespace GoblinFramework.Client.UI.Base
 
         public async void Open()
         {
-            if (null == go)
+            if (null == gameObject)
             {
                 UIState = UIState.Loading;
-                go = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
+                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
 
-                canvas = go.GetComponent<Canvas>();
+                canvas = gameObject.GetComponent<Canvas>();
                 Sorting = sorting;
 
                 OnBuildUI();
@@ -68,6 +68,7 @@ namespace GoblinFramework.Client.UI.Base
         {
             OnClose();
             UIState = UIState.Close;
+            GameObject.Destroy(gameObject);
         }
     }
 }
