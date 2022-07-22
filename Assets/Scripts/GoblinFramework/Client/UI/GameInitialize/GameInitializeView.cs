@@ -17,7 +17,16 @@ namespace GoblinFramework.Client.UI.GameInitialize
 
         protected override string UIRes => "GameInitialize/GameInitializeView";
 
-        private float speed = 0.5f;
+        private Slider sliderProgress;
+        private Text textProgress;
+        protected override void OnBuildUI()
+        {
+            base.OnBuildUI();
+            sliderProgress = Engine.U3D.SeekNode<Slider>(gameObject, "Progress");
+            textProgress = Engine.U3D.SeekNode<Text>(gameObject, "ProgressDesctText");
+        }
+
+        private float speed = 0.25f;
         public float progress = 0;
         public void Update(float tick)
         {
@@ -25,11 +34,18 @@ namespace GoblinFramework.Client.UI.GameInitialize
 
             if (progress >= 1) return;
 
-            Engine.U3D.SeekNode<Slider>(gameObject, "Progress").value = progress;
+            sliderProgress.value = progress;
 
             progress += tick * speed;
 
             Mathf.Clamp(progress, 0, 1);
+
+            if (progress <= 0.3f)
+                textProgress.text = "检查更新...";
+            else if (progress >= 0.3f && progress <= 0.6f)
+                textProgress.text = "初始化配置...";
+            else if (progress >= 0.6f)
+                textProgress.text = "正在初始化游戏...";
         }
     }
 }

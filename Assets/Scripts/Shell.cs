@@ -8,32 +8,32 @@ using GoblinFramework.General;
 public class Shell : MonoBehaviour
 {
     public static Shell Instance;
-    public static CGEngineComp CEngine = null;
+    public static CGEngineComp Engine = null;
 
     private void Start()
     {
         Instance = this;
-        CEngine = GameEngineComp<CGEngineComp>.CreateGameEngine();
+        Engine = GameEngineComp<CGEngineComp>.CreateGameEngine();
     }
 
     private void OnDestroy()
     {
-        CEngine?.Destroy();
-        CEngine = null;
+        Engine?.Destroy();
+        Engine = null;
     }
 
     private void Update()
     {
-        CEngine.TickEngine.Update(Time.deltaTime);
+        Engine.TickEngine.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        CEngine.TickEngine.LateUpdate(Time.deltaTime);
+        Engine.TickEngine.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        CEngine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
+        Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 }
