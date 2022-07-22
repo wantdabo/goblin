@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GameStageGameInitializeState : GameStageState
+    public class GameInitializeState : GameStageState
     {
-        public override List<Type> PassStates => new List<Type> { typeof(GameStageHotfixState), typeof(GameStageLoginState) };
+        public override List<Type> PassStates => new List<Type> { typeof(HotfixState), typeof(StageLoginState) };
 
         private GameInitializeView view = null;
 
@@ -30,7 +30,7 @@ namespace GoblinFramework.Client.GameStages
         {
             if (true == Engine.GameRes.Ready && null == view) view = Engine.GameUI.OpenView<GameInitializeView>();
 
-            if (view?.progress >= 1) Engine.GameStage.EnterState<GameStageLoginState>();
+            if (view?.progress >= 1) Engine.GameStage.EnterState<StageLoginState>();
         }
     }
 }
