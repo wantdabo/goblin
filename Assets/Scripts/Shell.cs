@@ -12,7 +12,6 @@ public class Shell : MonoBehaviour
     private void Start()
     {
         Instance = this;
-
         Engine = GameEngineComp<CGEngineComp>.CreateGameEngine();
     }
 
