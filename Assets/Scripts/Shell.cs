@@ -3,7 +3,7 @@ using GoblinFramework.Client;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GoblinFramework.Common;
+using GoblinFramework.General;
 
 public class Shell : MonoBehaviour
 {

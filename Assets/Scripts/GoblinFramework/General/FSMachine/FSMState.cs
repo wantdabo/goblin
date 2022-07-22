@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Common.FSMachine
+namespace GoblinFramework.General.FSMachine
 {
 
     /// <summary>

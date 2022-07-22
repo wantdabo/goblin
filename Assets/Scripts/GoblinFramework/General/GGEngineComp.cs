@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Common
+namespace GoblinFramework.General
 {
     /// <summary>
     /// General-Game-Engine-Comp 通用的引擎组件

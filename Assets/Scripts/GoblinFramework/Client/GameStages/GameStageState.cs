@@ -1,4 +1,4 @@
-﻿using GoblinFramework.Common.FSMachine;
+﻿using GoblinFramework.General.FSMachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;

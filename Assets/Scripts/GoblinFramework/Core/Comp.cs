@@ -2,7 +2,7 @@
 using GoblinFramework.Client;
 using GoblinFramework.Client.Common;
 #endif
-using GoblinFramework.Common;
+using GoblinFramework.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,7 @@
 using GoblinFramework.Client.GameRes;
 using GoblinFramework.Client.GameStages;
 using GoblinFramework.Client.UI.Common;
-using GoblinFramework.Common;
+using GoblinFramework.General;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Common
+namespace GoblinFramework.General
 {
     /// <summary>
     /// 游戏配置组件
