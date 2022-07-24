@@ -12,14 +12,14 @@ namespace GoblinFramework.General
     /// </summary>
     public class GGEngineComp : GameEngineComp<GGEngineComp>
     {
-        public GameConfigComp GameConfig;
+        public ConfigComp Config;
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
             // 游戏配置
-            GameConfig = AddComp<GameConfigComp>();
+            Config = AddComp<ConfigComp>();
         }
 
         protected override void OnDestroy()

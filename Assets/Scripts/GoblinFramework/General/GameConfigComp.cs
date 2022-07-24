@@ -10,7 +10,7 @@ namespace GoblinFramework.General
     /// <summary>
     /// 游戏配置组件
     /// </summary>
-    public class GameConfigComp : Comp<GGEngineComp>
+    public class ConfigComp : Comp<GGEngineComp>
     {
     }
 }

@@ -67,7 +67,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\FSMachine\FSMLockstepComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\ClockComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CGEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamePlayingState.cs" />
@@ -87,8 +87,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GameConfigComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\GameplayComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Common\GTickEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\PGEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\PTickEngineComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
