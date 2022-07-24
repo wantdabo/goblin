@@ -24,16 +24,16 @@ public class Shell : MonoBehaviour
 
     private void Update()
     {
-        Engine.TickEngine.Update(Time.deltaTime);
+        Engine.CTickEngine.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.TickEngine.LateUpdate(Time.deltaTime);
+        Engine.CTickEngine.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
+        Engine.CTickEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 }

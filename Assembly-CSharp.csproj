@@ -56,7 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTickEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
@@ -70,23 +70,25 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\GameUIComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameInitializeState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngineComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DComp.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameInitializeState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GameConfigComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamePlayingState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\GameplayComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Common\GTickEngineComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

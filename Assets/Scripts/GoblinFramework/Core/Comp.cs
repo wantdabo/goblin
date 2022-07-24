@@ -42,9 +42,9 @@ namespace GoblinFramework.Core
             if (Engine is CGEngineComp) 
             {
                 var engine = Engine as CGEngineComp;
-                if (this is IUpdate) engine.TickEngine.AddUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.TickEngine.AddLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.TickEngine.AddFixedUpdate(this as IFixedUpdate);
+                if (this is IUpdate) engine.CTickEngine.AddUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.CTickEngine.AddLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.CTickEngine.AddFixedUpdate(this as IFixedUpdate);
             }
 #endif
         }
@@ -55,9 +55,9 @@ namespace GoblinFramework.Core
             if (Engine is CGEngineComp)
             {
                 var engine = Engine as CGEngineComp;
-                if (this is IUpdate) engine.TickEngine.RmvUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.TickEngine.RmvLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.TickEngine.RmvFixedUpdate(this as IFixedUpdate);
+                if (this is IUpdate) engine.CTickEngine.RmvUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.CTickEngine.RmvLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.CTickEngine.RmvFixedUpdate(this as IFixedUpdate);
             }
 #endif
             for (int i = compList.Count - 1; i >= 0; i--) RmvComp(compList[i]);
