@@ -1,6 +1,6 @@
 ﻿using GoblinFramework.Client.Common;
 using GoblinFramework.Client.UI.Base;
-using GoblinFramework.Client.UI.Common;
+using GoblinFramework.Client.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

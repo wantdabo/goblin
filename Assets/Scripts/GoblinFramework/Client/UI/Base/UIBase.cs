@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
+using GoblinFramework.Client.UI.Common;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace GoblinFramework.Client.UI.Base
 {
@@ -21,6 +23,10 @@ namespace GoblinFramework.Client.UI.Base
 
         public GameObject gameObject;
 
+        /// <summary>
+        /// 激活 UI
+        /// </summary>
+        /// <param name="status">激活状态</param>
         public void SetActive(bool status)
         {
             IsActive = status;
@@ -28,11 +34,28 @@ namespace GoblinFramework.Client.UI.Base
             OnActive();
         }
 
+        /// <summary>
+        /// 获得一些 UI 小组件
+        /// </summary>
+        /// <typeparam name="T">部件类型</typeparam>
+        /// <returns></returns>
         public List<T> GetUICells<T>() where T : UIBaseCell
         {
             return GetComp<T>();
         }
 
+        /// <summary>
+        /// 快速查表，此 UIBase 下的小组件，方便批量快操
+        /// </summary>
+        private List<UIBaseCell> cellList = new List<UIBaseCell>();
+
+        /// <summary>
+        /// 添加 UI 小组件
+        /// </summary>
+        /// <typeparam name="T">小组件类型</typeparam>
+        /// <param name="parentNodePath">挂载的节点名字</param>
+        /// <param name="active">激活状态</param>
+        /// <returns>小组件</returns>
         public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
             var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
@@ -41,7 +64,13 @@ namespace GoblinFramework.Client.UI.Base
             return AddUICell<T>(parentNode, active);
         }
 
-        private List<UIBaseCell> cellList = new List<UIBaseCell>();
+        /// <summary>
+        /// 添加 UI 小组件
+        /// </summary>
+        /// <typeparam name="T">小组件类型</typeparam>
+        /// <param name="parentNodePath">挂载的节点</param>
+        /// <param name="active">激活状态</param>
+        /// <returns>小组件</returns>
         public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
             var comp = AddComp<T>();
@@ -54,30 +83,80 @@ namespace GoblinFramework.Client.UI.Base
             return comp;
         }
 
+        /// <summary>
+        /// 卸载小组件
+        /// </summary>
+        /// <param name="comp">小组件</param>
         public void RmvUICell(UIBaseCell comp)
         {
             RmvComp(comp);
             cellList.Remove(comp);
         }
 
+        /// <summary>
+        /// 卸载指定类型的所有小组件
+        /// </summary>
+        /// <typeparam name="T">小组件类型</typeparam>
         public void RmvUICell<T>() where T : UIBaseCell
         {
             RmvComp<T>();
             for (int i = cellList.Count - 1; i >= 0; i--) cellList.RemoveAt(i);
         }
 
+        /// <summary>
+        /// UI 打开回调
+        /// </summary>
         protected virtual void OnOpen()
         {
             foreach (var cell in cellList) cell.OnOpen();
         }
 
+        /// <summary>
+        /// UI 关闭回调
+        /// </summary>
         protected virtual void OnClose()
         {
             foreach (var cell in cellList) cell.OnClose();
         }
 
+        /// <summary>
+        /// 构建 UI 回调，用于添加小组件，获取并缓存指定的动态 Unity3D 组件
+        /// </summary>
         protected virtual void OnBuildUI() { }
+        /// <summary>
+        /// 绑定事件回调可以集中写在这里
+        /// </summary>
         protected virtual void OnBindEvent() { }
+        /// <summary>
+        /// UI 激活/失活回调
+        /// </summary>
         protected virtual void OnActive() { }
+
+        /// <summary>
+        /// 注册 UI 事件
+        /// </summary>
+        /// <param name="nodeName">节点名</param>
+        /// <param name="action">回调</param>
+        /// <param name="eventType">事件类型，默认点击</param>
+        public void AddUIEventListener(string nodeName, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick) 
+        {
+            AddUIEventListener(Engine.U3D.SeekNode<GameObject>(gameObject, nodeName), action, eventType);
+        }
+
+        /// <summary>
+        /// 注册 UI 事件
+        /// </summary>
+        /// <param name="nodeName">节点</param>
+        /// <param name="action">回调</param>
+        /// <param name="eventType">事件类型，默认点击</param>
+        public void AddUIEventListener(GameObject node, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick)
+        {
+            if (null == node) throw new Exception($"node can be null, plz check.");
+
+            var listener = Engine.U3D.GetNode<UIEventListener>(node);
+            if (null == listener) listener = node.AddComponent<UIEventListener>();
+
+            listener.AddListener(eventType, action);
+        }
     }
 }

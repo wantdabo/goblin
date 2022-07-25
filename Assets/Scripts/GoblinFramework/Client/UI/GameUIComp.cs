@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI.Common
+namespace GoblinFramework.Client.UI
 {
     /// <summary>
     /// Game-UI-Comp 游戏 UI 组件

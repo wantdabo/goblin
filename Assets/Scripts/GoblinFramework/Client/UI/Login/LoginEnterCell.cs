@@ -10,5 +10,14 @@ namespace GoblinFramework.Client.UI.Login
     public class LoginEnterCell : UIBaseCell
     {
         protected override string UIRes => "Login/LoginEnterCell";
+
+        protected override void OnBindEvent()
+        {
+            base.OnBindEvent();
+            AddUIEventListener("LoginBtn", (eventData) =>
+            {
+                General.GoblinDebug.Log("got click.");
+            });
+        }
     }
 }
