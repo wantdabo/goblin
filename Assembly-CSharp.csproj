@@ -91,6 +91,20 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameInitializeState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Actor.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\MotionComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\InputComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Matrix.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedMath.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedRandom.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector2.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64TanLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Quaternion.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64AcosLut.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
