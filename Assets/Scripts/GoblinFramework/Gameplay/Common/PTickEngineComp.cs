@@ -11,14 +11,14 @@ namespace GoblinFramework.Gameplay.Common
     /// <summary>
     /// IPlayLoop，战斗循环
     /// </summary>
-    public interface IPLoop { public void Update(float tick); }
+    public interface IPLoop { public void Update(int frame); }
 
     /// <summary>
     /// Play-Tick-Engine-Comp, 玩法 Tick 驱动组件
     /// </summary>
     public class PTickEngineComp : Comp<PGEngineComp>
     {
-        private List<IPLoop> ipLoogs = new List<IPLoop>();
+        private List<IPLoop> iploops = new List<IPLoop>();
 
         protected override void OnCreate()
         {
@@ -27,19 +27,19 @@ namespace GoblinFramework.Gameplay.Common
 
         protected override void OnDestroy()
         {
-            ipLoogs.Clear();
-            ipLoogs = null;
+            iploops.Clear();
+            iploops = null;
 
             base.OnDestroy();
         }
 
-        public void AddUpdate(IPLoop update) { ipLoogs.Add(update); }
-        public void RmvUpdate(IPLoop update) { ipLoogs.Remove(update); }
+        public void AddUpdate(IPLoop update) { iploops.Add(update); }
+        public void RmvUpdate(IPLoop update) { iploops.Remove(update); }
 
-        public void Update(float tick)
+        public void Update(int frame)
         {
-            if (0 > ipLoogs.Count) return;
-            for (int i = ipLoogs.Count - 1; i >= 0; i--) ipLoogs[i].Update(tick);
+            if (0 > iploops.Count) return;
+            for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].Update(frame);
         }
     }
 }

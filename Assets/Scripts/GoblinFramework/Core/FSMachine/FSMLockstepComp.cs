@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.FSMachine
+namespace GoblinFramework.Core.FSMachine
 {
     /// <summary>
     /// Finite-State-Machine-Lock-Comp，状态机，锁步状态机组件

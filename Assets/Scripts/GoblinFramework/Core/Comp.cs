@@ -2,7 +2,10 @@
 using GoblinFramework.Client;
 using GoblinFramework.Client.Common;
 #endif
-using GoblinFramework.General;
+#if GOBLIN_GAMEPLAY
+using GoblinFramework.Gameplay;
+using GoblinFramework.Gameplay.Common;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +50,13 @@ namespace GoblinFramework.Core
                 if (this is IFixedUpdate) engine.CTickEngine.AddFixedUpdate(this as IFixedUpdate);
             }
 #endif
+#if GOBLIN_GAMEPLAY
+            if (Engine is PGEngineComp)
+            {
+                var engine = Engine as PGEngineComp;
+                if (this is IPLoop) engine.PTickEngine.AddUpdate(this as IPLoop);
+            }
+#endif
         }
 
         protected override void OnDestroy()
@@ -60,6 +70,14 @@ namespace GoblinFramework.Core
                 if (this is IFixedUpdate) engine.CTickEngine.RmvFixedUpdate(this as IFixedUpdate);
             }
 #endif
+#if GOBLIN_GAMEPLAY
+            if (Engine is PGEngineComp)
+            {
+                var engine = Engine as PGEngineComp;
+                if (this is IPLoop) engine.PTickEngine.RmvUpdate(this as IPLoop);
+            }
+#endif
+
             for (int i = compList.Count - 1; i >= 0; i--) RmvComp(compList[i]);
             compList.Clear();
             compList = null;

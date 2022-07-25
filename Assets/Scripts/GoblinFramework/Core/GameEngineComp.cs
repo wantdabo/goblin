@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Core
 {
     /// <summary>
-    /// 游戏引擎组件
+    /// 泛型游戏引擎组件
     /// </summary>
     /// <typeparam name="E">引擎组件类型</typeparam>
     public class GameEngineComp<E> : Comp<E> where E : GameEngineComp<E>, new()

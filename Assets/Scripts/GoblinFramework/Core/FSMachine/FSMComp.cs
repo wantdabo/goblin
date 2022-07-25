@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.FSMachine
+namespace GoblinFramework.Core.FSMachine
 {
 
     /// <summary>
