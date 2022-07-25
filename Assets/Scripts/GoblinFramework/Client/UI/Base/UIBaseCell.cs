@@ -16,23 +16,12 @@ namespace GoblinFramework.Client.UI.Base
 
         public GameObject Container { get { return container; } set { container = value; } }
 
-        public void Load() 
+        public override void Load()
         {
             gameObject = Engine.GameRes.Location.LoadUIPrefabSync(UIRes, Container.transform);
             OnBuildUI();
             OnBindEvent();
-        }
-
-        protected override void OnOpen()
-        {
-            base.OnOpen();
-            gameObject.SetActive(IsActive);
-        }
-
-        protected override void OnClose()
-        {
-            base.OnClose();
-            gameObject.SetActive(IsActive);
+            base.Load();
         }
     }
 }

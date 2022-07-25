@@ -89,6 +89,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="comp">小组件</param>
         public void RmvUICell(UIBaseCell comp)
         {
+            comp.Unload();
             RmvComp(comp);
             cellList.Remove(comp);
         }
@@ -99,34 +100,72 @@ namespace GoblinFramework.Client.UI.Base
         /// <typeparam name="T">小组件类型</typeparam>
         public void RmvUICell<T>() where T : UIBaseCell
         {
-            RmvComp<T>();
-            for (int i = cellList.Count - 1; i >= 0; i--) cellList.RemoveAt(i);
+            for (int i = cellList.Count - 1; i >= 0; i--)
+                if (cellList[i] is T) RmvUICell(cellList[i]);
         }
+
+        /// <summary>
+        /// 加载 UI
+        /// </summary>
+        public virtual void Load() { OnLoad(); }
+
+        /// <summary>
+        /// 卸载 UI
+        /// </summary>
+        public virtual void Unload()
+        {
+            OnUnload();
+            GameObject.Destroy(gameObject);
+        }
+
+        /// <summary>
+        /// 打开 UI
+        /// </summary>
+        public virtual void Open()
+        {
+            foreach (var cell in cellList) cell.Open();
+            OnOpen();
+        }
+
+        /// <summary>
+        /// 关闭 UI
+        /// </summary>
+        public virtual void Close()
+        {
+            foreach (var cell in cellList) cell.Close();
+            OnClose();
+        }
+
+        /// <summary>
+        /// UI 加载回调
+        /// </summary>
+        protected virtual void OnLoad() { }
+
+        /// <summary>
+        /// UI 卸载回调
+        /// </summary>
+        protected virtual void OnUnload() { }
 
         /// <summary>
         /// UI 打开回调
         /// </summary>
-        protected virtual void OnOpen()
-        {
-            foreach (var cell in cellList) cell.OnOpen();
-        }
+        protected virtual void OnOpen() { }
 
         /// <summary>
         /// UI 关闭回调
         /// </summary>
-        protected virtual void OnClose()
-        {
-            foreach (var cell in cellList) cell.OnClose();
-        }
+        protected virtual void OnClose() { }
 
         /// <summary>
         /// 构建 UI 回调，用于添加小组件，获取并缓存指定的动态 Unity3D 组件
         /// </summary>
         protected virtual void OnBuildUI() { }
+
         /// <summary>
         /// 绑定事件回调可以集中写在这里
         /// </summary>
         protected virtual void OnBindEvent() { }
+
         /// <summary>
         /// UI 激活/失活回调
         /// </summary>
@@ -138,7 +177,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="nodeName">节点名</param>
         /// <param name="action">回调</param>
         /// <param name="eventType">事件类型，默认点击</param>
-        public void AddUIEventListener(string nodeName, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick) 
+        public void AddUIEventListener(string nodeName, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick)
         {
             AddUIEventListener(Engine.U3D.SeekNode<GameObject>(gameObject, nodeName), action, eventType);
         }

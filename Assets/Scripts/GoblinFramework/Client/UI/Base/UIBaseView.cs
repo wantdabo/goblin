@@ -35,40 +35,38 @@ namespace GoblinFramework.Client.UI.Base
 
         private Canvas canvas;
 
-        protected override void OnCreate()
+        public override async void Load()
         {
-            base.OnCreate();
+            UIState = UIState.Loading;
+            gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
+
+            canvas = gameObject.GetComponent<Canvas>();
+            Sorting = sorting;
+
+            OnBuildUI();
+            OnBindEvent();
+
+            base.Load();
         }
 
-        protected override void OnDestroy()
+        public override void Unload()
         {
-            base.OnDestroy();
             UIState = UIState.Free;
+            base.Unload();
         }
 
-        public async void Open()
+        public override void Open()
         {
-            if (null == gameObject)
-            {
-                UIState = UIState.Loading;
-                gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
-
-                canvas = gameObject.GetComponent<Canvas>();
-                Sorting = sorting;
-
-                OnBuildUI();
-                OnBindEvent();
-            }
-
-            OnOpen();
+            if (null == gameObject) Load();
             UIState = UIState.Open;
+            base.Open();
         }
 
-        public void Close()
+        public override void Close()
         {
-            OnClose();
             UIState = UIState.Close;
-            GameObject.Destroy(gameObject);
+            base.Close();
+            Unload();
         }
     }
 }
