@@ -62,24 +62,19 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\FSMachine\FSMComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\PGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\FSMachine\FSMLockstepComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\ClockComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStageState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameUIComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameInitializeState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocationComp.cs" />
@@ -91,6 +86,11 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\ConfigComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Server\SGEngineComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GamePlayingState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameInitializeState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameHotfixState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
