@@ -103,12 +103,14 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\GameplayRender.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Actors\Actor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Comps\RComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\GameplayCmdParser.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\FSMachine\FSMachineLockstep.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\Cmds\SyncPosCmd.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\CmdParser.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\BinaryRW.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
