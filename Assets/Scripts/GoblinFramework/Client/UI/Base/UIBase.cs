@@ -18,21 +18,7 @@ namespace GoblinFramework.Client.UI.Base
     {
         protected abstract string UIRes { get; }
 
-        private bool active = true;
-        protected bool IsActive { get { return active; } private set { active = value; } }
-
         public GameObject gameObject;
-
-        /// <summary>
-        /// 激活 UI
-        /// </summary>
-        /// <param name="status">激活状态</param>
-        public void SetActive(bool status)
-        {
-            IsActive = status;
-            gameObject.SetActive(IsActive);
-            OnActive();
-        }
 
         /// <summary>
         /// 获得一些 UI 小组件
@@ -167,11 +153,6 @@ namespace GoblinFramework.Client.UI.Base
         protected virtual void OnBindEvent() { }
 
         /// <summary>
-        /// UI 激活/失活回调
-        /// </summary>
-        protected virtual void OnActive() { }
-
-        /// <summary>
         /// 注册 UI 事件
         /// </summary>
         /// <param name="nodeName">节点名</param>
@@ -190,7 +171,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="eventType">事件类型，默认点击</param>
         public void AddUIEventListener(GameObject node, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick)
         {
-            if (null == node) throw new Exception($"node can be null, plz check.");
+            if (null == node) throw new Exception($"node can't be null, plz check.");
 
             var listener = Engine.U3D.GetNode<UIEventListener>(node);
             if (null == listener) listener = node.AddComponent<UIEventListener>();
