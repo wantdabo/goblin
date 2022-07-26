@@ -15,27 +15,28 @@ namespace GoblinFramework.Client
     /// <summary>
     /// Client-Game-Engine-Comp 客户端引擎组件
     /// </summary>
-    public class CGEngineComp : GameEngineComp<CGEngineComp>
+    public class CGEngine : GameEngine<CGEngine>
     {
-        public CTickEngineComp CTickEngine = null;
-        public U3DComp U3D = null;
-        public GameUIComp GameUI = null;
-        public GameResComp GameRes = null;
-        public GameStageComp GameStage = null;
+        public CTickEngine TickEngine = null;
+        public U3DTool U3D = null;
+        public GameUI GameUI = null;
+        public GameRes.GameRes GameRes = null;
+        public GameStage GameStage = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
+
             // 开发引擎（Unity3D）Tick
-            CTickEngine = AddComp<CTickEngineComp>();
-            // U3D 开发，辅助 API
-            U3D = AddComp<U3DComp>();
+            TickEngine = AddComp<CTickEngine>();
+            // U3D API
+            U3D = AddComp<U3DTool>();
             // 游戏 UI
-            GameUI = AddComp<GameUIComp>();
+            GameUI = AddComp<GameUI>();
             // 游戏美术资源
-            GameRes = Engine.AddComp<YooGameResComp>();
+            GameRes = Engine.AddComp<YooGameRes>();
             // 游戏阶段总控
-            GameStage = AddComp<GameStageComp>();
+            GameStage = AddComp<GameStage>();
 
             // 进入资源检查阶段
             GameStage.EnterState<GameInitializeState>();
@@ -44,7 +45,7 @@ namespace GoblinFramework.Client
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            CTickEngine = null;
+            TickEngine = null;
             U3D = null;
             GameUI = null;
             GameRes = null;

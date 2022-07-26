@@ -14,9 +14,9 @@ namespace GoblinFramework.Gameplay.Common
     public interface IPLoop { public void Update(int frame); }
 
     /// <summary>
-    /// Play-Tick-Engine-Comp, 玩法 Tick 驱动组件
+    /// Play-Tick-Engine, 玩法 Tick 驱动组件
     /// </summary>
-    public class PTickEngineComp : Comp<PGEngineComp>
+    public class PTickEngine : Comp<PGEngine>
     {
         private List<IPLoop> iploops = new List<IPLoop>();
 

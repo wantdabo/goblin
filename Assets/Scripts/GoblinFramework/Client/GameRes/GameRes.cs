@@ -9,7 +9,7 @@ namespace GoblinFramework.Client.GameRes
     /// <summary>
     /// Game-Resources-Comp 资源加载组件
     /// </summary>
-    public abstract class GameResComp : Comp<CGEngineComp>
+    public abstract class GameRes : Comp<CGEngine>
     {
         /// <summary>
         /// 资源组件就绪状态
@@ -24,12 +24,12 @@ namespace GoblinFramework.Client.GameRes
         /// <summary>
         /// 资源加载定位器，具体的加载在这里实现
         /// </summary>
-        public GameResLocationComp Location;
+        public GameResLocation Location;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            Location = AddComp<GameResLocationComp>();
+            Location = AddComp<GameResLocation>();
         }
 
         /// <summary>

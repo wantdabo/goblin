@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.GameRes
     /// <summary>
     /// YooAsset 资源加载组件
     /// </summary>
-    public class YooGameResComp : GameResComp
+    public class YooGameRes : GameRes
     {
         protected async override void OnCreate()
         {

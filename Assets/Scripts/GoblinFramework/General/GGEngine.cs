@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 namespace GoblinFramework.General
 {
     /// <summary>
-    /// General-Game-Engine-Comp 通用的引擎组件
+    /// General-Game-Engine 通用的引擎组件
     /// </summary>
-    public class GGEngineComp : GameEngineComp<GGEngineComp>
+    public class GGEngine : GameEngine<GGEngine>
     {
-        public ConfigComp Config;
+        public Config Config;
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
             // 游戏配置
-            Config = AddComp<ConfigComp>();
+            Config = AddComp<Config>();
         }
 
         protected override void OnDestroy()

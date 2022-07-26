@@ -12,12 +12,12 @@ namespace GoblinFramework.Core
     /// 泛型游戏引擎组件
     /// </summary>
     /// <typeparam name="E">引擎组件类型</typeparam>
-    public class GameEngineComp<E> : Comp<E> where E : GameEngineComp<E>, new()
+    public class GameEngine<E> : Comp<E> where E : GameEngine<E>, new()
     {
         /// <summary>
         /// 通用引擎组件
         /// </summary>
-        public GGEngineComp G;
+        public GGEngine G;
 
         /// <summary>
         /// 创建一个游戏引擎
@@ -25,7 +25,7 @@ namespace GoblinFramework.Core
         /// <returns>游戏引擎组件</returns>
         public static E CreateGameEngine() 
         {
-            GGEngineComp gengine = new GGEngineComp();
+            GGEngine gengine = new GGEngine();
             gengine.Engine = gengine;
             gengine.Create();
 

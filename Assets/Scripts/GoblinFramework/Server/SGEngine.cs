@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Server
 {
     /// <summary>
-    /// Server-Game-Engine-Comp 服务端的引擎组件
+    /// Server-Game-Engine 服务端的引擎组件
     /// </summary>
-    public class SGEngineComp : GameEngineComp<SGEngineComp>
+    public class SGEngine : GameEngine<SGEngine>
     {
     }
 }

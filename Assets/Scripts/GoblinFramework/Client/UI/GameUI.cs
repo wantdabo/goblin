@@ -11,9 +11,9 @@ using UnityEngine;
 namespace GoblinFramework.Client.UI
 {
     /// <summary>
-    /// Game-UI-Comp 游戏 UI 组件
+    /// Game-UI 游戏 UI 组件
     /// </summary>
-    public class GameUIComp : Comp<CGEngineComp>
+    public class GameUI : Comp<CGEngine>
     {
         #region 枚举
         /// <summary>

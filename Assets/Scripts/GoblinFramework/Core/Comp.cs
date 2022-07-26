@@ -18,7 +18,7 @@ namespace GoblinFramework.Core
     /// 组件，核心思想类
     /// </summary>
     /// <typeparam name="E">引擎组件类型</typeparam>
-    public abstract class Comp<E> : Goblin where E : GameEngineComp<E>, new()
+    public abstract class Comp<E> : Goblin where E : GameEngine<E>, new()
     {
         /// <summary>
         /// 组件列表
@@ -42,19 +42,19 @@ namespace GoblinFramework.Core
         protected override void OnCreate()
         {
 #if GOBLIN_CLIENT
-            if (Engine is CGEngineComp) 
+            if (Engine is CGEngine) 
             {
-                var engine = Engine as CGEngineComp;
-                if (this is IUpdate) engine.CTickEngine.AddUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.CTickEngine.AddLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.CTickEngine.AddFixedUpdate(this as IFixedUpdate);
+                var engine = Engine as CGEngine;
+                if (this is IUpdate) engine.TickEngine.AddUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.TickEngine.AddLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.TickEngine.AddFixedUpdate(this as IFixedUpdate);
             }
 #endif
 #if GOBLIN_GAMEPLAY
-            if (Engine is PGEngineComp)
+            if (Engine is PGEngine)
             {
-                var engine = Engine as PGEngineComp;
-                if (this is IPLoop) engine.PTickEngine.AddUpdate(this as IPLoop);
+                var engine = Engine as PGEngine;
+                if (this is IPLoop) engine.TickEngine.AddUpdate(this as IPLoop);
             }
 #endif
         }
@@ -62,19 +62,19 @@ namespace GoblinFramework.Core
         protected override void OnDestroy()
         {
 #if GOBLIN_CLIENT
-            if (Engine is CGEngineComp)
+            if (Engine is CGEngine)
             {
-                var engine = Engine as CGEngineComp;
-                if (this is IUpdate) engine.CTickEngine.RmvUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.CTickEngine.RmvLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.CTickEngine.RmvFixedUpdate(this as IFixedUpdate);
+                var engine = Engine as CGEngine;
+                if (this is IUpdate) engine.TickEngine.RmvUpdate(this as IUpdate);
+                if (this is ILateUpdate) engine.TickEngine.RmvLateUpdate(this as ILateUpdate);
+                if (this is IFixedUpdate) engine.TickEngine.RmvFixedUpdate(this as IFixedUpdate);
             }
 #endif
 #if GOBLIN_GAMEPLAY
-            if (Engine is PGEngineComp)
+            if (Engine is PGEngine)
             {
-                var engine = Engine as PGEngineComp;
-                if (this is IPLoop) engine.PTickEngine.RmvUpdate(this as IPLoop);
+                var engine = Engine as PGEngine;
+                if (this is IPLoop) engine.TickEngine.RmvUpdate(this as IPLoop);
             }
 #endif
 

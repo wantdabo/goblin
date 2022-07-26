@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GameStageState : FSMLockstepState<CGEngineComp, GameStageComp, GameStageState>
+    public class GameStageState : FSMLockstepState<CGEngine, GameStage, GameStageState>
     {
         public override List<Type> PassStates => throw new NotImplementedException();
 

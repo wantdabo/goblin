@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay
 {
     /// <summary>
-    /// Play-Game-Engine-Comp 战斗的引擎组件
+    /// Play-Game-Engine 战斗的引擎组件
     /// </summary>
-    public class PGEngineComp : GameEngineComp<PGEngineComp>
+    public class PGEngine : GameEngine<PGEngine>
     {
-        public PTickEngineComp PTickEngine = null;
+        public PTickEngine TickEngine = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            PTickEngine = AddComp<PTickEngineComp>();
+            TickEngine = AddComp<PTickEngine>();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace GoblinFramework.Client.Common
     /// <summary>
     /// Unity3D 工具组件
     /// </summary>
-    public class U3DComp : Comp<CGEngineComp>
+    public class U3DTool : Comp<CGEngine>
     {
         /// <summary>
         /// 获取 Unity3D 节点/组件

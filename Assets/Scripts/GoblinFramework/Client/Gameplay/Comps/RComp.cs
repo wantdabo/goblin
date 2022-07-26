@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General
+namespace GoblinFramework.Client.Gameplay.Comps
 {
     /// <summary>
-    /// 游戏配置组件
+    /// Render-Comp，战斗渲染层组件
     /// </summary>
-    public class ConfigComp : Comp<GGEngineComp>
+    public class RComp : Comp<CGEngine>
     {
     }
 }

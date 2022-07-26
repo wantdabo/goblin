@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.UI.Login
 {
     public class LoginView : UIBaseView
     {
-        public override GameUIComp.UILayer UILayer => GameUIComp.UILayer.UIMain;
+        public override GameUI.UILayer UILayer => GameUI.UILayer.UIMain;
 
         protected override string UIRes => "Login/LoginView";
 
@@ -36,7 +36,7 @@ namespace GoblinFramework.Client.UI.Login
 
             // 测试定时器
             int counter = 0;
-            var clock = AddComp<ClockComp>();
+            var clock = AddComp<Clock>();
             var textClock = Engine.U3D.SeekNode<Text>(gameObject, "ClockText");
             clock.Start(() =>
             {

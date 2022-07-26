@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Common
 {
     /// <summary>
-    /// Clock-Comp 客户端计时器
+    /// Clock 客户端计时器
     /// </summary>
-    public class ClockComp : Comp<CGEngineComp>, IUpdate
+    public class Clock : Comp<CGEngine>, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }

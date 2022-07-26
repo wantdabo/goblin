@@ -1,13 +1,13 @@
-﻿using GoblinFramework.Core;
+﻿using GoblinFramework.Client.Gameplay.Comps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Comps
+namespace GoblinFramework.Client.Gameplay.Actors
 {
-    public class MotionComp : Comp<PGEngineComp>
+    public class Actor : RComp
     {
     }
 }

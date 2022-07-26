@@ -8,45 +8,73 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Comps
 {
-    public enum InputType
-    {
-        LInput,
-        LJoystick,
-        LBA,
-        LBB,
-        LBC,
-        LBD,
-    }
-
-    public struct InputInfo
+    public struct Input
     {
         public bool press;
         public Fixed64Vector2 dire;
     }
 
-    public class LInputComp : Comp<PGEngineComp>
+    public class InputComp : LComp<InputComp.InputInfo>
     {
-        private Dictionary<InputType, InputInfo> inputMap = new Dictionary<InputType, InputInfo>
+        public enum InputType
         {
-                {InputType.LJoystick, new InputInfo(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBA, new InputInfo(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBB, new InputInfo(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBC, new InputInfo(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBD, new InputInfo(){press = false, dire = Fixed64Vector2.Zero}},
-        };
+            LInput,
+            LJoystick,
+            LBA,
+            LBB,
+            LBC,
+            LBD,
+        }
 
-        public InputInfo GetInput(InputType inputType)
+        /// <summary>
+        /// 获取输入状态
+        /// </summary>
+        /// <param name="inputType">输入类型</param>
+        /// <returns>输入状态</returns>
+        /// <exception cref="Exception">未找到输入类型异常</exception>
+        public Input GetInput(InputType inputType)
         {
-            if (inputMap.TryGetValue(inputType, out InputInfo input)) return input;
+            if (Info.inputMap.TryGetValue(inputType, out Input input)) return input;
 
             throw new Exception($"inputType not found {inputType}");
         }
 
-        public void SetInput(InputType inputType, InputInfo input)
+        /// <summary>
+        /// 设置输入状态
+        /// </summary>
+        /// <param name="inputType">输入类型</param>
+        /// <param name="input">输入状态</param>
+        public void SetInput(InputType inputType, Input input)
         {
-            if (inputMap.ContainsKey(inputType)) inputMap.Remove(inputType);
+            if (Info.inputMap.ContainsKey(inputType)) Info.inputMap.Remove(inputType);
 
-            inputMap.Add(inputType, input);
+            Info.inputMap.Add(inputType, input);
         }
+
+        #region InputInfo
+        public class InputInfo : LInfo
+        {
+            public Dictionary<InputType, Input> inputMap = new Dictionary<InputType, Input>
+            {
+                {InputType.LJoystick, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.LBA, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.LBB, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.LBC, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.LBD, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+            };
+
+            public override object Clone()
+            {
+                var inputInfo = new InputInfo();
+                foreach (var kv in inputMap)
+                {
+                    inputInfo.inputMap.Remove(kv.Key);
+                    inputInfo.inputMap.Add(kv.Key, kv.Value);
+                }
+
+                return inputInfo;
+            }
+        }
+        #endregion
     }
 }

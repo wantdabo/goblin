@@ -23,9 +23,9 @@ namespace GoblinFramework.Client.Common
     public interface IFixedUpdate { public void FixedUpdate(float tick); }
 
     /// <summary>
-    /// Client-Tick-Engine-Comp, 客户端 Tick 驱动组件
+    /// Client-Tick-Engine, 客户端 Tick 驱动组件
     /// </summary>
-    public class CTickEngineComp : Comp<CGEngineComp>
+    public class CTickEngine : Comp<CGEngine>
     {
         private List<IUpdate> updates = new List<IUpdate>();
         private List<ILateUpdate> lateUpdates = new List<ILateUpdate>();

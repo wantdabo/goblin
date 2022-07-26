@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.UI.GameInitialize
 {
     public class GameInitializeView : UIBaseView, IUpdate
     {
-        public override GameUIComp.UILayer UILayer => GameUIComp.UILayer.UITop;
+        public override GameUI.UILayer UILayer => GameUI.UILayer.UITop;
 
         protected override string UIRes => "GameInitialize/GameInitializeView";
 
