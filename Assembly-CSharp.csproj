@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\Behavior\InputComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\Behavior\BehaviorComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\Behavior\MotionComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Comps\Behavior\ControllerComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\HeroActor.cs" />
   </ItemGroup>
   <ItemGroup>

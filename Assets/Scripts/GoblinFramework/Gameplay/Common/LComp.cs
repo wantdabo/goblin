@@ -28,15 +28,23 @@ namespace GoblinFramework.Gameplay.Common
             if (this is IPLoop) Engine.TickEngine.RmvPLoop(this as IPLoop);
         }
 
+        public void RmvActor(Actor actor)
+        {
+            actorList.Remove(actor);
+        }
+
+        private List<Actor> actorList = new List<Actor>();
+
         /// <summary>
         /// 添加实体组件
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">只能添加 Actor</exception>
         public T AddActor<T>() where T : Actor, new()
         {
             var actor = base.AddComp<T>();
+            actorList.Add(actor);
             actor.Actor = Actor;
             if (actor is Actor) return actor;
 
@@ -62,6 +70,7 @@ namespace GoblinFramework.Gameplay.Common
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// <returns>行为逻辑组件</returns>
+        /// <exception cref="Exception">只能添加 BehaviorComp</exception>
         public T AddBehavior<T>() where T : LComp, new() 
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
@@ -83,7 +92,7 @@ namespace GoblinFramework.Gameplay.Common
         /// <exception cref="Exception">请使用 AddBehavior/AddActor 去完成工作</exception>
         public override T AddComp<T>()
         {
-            throw new Exception("plz use AddBehavior to finish your work.");
+            throw new Exception("plz use AddBehavior/AddActor to finish your work.");
         }
     }
 }
