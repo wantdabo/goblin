@@ -13,6 +13,7 @@ namespace GoblinFramework.General.Gameplay.Command.Cmds
     public struct SyncPosCmd
     {
         public int actorId;
-        public Fixed64Vector3 pos;
+        public int dire;
+        public int x, y, z;
     }
 }

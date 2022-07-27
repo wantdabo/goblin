@@ -32,5 +32,5 @@ namespace GoblinFramework.Client.GameStages
 
             if (view?.progress >= 1) Engine.GameStage.EnterState<StageLoginState>();
         }
-    }
+}
 }

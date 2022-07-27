@@ -32,7 +32,10 @@ namespace GoblinFramework.General.Gameplay.Command
             var writer = BinaryRW.GenWriter();
 
             writer.Write(cmd.actorId);
-            writer.Write(Fixed64Vector3ToBytes(cmd.pos));
+            writer.Write(cmd.dire);
+            writer.Write(cmd.x);
+            writer.Write(cmd.y);
+            writer.Write(cmd.z);
             var bytes = BinaryRW.ToArray(writer.BaseStream);
 
             BinaryRW.EndWriter(writer);
@@ -46,38 +49,14 @@ namespace GoblinFramework.General.Gameplay.Command
 
             var cmd = new SyncPosCmd();
             cmd.actorId = reader.ReadInt32();
-            cmd.pos = new Fixed64Vector3(reader.ReadInt64(), reader.ReadInt64(), reader.ReadInt64());
+            cmd.dire = reader.ReadInt32();
+            cmd.x = reader.ReadInt32();
+            cmd.y = reader.ReadInt32();
+            cmd.z = reader.ReadInt32();
 
             BinaryRW.EndReader(reader);
 
             return cmd;
-        }
-
-        public byte[] Fixed64Vector2ToBytes(Fixed64Vector2 vec2)
-        {
-            var writer = BinaryRW.GenWriter();
-
-            writer.Write(vec2.x.RawValue);
-            writer.Write(vec2.y.RawValue);
-            var bytes = BinaryRW.ToArray(writer.BaseStream);
-
-            BinaryRW.EndWriter(writer);
-
-            return bytes;
-        }
-
-        public byte[] Fixed64Vector3ToBytes(Fixed64Vector3 vec3)
-        {
-            var writer = BinaryRW.GenWriter();
-
-            writer.Write(vec3.x.RawValue);
-            writer.Write(vec3.y.RawValue);
-            writer.Write(vec3.z.RawValue);
-            var bytes = BinaryRW.ToArray(writer.BaseStream);
-
-            BinaryRW.EndWriter(writer);
-
-            return bytes;
         }
     }
 }

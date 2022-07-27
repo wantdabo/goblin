@@ -14,11 +14,10 @@ namespace GoblinFramework.Gameplay.Comps
         public Fixed64Vector2 dire;
     }
 
-    public class InputComp : LComp<InputComp.InputInfo>
+    public class InputComp : BehaviorComp<InputComp.InputInfo>
     {
         public enum InputType
         {
-            LInput,
             LJoystick,
             LBA,
             LBB,
@@ -34,7 +33,7 @@ namespace GoblinFramework.Gameplay.Comps
         /// <exception cref="Exception">未找到输入类型异常</exception>
         public Input GetInput(InputType inputType)
         {
-            if (Info.inputMap.TryGetValue(inputType, out Input input)) return input;
+            if (Info.InputMap.TryGetValue(inputType, out Input input)) return input;
 
             throw new Exception($"inputType not found {inputType}");
         }
@@ -46,15 +45,15 @@ namespace GoblinFramework.Gameplay.Comps
         /// <param name="input">输入状态</param>
         public void SetInput(InputType inputType, Input input)
         {
-            if (Info.inputMap.ContainsKey(inputType)) Info.inputMap.Remove(inputType);
+            if (Info.InputMap.ContainsKey(inputType)) Info.InputMap.Remove(inputType);
 
-            Info.inputMap.Add(inputType, input);
+            Info.InputMap.Add(inputType, input);
         }
 
         #region InputInfo
         public class InputInfo : LInfo
         {
-            public Dictionary<InputType, Input> inputMap = new Dictionary<InputType, Input>
+            public Dictionary<InputType, Input> InputMap = new Dictionary<InputType, Input>
             {
                 {InputType.LJoystick, new Input(){press = false, dire = Fixed64Vector2.Zero}},
                 {InputType.LBA, new Input(){press = false, dire = Fixed64Vector2.Zero}},
@@ -66,10 +65,10 @@ namespace GoblinFramework.Gameplay.Comps
             public override object Clone()
             {
                 var inputInfo = new InputInfo();
-                foreach (var kv in inputMap)
+                foreach (var kv in InputMap)
                 {
-                    inputInfo.inputMap.Remove(kv.Key);
-                    inputInfo.inputMap.Add(kv.Key, kv.Value);
+                    inputInfo.InputMap.Remove(kv.Key);
+                    inputInfo.InputMap.Add(kv.Key, kv.Value);
                 }
 
                 return inputInfo;

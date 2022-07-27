@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Common
     /// <summary>
     /// IPlayLoop，战斗循环
     /// </summary>
-    public interface IPLoop { public void Update(int frame); }
+    public interface IPLoop { public void PLoop(int frame); }
 
     /// <summary>
     /// Play-Tick-Engine, 玩法 Tick 驱动组件
@@ -33,13 +33,13 @@ namespace GoblinFramework.Gameplay.Common
             base.OnDestroy();
         }
 
-        public void AddUpdate(IPLoop update) { iploops.Add(update); }
-        public void RmvUpdate(IPLoop update) { iploops.Remove(update); }
+        public void AddPLoop(IPLoop update) { iploops.Add(update); }
+        public void RmvPLoop(IPLoop update) { iploops.Remove(update); }
 
-        public void Update(int frame)
+        public void PLoop(int frame)
         {
             if (0 > iploops.Count) return;
-            for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].Update(frame);
+            for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].PLoop(frame);
         }
     }
 }

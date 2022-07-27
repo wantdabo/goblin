@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Core.FSMachine;
+﻿using GoblinFramework.Client.Common;
+using GoblinFramework.Core.FSMachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace GoblinFramework.Client.GameStages
         {
         }
 
-        public override void OnStateTick(float tick)
+        public virtual void OnStateTick(float tick)
         {
         }
     }

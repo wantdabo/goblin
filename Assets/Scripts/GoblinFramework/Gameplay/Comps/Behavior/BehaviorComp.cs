@@ -1,4 +1,4 @@
-﻿using GoblinFramework.Core;
+﻿using GoblinFramework.Gameplay.Common;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Comps
 {
     /// <summary>
-    /// Logic-Comp，战斗逻辑层组件
+    /// Behavior-Comp，战斗逻辑层行为组件
     /// </summary>
     /// <typeparam name="T">组件数据类型</typeparam>
-    public class LComp<T> : Comp<PGEngine> where T : LInfo, new()
+    public class BehaviorComp<T> : LComp where T : LInfo, new()
     {
         private T info = new T();
         public T Info { get { return info; } private set { info = value; } }

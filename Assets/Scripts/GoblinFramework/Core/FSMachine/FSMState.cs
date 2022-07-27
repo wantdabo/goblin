@@ -35,14 +35,10 @@ namespace GoblinFramework.Core.FSMachine
         /// 状态进入
         /// </summary>
         protected abstract void OnEnter();
+
         /// <summary>
         /// 状态离开
         /// </summary>
         protected abstract void OnLeave();
-        /// <summary>
-        /// 状态驱动
-        /// </summary>
-        /// <param name="tick">变值步长</param>
-        public abstract void OnStateTick(float tick);
     }
 }

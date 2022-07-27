@@ -50,13 +50,6 @@ namespace GoblinFramework.Core
                 if (this is IFixedUpdate) engine.TickEngine.AddFixedUpdate(this as IFixedUpdate);
             }
 #endif
-#if GOBLIN_GAMEPLAY
-            if (Engine is PGEngine)
-            {
-                var engine = Engine as PGEngine;
-                if (this is IPLoop) engine.TickEngine.AddUpdate(this as IPLoop);
-            }
-#endif
         }
 
         protected override void OnDestroy()
@@ -68,13 +61,6 @@ namespace GoblinFramework.Core
                 if (this is IUpdate) engine.TickEngine.RmvUpdate(this as IUpdate);
                 if (this is ILateUpdate) engine.TickEngine.RmvLateUpdate(this as ILateUpdate);
                 if (this is IFixedUpdate) engine.TickEngine.RmvFixedUpdate(this as IFixedUpdate);
-            }
-#endif
-#if GOBLIN_GAMEPLAY
-            if (Engine is PGEngine)
-            {
-                var engine = Engine as PGEngine;
-                if (this is IPLoop) engine.TickEngine.RmvUpdate(this as IPLoop);
             }
 #endif
 
