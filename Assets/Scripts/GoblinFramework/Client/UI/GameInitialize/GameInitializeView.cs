@@ -26,7 +26,7 @@ namespace GoblinFramework.Client.UI.GameInitialize
             textProgress = Engine.U3D.SeekNode<Text>(gameObject, "ProgressDesctText");
         }
 
-        private float speed = 0.25f;
+        private float speed = 0.5f;
         public float progress = 0;
         public void Update(float tick)
         {

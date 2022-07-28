@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Behaviors
     /// <summary>
     /// 组件数据定义，日后方便拷贝，预测状态
     /// </summary>
-    public abstract class LInfo : Goblin, ICloneable
+    public abstract class LInfo : Goblin<PGEngine>, ICloneable
     {
         protected override void OnCreate() { }
         protected override void OnDestroy() { }

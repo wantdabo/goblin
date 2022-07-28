@@ -14,5 +14,17 @@ namespace GoblinFramework.Gameplay.Common
     public class LComp : Comp<PGEngine>
     {
         public Actor Actor;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            if (this is IPLoop) Engine.TickEngine.AddPLoop(this as IPLoop);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (this is IPLoop) Engine.TickEngine.RmvPLoop(this as IPLoop);
+        }
     }
 }

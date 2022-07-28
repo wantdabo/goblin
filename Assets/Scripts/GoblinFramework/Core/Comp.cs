@@ -18,7 +18,7 @@ namespace GoblinFramework.Core
     /// 组件，核心思想类
     /// </summary>
     /// <typeparam name="E">引擎组件类型</typeparam>
-    public abstract class Comp<E> : Goblin where E : GameEngine<E>, new()
+    public abstract class Comp<E> : Goblin<E> where E : GameEngine<E>, new()
     {
         /// <summary>
         /// 组件列表
@@ -33,11 +33,6 @@ namespace GoblinFramework.Core
         /// 父组件
         /// </summary>
         protected Comp<E> parent;
-
-        /// <summary>
-        /// 引擎组件
-        /// </summary>
-        public E Engine;
 
         protected override void OnCreate()
         {
