@@ -14,12 +14,12 @@ namespace GoblinFramework.Gameplay
     /// </summary>
     public class PGEngine : GameEngine<PGEngine>
     {
-        public PTickEngine TickEngine = null;
+        public TickEngine TickEngine = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            TickEngine = AddComp<PTickEngine>();
+            TickEngine = AddComp<TickEngine>();
         }
     }
 }

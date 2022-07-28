@@ -25,7 +25,7 @@ namespace GoblinFramework.Client.Common
     /// <summary>
     /// Client-Tick-Engine, 客户端 Tick 驱动组件
     /// </summary>
-    public class CTickEngine : Comp<CGEngine>
+    public class TickEngine : Comp<CGEngine>
     {
         private List<IUpdate> updates = new List<IUpdate>();
         private List<ILateUpdate> lateUpdates = new List<ILateUpdate>();

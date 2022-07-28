@@ -90,7 +90,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\ControllerBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector2.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CTickEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\CmdParser.cs" />
@@ -103,7 +103,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Actor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocation.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\PTickEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DTool.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />

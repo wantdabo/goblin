@@ -17,7 +17,7 @@ namespace GoblinFramework.Client
     /// </summary>
     public class CGEngine : GameEngine<CGEngine>
     {
-        public CTickEngine TickEngine = null;
+        public TickEngine TickEngine = null;
         public U3DTool U3D = null;
         public GameUI GameUI = null;
         public GameRes.GameRes GameRes = null;
@@ -28,7 +28,7 @@ namespace GoblinFramework.Client
             base.OnCreate();
 
             // 开发引擎（Unity3D）Tick
-            TickEngine = AddComp<CTickEngine>();
+            TickEngine = AddComp<TickEngine>();
             // U3D API
             U3D = AddComp<U3DTool>();
             // 游戏 UI
