@@ -15,8 +15,21 @@ namespace GoblinFramework.Gameplay.Behaviors
     /// <typeparam name="TI">组件数据类型</typeparam>
     public class Behavior<TI> : LComp where TI : LInfo, new()
     {
-        private TI info = new TI();
+        private TI info = null;
         public TI Info { get { return info; } private set { info = value; } }
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            info = new TI();
+            info.Engine = Engine;
+            info.Create();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
     }
 
     /// <summary>

@@ -115,6 +115,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\Behavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\RComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachineLockstep.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMLockstepState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
