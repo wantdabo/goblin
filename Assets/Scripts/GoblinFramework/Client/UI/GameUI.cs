@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.UI
     /// <summary>
     /// Game-UI 游戏 UI 组件
     /// </summary>
-    public class GameUI : Comp<CGEngine>
+    public class GameUI : RComp
     {
         #region 枚举
         /// <summary>

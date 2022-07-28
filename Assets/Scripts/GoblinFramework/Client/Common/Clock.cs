@@ -10,7 +10,7 @@ namespace GoblinFramework.Client.Common
     /// <summary>
     /// Clock 客户端计时器
     /// </summary>
-    public class Clock : Comp<CGEngine>, IUpdate
+    public class Clock : RComp, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }

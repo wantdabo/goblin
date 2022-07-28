@@ -14,7 +14,7 @@ namespace GoblinFramework.Client.UI.Base
     /// <summary>
     /// UI 基础类
     /// </summary>
-    public abstract class UIBase : Comp<CGEngine>
+    public abstract class UIBase : RComp
     {
         protected abstract string UIRes { get; }
 

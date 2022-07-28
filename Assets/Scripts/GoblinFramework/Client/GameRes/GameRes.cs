@@ -9,7 +9,7 @@ namespace GoblinFramework.Client.GameRes
     /// <summary>
     /// Game-Resources-Comp 资源加载组件
     /// </summary>
-    public abstract class GameRes : Comp<CGEngine>
+    public abstract class GameRes : RComp
     {
         /// <summary>
         /// 资源组件就绪状态

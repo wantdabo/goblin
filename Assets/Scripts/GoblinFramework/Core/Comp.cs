@@ -36,42 +36,10 @@ namespace GoblinFramework.Core
 
         protected override void OnCreate()
         {
-#if GOBLIN_CLIENT
-            if (Engine is CGEngine) 
-            {
-                var engine = Engine as CGEngine;
-                if (this is IUpdate) engine.TickEngine.AddUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.TickEngine.AddLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.TickEngine.AddFixedUpdate(this as IFixedUpdate);
-            }
-#endif
-#if GOBLIN_GAMEPLAY
-            if (Engine is PGEngine)
-            {
-                var engine = Engine as PGEngine;
-                if (this is IPLoop) engine.TickEngine.AddPLoop(this as IPLoop);
-            }
-#endif
         }
 
         protected override void OnDestroy()
         {
-#if GOBLIN_CLIENT
-            if (Engine is CGEngine)
-            {
-                var engine = Engine as CGEngine;
-                if (this is IUpdate) engine.TickEngine.RmvUpdate(this as IUpdate);
-                if (this is ILateUpdate) engine.TickEngine.RmvLateUpdate(this as ILateUpdate);
-                if (this is IFixedUpdate) engine.TickEngine.RmvFixedUpdate(this as IFixedUpdate);
-            }
-#endif
-#if GOBLIN_GAMEPLAY
-            if (Engine is PGEngine) 
-            {
-                var engine = Engine as PGEngine;
-                if (this is IPLoop) engine.TickEngine.RmvPLoop(this as IPLoop);
-            }
-#endif
             for (int i = compList.Count - 1; i >= 0; i--) RmvComp(compList[i]);
             compList.Clear();
             compList = null;
@@ -94,9 +62,9 @@ namespace GoblinFramework.Core
             List<T> list = null;
             foreach (var comp in compList)
             {
-                if (comp is T) 
+                if (comp is T)
                 {
-                    if(null == list) list = new List<T>();
+                    if (null == list) list = new List<T>();
                     list.Add(comp as T);
                 }
             }

@@ -114,6 +114,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\Behavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\RComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
