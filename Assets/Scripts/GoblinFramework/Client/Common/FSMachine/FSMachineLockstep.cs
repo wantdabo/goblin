@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Core.FSMachine
+namespace GoblinFramework.Client.Common.FSMachine
 {
     /// <summary>
     /// Finite-State-Machine-Lock，状态机，锁步状态机组件
     /// </summary>
-    /// <typeparam name="E">引擎组件类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachineLockstep<E, MT, ST> : FSMachine<E, MT, ST> where E : GameEngine<E>, new() where MT : FSMachineLockstep<E, MT, ST>, new() where ST : FSMLockstepState<E, MT, ST>, new()
+    public abstract class FSMachineLockstep<MT, ST> : FSMachine<MT, ST> where MT : FSMachineLockstep<MT, ST>, new() where ST : FSMLockstepState<MT, ST>, new()
     {
         /// <summary>
         /// 切换至指定状态，且指定状态在通行列表中

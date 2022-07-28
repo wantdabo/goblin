@@ -1,20 +1,19 @@
-﻿using GoblinFramework.Core;
+﻿using GoblinFramework.Client;
+using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Core.FSMachine
+namespace GoblinFramework.Client.Common.FSMachine
 {
-
     /// <summary>
     /// Finite-State-Machine-Comp，状态机，状态机组件
     /// </summary>
-    /// <typeparam name="E">引擎组件类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<E, MT, ST> : Comp<E> where E : GameEngine<E>, new() where MT : FSMachine<E, MT, ST>, new() where ST : FSMState<E, MT, ST>, new()
+    public abstract class FSMachine<MT, ST> : Comp<CGEngine>, IUpdate where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
@@ -48,6 +47,12 @@ namespace GoblinFramework.Core.FSMachine
 
             State = targetState;
             targetState.Enter();
+        }
+
+        public void Update(float tick)
+        {
+            if (null == State) return;
+            State.OnStateTick(tick);
         }
     }
 }

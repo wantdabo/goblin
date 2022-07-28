@@ -1,20 +1,20 @@
-﻿using GoblinFramework.Core;
+﻿using GoblinFramework.Client;
+using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Core.FSMachine
+namespace GoblinFramework.Client.Common.FSMachine
 {
 
     /// <summary>
     /// Finite-State-Machine-State，状态机，状态
     /// </summary>
-    /// <typeparam name="E">引擎组件类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<E, MT, ST> : Comp<E> where E : GameEngine<E>, new() where MT : FSMachine<E, MT, ST>, new() where ST : FSMState<E, MT, ST>, new()
+    public abstract class FSMState<MT, ST> : Comp<CGEngine> where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         /// <summary>
         /// 状态机
@@ -30,6 +30,12 @@ namespace GoblinFramework.Core.FSMachine
         {
             OnLeave();
         }
+
+        /// <summary>
+        /// 状态 Tick
+        /// </summary>
+        /// <param name="tick">变值步长</param>
+        public virtual void OnStateTick(float tick){}
 
         /// <summary>
         /// 状态进入

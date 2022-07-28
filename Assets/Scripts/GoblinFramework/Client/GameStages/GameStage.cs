@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Core.FSMachine;
+using GoblinFramework.Client.Common.FSMachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GameStage : FSMachineLockstep<CGEngine, GameStage, GameStageState>, IUpdate
+    public class GameStage : FSMachineLockstep<GameStage, GameStageState>
     {
         protected override void OnCreate()
         {
@@ -18,12 +18,6 @@ namespace GoblinFramework.Client.GameStages
             SetState<GamePlayingState>();
 
             base.OnCreate();
-        }
-
-        public void Update(float tick)
-        {
-            if (null == State) return;
-            State.OnStateTick(tick);
         }
     }
 }

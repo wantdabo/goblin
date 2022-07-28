@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Core.FSMachine;
+using GoblinFramework.Client.Common.FSMachine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GameStageState : FSMLockstepState<CGEngine, GameStage, GameStageState>
+    public class GameStageState : FSMLockstepState<GameStage, GameStageState>
     {
         public override List<Type> PassStates => throw new NotImplementedException();
 
@@ -17,10 +17,6 @@ namespace GoblinFramework.Client.GameStages
         }
 
         protected override void OnLeave()
-        {
-        }
-
-        public virtual void OnStateTick(float tick)
         {
         }
     }
