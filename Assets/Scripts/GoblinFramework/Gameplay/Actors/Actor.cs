@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Gameplay.Common;
-using GoblinFramework.Gameplay.Comps;
+﻿using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Common;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Actors
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// <typeparam name="TI">行为逻辑组件数据类型</typeparam>
-        public void RmvBehavior<T, TI>() where T : BehaviorComp<TI>, new() where TI : LInfo, new()
+        public void RmvBehavior<T, TI>() where T : Behavior<TI>, new() where TI : LInfo, new()
         {
             if (false == behaviorDict.TryGetValue(typeof(T), out var behavior)) return;
             behaviorDict.Remove(typeof(T));
@@ -43,13 +43,11 @@ namespace GoblinFramework.Gameplay.Actors
         /// 添加行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        /// <typeparam name="TI">行为逻辑组件数据类型</typeparam>
-        public T AddBehavior<T, TI>() where T : BehaviorComp<TI>, new() where TI : LInfo, new()
+        public T AddBehavior<T>() where T : LComp, new()
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
             var comp = AddComp<T>();
-
             behaviorDict.Add(typeof(T), comp);
             comp.Actor = Actor;
 
@@ -58,8 +56,8 @@ namespace GoblinFramework.Gameplay.Actors
 
         public void RmvActor(Actor actor)
         {
-            RmvComp(actor);
             actorList.Remove(actor);
+            RmvComp(actor);
         }
 
         private List<Actor> actorList = new List<Actor>();

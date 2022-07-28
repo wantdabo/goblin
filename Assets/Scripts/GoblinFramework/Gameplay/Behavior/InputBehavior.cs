@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Comps
+namespace GoblinFramework.Gameplay.Behaviors
 {
     public struct Input
     {
@@ -14,7 +14,7 @@ namespace GoblinFramework.Gameplay.Comps
         public Fixed64Vector2 dire;
     }
 
-    public class InputComp : BehaviorComp<InputComp.InputInfo>
+    public class InputBehavior : Behavior<InputBehavior.InputInfo>
     {
         public enum InputType
         {

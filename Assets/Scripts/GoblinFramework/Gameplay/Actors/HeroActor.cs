@@ -1,4 +1,4 @@
-﻿using GoblinFramework.Gameplay.Comps;
+﻿using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace GoblinFramework.Gameplay.Actors
         protected override void OnCreate()
         {
             base.OnCreate();
-            AddBehavior<InputComp, InputComp.InputInfo>();
-            AddBehavior<MotionComp, MotionComp.MotionInfo>();
+            AddBehavior<InputBehavior>();
+            AddBehavior<MotionBehavior>();
         }
 
         protected override void OnDestroy()

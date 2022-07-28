@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Comps
+namespace GoblinFramework.Gameplay.Behaviors
 {
-    public class MotionComp : BehaviorComp<MotionComp.MotionInfo>, IPLoop
+    public class MotionBehavior : Behavior<MotionBehavior.MotionInfo>, IPLoop
     {
         public void AddForce(Fixed64Vector3 force) 
         {
@@ -28,7 +28,10 @@ namespace GoblinFramework.Gameplay.Comps
 
             public override object Clone()
             {
-                throw new NotImplementedException();
+                MotionInfo motionInfo = new MotionInfo();
+                motionInfo.force = Fixed64Vector3.zero;
+
+                return motionInfo;
             }
         }
         #endregion

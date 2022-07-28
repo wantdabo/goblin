@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Comps.Behavior
+namespace GoblinFramework.Gameplay.Behavior
 {
-    public class ControllerComp : LComp
+    public class ControllerBehavior : LComp
     {
     }
 }

@@ -1,6 +1,5 @@
 ﻿using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Actors;
-using GoblinFramework.Gameplay.Comps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
