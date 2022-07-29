@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Actors
 {
-    public class Actor : LComp
+    public class Actor : PComp
     {
         public ActorInfo ActorInfo = new ActorInfo();
 
-        private Dictionary<Type, LComp> behaviorDict = new Dictionary<Type, LComp>();
+        private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();
 
         /// <summary>
         /// 获取行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// <returns>行为逻辑组件</returns>
-        public T GetBehavior<T>() where T : LComp, new()
+        public T GetBehavior<T>() where T : PComp, new()
         {
             if (behaviorDict.TryGetValue(typeof(T), out var behavior)) return behavior as T;
 
@@ -43,13 +43,12 @@ namespace GoblinFramework.Gameplay.Actors
         /// 添加行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        public T AddBehavior<T>() where T : LComp, new()
+        public T AddBehavior<T>() where T : PComp, new()
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
             var comp = AddComp<T>();
             behaviorDict.Add(typeof(T), comp);
-            comp.Actor = Actor;
 
             return comp;
         }
@@ -66,14 +65,26 @@ namespace GoblinFramework.Gameplay.Actors
         /// 添加实体组件
         /// </summary>
         /// <typeparam name="T">实体组件类型</typeparam>
-        /// <returns></returns>
+        /// <returns>Actor</returns>
         public T AddActor<T>() where T : Actor, new()
         {
             var actor = AddComp<T>();
             actorList.Add(actor);
-            actor.Actor = Actor;
 
             return actor;
+        }
+
+        /// <summary>
+        /// 增强 AddComp，使其具备 Acor 赋值功能
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <returns>T</returns>
+        public new T AddComp<T>() where T : PComp, new()
+        {
+            var comp = base.AddComp<T>();
+            comp.Actor = Actor;
+
+            return comp;
         }
     }
 

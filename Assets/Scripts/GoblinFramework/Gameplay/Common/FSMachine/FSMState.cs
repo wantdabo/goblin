@@ -14,7 +14,7 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
     /// </summary>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<MT, ST> : LComp where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
+    public abstract class FSMState<MT, ST> : PComp where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         /// <summary>
         /// 状态机

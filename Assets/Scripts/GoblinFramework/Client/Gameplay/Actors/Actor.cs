@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.Gameplay.Actors
 {
-    public class Actor : RComp
+    public class Actor : CComp
     {
     }
 }

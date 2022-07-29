@@ -12,7 +12,7 @@ namespace GoblinFramework.Client.GameRes
     /// <summary>
     /// 资源加载定位器，加载框架包装定位资源地址
     /// </summary>
-    public class GameResLocation : RComp
+    public class GameResLocation : CComp
     {
         private const string prefabsPath = "UIPrefabs/";
         private const string spritesPath = "UISprites/";

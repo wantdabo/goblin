@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Common
 {
     /// <summary>
-    /// Render-Comp，渲染层组件
+    /// Client-Comp，渲染层组件
     /// </summary>
-    public class RComp : Comp<CGEngine>
+    public class CComp : Comp<CGEngine>
     {
         protected override void OnCreate()
         {

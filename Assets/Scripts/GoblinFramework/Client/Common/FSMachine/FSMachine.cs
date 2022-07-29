@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.Common.FSMachine
     /// </summary>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<MT, ST> : RComp, IUpdate where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
+    public abstract class FSMachine<MT, ST> : CComp, IUpdate where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }

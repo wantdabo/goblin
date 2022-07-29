@@ -14,7 +14,7 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
     /// </summary>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<MT, ST> : LComp, IPLoop where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
+    public abstract class FSMachine<MT, ST> : PComp, IPLoop where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
@@ -52,6 +52,8 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
 
         public void PLoop(int frame)
         {
+            if (null == State) return;
+            State.OnStateTick(frame);
         }
     }
 }

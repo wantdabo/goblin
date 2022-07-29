@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Common
 {
     /// <summary>
-    /// Logic-Comp，逻辑层组件
+    /// Play-Comp，逻辑层组件
     /// </summary>
-    public class LComp : Comp<PGEngine>
+    public class PComp : Comp<PGEngine>
     {
         public Actor Actor;
 

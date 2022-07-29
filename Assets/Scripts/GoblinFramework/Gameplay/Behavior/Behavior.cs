@@ -13,7 +13,7 @@ namespace GoblinFramework.Gameplay.Behaviors
     /// Behavior-Comp，战斗逻辑层行为组件
     /// </summary>
     /// <typeparam name="TI">组件数据类型</typeparam>
-    public class Behavior<TI> : LComp where TI : LInfo, new()
+    public class Behavior<TI> : PComp where TI : LInfo, new()
     {
         private TI info = null;
         public TI Info { get { return info; } private set { info = value; } }

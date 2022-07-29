@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.Gameplay
 {
-    public class GameplayRender : RComp
+    public class GameplayRender : CComp
     {
         public void Call<T>(T cmd)
         {

@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Actors
+namespace GoblinFramework.Gameplay.Actors.Hoshi
 {
-    public class HeroActor : Actor
+    public class HoshiActor : Actor
     {
         protected override void OnCreate()
         {
             base.OnCreate();
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
+            AddBehavior<HoshiBehavior>();
         }
 
         protected override void OnDestroy()

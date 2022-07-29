@@ -56,7 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\LComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\PComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Matrix.cs" />
@@ -66,9 +66,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMachine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\HeroActor.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiActor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Server\SGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameInitializeState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\CComp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Actors\Actor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedRandom.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\PGEngine.cs" />
@@ -88,17 +89,21 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\ControllerBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachineLockstep.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector2.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\Behavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\CmdParser.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\MotionBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\GameplayRender.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Actor.cs" />
@@ -113,12 +118,16 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\Behavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\RComp.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachineLockstep.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMLockstepState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiWalkState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiRunState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackBState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackCState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackAState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiIdleState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackDState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiController.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

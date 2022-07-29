@@ -37,9 +37,6 @@ namespace GoblinFramework.Client
             GameRes = Engine.AddComp<YooGameRes>();
             // 游戏阶段总控
             GameStage = AddComp<GameStage>();
-
-            // 进入资源检查阶段
-            GameStage.EnterState<GameInitializeState>();
         }
 
         protected override void OnDestroy()

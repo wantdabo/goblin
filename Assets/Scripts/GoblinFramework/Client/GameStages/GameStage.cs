@@ -12,12 +12,15 @@ namespace GoblinFramework.Client.GameStages
     {
         protected override void OnCreate()
         {
+            base.OnCreate();
+
             SetState<GameInitializeState>();
             SetState<GameHotfixState>();
             SetState<StageLoginState>();
             SetState<GamePlayingState>();
 
-            base.OnCreate();
+            // 进入资源检查阶段
+            EnterState<GameInitializeState>();
         }
     }
 }
