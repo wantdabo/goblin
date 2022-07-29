@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,10 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
     /// <summary>
     /// Finite-State-Machine-Lock，状态机，锁步状态机组件
     /// </summary>
+    /// <typeparam name="I">BeaviorInfo 类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachineLockstep<MT, ST> : FSMachine<MT, ST> where MT : FSMachineLockstep<MT, ST>, new() where ST : FSMLockstepState<MT, ST>, new()
+    public abstract class FSMachineLockstep<I, MT, ST> : FSMachine<I, MT, ST> where I : BehaviorInfo, new() where MT : FSMachineLockstep<I, MT, ST>, new() where ST : FSMLockstepState<I, MT, ST>, new()
     {
         /// <summary>
         /// 切换至指定状态，且指定状态在通行列表中

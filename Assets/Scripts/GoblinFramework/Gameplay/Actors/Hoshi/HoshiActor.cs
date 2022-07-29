@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Gameplay.Behaviors;
+﻿using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
+using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
             AddBehavior<HoshiBehavior>();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
         }
     }
 }

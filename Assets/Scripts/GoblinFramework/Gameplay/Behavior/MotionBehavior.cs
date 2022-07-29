@@ -17,22 +17,14 @@ namespace GoblinFramework.Gameplay.Behaviors
 
         public void PLoop(int frame)
         {
-            Actor.ActorInfo.pos += Info.force;
+            Actor.ActorBehavior.Info.pos += Info.force;
             Info.force = Fixed64Vector3.zero;
         }
 
         #region MotionInfo
-        public class MotionInfo : LInfo
+        public class MotionInfo : BehaviorInfo
         {
             public Fixed64Vector3 force;
-
-            public override object Clone()
-            {
-                MotionInfo motionInfo = new MotionInfo();
-                motionInfo.force = Fixed64Vector3.zero;
-
-                return motionInfo;
-            }
         }
         #endregion
     }

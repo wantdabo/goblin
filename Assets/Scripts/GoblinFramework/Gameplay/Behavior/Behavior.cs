@@ -10,36 +10,29 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Behaviors
 {
     /// <summary>
-    /// Behavior-Comp，战斗逻辑层行为组件
+    /// Behavior，战斗逻辑层行为组件
     /// </summary>
-    /// <typeparam name="TI">组件数据类型</typeparam>
-    public class Behavior<TI> : PComp where TI : LInfo, new()
+    /// <typeparam name="I">组件数据类型</typeparam>
+    public class Behavior<I> : PComp where I : BehaviorInfo, new()
     {
-        private TI info = null;
-        public TI Info { get { return info; } private set { info = value; } }
+        private I info = null;
+        public I Info { get { return info; } private set { info = value; } }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            info = new TI();
+            info = new I();
             info.Engine = Engine;
             info.Create();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
         }
     }
 
     /// <summary>
-    /// 组件数据定义，日后方便拷贝，预测状态
+    /// 组件数据定义
     /// </summary>
-    public abstract class LInfo : Goblin<PGEngine>, ICloneable
+    public abstract class BehaviorInfo : Goblin<PGEngine>
     {
         protected override void OnCreate() { }
         protected override void OnDestroy() { }
-
-        public abstract object Clone();
     }
 }

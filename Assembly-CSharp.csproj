@@ -118,16 +118,25 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiWalkState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiRunState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackBState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackCState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackAState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiIdleState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiAttackDState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Controllers\HoshiController.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiRun.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackB.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackC.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackA.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiIdle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackD.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\ActorBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Art\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
+    <None Include="Assets\Art\UnityChanShader\Shader\CharaOutline.cginc" />
+    <None Include="Assets\Art\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
+    <None Include="Assets\Art\UnityChanShader\Shader\Unitychan_chara_fuku_ds.shader" />
+    <None Include="Assets\Art\UnityChanShader\Shader\CharaMain.cginc" />
+    <None Include="Assets\Art\UnityChanShader\Shader\CharaSkin.cginc" />
+    <None Include="Assets\Art\UnityChanShader\Shader\Unitychan_chara_eye.shader" />
+    <None Include="Assets\Art\UnityChanShader\Shader\Unitychan_chara_eye_blend.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

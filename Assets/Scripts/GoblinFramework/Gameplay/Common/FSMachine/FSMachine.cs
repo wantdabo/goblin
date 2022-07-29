@@ -1,6 +1,7 @@
 ﻿using GoblinFramework.Client;
 using GoblinFramework.Client.Common;
 using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,10 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
     /// <summary>
     /// Finite-State-Machine-Comp，状态机，状态机组件
     /// </summary>
+    /// <typeparam name="I">BeaviorInfo 类型</typeparam>
     /// <typeparam name="MT">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<MT, ST> : PComp, IPLoop where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
+    public abstract class FSMachine<I, MT, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where MT : FSMachine<I, MT, ST>, new() where ST : FSMState<I, MT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
@@ -50,7 +52,7 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
             targetState.Enter();
         }
 
-        public void PLoop(int frame)
+        public virtual void PLoop(int frame)
         {
             if (null == State) return;
             State.OnStateTick(frame);

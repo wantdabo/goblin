@@ -11,6 +11,7 @@ namespace GoblinFramework.Gameplay.Behaviors
     public struct Input
     {
         public bool press;
+        public bool release;
         public Fixed64Vector2 dire;
     }
 
@@ -45,13 +46,19 @@ namespace GoblinFramework.Gameplay.Behaviors
         /// <param name="input">输入状态</param>
         public void SetInput(InputType inputType, Input input)
         {
-            if (Info.InputMap.ContainsKey(inputType)) Info.InputMap.Remove(inputType);
+
+            if (Info.InputMap.TryGetValue(inputType, out var oldInput))
+            {
+                // 上一次是 Press，新的是 UnPress 表示技能释放出去了。
+                if (oldInput.press && false == input.press) input.release = true;
+                Info.InputMap.Remove(inputType);
+            }
 
             Info.InputMap.Add(inputType, input);
         }
 
         #region InputInfo
-        public class InputInfo : LInfo
+        public class InputInfo : BehaviorInfo
         {
             public Dictionary<InputType, Input> InputMap = new Dictionary<InputType, Input>
             {
@@ -61,18 +68,6 @@ namespace GoblinFramework.Gameplay.Behaviors
                 {InputType.LBC, new Input(){press = false, dire = Fixed64Vector2.Zero}},
                 {InputType.LBD, new Input(){press = false, dire = Fixed64Vector2.Zero}},
             };
-
-            public override object Clone()
-            {
-                var inputInfo = new InputInfo();
-                foreach (var kv in InputMap)
-                {
-                    inputInfo.InputMap.Remove(kv.Key);
-                    inputInfo.InputMap.Add(kv.Key, kv.Value);
-                }
-
-                return inputInfo;
-            }
         }
         #endregion
     }

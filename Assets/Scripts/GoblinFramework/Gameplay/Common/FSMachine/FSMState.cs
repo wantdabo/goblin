@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,10 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
     /// <summary>
     /// Finite-State-Machine-State，状态机，状态
     /// </summary>
-    /// <typeparam name="MT">状态机类型</typeparam>
+    /// <typeparam name="I">BeaviorInfo 类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<MT, ST> : PComp where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
+    /// <typeparam name="ST">状态类型</typeparam>
+    public abstract class FSMState<I, MT, ST> : PComp where I : BehaviorInfo, new() where MT : FSMachine<I, MT, ST>, new() where ST : FSMState<I, MT, ST>, new()
     {
         /// <summary>
         /// 状态机
@@ -35,7 +36,7 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
         /// 状态 Tick
         /// </summary>
         /// <param name="frame">帧数</param>
-        public virtual void OnStateTick(int frame){}
+        public virtual void OnStateTick(int frame) { }
 
         /// <summary>
         /// 状态进入

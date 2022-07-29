@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Gameplay.Behaviors;
+﻿using GoblinFramework.Gameplay.Behavior;
+using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using Numerics.Fixed;
 using System;
@@ -11,7 +12,13 @@ namespace GoblinFramework.Gameplay.Actors
 {
     public class Actor : PComp
     {
-        public ActorInfo ActorInfo = new ActorInfo();
+        public ActorBehavior ActorBehavior;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            ActorBehavior = AddBehavior<ActorBehavior>();
+        }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();
 
@@ -32,7 +39,7 @@ namespace GoblinFramework.Gameplay.Actors
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// <typeparam name="TI">行为逻辑组件数据类型</typeparam>
-        public void RmvBehavior<T, TI>() where T : Behavior<TI>, new() where TI : LInfo, new()
+        public void RmvBehavior<T, TI>() where T : Behavior<TI>, new() where TI : BehaviorInfo, new()
         {
             if (false == behaviorDict.TryGetValue(typeof(T), out var behavior)) return;
             behaviorDict.Remove(typeof(T));
@@ -87,22 +94,4 @@ namespace GoblinFramework.Gameplay.Actors
             return comp;
         }
     }
-
-    #region ActorInfo
-    public class ActorInfo : LInfo
-    {
-        public int actorId;
-        public int angle;
-        public Fixed64Vector3 pos;
-
-        public override object Clone()
-        {
-            var actorInfo = new ActorInfo();
-            actorInfo.actorId = actorId;
-            actorInfo.pos = pos;
-
-            return actorInfo;
-        }
-    }
-    #endregion
 }
