@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Gameplay.Behaviors;
-using GoblinFramework.Gameplay.Common.FSMachine;
+﻿using GoblinFramework.Gameplay.Behavior.FSMachine;
+using GoblinFramework.Gameplay.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +10,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiBehavior : FSMachineLockstep<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
     {
-        public HoshiBehavior Behavior = null;
-
         protected override void OnCreate()
         {
             base.OnCreate();
-            
-            Behavior = this;
             
             SetState<HoshiIdle>();
             SetState<HoshiRun>();

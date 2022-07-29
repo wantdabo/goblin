@@ -8,5 +8,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiIdle : HoshiState
     {
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+        }
     }
 }

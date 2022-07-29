@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Common.FSMachine
+namespace GoblinFramework.Gameplay.Behavior.FSMachine
 {
     /// <summary>
     /// Finite-State-Machine-Lock，状态机，锁步状态机组件

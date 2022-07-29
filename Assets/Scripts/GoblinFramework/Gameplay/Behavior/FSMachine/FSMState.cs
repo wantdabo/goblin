@@ -1,26 +1,27 @@
 ﻿using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Common.FSMachine
+namespace GoblinFramework.Gameplay.Behavior.FSMachine
 {
 
     /// <summary>
     /// Finite-State-Machine-State，状态机，状态
     /// </summary>
     /// <typeparam name="I">BeaviorInfo 类型</typeparam>
+    /// <typeparam name="B">行为组件</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<I, MT, ST> : PComp where I : BehaviorInfo, new() where MT : FSMachine<I, MT, ST>, new() where ST : FSMState<I, MT, ST>, new()
+    public abstract class FSMState<I, B, ST> : PComp where I : BehaviorInfo, new() where B : FSMachine<I, B, ST>, new() where ST : FSMState<I, B, ST>, new()
     {
         /// <summary>
         /// 状态机
         /// </summary>
-        public MT Machine;
+        public B Behavior;
 
         public void Enter()
         {

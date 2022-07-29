@@ -89,7 +89,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachineLockstep.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMachineLockstep.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector2.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
@@ -100,10 +100,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMLockstepState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\MotionBehavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMachine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\FSMachine\FSMState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMachine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\GameplayRender.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Actor.cs" />

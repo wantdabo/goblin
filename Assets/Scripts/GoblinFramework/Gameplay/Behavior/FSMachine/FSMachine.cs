@@ -2,21 +2,22 @@
 using GoblinFramework.Client.Common;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Common.FSMachine
+namespace GoblinFramework.Gameplay.Behavior.FSMachine
 {
     /// <summary>
     /// Finite-State-Machine-Comp，状态机，状态机组件
     /// </summary>
     /// <typeparam name="I">BeaviorInfo 类型</typeparam>
-    /// <typeparam name="MT">状态机类型</typeparam>
+    /// <typeparam name="B">行为状态机组件类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<I, MT, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where MT : FSMachine<I, MT, ST>, new() where ST : FSMState<I, MT, ST>, new()
+    public abstract class FSMachine<I, B, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where B : FSMachine<I, B, ST>, new() where ST : FSMState<I, B, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
@@ -32,6 +33,7 @@ namespace GoblinFramework.Gameplay.Common.FSMachine
         public void SetState<T>() where T : ST, new()
         {
             var state = AddComp<T>();
+            state.Behavior = this as B;
             stateDict.Add(typeof(T), state);
         }
 
