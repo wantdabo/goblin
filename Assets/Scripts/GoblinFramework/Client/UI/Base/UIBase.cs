@@ -75,9 +75,10 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="comp">小组件</param>
         public void RmvUICell(UIBaseCell comp)
         {
+            cellList.Remove(comp);
+
             comp.Unload();
             RmvComp(comp);
-            cellList.Remove(comp);
         }
 
         /// <summary>

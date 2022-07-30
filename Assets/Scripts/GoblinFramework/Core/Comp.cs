@@ -103,10 +103,10 @@ namespace GoblinFramework.Core
         /// <param name="comp">组件</param>
         public virtual void RmvComp(Comp<E> comp)
         {
-            comp.Destroy();
-
             if (compDict.TryGetValue(comp.GetType(), out List<Comp<E>> comps)) comps.Remove(comp);
             compList.Remove(comp);
+
+            comp.Destroy();
         }
 
         /// <summary>

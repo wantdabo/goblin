@@ -14,7 +14,7 @@ namespace GoblinFramework.Client.UI.Login
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
-            AddUIEventListener("LoginBtn", (eventData) =>
+            AddUIEventListener("TryBtn", (eventData) =>
             {
                 General.GoblinDebug.Log("got click.");
             });

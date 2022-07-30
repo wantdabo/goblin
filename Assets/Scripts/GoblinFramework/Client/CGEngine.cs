@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.GameRes;
+using GoblinFramework.Client.GameResource;
 using GoblinFramework.Client.GameStages;
 using GoblinFramework.Client.UI;
 using GoblinFramework.General;
@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoblinFramework.Client.Gameplay;
+using GoblinFramework.General.Gameplay.Command.Cmds;
 
 namespace GoblinFramework.Client
 {
@@ -20,7 +22,8 @@ namespace GoblinFramework.Client
         public TickEngine TickEngine = null;
         public U3DTool U3D = null;
         public GameUI GameUI = null;
-        public GameRes.GameRes GameRes = null;
+        public GameRes GameRes = null;
+        public Theater Theater = null;
         public GameStage GameStage = null;
 
         protected override void OnCreate()
@@ -35,6 +38,8 @@ namespace GoblinFramework.Client
             GameUI = AddComp<GameUI>();
             // 游戏美术资源
             GameRes = Engine.AddComp<YooGameRes>();
+            // 游戏剧场
+            Theater = AddComp<Theater>();
             // 游戏阶段总控
             GameStage = AddComp<GameStage>();
         }

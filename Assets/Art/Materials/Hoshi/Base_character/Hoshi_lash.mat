@@ -81,7 +81,7 @@ Material:
     - _DepthBias: 0.00012
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EdgeThickness: 1
+    - _EdgeThickness: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

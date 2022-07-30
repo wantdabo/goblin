@@ -22,6 +22,9 @@ namespace GoblinFramework.Client.UI.GameInitialize
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
+
+            Engine.GameRes.Location.LoadActorPrefabSync("Hoshi/Hoshi");
+
             sliderProgress = Engine.U3D.SeekNode<Slider>(gameObject, "Progress");
             textProgress = Engine.U3D.SeekNode<Text>(gameObject, "ProgressDesctText");
         }

@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.GameRes;
+using GoblinFramework.Client.GameResource;
 using GoblinFramework.Client.UI.GameInitialize;
 using System;
 using System.Collections.Generic;

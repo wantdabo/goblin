@@ -31,18 +31,16 @@ namespace GoblinFramework.Client.UI.Login
             // 挂载一个 UI 组件
             AddUICell<LoginEnterCell>("LoginEnterContent");
 
-            // 测试 API，模糊查找组件
-            Engine.U3D.SeekNode<Text>(gameObject, "Title").text = "Goblin Framework";
+            //// 测试 API，模糊查找组件
+            //Engine.U3D.SeekNode<Text>(gameObject, "Title").text = "Goblin Framework";
 
             // 测试定时器
-            int counter = 0;
             var clock = AddComp<Clock>();
             var textClock = Engine.U3D.SeekNode<Text>(gameObject, "ClockText");
             clock.Start(() =>
             {
-                counter++;
-                textClock.text = counter.ToString();
-            }, 0.0001f, -1);
+                textClock.text = DateTime.Now.ToLongTimeString();
+            }, 1f, -1);
         }
     }
 }

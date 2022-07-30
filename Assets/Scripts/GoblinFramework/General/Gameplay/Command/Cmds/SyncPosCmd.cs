@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.General.Gameplay.Command.Cmds
 {
-    public struct SyncPosCmd
+    public class SyncPosCmd : SyncCmd
     {
-        public int actorId;
         public int dire;
         public int x, y, z;
+
+        public override CType Type => CType.SyncPosCmd;
     }
 }

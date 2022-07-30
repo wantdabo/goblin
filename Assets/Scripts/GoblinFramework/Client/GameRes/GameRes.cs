@@ -4,7 +4,7 @@ using UnityEngine;
 using GoblinFramework.Client.Common;
 using GoblinFramework.Core;
 
-namespace GoblinFramework.Client.GameRes
+namespace GoblinFramework.Client.GameResource
 {
     /// <summary>
     /// Game-Resources-Comp 资源加载组件
