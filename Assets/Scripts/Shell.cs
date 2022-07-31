@@ -4,15 +4,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GoblinFramework.General;
+using GoblinFramework.Gameplay;
 
 public class Shell : MonoBehaviour
 {
-    public static Shell Instance;
+    public static Shell Instance = null;
     public static CGEngine Engine = null;
+
+    private void GameSettings()
+    {
+        Instance = this;
+        Application.runInBackground = true;
+    }
 
     private void Start()
     {
-        Instance = this;
+        GameSettings();
         Engine = GameEngine<CGEngine>.CreateGameEngine();
     }
 

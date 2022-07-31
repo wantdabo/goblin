@@ -1,5 +1,6 @@
 ﻿using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Theaters;
 using GoblinFramework.General;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ namespace GoblinFramework.Gameplay
     {
         public TickEngine TickEngine = null;
 
+        public Theater Theater;
+
         protected override void OnCreate()
         {
             base.OnCreate();
             TickEngine = AddComp<TickEngine>();
+            Theater = AddComp<Theater>();
         }
     }
 }

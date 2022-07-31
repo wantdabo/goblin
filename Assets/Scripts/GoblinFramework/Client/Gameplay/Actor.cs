@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace GoblinFramework.Client.Gameplay
 {
@@ -18,24 +19,38 @@ namespace GoblinFramework.Client.Gameplay
 
         public int actorId;
 
+        private GameObject node;
+        public GameObject Node { get { return node; } private set { node = value; } }
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            Node = new GameObject(actorId.ToString());
+        }
+
         /// <summary>
         /// 指令解析器字典，用于根据指令做出相应行为，不可重复
         /// </summary>
-        private Dictionary<SyncCmd.CType, SyncResolver> syncResolverDict = new Dictionary<SyncCmd.CType, SyncResolver>();
+        private Dictionary<SyncCmd.CType, CComp> syncResolverDict = new Dictionary<SyncCmd.CType, CComp>();
 
         /// <summary>
         /// 获取指令解析器
         /// </summary>
         /// <param name="type">指令解析器类型</param>
         /// <returns>指令解析器</returns>
-        private SyncResolver GetSyncResolver(SyncCmd.CType type)
+        private CComp GetSyncResolver(SyncCmd.CType type)
         {
-            syncResolverDict.TryGetValue(type, out SyncResolver resolver);
+            syncResolverDict.TryGetValue(type, out CComp resolver);
 
             return resolver;
         }
 
-        private void SetSyncResolver<T>(SyncCmd.CType type) where T : SyncResolver, new()
+        /// <summary>
+        /// 设置一个指令解析器
+        /// </summary>
+        /// <typeparam name="T">解析器类型</typeparam>
+        /// <param name="type">指令类型</param>
+        private void SetSyncResolver<T>(SyncCmd.CType type) where T : CComp, new()
         {
             var resolver = AddComp<T>();
             syncResolverDict.Add(type, resolver);
@@ -78,6 +93,8 @@ namespace GoblinFramework.Client.Gameplay
         public void Resolve<T>(T cmd) where T : SyncCmd
         {
             CheckSyncResolver(cmd.Type);
+            var resolver = GetSyncResolver(cmd.Type);
+            (resolver as SyncResolver<T>).Resolve<T>(cmd);
         }
     }
 }

@@ -19,14 +19,19 @@ namespace GoblinFramework.Client.UI.GameInitialize
 
         private Slider sliderProgress;
         private Text textProgress;
+        private GameObject Hoshi;
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-
-            Engine.GameRes.Location.LoadActorPrefabSync("Hoshi/Hoshi");
-
+            Hoshi = Engine.GameRes.Location.LoadActorPrefabSync("Hoshi/Hoshi");
             sliderProgress = Engine.U3D.SeekNode<Slider>(gameObject, "Progress");
             textProgress = Engine.U3D.SeekNode<Text>(gameObject, "ProgressDesctText");
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GameObject.Destroy(Hoshi);
         }
 
         private float speed = 0.5f;
