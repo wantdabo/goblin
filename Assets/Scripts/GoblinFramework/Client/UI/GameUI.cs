@@ -51,11 +51,6 @@ namespace GoblinFramework.Client.UI
             foreach (var name in Enum.GetNames(typeof(UILayer))) if (Enum.TryParse(name, out UILayer result)) GenUILayerNode(result);
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         private Dictionary<UILayer, GameObject> layerNodeDict = new Dictionary<UILayer, GameObject>();
         private void GenUILayerNode(UILayer layer)
         {
@@ -108,6 +103,7 @@ namespace GoblinFramework.Client.UI
         public void CloseView(UIBaseView view) 
         {
             view.Close();
+            RmvComp(view);
         }
     }
 }

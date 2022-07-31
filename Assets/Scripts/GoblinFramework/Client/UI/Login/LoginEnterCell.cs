@@ -16,7 +16,7 @@ namespace GoblinFramework.Client.UI.Login
             base.OnBindEvent();
             AddUIEventListener("TryBtn", (eventData) =>
             {
-                General.GoblinDebug.Log("got click.");
+                Engine.GameStage.EnterState<GameStages.GamePlayingState>();
             });
         }
     }

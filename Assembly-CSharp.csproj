@@ -140,6 +140,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Theater.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Goblin\GoblinTheater.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Gameplay\GameplayView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

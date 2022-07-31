@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoblinFramework.Client.UI.Login;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,17 @@ namespace GoblinFramework.Client.GameStages
     {
         public override List<Type> PassStates => new List<Type> { typeof(GamePlayingState) };
 
+        private LoginView loginView;
         protected override void OnEnter()
         {
             base.OnEnter();
-            Engine.GameUI.OpenView<UI.Login.LoginView>();
+            loginView = Engine.GameUI.OpenView<UI.Login.LoginView>();
+        }
+
+        protected override void OnLeave()
+        {
+            base.OnLeave();
+            Engine.GameUI.CloseView(loginView);
         }
     }
 }

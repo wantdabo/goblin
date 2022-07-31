@@ -9,5 +9,11 @@ namespace GoblinFramework.Gameplay.Theaters
 {
     public class Theater : Actor
     {
+        protected override void OnCreate()
+        {
+            Actor = this;
+            base.OnCreate();
+            AddActor<Actors.Hoshi.HoshiActor>();
+        }
     }
 }

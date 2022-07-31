@@ -18,6 +18,7 @@ namespace GoblinFramework.Client.GameStages
         {
             base.OnEnter();
             PGEngine = GameEngine<PGEngine>.CreateGameEngine();
+            Engine.GameUI.OpenView<UI.Gameplay.GameplayView>();
         }
 
         int frame = 0;

@@ -23,7 +23,7 @@ namespace GoblinFramework.Client.GameStages
         protected override void OnLeave()
         {
             base.OnLeave();
-            view?.Close();
+            Engine.GameUI.CloseView(view);
         }
 
         public override void OnStateTick(float tick)
