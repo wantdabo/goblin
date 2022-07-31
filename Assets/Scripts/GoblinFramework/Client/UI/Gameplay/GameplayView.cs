@@ -24,8 +24,6 @@ namespace GoblinFramework.Client.UI.Gameplay
 
         public void Update(float tick)
         {
-            if (null == clockText) return;
-
             clockText.text = DateTime.Now.ToLongTimeString();
         }
     }

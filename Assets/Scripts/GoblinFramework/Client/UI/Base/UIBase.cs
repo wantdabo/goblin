@@ -20,6 +20,14 @@ namespace GoblinFramework.Client.UI.Base
 
         public GameObject gameObject;
 
+        protected override void OnCreate()
+        {
+        }
+
+        protected override void OnDestroy()
+        {
+        }
+
         /// <summary>
         /// 获得一些 UI 小组件
         /// </summary>
@@ -94,7 +102,10 @@ namespace GoblinFramework.Client.UI.Base
         /// <summary>
         /// 加载 UI
         /// </summary>
-        public virtual void Load() { OnLoad(); }
+        public virtual void Load()
+        {
+            OnLoad();
+        }
 
         /// <summary>
         /// 卸载 UI
@@ -126,12 +137,12 @@ namespace GoblinFramework.Client.UI.Base
         /// <summary>
         /// UI 加载回调
         /// </summary>
-        protected virtual void OnLoad() { }
+        protected virtual void OnLoad() { base.OnCreate(); }
 
         /// <summary>
         /// UI 卸载回调
         /// </summary>
-        protected virtual void OnUnload() { }
+        protected virtual void OnUnload() { base.OnDestroy(); }
 
         /// <summary>
         /// UI 打开回调
