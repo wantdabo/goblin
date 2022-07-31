@@ -127,7 +127,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DTool.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Goblin\GoblinTheater.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncStateResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />

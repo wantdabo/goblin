@@ -24,6 +24,11 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             EnterState<HoshiIdle>();
         }
 
+        public override void PLoop(int frame)
+        {
+            base.PLoop(frame);
+        }
+
         #region
         public class HoshiInfo : BehaviorInfo
         {

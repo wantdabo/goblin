@@ -20,10 +20,11 @@ namespace GoblinFramework.Gameplay.Behaviors
 
         protected override void OnCreate()
         {
-            base.OnCreate();
             info = new I();
             info.Engine = Engine;
             info.Create();
+
+            base.OnCreate();
         }
     }
 

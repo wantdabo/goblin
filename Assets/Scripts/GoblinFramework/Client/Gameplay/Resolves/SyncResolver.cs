@@ -10,6 +10,8 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 {
     public class SyncResolver<CT> : CComp
     {
+        public Actor Actor;
+
         /// <summary>
         /// 指令解析方法
         /// </summary>

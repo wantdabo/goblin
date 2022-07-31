@@ -65,9 +65,13 @@ namespace GoblinFramework.Client.Gameplay
         /// <param name="actorId">ActorID，身份标识</param>
         public void AddActor(int actorId)
         {
-            var actor = AddComp<Actor>();
-            actor.Theater = this;
-            actor.actorId = actorId;
+            AddComp<Actor>((actor) =>
+            {
+                actor.Theater = this;
+                actor.actorId = actorId;
+                actorDict.Add(actorId, actor);
+                actorList.Add(actor);
+            });
         }
     }
 }

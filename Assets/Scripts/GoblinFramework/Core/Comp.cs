@@ -76,8 +76,9 @@ namespace GoblinFramework.Core
         /// 添加组件
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
+        /// <param name="createAheadAction"></param>
         /// <returns>返回一个就绪的组件</returns>
-        public virtual T AddComp<T>() where T : Comp<E>, new()
+        public virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp<E>, new()
         {
             T comp = new T();
 
@@ -92,6 +93,7 @@ namespace GoblinFramework.Core
             comp.Engine = Engine;
             comp.parent = this;
 
+            createAheadAction?.Invoke(comp);
             comp.Create();
 
             return comp;

@@ -1,6 +1,7 @@
 ﻿using GoblinFramework.Gameplay.Behavior;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Theaters;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,13 @@ namespace GoblinFramework.Gameplay.Actors
 {
     public class Actor : PComp
     {
+        public Theater Theater;
         public ActorBehavior ActorBehavior;
 
         protected override void OnCreate()
         {
-            Actor = this;
             ActorBehavior = AddBehavior<ActorBehavior>();
+            ActorBehavior.Info.actorId = Theater.NewActorId;
 
             base.OnCreate();
         }
@@ -78,8 +80,12 @@ namespace GoblinFramework.Gameplay.Actors
         /// <returns>Actor</returns>
         public T AddActor<T>() where T : Actor, new()
         {
-            var actor = AddComp<T>();
-            actorList.Add(actor);
+            var actor = AddComp<T>((item) =>
+            {
+                item.Actor = this;
+                item.Theater = Theater;
+                actorList.Add(item);
+            });
 
             return actor;
         }

@@ -15,10 +15,8 @@ namespace GoblinFramework.Client.Gameplay
     /// </summary>
     public class Actor : CComp
     {
-        public Theater Theater;
-
         public int actorId;
-
+        public Theater Theater;
         private GameObject node;
         public GameObject Node { get { return node; } private set { node = value; } }
 
@@ -50,9 +48,11 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <typeparam name="T">解析器类型</typeparam>
         /// <param name="type">指令类型</param>
-        private void SetSyncResolver<T>(SyncCmd.CType type) where T : CComp, new()
+        private void SetSyncResolver<T, CT>(SyncCmd.CType type) where T : CComp, new() where CT : SyncCmd
         {
             var resolver = AddComp<T>();
+            (resolver as SyncResolver<CT>).Actor = this;
+
             syncResolverDict.Add(type, resolver);
         }
 
@@ -68,19 +68,19 @@ namespace GoblinFramework.Client.Gameplay
             switch (type)
             {
                 case SyncCmd.CType.SyncAddCmd:
-                    SetSyncResolver<SyncAddResolver>(type);
+                    SetSyncResolver<SyncAddResolver, SyncAddCmd>(type);
                     break;
                 case SyncCmd.CType.SyncRmvCmd:
-                    SetSyncResolver<SyncRmvResolver>(type);
+                    SetSyncResolver<SyncRmvResolver, SyncRmvCmd>(type);
                     break;
                 case SyncCmd.CType.SyncPosCmd:
-                    SetSyncResolver<SyncPosResolver>(type);
+                    SetSyncResolver<SyncPosResolver, SyncPosCmd>(type);
                     break;
                 case SyncCmd.CType.SyncStateCmd:
-                    SetSyncResolver<SyncStateResolver>(type);
+                    SetSyncResolver<SyncStateResolver, SyncStateCmd>(type);
                     break;
                 case SyncCmd.CType.SyncModelCmd:
-                    SetSyncResolver<SyncModelResolver>(type);
+                    SetSyncResolver<SyncModelResolver, SyncModelCmd>(type);
                     break;
             }
         }

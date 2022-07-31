@@ -38,7 +38,7 @@ namespace GoblinFramework.Gameplay.Common
 
         public void PLoop(int frame)
         {
-            if (0 > iploops.Count) return;
+            if (0 == iploops.Count) return;
             for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].PLoop(frame);
         }
     }

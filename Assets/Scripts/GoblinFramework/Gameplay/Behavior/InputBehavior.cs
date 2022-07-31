@@ -19,11 +19,11 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public enum InputType
         {
-            LJoystick,
-            LBA,
-            LBB,
-            LBC,
-            LBD,
+            Joystick,
+            BA,
+            BB,
+            BC,
+            BD,
         }
 
         /// <summary>
@@ -62,11 +62,11 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             public Dictionary<InputType, Input> InputMap = new Dictionary<InputType, Input>
             {
-                {InputType.LJoystick, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBA, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBB, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBC, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.LBD, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.Joystick, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.BA, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.BB, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.BC, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.BD, new Input(){press = false, dire = Fixed64Vector2.Zero}},
             };
         }
         #endregion
