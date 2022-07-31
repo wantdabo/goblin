@@ -17,7 +17,6 @@ namespace GoblinFramework.Gameplay.Behaviors
 
         public void PLoop(int frame)
         {
-            if (null == Actor) return;
             Actor.ActorBehavior.Info.pos += Info.force;
             Info.force = Fixed64Vector3.zero;
         }

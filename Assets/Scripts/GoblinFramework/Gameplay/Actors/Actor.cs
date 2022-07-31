@@ -16,8 +16,10 @@ namespace GoblinFramework.Gameplay.Actors
 
         protected override void OnCreate()
         {
-            base.OnCreate();
+            Actor = this;
             ActorBehavior = AddBehavior<ActorBehavior>();
+
+            base.OnCreate();
         }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();
@@ -55,6 +57,7 @@ namespace GoblinFramework.Gameplay.Actors
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
             var comp = AddComp<T>();
+            comp.Actor = Actor;
             behaviorDict.Add(typeof(T), comp);
 
             return comp;
@@ -79,19 +82,6 @@ namespace GoblinFramework.Gameplay.Actors
             actorList.Add(actor);
 
             return actor;
-        }
-
-        /// <summary>
-        /// 增强 AddComp，使其具备 Acor 赋值功能
-        /// </summary>
-        /// <typeparam name="T">组件类型</typeparam>
-        /// <returns>T</returns>
-        public new T AddComp<T>() where T : PComp, new()
-        {
-            var comp = base.AddComp<T>();
-            comp.Actor = Actor;
-
-            return comp;
         }
     }
 }

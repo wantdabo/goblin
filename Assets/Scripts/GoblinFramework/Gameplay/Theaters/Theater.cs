@@ -11,7 +11,6 @@ namespace GoblinFramework.Gameplay.Theaters
     {
         protected override void OnCreate()
         {
-            Actor = this;
             base.OnCreate();
             AddActor<Actors.Hoshi.HoshiActor>();
         }

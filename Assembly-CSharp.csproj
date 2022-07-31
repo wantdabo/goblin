@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Matrix.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedMath.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Gameplay\GameplayView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\Command\Cmds\SyncStateCmd.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\ActorBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\MotionBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Theater.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMachine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behavior\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DTool.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Goblin\GoblinTheater.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncStateResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
@@ -138,9 +141,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Goblin\GoblinTheater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Gameplay\GameplayView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
