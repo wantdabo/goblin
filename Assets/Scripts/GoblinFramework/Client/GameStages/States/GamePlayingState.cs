@@ -19,12 +19,6 @@ namespace GoblinFramework.Client.GameStages
         protected override void OnEnter()
         {
             base.OnEnter();
-            // TODO 临时代码，记得删除
-            Theater = AddComp<Theater>();
-            PGEngine = GameEngine<PGEngine>.CreateGameEngine();
-            PGEngine.RegisterClientTheater(Theater);
-            PGEngine.BeginGame();
-
             Engine.GameUI.OpenView<UI.Gameplay.GameplayView>();
         }
 

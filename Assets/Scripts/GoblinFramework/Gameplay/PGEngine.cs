@@ -17,43 +17,20 @@ namespace GoblinFramework.Gameplay
     public class PGEngine : GameEngine<PGEngine>
     {
         public TickEngine TickEngine = null;
+        public Theater Theater = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             TickEngine = AddComp<TickEngine>();
+            Theater = AddComp<Theater>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             TickEngine = null;
-        }
-
-        /// <summary>
-        /// TODO 临时代码，测试管道，记得删除哟
-        /// </summary>
-        private Theater Theater = null;
-        public void BeginGame()
-        {
-            Theater = AddComp<Theater>();
-        }
-
-        /// <summary>
-        /// TODO 临时代码，测试管道，记得删除哟
-        /// </summary>
-        private Client.Gameplay.Theater CTheater;
-        public void RegisterClientTheater(Client.Gameplay.Theater ctheater)
-        {
-            CTheater = ctheater;
-        }
-
-        /// <summary>
-        /// TODO 临时代码，测试管道，记得删除哟
-        /// </summary>
-        public void ToSyncCMD<T>(T cmd) where T : SyncCmd
-        {
-            CTheater.Resolve(cmd);
+            Theater = null;
         }
     }
 }

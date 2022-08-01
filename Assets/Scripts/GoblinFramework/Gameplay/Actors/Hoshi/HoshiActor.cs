@@ -17,15 +17,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
             AddBehavior<HoshiBehavior>();
-
-            var addCmd = new SyncAddCmd();
-            addCmd.actorId = ActorBehavior.Info.actorId;
-            Engine.ToSyncCMD(addCmd);
-
-            var modelCmd = new SyncModelCmd();
-            modelCmd.actorId = ActorBehavior.Info.actorId;
-            modelCmd.modelName = "Hoshi/Hoshi";
-            Engine.ToSyncCMD(modelCmd);
         }
     }
 }
