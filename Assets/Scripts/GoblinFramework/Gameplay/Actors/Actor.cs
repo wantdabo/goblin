@@ -19,7 +19,6 @@ namespace GoblinFramework.Gameplay.Actors
         protected override void OnCreate()
         {
             ActorBehavior = AddBehavior<ActorBehavior>();
-            ActorBehavior.Info.actorId = Theater.NewActorId;
 
             base.OnCreate();
         }
@@ -58,11 +57,19 @@ namespace GoblinFramework.Gameplay.Actors
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
-            var comp = AddComp<T>();
-            comp.Actor = Actor;
+            var comp = AddComp<T>((item) => item.Actor = this);
             behaviorDict.Add(typeof(T), comp);
 
             return comp;
+        }
+
+        private List<Actor> actorList = new List<Actor>();
+        private Dictionary<int, Actor> actorDict = new Dictionary<int, Actor>();
+        public Actor GetActor(int actorId) 
+        {
+            actorDict.TryGetValue(actorId, out var actor);
+
+            return actor;
         }
 
         public void RmvActor(Actor actor)
@@ -70,8 +77,6 @@ namespace GoblinFramework.Gameplay.Actors
             actorList.Remove(actor);
             RmvComp(actor);
         }
-
-        private List<Actor> actorList = new List<Actor>();
 
         /// <summary>
         /// 添加实体组件
@@ -84,8 +89,9 @@ namespace GoblinFramework.Gameplay.Actors
             {
                 item.Actor = this;
                 item.Theater = Theater;
-                actorList.Add(item);
             });
+            actorList.Add(actor);
+            actorDict.Add(actor.ActorBehavior.Info.actorId, actor);
 
             return actor;
         }

@@ -36,7 +36,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <param name="type">指令解析器类型</param>
         /// <returns>指令解析器</returns>
-        private CComp GetSyncResolver(SyncCmd.CType type)
+        public CComp GetSyncResolver(SyncCmd.CType type)
         {
             syncResolverDict.TryGetValue(type, out CComp resolver);
 

@@ -10,6 +10,12 @@ namespace GoblinFramework.Gameplay.Behavior
 {
     public class ActorBehavior : Behavior<ActorBehavior.ActorInfo>
     {
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            Info.actorId = Actor.Theater.NewActorId;
+        }
+
         #region ActorInfo
         public class ActorInfo : BehaviorInfo
         {
