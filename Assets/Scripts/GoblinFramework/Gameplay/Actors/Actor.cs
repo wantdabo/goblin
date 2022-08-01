@@ -1,7 +1,7 @@
-﻿using GoblinFramework.Gameplay.Behavior;
-using GoblinFramework.Gameplay.Behaviors;
+﻿using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Theaters;
+using GoblinFramework.General.Gameplay.Command.Cmds;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -19,8 +19,16 @@ namespace GoblinFramework.Gameplay.Actors
         protected override void OnCreate()
         {
             ActorBehavior = AddBehavior<ActorBehavior>();
-
             base.OnCreate();
+            ToSyncCmd<SyncAddCmd>((cmd) => { });
+        }
+
+        public void ToSyncCmd<T>(Action<T> action) where T : SyncCmd, new()
+        {
+            T cmd = new T();
+            cmd.actorId = ActorBehavior.Info.actorId;
+            action.Invoke(cmd);
+            Theater.ToSyncCmd(cmd);
         }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();
@@ -65,7 +73,7 @@ namespace GoblinFramework.Gameplay.Actors
 
         private List<Actor> actorList = new List<Actor>();
         private Dictionary<int, Actor> actorDict = new Dictionary<int, Actor>();
-        public Actor GetActor(int actorId) 
+        public Actor GetActor(int actorId)
         {
             actorDict.TryGetValue(actorId, out var actor);
 

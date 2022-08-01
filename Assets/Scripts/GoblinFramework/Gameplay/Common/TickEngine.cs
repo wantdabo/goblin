@@ -18,6 +18,9 @@ namespace GoblinFramework.Gameplay.Common
     /// </summary>
     public class TickEngine : Comp<PGEngine>
     {
+        private int frame = 0;
+        public int Frame { get { return frame; } private set { frame = value; } }
+
         private List<IPLoop> iploops = new List<IPLoop>();
 
         protected override void OnCreate()
@@ -36,10 +39,11 @@ namespace GoblinFramework.Gameplay.Common
         public void AddPLoop(IPLoop update) { iploops.Add(update); }
         public void RmvPLoop(IPLoop update) { iploops.Remove(update); }
 
-        public void PLoop(int frame)
+        public void PLoop()
         {
+            Frame += 1;
             if (0 == iploops.Count) return;
-            for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].PLoop(frame);
+            for (int i = iploops.Count - 1; i >= 0; i--) iploops[i].PLoop(Frame);
         }
     }
 }

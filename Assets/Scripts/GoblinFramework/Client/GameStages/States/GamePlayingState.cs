@@ -10,25 +10,15 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.GameStages
 {
-    public class GamePlayingState : GameStageState, IFixedUpdate
+    public class GamePlayingState : GameStageState
     {
         public override List<Type> PassStates => new List<Type> { typeof(StageLoginState) };
 
         private PGEngine PGEngine = null;
-        private Theater Theater = null;
         protected override void OnEnter()
         {
             base.OnEnter();
             Engine.GameUI.OpenView<UI.Gameplay.GameplayView>();
-        }
-
-        int frame = 0;
-        public void FixedUpdate(float tick)
-        {
-            if (null == PGEngine) return;
-
-            frame += 1;
-            PGEngine.TickEngine.PLoop(frame);
         }
     }
 }

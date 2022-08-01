@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Gameplay
 {
     /// <summary>
-    /// 剧场，所有 Actor 的管理
+    /// Theater 渲染剧场，所有渲染 Actor 的管理
     /// </summary>
     public class Theater : CComp
     {
@@ -24,19 +24,23 @@ namespace GoblinFramework.Client.Gameplay
         /// <exception cref="Exception"></exception>
         public void Resolve<T>(T cmd) where T : SyncCmd
         {
+            // 添加一个渲染 Actor
             if (SyncCmd.CType.SyncAddCmd == cmd.Type && false == actorDict.ContainsKey(cmd.actorId)) AddActor(cmd.actorId);
-            if (SyncCmd.CType.SyncRmvCmd == cmd.Type && actorDict.ContainsKey(cmd.actorId)) RmvActor(cmd.actorId);
 
             var actor = GetActor(cmd.actorId);
-            if (null == actor) throw new Exception("can't find the actor. because check, plz let the SyncAddCmd go as first.");
+            if (null == actor) throw new Exception("can't find the actor. because check, plz let the syncaddcmd go as first.");
 
+            // 渲染指令流水线
             actor.Resolve(cmd);
+
+            // 因为过一遍指令流水线来达到清理效果，最终清理 Actor，所以放到最后
+            if (SyncCmd.CType.SyncRmvCmd == cmd.Type && actorDict.ContainsKey(cmd.actorId)) RmvActor(cmd.actorId);
         }
 
         /// <summary>
         /// 查找演员
         /// </summary>
-        /// <param name="actorId">演员 ID，来源于 Gameplay 逻辑部分的 ID</param>
+        /// <param name="actorId">ActorID，身份标识，来源于 Gameplay 逻辑部分的 ID</param>
         /// <returns>演员</returns>
         public Actor GetActor(int actorId)
         {
@@ -48,7 +52,7 @@ namespace GoblinFramework.Client.Gameplay
         /// <summary>
         /// 演员杀青
         /// </summary>
-        /// <param name="actorId">ActorID，身份标识</param>
+        /// <param name="actorId">ActorID，身份标识，来源于 Gameplay 逻辑部分的 ID</param>
         public void RmvActor(int actorId)
         {
             var actor = GetActor(actorId);
@@ -62,7 +66,7 @@ namespace GoblinFramework.Client.Gameplay
         /// <summary>
         /// 演员进组
         /// </summary>
-        /// <param name="actorId">ActorID，身份标识</param>
+        /// <param name="actorId">ActorID，身份标识，来源于 Gameplay 逻辑部分的 ID</param>
         public void AddActor(int actorId)
         {
             var actor = AddComp<Actor>((item) =>

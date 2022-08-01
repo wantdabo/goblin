@@ -9,11 +9,27 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.Gameplay.Resolves
 {
+    /// <summary>
+    /// Sync-Add-Resolver，渲染指令添加渲染节点解析
+    /// </summary>
     public class SyncAddResolver : SyncResolver<SyncAddCmd>
     {
-        public override void Resolve<T>(T cmd)
+        protected override List<SyncCmd.CType> RelyResolvers => null;
+
+        public GameObject Node = null;
+
+        protected override void OnCreate()
         {
-            base.Resolve(cmd);
+            base.OnCreate();
+        }
+
+        protected override void OnResolve<T>(T cmd)
+        {
+            if (null == Node)
+            {
+                Node = new GameObject(cmd.actorId.ToString());
+                SelfReady = true;
+            }
         }
     }
 }

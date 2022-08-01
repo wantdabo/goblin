@@ -17,30 +17,45 @@ namespace GoblinFramework.Client.Gameplay
     {
         public int actorId;
         public Theater Theater;
-        private GameObject node;
-        public GameObject Node { get { return node; } private set { node = value; } }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            Node = new GameObject(actorId.ToString());
+            SetSyncResolver<SyncAddResolver, SyncAddCmd>(SyncCmd.CType.SyncAddCmd);
+            SetSyncResolver<SyncRmvResolver, SyncRmvCmd>(SyncCmd.CType.SyncRmvCmd);
+            SetSyncResolver<SyncPosResolver, SyncPosCmd>(SyncCmd.CType.SyncPosCmd);
+            SetSyncResolver<SyncModelResolver, SyncModelCmd>(SyncCmd.CType.SyncModelCmd);
+            SetSyncResolver<SyncStateResolver, SyncStateCmd>(SyncCmd.CType.SyncStateCmd);
         }
 
         /// <summary>
         /// 指令解析器字典，用于根据指令做出相应行为，不可重复
         /// </summary>
         private Dictionary<SyncCmd.CType, CComp> syncResolverDict = new Dictionary<SyncCmd.CType, CComp>();
+        private Dictionary<Type, CComp> syncResolverTypeDict = new Dictionary<Type, CComp>();
 
         /// <summary>
         /// 获取指令解析器
         /// </summary>
-        /// <param name="type">指令解析器类型</param>
-        /// <returns>指令解析器</returns>
+        /// <param name="type">指令类型</param>
+        /// <returns>指令解析器，装箱的</returns>
         public CComp GetSyncResolver(SyncCmd.CType type)
         {
             syncResolverDict.TryGetValue(type, out CComp resolver);
 
             return resolver;
+        }
+
+        /// <summary>
+        /// 获取指令解析器
+        /// </summary>
+        /// <typeparam name="T">指令解析器类型</typeparam>
+        /// <returns>指令解析器，拆箱的</returns>
+        public T GetSyncResolver<T>() where T : CComp
+        {
+            if (syncResolverTypeDict.TryGetValue(typeof(T), out var comp)) return comp as T;
+
+            return null;
         }
 
         /// <summary>
@@ -54,35 +69,7 @@ namespace GoblinFramework.Client.Gameplay
             (resolver as SyncResolver<CT>).Actor = this;
 
             syncResolverDict.Add(type, resolver);
-        }
-
-        /// <summary>
-        /// 检查指令解析器
-        /// </summary>
-        /// <param name="type">指令解析器类型</param>
-        private void CheckSyncResolver(SyncCmd.CType type)
-        {
-            var resolver = GetSyncResolver(type);
-            if (null != resolver) return;
-
-            switch (type)
-            {
-                case SyncCmd.CType.SyncAddCmd:
-                    SetSyncResolver<SyncAddResolver, SyncAddCmd>(type);
-                    break;
-                case SyncCmd.CType.SyncRmvCmd:
-                    SetSyncResolver<SyncRmvResolver, SyncRmvCmd>(type);
-                    break;
-                case SyncCmd.CType.SyncPosCmd:
-                    SetSyncResolver<SyncPosResolver, SyncPosCmd>(type);
-                    break;
-                case SyncCmd.CType.SyncStateCmd:
-                    SetSyncResolver<SyncStateResolver, SyncStateCmd>(type);
-                    break;
-                case SyncCmd.CType.SyncModelCmd:
-                    SetSyncResolver<SyncModelResolver, SyncModelCmd>(type);
-                    break;
-            }
+            syncResolverTypeDict.Add(typeof(T), resolver);
         }
 
         /// <summary>
@@ -92,9 +79,7 @@ namespace GoblinFramework.Client.Gameplay
         /// <param name="cmd">指令</param>
         public void Resolve<T>(T cmd) where T : SyncCmd
         {
-            CheckSyncResolver(cmd.Type);
-            var resolver = GetSyncResolver(cmd.Type);
-            (resolver as SyncResolver<T>).Resolve<T>(cmd);
+            (GetSyncResolver(cmd.Type) as SyncResolver<T>).Resolve(cmd);
         }
     }
 }

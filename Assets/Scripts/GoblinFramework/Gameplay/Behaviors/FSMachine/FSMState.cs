@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Behavior.FSMachine
+namespace GoblinFramework.Gameplay.Behaviors.FSMachine
 {
 
     /// <summary>

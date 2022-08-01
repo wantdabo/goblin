@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Behavior
+namespace GoblinFramework.Gameplay.Behaviors
 {
     public class ActorBehavior : Behavior<ActorBehavior.ActorInfo>
     {

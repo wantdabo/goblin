@@ -8,15 +8,24 @@ using UnityEngine;
 
 namespace GoblinFramework.Client.Gameplay.Resolves
 {
+    /// <summary>
+    /// Sync-Model-Resolver，渲染指令模型解析
+    /// </summary>
     public class SyncModelResolver : SyncResolver<SyncModelCmd>
     {
         public GameObject Model;
+        public Animator Animator;
 
-        public override void Resolve<T>(T cmd)
+        protected override List<SyncCmd.CType> RelyResolvers => new List<SyncCmd.CType> { SyncCmd.CType.SyncAddCmd };
+
+        protected async override void OnResolve<T>(T cmd)
         {
-            base.Resolve(cmd);
-            Model = Engine.GameRes.Location.LoadActorPrefabSync(cmd.modelName);
-            Model.transform.SetParent(Actor.Node.transform);
+            if (null == Model) 
+            {
+                Model = await Engine.GameRes.Location.LoadActorPrefabAsync(cmd.modelName);
+                Animator = Model.GetComponent<Animator>();
+                SelfReady = true;
+            }
         }
     }
 }
