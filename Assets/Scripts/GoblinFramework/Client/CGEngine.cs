@@ -36,7 +36,7 @@ namespace GoblinFramework.Client
             U3D = AddComp<U3DTool>();
             // 游戏 UI
             GameUI = AddComp<GameUI>();
-            // 游戏美术资源
+            // 游戏资源
             GameRes = Engine.AddComp<YooGameRes>();
             // 游戏阶段总控
             GameStage = AddComp<GameStage>();

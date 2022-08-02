@@ -20,15 +20,15 @@ namespace GoblinFramework.Gameplay.Actors
         {
             ActorBehavior = AddBehavior<ActorBehavior>();
             base.OnCreate();
-            ToSyncCmd<SyncAddCmd>((cmd) => { });
+            SendSyncCmd<SyncAddCmd>((cmd) => { });
         }
 
-        public void ToSyncCmd<T>(Action<T> action) where T : SyncCmd, new()
+        public void SendSyncCmd<T>(Action<T> action) where T : SyncCmd, new()
         {
             T cmd = new T();
             cmd.actorId = ActorBehavior.Info.actorId;
             action.Invoke(cmd);
-            Theater.ToSyncCmd(cmd);
+            Theater.SendSyncCmd(cmd);
         }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();

@@ -19,12 +19,14 @@ namespace GoblinFramework.Gameplay.Common
         {
             base.OnCreate();
             if (this is IPLoop) Engine.TickEngine.AddPLoop(this as IPLoop);
+            if (this is IPLateLoop) Engine.TickEngine.AddPLateLoop(this as IPLateLoop);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             if (this is IPLoop) Engine.TickEngine.RmvPLoop(this as IPLoop);
+            if (this is IPLateLoop) Engine.TickEngine.RmvPLateLoop(this as IPLateLoop);
         }
     }
 }

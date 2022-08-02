@@ -21,7 +21,7 @@ namespace GoblinFramework.Gameplay.Theaters
             AddActor<Actors.Hoshi.HoshiActor>();
         }
 
-        public void ToSyncCmd<T>(T cmd) where T : SyncCmd
+        public void SendSyncCmd<T>(T cmd) where T : SyncCmd
         {
             if(false == syncCmdsDict.ContainsKey(Engine.TickEngine.Frame)) syncCmdsDict.Add(Engine.TickEngine.Frame, new List<SyncCmd>());
             syncCmdsDict.TryGetValue(Engine.TickEngine.Frame, out var syncCmdList);

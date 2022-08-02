@@ -27,8 +27,10 @@ public class Shell : MonoBehaviour
 
     private void OnDestroy()
     {
-        Engine?.Destroy();
+        Engine.Destroy();
         Engine = null;
+
+        PGEngine.Destroy();
         PGEngine = null;
     }
 

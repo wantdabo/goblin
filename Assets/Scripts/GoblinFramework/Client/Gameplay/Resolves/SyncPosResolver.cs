@@ -32,6 +32,8 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
         public void Update(float tick)
         {
+            if (false == RelyReady) return;
+
             var trans = Actor.GetSyncResolver<SyncAddResolver>().Node.transform;
 
             // 坐标算法，插值算法后边再写
