@@ -1,4 +1,4 @@
-﻿using GoblinFramework.General.Gameplay.Command.Cmds;
+﻿using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <summary>
     /// Sync-State-Resolver，渲染指令动画状态解析
     /// </summary>
-    public class SyncStateResolver : SyncResolver<SyncStateCmd>
+    public class SyncStateResolver : SyncResolver<RILState>
     {
-        protected override List<SyncCmd.CType> RelyResolvers => new List<SyncCmd.CType> { SyncCmd.CType.SyncModelCmd };
+        protected override List<RIL.RILType> RelyResolvers => new List<RIL.RILType> { RIL.RILType.RILModel };
 
         protected override void OnCreate()
         {
@@ -20,7 +20,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             SelfReady = true;
         }
 
-        protected override void OnResolve<T>(T cmd)
+        protected override void OnResolve<T>(T ril)
         {
         }
     }

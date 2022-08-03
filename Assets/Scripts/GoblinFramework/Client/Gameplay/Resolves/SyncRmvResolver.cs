@@ -1,4 +1,4 @@
-﻿using GoblinFramework.General.Gameplay.Command.Cmds;
+﻿using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,9 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <summary>
     /// Sync-Remove-Resolver，渲染指令移除解析
     /// </summary>
-    public class SyncRmvResolver : SyncResolver<SyncRmvCmd>
+    public class SyncRmvResolver : SyncResolver<RILRmv>
     {
-        protected override List<SyncCmd.CType> RelyResolvers => new List<SyncCmd.CType> { SyncCmd.CType .SyncAddCmd};
+        protected override List<RIL.RILType> RelyResolvers => new List<RIL.RILType> { RIL.RILType .RILAdd};
 
         protected override void OnCreate()
         {
@@ -21,7 +21,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             SelfReady = true;
         }
 
-        protected override void OnResolve<T>(T cmd)
+        protected override void OnResolve<T>(T ril)
         {
             var resolver = Actor.GetSyncResolver<SyncAddResolver>();
             GameObject.Destroy(resolver.Node);

@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +20,21 @@ namespace GoblinFramework.Client.Gameplay
         /// 指令解析方法
         /// </summary>
         /// <typeparam name="T">指令类型</typeparam>
-        /// <param name="cmd">指令</param>
+        /// <param name="ril">指令</param>
         /// <exception cref="Exception"></exception>
-        public void Resolve<T>(T cmd) where T : SyncCmd
+        public void Resolve<T>(T ril) where T : RIL
         {
             // 添加一个渲染 Actor
-            if (SyncCmd.CType.SyncAddCmd == cmd.Type && false == actorDict.ContainsKey(cmd.actorId)) AddActor(cmd.actorId);
+            if (RIL.RILType.RILAdd == ril.Type && false == actorDict.ContainsKey(ril.actorId)) AddActor(ril.actorId);
 
-            var actor = GetActor(cmd.actorId);
-            if (null == actor) throw new Exception("can't find the actor. because check, plz let the syncaddcmd go as first.");
+            var actor = GetActor(ril.actorId);
+            if (null == actor) throw new Exception("can't find the actor. because check, plz let the riladd go as first.");
 
             // 渲染指令流水线
-            actor.Resolve(cmd);
+            actor.Resolve(ril);
 
             // 因为过一遍指令流水线来达到清理效果，最终清理 Actor，所以放到最后
-            if (SyncCmd.CType.SyncRmvCmd == cmd.Type && actorDict.ContainsKey(cmd.actorId)) RmvActor(cmd.actorId);
+            if (RIL.RILType.RILRmv == ril.Type && actorDict.ContainsKey(ril.actorId)) RmvActor(ril.actorId);
         }
 
         /// <summary>

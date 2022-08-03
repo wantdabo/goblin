@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.Command
+namespace GoblinFramework.General.Gameplay.RIL
 {
     public class BinaryRW : Comp<GGEngine>
     {

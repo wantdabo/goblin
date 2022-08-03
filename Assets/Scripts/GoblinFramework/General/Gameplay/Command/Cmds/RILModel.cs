@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.Command.Cmds
+namespace GoblinFramework.General.Gameplay.RIL.RILS
 {
-    public class SyncModelCmd : SyncCmd
+    public class RILModel : RIL
     {
         /// <summary>
         /// 以后会是配置表的 ID 来的
         /// </summary>
         public string modelName;
 
-        public override CType Type => CType.SyncModelCmd;
+        public override RILType Type => RILType.RILModel;
     }
 
-    //public class SyncDressCmd : SyncCmd 
+    //public class RILDress : RIL
     //{
     //    /// <summary>
     //    /// 部位 ID，头、手、腿装扮
@@ -26,5 +26,7 @@ namespace GoblinFramework.General.Gameplay.Command.Cmds
     //    /// 以后会是配置表的 ID 来的
     //    /// </summary>
     //    public string modelName;
+
+    //    public override RILType Type => throw new NotImplementedException();
     //}
 }

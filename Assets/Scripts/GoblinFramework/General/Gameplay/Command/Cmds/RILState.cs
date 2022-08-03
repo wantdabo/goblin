@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.Command.Cmds
+namespace GoblinFramework.General.Gameplay.RIL.RILS
 {
-    public class SyncStateCmd : SyncCmd
+    public class RILState : RIL
     {
         public int stateId;
 
-        public override CType Type => CType.SyncStateCmd;
+        public override RILType Type => RILType.RILState;
     }
 }

@@ -8,13 +8,13 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.Command.Cmds
+namespace GoblinFramework.General.Gameplay.RIL.RILS
 {
-    public class SyncPosCmd : SyncCmd
+    public class RILPos : RIL
     {
         public int dire;
         public int x, y, z;
 
-        public override CType Type => CType.SyncPosCmd;
+        public override RILType Type => RILType.RILPos;
     }
 }

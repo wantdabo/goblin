@@ -1,4 +1,4 @@
-﻿using GoblinFramework.General.Gameplay.Command.Cmds;
+﻿using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +11,18 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <summary>
     /// Sync-Model-Resolver，渲染指令模型解析
     /// </summary>
-    public class SyncModelResolver : SyncResolver<SyncModelCmd>
+    public class SyncModelResolver : SyncResolver<RILModel>
     {
         public GameObject Model;
         public Animator Animator;
 
-        protected override List<SyncCmd.CType> RelyResolvers => new List<SyncCmd.CType> { SyncCmd.CType.SyncAddCmd };
+        protected override List<RIL.RILType> RelyResolvers => new List<RIL.RILType> { RIL.RILType.RILAdd };
 
-        protected async override void OnResolve<T>(T cmd)
+        protected async override void OnResolve<T>(T ril)
         {
             if (null == Model) 
             {
-                Model = await Engine.GameRes.Location.LoadActorPrefabAsync(cmd.modelName);
+                Model = await Engine.GameRes.Location.LoadActorPrefabAsync(ril.modelName);
                 Animator = Model.GetComponent<Animator>();
                 SelfReady = true;
             }

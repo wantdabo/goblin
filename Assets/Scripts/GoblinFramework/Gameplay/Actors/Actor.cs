@@ -1,7 +1,7 @@
 ﻿using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Theaters;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -20,15 +20,15 @@ namespace GoblinFramework.Gameplay.Actors
         {
             ActorBehavior = AddBehavior<ActorBehavior>();
             base.OnCreate();
-            SendSyncCmd<SyncAddCmd>((cmd) => { });
+            SendRIL<RILAdd>((ril) => { });
         }
 
-        public void SendSyncCmd<T>(Action<T> action) where T : SyncCmd, new()
+        public void SendRIL<T>(Action<T> action) where T : RIL, new()
         {
-            T cmd = new T();
-            cmd.actorId = ActorBehavior.Info.actorId;
-            action.Invoke(cmd);
-            Theater.SendSyncCmd(cmd);
+            T ril = new T();
+            ril.actorId = ActorBehavior.Info.actorId;
+            action.Invoke(ril);
+            Theater.SendRIL(ril);
         }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();

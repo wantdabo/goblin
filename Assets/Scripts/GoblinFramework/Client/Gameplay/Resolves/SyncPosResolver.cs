@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,9 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <summary>
     /// Sync-Positon-Resolver，渲染指令坐标、旋转解析
     /// </summary>
-    public class SyncPosResolver : SyncResolver<SyncPosCmd>, IUpdate
+    public class SyncPosResolver : SyncResolver<RILPos>, IUpdate
     {
-        protected override List<SyncCmd.CType> RelyResolvers => new List<SyncCmd.CType> { SyncCmd.CType.SyncAddCmd };
+        protected override List<RIL.RILType> RelyResolvers => new List<RIL.RILType> { RIL.RILType.RILAdd };
 
         protected override void OnCreate()
         {
@@ -24,10 +24,10 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
         private Vector3 lerp2Target;
         private float lerp2dire;
-        protected override void OnResolve<T>(T cmd)
+        protected override void OnResolve<T>(T ril)
         {
-            lerp2Target.Set(cmd.x, 0, cmd.y);
-            lerp2dire = cmd.dire;
+            lerp2Target.Set(ril.x, 0, ril.y);
+            lerp2dire = ril.dire;
         }
 
         public void Update(float tick)

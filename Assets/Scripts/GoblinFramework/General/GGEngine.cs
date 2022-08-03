@@ -1,6 +1,6 @@
 ﻿using GoblinFramework.Core;
 using GoblinFramework.General.Gameplay;
-using GoblinFramework.General.Gameplay.Command;
+using GoblinFramework.General.Gameplay.RIL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace GoblinFramework.General
     /// </summary>
     public class GGEngine : GameEngine<GGEngine>
     {
-        public CmdParser CmdParser;
+        public RILParser RILParser;
         public Config Config;
 
         protected override void OnCreate()
@@ -22,7 +22,7 @@ namespace GoblinFramework.General
             base.OnCreate();
 
             // 指令翻译
-            CmdParser = AddComp<CmdParser>();
+            RILParser = AddComp<RILParser>();
             // 游戏配置
             Config = AddComp<Config>();
         }

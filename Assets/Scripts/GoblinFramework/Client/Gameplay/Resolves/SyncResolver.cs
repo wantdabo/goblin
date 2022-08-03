@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +11,20 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <summary>
     /// Sync-Resolver，渲染指令解析
     /// </summary>
-    /// <typeparam name="CT">指令类型</typeparam>
-    public abstract class SyncResolver<CT> : CComp
+    /// <typeparam name="RILT">指令类型</typeparam>
+    public abstract class SyncResolver<RILT> : CComp
     {
         public Actor Actor;
 
         /// <summary>
         /// 依赖检查
         /// </summary>
-        protected abstract List<SyncCmd.CType> RelyResolvers { get; }
+        protected abstract List<RIL.RILType> RelyResolvers { get; }
 
         /// <summary>
         /// 渲染指令
         /// </summary>
-        private CT cacheCmd;
+        private RILT cacheRil;
 
         /// <summary>
         /// 自身否就绪检查/供其他解析器解读是否就绪
@@ -61,10 +61,10 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
             foreach (var r in RelyResolvers)
             {
-                var resolver = Actor.GetSyncResolver(r) as SyncResolver<CT>;
+                var resolver = Actor.GetSyncResolver(r) as SyncResolver<RILT>;
                 resolver.RegisterInterestedReady(() =>
                 {
-                    if (null != cacheCmd || false == CheckRelyResolvers()) Resolve(cacheCmd);
+                    if (null != cacheRil || false == CheckRelyResolvers()) Resolve(cacheRil);
                 });
             }
         }
@@ -79,7 +79,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
             foreach (var r in RelyResolvers)
             {
-                var resolver = Actor.GetSyncResolver(r) as SyncResolver<CT>;
+                var resolver = Actor.GetSyncResolver(r) as SyncResolver<RILT>;
                 if (false == resolver.SelfReady) return false;
             }
 
@@ -91,19 +91,19 @@ namespace GoblinFramework.Client.Gameplay.Resolves
         /// 指令解析方法
         /// </summary>
         /// <typeparam name="T">指令类型</typeparam>
-        /// <param name="cmd">指令</param>
-        public void Resolve<T>(T cmd) where T : CT
+        /// <param name="ril">指令</param>
+        public void Resolve<T>(T ril) where T : RILT
         {
             if (false == RelyReady && false == CheckRelyResolvers())
             {
-                cacheCmd = cmd;
+                cacheRil = ril;
 
                 return;
             }
 
-            OnResolve(cmd);
+            OnResolve(ril);
         }
 
-        protected abstract void OnResolve<T>(T cmd) where T : CT;
+        protected abstract void OnResolve<T>(T ril) where T : RILT;
     }
 }

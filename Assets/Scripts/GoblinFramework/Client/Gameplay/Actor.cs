@@ -1,6 +1,6 @@
 ﻿using GoblinFramework.Client.Common;
 using GoblinFramework.Client.Gameplay.Resolves;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +21,17 @@ namespace GoblinFramework.Client.Gameplay
         protected override void OnCreate()
         {
             base.OnCreate();
-            SetSyncResolver<SyncAddResolver, SyncAddCmd>(SyncCmd.CType.SyncAddCmd);
-            SetSyncResolver<SyncRmvResolver, SyncRmvCmd>(SyncCmd.CType.SyncRmvCmd);
-            SetSyncResolver<SyncPosResolver, SyncPosCmd>(SyncCmd.CType.SyncPosCmd);
-            SetSyncResolver<SyncModelResolver, SyncModelCmd>(SyncCmd.CType.SyncModelCmd);
-            SetSyncResolver<SyncStateResolver, SyncStateCmd>(SyncCmd.CType.SyncStateCmd);
+            SetSyncResolver<SyncAddResolver, RILAdd>(RIL.RILType.RILAdd);
+            SetSyncResolver<SyncRmvResolver, RILRmv>(RIL.RILType.RILRmv);
+            SetSyncResolver<SyncPosResolver, RILPos>(RIL.RILType.RILPos);
+            SetSyncResolver<SyncModelResolver, RILModel>(RIL.RILType.RILModel);
+            SetSyncResolver<SyncStateResolver, RILState>(RIL.RILType.RILState);
         }
 
         /// <summary>
         /// 指令解析器字典，用于根据指令做出相应行为，不可重复
         /// </summary>
-        private Dictionary<SyncCmd.CType, CComp> syncResolverDict = new Dictionary<SyncCmd.CType, CComp>();
+        private Dictionary<RIL.RILType, CComp> syncResolverDict = new Dictionary<RIL.RILType, CComp>();
         private Dictionary<Type, CComp> syncResolverTypeDict = new Dictionary<Type, CComp>();
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <param name="type">指令类型</param>
         /// <returns>指令解析器，装箱的</returns>
-        public CComp GetSyncResolver(SyncCmd.CType type)
+        public CComp GetSyncResolver(RIL.RILType type)
         {
             syncResolverDict.TryGetValue(type, out CComp resolver);
 
@@ -63,7 +63,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <typeparam name="T">解析器类型</typeparam>
         /// <param name="type">指令类型</param>
-        private void SetSyncResolver<T, CT>(SyncCmd.CType type) where T : CComp, new() where CT : SyncCmd
+        private void SetSyncResolver<T, CT>(RIL.RILType type) where T : CComp, new() where CT : RIL
         {
             var resolver = AddComp<T>();
             (resolver as SyncResolver<CT>).Actor = this;
@@ -76,10 +76,10 @@ namespace GoblinFramework.Client.Gameplay
         /// 指令解析方法
         /// </summary>
         /// <typeparam name="T">指令类型</typeparam>
-        /// <param name="cmd">指令</param>
-        public void Resolve<T>(T cmd) where T : SyncCmd
+        /// <param name="ril">指令</param>
+        public void Resolve<T>(T ril) where T : RIL
         {
-            (GetSyncResolver(cmd.Type) as SyncResolver<T>).Resolve(cmd);
+            (GetSyncResolver(ril.Type) as SyncResolver<T>).Resolve(ril);
         }
     }
 }

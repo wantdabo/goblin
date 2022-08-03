@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Core;
-using GoblinFramework.General.Gameplay.Command.Cmds;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.Command
+namespace GoblinFramework.General.Gameplay.RIL
 {
-    public class CmdParser : Comp<GGEngine>
+    public class RILParser : Comp<GGEngine>
     {
         public BinaryRW BinaryRW;
 
@@ -27,15 +27,15 @@ namespace GoblinFramework.General.Gameplay.Command
             base.OnDestroy();
         }
 
-        public byte[] SyncPosCmdToBytes(SyncPosCmd cmd)
+        public byte[] RILPosToBytes(RILPos rilPos)
         {
             var writer = BinaryRW.GenWriter();
 
-            writer.Write(cmd.actorId);
-            writer.Write(cmd.dire);
-            writer.Write(cmd.x);
-            writer.Write(cmd.y);
-            writer.Write(cmd.z);
+            writer.Write(rilPos.actorId);
+            writer.Write(rilPos.dire);
+            writer.Write(rilPos.x);
+            writer.Write(rilPos.y);
+            writer.Write(rilPos.z);
             var bytes = BinaryRW.ToArray(writer.BaseStream);
 
             BinaryRW.EndWriter(writer);
@@ -43,20 +43,20 @@ namespace GoblinFramework.General.Gameplay.Command
             return bytes;
         }
 
-        public SyncPosCmd BytesToSyncPosCmd(byte[] bytes)
+        public RILPos BytesToRILPos(byte[] bytes)
         {
             var reader = BinaryRW.GenReader(bytes);
 
-            var cmd = new SyncPosCmd();
-            cmd.actorId = reader.ReadInt32();
-            cmd.dire = reader.ReadInt32();
-            cmd.x = reader.ReadInt32();
-            cmd.y = reader.ReadInt32();
-            cmd.z = reader.ReadInt32();
+            var rilPos = new RILPos();
+            rilPos.actorId = reader.ReadInt32();
+            rilPos.dire = reader.ReadInt32();
+            rilPos.x = reader.ReadInt32();
+            rilPos.y = reader.ReadInt32();
+            rilPos.z = reader.ReadInt32();
 
             BinaryRW.EndReader(reader);
 
-            return cmd;
+            return rilPos;
         }
     }
 }
