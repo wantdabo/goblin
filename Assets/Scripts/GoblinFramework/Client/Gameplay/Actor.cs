@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Client.Common;
+﻿using Assets.Scripts.GoblinFramework.Client.Gameplay.Comps;
+using GoblinFramework.Client.Common;
 using GoblinFramework.Client.Gameplay.Resolves;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
@@ -13,10 +14,9 @@ namespace GoblinFramework.Client.Gameplay
     /// <summary>
     /// Actor, 演员
     /// </summary>
-    public class Actor : CComp
+    public class Actor : CPComp
     {
         public int actorId;
-        public Theater Theater;
 
         protected override void OnCreate()
         {

@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Client.Common;
+﻿using Assets.Scripts.GoblinFramework.Client.Gameplay.Comps;
+using GoblinFramework.Client.Common;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Client.Gameplay.Resolves
 {
-    public abstract class Resolver : CComp
+    public abstract class Resolver : CPComp
     {
         public Actor Actor;
 

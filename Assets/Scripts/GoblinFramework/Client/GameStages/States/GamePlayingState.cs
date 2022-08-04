@@ -51,6 +51,10 @@ namespace GoblinFramework.Client.GameStages
             input.press = input.dire != Fixed64Vector2.Zero;
 
             PGEngine.SetInput(1, InputType.Joystick, input);
+
+            var actor = Theater.GetActor(1);
+            if (null == actor) return;
+            Theater.CameraFollow.FollowActor = actor;
         }
 
         public void FixedUpdate(float tick)

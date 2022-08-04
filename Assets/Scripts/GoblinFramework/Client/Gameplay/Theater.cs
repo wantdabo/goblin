@@ -1,4 +1,6 @@
-﻿using GoblinFramework.Client.Common;
+﻿using Assets.Scripts.GoblinFramework.Client.Gameplay.Comps;
+using GoblinFramework.Client.Common;
+using GoblinFramework.Client.Gameplay.Comps;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,18 @@ namespace GoblinFramework.Client.Gameplay
     /// <summary>
     /// Theater 渲染剧场，所有渲染 Actor 的管理
     /// </summary>
-    public class Theater : CComp
+    public class Theater : CPComp
     {
         private List<Actor> actorList = new List<Actor>();
         private Dictionary<int, Actor> actorDict = new Dictionary<int, Actor>();
+
+        public CameraFollow CameraFollow;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            CameraFollow = AddComp<CameraFollow>();
+        }
 
         /// <summary>
         /// 指令解析方法
@@ -71,11 +81,18 @@ namespace GoblinFramework.Client.Gameplay
         {
             var actor = AddComp<Actor>((item) =>
             {
-                item.Theater = this;
                 item.actorId = actorId;
             });
             actorDict.Add(actorId, actor);
             actorList.Add(actor);
+        }
+
+        public new T AddComp<T>(Action<T> createAheadAction = null) where T : CPComp, new()
+        {
+            var comp = base.AddComp(createAheadAction);
+            comp.Theater = this;
+
+            return comp;
         }
     }
 }
