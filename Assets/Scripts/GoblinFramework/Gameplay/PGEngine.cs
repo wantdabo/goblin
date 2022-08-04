@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Theaters;
 using GoblinFramework.General;
@@ -31,6 +32,32 @@ namespace GoblinFramework.Gameplay
             base.OnDestroy();
             TickEngine = null;
             Theater = null;
+        }
+
+        public void SetInput(int actorId, InputType inputType, Input input) 
+        {
+            Theater.SetInput(actorId, inputType, input);
+        }
+
+        private Dictionary<object, Action<RIL>> rilRecvDict = new Dictionary<object, Action<RIL>>();
+        public void RegisterRILRecv(object obj, Action<RIL> rilAction)
+        {
+            if (rilRecvDict.ContainsKey(obj)) throw new Exception("ril recv action repeat register.");
+            rilRecvDict.Add(obj, rilAction);
+
+            Theater.AddActor<Actors.Hoshi.HoshiActor>();
+        }
+
+        public void UnRegisterRILRecv(object obj)
+        {
+            if (false == rilRecvDict.ContainsKey(obj)) throw new Exception("ril recv action not found. plz check.");
+            rilRecvDict.Remove(obj);
+        }
+
+        public void SendRIL<T>(T ril) where T : RIL
+        {
+            foreach (var kv in rilRecvDict)
+                kv.Value.Invoke(ril);
         }
     }
 }

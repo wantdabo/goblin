@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginEnterCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseCell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Matrix.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Goblin.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedMath.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Gameplay\GameplayView.cs" />
@@ -85,8 +86,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\BinaryRW.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiRun.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILAdd.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncAddResolver.cs" />
@@ -123,6 +126,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DTool.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncStateResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
@@ -135,11 +140,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILAdd.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\Resolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

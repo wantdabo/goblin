@@ -14,11 +14,22 @@ namespace GoblinFramework.Client.GameStages
     {
         public override List<Type> PassStates => new List<Type> { typeof(StageLoginState) };
 
-        private PGEngine PGEngine = null;
+        public Theater Theater = null;
+        public PGEngine PGEngine = null;
+
         protected override void OnEnter()
         {
             base.OnEnter();
             Engine.GameUI.OpenView<UI.Gameplay.GameplayView>();
+
+            Theater = AddComp<Theater>();
+            PGEngine = GameEngine<PGEngine>.CreateGameEngine();
+            PGEngine.RegisterRILRecv(Theater, (ril) => Theater.Resolve(ril));
+        }
+
+        protected override void OnLeave()
+        {
+            base.OnLeave();
         }
     }
 }

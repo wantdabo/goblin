@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
@@ -13,7 +14,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         protected override void OnCreate()
         {
             base.OnCreate();
-            
+
+            Actor.ActorBehavior.SendRIL<RILModel>((ril) => ril.modelName = "Hoshi/Hoshi");
+
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
             SetState<HoshiAttackA>();

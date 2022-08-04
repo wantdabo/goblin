@@ -20,15 +20,6 @@ namespace GoblinFramework.Gameplay.Actors
         {
             ActorBehavior = AddBehavior<ActorBehavior>();
             base.OnCreate();
-            SendRIL<RILAdd>((ril) => { });
-        }
-
-        public void SendRIL<T>(Action<T> action) where T : RIL, new()
-        {
-            T ril = new T();
-            ril.actorId = ActorBehavior.Info.actorId;
-            action.Invoke(ril);
-            Theater.SendRIL(ril);
         }
 
         private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();

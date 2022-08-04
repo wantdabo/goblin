@@ -31,17 +31,17 @@ namespace GoblinFramework.Client.Gameplay
         /// <summary>
         /// 指令解析器字典，用于根据指令做出相应行为，不可重复
         /// </summary>
-        private Dictionary<RIL.RILType, CComp> syncResolverDict = new Dictionary<RIL.RILType, CComp>();
-        private Dictionary<Type, CComp> syncResolverTypeDict = new Dictionary<Type, CComp>();
+        private Dictionary<RIL.RILType, Resolver> syncResolverDict = new Dictionary<RIL.RILType, Resolver>();
+        private Dictionary<Type, Resolver> syncResolverTypeDict = new Dictionary<Type, Resolver>();
 
         /// <summary>
         /// 获取指令解析器
         /// </summary>
         /// <param name="type">指令类型</param>
         /// <returns>指令解析器，装箱的</returns>
-        public CComp GetSyncResolver(RIL.RILType type)
+        public Resolver GetSyncResolver(RIL.RILType type)
         {
-            syncResolverDict.TryGetValue(type, out CComp resolver);
+            syncResolverDict.TryGetValue(type, out Resolver resolver);
 
             return resolver;
         }
@@ -51,7 +51,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <typeparam name="T">指令解析器类型</typeparam>
         /// <returns>指令解析器，拆箱的</returns>
-        public T GetSyncResolver<T>() where T : CComp
+        public T GetSyncResolver<T>() where T : Resolver
         {
             if (syncResolverTypeDict.TryGetValue(typeof(T), out var comp)) return comp as T;
 
@@ -61,15 +61,14 @@ namespace GoblinFramework.Client.Gameplay
         /// <summary>
         /// 设置一个指令解析器
         /// </summary>
-        /// <typeparam name="T">解析器类型</typeparam>
+        /// <typeparam name="SRT">解析器类型</typeparam>
         /// <param name="type">指令类型</param>
-        private void SetSyncResolver<T, CT>(RIL.RILType type) where T : CComp, new() where CT : RIL
+        private void SetSyncResolver<SRT, RILT>(RIL.RILType type) where SRT : Resolver, new() where RILT : RIL
         {
-            var resolver = AddComp<T>();
-            (resolver as SyncResolver<CT>).Actor = this;
+            var resolver = AddComp<SRT>((item) => { (item as SyncResolver<RILT>).Actor = this; });
 
             syncResolverDict.Add(type, resolver);
-            syncResolverTypeDict.Add(typeof(T), resolver);
+            syncResolverTypeDict.Add(typeof(SRT), resolver);
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace GoblinFramework.Client.Gameplay
         /// <param name="ril">指令</param>
         public void Resolve<T>(T ril) where T : RIL
         {
-            (GetSyncResolver(ril.Type) as SyncResolver<T>).Resolve(ril);
+            GetSyncResolver(ril.Type).Resolve(ril);
         }
     }
 }

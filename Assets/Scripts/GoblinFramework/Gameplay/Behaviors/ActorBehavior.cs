@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,18 @@ namespace GoblinFramework.Gameplay.Behaviors
         protected override void OnCreate()
         {
             base.OnCreate();
+
             Info.actorId = Actor.Theater.NewActorId;
+
+            SendRIL<RILAdd>();
+        }
+
+        public void SendRIL<T>(Action<T> action = null) where T : RIL, new()
+        {
+            T ril = new T();
+            ril.actorId = Info.actorId;
+            action?.Invoke(ril);
+            Actor.Theater.SendRIL(ril);
         }
 
         #region ActorInfo

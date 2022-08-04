@@ -15,17 +15,17 @@ namespace GoblinFramework.Gameplay.Behaviors
         public Fixed64Vector2 dire;
     }
 
+    public enum InputType
+    {
+        Joystick,
+        BA,
+        BB,
+        BC,
+        BD,
+    }
+
     public class InputBehavior : Behavior<InputBehavior.InputInfo>
     {
-        public enum InputType
-        {
-            Joystick,
-            BA,
-            BB,
-            BC,
-            BD,
-        }
-
         /// <summary>
         /// 获取输入状态
         /// </summary>

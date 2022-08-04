@@ -10,7 +10,6 @@ public class Shell : MonoBehaviour
 {
     public static Shell Instance = null;
     public static CGEngine Engine = null;
-    public static PGEngine PGEngine = null;
 
     private void GameSettings()
     {
@@ -22,16 +21,12 @@ public class Shell : MonoBehaviour
     {
         GameSettings();
         Engine = GameEngine<CGEngine>.CreateGameEngine();
-        PGEngine = GameEngine<PGEngine>.CreateGameEngine();
     }
 
     private void OnDestroy()
     {
         Engine.Destroy();
         Engine = null;
-
-        PGEngine.Destroy();
-        PGEngine = null;
     }
 
     private void Update()
@@ -47,6 +42,5 @@ public class Shell : MonoBehaviour
     private void FixedUpdate()
     {
         Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
-        PGEngine.TickEngine.PLoop();
     }
 }

@@ -20,9 +20,10 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
         protected async override void OnResolve<T>(T ril)
         {
-            if (null == Model) 
+            if (null == Model)
             {
                 Model = await Engine.GameRes.Location.LoadActorPrefabAsync(ril.modelName);
+                Model.transform.SetParent(Actor.GetSyncResolver<SyncAddResolver>().Node.transform);
                 Animator = Model.GetComponent<Animator>();
                 SelfReady = true;
             }
