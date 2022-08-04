@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoblinFramework.General.Gameplay.RIL.RILS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,10 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiIdle : HoshiState
     {
-        protected override void OnCreate()
+        protected override void OnEnter()
         {
-            base.OnCreate();
+            base.OnEnter();
+            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateId = 1);
         }
     }
 }

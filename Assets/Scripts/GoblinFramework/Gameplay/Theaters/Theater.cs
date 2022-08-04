@@ -35,7 +35,7 @@ namespace GoblinFramework.Gameplay.Theaters
             var actor = GetActor(actorId);
             if (null == actor) throw new Exception($"actor not found {actorId}");
 
-            var inputBehavior = GetBehavior<InputBehavior>();
+            var inputBehavior = actor.GetBehavior<InputBehavior>();
             if (null == inputBehavior) throw new Exception($"this actor donot has inputbehavior {actorId}");
 
             inputBehavior.SetInput(inputType, input);

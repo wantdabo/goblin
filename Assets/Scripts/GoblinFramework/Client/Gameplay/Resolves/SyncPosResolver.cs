@@ -22,12 +22,18 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             SelfReady = true;
         }
 
-        private Vector3 lerp2Target;
+        private Vector3 lerp2Pos;
         private float lerp2dire;
         protected override void OnResolve<T>(T ril)
         {
-            lerp2Target.Set(ril.x, 0, ril.y);
-            lerp2dire = ril.dire;
+            lerp2Pos.Set(ril.x, 0, ril.z);
+
+            var trans = Actor.GetSyncResolver<SyncAddResolver>().Node.transform;
+
+            // 角度计算
+            var dire = trans.position - lerp2Pos;
+            float radian = Mathf.Atan2(dire.z, -dire.x);
+            lerp2dire = radian * 180 / Mathf.PI + 90;
         }
 
         public void Update(float tick)
@@ -37,11 +43,11 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             var trans = Actor.GetSyncResolver<SyncAddResolver>().Node.transform;
 
             // 坐标算法，插值算法后边再写
-            trans.position = Vector3.Lerp(trans.position, lerp2Target, tick);
+            trans.position = Vector3.Lerp(trans.position, lerp2Pos, tick * 15);
 
             // 旋转算法，插值算法后边再写
             var eulerAngles = trans.rotation.eulerAngles;
-            eulerAngles.y = Mathf.Lerp(eulerAngles.y, lerp2dire, tick);
+            eulerAngles.y = lerp2dire;
             trans.rotation = Quaternion.Euler(eulerAngles.x, eulerAngles.y, eulerAngles.z);
         }
     }

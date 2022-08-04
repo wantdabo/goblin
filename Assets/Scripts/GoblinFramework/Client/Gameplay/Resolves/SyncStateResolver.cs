@@ -22,6 +22,11 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
         protected override void OnResolve<T>(T ril)
         {
+            var modelResolver = Actor.GetSyncResolver<SyncModelResolver>();
+            if (1 == ril.stateId)
+                modelResolver.Animator.CrossFade("Idle", 0.06f);
+            else if (2 == ril.stateId)
+                modelResolver.Animator.CrossFade("Run", 0.045f);
         }
     }
 }

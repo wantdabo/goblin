@@ -13,7 +13,7 @@ namespace GoblinFramework.General.Gameplay.RIL.RILS
     public class RILPos : RIL
     {
         public int dire;
-        public int x, y, z;
+        public float x, y, z;
 
         public override RILType Type => RILType.RILPos;
     }
