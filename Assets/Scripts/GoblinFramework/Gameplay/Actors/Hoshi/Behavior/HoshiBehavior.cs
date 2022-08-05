@@ -10,7 +10,7 @@ using Numerics.Fixed;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
-    public class HoshiBehavior : FSMachineLockstep<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
+    public class HoshiBehavior : FSMachine<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
     {
         public InputBehavior InputBehavior;
         public MotionBehavior MotionBehavior;
@@ -27,13 +27,17 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
             SetState<HoshiAttackA>();
-            EnterState<HoshiIdle>();
+
+            Entrance<HoshiIdle>();
         }
 
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
-            public Fixed64 runSpeed = 14 * Fixed64.EN2;
+            public Fixed64 runSpeed = 24 * Fixed64.EN2;
+
+            public int attackAKeepFrame = 13;
+            public Fixed64 attackAMotionForce = 4 * Fixed64.EN1;
         }
         #endregion
     }

@@ -10,7 +10,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiIdle : HoshiState
     {
-        protected override bool OnDetect()
+        public override bool OnDetect()
         {
             var inputBehavior = Actor.GetBehavior<InputBehavior>();
 

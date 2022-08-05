@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         public class ActorInfo : BehaviorInfo
         {
             public int actorId;
-            public int dire;
+            public Fixed64Vector3 dire;
             public Fixed64Vector3 pos;
         }
         #endregion

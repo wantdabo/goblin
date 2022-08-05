@@ -96,6 +96,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncAddResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiIdle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\InputBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncRmvResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameUI.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Core\GameEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GamePlayingState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMachineLockstep.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMachine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector2.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
@@ -116,11 +117,9 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\ActorBehavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMLockstepState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\MotionBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Theaters\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMachine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\GameInitialize\GameInitializeView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Actor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameResLocation.cs" />
@@ -142,7 +141,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\InputBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

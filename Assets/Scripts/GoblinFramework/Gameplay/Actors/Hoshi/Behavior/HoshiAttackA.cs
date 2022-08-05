@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.General.Gameplay.RIL.RILS;
+using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,19 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
     {
         public override List<Type> PassStates => null;
 
-        //protected override bool OnDetect()
-        //{
-        //    var release = Behavior.InputBehavior.GetInput(Behaviors.InputType.BA).release;
+        public override bool OnDetect()
+        {
+            var release = Behavior.InputBehavior.GetInput(Behaviors.InputType.BA).release;
 
-        //    return release;
-        //}
+            return release;
+        }
 
+        private int countFrame = 0;
         protected override void OnEnter()
         {
             base.OnEnter();
+            countFrame = 0;
+
             Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateId = 3);
         }
 
@@ -32,6 +36,10 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         public override void OnStateTick(int frame)
         {
             base.OnStateTick(frame);
+            countFrame++;
+            if (countFrame >= Behavior.Info.attackAKeepFrame) Leave();
+
+            Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.dire * Behavior.Info.attackAMotionForce);
         }
     }
 }

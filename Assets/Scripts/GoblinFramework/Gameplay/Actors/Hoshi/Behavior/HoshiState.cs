@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
-    public class HoshiState : FSMLockstepState<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
+    public class HoshiState : FSMState<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
     {
         public override List<Type> PassStates => new List<Type>
         {
@@ -15,7 +15,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             typeof(HoshiAttackA),
         };
 
-        protected override bool OnDetect()
+        public override bool OnDetect()
         {
             return false;
         }

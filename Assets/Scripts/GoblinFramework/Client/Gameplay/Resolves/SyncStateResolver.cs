@@ -24,9 +24,11 @@ namespace GoblinFramework.Client.Gameplay.Resolves
         {
             var modelResolver = Actor.GetSyncResolver<SyncModelResolver>();
             if (1 == ril.stateId)
-                modelResolver.Animator.CrossFade("Idle", 0.06f);
+                modelResolver.Animator.CrossFade("Idle", 1f);
             else if (2 == ril.stateId)
-                modelResolver.Animator.CrossFade("Run", 0.045f);
+                modelResolver.Animator.CrossFade("Run", 0.1f);
+            else if (3 == ril.stateId)
+                modelResolver.Animator.CrossFade("AttackA", 0.045f);
         }
     }
 }

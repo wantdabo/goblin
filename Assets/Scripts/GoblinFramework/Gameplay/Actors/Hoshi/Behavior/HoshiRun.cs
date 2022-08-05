@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiRun : HoshiState
     {
-        protected override bool OnDetect()
+        public override bool OnDetect()
         {
             return Behavior.InputBehavior.GetInput(InputType.Joystick).press;
         }
@@ -27,6 +27,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             base.OnStateTick(frame);
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
+            if(joystick.press) Actor.ActorBehavior.Info.dire = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
+
             Fixed64Vector3 force = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
             Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed);
         }

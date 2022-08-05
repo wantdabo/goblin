@@ -1,6 +1,4 @@
-﻿using GoblinFramework.Client;
-using GoblinFramework.Client.Common;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using System;
@@ -12,24 +10,32 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Behaviors.FSMachine
 {
     /// <summary>
-    /// Finite-State-Machine-Comp，状态机，状态机组件
+    /// Finite-State-Machine，有限状态机
     /// </summary>
     /// <typeparam name="I">BeaviorInfo 类型</typeparam>
-    /// <typeparam name="B">行为状态机组件类型</typeparam>
+    /// <typeparam name="B">状态机类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
     public abstract class FSMachine<I, B, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where B : FSMachine<I, B, ST>, new() where ST : FSMState<I, B, ST>, new()
     {
         protected ST state;
-        public ST State { get { return state; } set { state = value; } }
+        public ST State { get { return state; } private set { state = value; } }
 
         protected Dictionary<Type, ST> stateDict = new Dictionary<Type, ST>();
         protected List<ST> stateList = new List<ST>();
+
+        public void Entrance<T>() where T : ST
+        {
+            if (null != State) throw new Exception("entrance only setting once.");
+
+            EnterState(GetState(typeof(T)));
+        }
+
         public ST GetState<T>() where T : ST
         {
             return GetState(typeof(T));
         }
 
-        public ST GetState(Type type) 
+        public ST GetState(Type type)
         {
             stateDict.TryGetValue(type, out ST targetState);
 
@@ -45,29 +51,72 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             stateList.Add(state);
         }
 
-        /// <summary>
-        /// 切换至指定状态，且指定状态在通行列表中
-        /// </summary>
-        /// <typeparam name="T">FSMState 状态</typeparam>
-        public void EnterState<T>() where T : ST
-        {
-            EnterState(GetState<T>());
-        }
-
-        public void EnterState(ST targetState)
+        private void EnterState(ST targetState)
         {
             if (targetState == State) return;
 
-            if (null != State) State.Leave();
+            if (null != State)
+            {
+                if (null == State.PassStates) return;
+                if (false == State.PassStates.Contains(targetState.GetType())) return;
 
-            State = targetState;
+                State.Leave();
+            }
+
             targetState.Enter();
+        }
+
+        private Stack<ST> downAutoStateStack = new Stack<ST>();
+        private ST PopDownAutoState()
+        {
+            if (1 >= downAutoStateStack.Count) return downAutoStateStack.Peek();
+
+            return downAutoStateStack.Pop();
+        }
+
+        private void PushDownAutoState(ST state)
+        {
+            if (downAutoStateStack.Count > 0)
+            {
+                var peekState = downAutoStateStack.Peek();
+                if (peekState.Equals(state)) return;
+            }
+
+            downAutoStateStack.Push(state);
+        }
+
+        public virtual void OnEnter(ST state)
+        {
+            State = state;
+            PushDownAutoState(state);
+        }
+
+        public virtual void OnLeave(ST state)
+        {
+            State = null;
+            PopDownAutoState();
+        }
+
+        private void StateDetect()
+        {
+            var detected = false;
+            foreach (var state in stateList)
+            {
+                if (state.OnDetect())
+                {
+                    detected = true;
+                    EnterState(state);
+                }
+            }
+
+            if (detected) return;
+            EnterState(PopDownAutoState());
         }
 
         public virtual void PLoop(int frame)
         {
-            if (null == State) return;
-            State.OnStateTick(frame);
+            StateDetect();
+            State?.OnStateTick(frame);
         }
     }
 }
