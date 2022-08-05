@@ -12,32 +12,22 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiBehavior : FSMachineLockstep<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
     {
+        public InputBehavior InputBehavior;
+        public MotionBehavior MotionBehavior;
+
         protected override void OnCreate()
         {
             base.OnCreate();
 
             Actor.ActorBehavior.SendRIL<RILModel>((ril) => ril.modelName = "Hoshi/Hoshi");
 
+            InputBehavior = Actor.GetBehavior<InputBehavior>();
+            MotionBehavior = Actor.GetBehavior<MotionBehavior>();
+
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
             SetState<HoshiAttackA>();
-            SetState<HoshiAttackB>();
-            SetState<HoshiAttackC>();
-            SetState<HoshiAttackD>();
-
             EnterState<HoshiIdle>();
-        }
-
-        public override void PLoop(int frame)
-        {
-            base.PLoop(frame);
-            var inputBehavior = Actor.GetBehavior<InputBehavior>();
-            var joystick = inputBehavior.GetInput(InputType.Joystick);
-
-            if (joystick.press)
-                EnterState<HoshiRun>();
-            else
-                EnterState<HoshiIdle>();
         }
 
         #region HoshiInfo

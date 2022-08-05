@@ -20,22 +20,29 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
     public abstract class FSMachine<I, B, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where B : FSMachine<I, B, ST>, new() where ST : FSMState<I, B, ST>, new()
     {
         protected ST state;
-        public ST State { get { return state; } private set { state = value; } }
+        public ST State { get { return state; } set { state = value; } }
 
         protected Dictionary<Type, ST> stateDict = new Dictionary<Type, ST>();
-        protected ST GetState<T>() where T : ST
+        protected List<ST> stateList = new List<ST>();
+        public ST GetState<T>() where T : ST
         {
-            stateDict.TryGetValue(typeof(T), out ST targetState);
+            return GetState(typeof(T));
+        }
+
+        public ST GetState(Type type) 
+        {
+            stateDict.TryGetValue(type, out ST targetState);
 
             return targetState;
         }
 
-        public void SetState<T>() where T : ST, new()
+        protected void SetState<T>() where T : ST, new()
         {
             var state = AddComp<T>();
             state.Behavior = this as B;
             state.Actor = Actor;
             stateDict.Add(typeof(T), state);
+            stateList.Add(state);
         }
 
         /// <summary>
@@ -47,8 +54,10 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             EnterState(GetState<T>());
         }
 
-        protected void EnterState(ST targetState)
+        public void EnterState(ST targetState)
         {
+            if (targetState == State) return;
+
             if (null != State) State.Leave();
 
             State = targetState;

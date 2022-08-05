@@ -15,15 +15,16 @@ namespace GoblinFramework.Client.Gameplay.Comps
     {
         public Actor FollowActor = null;
 
-        private GameObject cameraGo;
+        public GameObject CameraGo;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            cameraGo = GameObject.Find("Eyes");
+            CameraGo = GameObject.Find("Eyes");
+            CameraGo.transform.rotation = Quaternion.Euler(25, 0, 0);
         }
 
-        private Vector3 offset = new Vector3(0.3f, 1.5f, 2);
+        private Vector3 offset = new Vector3(0f, 2f, -2.5f);
         public void LateUpdate(float tick)
         {
             if (null == FollowActor) return;
@@ -31,7 +32,7 @@ namespace GoblinFramework.Client.Gameplay.Comps
             var resolver = FollowActor.GetSyncResolver<SyncAddResolver>();
             var followPos = resolver.Node.transform.position + offset;
 
-            cameraGo.transform.position = followPos;
+            CameraGo.transform.position = followPos;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Common;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         BD,
     }
 
-    public class InputBehavior : Behavior<InputBehavior.InputInfo>
+    public class InputBehavior : Behavior<InputBehavior.InputInfo>, IPLateLoop
     {
         /// <summary>
         /// 获取输入状态
@@ -55,6 +56,28 @@ namespace GoblinFramework.Gameplay.Behaviors
             }
 
             Info.InputMap.Add(inputType, input);
+        }
+
+        public bool HasAnyInput()
+        {
+            foreach (var kv in Info.InputMap) if (kv.Value.press || kv.Value.release) return true;
+
+            return false;
+        }
+
+        public void PLateLoop(int frame)
+        {
+            // 清理 Release 状态
+            foreach (var name in Enum.GetNames(typeof(InputType)))
+            {
+                if (Enum.TryParse(name, out InputType result))
+                {
+                    Info.InputMap.TryGetValue(result, out var input);
+                    Info.InputMap.Remove(result);
+                    input.release = false;
+                    Info.InputMap.Add(result, input);
+                }
+            }
         }
 
         #region InputInfo

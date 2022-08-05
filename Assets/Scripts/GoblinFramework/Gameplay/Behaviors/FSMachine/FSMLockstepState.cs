@@ -20,5 +20,16 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         /// 定义可通行的状态类型列表，如果下一个装填类型不在此列表中，将不允通过
         /// </summary>
         public abstract List<Type> PassStates { get; }
+
+        public void Detect() 
+        {
+            if (OnDetect()) Behavior.EnterState(this as ST);
+        }
+
+        /// <summary>
+        /// 状态检查，能否进入
+        /// </summary>
+        /// <returns>true 能进，false 不能进</returns>
+        protected abstract bool OnDetect();
     }
 }

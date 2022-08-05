@@ -43,9 +43,9 @@ namespace GoblinFramework.Gameplay.Theaters
 
         public void SendRIL<T>(T ril) where T : RIL
         {
-            if (false == rilsDict.ContainsKey(Engine.TickEngine.Frame)) rilsDict.Add(Engine.TickEngine.Frame, new List<RIL>());
-            rilsDict.TryGetValue(Engine.TickEngine.Frame, out var rils);
-            rils.Add(ril);
+            //if (false == rilsDict.ContainsKey(Engine.TickEngine.Frame)) rilsDict.Add(Engine.TickEngine.Frame, new List<RIL>());
+            //rilsDict.TryGetValue(Engine.TickEngine.Frame, out var rils);
+            //rils.Add(ril);
 
             Engine.SendRIL(ril);
         }

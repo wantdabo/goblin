@@ -24,15 +24,29 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         {
             var targetState = GetState<T>();
 
+            EnterState(targetState);
+        }
+
+        public new void EnterState(ST targetState)
+        {
             if (null == State)
             {
-                EnterState(targetState);
+                base.EnterState(targetState);
+
                 return;
             }
 
-            if (false == State.PassStates.Contains(typeof(T))) throw new Exception($"can't turn to {typeof(T)}. because cur state is {State}");
+            if (null == State.PassStates) return;
 
-            EnterState(targetState);
+            if (false == State.PassStates.Contains(targetState.GetType())) return;
+
+            base.EnterState(targetState);
+        }
+
+        public override void PLoop(int frame)
+        {
+            foreach (var state in stateList) state.Detect();
+            base.PLoop(frame);
         }
     }
 }

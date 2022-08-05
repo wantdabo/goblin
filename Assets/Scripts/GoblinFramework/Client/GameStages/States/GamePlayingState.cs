@@ -1,5 +1,6 @@
 ﻿using GoblinFramework.Client.Common;
 using GoblinFramework.Client.Gameplay;
+using GoblinFramework.Client.Gameplay.Resolves;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Behaviors;
@@ -34,32 +35,33 @@ namespace GoblinFramework.Client.GameStages
             base.OnLeave();
         }
 
-        public override void OnStateTick(float tick)
-        {
-            base.OnStateTick(tick);
-
-            Input input = new Input();
-            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
-                input.dire += Fixed64Vector2.Up;
-            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
-                input.dire += Fixed64Vector2.Down;
-            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
-                input.dire += Fixed64Vector2.Left;
-            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
-                input.dire += Fixed64Vector2.Right;
-
-            input.press = input.dire != Fixed64Vector2.Zero;
-
-            PGEngine.SetInput(1, InputType.Joystick, input);
-
-            var actor = Theater.GetActor(1);
-            if (null == actor) return;
-            Theater.CameraFollow.FollowActor = actor;
-        }
-
         public void FixedUpdate(float tick)
         {
-            PGEngine?.TickEngine.PLoop();
+            if (null == PGEngine) return;
+
+            var actor = Theater.GetActor(1);
+            Theater.CameraFollow.FollowActor = actor;
+
+            Input joystick = new Input();
+            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
+                joystick.dire += Fixed64Vector2.Up;
+            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
+                joystick.dire += Fixed64Vector2.Down;
+            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
+                joystick.dire += Fixed64Vector2.Left;
+            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
+                joystick.dire += Fixed64Vector2.Right;
+            joystick.dire.Normalize();
+            joystick.press = joystick.dire != Fixed64Vector2.Zero;
+
+            Input ba = new Input();
+            ba.press = UnityEngine.Input.GetKey(UnityEngine.KeyCode.J);
+            ba.dire = joystick.dire;
+
+            PGEngine.SetInput(1, InputType.Joystick, joystick);
+            PGEngine.SetInput(1, InputType.BA, ba);
+
+            PGEngine.TickEngine.PLoop();
         }
     }
 }
