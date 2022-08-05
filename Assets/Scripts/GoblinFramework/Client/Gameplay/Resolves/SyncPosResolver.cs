@@ -47,7 +47,8 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
             // 旋转算法，插值算法后边再写
             var eulerAngles = trans.rotation.eulerAngles;
-            eulerAngles.y = lerp2dire;
+            eulerAngles.y = Mathf.LerpAngle(eulerAngles.y, lerp2dire, tick * 5);
+
             trans.rotation = Quaternion.Euler(eulerAngles.x, eulerAngles.y, eulerAngles.z);
         }
     }
