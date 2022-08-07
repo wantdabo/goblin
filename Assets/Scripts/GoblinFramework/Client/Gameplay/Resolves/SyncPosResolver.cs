@@ -44,6 +44,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
 
             // 坐标算法，插值算法后边再写
             trans.position = Vector3.Lerp(trans.position, lerp2Pos, tick * 15);
+            //trans.position = lerp2Pos;
 
             // 旋转算法，插值算法后边再写
             var eulerAngles = trans.rotation.eulerAngles;

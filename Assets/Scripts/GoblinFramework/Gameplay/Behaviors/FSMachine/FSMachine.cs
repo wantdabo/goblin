@@ -30,9 +30,9 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             EnterState(GetState(typeof(T)));
         }
 
-        public ST GetState<T>() where T : ST
+        public T GetState<T>() where T : ST
         {
-            return GetState(typeof(T));
+            return GetState(typeof(T)) as T;
         }
 
         public ST GetState(Type type)
@@ -99,22 +99,23 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
 
         private void StateDetect()
         {
-            var detected = false;
+            var detect = false;
             foreach (var state in stateList)
             {
-                if (state.OnDetect())
+                if (state.OnDetectEnter())
                 {
-                    detected = true;
+                    detect = true;
                     EnterState(state);
                 }
             }
 
-            if (detected) return;
+            if (detect) return;
             EnterState(PopDownAutoState());
         }
 
         public virtual void PLoop(int frame)
         {
+            if (State != null && State.OnDetectLeave()) State.Leave();
             StateDetect();
             State?.OnStateTick(frame);
         }

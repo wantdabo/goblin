@@ -12,10 +12,15 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         public override List<Type> PassStates => new List<Type>
         {
             typeof(HoshiIdle), typeof(HoshiRun),
-            typeof(HoshiAttackA),
+            typeof(HoshiAttackA), typeof(HoshiAttackCHold)
         };
 
-        public override bool OnDetect()
+        public override bool OnDetectEnter()
+        {
+            return false;
+        }
+
+        public override bool OnDetectLeave()
         {
             return false;
         }

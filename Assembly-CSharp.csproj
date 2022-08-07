@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedMath.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackD.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMachine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiActor.cs" />
@@ -79,7 +78,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\FixedRandom.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\Resolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\PGEngine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackC.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RIL.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\Clock.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackB.cs" />
@@ -135,12 +133,14 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64AcosLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackA.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackC.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncPosResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackCHold.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackA.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

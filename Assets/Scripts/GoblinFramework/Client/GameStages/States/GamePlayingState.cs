@@ -58,8 +58,13 @@ namespace GoblinFramework.Client.GameStages
             ba.press = UnityEngine.Input.GetKey(UnityEngine.KeyCode.J);
             ba.dire = joystick.dire;
 
+            Input bb = new Input();
+            bb.press = UnityEngine.Input.GetKey(UnityEngine.KeyCode.K);
+            bb.dire = joystick.dire;
+
             PGEngine.SetInput(1, InputType.Joystick, joystick);
             PGEngine.SetInput(1, InputType.BA, ba);
+            PGEngine.SetInput(1, InputType.BB, bb);
 
             PGEngine.TickEngine.PLoop();
         }

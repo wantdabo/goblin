@@ -49,7 +49,13 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         /// 状态检查，能否进入
         /// </summary>
         /// <returns>true 能进，false 不能进</returns>
-        public abstract bool OnDetect();
+        public abstract bool OnDetectEnter();
+
+        /// <summary>
+        /// 状态检查，是否要退出
+        /// </summary>
+        /// <returns>true 退出，false 不退出</returns>
+        public abstract bool OnDetectLeave();
 
         /// <summary>
         /// 状态进入

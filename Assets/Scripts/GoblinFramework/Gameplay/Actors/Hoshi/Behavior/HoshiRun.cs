@@ -11,9 +11,14 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
     public class HoshiRun : HoshiState
     {
-        public override bool OnDetect()
+        public override bool OnDetectEnter()
         {
             return Behavior.InputBehavior.GetInput(InputType.Joystick).press;
+        }
+
+        public override bool OnDetectLeave()
+        {
+            return false == Behavior.InputBehavior.GetInput(InputType.Joystick).press;
         }
 
         protected override void OnEnter()
@@ -22,12 +27,18 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateId = 2);
         }
 
+        protected override void OnLeave()
+        {
+            base.OnLeave();
+        }
+
         public override void OnStateTick(int frame)
         {
             base.OnStateTick(frame);
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
-            if(joystick.press) Actor.ActorBehavior.Info.dire = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
+
+            if (joystick.press) Actor.ActorBehavior.Info.dire = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
 
             Fixed64Vector3 force = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
             Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed);

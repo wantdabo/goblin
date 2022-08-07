@@ -27,6 +27,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
             SetState<HoshiAttackA>();
+            SetState<HoshiAttackB>();
+            SetState<HoshiAttackCHold>();
+            SetState<HoshiAttackC>();
 
             Entrance<HoshiIdle>();
         }
@@ -34,10 +37,13 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
-            public Fixed64 runSpeed = 24 * Fixed64.EN2;
+            public Fixed64 runSpeed = 4 * Fixed64.EN1;
 
-            public int attackAKeepFrame = 13;
-            public Fixed64 attackAMotionForce = 4 * Fixed64.EN1;
+            public int attackAKeepFrame = 5;
+            public int attackBKeepFrame = 3;
+
+            public int attackCKeepFrame = 10;
+            public Fixed64 attackCMotionForce = 10 * Fixed64.EN1;
         }
         #endregion
     }
