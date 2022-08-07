@@ -8,7 +8,7 @@ namespace GoblinFramework.General.Gameplay.RIL.RILS
 {
     public class RILState : RIL
     {
-        public int stateId;
+        public string stateName;
 
         public override RILType Type => RILType.RILState;
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace GoblinFramework.Client.Gameplay.Resolves
 {
@@ -24,26 +25,11 @@ namespace GoblinFramework.Client.Gameplay.Resolves
         {
             var modelResolver = Actor.GetSyncResolver<SyncModelResolver>();
 
-            General.GoblinDebug.Log(ril.stateId.ToString());
-            modelResolver.Animator.SetBool("Idle", false);
-            modelResolver.Animator.SetBool("Run", false);
-            modelResolver.Animator.SetBool("AttackA", false);
-            modelResolver.Animator.SetBool("AttackB", false);
-            modelResolver.Animator.SetBool("AttackCHold", false);
-            modelResolver.Animator.SetBool("AttackC", false);
+            foreach (var paramter in modelResolver.Animator.parameters)
+                if (AnimatorControllerParameterType.Bool == paramter.type) modelResolver.Animator.SetBool(paramter.name, paramter.defaultBool);
 
-            if (1 == ril.stateId)
-                modelResolver.Animator.SetBool("Idle", true);
-            else if (2 == ril.stateId)
-                modelResolver.Animator.SetBool("Run", true);
-            else if (3 == ril.stateId)
-                modelResolver.Animator.SetBool("AttackA", true);
-            else if (4 == ril.stateId)
-                modelResolver.Animator.SetBool("AttackB", true);
-            else if (5 == ril.stateId)
-                modelResolver.Animator.SetBool("AttackCHold", true);
-            else if (6 == ril.stateId)
-                modelResolver.Animator.SetBool("AttackC", true);
+            General.GoblinDebug.Log(ril.stateName);
+            modelResolver.Animator.SetBool(ril.stateName, true);
         }
     }
 }

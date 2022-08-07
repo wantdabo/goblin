@@ -25,7 +25,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         protected override void OnEnter()
         {
             base.OnEnter();
-            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateId = 3);
+            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "AttackA");
         }
 
         protected override void OnLeave()

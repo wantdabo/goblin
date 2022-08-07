@@ -29,7 +29,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
             countFrame = 0;
 
-            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateId = 6);
+            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "AttackC");
         }
 
         protected override void OnLeave()
