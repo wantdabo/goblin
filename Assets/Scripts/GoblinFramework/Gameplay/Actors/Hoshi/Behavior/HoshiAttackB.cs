@@ -15,7 +15,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         {
             if (false == Behavior.InputBehavior.GetInput(Behaviors.InputType.BA).press) return false;
 
-            var attackA = Behavior.GetState<HoshiAttackA>();
+            var attackA = Behavior.State as HoshiAttackA;
+            if (null == attackA) return false;
 
             if (attackA.countFrame >= 4) return true;
 
