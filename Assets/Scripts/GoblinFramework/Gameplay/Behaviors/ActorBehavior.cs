@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         public class ActorInfo : BehaviorInfo
         {
             public int actorId;
-            public Fixed64Vector3 dire;
+            public Fixed64Vector3 dire = Fixed64Vector3.forward;
             public Fixed64Vector3 pos;
         }
         #endregion
