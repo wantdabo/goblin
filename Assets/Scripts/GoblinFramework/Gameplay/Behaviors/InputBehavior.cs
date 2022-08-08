@@ -27,6 +27,21 @@ namespace GoblinFramework.Gameplay.Behaviors
 
     public class InputBehavior : Behavior<InputBehavior.InputInfo>, IPLateLoop
     {
+        private List<InputType> totalInputKeys = new List<InputType>();
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            foreach (var name in Enum.GetNames(typeof(InputType)))
+                if (Enum.TryParse(name, out InputType result)) totalInputKeys.Add(result);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            totalInputKeys.Clear();
+        }
+
         /// <summary>
         /// 获取输入状态
         /// </summary>
@@ -68,15 +83,12 @@ namespace GoblinFramework.Gameplay.Behaviors
         public void PLateLoop(int frame)
         {
             // 清理 Release 状态
-            foreach (var name in Enum.GetNames(typeof(InputType)))
+            foreach (var key in totalInputKeys) 
             {
-                if (Enum.TryParse(name, out InputType result))
-                {
-                    Info.InputMap.TryGetValue(result, out var input);
-                    Info.InputMap.Remove(result);
-                    input.release = false;
-                    Info.InputMap.Add(result, input);
-                }
+                Info.InputMap.TryGetValue(key, out var input);
+                Info.InputMap.Remove(key);
+                input.release = false;
+                Info.InputMap.Add(key, input);
             }
         }
 
