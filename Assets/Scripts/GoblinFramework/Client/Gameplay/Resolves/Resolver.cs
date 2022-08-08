@@ -98,9 +98,9 @@ namespace GoblinFramework.Client.Gameplay.Resolves
                 return;
             }
 
-            OnBoxResolver(ril);
+            OnPackResolver(ril);
         }
 
-        protected abstract void OnBoxResolver<T>(T ril) where T : RIL;
+        protected abstract void OnPackResolver<T>(T ril) where T : RIL;
     }
 }

@@ -84,7 +84,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackB.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Quaternion.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64TanLut.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\BinaryRW.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />

@@ -35,8 +35,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         protected override void OnCreate()
         {
             base.OnCreate();
-            foreach (var name in Enum.GetNames(typeof(InputType)))
-                if (Enum.TryParse(name, out InputType result)) totalInputKeys.Add(result);
+            foreach (var name in Enum.GetNames(typeof(InputType))) if (Enum.TryParse(name, out InputType result)) totalInputKeys.Add(result);
         }
 
         protected override void OnDestroy()
@@ -76,6 +75,10 @@ namespace GoblinFramework.Gameplay.Behaviors
             Info.InputMap.Add(inputType, input);
         }
 
+        /// <summary>
+        /// 任意输入激活
+        /// </summary>
+        /// <returns>任意键激活，true，否则 false</returns>
         public bool HasAnyInput()
         {
             foreach (var kv in Info.InputMap) if (kv.Value.press || kv.Value.release) return true;

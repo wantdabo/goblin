@@ -14,7 +14,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
     /// <typeparam name="RILT">指令类型</typeparam>
     public abstract class SyncResolver<RILT> : Resolver where RILT : RIL
     {
-        protected override void OnBoxResolver<T>(T ril)
+        protected override void OnPackResolver<T>(T ril)
         {
             OnResolve(ril as RILT);
         }

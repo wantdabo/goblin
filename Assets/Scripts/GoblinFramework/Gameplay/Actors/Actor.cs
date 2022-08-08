@@ -52,6 +52,7 @@ namespace GoblinFramework.Gameplay.Actors
         /// 添加行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
+        /// 
         public T AddBehavior<T>() where T : PComp, new()
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
@@ -64,6 +65,12 @@ namespace GoblinFramework.Gameplay.Actors
 
         private List<Actor> actorList = new List<Actor>();
         private Dictionary<int, Actor> actorDict = new Dictionary<int, Actor>();
+
+        /// <summary>
+        /// 获取 Actor
+        /// </summary>
+        /// <param name="actorId">actorId 唯一身份表示</param>
+        /// <returns>Actor</returns>
         public Actor GetActor(int actorId)
         {
             actorDict.TryGetValue(actorId, out var actor);

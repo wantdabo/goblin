@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using Numerics.Fixed;
+using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 
-namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
+namespace GoblinFramework.Gameplay.Actors.Hoshi
 {
     public class HoshiBehavior : FSMachine<HoshiBehavior, HoshiBehavior.HoshiInfo, HoshiState>
     {

@@ -1,4 +1,5 @@
-﻿using GoblinFramework.General.Gameplay.RIL.RILS;
+﻿using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
         public override bool OnDetectEnter()
         {
-            return Behavior.InputBehavior.GetInput(Behaviors.InputType.BA).press;
+            return Behavior.InputBehavior.GetInput(InputType.BA).press;
         }
 
         public override bool OnDetectLeave()
