@@ -1,6 +1,7 @@
 ﻿using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Physics;
 using GoblinFramework.Gameplay.Theaters;
 using GoblinFramework.General;
 using GoblinFramework.General.Gameplay.RIL.RILS;
@@ -18,12 +19,14 @@ namespace GoblinFramework.Gameplay
     public class PGEngine : GameEngine<PGEngine>
     {
         public TickEngine TickEngine = null;
+        public World World = null;
         public Theater Theater = null;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             TickEngine = AddComp<TickEngine>();
+            World = AddComp<World>();
             Theater = AddComp<Theater>();
         }
 
@@ -31,6 +34,7 @@ namespace GoblinFramework.Gameplay
         {
             base.OnDestroy();
             TickEngine = null;
+            World = null;
             Theater = null;
         }
 

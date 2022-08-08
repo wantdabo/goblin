@@ -20,6 +20,11 @@ namespace GoblinFramework.Gameplay.Behaviors
             SendRIL<RILAdd>();
         }
 
+        public void SetPos(Fixed64Vector3 pos) 
+        {
+            Info.pos = pos;
+        }
+
         public void SendRIL<T>(Action<T> action = null) where T : RIL, new()
         {
             T ril = new T();

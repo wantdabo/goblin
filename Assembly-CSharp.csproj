@@ -141,6 +141,12 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Shape2D.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Rectangle2D.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Polygon2D.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Circle2D.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\World.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\QuadTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

@@ -20,8 +20,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             if (Fixed64Vector3.zero == Info.force) return;
 
-            Actor.ActorBehavior.Info.pos += Info.force;
-
+            Actor.ActorBehavior.SetPos(Actor.ActorBehavior.Info.pos + Info.force);
             Actor.ActorBehavior.SendRIL<RILPos>((ril) =>
             {
                 ril.x = Actor.ActorBehavior.Info.pos.x.AsFloat();
@@ -29,7 +28,6 @@ namespace GoblinFramework.Gameplay.Behaviors
                 ril.z = Actor.ActorBehavior.Info.pos.z.AsFloat();
                 ril.dire = 0;
             });
-
             Info.force = Fixed64Vector3.zero;
         }
 
