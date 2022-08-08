@@ -12,23 +12,19 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
     /// <summary>
     /// Finite-State-Machine，有限状态机
     /// </summary>
-    /// <typeparam name="I">BeaviorInfo 类型</typeparam>
-    /// <typeparam name="B">状态机类型</typeparam>
+    /// <typeparam name="MT">状态机类型</typeparam>
+    /// <typeparam name="MIT">状态机 BeaviorInfo 类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<I, B, ST> : Behavior<I>, IPLoop where I : BehaviorInfo, new() where B : FSMachine<I, B, ST>, new() where ST : FSMState<I, B, ST>, new()
+    public abstract class FSMachine<MT, MIT, ST> : Behavior<MIT>, IPLoop where MIT : BehaviorInfo, new() where MT : FSMachine<MT, MIT, ST>, new() where ST : FSMState<MT, MIT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
 
+        protected Type entranceState;
+        public Type EntranceState { get { return entranceState; } private set { entranceState = value; } }
+
         protected Dictionary<Type, ST> stateDict = new Dictionary<Type, ST>();
         protected List<ST> stateList = new List<ST>();
-
-        public void Entrance<T>() where T : ST
-        {
-            if (null != State) throw new Exception("entrance only setting once.");
-
-            EnterState(GetState(typeof(T)));
-        }
 
         public T GetState<T>() where T : ST
         {
@@ -45,10 +41,28 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         protected void SetState<T>() where T : ST, new()
         {
             var state = AddComp<T>();
-            state.Behavior = this as B;
+            state.Behavior = this as MT;
             state.Actor = Actor;
             stateDict.Add(typeof(T), state);
             stateList.Add(state);
+        }
+
+        public void SetEntrance<T>() where T : ST
+        {
+            SetEntrance(typeof(T));
+        }
+
+        public void SetEntrance(Type type)
+        {
+            if (null != EntranceState) throw new Exception("entrance only setting once.");
+            EntranceState = type;
+            Entrance();
+        }
+
+        public void Entrance()
+        {
+            if (null == EntranceState) throw new Exception("entrancestate is null, plz do this at setting entrancestate later.");
+            EnterState(GetState(EntranceState));
         }
 
         private void EnterState(ST targetState)
@@ -66,35 +80,14 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             targetState.Enter();
         }
 
-        private Stack<ST> downAutoStateStack = new Stack<ST>();
-        private ST PopDownAutoState()
-        {
-            if (1 >= downAutoStateStack.Count) return downAutoStateStack.Peek();
-
-            return downAutoStateStack.Pop();
-        }
-
-        private void PushDownAutoState(ST state)
-        {
-            if (downAutoStateStack.Count > 0)
-            {
-                var peekState = downAutoStateStack.Peek();
-                if (peekState.Equals(state)) return;
-            }
-
-            downAutoStateStack.Push(state);
-        }
-
         public virtual void OnEnter(ST state)
         {
             State = state;
-            PushDownAutoState(state);
         }
 
         public virtual void OnLeave(ST state)
         {
             State = null;
-            PopDownAutoState();
         }
 
         private void StateDetect()
@@ -110,7 +103,7 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             }
 
             if (detect) return;
-            EnterState(PopDownAutoState());
+            Entrance();
         }
 
         public virtual void PLoop(int frame)

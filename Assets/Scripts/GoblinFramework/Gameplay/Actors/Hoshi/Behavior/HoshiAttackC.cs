@@ -19,28 +19,19 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
         public override bool OnDetectLeave()
         {
-            return countFrame >= Behavior.Info.attackCKeepFrame;
+            return ElapsedFrames >= Behavior.Info.attackCKeepFrame;
         }
 
-        private int countFrame = 0;
         protected override void OnEnter()
         {
             base.OnEnter();
 
-            countFrame = 0;
-
             Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "AttackC");
-        }
-
-        protected override void OnLeave()
-        {
-            base.OnLeave();
         }
 
         public override void OnStateTick(int frame)
         {
             base.OnStateTick(frame);
-            countFrame++;
 
             Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.dire * Behavior.Info.attackCMotionForce);
         }

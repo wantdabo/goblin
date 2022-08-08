@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 {
-    public class HoshiState : FSMState<HoshiBehavior.HoshiInfo, HoshiBehavior, HoshiState>
+    public class HoshiState : FSMState<HoshiBehavior, HoshiBehavior.HoshiInfo, HoshiState>
     {
         public override List<Type> PassStates => new List<Type>
         {

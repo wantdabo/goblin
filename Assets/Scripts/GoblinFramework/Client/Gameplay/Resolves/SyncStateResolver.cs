@@ -28,7 +28,6 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             foreach (var paramter in modelResolver.Animator.parameters)
                 if (AnimatorControllerParameterType.Bool == paramter.type) modelResolver.Animator.SetBool(paramter.name, paramter.defaultBool);
 
-            General.GoblinDebug.Log(ril.stateName);
             modelResolver.Animator.SetBool(ril.stateName, true);
         }
     }

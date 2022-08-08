@@ -56,8 +56,7 @@ namespace GoblinFramework.Gameplay
 
         public void SendRIL<T>(T ril) where T : RIL
         {
-            foreach (var kv in rilRecvDict)
-                kv.Value.Invoke(ril);
+            foreach (var kv in rilRecvDict) kv.Value.Invoke(ril);
         }
     }
 }

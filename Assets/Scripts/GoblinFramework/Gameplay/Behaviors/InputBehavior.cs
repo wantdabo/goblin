@@ -25,6 +25,9 @@ namespace GoblinFramework.Gameplay.Behaviors
         BD,
     }
 
+    /// <summary>
+    /// InputBehavior，输入行为组件
+    /// </summary>
     public class InputBehavior : Behavior<InputBehavior.InputInfo>, IPLateLoop
     {
         private List<InputType> totalInputKeys = new List<InputType>();
