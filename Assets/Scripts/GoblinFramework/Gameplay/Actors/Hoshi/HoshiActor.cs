@@ -1,5 +1,6 @@
 ﻿using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Physics.Collisions;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         protected override void OnCreate()
         {
             base.OnCreate();
+            AddComp<Circle2D>((circle) => circle.radius = 1);
+
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
             AddBehavior<HoshiBehavior>();

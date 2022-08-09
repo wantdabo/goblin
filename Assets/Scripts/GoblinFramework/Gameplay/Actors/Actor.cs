@@ -57,7 +57,7 @@ namespace GoblinFramework.Gameplay.Actors
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
-            var comp = AddComp<T>((item) => item.Actor = this);
+            var comp = AddComp<T>();
             behaviorDict.Add(typeof(T), comp);
 
             return comp;
@@ -93,13 +93,21 @@ namespace GoblinFramework.Gameplay.Actors
         {
             var actor = AddComp<T>((item) =>
             {
-                item.Actor = this;
                 item.Theater = Theater;
             });
             actorList.Add(actor);
             actorDict.Add(actor.ActorBehavior.Info.actorId, actor);
 
             return actor;
+        }
+
+        public new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
+        {
+            return base.AddComp<T>((item) =>
+            {
+                item.Actor = this;
+                createAheadAction?.Invoke(item);
+            });
         }
     }
 }

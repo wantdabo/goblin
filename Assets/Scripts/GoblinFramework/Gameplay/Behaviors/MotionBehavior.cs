@@ -20,7 +20,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             if (Fixed64Vector3.zero == Info.force) return;
 
-            Actor.ActorBehavior.SetPos(Actor.ActorBehavior.Info.pos + Info.force);
+            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + Info.force;
             Actor.ActorBehavior.SendRIL<RILPos>((ril) =>
             {
                 ril.x = Actor.ActorBehavior.Info.pos.x.AsFloat();
@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         }
 
         #region MotionInfo
-        public class MotionInfo : BehaviorInfo
+        public class MotionInfo: BehaviorInfo
         {
             public Fixed64Vector3 force;
         }

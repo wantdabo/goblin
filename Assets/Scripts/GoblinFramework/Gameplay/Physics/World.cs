@@ -30,11 +30,9 @@ namespace GoblinFramework.Gameplay.Physics
             QuadTree = AddComp<QuadTree>();
         }
 
-
-
         public void PLateLoop(int frame)
         {
-            foreach (var shape2d in shape2dList) shape2d.Collision();
+            //foreach (var shape2d in shape2dList) shape2d.Collision();
         }
     }
 }

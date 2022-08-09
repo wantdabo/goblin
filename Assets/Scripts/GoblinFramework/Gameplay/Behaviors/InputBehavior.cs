@@ -89,7 +89,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         public void PLateLoop(int frame)
         {
             // 清理 Release 状态
-            foreach (var key in totalInputKeys) 
+            foreach (var key in totalInputKeys)
             {
                 Info.InputMap.TryGetValue(key, out var input);
                 Info.InputMap.Remove(key);

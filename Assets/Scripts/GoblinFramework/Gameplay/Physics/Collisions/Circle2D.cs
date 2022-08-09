@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Numerics.Fixed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
 {
     public class Circle2D : Shape2D
     {
+        public Fixed64 radius;
     }
 }

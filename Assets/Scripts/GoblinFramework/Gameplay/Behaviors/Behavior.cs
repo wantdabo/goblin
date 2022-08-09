@@ -20,18 +20,15 @@ namespace GoblinFramework.Gameplay.Behaviors
 
         protected override void OnCreate()
         {
-            info = new I();
-            info.Engine = Engine;
-            info.Create();
-
             base.OnCreate();
+            Info = Actor.AddComp<I>();
         }
     }
 
     /// <summary>
     /// 组件数据定义
     /// </summary>
-    public abstract class BehaviorInfo : Goblin<PGEngine>
+    public abstract class BehaviorInfo : PComp
     {
         protected override void OnCreate() { }
         protected override void OnDestroy() { }

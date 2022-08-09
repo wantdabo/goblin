@@ -1,12 +1,4 @@
-﻿#if GOBLIN_CLIENT
-using GoblinFramework.Client;
-using GoblinFramework.Client.Common;
-#endif
-#if GOBLIN_GAMEPLAY
-using GoblinFramework.Gameplay;
-using GoblinFramework.Gameplay.Common;
-#endif
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,10 +48,19 @@ namespace GoblinFramework.Core
         /// <returns>组件列表</returns>
         public virtual List<T> GetComp<T>(bool force = false) where T : Comp<E>
         {
-            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) return comps as List<T>;
+            List<T> list = null;
+            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps))
+            {
+                list = new List<T>();
+
+                foreach (var item in comps) list.Add(item as T);
+
+                return list;
+            }
+
             if (false == force) return null;
 
-            List<T> list = null;
+            // 高代价查表
             foreach (var comp in compList)
             {
                 if (comp is T)
