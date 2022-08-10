@@ -71,7 +71,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMachine.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Circle2D.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiActor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Server\SGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameInitializeState.cs" />
@@ -111,7 +110,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\Behavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Rectangle2D.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Rectangle.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILParser.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameRes.cs" />
@@ -131,7 +130,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\obj\Debug\netstandard2.0\Numerics.Fixed.AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\U3DTool.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Polygon2D.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Comps\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
@@ -147,6 +145,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Triangle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Circle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

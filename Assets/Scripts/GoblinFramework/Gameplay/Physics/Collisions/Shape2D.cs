@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
-    public class Shape2D : PComp
+    public abstract class Shape2D : PComp
     {
         public Fixed64Vector3 dire { get; private set; }
         public Fixed64Vector3 pos { get; private set; }
+        public GPoint rect { get; private set; }
 
         protected override void OnCreate()
         {
@@ -35,6 +36,32 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         private void PosChanged(Fixed64Vector3 pos)
         {
             this.pos = pos;
+        }
+
+        public virtual void DirtyRect()
+        {
+            rect = GenRect();
+        }
+
+        public abstract GPoint GenRect();
+
+        /// <summary>
+        /// Goblin-Point
+        /// </summary>
+        public struct GPoint
+        {
+            public Fixed64 x;
+            public Fixed64 y;
+        }
+
+        /// <summary>
+        /// Goblin-Triangle
+        /// </summary>
+        public struct GTriangle 
+        {
+            public GPoint p0;
+            public GPoint p1;
+            public GPoint p2;
         }
     }
 }

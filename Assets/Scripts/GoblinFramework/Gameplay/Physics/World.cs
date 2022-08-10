@@ -14,20 +14,30 @@ namespace GoblinFramework.Gameplay.Physics
         /// <summary>
         /// 四叉树
         /// </summary>
-        public QuadTree QuadTree;
+        public QuadTree QuadTree { get; private set; }
 
         /// <summary>
         /// 碰撞总列表
         /// </summary>
         public List<Shape2D> shape2dList = new List<Shape2D>();
 
-        private Fixed64Vector3 worldSize;
-        public Fixed64Vector3 WorldSize { get { return worldSize; } private set { worldSize = value; } }
+        private int bounds = 32;
+        public int Bounds
+        {
+            get { return bounds; }
+            set
+            {
+                if (0 == bounds || 0 != (bounds & bounds - 1))
+                    throw new Exception("boundX need 2 power number. and not (0) zero");
+
+                bounds = value;
+            }
+        }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            QuadTree = AddComp<QuadTree>();
+            QuadTree = AddComp<QuadTree>((tree) => tree.World = this);
         }
 
         public void PLateLoop(int frame)
