@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64TanLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\BinaryRW.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Circle.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiRun.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Comps\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Triangle.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncStateResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
@@ -145,8 +147,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Triangle.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Circle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\Shape2DExtends.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

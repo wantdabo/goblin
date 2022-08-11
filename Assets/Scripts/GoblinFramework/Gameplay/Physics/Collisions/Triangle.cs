@@ -12,14 +12,16 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
     /// </summary>
     public class Triangle : Shape2D
     {
-        private GTriangle mTriangle;
-        public GTriangle triangle
+        public GTriangle triangle { get; private set; }
+
+        private GTriangle mVertex;
+        public GTriangle vertex
         {
-            get { return mTriangle; }
-            set { mTriangle = value; DirtyRect(); }
+            get { return mVertex; }
+            set { mVertex = value; SetDirty(); }
         }
 
-        public override GPoint GenRect()
+        public override GRect MakeBox()
         {
             Fixed64 minX = Fixed64.MaxValue;
             Fixed64 maxX = Fixed64.MinValue;
@@ -39,7 +41,17 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             maxY = FixedMath.Max(triangle.p1.y, maxY);
             maxY = FixedMath.Max(triangle.p2.y, maxY);
 
-            return new GPoint() { x = maxX - minX, y = maxY - minY };
+            return new GRect() { lt = new GPoint { detail = new Fixed64Vector2(minX, maxY) }, rb = new GPoint { detail = new Fixed64Vector2(maxX, minY) } };
+        }
+
+        public override void OnDirty()
+        {
+            triangle = new GTriangle
+            {
+                p0 = new GPoint { detail = vertex.p0.detail + pos.detail },
+                p1 = new GPoint { detail = vertex.p1.detail + pos.detail },
+                p2 = new GPoint { detail = vertex.p2.detail + pos.detail }
+            };
         }
     }
 }
