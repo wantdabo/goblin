@@ -1,4 +1,5 @@
-﻿using Numerics.Fixed;
+﻿using GoblinFramework.Gameplay.Physics.Shape;
+using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
     /// <summary>
-    /// Circle，圆形碰撞盒
+    /// Circle-Collider，圆形碰撞盒
     /// </summary>
-    public class Circle : Shape2D
+    public class CircleCo : ShapeCo
     {
         public GCircle circle { get; private set; }
 

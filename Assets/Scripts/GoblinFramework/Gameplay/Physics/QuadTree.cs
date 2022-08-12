@@ -45,43 +45,43 @@ namespace GoblinFramework.Gameplay.Physics
             return quad;
         }
 
-        private Dictionary<Shape2D, Quad> shapeQuadDict;
+        private Dictionary<ShapeCo, Quad> shapeQuadDict;
 
-        public void Add2QuadTree(Shape2D shape2d) 
+        public void Add2QuadTree(ShapeCo shape2d) 
         {
-            if (null == shapeQuadDict) shapeQuadDict = new Dictionary<Shape2D, Quad>();
+            if (null == shapeQuadDict) shapeQuadDict = new Dictionary<ShapeCo, Quad>();
             if (shapeQuadDict.ContainsKey(shape2d)) throw new Exception("repeat. plz check.");
             // TODO 插入树中
         }
 
-        public void Rmv4QuadTree(Shape2D shape2d) 
+        public void Rmv4QuadTree(ShapeCo shape2d) 
         {
             if (false == shapeQuadDict.ContainsKey(shape2d)) throw new Exception("not found. plz check.");
             shapeQuadDict.Remove(shape2d);
             // TODO 树中移除
         }
 
-        public void QuadTreeDirty(Shape2D shape2d) 
+        public void QuadTreeDirty(ShapeCo shape2d) 
         {
             var quad = GetQuad(shape2d);
             //shapeQuadDict.TryGetValue(shape2d, out Quad quad);
             // TODO 检查，是否出范围。如果出了范围就向上提一层，在查一遍。
         }
 
-        public void CheckPlace(Shape2D resident, Quad quad) 
+        public void CheckPlace(ShapeCo resident, Quad quad) 
         {
         }
 
-        public Quad GetQuad(Shape2D shape2d) 
+        public Quad GetQuad(ShapeCo shape2d) 
         {
             shapeQuadDict.TryGetValue(shape2d, out var ret);
 
             return ret;
         }
 
-        public List<Shape2D> GetNeighbor(Shape2D shape2d) 
+        public List<ShapeCo> GetNeighbor(ShapeCo shape2d) 
         {
-            List<Shape2D> shapeList = new List<Shape2D>();
+            List<ShapeCo> shapeList = new List<ShapeCo>();
 
 
             return shapeList;
@@ -107,7 +107,7 @@ namespace GoblinFramework.Gameplay.Physics
             /// <summary>
             /// 该节点下的所有物体
             /// </summary>
-            public List<Shape2D> shapeList;
+            public List<ShapeCo> shapeList;
 
             /// <summary>
             /// [1, 0]

@@ -1,4 +1,5 @@
-﻿using Numerics.Fixed;
+﻿using GoblinFramework.Gameplay.Physics.Shape;
+using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
     /// <summary>
-    /// Triangle，三角形碰撞盒
+    /// Triangle-Collider，三角形碰撞盒
     /// </summary>
-    public class Triangle : Shape2D
+    public class TriangleCo : ShapeCo
     {
         public GTriangle triangle { get; private set; }
 

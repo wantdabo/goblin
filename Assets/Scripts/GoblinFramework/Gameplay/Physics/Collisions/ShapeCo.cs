@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Physics.Shape;
 using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
-    public abstract partial class Shape2D : PComp
+    public abstract partial class ShapeCo : PComp
     {
         /// <summary>
         /// 方向

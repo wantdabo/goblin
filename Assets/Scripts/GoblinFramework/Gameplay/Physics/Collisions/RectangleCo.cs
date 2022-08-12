@@ -1,4 +1,5 @@
-﻿using Numerics.Fixed;
+﻿using GoblinFramework.Gameplay.Physics.Shape;
+using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
     /// <summary>
-    /// Rectangle，矩形碰撞盒
+    /// Rectangle-Collider，矩形碰撞盒
     /// </summary>
-    public class Rectangle : Shape2D
+    public class RectangleCo : ShapeCo
     {
         public GRect rectangle { get; private set; }
 
