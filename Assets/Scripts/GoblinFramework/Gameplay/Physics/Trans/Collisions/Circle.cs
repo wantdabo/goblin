@@ -21,7 +21,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mRadius = value; SetDirty(); }
         }
 
-        public override GRect MakeBox()
+        public override GRect ComputeAABB()
         {
             return new GRect
             {
@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
 
         public override void OnDirty()
         {
-            circle = new GCircle { radius = radius, pos = pos };
+            circle = new GCircle { center = pos, radius = radius };
         }
     }
 }

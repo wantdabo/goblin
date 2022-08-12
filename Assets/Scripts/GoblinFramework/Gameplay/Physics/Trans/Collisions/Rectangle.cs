@@ -21,7 +21,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mSize = value; SetDirty(); }
         }
 
-        public override GRect MakeBox()
+        public override GRect ComputeAABB()
         {
             return rectangle;
         }

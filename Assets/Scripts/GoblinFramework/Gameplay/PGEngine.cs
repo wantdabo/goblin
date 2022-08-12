@@ -5,6 +5,7 @@ using GoblinFramework.Gameplay.Physics;
 using GoblinFramework.Gameplay.Theaters;
 using GoblinFramework.General;
 using GoblinFramework.General.Gameplay.RIL.RILS;
+using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;

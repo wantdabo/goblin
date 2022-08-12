@@ -21,7 +21,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mVertex = value; SetDirty(); }
         }
 
-        public override GRect MakeBox()
+        public override GRect ComputeAABB()
         {
             Fixed64 minX = Fixed64.MaxValue;
             Fixed64 maxX = Fixed64.MinValue;
@@ -48,6 +48,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         {
             triangle = new GTriangle
             {
+                center = pos,
                 p0 = new GPoint { detail = vertex.p0.detail + pos.detail },
                 p1 = new GPoint { detail = vertex.p1.detail + pos.detail },
                 p2 = new GPoint { detail = vertex.p2.detail + pos.detail }

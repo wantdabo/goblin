@@ -55,10 +55,10 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         public void SetDirty()
         {
             OnDirty();
-            this.box = MakeBox();
+            this.box = ComputeAABB();
         }
 
         public abstract void OnDirty();
-        public abstract GRect MakeBox();
+        public abstract GRect ComputeAABB();
     }
 }

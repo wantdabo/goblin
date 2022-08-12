@@ -15,7 +15,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         protected override void OnCreate()
         {
             base.OnCreate();
-            AddComp<Circle>((circle) => circle.radius = 1);
 
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
