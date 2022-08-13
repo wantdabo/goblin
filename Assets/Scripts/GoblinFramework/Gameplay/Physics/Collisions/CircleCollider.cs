@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
     /// <summary>
     /// Circle-Collider，圆形碰撞盒
     /// </summary>
-    public class CircleCo : ShapeCo
+    public class CircleCollider : ShapeCollider
     {
         public GCircle circle { get; private set; }
 
@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mRadius = value; SetDirty(); }
         }
 
-        public override GRect ComputeAABB()
+        public override GRect CalcAABB()
         {
             return new GRect
             {

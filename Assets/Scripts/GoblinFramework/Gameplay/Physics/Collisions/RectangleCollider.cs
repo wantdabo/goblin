@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
     /// <summary>
     /// Rectangle-Collider，矩形碰撞盒
     /// </summary>
-    public class RectangleCo : ShapeCo
+    public class RectangleCollider : ShapeCollider
     {
         public GRect rectangle { get; private set; }
 
@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mSize = value; SetDirty(); }
         }
 
-        public override GRect ComputeAABB()
+        public override GRect CalcAABB()
         {
             return rectangle;
         }

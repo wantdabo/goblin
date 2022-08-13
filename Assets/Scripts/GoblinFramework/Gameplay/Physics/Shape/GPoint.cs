@@ -27,22 +27,22 @@ namespace GoblinFramework.Gameplay.Physics.Shape
 
         public bool Collision(GPoint p)
         {
-            return ShapeCo.Collision(this, p);
+            return GoblinCollision.Collision(this, p);
         }
 
         public bool Collision(GRect r)
         {
-            return ShapeCo.Collision(this, r);
+            return GoblinCollision.Collision(this, r);
         }
 
         public bool Collision(GCircle c)
         {
-            return ShapeCo.Collision(this, c);
+            return GoblinCollision.Collision(this, c);
         }
 
         public bool Collision(GTriangle t)
         {
-            return ShapeCo.Collision(this, t);
+            return GoblinCollision.Collision(this, t);
         }
     }
 }

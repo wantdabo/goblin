@@ -70,7 +70,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Fixed64Vector3.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\ShapeCoExtends.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMachine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiActor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Server\SGEngine.cs" />
@@ -88,7 +87,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64TanLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\HoshiBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\BinaryRW.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\CircleCo.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\CircleCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiRun.cs" />
@@ -97,8 +96,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILAdd.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameHotfixState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GRect.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncAddResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiIdle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GPoint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\InputBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncRmvResolver.cs" />
@@ -112,13 +113,14 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\TickEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\Behavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\RectangleCo.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\RectangleCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMLockstepState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILParser.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\GameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncModelResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBaseView.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\ShapeCo.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\ShapeCollider.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GTriangle.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\GameStageState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\ActorBehavior.cs" />
@@ -134,25 +136,23 @@
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Comps\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\TriangleCo.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Collisions\TriangleCollider.cs" />
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncStateResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameRes\YooGameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\ThirdParty\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64AcosLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\IShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\QuadTree.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GCircle.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackC.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncPosResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\States\StageLoginState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Theater.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\QuadTree.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GPoint.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GRect.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GCircle.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GTriangle.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\IShape.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Shape\GoblinCollision.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

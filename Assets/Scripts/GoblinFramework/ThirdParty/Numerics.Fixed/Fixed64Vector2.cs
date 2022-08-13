@@ -457,6 +457,20 @@ namespace Numerics.Fixed
             return Fixed64.Acos(a.Normalized * b.Normalized) * Fixed64.Rad2Deg;
         }
 
+        public static Fixed64 Angle360(Fixed64Vector2 a, Fixed64Vector2 b)
+        {
+            if (a == Fixed64Vector2.Zero && b == Fixed64Vector2.Zero) return 0;
+
+            Fixed64Vector2 c = new Fixed64Vector2(b.x - a.x, b.y - a.y);
+            Fixed64 xrd = FixedMath.Atan2(c.y, c.x);
+            Fixed64 rot = xrd / FixedMath.Pi * 180;
+            Fixed64 angle = 270 - rot;
+            angle = angle < 0 ? 360 : angle;
+            angle %= 360;
+
+            return angle;
+        }
+
         public Fixed64Vector3 ToTSVector()
         {
             return new Fixed64Vector3(x, y, 0);

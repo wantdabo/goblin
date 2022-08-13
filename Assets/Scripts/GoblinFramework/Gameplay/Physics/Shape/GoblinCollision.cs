@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Gameplay.Physics.Collisions
+namespace GoblinFramework.Gameplay.Physics.Shape
 {
-    public partial class ShapeCo
+    public static class GoblinCollision
     {
         /// <summary>
         /// 点与点碰撞检测
@@ -29,6 +29,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GPoint p, GRect r)
         {
+            throw new NotImplementedException();
             return p.detail.x >= r.lt.detail.x &&
                    p.detail.y >= r.lt.detail.y &&
                    p.detail.x <= r.rb.detail.x &&
@@ -69,6 +70,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GRect r0, GRect r1)
         {
+            throw new NotImplementedException();
             var minX = FixedMath.Max(r0.lt.x, r1.lt.x);
             var minY = FixedMath.Max(r0.lt.y, r1.lt.y);
             var maxX = FixedMath.Max(r0.rb.x, r1.rb.x);
@@ -85,11 +87,12 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GRect r, GCircle c)
         {
-            if (ShapeCo.Collision(c.center, r)) return true;
-            if (ShapeCo.Collision(r.lt, c)) return true;
-            if (ShapeCo.Collision(r.rb, c)) return true;
-            if (ShapeCo.Collision(new GPoint { x = r.rb.x, y = r.lt.y }, c)) return true;
-            if (ShapeCo.Collision(new GPoint { x = r.lt.x, y = r.rb.y }, c)) return true;
+            throw new NotImplementedException();
+            if (GoblinCollision.Collision(c.center, r)) return true;
+            if (GoblinCollision.Collision(r.lt, c)) return true;
+            if (GoblinCollision.Collision(r.rb, c)) return true;
+            if (GoblinCollision.Collision(new GPoint { x = r.rb.x, y = r.lt.y }, c)) return true;
+            if (GoblinCollision.Collision(new GPoint { x = r.lt.x, y = r.rb.y }, c)) return true;
 
             var p = new GPoint
             {
@@ -97,24 +100,48 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
                 y = FixedMath.Clamp(c.center.y, r.rb.y, r.lt.y)
             };
 
-            return ShapeCo.Collision(p, r);
+            return GoblinCollision.Collision(p, r);
         }
 
+        /// <summary>
+        /// 矩形与三角形碰撞检测
+        /// </summary>
+        /// <param name="r">矩形</param>
+        /// <param name="t">三角形</param>
+        /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GRect r, GTriangle t)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 圆形与圆形碰撞检测
+        /// </summary>
+        /// <param name="r">圆形</param>
+        /// <param name="t">圆形</param>
+        /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GCircle c0, GCircle c1)
         {
-            throw new NotImplementedException();
+            return Fixed64Vector2.Distance(c0.center.detail, c1.center.detail) < c0.radius + c1.radius;
         }
 
+        /// <summary>
+        /// 圆形与三角形碰撞检测
+        /// </summary>
+        /// <param name="r">圆形</param>
+        /// <param name="t">三角形</param>
+        /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GCircle c, GTriangle t)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 三角形与三角形碰撞检测
+        /// </summary>
+        /// <param name="r">三角形</param>
+        /// <param name="t">三角形</param>
+        /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GTriangle t0, GTriangle t1)
         {
             throw new NotImplementedException();

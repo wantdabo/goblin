@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Physics.Collisions
 {
-    public abstract partial class ShapeCo : PComp
+    public abstract partial class ShapeCollider : PComp
     {
-        /// <summary>
-        /// 方向
-        /// </summary>
-        public GPoint dire { get; private set; }
         /// <summary>
         /// 坐标
         /// </summary>
         public GPoint pos { get; private set; }
         /// <summary>
-        /// 简单包围盒
+        /// 方向
         /// </summary>
-        public GRect box { get; private set; }
+        public GPoint dire { get; private set; }
+        /// <summary>
+        /// AABB 包围盒
+        /// </summary>
+        public GRect aabb { get; private set; }
 
         protected override void OnCreate()
         {
@@ -56,10 +56,10 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         public void SetDirty()
         {
             OnDirty();
-            this.box = ComputeAABB();
+            this.aabb = CalcAABB();
         }
 
         public abstract void OnDirty();
-        public abstract GRect ComputeAABB();
+        public abstract GRect CalcAABB();
     }
 }

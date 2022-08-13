@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
     /// <summary>
     /// Triangle-Collider，三角形碰撞盒
     /// </summary>
-    public class TriangleCo : ShapeCo
+    public class TriangleCollider : ShapeCollider
     {
         public GTriangle triangle { get; private set; }
 
@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             set { mVertex = value; SetDirty(); }
         }
 
-        public override GRect ComputeAABB()
+        public override GRect CalcAABB()
         {
             Fixed64 minX = Fixed64.MaxValue;
             Fixed64 maxX = Fixed64.MinValue;
