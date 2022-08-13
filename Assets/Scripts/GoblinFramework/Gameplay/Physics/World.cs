@@ -1,6 +1,5 @@
 ﻿using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Physics.Collisions;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GoblinFramework.General.Gameplay.RIL.RILS;
-using Numerics.Fixed;
 using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
+using FixMath.NET;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi
 {
@@ -38,13 +38,13 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
-            public Fixed64 runSpeed = 4 * Fixed64.EN1;
+            public Fix64 runSpeed = 4 * Fix64.EN1;
 
             public int attackAKeepFrame = 5;
             public int attackBKeepFrame = 3;
 
             public int attackCKeepFrame = 10;
-            public Fixed64 attackCMotionForce = 10 * Fixed64.EN1;
+            public Fix64 attackCMotionForce = 10 * Fix64.EN1;
         }
         #endregion
     }

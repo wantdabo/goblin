@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Core;
+﻿using BEPUutilities;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public bool press;
         public bool release;
-        public Fixed64Vector2 dire;
+        public Vector2 dire;
     }
 
     public enum InputType
@@ -103,11 +103,11 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             public Dictionary<InputType, Input> InputMap = new Dictionary<InputType, Input>
             {
-                {InputType.Joystick, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.BA, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.BB, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.BC, new Input(){press = false, dire = Fixed64Vector2.Zero}},
-                {InputType.BD, new Input(){press = false, dire = Fixed64Vector2.Zero}},
+                {InputType.Joystick, new Input(){press = false, dire = Vector2.Zero}},
+                {InputType.BA, new Input(){press = false, dire = Vector2.Zero}},
+                {InputType.BB, new Input(){press = false, dire = Vector2.Zero}},
+                {InputType.BC, new Input(){press = false, dire = Vector2.Zero}},
+                {InputType.BD, new Input(){press = false, dire = Vector2.Zero}},
             };
         }
         #endregion

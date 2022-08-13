@@ -2,7 +2,6 @@
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Theaters;
 using GoblinFramework.General.Gameplay.RIL.RILS;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;

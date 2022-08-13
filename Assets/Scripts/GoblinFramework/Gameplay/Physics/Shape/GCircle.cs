@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Gameplay.Physics.Collisions;
-using Numerics.Fixed;
+﻿using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Collisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,9 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         /// <summary>
         /// 半径
         /// </summary>
-        public Fixed64 radius;
+        public Fix64 radius;
 
-        public Fixed64 area => FixedMath.Pi * (radius * radius);
+        public Fix64 area => Fix64Math.Pi * (radius * radius);
 
         public bool Equals(GCircle other)
         {

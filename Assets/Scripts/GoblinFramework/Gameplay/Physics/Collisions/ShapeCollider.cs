@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Gameplay.Common;
+﻿using BEPUutilities;
+using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,15 +38,15 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
             Actor.ActorBehavior.Info.posChanged -= PosChanged;
         }
 
-        private void DireChanged(Fixed64Vector3 dire)
+        private void DireChanged(Vector3 dire)
         {
-            this.dire = new GPoint() { detail = new Fixed64Vector2(dire.x, dire.z) };
+            this.dire = new GPoint() { detail = new Vector2(dire.X, dire.Z) };
             SetDirty();
         }
 
-        private void PosChanged(Fixed64Vector3 pos)
+        private void PosChanged(Vector3 pos)
         {
-            this.pos = new GPoint() { detail = new Fixed64Vector2(pos.x, pos.z) };
+            this.pos = new GPoint() { detail = new Vector2(pos.X, pos.Z) };
             SetDirty();
         }
 

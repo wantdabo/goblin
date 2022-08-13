@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Collisions;
+﻿using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Collisions;
 using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +27,11 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         /// </summary>
         public GPoint rb;
 
-        public Fixed64 area
+        public Fix64 area
         {
             get
             {
-                return FixedMath.Abs(lt.x - rb.x) * FixedMath.Abs(lt.y - rb.y);
+                return Fix64Math.Abs(lt.x - rb.x) * Fix64Math.Abs(lt.y - rb.y);
             }
         }
 

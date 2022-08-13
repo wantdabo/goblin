@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Gameplay.Behaviors;
+﻿using BEPUutilities;
+using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.General.Gameplay.RIL.RILS;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +38,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
 
-            if (joystick.press) Actor.ActorBehavior.Info.dire = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
+            if (joystick.press) Actor.ActorBehavior.Info.dire = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
 
-            Fixed64Vector3 force = new Fixed64Vector3(joystick.dire.x, 0, joystick.dire.y);
+            Vector3 force = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
             Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed);
         }
     }

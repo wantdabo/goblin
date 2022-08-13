@@ -1,4 +1,4 @@
-﻿using Numerics.Fixed;
+﻿using FixMath.NET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace GoblinFramework.Gameplay.Physics.Shape
 {
     public interface IShape
     {
-        public Fixed64 area { get; }
+        public Fix64 area { get; }
     }
 }

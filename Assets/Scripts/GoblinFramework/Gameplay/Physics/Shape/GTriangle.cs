@@ -1,5 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Collisions;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Collisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +26,16 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         /// 令p=(a+b+c)/2
         /// 则S=√[p(p - a)(p-b)(p-c)]
         /// </summary>
-        public Fixed64 area
+        public Fix64 area
         {
             get
             {
-                var a = Fixed64Vector2.Distance(p0.detail, p1.detail);
-                var b = Fixed64Vector2.Distance(p0.detail, p2.detail);
-                var c = Fixed64Vector2.Distance(p1.detail, p2.detail);
-                var p = (a + b + c) * Fixed64.Half;
+                var a = Vector2.Distance(p0.detail, p1.detail);
+                var b = Vector2.Distance(p0.detail, p2.detail);
+                var c = Vector2.Distance(p1.detail, p2.detail);
+                var p = (a + b + c) * Fix64.Half;
 
-                return FixedMath.Sqrt(p * (p - a) * (p - b) * (p - c));
+                return Fix64Math.Sqrt(p * (p - a) * (p - b) * (p - c));
             }
         }
 

@@ -1,5 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Shape;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
     {
         public GCircle circle { get; private set; }
 
-        private Fixed64 mRadius;
-        public Fixed64 radius
+        private Fix64 mRadius;
+        public Fix64 radius
         {
             get { return mRadius; }
             set { mRadius = value; SetDirty(); }
@@ -26,8 +27,8 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         {
             return new GRect
             {
-                lt = new GPoint { detail = new Fixed64Vector2(-radius + pos.x, radius + pos.y) },
-                rb = new GPoint { detail = new Fixed64Vector2(radius + pos.x, -radius + pos.y) }
+                lt = new GPoint { detail = new Vector2(-radius + pos.x, radius + pos.y) },
+                rb = new GPoint { detail = new Vector2(radius + pos.x, -radius + pos.y) }
             };
         }
 

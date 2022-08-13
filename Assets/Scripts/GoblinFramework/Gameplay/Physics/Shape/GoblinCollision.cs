@@ -1,5 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Shape;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +31,10 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         public static bool Collision(GPoint p, GRect r)
         {
             throw new NotImplementedException();
-            return p.detail.x >= r.lt.detail.x &&
-                   p.detail.y >= r.lt.detail.y &&
-                   p.detail.x <= r.rb.detail.x &&
-                   p.detail.y <= r.rb.detail.y;
+            return p.detail.X >= r.lt.detail.X &&
+                   p.detail.Y >= r.lt.detail.Y &&
+                   p.detail.X <= r.rb.detail.X &&
+                   p.detail.Y <= r.rb.detail.Y;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GPoint p, GCircle c)
         {
-            return Fixed64Vector2.Distance(p.detail, c.center.detail) < c.radius;
+            return Vector2.Distance(p.detail, c.center.detail) < c.radius;
         }
 
         /// <summary>
@@ -71,10 +72,10 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         public static bool Collision(GRect r0, GRect r1)
         {
             throw new NotImplementedException();
-            var minX = FixedMath.Max(r0.lt.x, r1.lt.x);
-            var minY = FixedMath.Max(r0.lt.y, r1.lt.y);
-            var maxX = FixedMath.Max(r0.rb.x, r1.rb.x);
-            var maxY = FixedMath.Max(r0.rb.y, r1.rb.y);
+            var minX = Fix64Math.Max(r0.lt.x, r1.lt.x);
+            var minY = Fix64Math.Max(r0.lt.y, r1.lt.y);
+            var maxX = Fix64Math.Max(r0.rb.x, r1.rb.x);
+            var maxY = Fix64Math.Max(r0.rb.y, r1.rb.y);
 
             return minX > maxX || minY > maxY;
         }
@@ -96,8 +97,8 @@ namespace GoblinFramework.Gameplay.Physics.Shape
 
             var p = new GPoint
             {
-                x = FixedMath.Clamp(c.center.x, r.lt.x, r.rb.x),
-                y = FixedMath.Clamp(c.center.y, r.rb.y, r.lt.y)
+                x = Fix64Math.Clamp(c.center.x, r.lt.x, r.rb.x),
+                y = Fix64Math.Clamp(c.center.y, r.rb.y, r.lt.y)
             };
 
             return GoblinCollision.Collision(p, r);
@@ -122,7 +123,7 @@ namespace GoblinFramework.Gameplay.Physics.Shape
         /// <returns>碰撞状态，true 相撞，false 未相撞</returns>
         public static bool Collision(GCircle c0, GCircle c1)
         {
-            return Fixed64Vector2.Distance(c0.center.detail, c1.center.detail) < c0.radius + c1.radius;
+            return Vector2.Distance(c0.center.detail, c1.center.detail) < c0.radius + c1.radius;
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
-﻿using GoblinFramework.Gameplay.Behaviors;
+﻿using BEPUutilities;
+using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Physics.Collisions;
 using GoblinFramework.General.Gameplay.RIL.RILS;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +32,9 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             public int actorId;
 
-            public event Action<Fixed64Vector3> direChanged;
-            private Fixed64Vector3 mDire = Fixed64Vector3.forward;
-            public Fixed64Vector3 dire
+            public event Action<Vector3> direChanged;
+            private Vector3 mDire = Vector3.forward;
+            public Vector3 dire
             {
                 get { return mDire; }
                 set
@@ -44,9 +44,9 @@ namespace GoblinFramework.Gameplay.Behaviors
                 }
             }
 
-            public event Action<Fixed64Vector3> posChanged;
-            private Fixed64Vector3 mPos;
-            public Fixed64Vector3 pos
+            public event Action<Vector3> posChanged;
+            private Vector3 mPos;
+            public Vector3 pos
             {
                 get { return mPos; }
                 set

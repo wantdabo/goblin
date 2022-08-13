@@ -1,5 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Collisions;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Collisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,12 @@ namespace GoblinFramework.Gameplay.Physics.Shape
     /// </summary>
     public struct GPoint : IEquatable<GPoint>, IShape
     {
-        public Fixed64 x { get { return detail.x; } set { detail.x = value; } }
-        public Fixed64 y { get { return detail.y; } set { detail.y = value; } }
+        public Fix64 x { get { return detail.X; } set { detail.X = value; } }
+        public Fix64 y { get { return detail.Y; } set { detail.Y = value; } }
 
-        public Fixed64 area => Fixed64.Zero;
+        public Fix64 area => Fix64.Zero;
 
-        public Fixed64Vector2 detail;
+        public Vector2 detail;
 
         public bool Equals(GPoint other)
         {

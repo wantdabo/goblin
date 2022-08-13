@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using GoblinFramework.Gameplay.Physics.Shape;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +31,8 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
         {
             rectangle = new GRect()
             {
-                lt = new GPoint { detail = new Fixed64Vector2(pos.x - size.x / 2, pos.y + size.y / 2) },
-                rb = new GPoint { detail = new Fixed64Vector2(pos.x + size.x / 2, pos.y - size.y / 2) }
+                lt = new GPoint { detail = new Vector2(pos.x - size.x / 2, pos.y + size.y / 2) },
+                rb = new GPoint { detail = new Vector2(pos.x + size.x / 2, pos.y - size.y / 2) }
             };
         }
     }

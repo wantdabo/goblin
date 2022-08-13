@@ -1,5 +1,6 @@
-﻿using GoblinFramework.Gameplay.Physics.Shape;
-using Numerics.Fixed;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Shape;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +25,25 @@ namespace GoblinFramework.Gameplay.Physics.Collisions
 
         public override GRect CalcAABB()
         {
-            Fixed64 minX = Fixed64.MaxValue;
-            Fixed64 maxX = Fixed64.MinValue;
-            minX = FixedMath.Min(triangle.p0.x, minX);
-            minX = FixedMath.Min(triangle.p1.x, minX);
-            minX = FixedMath.Min(triangle.p2.x, minX);
-            maxX = FixedMath.Max(triangle.p0.x, maxX);
-            maxX = FixedMath.Max(triangle.p1.x, maxX);
-            maxX = FixedMath.Max(triangle.p2.x, maxX);
+            Fix64 minX = Fix64.MaxValue;
+            Fix64 maxX = Fix64.MinValue;
+            minX = Fix64Math.Min(triangle.p0.x, minX);
+            minX = Fix64Math.Min(triangle.p1.x, minX);
+            minX = Fix64Math.Min(triangle.p2.x, minX);
+            maxX = Fix64Math.Max(triangle.p0.x, maxX);
+            maxX = Fix64Math.Max(triangle.p1.x, maxX);
+            maxX = Fix64Math.Max(triangle.p2.x, maxX);
 
-            Fixed64 minY = Fixed64.MaxValue;
-            Fixed64 maxY = Fixed64.MinValue;
-            minY = FixedMath.Min(triangle.p0.y, minY);
-            minY = FixedMath.Min(triangle.p1.y, minY);
-            minY = FixedMath.Min(triangle.p2.y, minY);
-            maxY = FixedMath.Max(triangle.p0.y, maxY);
-            maxY = FixedMath.Max(triangle.p1.y, maxY);
-            maxY = FixedMath.Max(triangle.p2.y, maxY);
+            Fix64 minY = Fix64.MaxValue;
+            Fix64 maxY = Fix64.MinValue;
+            minY = Fix64Math.Min(triangle.p0.y, minY);
+            minY = Fix64Math.Min(triangle.p1.y, minY);
+            minY = Fix64Math.Min(triangle.p2.y, minY);
+            maxY = Fix64Math.Max(triangle.p0.y, maxY);
+            maxY = Fix64Math.Max(triangle.p1.y, maxY);
+            maxY = Fix64Math.Max(triangle.p2.y, maxY);
 
-            return new GRect() { lt = new GPoint { detail = new Fixed64Vector2(minX, maxY) }, rb = new GPoint { detail = new Fixed64Vector2(maxX, minY) } };
+            return new GRect() { lt = new GPoint { detail = new Vector2(minX, maxY) }, rb = new GPoint { detail = new Vector2(maxX, minY) } };
         }
 
         public override void OnDirty()

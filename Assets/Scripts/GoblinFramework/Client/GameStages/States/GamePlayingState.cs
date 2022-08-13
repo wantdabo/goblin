@@ -1,10 +1,10 @@
-﻿using GoblinFramework.Client.Common;
+﻿using BEPUutilities;
+using GoblinFramework.Client.Common;
 using GoblinFramework.Client.Gameplay;
 using GoblinFramework.Client.Gameplay.Resolves;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Behaviors;
-using Numerics.Fixed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,15 +44,15 @@ namespace GoblinFramework.Client.GameStages
 
             Input joystick = new Input();
             if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
-                joystick.dire += Fixed64Vector2.Up;
+                joystick.dire += Vector2.Up;
             if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
-                joystick.dire += Fixed64Vector2.Down;
+                joystick.dire += Vector2.Down;
             if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
-                joystick.dire += Fixed64Vector2.Left;
+                joystick.dire += Vector2.Left;
             if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
-                joystick.dire += Fixed64Vector2.Right;
+                joystick.dire += Vector2.Right;
             joystick.dire.Normalize();
-            joystick.press = joystick.dire != Fixed64Vector2.Zero;
+            joystick.press = joystick.dire != Vector2.Zero;
 
             Input ba = new Input();
             ba.press = UnityEngine.Input.GetKey(UnityEngine.KeyCode.J);
