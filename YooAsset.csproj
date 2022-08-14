@@ -91,8 +91,8 @@
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\AssetSystem\Handles\SceneOperationHandle.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Utility\BitMask64.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Debugger\DebugProviderInfo.cs" />
-    <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Services\LocationServices\AddressLocationServices.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\PatchSystem\Operations\DownloaderOperation.cs" />
+    <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Services\LocationServices\AddressLocationServices.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\OperationSystem\GameAsyncOperation.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\AssetSystem\Operations\UnloadSceneOperation.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Debugger\RemoteDebuggerInRuntime.cs" />
