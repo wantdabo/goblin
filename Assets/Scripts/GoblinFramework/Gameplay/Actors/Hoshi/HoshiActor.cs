@@ -1,5 +1,8 @@
-﻿using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Physics.Comps;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         protected override void OnCreate()
         {
             base.OnCreate();
+
+            AddComp<ActorCollider<BoxCollider>>();
 
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();

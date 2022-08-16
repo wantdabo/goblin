@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\CollisionAlgorithms\GJK\GJKToolbox.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\StaticMeshSpherePairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\MobileMeshConvexPairHandler.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\CylinderCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\World.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Matrix3x3.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\OtherSpaceStages\IDeferredEventCreatorOwner.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\Control.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseSystems\IQueryAccelerator.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Login\LoginView.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\Collider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\SingleBoneConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\ActiveSet.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\StepCurve1D.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\ContainmentType.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\StaticMesh.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\TwoEntity\Joints\SwivelHingeAngularJoint.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\CapsuleCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Space.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\EntityStateManagement\EntityStateWriteBuffer.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\WrappedBody.cs" />
@@ -251,7 +254,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\DataStructures\ConcurrentDeque.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\MobileMeshSphereContactManifold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\CompoundTerrainPairHandler.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\MinkowskiSum.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\BoxCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Character\QueryManager.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
@@ -259,7 +262,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\ResourceManagement\UnsafeResourcePool.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\OtherSpaceStages\IDeferredEventCreator.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\Events\IEntryEventTriggerer.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\MinkowskiSumShape.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\MinkowskiSum.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\Collision\ContactManifoldConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Matrix4x8.cs" />
@@ -267,6 +270,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\CollisionShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackCHold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\BoxSphereContactManifold.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\MinkowskiSumShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILAdd.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\EntityStateManagement\InterpolatedStatesManager.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\DeactivationManagement\SimulationIslandConnection.cs" />
@@ -306,6 +310,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\ConvexHullHelper.Pruning.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Int2.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\InputBehavior.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\SphereCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Entity.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\CardinalSpline3D.cs" />
@@ -563,11 +568,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Box.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\AngularPlaneControl.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\CollidableCollection.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\BoxCollider.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\Collider.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\SphereCollider.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\CylinderCollider.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\CapsuleCollider.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\ActorCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
