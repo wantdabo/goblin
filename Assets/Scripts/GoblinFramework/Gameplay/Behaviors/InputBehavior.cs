@@ -1,4 +1,5 @@
 ﻿using BEPUutilities;
+using FixMath.NET;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 using System;
@@ -86,7 +87,7 @@ namespace GoblinFramework.Gameplay.Behaviors
             return false;
         }
 
-        public void PLateLoop(int frame)
+        public void PLateLoop(int frame, Fix64 detailTime)
         {
             // 清理 Release 状态
             foreach (var key in totalInputKeys)

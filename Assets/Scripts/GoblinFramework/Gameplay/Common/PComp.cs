@@ -28,5 +28,14 @@ namespace GoblinFramework.Gameplay.Common
             if (this is IPLoop) Engine.TickEngine.RmvPLoop(this as IPLoop);
             if (this is IPLateLoop) Engine.TickEngine.RmvPLateLoop(this as IPLateLoop);
         }
+
+        public new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
+        {
+            return base.AddComp<T>((item) =>
+            {
+                item.Actor = Actor;
+                createAheadAction?.Invoke(item);
+            });
+        }
     }
 }

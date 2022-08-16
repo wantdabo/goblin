@@ -1,4 +1,5 @@
 ﻿using BEPUutilities;
+using FixMath.NET;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
@@ -16,7 +17,7 @@ namespace GoblinFramework.Gameplay.Behaviors
             Info.force += force;
         }
 
-        public void PLoop(int frame)
+        public void PLoop(int frame, Fix64 detailTime)
         {
             if (Vector3.zero == Info.force) return;
 

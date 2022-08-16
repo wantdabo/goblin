@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Core;
+﻿using FixMath.NET;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using System;
@@ -106,7 +107,7 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
             Entrance();
         }
 
-        public virtual void PLoop(int frame)
+        public virtual void PLoop(int frame, Fix64 detailTime)
         {
             if (State != null && State.OnDetectLeave()) State.Leave();
             StateDetect();

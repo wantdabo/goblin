@@ -25,13 +25,38 @@ namespace FixMath.NET
         public static readonly Fix64 Zero = new Fix64();
         public static readonly Fix64 C0p28 = (Fix64)0.28m;
         public static readonly Fix64 Half = One / 2;
+
+        /// <summary>
+        /// 0.1
+        /// </summary>
         public static readonly Fix64 EN1 = One / 10;
+        /// <summary>
+        /// 0.01
+        /// </summary>
         public static readonly Fix64 EN2 = One / 100;
+        /// <summary>
+        /// 0.001
+        /// </summary>
         public static readonly Fix64 EN3 = One / 1000;
+        /// <summary>
+        /// 0.0001
+        /// </summary>
         public static readonly Fix64 EN4 = One / 10000;
+        /// <summary>
+        /// 0.00001
+        /// </summary>
         public static readonly Fix64 EN5 = One / 100000;
+        /// <summary>
+        /// 0.000001
+        /// </summary>
         public static readonly Fix64 EN6 = One / 1000000;
+        /// <summary>
+        /// 0.0000001
+        /// </summary>
         public static readonly Fix64 EN7 = One / 10000000;
+        /// <summary>
+        /// 0.00000001
+        /// </summary>
         public static readonly Fix64 EN8 = One / 100000000;
         public static readonly Fix64 Epsilon = EN3;
         /// <summary>
