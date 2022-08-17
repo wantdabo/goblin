@@ -70,4 +70,22 @@ namespace GoblinFramework.Client.Common
             return null;
         }
     }
+
+    public static class U3DVector3Extends
+    {
+        public static Vector3 ToU3DVector3(this BEPUutilities.Vector3 fixVector3)
+        {
+            return new Vector3(fixVector3.X.AsFloat(), fixVector3.Y.AsFloat(), fixVector3.Z.AsFloat());
+        }
+
+        public static Vector2 ToU3DVector2(this BEPUutilities.Vector2 fixVector2)
+        {
+            return new Vector2(fixVector2.X.AsFloat(), fixVector2.Y.AsFloat());
+        }
+
+        public static Quaternion ToU3DQuaternion(this BEPUutilities.Quaternion fixQuaternion)
+        {
+            return new Quaternion(fixQuaternion.X.AsFloat(), fixQuaternion.Y.AsFloat(), fixQuaternion.Z.AsFloat(), fixQuaternion.W.AsFloat());
+        }
+    }
 }

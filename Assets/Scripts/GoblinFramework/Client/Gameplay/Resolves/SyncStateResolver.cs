@@ -21,11 +21,13 @@ namespace GoblinFramework.Client.Gameplay.Resolves
             SelfReady = true;
         }
 
+        private AnimatorControllerParameter[] parameters;
         protected override void OnResolve<T>(T ril)
         {
             var modelResolver = Actor.GetSyncResolver<SyncModelResolver>();
 
-            foreach (var paramter in modelResolver.Animator.parameters)
+            parameters = parameters ?? modelResolver.Animator.parameters;
+            foreach (var paramter in parameters)
                 if (AnimatorControllerParameterType.Bool == paramter.type) modelResolver.Animator.SetBool(paramter.name, paramter.defaultBool);
 
             modelResolver.Animator.SetBool(ril.stateName, true);

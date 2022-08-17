@@ -54,6 +54,18 @@ namespace GoblinFramework.Gameplay.Behaviors
                     posChanged?.Invoke(pos);
                 }
             }
+
+            public event Action<Vector3> sizeChanged;
+            private Vector3 mSize;
+            public Vector3 size
+            {
+                get { return mSize; }
+                set
+                {
+                    mSize = value;
+                    sizeChanged?.Invoke(size);
+                }
+            }
         }
         #endregion
     }

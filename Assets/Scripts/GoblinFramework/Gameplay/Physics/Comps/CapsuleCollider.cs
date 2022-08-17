@@ -14,6 +14,11 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         public Fix64 height;
         public Fix64 radius;
 
+        public override void ComputeCPS()
+        {
+            throw new NotImplementedException();
+        }
+
         public override Entity GenEntity()
         {
             return new Capsule(Actor.ActorBehavior.Info.pos, height, radius);

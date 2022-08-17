@@ -18,6 +18,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         {
             base.OnCreate();
 
+            ActorBehavior.Info.size = new Vector3(Fix64.Half, 165 * Fix64.EN2, Fix64.Half);
+
             AddComp<ActorCollider<BoxCollider>>();
 
             AddBehavior<InputBehavior>();

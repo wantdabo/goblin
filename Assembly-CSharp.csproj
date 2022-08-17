@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{D8AAC7AF-45DA-1FE2-19D2-E5144D87BA76}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -422,6 +421,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\TriangleMeshConvexContactManifold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\EntityStateManagement\EntityBufferedStates.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\UI\Common\UIEventListener.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\ActorCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\TimeStepSettings.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\CurveEndpointBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\TwoEntity\JointLimits\JointLimit.cs" />
@@ -569,7 +569,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Box.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\AngularPlaneControl.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\CollidableCollection.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\ActorCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
@@ -1183,9 +1182,6 @@
       <Project>{34813E10-62EE-A55F-AD6B-C7C8E2E2CEDC}</Project>
       <Name>YooAsset</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

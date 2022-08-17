@@ -30,17 +30,24 @@ namespace GoblinFramework.Gameplay.Physics
             base.OnDestroy();
         }
 
-        public Collider GetCollider(long id) 
+        private Dictionary<long, Collider> colliderDict = new Dictionary<long, Collider>();
+        private List<Collider> colliders = new List<Collider>();
+        public void GetColliders(ref List<Collider> result) 
+        {
+            result = colliders;
+        }
+
+        public Collider GetCollider(long id)
         {
             colliderDict.TryGetValue(id, out var collider);
 
             return collider;
         }
 
-        private Dictionary<long, Collider> colliderDict = new Dictionary<long, Collider>();
         public void AddCollider(Collider collider) 
         {
             colliderDict.Add(collider.entity.InstanceId, collider);
+            colliders.Add(collider);
             Space.Add(collider.entity);
         }
 
@@ -48,6 +55,7 @@ namespace GoblinFramework.Gameplay.Physics
         {
             Space.Remove(collider.entity);
             colliderDict.Remove(collider.entity.InstanceId);
+            colliders.Remove(collider);
         }
 
         public List<long> ConvEntityIds(EntityCollidableCollection entitys)

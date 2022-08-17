@@ -29,21 +29,29 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 
         public abstract Entity GenEntity();
 
+        public Vector3 colliderPos { get; protected set; }
+        public Vector3 colliderSize { get; protected set; }
+        public abstract void ComputeCPS();
+
         protected override void OnCreate()
         {
             base.OnCreate();
             entity = GenEntity();
             Id = entity.InstanceId;
             RegisterDetectBody();
+            Actor.ActorBehavior.Info.posChanged += PosChanged;
+            Actor.ActorBehavior.Info.sizeChanged += SizeChanged;
             Engine.World.AddCollider(this);
         }
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
+            Actor.ActorBehavior.Info.posChanged -= PosChanged;
+            Actor.ActorBehavior.Info.sizeChanged -= SizeChanged;
             UnRegisterDetectBody();
             Engine.World.RmvCollider(this);
             Id = -1;
+            base.OnDestroy();
         }
 
         private void RegisterDetectBody()
@@ -60,6 +68,16 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             entity.CollisionInformation.Events.ContactCreated -= ContactCreated;
             entity.CollisionInformation.Events.ContactRemoved -= ContactRemoved;
             entity.CollisionInformation.Events.CollisionEnded -= CollisionEnded;
+        }
+
+        private void PosChanged(Vector3 pos)
+        {
+            ComputeCPS();
+        }
+
+        private void SizeChanged(Vector3 size)
+        {
+            ComputeCPS();
         }
 
         private void InitialCollisionDetected(BEPUphysics.BroadPhaseEntries.MobileCollidables.EntityCollidable sender, BEPUphysics.BroadPhaseEntries.Collidable other, BEPUphysics.NarrowPhaseSystems.Pairs.CollidablePairHandler pair)
