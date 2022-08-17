@@ -43,7 +43,6 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         {
             var state = AddComp<T>();
             state.Behavior = this as MT;
-            state.Actor = Actor;
             stateDict.Add(typeof(T), state);
             stateList.Add(state);
         }

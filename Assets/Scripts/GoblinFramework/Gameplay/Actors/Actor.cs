@@ -77,6 +77,10 @@ namespace GoblinFramework.Gameplay.Actors
             return actor;
         }
 
+        /// <summary>
+        /// 移除 Actor
+        /// </summary>
+        /// <param name="actor">Actor</param>
         public void RmvActor(Actor actor)
         {
             actorList.Remove(actor);
@@ -100,7 +104,7 @@ namespace GoblinFramework.Gameplay.Actors
             return actor;
         }
 
-        public new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
+        public override T AddComp<T>(Action<T> createAheadAction = null)
         {
             return base.AddComp<T>((item) =>
             {

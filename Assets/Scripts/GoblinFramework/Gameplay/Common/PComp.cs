@@ -29,7 +29,7 @@ namespace GoblinFramework.Gameplay.Common
             if (this is IPLateLoop) Engine.TickEngine.RmvPLateLoop(this as IPLateLoop);
         }
 
-        public new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
+        public virtual new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
         {
             return base.AddComp<T>((item) =>
             {
