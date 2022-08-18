@@ -96,7 +96,7 @@ namespace BEPUutilities
         /// Constructs a new 3d vector.
         /// </summary>
         /// <param name="val">val component of the (val, val, val)vector.</param>
-        public Vector3(Fix64 val) :this(val, val, val){}
+        public Vector3(Fix64 val) : this(val, val, val) { }
 
         /// <summary>
         /// Constructs a new 3d vector.
@@ -149,6 +149,21 @@ namespace BEPUutilities
             X *= inverse;
             Y *= inverse;
             Z *= inverse;
+        }
+
+        public Vector2 ToVector2()
+        {
+            return new Vector2(X, Y);
+        }
+
+        public Vector4 ToVector4() 
+        {
+            return ToVector4(0);
+        }
+
+        public Vector4 ToVector4(Fix64 w)
+        {
+            return new Vector4(X, Y, Z, w);
         }
 
         /// <summary>
@@ -482,7 +497,7 @@ namespace BEPUutilities
                     X = F64.C0,
                     Y = F64.C1,
                     Z = F64.C0
-				};
+                };
             }
         }
 
@@ -498,7 +513,7 @@ namespace BEPUutilities
                     X = F64.C0,
                     Y = -1,
                     Z = F64.C0
-				};
+                };
             }
         }
 
@@ -514,7 +529,7 @@ namespace BEPUutilities
                     X = F64.C1,
                     Y = F64.C0,
                     Z = F64.C0
-				};
+                };
             }
         }
 
@@ -530,7 +545,7 @@ namespace BEPUutilities
                     X = -1,
                     Y = F64.C0,
                     Z = F64.C0
-				};
+                };
             }
         }
 
@@ -562,7 +577,7 @@ namespace BEPUutilities
                     X = F64.C0,
                     Y = F64.C0,
                     Z = F64.C1
-				};
+                };
             }
         }
 

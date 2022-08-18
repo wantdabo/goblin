@@ -104,7 +104,7 @@ namespace GoblinFramework.Gameplay.Actors
             return actor;
         }
 
-        private new T AddComp<T>(Action<T> createAheadAction = null) where T : PComp, new()
+        public override T AddComp<T>(Action<T> createAheadAction = null)
         {
             return base.AddComp<T>((item) =>
             {

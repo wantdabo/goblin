@@ -42,12 +42,12 @@ public class Shell : MonoBehaviour
         Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         DrawPhysicsCollisionLine();
     }
 
-#if UNITY_EDITOR
     private void DrawPhysicsCollisionLine()
     {
         if (null == Engine) return;

@@ -569,6 +569,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Box.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\AngularPlaneControl.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\CollidableCollection.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\CubeActor.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\TerrainActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

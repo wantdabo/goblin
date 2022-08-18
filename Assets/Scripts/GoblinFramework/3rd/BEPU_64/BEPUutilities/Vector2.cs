@@ -98,6 +98,26 @@ namespace BEPUutilities
             return Fix64.Sqrt(X * X + Y * Y);
         }
 
+        public Vector3 ToVector3()
+        {
+            return ToVector3(0);
+        }
+
+        public Vector3 ToVector3(Fix64 z)
+        {
+            return new Vector3(X, Y, z);
+        }
+
+        public Vector4 ToVector4()
+        {
+            return ToVector4(0, 0);
+        }
+
+        public Vector4 ToVector4(Fix64 z, Fix64 w)
+        {
+            return new Vector4(X, Y, z, w);
+        }
+
         /// <summary>
         /// Gets a string representation of the vector.
         /// </summary>

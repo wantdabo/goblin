@@ -27,7 +27,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             InputBehavior = Actor.GetBehavior<InputBehavior>();
             MotionBehavior = Actor.GetBehavior<MotionBehavior>();
 
-            Actor.ActorBehavior.Info.size = new Vector3(Fix64.Half, 165 * Fix64.EN2, Fix64.Half);
+            Actor.ActorBehavior.Info.scale = new Vector4(Fix64.Half, 165 * Fix64.EN2, Fix64.Half, Fix64.One);
             AddComp<ActorCollider<BoxCollider>>();
 
             SetState<HoshiIdle>();

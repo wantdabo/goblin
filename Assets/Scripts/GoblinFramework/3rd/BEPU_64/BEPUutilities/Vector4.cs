@@ -153,6 +153,16 @@ namespace BEPUutilities
             W *= inverse;
         }
 
+        public Vector2 ToVector2()
+        {
+            return new Vector2(X, Y);
+        }
+
+        public Vector3 ToVector3()
+        {
+            return new Vector3(X, Y, Z);
+        }
+
         /// <summary>
         /// Gets a string representation of the vector.
         /// </summary>

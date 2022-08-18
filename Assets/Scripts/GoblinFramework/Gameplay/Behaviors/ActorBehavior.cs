@@ -31,18 +31,6 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             public int actorId;
 
-            public event Action<Vector3> direChanged;
-            private Vector3 mRotation = Vector3.forward;
-            public Vector3 rotation
-            {
-                get { return mRotation; }
-                set
-                {
-                    mRotation = value;
-                    direChanged?.Invoke(rotation);
-                }
-            }
-
             public event Action<Vector3> posChanged;
             private Vector3 mPos;
             public Vector3 pos
@@ -55,15 +43,27 @@ namespace GoblinFramework.Gameplay.Behaviors
                 }
             }
 
-            public event Action<Vector3> sizeChanged;
-            private Vector3 mSize;
-            public Vector3 size
+            public event Action<Vector3> rotationChanged;
+            private Vector3 mRotation = Vector3.forward;
+            public Vector3 rotation
             {
-                get { return mSize; }
+                get { return mRotation; }
                 set
                 {
-                    mSize = value;
-                    sizeChanged?.Invoke(size);
+                    mRotation = value;
+                    rotationChanged?.Invoke(rotation);
+                }
+            }
+
+            public event Action<Vector4> scaleChanged;
+            private Vector4 mScale;
+            public Vector4 scale
+            {
+                get { return mScale; }
+                set
+                {
+                    mScale = value;
+                    scaleChanged?.Invoke(scale);
                 }
             }
         }

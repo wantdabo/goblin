@@ -18,12 +18,12 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         public override void ComputeCPS()
         {
             var pos = Actor.ActorBehavior.Info.pos;
-            var size = Actor.ActorBehavior.Info.size;
+            var size = Actor.ActorBehavior.Info.scale;
 
             pos.Y += size.Y * Fix64.Half;
 
             colliderPos = pos;
-            colliderSize = size;
+            colliderSize = size.ToVector3();
 
             capsule.position = colliderPos;
 

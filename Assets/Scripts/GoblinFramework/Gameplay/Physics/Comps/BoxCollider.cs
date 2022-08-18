@@ -16,16 +16,14 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         {
             var rot = Actor.ActorBehavior.Info.rotation;
             var pos = Actor.ActorBehavior.Info.pos;
-            var size = Actor.ActorBehavior.Info.size;
+            var size = Actor.ActorBehavior.Info.scale;
 
-            pos.Y += size.Y * Fix64.Half;
-
-            colliderRotation = rot;
             colliderPos = pos;
-            colliderSize = size;
+            colliderRotation = rot;
+            colliderSize = size.ToVector3();
 
-            box.orientation = Quaternion.Euler(rot);
             box.position = pos;
+            box.orientation = Quaternion.Euler(rot);
 
             box.Width = size.X;
             box.Height = size.Y;

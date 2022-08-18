@@ -41,14 +41,16 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             Id = entity.InstanceId;
             RegisterDetectBody();
             Actor.ActorBehavior.Info.posChanged += PosChanged;
-            Actor.ActorBehavior.Info.sizeChanged += SizeChanged;
+            Actor.ActorBehavior.Info.rotationChanged += RotationChanged;
+            Actor.ActorBehavior.Info.scaleChanged += SizeChanged;
             Engine.World.AddCollider(this);
         }
 
         protected override void OnDestroy()
         {
             Actor.ActorBehavior.Info.posChanged -= PosChanged;
-            Actor.ActorBehavior.Info.sizeChanged -= SizeChanged;
+            Actor.ActorBehavior.Info.rotationChanged -= RotationChanged;
+            Actor.ActorBehavior.Info.scaleChanged -= SizeChanged;
             UnRegisterDetectBody();
             Engine.World.RmvCollider(this);
             Id = -1;
@@ -76,7 +78,12 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             ComputeCPS();
         }
 
-        private void SizeChanged(Vector3 size)
+        private void RotationChanged(Vector3 obj)
+        {
+            ComputeCPS();
+        }
+
+        private void SizeChanged(Vector4 scale)
         {
             ComputeCPS();
         }

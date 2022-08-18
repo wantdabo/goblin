@@ -50,6 +50,8 @@ namespace GoblinFramework.Gameplay
             rilRecvDict.Add(obj, rilAction);
 
             Theater.AddActor<Actors.Hoshi.HoshiActor>();
+            Theater.AddActor<Actors.Builds.TerrainActor>();
+            Theater.AddActor<Actors.Builds.CubeActor>();
         }
 
         public void UnRegisterRILRecv(object obj)
