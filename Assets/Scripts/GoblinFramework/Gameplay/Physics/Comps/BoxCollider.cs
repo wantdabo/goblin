@@ -12,26 +12,19 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 {
     public class BoxCollider : Collider
     {
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         public override void ComputeCPS()
         {
+            var rot = Actor.ActorBehavior.Info.rotation;
             var pos = Actor.ActorBehavior.Info.pos;
             var size = Actor.ActorBehavior.Info.size;
 
             pos.Y += size.Y * Fix64.Half;
 
+            colliderRotation = rot;
             colliderPos = pos;
             colliderSize = size;
 
+            box.orientation = Quaternion.Euler(rot);
             box.position = pos;
 
             box.Width = size.X;

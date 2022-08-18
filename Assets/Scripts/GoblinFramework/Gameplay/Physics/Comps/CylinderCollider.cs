@@ -1,5 +1,6 @@
 ﻿using BEPUphysics.Entities;
 using BEPUphysics.Entities.Prefabs;
+using BEPUutilities;
 using FixMath.NET;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,29 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 {
     public class CylinderCollider : Collider
     {
-        public Fix64 height;
-        public Fix64 radius;
-
         public override void ComputeCPS()
         {
-            throw new NotImplementedException();
+            var pos = Actor.ActorBehavior.Info.pos;
+            var size = Actor.ActorBehavior.Info.size;
+
+            pos.Y += size.Y * Fix64.Half;
+
+            colliderPos = pos;
+            colliderSize = size;
+
+            cylinder.position = pos;
+
+            cylinder.Height = size.Y;
+            cylinder.Radius = size.Z * Fix64.Half;
         }
 
+        private Cylinder cylinder;
         public override Entity GenEntity()
         {
-            return new Cylinder(Actor.ActorBehavior.Info.pos, height, radius);
+            cylinder = new Cylinder(Vector3.Zero, 0, 0);
+            ComputeCPS();
+
+            return cylinder;
         }
     }
 }

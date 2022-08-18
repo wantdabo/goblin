@@ -18,7 +18,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         protected override void OnCreate()
         {
             base.OnCreate();
-            collider = Actor.AddComp<T>();
+            collider = AddComp<T>();
             collider.entity.PositionUpdateMode = BEPUphysics.PositionUpdating.PositionUpdateMode.Continuous;
         }
 

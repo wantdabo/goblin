@@ -32,14 +32,14 @@ namespace GoblinFramework.Gameplay.Behaviors
             public int actorId;
 
             public event Action<Vector3> direChanged;
-            private Vector3 mDire = Vector3.forward;
-            public Vector3 dire
+            private Vector3 mRotation = Vector3.forward;
+            public Vector3 rotation
             {
-                get { return mDire; }
+                get { return mRotation; }
                 set
                 {
-                    mDire = value;
-                    direChanged?.Invoke(dire);
+                    mRotation = value;
+                    direChanged?.Invoke(rotation);
                 }
             }
 

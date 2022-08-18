@@ -20,7 +20,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         protected override void OnCreate()
         {
             base.OnCreate();
-            Info = Actor.AddComp<I>();
+            Info = AddComp<I>();
         }
     }
 

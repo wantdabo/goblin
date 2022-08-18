@@ -44,6 +44,40 @@ namespace BEPUutilities
             this.W = w;
         }
 
+        public static Quaternion Euler(Fix64 x, Fix64 y, Fix64 z)
+        {
+            x *= Fix64.Deg2Rad;
+            y *= Fix64.Deg2Rad;
+            z *= Fix64.Deg2Rad;
+
+            CreateFromYawPitchRoll(y, x, z, out Quaternion rotation);
+
+            return rotation;
+        }
+
+        public static Quaternion Euler(Vector3 eulerAngles)
+        {
+            return Euler(eulerAngles.X, eulerAngles.Y, eulerAngles.Z);
+        }
+
+        public static Quaternion AngleAxis(Fix64 angle, Vector3 axis)
+        {
+            axis = axis * Fix64.Deg2Rad;
+            axis.Normalize();
+
+            Fix64 halfAngle = angle * Fix64.Deg2Rad * Fix64.Half;
+
+            Quaternion rotation;
+            Fix64 sin = Fix64.Sin(halfAngle);
+
+            rotation.X = axis.X * sin;
+            rotation.Y = axis.Y * sin;
+            rotation.Z = axis.Z * sin;
+            rotation.W = Fix64.Cos(halfAngle);
+
+            return rotation;
+        }
+
         /// <summary>
         /// Adds two quaternions together.
         /// </summary>

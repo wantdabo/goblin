@@ -38,7 +38,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
 
-            if (joystick.press) Actor.ActorBehavior.Info.dire = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
+            if (joystick.press) Actor.ActorBehavior.Info.rotation = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
 
             Vector3 force = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
             Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed);

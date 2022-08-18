@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using FixMath.NET;
+using GoblinFramework.Gameplay.Physics.Comps;
+using BEPUutilities;
 
 namespace GoblinFramework.Gameplay.Actors.Hoshi
 {
@@ -24,6 +26,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
 
             InputBehavior = Actor.GetBehavior<InputBehavior>();
             MotionBehavior = Actor.GetBehavior<MotionBehavior>();
+
+            Actor.ActorBehavior.Info.size = new Vector3(Fix64.Half, 165 * Fix64.EN2, Fix64.Half);
+            AddComp<ActorCollider<BoxCollider>>();
 
             SetState<HoshiIdle>();
             SetState<HoshiRun>();

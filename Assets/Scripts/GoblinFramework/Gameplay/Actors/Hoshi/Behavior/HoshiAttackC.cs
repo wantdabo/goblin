@@ -32,7 +32,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         {
             base.OnStateTick(frame);
 
-            Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.dire * Behavior.Info.attackCMotionForce);
+            Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.rotation * Behavior.Info.attackCMotionForce);
         }
     }
 }

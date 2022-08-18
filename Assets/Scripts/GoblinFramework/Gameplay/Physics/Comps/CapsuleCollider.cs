@@ -1,5 +1,6 @@
 ﻿using BEPUphysics.Entities;
 using BEPUphysics.Entities.Prefabs;
+using BEPUutilities;
 using FixMath.NET;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,27 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 
         public override void ComputeCPS()
         {
-            throw new NotImplementedException();
+            var pos = Actor.ActorBehavior.Info.pos;
+            var size = Actor.ActorBehavior.Info.size;
+
+            pos.Y += size.Y * Fix64.Half;
+
+            colliderPos = pos;
+            colliderSize = size;
+
+            capsule.position = colliderPos;
+
+            capsule.Length = size.Y;
+            capsule.Radius = size.X * Fix64.Half;
         }
 
+        private Capsule capsule;
         public override Entity GenEntity()
         {
-            return new Capsule(Actor.ActorBehavior.Info.pos, height, radius);
+            capsule = new Capsule(Vector3.Zero, 0, 0);
+            ComputeCPS();
+
+            return capsule;
         }
     }
 }
