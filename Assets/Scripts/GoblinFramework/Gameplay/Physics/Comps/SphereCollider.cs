@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             colliderPos = pos;
             colliderSize = size.ToVector3();
 
-            sphere.position = pos;
+            sphere.Position = pos;
 
             sphere.Radius = radius;
         }

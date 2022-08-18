@@ -42,7 +42,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             RegisterDetectBody();
             Actor.ActorBehavior.Info.posChanged += PosChanged;
             Actor.ActorBehavior.Info.rotationChanged += RotationChanged;
-            Actor.ActorBehavior.Info.scaleChanged += SizeChanged;
+            Actor.ActorBehavior.Info.scaleChanged += ScaleChanged;
             Engine.World.AddCollider(this);
         }
 
@@ -50,7 +50,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         {
             Actor.ActorBehavior.Info.posChanged -= PosChanged;
             Actor.ActorBehavior.Info.rotationChanged -= RotationChanged;
-            Actor.ActorBehavior.Info.scaleChanged -= SizeChanged;
+            Actor.ActorBehavior.Info.scaleChanged -= ScaleChanged;
             UnRegisterDetectBody();
             Engine.World.RmvCollider(this);
             Id = -1;
@@ -83,7 +83,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             ComputeCPS();
         }
 
-        private void SizeChanged(Vector4 scale)
+        private void ScaleChanged(Vector4 scale)
         {
             ComputeCPS();
         }

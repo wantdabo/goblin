@@ -25,7 +25,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             colliderPos = pos;
             colliderSize = size.ToVector3();
 
-            capsule.position = colliderPos;
+            capsule.Position = colliderPos;
 
             capsule.Length = size.Y;
             capsule.Radius = size.X * Fix64.Half;

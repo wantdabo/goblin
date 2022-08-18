@@ -20,7 +20,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             colliderPos = pos;
             colliderSize = size.ToVector3();
 
-            cylinder.position = pos;
+            cylinder.Position = pos;
 
             cylinder.Height = size.Y;
             cylinder.Radius = size.Z * Fix64.Half;

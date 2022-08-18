@@ -15,14 +15,12 @@ namespace GoblinFramework.Gameplay.Physics
 {
     public class World : PComp, IPLateLoop
     {
-        public Vector3 gravity = new Vector3(0, 981 * Fix64.EN2, 0);
         public Space Space;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             Space = new Space();
-            Space.ForceUpdater.Gravity = gravity;
         }
 
         protected override void OnDestroy()

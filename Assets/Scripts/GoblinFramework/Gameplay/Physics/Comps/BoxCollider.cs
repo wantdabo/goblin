@@ -22,7 +22,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             colliderRotation = rot;
             colliderSize = size.ToVector3();
 
-            box.position = pos;
+            box.Position = pos;
             box.orientation = Quaternion.Euler(rot);
 
             box.Width = size.X;
@@ -33,7 +33,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         private Box box;
         public override Entity GenEntity()
         {
-            box = new Box(Vector3.Zero, 0, 0, 0);
+            box = new Box(Vector3.Zero, 0, 0, 0, 1);
             ComputeCPS();
 
             return box;

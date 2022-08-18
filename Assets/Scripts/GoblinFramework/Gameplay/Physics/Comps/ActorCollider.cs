@@ -26,7 +26,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         {
             get
             {
-                Ray ray = new Ray(collider.entity.position, Vector3.Down);
+                Ray ray = new Ray(collider.entity.Position, Vector3.Down);
                 if (false == Engine.World.Space.RayCast(ray, 1 * Fix64.EN3, out var result)) return false;
                 if (0 == result.HitObject.BroadPhase.Overlaps.Count) return false;
 
