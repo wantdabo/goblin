@@ -21,6 +21,8 @@ namespace GoblinFramework.Gameplay.Physics
         {
             base.OnCreate();
             Space = new Space();
+            Space.ForceUpdater.AllowMultithreading = false;
+            Space.PositionUpdater.Enabled = false;
         }
 
         protected override void OnDestroy()

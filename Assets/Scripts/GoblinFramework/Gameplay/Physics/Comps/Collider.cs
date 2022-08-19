@@ -98,7 +98,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 
         private void CollisionEnded(BEPUphysics.BroadPhaseEntries.MobileCollidables.EntityCollidable sender, BEPUphysics.BroadPhaseEntries.Collidable other, BEPUphysics.NarrowPhaseSystems.Pairs.CollidablePairHandler pair)
         {
-            colliderIds.Clear();
+            colliderIds = Engine.World.ConvEntityIds(sender.OverlappedEntities);
             //if (null == collisionLeave) return;
             //collisionLeave(new CollisionInfo { self = Id, colliders = colliderIds });
         }

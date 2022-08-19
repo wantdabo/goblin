@@ -498,6 +498,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\DataStructures\TinyStructList.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\TriangleConvexPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\TwoEntity\Joints\TwistJoint.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\CubeActor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Matrix3x6.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\Path following\EntityMover.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\SingleEntity\SingleEntityConstraint.cs" />
@@ -547,6 +548,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\ResourceManagement\LockingResourcePool.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseSystems\SortAndSweep\Grid2DEntry.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\Collision\ContactPenetrationConstraint.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\TerrainActor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\Collidable.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\BoxShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Matrix.cs" />
@@ -569,8 +571,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Box.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\AngularPlaneControl.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\CollidableCollection.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\CubeActor.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Builds\TerrainActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
