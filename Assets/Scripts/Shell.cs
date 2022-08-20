@@ -64,22 +64,22 @@ public class Shell : MonoBehaviour
             if (collider is GoblinFramework.Gameplay.Physics.Comps.BoxCollider)
             {
                 var boxCollider = collider as GoblinFramework.Gameplay.Physics.Comps.BoxCollider;
-                Gizmos.DrawWireCube(boxCollider.colliderPos.ToU3DVector3(), boxCollider.colliderSize.ToU3DVector3());
+                Gizmos.DrawWireCube(boxCollider.colliderPos.ToU3DVector3(), boxCollider.colliderScale.ToU3DVector3());
             }
             else if (collider is GoblinFramework.Gameplay.Physics.Comps.CylinderCollider)
             {
                 var cylinderCollider = collider as GoblinFramework.Gameplay.Physics.Comps.CylinderCollider;
-                Gizmos.DrawWireCube(cylinderCollider.colliderPos.ToU3DVector3(), cylinderCollider.colliderSize.ToU3DVector3());
+                Gizmos.DrawWireCube(cylinderCollider.colliderPos.ToU3DVector3(), cylinderCollider.colliderScale.ToU3DVector3());
             }
             else if (collider is GoblinFramework.Gameplay.Physics.Comps.SphereCollider)
             {
                 var sphereCollider = collider as GoblinFramework.Gameplay.Physics.Comps.SphereCollider;
-                Gizmos.DrawWireSphere(sphereCollider.colliderPos.ToU3DVector3(), sphereCollider.colliderSize.ToU3DVector3().x * 0.5f);
+                Gizmos.DrawWireSphere(sphereCollider.colliderPos.ToU3DVector3(), sphereCollider.colliderScale.ToU3DVector3().x * 0.5f);
             }
             else if (collider is GoblinFramework.Gameplay.Physics.Comps.CapsuleCollider) 
             {
                 var capsuleCollider = collider as GoblinFramework.Gameplay.Physics.Comps.CapsuleCollider;
-                Gizmos.DrawWireCube(capsuleCollider.colliderPos.ToU3DVector3(), capsuleCollider.colliderSize.ToU3DVector3());
+                Gizmos.DrawWireCube(capsuleCollider.colliderPos.ToU3DVector3(), capsuleCollider.colliderScale.ToU3DVector3());
             }
         }
     }

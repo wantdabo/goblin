@@ -26,8 +26,7 @@ namespace GoblinFramework.Client.Gameplay.Resolves
         private float lerp2dire;
         protected override void OnResolve<T>(T ril)
         {
-            lerp2Pos.Set(ril.x, 0, ril.z);
-
+            lerp2Pos.Set(ril.x, ril.y, ril.z);
             var trans = Actor.GetSyncResolver<SyncAddResolver>().Node.transform;
 
             // 角度计算

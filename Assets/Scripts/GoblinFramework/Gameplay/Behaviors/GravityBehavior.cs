@@ -1,0 +1,29 @@
+﻿using BEPUutilities;
+using FixMath.NET;
+using GoblinFramework.Gameplay.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GoblinFramework.Gameplay.Behaviors
+{
+    public class GravityBehavior : Behavior<GravityBehavior.GravityInfo>, IPLoop
+    {
+        public void PLoop(int frame, Fix64 detailTime)
+        {
+            var motionBehavior = Actor.GetBehavior<MotionBehavior>();
+            Info.gravityVelocity += Info.gravity * detailTime;
+            motionBehavior?.AddForce(Info.gravityVelocity * detailTime);
+        }
+
+        #region GravityInfo
+        public class GravityInfo : BehaviorInfo
+        {
+            public Vector3 gravity = new Vector3(0, -981 * Fix64.EN2, 0);
+            public Vector3 gravityVelocity = Vector3.Zero;
+        }
+        #endregion
+    }
+}

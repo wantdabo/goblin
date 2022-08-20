@@ -29,9 +29,9 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 
         public abstract Entity GenEntity();
 
-        public Vector3 colliderRotation { get; protected set; }
         public Vector3 colliderPos { get; protected set; }
-        public Vector3 colliderSize { get; protected set; }
+        public Vector3 colliderRotation { get; protected set; }
+        public Vector3 colliderScale { get; protected set; }
         public abstract void ComputeCPS();
 
         protected override void OnCreate()

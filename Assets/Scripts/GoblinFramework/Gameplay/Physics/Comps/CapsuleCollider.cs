@@ -12,9 +12,6 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 {
     public class CapsuleCollider : Collider
     {
-        public Fix64 height;
-        public Fix64 radius;
-
         public override void ComputeCPS()
         {
             var pos = Actor.ActorBehavior.Info.pos;
@@ -23,7 +20,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             pos.Y += size.Y * Fix64.Half;
 
             colliderPos = pos;
-            colliderSize = size.ToVector3();
+            colliderScale = size.ToVector3();
 
             capsule.Position = colliderPos;
 

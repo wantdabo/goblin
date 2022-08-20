@@ -2,6 +2,7 @@
 using FixMath.NET;
 using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.Gameplay.Physics;
 using GoblinFramework.Gameplay.Physics.Comps;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
@@ -19,6 +20,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             base.OnCreate();
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
+            AddBehavior<GravityBehavior>();
             AddBehavior<HoshiBehavior>();
         }
     }

@@ -14,14 +14,14 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void AddForce(Vector3 force)
         {
-            Info.force += force;
+            Info.motionForce += force;
         }
 
         public void PLoop(int frame, Fix64 detailTime)
         {
-            if (Vector3.zero == Info.force) return;
-
-            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + Info.force;
+            if (Vector3.zero == Info.motionForce) return;
+            var lossForce = Info.motionForce;
+            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + lossForce;
             Actor.ActorBehavior.SendRIL<RILPos>((ril) =>
             {
                 ril.x = Actor.ActorBehavior.Info.pos.X.AsFloat();
@@ -29,13 +29,13 @@ namespace GoblinFramework.Gameplay.Behaviors
                 ril.z = Actor.ActorBehavior.Info.pos.Z.AsFloat();
                 ril.dire = 0;
             });
-            Info.force = Vector3.zero;
+            Info.motionForce -= lossForce;
         }
 
         #region MotionInfo
         public class MotionInfo: BehaviorInfo
         {
-            public Vector3 force;
+            public Vector3 motionForce;
         }
         #endregion
     }
