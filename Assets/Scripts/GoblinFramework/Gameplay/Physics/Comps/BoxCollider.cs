@@ -14,19 +14,15 @@ namespace GoblinFramework.Gameplay.Physics.Comps
     {
         public override void ComputeCPS()
         {
-            var pos = Actor.ActorBehavior.Info.pos;
-            var rot = Actor.ActorBehavior.Info.rotation;
-            var scale = Actor.ActorBehavior.Info.scale;
+            colliderPos = Actor.ActorBehavior.Info.pos;
+            colliderRotation = Actor.ActorBehavior.Info.rotation;
+            colliderScale = Actor.ActorBehavior.Info.scale.ToVector3() * Actor.ActorBehavior.Info.scale.W;
 
-            colliderPos = pos;
-            colliderRotation = rot;
-            colliderScale = scale.ToVector3();
-
-            box.Position = pos;
-            box.Orientation = Quaternion.Euler(rot);
-            box.Width = scale.X;
-            box.Height = scale.Y;
-            box.Length = scale.Z;
+            box.Position = colliderPos;
+            box.Orientation = Quaternion.Euler(colliderRotation);
+            box.Width = colliderScale.X;
+            box.Height = colliderScale.Y;
+            box.Length = colliderScale.Z;
         }
 
         private Box box;
