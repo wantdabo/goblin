@@ -1,6 +1,7 @@
 ﻿using BEPUutilities;
 using FixMath.NET;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Physics.Comps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,14 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLoop(int frame, Fix64 detailTime)
         {
+            var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
+            General.GoblinDebug.Log(colliderBehavior.IsOnGround.ToString());
+            if (null != colliderBehavior && colliderBehavior.IsOnGround) 
+            {
+                Info.gravityVelocity = Vector3.Zero;
+                return;
+            }
+
             var motionBehavior = Actor.GetBehavior<MotionBehavior>();
             Info.gravityVelocity += Info.gravity * detailTime;
             motionBehavior?.AddForce(Info.gravityVelocity * detailTime);

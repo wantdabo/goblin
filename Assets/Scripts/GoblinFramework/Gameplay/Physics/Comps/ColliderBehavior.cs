@@ -14,6 +14,28 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 {
     public class ColliderBehavior : Behavior<ColliderBehavior.ColliderInfo>
     {
+        public Collider collider;
+
+        public bool IsOnGround
+        {
+            get
+            {
+                var pos = collider.colliderPos;
+                pos.Y -= collider.colliderScale.Y * Fix64.Half + 1 * Fix64.EN3;
+                Ray ray = new Ray(pos, Vector3.Down);
+                if (false == Engine.World.Space.RayCast(ray, 1 * Fix64.EN4, out var result)) return false;
+                if (0 == result.HitObject.BroadPhase.Overlaps.Count) return false;
+
+                foreach (var item in result.HitObject.BroadPhase.Overlaps)
+                {
+                    var coll = item.entryA as EntityCollidable;
+                    if (null != coll && coll.Entity != collider.entity) return true;
+                }
+
+                return false;
+            }
+        }
+
         #region ColliderInfo
         public class ColliderInfo : BehaviorInfo
         {
@@ -58,31 +80,15 @@ namespace GoblinFramework.Gameplay.Physics.Comps
 
     public class ColliderBehavior<T> : ColliderBehavior where T : Collider, new()
     {
-        public T collider;
-
         protected override void OnCreate()
         {
             base.OnCreate();
+
+            // 绑定 Behavior 到基类
+            Actor.SetBehavior<ColliderBehavior>(this);
+
             collider = AddComp<T>();
             collider.entity.PositionUpdateMode = BEPUphysics.PositionUpdating.PositionUpdateMode.Continuous;
-        }
-
-        public bool IsGround
-        {
-            get
-            {
-                Ray ray = new Ray(collider.entity.Position, Vector3.Down);
-                if (false == Engine.World.Space.RayCast(ray, 1 * Fix64.EN3, out var result)) return false;
-                if (0 == result.HitObject.BroadPhase.Overlaps.Count) return false;
-
-                foreach (var item in result.HitObject.BroadPhase.Overlaps)
-                {
-                    var coll = item.entryA as EntityCollidable;
-                    if (null != coll) return true;
-                }
-
-                return false;
-            }
         }
     }
 }

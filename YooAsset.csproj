@@ -71,8 +71,8 @@
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\AssetSystem\Provider\BundledSubAssetsProvider.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\AssetSystem\Provider\BundledProvider.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\PatchSystem\PlayMode\EditorSimulateModeHelper.cs" />
-    <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Settings\YooAssetSettings.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\YooAssetDriver.cs" />
+    <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Settings\YooAssetSettings.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Debugger\RemoteCommand.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\AssetSystem\Handles\SubAssetsOperationHandle.cs" />
     <Compile Include="Library\PackageCache\com.tuyoogame.yooasset@1.1.1\Runtime\Settings\YooAssetSettingsData.cs" />

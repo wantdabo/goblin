@@ -35,6 +35,11 @@ namespace GoblinFramework.Gameplay.Actors
             return null;
         }
 
+        public void SetBehavior<T>(PComp behavior) where T : PComp, new() 
+        {
+            behaviorDict.Add(typeof(T), behavior);
+        }
+
         /// <summary>
         /// 移除行为逻辑组件
         /// </summary>
@@ -56,10 +61,10 @@ namespace GoblinFramework.Gameplay.Actors
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
-            var comp = AddComp<T>();
-            behaviorDict.Add(typeof(T), comp);
+            var behavior = AddComp<T>();
+            SetBehavior<T>(behavior);
 
-            return comp;
+            return behavior;
         }
 
         private List<Actor> actorList = new List<Actor>();

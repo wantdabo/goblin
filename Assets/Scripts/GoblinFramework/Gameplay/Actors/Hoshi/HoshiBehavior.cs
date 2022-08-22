@@ -37,6 +37,15 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             SetEntrance<HoshiIdle>();
         }
 
+        public override void PLoop(int frame, Fix64 detailTime)
+        {
+            if (InputBehavior.GetInput(InputType.BC).release)
+            {
+                Actor.ActorBehavior.Info.pos = new Vector3(Actor.ActorBehavior.Info.pos.X, 5, Actor.ActorBehavior.Info.pos.Z);
+            }
+            base.PLoop(frame, detailTime);
+        }
+
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
