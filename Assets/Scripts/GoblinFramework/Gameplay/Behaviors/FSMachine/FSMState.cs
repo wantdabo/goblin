@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Core;
+﻿using FixMath.NET;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Common;
 using System;
@@ -75,6 +76,6 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         /// 状态 Tick
         /// </summary>
         /// <param name="frame">帧数</param>
-        public virtual void OnStateTick(int frame) { elapsedFrames++; }
+        public virtual void OnStateTick(int frame, Fix64 detailTime) { elapsedFrames++; }
     }
 }

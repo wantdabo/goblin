@@ -17,6 +17,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
     {
         public InputBehavior InputBehavior;
         public MotionBehavior MotionBehavior;
+        public ColliderBehavior ColliderBehavior;
 
         protected override void OnCreate()
         {
@@ -26,9 +27,12 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
 
             InputBehavior = Actor.GetBehavior<InputBehavior>();
             MotionBehavior = Actor.GetBehavior<MotionBehavior>();
+            ColliderBehavior = Actor.GetBehavior<ColliderBehavior>();
 
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
+            SetState<HoshiJumping>();
+            SetState<HoshiFalling>();
             SetState<HoshiAttackA>();
             SetState<HoshiAttackB>();
             SetState<HoshiAttackCHold>();
@@ -37,25 +41,23 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             SetEntrance<HoshiIdle>();
         }
 
-        public override void PLoop(int frame, Fix64 detailTime)
-        {
-            if (InputBehavior.GetInput(InputType.BC).release)
-            {
-                Actor.ActorBehavior.Info.pos = new Vector3(Actor.ActorBehavior.Info.pos.X, 5, Actor.ActorBehavior.Info.pos.Z);
-            }
-            base.PLoop(frame, detailTime);
-        }
-
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
-            public Fix64 runSpeed = 4 * Fix64.EN1;
+            public readonly Fix64 runSpeed = 6;
 
-            public int attackAKeepFrame = 5;
-            public int attackBKeepFrame = 3;
+            public readonly int attackAKeepFrame = 5;
+            public readonly int attackBKeepFrame = 3;
 
-            public int attackCKeepFrame = 10;
-            public Fix64 attackCMotionForce = 10 * Fix64.EN1;
+            public readonly int attackCKeepFrame = 10;
+            public readonly Fix64 attackCMotionForce = 10 * Fix64.EN1;
+
+            public readonly Vector3 jumpMotionForce = new Vector3(0, 55 * Fix64.EN1, 0);
+
+            /// <summary>
+            /// 跳跃状态下的力量
+            /// </summary>
+            public Vector3 jumpingForce = Vector3.Zero;
         }
         #endregion
     }

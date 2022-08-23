@@ -110,7 +110,7 @@ namespace GoblinFramework.Gameplay.Behaviors.FSMachine
         {
             if (State != null && State.OnDetectLeave()) State.Leave();
             StateDetect();
-            State?.OnStateTick(frame);
+            State?.OnStateTick(frame, detailTime);
         }
     }
 }

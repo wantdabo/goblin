@@ -35,7 +35,12 @@ namespace GoblinFramework.Gameplay.Actors
             return null;
         }
 
-        public void SetBehavior<T>(PComp behavior) where T : PComp, new() 
+        public void UnBindingBehavior<T>() where T : PComp
+        {
+            behaviorDict.Remove(typeof(T));
+        }
+
+        public void BindingBehavior<T>(PComp behavior) where T : PComp, new()
         {
             behaviorDict.Add(typeof(T), behavior);
         }
@@ -48,7 +53,7 @@ namespace GoblinFramework.Gameplay.Actors
         public void RmvBehavior<T, TI>() where T : Behavior<TI>, new() where TI : BehaviorInfo, new()
         {
             if (false == behaviorDict.TryGetValue(typeof(T), out var behavior)) return;
-            behaviorDict.Remove(typeof(T));
+            UnBindingBehavior<T>();
             RmvComp(behavior);
         }
 
@@ -62,7 +67,7 @@ namespace GoblinFramework.Gameplay.Actors
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
             var behavior = AddComp<T>();
-            SetBehavior<T>(behavior);
+            BindingBehavior<T>(behavior);
 
             return behavior;
         }

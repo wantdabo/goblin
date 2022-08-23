@@ -1,4 +1,5 @@
 ﻿using BEPUutilities;
+using FixMath.NET;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
@@ -32,9 +33,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             base.OnLeave();
         }
 
-        public override void OnStateTick(int frame)
+        public override void OnStateTick(int frame, Fix64 detailTime)
         {
-            base.OnStateTick(frame);
+            base.OnStateTick(frame, detailTime);
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
 
@@ -42,7 +43,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
             Vector3 force = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
             force.Normalize();
-            Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed);
+            Behavior.MotionBehavior.AddForce(force * Behavior.Info.runSpeed * detailTime);
         }
     }
 }

@@ -39,41 +39,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         #region ColliderInfo
         public class ColliderInfo : BehaviorInfo
         {
-            public event Action<Vector3> posChanged;
-            private Vector3 mPos;
-            public Vector3 pos
-            {
-                get { return mPos; }
-                set
-                {
-                    mPos = value;
-                    posChanged?.Invoke(pos);
-                }
-            }
 
-            public event Action<Vector3> rotationChanged;
-            private Vector3 mRotation = Vector3.forward;
-            public Vector3 rotation
-            {
-                get { return mRotation; }
-                set
-                {
-                    mRotation = value;
-                    rotationChanged?.Invoke(rotation);
-                }
-            }
-
-            public event Action<Vector4> scaleChanged;
-            private Vector4 mScale;
-            public Vector4 scale
-            {
-                get { return mScale; }
-                set
-                {
-                    mScale = value;
-                    scaleChanged?.Invoke(scale);
-                }
-            }
         }
         #endregion
     }
@@ -85,10 +51,16 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             base.OnCreate();
 
             // 绑定 Behavior 到基类
-            Actor.SetBehavior<ColliderBehavior>(this);
+            Actor.BindingBehavior<ColliderBehavior>(this);
 
             collider = AddComp<T>();
             collider.entity.PositionUpdateMode = BEPUphysics.PositionUpdating.PositionUpdateMode.Continuous;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Actor.UnBindingBehavior<ColliderBehavior>();
         }
     }
 }

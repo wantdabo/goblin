@@ -15,7 +15,6 @@ namespace GoblinFramework.Gameplay.Behaviors
         public void PLoop(int frame, Fix64 detailTime)
         {
             var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
-            General.GoblinDebug.Log(colliderBehavior.IsOnGround.ToString());
             if (null != colliderBehavior && colliderBehavior.IsOnGround) 
             {
                 Info.gravityVelocity = Vector3.Zero;

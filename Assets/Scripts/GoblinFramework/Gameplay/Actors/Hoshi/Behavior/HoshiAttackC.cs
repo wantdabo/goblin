@@ -1,4 +1,5 @@
-﻿using GoblinFramework.General.Gameplay.RIL.RILS;
+﻿using FixMath.NET;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "AttackC");
         }
 
-        public override void OnStateTick(int frame)
+        public override void OnStateTick(int frame, Fix64 detailTime)
         {
-            base.OnStateTick(frame);
+            base.OnStateTick(frame, detailTime);
 
             Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.rotation * Behavior.Info.attackCMotionForce);
         }
