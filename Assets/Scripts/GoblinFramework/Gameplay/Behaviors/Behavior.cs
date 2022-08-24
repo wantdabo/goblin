@@ -8,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Behaviors
 {
+    public class Behavior : PComp 
+    {
+        
+    }
+
     /// <summary>
     /// Behavior，战斗逻辑层行为组件
     /// </summary>
     /// <typeparam name="I">组件数据类型</typeparam>
-    public class Behavior<I> : PComp where I : BehaviorInfo, new()
+    public class Behavior<I> : Behavior where I : BehaviorInfo, new()
     {
         private I info = null;
         public I Info { get { return info; } private set { info = value; } }

@@ -21,26 +21,26 @@ namespace GoblinFramework.Gameplay.Actors
             base.OnCreate();
         }
 
-        private Dictionary<Type, PComp> behaviorDict = new Dictionary<Type, PComp>();
+        private Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
 
         /// <summary>
         /// 获取行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// <returns>行为逻辑组件</returns>
-        public T GetBehavior<T>() where T : PComp, new()
+        public T GetBehavior<T>() where T : Behavior, new()
         {
             if (behaviorDict.TryGetValue(typeof(T), out var behavior)) return behavior as T;
 
             return null;
         }
 
-        public void UnBindingBehavior<T>() where T : PComp
+        public void UnBindingBehavior<T>() where T : Behavior
         {
             behaviorDict.Remove(typeof(T));
         }
 
-        public void BindingBehavior<T>(PComp behavior) where T : PComp, new()
+        public void BindingBehavior<T>(Behavior behavior) where T : Behavior, new()
         {
             behaviorDict.Add(typeof(T), behavior);
         }
@@ -49,8 +49,7 @@ namespace GoblinFramework.Gameplay.Actors
         /// 移除行为逻辑组件
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        /// <typeparam name="TI">行为逻辑组件数据类型</typeparam>
-        public void RmvBehavior<T, TI>() where T : Behavior<TI>, new() where TI : BehaviorInfo, new()
+        public void RmvBehavior<T>() where T : Behavior, new()
         {
             if (false == behaviorDict.TryGetValue(typeof(T), out var behavior)) return;
             UnBindingBehavior<T>();
@@ -62,7 +61,7 @@ namespace GoblinFramework.Gameplay.Actors
         /// </summary>
         /// <typeparam name="T">行为逻辑组件类型</typeparam>
         /// 
-        public T AddBehavior<T>() where T : PComp, new()
+        public T AddBehavior<T>() where T : Behavior, new()
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
 
