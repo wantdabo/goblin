@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Behaviors
 {
-    public class GravityBehavior : Behavior, IPLoop
+    public class GravityBehavior : Behavior<GravityBehavior.GravityInfo>, IPLoop
     {
-        private EnergyBehavior energyBehavior;
         protected override void OnCreate()
         {
             base.OnCreate();
-            energyBehavior = Actor.GetBehavior<EnergyBehavior>();
         }
 
         public void PLoop(int frame, Fix64 detailTime)
@@ -24,13 +22,19 @@ namespace GoblinFramework.Gameplay.Behaviors
             var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
             if (null != colliderBehavior && colliderBehavior.IsOnGround) 
             {
-                energyBehavior.Info.gravityVelocity = Vector3.Zero;
+                Info.gravityVelocity = Vector3.Zero;
                 return;
             }
 
-            var motionBehavior = Actor.GetBehavior<MotionBehavior>();
-            energyBehavior.Info.gravityVelocity += energyBehavior.Info.gravity * detailTime;
-            motionBehavior?.AddForce(energyBehavior.Info.gravityVelocity * detailTime);
+            Info.gravityVelocity += Info.gravity * detailTime;
         }
+
+        #region GravityInfo
+        public class GravityInfo : BehaviorInfo
+        {
+            public Vector3 gravity = new Vector3(0, -981 * Fix64.EN2, 0);
+            public Vector3 gravityVelocity = Vector3.Zero;
+        }
+        #endregion
     }
 }
