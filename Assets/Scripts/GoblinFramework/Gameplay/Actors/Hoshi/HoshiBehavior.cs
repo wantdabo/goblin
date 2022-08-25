@@ -31,8 +31,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
 
             SetState<HoshiIdle>();
             SetState<HoshiRun>();
-            SetState<HoshiJumping>();
-            SetState<HoshiFalling>();
             SetState<HoshiAttackA>();
             SetState<HoshiAttackB>();
             SetState<HoshiAttackCHold>();
