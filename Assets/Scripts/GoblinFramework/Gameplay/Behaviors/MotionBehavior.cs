@@ -10,18 +10,13 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Behaviors
 {
-    public class MotionBehavior : Behavior<MotionBehavior.MotionInfo>, IPLoop
+    public class MotionBehavior : Behavior
     {
-        public void AddForce(Vector3 force)
+        public void Motion(Vector3 motionForce)
         {
-            Info.motionForce += force;
-        }
+            if (Vector3.Zero == motionForce) return;
 
-        public void PLoop(int frame, Fix64 detailTime)
-        {
-            if (Vector3.zero == Info.motionForce) return;
-            var lossForce = Info.motionForce;
-            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + lossForce;
+            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + motionForce;
             Actor.ActorBehavior.SendRIL<RILPos>((ril) =>
             {
                 ril.x = Actor.ActorBehavior.Info.pos.X.AsFloat();
@@ -29,14 +24,6 @@ namespace GoblinFramework.Gameplay.Behaviors
                 ril.z = Actor.ActorBehavior.Info.pos.Z.AsFloat();
                 ril.dire = 0;
             });
-            Info.motionForce -= lossForce;
         }
-
-        #region MotionInfo
-        public class MotionInfo: BehaviorInfo
-        {
-            public Vector3 motionForce;
-        }
-        #endregion
     }
 }

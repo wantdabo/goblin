@@ -16,7 +16,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
     public class HoshiBehavior : FSMachine<HoshiBehavior, HoshiBehavior.HoshiInfo, HoshiState>
     {
         public InputBehavior InputBehavior;
-        public MotionBehavior MotionBehavior;
         public ColliderBehavior ColliderBehavior;
 
         protected override void OnCreate()
@@ -26,7 +25,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             Actor.ActorBehavior.SendRIL<RILModel>((ril) => ril.modelName = "Hoshi/Hoshi");
 
             InputBehavior = Actor.GetBehavior<InputBehavior>();
-            MotionBehavior = Actor.GetBehavior<MotionBehavior>();
             ColliderBehavior = Actor.GetBehavior<ColliderBehavior>();
 
             SetState<HoshiIdle>();
@@ -52,7 +50,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             public readonly int attackCKeepFrame = 10;
             public readonly Fix64 attackCMotionForce = 10 * Fix64.EN1;
 
-            public readonly Vector3 jumpMotionForce = new Vector3(0, 5 * Fix64.EN1, 0);
+            public readonly Vector3 jumpMotionForce = new Vector3(0, 5, 0);
         }
         #endregion
     }

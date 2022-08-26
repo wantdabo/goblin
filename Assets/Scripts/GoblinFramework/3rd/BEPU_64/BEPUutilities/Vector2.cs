@@ -105,7 +105,7 @@ namespace BEPUutilities
 
         public Vector3 ToVector3(Fix64 z)
         {
-            return new Vector3(X, Y, z);
+            return new Vector3(X, z, Y);
         }
 
         public Vector4 ToVector4()

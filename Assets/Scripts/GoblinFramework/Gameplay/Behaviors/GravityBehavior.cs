@@ -14,21 +14,16 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLoop(int frame, Fix64 detailTime)
         {
+            var energyBehavior = Actor.GetBehavior<EnergyBehavior>();
             var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
-            if (null != colliderBehavior && colliderBehavior.IsOnGround) 
-            {
-                Info.gravityVelocity = Vector3.Zero;
-                return;
-            }
-
-            Info.gravityVelocity += Info.gravity * detailTime;
+            if (null != colliderBehavior && colliderBehavior.IsOnGround) return;
+            energyBehavior.Info.linearEnergy += Info.gravity * detailTime;
         }
 
         #region GravityInfo
         public class GravityInfo : BehaviorInfo
         {
             public Vector3 gravity = new Vector3(0, -981 * Fix64.EN2, 0);
-            public Vector3 gravityVelocity = Vector3.Zero;
         }
         #endregion
     }

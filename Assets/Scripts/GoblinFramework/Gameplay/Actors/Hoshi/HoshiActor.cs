@@ -22,10 +22,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             ActorBehavior.Info.scale = new Vector4(Fix64.Half, 165 * Fix64.EN2, Fix64.Half, Fix64.One);
 
             AddBehavior<InputBehavior>();
-            AddBehavior<MotionBehavior>();
             AddBehavior<ColliderBehavior<BoxCollider>>();
-            AddBehavior<BouncingBehavior>();
             AddBehavior<GravityBehavior>();
+            AddBehavior<MotionBehavior>();
             AddBehavior<EnergyBehavior>();
             AddBehavior<HoshiBehavior>();
         }

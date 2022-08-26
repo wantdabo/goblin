@@ -195,7 +195,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\MobileCollidables\CompoundHierarchy.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\IKJoint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\ColliderBehavior.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\BouncingBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\MeshGroupPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\PhysicsChecker.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RIL.cs" />

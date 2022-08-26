@@ -14,33 +14,27 @@ namespace GoblinFramework.Gameplay.Behaviors
     /// </summary>
     public class EnergyBehavior : Behavior<EnergyBehavior.EnergyInfo>, IPLateLoop
     {
-        private GravityBehavior gravityBehavior;
-        private BouncingBehavior bouncingBehavior;
-        private MotionBehavior motionBehavior;
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-            gravityBehavior = Actor.GetBehavior<GravityBehavior>();
-            bouncingBehavior = Actor.GetBehavior<BouncingBehavior>();
-            motionBehavior = Actor.GetBehavior<MotionBehavior>();
-        }
-
         public void PLateLoop(int frame, Fix64 detailTime)
         {
-            var force = Vector3.Zero;
-            // 重力转换
-            if (null != gravityBehavior && gravityBehavior.Info.gravityVelocity != Vector3.Zero) force += gravityBehavior.Info.gravityVelocity * detailTime;
-            // 弹跳力转换
-            if (null != bouncingBehavior && bouncingBehavior.Info.bouncingVelocity != Vector3.Zero) force += bouncingBehavior.Info.bouncingVelocity;
+            General.GoblinDebug.Log($"gaohao {Info.linearEnergy}");
+            var motionBehavior = Actor.GetBehavior<MotionBehavior>();
+            if (null == motionBehavior) return;
+            var lossMomentEnergy = Info.momentEnergy;
+            Info.momentEnergy -= lossMomentEnergy;
 
-            Info.velocity = force;
-            motionBehavior?.AddForce(force);
+            Info.linearEnergy -= lossMomentEnergy;
+            var lossLinearEnergy = Info.linearEnergy * detailTime;
+            Info.linearEnergy -= lossLinearEnergy;
+            motionBehavior.Motion(lossMomentEnergy + lossLinearEnergy);
         }
 
         #region EnergyInfo
         public class EnergyInfo : BehaviorInfo
         {
-            public Vector3 velocity = Vector3.Zero;
+            public Vector3 linearEnergy;
+
+            private Vector3 mMomentEnergy;
+            public Vector3 momentEnergy { get { return mMomentEnergy; } set { mMomentEnergy = value; linearEnergy += mMomentEnergy; } }
         }
         #endregion
     }

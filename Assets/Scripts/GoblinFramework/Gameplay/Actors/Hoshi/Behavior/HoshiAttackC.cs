@@ -1,4 +1,5 @@
 ﻿using FixMath.NET;
+using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         public override void OnStateTick(int frame, Fix64 detailTime)
         {
             base.OnStateTick(frame, detailTime);
-
-            Behavior.MotionBehavior.AddForce(Actor.ActorBehavior.Info.rotation * Behavior.Info.attackCMotionForce);
+            Actor.GetBehavior<EnergyBehavior>().Info.momentEnergy += Actor.ActorBehavior.Info.rotation * Behavior.Info.attackCMotionForce;
         }
     }
 }
