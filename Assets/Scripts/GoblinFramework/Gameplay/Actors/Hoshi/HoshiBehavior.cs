@@ -52,12 +52,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             public readonly int attackCKeepFrame = 10;
             public readonly Fix64 attackCMotionForce = 10 * Fix64.EN1;
 
-            public readonly Vector3 jumpMotionForce = new Vector3(0, 55 * Fix64.EN1, 0);
-
-            /// <summary>
-            /// 跳跃状态下的力量
-            /// </summary>
-            public Vector3 jumpingForce = Vector3.Zero;
+            public readonly Vector3 jumpMotionForce = new Vector3(0, 5 * Fix64.EN1, 0);
         }
         #endregion
     }

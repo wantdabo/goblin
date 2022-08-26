@@ -12,11 +12,6 @@ namespace GoblinFramework.Gameplay.Behaviors
 {
     public class GravityBehavior : Behavior<GravityBehavior.GravityInfo>, IPLoop
     {
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-        }
-
         public void PLoop(int frame, Fix64 detailTime)
         {
             var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();

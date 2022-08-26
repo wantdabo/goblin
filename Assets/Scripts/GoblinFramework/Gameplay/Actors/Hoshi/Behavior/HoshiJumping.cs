@@ -23,28 +23,21 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         protected override void OnEnter()
         {
             base.OnEnter();
-            Behavior.Info.jumpingForce = Behavior.Info.jumpMotionForce + Behavior.MotionBehavior.Info.motionForce;
+            var bouncingBehavior = Actor.GetBehavior<BouncingBehavior>();
+            bouncingBehavior.Info.bouncingVelocity = Behavior.Info.jumpMotionForce + Behavior.MotionBehavior.Info.motionForce;
 
             var joystick = Behavior.InputBehavior.GetInput(Behaviors.InputType.Joystick);
             if (joystick.press)
             {
                 var motionForce = joystick.dire * Behavior.Info.runSpeed;
-                Behavior.Info.jumpingForce.X += motionForce.X;
-                Behavior.Info.jumpingForce.Z += motionForce.Y;
+                bouncingBehavior.Info.bouncingVelocity.X += motionForce.X;
+                bouncingBehavior.Info.bouncingVelocity.Z += motionForce.Y;
             }
         }
 
         protected override void OnLeave()
         {
             base.OnLeave();
-        }
-
-        public override void OnStateTick(int frame, Fix64 detailTime)
-        {
-            base.OnStateTick(frame, detailTime);
-            var lossForce = Behavior.Info.jumpMotionForce * detailTime;
-            Behavior.Info.jumpingForce -= lossForce;
-            Behavior.MotionBehavior.AddForce(lossForce);
         }
     }
 }

@@ -24,8 +24,9 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             AddBehavior<InputBehavior>();
             AddBehavior<MotionBehavior>();
             AddBehavior<ColliderBehavior<BoxCollider>>();
+            AddBehavior<BouncingBehavior>();
             AddBehavior<GravityBehavior>();
-            AddBehavior<EnergyConvBehavior>();
+            AddBehavior<EnergyBehavior>();
             AddBehavior<HoshiBehavior>();
         }
     }

@@ -27,7 +27,7 @@ namespace GoblinFramework.Gameplay.Common
         private int mFrame = 0;
         public int frame { get { return mFrame; } private set { mFrame = value; } }
 
-        public readonly Fix64 detailTime = 6666 * Fix64.EN5;
+        public readonly Fix64 detailTime = 625 * Fix64.EN4;
 
         private List<IPLoop> iploops = new List<IPLoop>();
         private List<IPLateLoop> iplateLoops = new List<IPLateLoop>();
