@@ -67,7 +67,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\MobileCollidables\CompoundHelper.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\SingleBoneAngularPlaneConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\ConvexHullShape.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiJumping.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\CollisionAlgorithms\GJK\GJKToolbox.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\StaticMeshSpherePairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\MobileMeshConvexPairHandler.cs" />
@@ -366,7 +365,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\Collision\NonConvexContactManifoldConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\GeneralConvexContactManifold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\StaticMeshShape.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\GravityBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\IXDImpulseConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseEntries\Events\CollisionEventTypes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\TwoEntity\Motors\MotorSettings.cs" />
@@ -535,7 +533,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Client\GameStages\GameStage.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\DataStructures\ReadOnlyDictionary.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Vector4.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiFalling.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\SingleBoneLinearMotor.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\TwoEntity\JointLimits\RevoluteLimit.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\FiniteDifferenceSpline3D.cs" />

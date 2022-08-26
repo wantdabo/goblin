@@ -11,7 +11,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
     {
         public override List<Type> PassStates => new List<Type>
         {
-            typeof(HoshiIdle), typeof(HoshiRun), typeof(HoshiJumping), typeof(HoshiFalling),
+            typeof(HoshiIdle), typeof(HoshiRun), 
             typeof(HoshiAttackA), typeof(HoshiAttackCHold)
         };
 
