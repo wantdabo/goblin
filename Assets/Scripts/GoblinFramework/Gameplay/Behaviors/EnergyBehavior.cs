@@ -1,6 +1,7 @@
 ﻿using BEPUutilities;
 using FixMath.NET;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Physics.Comps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,9 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLateLoop(int frame, Fix64 detailTime)
         {
-            General.GoblinDebug.Log($"gaohao {Info.linearEnergy}");
+            var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
+            if (null != colliderBehavior && colliderBehavior.IsOnGround && Info.linearEnergy.Y <= Fix64.Zero) Info.linearEnergy.Y = Fix64.Zero;
+
             var motionBehavior = Actor.GetBehavior<MotionBehavior>();
             if (null == motionBehavior) return;
             var lossMomentEnergy = Info.momentEnergy;

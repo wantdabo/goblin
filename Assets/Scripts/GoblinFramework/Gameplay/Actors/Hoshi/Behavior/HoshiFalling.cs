@@ -1,5 +1,6 @@
 ﻿using FixMath.NET;
 using GoblinFramework.Gameplay.Behaviors;
+using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,19 +26,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         protected override void OnEnter()
         {
             base.OnEnter();
-            General.GoblinDebug.Log("========> Falling Enter");
-        }
-
-        protected override void OnLeave()
-        {
-            base.OnLeave();
-            General.GoblinDebug.Log("========> Falling Leave");
-        }
-
-        public override void OnStateTick(int frame, Fix64 detailTime)
-        {
-            base.OnStateTick(frame, detailTime);
-            General.GoblinDebug.Log("========> Falling");
+            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "Falling");
         }
     }
 }

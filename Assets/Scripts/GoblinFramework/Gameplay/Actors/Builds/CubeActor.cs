@@ -15,7 +15,7 @@ namespace GoblinFramework.Gameplay.Actors.Builds
         {
             base.OnCreate();
             ActorBehavior.SendRIL<RILModel>((ril) => ril.modelName = "Builds/Cube");
-            ActorBehavior.Info.scale = new Vector4(1, 1, 1, 1);
+            ActorBehavior.Info.scale = new Vector4(1, 4, 1, 1);
             AddComp<BoxCollider>();
         }
     }
