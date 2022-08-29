@@ -17,27 +17,36 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLateLoop(int frame, Fix64 detailTime)
         {
-            var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
-            if (null != colliderBehavior && colliderBehavior.IsOnGround && Info.linearEnergy.Y <= Fix64.Zero) Info.linearEnergy.Y = Fix64.Zero;
-
-            var motionBehavior = Actor.GetBehavior<MotionBehavior>();
-            if (null == motionBehavior) return;
             var lossMomentEnergy = Info.momentEnergy;
             Info.momentEnergy -= lossMomentEnergy;
 
-            Info.linearEnergy -= lossMomentEnergy;
-            var lossLinearEnergy = Info.linearEnergy * detailTime;
-            Info.linearEnergy -= lossLinearEnergy;
-            motionBehavior.Motion(lossMomentEnergy + lossLinearEnergy);
+            var motionBehavior = Actor.GetBehavior<MotionBehavior>();
+            if (null == motionBehavior) return;
+            motionBehavior.Motion(lossMomentEnergy + Info.linearEnergy * detailTime);
         }
 
         #region EnergyInfo
         public class EnergyInfo : BehaviorInfo
         {
-            public Vector3 linearEnergy;
+            public Vector3 mLinearEnergy;
+            public Vector3 linearEnergy
+            {
+                get
+                {
+                    var energy = momentEnergy;
+                    
+                    var bouncingBehavior = Actor.GetBehavior<BouncingBehavior>();
+                    if (null != bouncingBehavior) energy += bouncingBehavior.Info.bouncingEnergy;
+
+                    var gravityBehavior = Actor.GetBehavior<GravityBehavior>();
+                    if (null != gravityBehavior) energy += gravityBehavior.Info.gravityEnergy;
+
+                    return energy;
+                }
+            }
 
             private Vector3 mMomentEnergy;
-            public Vector3 momentEnergy { get { return mMomentEnergy; } set { mMomentEnergy = value; linearEnergy += mMomentEnergy; } }
+            public Vector3 momentEnergy { get { return mMomentEnergy; } set { mMomentEnergy = value;} }
         }
         #endregion
     }

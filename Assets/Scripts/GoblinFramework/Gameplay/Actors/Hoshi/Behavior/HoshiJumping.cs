@@ -23,7 +23,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
         public override bool OnDetectLeave()
         {
-            return Actor.GetBehavior<EnergyBehavior>().Info.linearEnergy.Y <= Fix64.Zero;
+            return Actor.GetBehavior<BouncingBehavior>().Info.bouncingEnergy.Y <= Fix64.Zero;
         }
 
         protected override void OnEnter()
@@ -34,8 +34,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
             if (joystick.press) force += joystick.dire.ToVector3() * Behavior.Info.runSpeed * (15 * Fix64.EN1);
 
-            var energyBehavior = Actor.GetBehavior<EnergyBehavior>();
-            energyBehavior.Info.linearEnergy += force;
+            var bouncingBehavior = Actor.GetBehavior<BouncingBehavior>();
+            bouncingBehavior.Info.bouncingEnergy += force;
         }
     }
 }
