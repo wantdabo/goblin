@@ -11,21 +11,11 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Physics.Comps
 {
-    //public struct CollisionInfo
-    //{
-    //    public long self;
-    //    public List<long> colliders;
-    //}
-
     public abstract class Collider : PComp
     {
         public long Id { get; private set; }
         public Entity entity { get; protected set; }
         public List<long> colliderIds { get; private set; }
-
-        //public event Action<CollisionInfo> collisionEnter;
-        //public event Action<CollisionInfo> collisionUpdate;
-        //public event Action<CollisionInfo> collisionLeave;
 
         public abstract Entity GenEntity();
 
@@ -92,45 +82,21 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         {
             if (null == colliderIds) colliderIds = new List<long>();
             colliderIds = Engine.World.ConvEntityIds(sender.OverlappedEntities);
-            //if (null == collisionEnter) return;
-            //collisionEnter(new CollisionInfo { self = Id, colliders = colliderIds });
         }
 
         private void CollisionEnded(BEPUphysics.BroadPhaseEntries.MobileCollidables.EntityCollidable sender, BEPUphysics.BroadPhaseEntries.Collidable other, BEPUphysics.NarrowPhaseSystems.Pairs.CollidablePairHandler pair)
         {
             colliderIds = Engine.World.ConvEntityIds(sender.OverlappedEntities);
-            //if (null == collisionLeave) return;
-            //collisionLeave(new CollisionInfo { self = Id, colliders = colliderIds });
         }
 
         private void ContactCreated(BEPUphysics.BroadPhaseEntries.MobileCollidables.EntityCollidable sender, BEPUphysics.BroadPhaseEntries.Collidable other, BEPUphysics.NarrowPhaseSystems.Pairs.CollidablePairHandler pair, BEPUphysics.CollisionTests.ContactData contact)
         {
             colliderIds = Engine.World.ConvEntityIds(sender.OverlappedEntities);
-
-            //if (null == collisionUpdate) return;
-
-            //collisionUpdate(
-            //    new CollisionInfo
-            //    {
-            //        self = Id,
-            //        colliders = colliderIds
-            //    }
-            //);
         }
 
         private void ContactRemoved(BEPUphysics.BroadPhaseEntries.MobileCollidables.EntityCollidable sender, BEPUphysics.BroadPhaseEntries.Collidable other, BEPUphysics.NarrowPhaseSystems.Pairs.CollidablePairHandler pair, BEPUphysics.CollisionTests.ContactData contact)
         {
             colliderIds = Engine.World.ConvEntityIds(sender.OverlappedEntities);
-
-            //if (null == collisionUpdate) return;
-
-            //collisionUpdate(
-            //    new CollisionInfo
-            //    {
-            //        self = Id,
-            //        colliders = Engine.World.ConvEntityIds(sender.OverlappedEntities)
-            //    }
-            //);
         }
     }
 }

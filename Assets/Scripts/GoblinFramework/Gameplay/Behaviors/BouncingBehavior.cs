@@ -22,28 +22,6 @@ namespace GoblinFramework.Gameplay.Behaviors
 
             Info.bouncingEnergy.Y -= gravityMag * Fix64.Half;
             Info.bouncingEnergy.Y = Fix64Math.Clamp(Info.bouncingEnergy.Y, 0, Fix64.MaxValue);
-
-            //if (Info.bouncingEnergy.X < 0)
-            //{
-            //    Info.bouncingEnergy.X += gravityMag;
-            //    if (Info.bouncingEnergy.X > 0) Info.bouncingEnergy.X = 0;
-            //}
-            //else if (Info.bouncingEnergy.X > 0)
-            //{
-            //    Info.bouncingEnergy.X -= gravityMag;
-            //    if (Info.bouncingEnergy.X < 0) Info.bouncingEnergy.X = 0;
-            //}
-
-            //if (Info.bouncingEnergy.Z < 0)
-            //{
-            //    Info.bouncingEnergy.Z += gravityMag;
-            //    if (Info.bouncingEnergy.Z > 0) Info.bouncingEnergy.Z = 0;
-            //}
-            //else if (Info.bouncingEnergy.Z > 0)
-            //{
-            //    Info.bouncingEnergy.Z -= gravityMag;
-            //    if (Info.bouncingEnergy.Z < 0) Info.bouncingEnergy.Z = 0;
-            //}
         }
 
         public class BouncingInfo : BehaviorInfo
