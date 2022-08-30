@@ -50,12 +50,12 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点名字</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
+        public T AddComp<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
             var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
             if (null == parentNode) Engine.U3D.SeekNode<GameObject>(gameObject, parentNodePath);
 
-            return AddUICell<T>(parentNode, active);
+            return AddComp<T>(parentNode, active);
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
+        public T AddComp<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
-            var comp = AddComp<T>();
+            var comp = base.AddComp<T>();
             cellList.Add(comp);
 
             comp.Container = parentNode;
@@ -81,22 +81,22 @@ namespace GoblinFramework.Client.UI.Base
         /// 卸载小组件
         /// </summary>
         /// <param name="comp">小组件</param>
-        public void RmvUICell(UIBaseCell comp)
+        public void RmvComp(UIBaseCell comp)
         {
             cellList.Remove(comp);
 
             comp.Unload();
-            RmvComp(comp);
+            base.RmvComp(comp);
         }
 
         /// <summary>
         /// 卸载指定类型的所有小组件
         /// </summary>
         /// <typeparam name="T">小组件类型</typeparam>
-        public void RmvUICell<T>() where T : UIBaseCell
+        public new void RmvComp<T>() where T : UIBaseCell
         {
             for (int i = cellList.Count - 1; i >= 0; i--)
-                if (cellList[i] is T) RmvUICell(cellList[i]);
+                if (cellList[i] is T) base.RmvComp(cellList[i]);
         }
 
         /// <summary>
