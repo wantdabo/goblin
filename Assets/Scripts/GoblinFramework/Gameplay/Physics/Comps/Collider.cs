@@ -68,7 +68,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             ComputeCPS();
         }
 
-        private void RotationChanged(Vector3 obj)
+        private void RotationChanged(Vector3 rotation)
         {
             ComputeCPS();
         }
