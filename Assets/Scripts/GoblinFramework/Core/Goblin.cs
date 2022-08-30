@@ -10,13 +10,8 @@ namespace GoblinFramework.Core
     /// <summary>
     /// Goblin 对象，框架基础对象
     /// </summary>
-    public abstract class Goblin<E> where E : GameEngine<E>, new()
+    public abstract class Goblin
     {
-        /// <summary>
-        /// 引擎组件
-        /// </summary>
-        public E Engine;
-
         /// <summary>
         /// 创建一个 Goblin 对象
         /// </summary>

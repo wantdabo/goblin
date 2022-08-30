@@ -35,7 +35,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <returns></returns>
         public List<T> GetUICells<T>() where T : UIBaseCell
         {
-            return GetComp<T>();
+            return GetComps<T>();
         }
 
         /// <summary>

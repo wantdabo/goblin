@@ -6,25 +6,18 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Core
 {
-    /// <summary>
-    /// 组件，核心思想类
-    /// </summary>
-    /// <typeparam name="E">引擎组件类型</typeparam>
-    public abstract class Comp<E> : Goblin<E> where E : GameEngine<E>, new()
+    public abstract class Comp : Goblin
     {
+        protected Comp parent;
         /// <summary>
         /// 组件列表
         /// </summary>
-        private List<Comp<E>> compList = new List<Comp<E>>();
+        private List<Comp> compList = new List<Comp>();
+
         /// <summary>
         /// 组件字典，根据组件类型分类
         /// </summary>
-        private Dictionary<Type, List<Comp<E>>> compDict = new Dictionary<Type, List<Comp<E>>>();
-
-        /// <summary>
-        /// 父组件
-        /// </summary>
-        protected Comp<E> parent;
+        private Dictionary<Type, List<Comp>> compsDict = new Dictionary<Type, List<Comp>>();
 
         protected override void OnCreate()
         {
@@ -36,8 +29,8 @@ namespace GoblinFramework.Core
             compList.Clear();
             compList = null;
 
-            compDict.Clear();
-            compDict = null;
+            compsDict.Clear();
+            compsDict = null;
         }
 
         /// <summary>
@@ -46,10 +39,10 @@ namespace GoblinFramework.Core
         /// <typeparam name="T">组件类型</typeparam>
         /// <param name="force">强制查询，如果字段快速查询未找到，并且 force 为 ture，将以高代价的查询方式获取</typeparam>
         /// <returns>组件列表</returns>
-        public virtual List<T> GetComp<T>(bool force = false) where T : Comp<E>
+        public virtual List<T> GetComps<T>(bool force = false) where T : Comp
         {
             List<T> list = null;
-            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps))
+            if (compsDict.TryGetValue(typeof(T), out List<Comp> comps))
             {
                 list = new List<T>();
 
@@ -74,24 +67,36 @@ namespace GoblinFramework.Core
         }
 
         /// <summary>
+        /// 获得一个组件，如果存在多个，将会取到最新那个
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <returns>组件</returns>
+        public virtual T GetComp<T>() where T : Comp
+        {
+            var comps = GetComps<T>();
+            if (null == comps) return null;
+
+            return comps.Last();
+        }
+
+        /// <summary>
         /// 添加组件
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
         /// <param name="createAheadAction"></param>
-        /// <returns>返回一个就绪的组件</returns>
-        public virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp<E>, new()
+        /// <returns>组件</returns>
+        public virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp, new()
         {
             T comp = new T();
 
-            if (false == compDict.TryGetValue(typeof(T), out List<Comp<E>> comps))
+            if (false == compsDict.TryGetValue(typeof(T), out List<Comp> comps))
             {
-                comps = new List<Comp<E>>();
-                compDict.Add(typeof(T), comps);
+                comps = new List<Comp>();
+                compsDict.Add(typeof(T), comps);
             }
             comps.Add(comp);
             compList.Add(comp);
 
-            comp.Engine = Engine;
             comp.parent = this;
 
             createAheadAction?.Invoke(comp);
@@ -104,9 +109,9 @@ namespace GoblinFramework.Core
         /// 移除组件
         /// </summary>
         /// <param name="comp">组件</param>
-        public virtual void RmvComp(Comp<E> comp)
+        public virtual void RmvComp(Comp comp)
         {
-            if (compDict.TryGetValue(comp.GetType(), out List<Comp<E>> comps)) comps.Remove(comp);
+            if (compsDict.TryGetValue(comp.GetType(), out List<Comp> comps)) comps.Remove(comp);
             compList.Remove(comp);
 
             comp.Destroy();
@@ -118,7 +123,34 @@ namespace GoblinFramework.Core
         /// <typeparam name="T">组件类型</typeparam>
         public virtual void RmvComp<T>()
         {
-            if (compDict.TryGetValue(typeof(T), out List<Comp<E>> comps)) for (int i = comps.Count - 1; i >= 0; i--) RmvComp(comps[i]);
+            if (compsDict.TryGetValue(typeof(T), out List<Comp> comps)) for (int i = comps.Count - 1; i >= 0; i--) RmvComp(comps[i]);
+        }
+    }
+
+    /// <summary>
+    /// 组件，核心思想类
+    /// </summary>
+    /// <typeparam name="E">引擎组件类型</typeparam>
+    public abstract class Comp<E> : Comp where E : GameEngine<E>, new()
+    {
+        /// <summary>
+        /// 引擎组件
+        /// </summary>
+        public E Engine;
+
+        /// <summary>
+        /// 添加组件
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <param name="createAheadAction"></param>
+        /// <returns>返回一个就绪的组件</returns>
+        public new virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp<E>, new()
+        {
+            return base.AddComp<T>((comp) =>
+            {
+                comp.Engine = Engine;
+                createAheadAction?.Invoke(comp);
+            });
         }
     }
 }
