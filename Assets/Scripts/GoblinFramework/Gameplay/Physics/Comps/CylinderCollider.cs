@@ -14,8 +14,8 @@ namespace GoblinFramework.Gameplay.Physics.Comps
     {
         public override void ComputeCPS()
         {
-            var pos = Actor.ActorBehavior.Info.pos;
-            var scale = Actor.ActorBehavior.Info.scale;
+            var pos = actor.actorBehaivor.info.pos;
+            var scale = actor.actorBehaivor.info.scale;
 
             colliderPos = pos;
             colliderScale = scale.ToVector3();

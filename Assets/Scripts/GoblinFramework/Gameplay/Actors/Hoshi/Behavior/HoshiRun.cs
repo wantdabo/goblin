@@ -25,7 +25,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
         protected override void OnEnter()
         {
             base.OnEnter();
-            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "Run");
+            actor.actorBehaivor.SendRIL<RILState>((ril) => ril.stateName = "Run");
         }
 
         protected override void OnLeave()
@@ -39,10 +39,10 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
 
-            if (joystick.press) Actor.ActorBehavior.Info.rotation = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
+            if (joystick.press) actor.actorBehaivor.info.rotation = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
 
             Vector3 force = new Vector3(joystick.dire.X, 0, joystick.dire.Y);
-            Actor.GetBehavior<EnergyBehavior>().Info.momentEnergy += force * Behavior.Info.runSpeed * detailTime;
+            actor.GetBehavior<EnergyBehavior>().info.momentEnergy += force * Behavior.info.runSpeed * detailTime;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         /// <exception cref="Exception">未找到输入类型异常</exception>
         public Input GetInput(InputType inputType)
         {
-            if (Info.InputMap.TryGetValue(inputType, out Input input)) return input;
+            if (info.InputMap.TryGetValue(inputType, out Input input)) return input;
 
             throw new Exception($"inputType not found {inputType}");
         }
@@ -66,14 +66,14 @@ namespace GoblinFramework.Gameplay.Behaviors
         public void SetInput(InputType inputType, Input input)
         {
 
-            if (Info.InputMap.TryGetValue(inputType, out var oldInput))
+            if (info.InputMap.TryGetValue(inputType, out var oldInput))
             {
                 // 上一次是 Press，新的是 UnPress 表示技能释放出去了。
                 if (oldInput.press && false == input.press) input.release = true;
-                Info.InputMap.Remove(inputType);
+                info.InputMap.Remove(inputType);
             }
 
-            Info.InputMap.Add(inputType, input);
+            info.InputMap.Add(inputType, input);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace GoblinFramework.Gameplay.Behaviors
         /// <returns>任意键激活，true，否则 false</returns>
         public bool HasAnyInput()
         {
-            foreach (var kv in Info.InputMap) if (kv.Value.press || kv.Value.release) return true;
+            foreach (var kv in info.InputMap) if (kv.Value.press || kv.Value.release) return true;
 
             return false;
         }
@@ -92,10 +92,10 @@ namespace GoblinFramework.Gameplay.Behaviors
             // 清理 Release 状态
             foreach (var key in totalInputKeys)
             {
-                Info.InputMap.TryGetValue(key, out var input);
-                Info.InputMap.Remove(key);
+                info.InputMap.TryGetValue(key, out var input);
+                info.InputMap.Remove(key);
                 input.release = false;
-                Info.InputMap.Add(key, input);
+                info.InputMap.Add(key, input);
             }
         }
 

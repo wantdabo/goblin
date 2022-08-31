@@ -18,8 +18,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         protected override void OnCreate()
         {
             base.OnCreate();
-            ActorBehavior.Info.pos = new Vector3(0, 1, 0);
-            ActorBehavior.Info.scale = new Vector4(Fix64.Half, 165 * Fix64.EN2, Fix64.Half, Fix64.One);
+            actorBehaivor.info.pos = new Vector3(0, 1, 0);
+            actorBehaivor.info.scale = new Vector4(Fix64.Half, 165 * Fix64.EN2, Fix64.Half, Fix64.One);
 
             AddBehavior<InputBehavior>();
             AddBehavior<ColliderBehavior<BoxCollider>>();

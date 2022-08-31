@@ -13,8 +13,8 @@ namespace GoblinFramework.Gameplay.Actors.Builds
         protected override void OnCreate()
         {
             base.OnCreate();
-            ActorBehavior.Info.pos = new Vector3(0, 0, 0);
-            ActorBehavior.Info.scale = new Vector4(300, 1, 300, 1);
+            actorBehaivor.info.pos = new Vector3(0, 0, 0);
+            actorBehaivor.info.scale = new Vector4(300, 1, 300, 1);
             AddComp<BoxCollider>();
         }
     }

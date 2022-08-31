@@ -23,19 +23,19 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
         public override bool OnDetectLeave()
         {
-            return Actor.GetBehavior<BouncingBehavior>().Info.bouncingEnergy.Y <= Fix64.Zero;
+            return actor.GetBehavior<BouncingBehavior>().info.bouncingEnergy.Y <= Fix64.Zero;
         }
 
         protected override void OnEnter()
         {
             base.OnEnter();
-            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "Jumping");
-            var force = Behavior.Info.jumpMotionForce;
+            actor.actorBehaivor.SendRIL<RILState>((ril) => ril.stateName = "Jumping");
+            var force = Behavior.info.jumpMotionForce;
             var joystick = Behavior.InputBehavior.GetInput(InputType.Joystick);
-            if (joystick.press) force += joystick.dire.ToVector3() * Behavior.Info.runSpeed * (15 * Fix64.EN1);
+            if (joystick.press) force += joystick.dire.ToVector3() * Behavior.info.runSpeed * (15 * Fix64.EN1);
 
-            var bouncingBehavior = Actor.GetBehavior<BouncingBehavior>();
-            bouncingBehavior.Info.bouncingEnergy += force;
+            var bouncingBehavior = actor.GetBehavior<BouncingBehavior>();
+            bouncingBehavior.info.bouncingEnergy += force;
         }
     }
 }

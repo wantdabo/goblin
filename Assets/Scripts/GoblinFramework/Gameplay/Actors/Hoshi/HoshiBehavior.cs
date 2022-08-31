@@ -22,10 +22,10 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         {
             base.OnCreate();
 
-            Actor.ActorBehavior.SendRIL<RILModel>((ril) => ril.modelName = "Hoshi/Hoshi");
+            actor.actorBehaivor.SendRIL<RILModel>((ril) => ril.modelName = "Hoshi/Hoshi");
 
-            InputBehavior = Actor.GetBehavior<InputBehavior>();
-            ColliderBehavior = Actor.GetBehavior<ColliderBehavior>();
+            InputBehavior = actor.GetBehavior<InputBehavior>();
+            ColliderBehavior = actor.GetBehavior<ColliderBehavior>();
 
             SetState<HoshiIdle>();
             SetState<HoshiRun>();

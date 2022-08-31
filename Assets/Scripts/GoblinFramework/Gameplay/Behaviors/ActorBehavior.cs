@@ -14,16 +14,16 @@ namespace GoblinFramework.Gameplay.Behaviors
         protected override void OnCreate()
         {
             base.OnCreate();
-            Info.actorId = Actor.Theater.NewActorId;
+            info.actorId = actor.theater.NewActorId;
             SendRIL<RILAdd>();
         }
 
         public void SendRIL<T>(Action<T> action = null) where T : RIL, new()
         {
             T ril = new T();
-            ril.actorId = Info.actorId;
+            ril.actorId = info.actorId;
             action?.Invoke(ril);
-            Actor.Theater.SendRIL(ril);
+            actor.theater.SendRIL(ril);
         }
 
         #region ActorInfo

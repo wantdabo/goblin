@@ -20,20 +20,20 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi.Behavior
 
         public override bool OnDetectLeave()
         {
-            return ElapsedFrames >= Behavior.Info.attackCKeepFrame;
+            return ElapsedFrames >= Behavior.info.attackCKeepFrame;
         }
 
         protected override void OnEnter()
         {
             base.OnEnter();
 
-            Actor.ActorBehavior.SendRIL<RILState>((ril) => ril.stateName = "AttackC");
+            actor.actorBehaivor.SendRIL<RILState>((ril) => ril.stateName = "AttackC");
         }
 
         public override void OnStateTick(int frame, Fix64 detailTime)
         {
             base.OnStateTick(frame, detailTime);
-            Actor.GetBehavior<EnergyBehavior>().Info.momentEnergy += Actor.ActorBehavior.Info.rotation * Behavior.Info.attackCMotionForce;
+            actor.GetBehavior<EnergyBehavior>().info.momentEnergy += actor.actorBehaivor.info.rotation * Behavior.info.attackCMotionForce;
         }
     }
 }

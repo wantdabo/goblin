@@ -13,15 +13,15 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLoop(int frame, Fix64 detailTime)
         {
-            var gravityBehavior = Actor.GetBehavior<GravityBehavior>();
+            var gravityBehavior = actor.GetBehavior<GravityBehavior>();
             if (null == gravityBehavior) return;
-            var gravityMag = gravityBehavior.Info.gravityEnergy.Length();
+            var gravityMag = gravityBehavior.info.gravityEnergy.Length();
 
-            if (Fix64.Zero == Info.bouncingEnergy.Y && Fix64.Zero == gravityMag) Info.bouncingEnergy = Vector3.Zero;
-            if (Info.bouncingEnergy == Vector3.Zero) return;
+            if (Fix64.Zero == info.bouncingEnergy.Y && Fix64.Zero == gravityMag) info.bouncingEnergy = Vector3.Zero;
+            if (info.bouncingEnergy == Vector3.Zero) return;
 
-            Info.bouncingEnergy.Y -= gravityMag * Fix64.Half;
-            Info.bouncingEnergy.Y = Fix64Math.Clamp(Info.bouncingEnergy.Y, 0, Fix64.MaxValue);
+            info.bouncingEnergy.Y -= gravityMag * Fix64.Half;
+            info.bouncingEnergy.Y = Fix64Math.Clamp(info.bouncingEnergy.Y, 0, Fix64.MaxValue);
         }
 
         public class BouncingInfo : BehaviorInfo

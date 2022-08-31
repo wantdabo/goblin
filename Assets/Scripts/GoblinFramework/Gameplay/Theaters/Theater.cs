@@ -13,8 +13,8 @@ namespace GoblinFramework.Gameplay.Theaters
     {
         protected override void OnCreate()
         {
-            Actor = this;
-            Theater = this;
+            actor = this;
+            theater = this;
             base.OnCreate();
         }
 

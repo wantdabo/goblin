@@ -14,9 +14,9 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLoop(int frame, Fix64 detailTime)
         {
-            var colliderBehavior = Actor.GetBehavior<ColliderBehavior>();
-            if (null != colliderBehavior && colliderBehavior.IsOnGround) { Info.gravityEnergy = Vector3.Zero; return; }
-            Info.gravityEnergy += Info.gravity * detailTime;
+            var colliderBehavior = actor.GetBehavior<ColliderBehavior>();
+            if (null != colliderBehavior && colliderBehavior.IsOnGround) { info.gravityEnergy = Vector3.Zero; return; }
+            info.gravityEnergy += info.gravity * detailTime;
         }
 
         #region GravityInfo

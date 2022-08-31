@@ -50,12 +50,12 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点名字</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddComp<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
+        public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
             var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
             if (null == parentNode) Engine.U3D.SeekNode<GameObject>(gameObject, parentNodePath);
 
-            return AddComp<T>(parentNode, active);
+            return AddUICell<T>(parentNode, active);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddComp<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
+        public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
             var comp = base.AddComp<T>();
             cellList.Add(comp);
@@ -81,7 +81,7 @@ namespace GoblinFramework.Client.UI.Base
         /// 卸载小组件
         /// </summary>
         /// <param name="comp">小组件</param>
-        public void RmvComp(UIBaseCell comp)
+        public void RmvUICell(UIBaseCell comp)
         {
             cellList.Remove(comp);
 
@@ -93,7 +93,7 @@ namespace GoblinFramework.Client.UI.Base
         /// 卸载指定类型的所有小组件
         /// </summary>
         /// <typeparam name="T">小组件类型</typeparam>
-        public new void RmvComp<T>() where T : UIBaseCell
+        public void RmvUICell<T>() where T : UIBaseCell
         {
             for (int i = cellList.Count - 1; i >= 0; i--)
                 if (cellList[i] is T) base.RmvComp(cellList[i]);

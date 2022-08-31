@@ -30,17 +30,17 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             entity = GenEntity();
             Id = entity.InstanceId;
             RegisterDetectBody();
-            Actor.ActorBehavior.Info.posChanged += PosChanged;
-            Actor.ActorBehavior.Info.rotationChanged += RotationChanged;
-            Actor.ActorBehavior.Info.scaleChanged += ScaleChanged;
+            actor.actorBehaivor.info.posChanged += PosChanged;
+            actor.actorBehaivor.info.rotationChanged += RotationChanged;
+            actor.actorBehaivor.info.scaleChanged += ScaleChanged;
             Engine.World.AddCollider(this);
         }
 
         protected override void OnDestroy()
         {
-            Actor.ActorBehavior.Info.posChanged -= PosChanged;
-            Actor.ActorBehavior.Info.rotationChanged -= RotationChanged;
-            Actor.ActorBehavior.Info.scaleChanged -= ScaleChanged;
+            actor.actorBehaivor.info.posChanged -= PosChanged;
+            actor.actorBehaivor.info.rotationChanged -= RotationChanged;
+            actor.actorBehaivor.info.scaleChanged -= ScaleChanged;
             UnRegisterDetectBody();
             Engine.World.RmvCollider(this);
             Id = -1;

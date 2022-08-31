@@ -51,7 +51,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             base.OnCreate();
 
             // 绑定 Behavior 到基类
-            Actor.BindingBehavior<ColliderBehavior>(this);
+            actor.BindingBehavior<ColliderBehavior>(this);
 
             collider = AddComp<T>();
             collider.entity.PositionUpdateMode = BEPUphysics.PositionUpdating.PositionUpdateMode.Continuous;
@@ -60,7 +60,7 @@ namespace GoblinFramework.Gameplay.Physics.Comps
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Actor.UnBindingBehavior<ColliderBehavior>();
+            actor.UnBindingBehavior<ColliderBehavior>();
         }
     }
 }

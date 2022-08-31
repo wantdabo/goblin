@@ -25,7 +25,7 @@ namespace GoblinFramework.Client.UI.Login
             Hoshi = Engine.GameRes.Location.LoadActorPrefabSync("Hoshi/Hoshi");
 
             // 挂载一个 UI 组件
-            AddComp<LoginEnterCell>("LoginEnterContent");
+            AddUICell<LoginEnterCell>("LoginEnterContent");
         }
 
         protected override void OnDestroy()

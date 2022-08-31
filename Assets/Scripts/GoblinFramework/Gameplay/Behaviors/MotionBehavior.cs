@@ -16,12 +16,12 @@ namespace GoblinFramework.Gameplay.Behaviors
         {
             if (Vector3.Zero == motionForce) return;
 
-            Actor.ActorBehavior.Info.pos = Actor.ActorBehavior.Info.pos + motionForce;
-            Actor.ActorBehavior.SendRIL<RILPos>((ril) =>
+            actor.actorBehaivor.info.pos = actor.actorBehaivor.info.pos + motionForce;
+            actor.actorBehaivor.SendRIL<RILPos>((ril) =>
             {
-                ril.x = Actor.ActorBehavior.Info.pos.X.AsFloat();
-                ril.y = Actor.ActorBehavior.Info.pos.Y.AsFloat();
-                ril.z = Actor.ActorBehavior.Info.pos.Z.AsFloat();
+                ril.x = actor.actorBehaivor.info.pos.X.AsFloat();
+                ril.y = actor.actorBehaivor.info.pos.Y.AsFloat();
+                ril.z = actor.actorBehaivor.info.pos.Z.AsFloat();
                 ril.dire = 0;
             });
         }

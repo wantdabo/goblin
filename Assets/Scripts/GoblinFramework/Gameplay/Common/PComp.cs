@@ -13,7 +13,7 @@ namespace GoblinFramework.Gameplay.Common
     /// </summary>
     public class PComp : Comp<PGEngine>
     {
-        public Actor Actor;
+        public Actor actor;
 
         protected override void OnCreate()
         {
@@ -33,7 +33,7 @@ namespace GoblinFramework.Gameplay.Common
         {
             return base.AddComp<T>((item) =>
             {
-                item.Actor = Actor;
+                item.actor = actor;
                 createAheadAction?.Invoke(item);
             });
         }

@@ -19,13 +19,13 @@ namespace GoblinFramework.Gameplay.Behaviors
     /// <typeparam name="I">组件数据类型</typeparam>
     public class Behavior<I> : Behavior where I : BehaviorInfo, new()
     {
-        private I info = null;
-        public I Info { get { return info; } private set { info = value; } }
+        private I mInfo = null;
+        public I info { get { return mInfo; } private set { mInfo = value; } }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            Info = AddComp<I>();
+            info = AddComp<I>();
         }
     }
 
