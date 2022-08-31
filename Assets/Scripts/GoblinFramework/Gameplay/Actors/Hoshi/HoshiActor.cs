@@ -4,7 +4,7 @@ using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using GoblinFramework.Gameplay.Behaviors;
 using GoblinFramework.Gameplay.Physics;
 using GoblinFramework.Gameplay.Physics.Comps;
-using GoblinFramework.General.Gameplay.RIL.RILS;
+using GoblinFramework.Common.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

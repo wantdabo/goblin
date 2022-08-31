@@ -88,7 +88,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\ConstantAngularSpeedCurve.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseSystems\IBroadPhaseEntryOwner.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\PermutationMapper.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILState.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RILState.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\StandardPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\UpdateableSystems\IBeforeNarrowPhaseUpdateable.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\StaticMeshConvexPairHandler.cs" />
@@ -197,7 +197,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\ColliderBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\MeshGroupPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\PhysicsChecker.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RIL.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RIL.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\ConeShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\IKSwingLimit.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\CompoundPairHandler.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\MathHelper.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Settings\CollisionResponseSettings.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\BroadPhaseSystems\Hierarchies\DynamicHierarchyNode.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\BinaryRW.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\BinaryRW.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\IKDistanceJoint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\Collision\SlidingFrictionTwoAxis.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Cone.cs" />
@@ -259,7 +259,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\BoxCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Character\QueryManager.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILRmv.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RILRmv.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiRun.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\ResourceManagement\UnsafeResourcePool.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\OtherSpaceStages\IDeferredEventCreator.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Actors\Hoshi\Behavior\HoshiAttackCHold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\BoxSphereContactManifold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\MinkowskiSumShape.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILAdd.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RILAdd.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\EntityStateManagement\InterpolatedStatesManager.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\DeactivationManagement\SimulationIslandConnection.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\NarrowPhasePairFactory.cs" />
@@ -314,7 +314,6 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Behaviors\InputBehavior.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Gameplay\Physics\Comps\SphereCollider.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Entity.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\GGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\CardinalSpline3D.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Vehicle\RaycastWheelShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\ContactManifold.cs" />
@@ -352,7 +351,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\ISpringConstraint.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\StaticGroupCompoundPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Materials\MaterialPair.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\GoblinDebug.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\GoblinDebug.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\BoxPairHandler.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\CollisionAlgorithms\BoxSphereTester.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionRuleManagement\CollisionRules.cs" />
@@ -399,7 +398,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\FixedMath.Net\src\Fix64TanLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\CollisionAlgorithms\GJK\RaySimplex.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Common\FSMachine\FSMLockstepState.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILParser.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILParser.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\Threading\ParallelLoopWorker.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Vehicle\Wheel.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Cylinder.cs" />
@@ -481,8 +480,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\NarrowPhaseSystems\Pairs\IDetectorVolumePairHandlerParent.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUik\DragControl.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\ContactSupplementData.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILModel.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Gameplay\RIL\RILS\RILPos.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RILModel.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Gameplay\RIL\RILS\RILPos.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\EntityShapeVolumeDescription.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionTests\Manifolds\StaticMeshSphereContactManifold.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Paths\VariableAngularSpeedCurve.cs" />
@@ -545,7 +544,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\CollisionShapes\ConvexShapes\WrappedShape.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUutilities\DataStructures\ObservableDictionary.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\UpdateableSystems\IDuringForcesUpdateable.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\General\Config.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Common\Config.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Client\Gameplay\Resolves\SyncPosResolver.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Entities\Prefabs\Triangle.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\BEPU_64\BEPUphysics\Constraints\SolverUpdateable.cs" />

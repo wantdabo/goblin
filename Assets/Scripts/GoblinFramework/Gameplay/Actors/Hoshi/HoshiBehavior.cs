@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GoblinFramework.General.Gameplay.RIL.RILS;
+using GoblinFramework.Common.Gameplay.RIL.RILS;
 using GoblinFramework.Gameplay.Actors.Hoshi.Behavior;
 using FixMath.NET;
 using GoblinFramework.Gameplay.Physics.Comps;
@@ -42,7 +42,8 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
         public override void PLoop(int frame, Fix64 detailTime)
         {
             base.PLoop(frame, detailTime);
-            General.GoblinDebug.Log(State.ToString());
+
+            GoblinFramework.Common.GoblinDebug.Log(State.ToString());
         }
 
         #region HoshiInfo

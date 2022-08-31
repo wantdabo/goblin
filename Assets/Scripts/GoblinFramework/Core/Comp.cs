@@ -144,11 +144,13 @@ namespace GoblinFramework.Core
         /// <typeparam name="T">组件类型</typeparam>
         /// <param name="createAheadAction"></param>
         /// <returns>返回一个就绪的组件</returns>
-        public new virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp<E>, new()
+        public override T AddComp<T>(Action<T> createAheadAction = null)
         {
             return base.AddComp<T>((comp) =>
             {
-                comp.Engine = Engine;
+                var engineComp = (comp as Comp<E>);
+                if (null != engineComp) engineComp.Engine = Engine;
+
                 createAheadAction?.Invoke(comp);
             });
         }

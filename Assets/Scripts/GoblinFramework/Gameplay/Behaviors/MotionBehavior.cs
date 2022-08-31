@@ -1,7 +1,7 @@
 ﻿using BEPUutilities;
 using FixMath.NET;
 using GoblinFramework.Gameplay.Common;
-using GoblinFramework.General.Gameplay.RIL.RILS;
+using GoblinFramework.Common.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

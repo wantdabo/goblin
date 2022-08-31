@@ -1,5 +1,5 @@
 ﻿using GoblinFramework.Core;
-using GoblinFramework.General.Gameplay.RIL.RILS;
+using GoblinFramework.Common.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.RIL
+namespace GoblinFramework.Common.Gameplay.RIL
 {
-    public class RILParser : Comp<GGEngine>
+    public class RILParser : Comp
     {
         public BinaryRW BinaryRW;
 

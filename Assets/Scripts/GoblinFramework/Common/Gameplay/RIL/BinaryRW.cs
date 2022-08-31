@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.RIL
+namespace GoblinFramework.Common.Gameplay.RIL
 {
-    public class BinaryRW : Comp<GGEngine>
+    public class BinaryRW : Comp
     {
         public byte[] ToArray(Stream stream) 
         {

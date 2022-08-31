@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.General.Gameplay.RIL.RILS
+namespace GoblinFramework.Common.Gameplay.RIL.RILS
 {
     public abstract class RIL
     {

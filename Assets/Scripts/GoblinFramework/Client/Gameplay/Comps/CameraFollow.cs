@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.GoblinFramework.Client.Gameplay.Comps;
 using GoblinFramework.Client.Common;
 using GoblinFramework.Client.Gameplay.Resolves;
-using GoblinFramework.General.Gameplay.RIL.RILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
