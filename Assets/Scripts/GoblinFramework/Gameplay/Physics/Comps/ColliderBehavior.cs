@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Gameplay.Physics.Comps
 {
-    public class ColliderBehavior : Behavior<ColliderBehavior.ColliderInfo>
+    public class ColliderBehavior : Behavior
     {
         public Collider collider;
 
@@ -22,26 +22,19 @@ namespace GoblinFramework.Gameplay.Physics.Comps
             {
                 var pos = collider.colliderPos;
                 pos.Y -= collider.colliderScale.Y * Fix64.Half + 1 * Fix64.EN3;
+
+                var energyBehavior = actor.GetBehavior<EnergyBehavior>();
+                if (null != energyBehavior) pos.Y += energyBehavior.info.linearEnergy.Y;
+
                 Ray ray = new Ray(pos, Vector3.Down);
                 if (false == Engine.World.Space.RayCast(ray, 1 * Fix64.EN4, out var result)) return false;
-                if (0 == result.HitObject.BroadPhase.Overlaps.Count) return false;
 
-                foreach (var item in result.HitObject.BroadPhase.Overlaps)
-                {
-                    var coll = item.entryA as EntityCollidable;
-                    if (null != coll && coll.Entity != collider.entity) return true;
-                }
+                var coll = result.HitObject as EntityCollidable;
+                if (coll.Entity != collider.entity) return true;
 
                 return false;
             }
         }
-
-        #region ColliderInfo
-        public class ColliderInfo : BehaviorInfo
-        {
-
-        }
-        #endregion
     }
 
     public class ColliderBehavior<T> : ColliderBehavior where T : Collider, new()

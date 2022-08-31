@@ -39,13 +39,6 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             SetEntrance<HoshiIdle>();
         }
 
-        public override void PLoop(int frame, Fix64 detailTime)
-        {
-            base.PLoop(frame, detailTime);
-
-            GoblinFramework.Common.GoblinDebug.Log(State.ToString());
-        }
-
         #region HoshiInfo
         public class HoshiInfo : BehaviorInfo
         {
@@ -57,7 +50,7 @@ namespace GoblinFramework.Gameplay.Actors.Hoshi
             public readonly int attackCKeepFrame = 10;
             public readonly Fix64 attackCMotionForce = 10 * Fix64.EN1;
 
-            public readonly Vector3 jumpMotionForce = new Vector3(0, 10, 0);
+            public readonly Vector3 jumpMotionForce = new Vector3(0, 16, 0);
         }
         #endregion
     }

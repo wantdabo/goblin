@@ -17,23 +17,21 @@ namespace GoblinFramework.Gameplay.Behaviors
     {
         public void PLateLoop(int frame, Fix64 detailTime)
         {
-            var lossMomentEnergy = info.momentEnergy;
-            info.momentEnergy -= lossMomentEnergy;
-
             var motionBehavior = actor.GetBehavior<MotionBehavior>();
             if (null == motionBehavior) return;
-            motionBehavior.Motion(lossMomentEnergy + info.linearEnergy * detailTime);
+
+            motionBehavior.Motion(info.linearEnergy);
+            info.momentEnergy = Vector3.Zero;
         }
 
         #region EnergyInfo
         public class EnergyInfo : BehaviorInfo
         {
-            public Vector3 mLinearEnergy;
             public Vector3 linearEnergy
             {
                 get
                 {
-                    var energy = momentEnergy;
+                    var energy = Vector3.Zero;
                     
                     var bouncingBehavior = actor.GetBehavior<BouncingBehavior>();
                     if (null != bouncingBehavior) energy += bouncingBehavior.info.bouncingEnergy;
@@ -41,7 +39,7 @@ namespace GoblinFramework.Gameplay.Behaviors
                     var gravityBehavior = actor.GetBehavior<GravityBehavior>();
                     if (null != gravityBehavior) energy += gravityBehavior.info.gravityEnergy;
 
-                    return energy;
+                    return energy * Engine.TickEngine.detailTime + momentEnergy;
                 }
             }
 
