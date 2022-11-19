@@ -25,11 +25,11 @@ namespace GoblinFramework.Render.Common
     /// <summary>
     /// Render-Tick, 渲染层 Tick 驱动组件
     /// </summary>
-    public class Ticker : Comp<CGEngine>
+    public class Ticker : Comp<RGEngine>
     {
-        private List<IUpdate> updates = new List<IUpdate>();
-        private List<ILateUpdate> lateUpdates = new List<ILateUpdate>();
-        private List<IFixedUpdate> fixedUpdates = new List<IFixedUpdate>();
+        private List<IUpdate> updates = new();
+        private List<ILateUpdate> lateUpdates = new();
+        private List<IFixedUpdate> fixedUpdates = new();
 
         protected override void OnCreate()
         {

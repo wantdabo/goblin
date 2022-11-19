@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Render
 {
     /// <summary>
-    /// Client-Game-Engine-Comp 客户端引擎组件
+    /// Render-Game-Engine-Comp 客户端引擎组件
     /// </summary>
-    public class CGEngine : GameEngine<CGEngine>
+    public class RGEngine : GameEngine<RGEngine>
     {
-        public Ticker TickEngine = null;
+        public Ticker Ticker = null;
         public U3DTool U3D = null;
         public GameUI GameUI = null;
         public GameRes GameRes = null;
@@ -25,8 +25,8 @@ namespace GoblinFramework.Render
             base.OnCreate();
 
             // 引擎 Tick
-            TickEngine = AddComp<Ticker>();
-            TickEngine.Create();
+            Ticker = AddComp<Ticker>();
+            Ticker.Create();
 
             // 游戏资源
             GameRes = AddComp<YooGameRes>();
@@ -48,7 +48,7 @@ namespace GoblinFramework.Render
         {
             base.OnDestroy();
 
-            TickEngine = null;
+            Ticker = null;
             U3D = null;
             GameUI = null;
             GameRes = null;

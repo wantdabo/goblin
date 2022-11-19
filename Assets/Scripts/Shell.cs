@@ -7,7 +7,7 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     public static Shell Instance = null;
-    public static CGEngine Engine = null;
+    public static RGEngine Engine = null;
 
     private void GameSettings()
     {
@@ -18,7 +18,7 @@ public class Shell : MonoBehaviour
     private void Start()
     {
         GameSettings();
-        Engine = GameEngine<CGEngine>.CreateGameEngine();
+        Engine = GameEngine<RGEngine>.CreateGameEngine();
     }
 
     private void OnDestroy()
@@ -29,16 +29,16 @@ public class Shell : MonoBehaviour
 
     private void Update()
     {
-        Engine.TickEngine.Update(Time.deltaTime);
+        Engine.Ticker.Update(Time.deltaTime);
     }
 
     private void LateUpdate()
     {
-        Engine.TickEngine.LateUpdate(Time.deltaTime);
+        Engine.Ticker.LateUpdate(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        Engine.TickEngine.FixedUpdate(Time.fixedDeltaTime);
+        Engine.Ticker.FixedUpdate(Time.fixedDeltaTime);
     }
 }

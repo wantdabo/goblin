@@ -64,11 +64,10 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Render\UI\Login\LoginView.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\Numerics.Fixed\Fixed64Vector3.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\Numerics.Fixed\Base\FixedRandom.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Render\Common\GTimer.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Render\Common\Timer.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64SinLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\Numerics.Fixed\Base\Fixed64LookUpTables\Fixed64TanLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\Numerics.Fixed\Fixed64Quaternion.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\Render\CGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\UI\Base\UIBase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Core\Comp.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\UI\GameUI.cs" />
@@ -88,6 +87,9 @@
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\GameRes\YooGameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\Common\RComp.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\LGEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Render\RGEngine.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\Common\Ticker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

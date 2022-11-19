@@ -11,22 +11,22 @@ namespace GoblinFramework.Render.Common
     /// <summary>
     /// Render-Comp，渲染层组件
     /// </summary>
-    public class RComp : Comp<CGEngine>
+    public class RComp : Comp<RGEngine>
     {
         protected override void OnCreate()
         {
             base.OnCreate();
-            if (this is IUpdate) Engine.TickEngine.AddUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.TickEngine.AddLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.TickEngine.AddFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) Engine.Ticker.AddUpdate(this as IUpdate);
+            if (this is ILateUpdate) Engine.Ticker.AddLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) Engine.Ticker.AddFixedUpdate(this as IFixedUpdate);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (this is IUpdate) Engine.TickEngine.RmvUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.TickEngine.RmvLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.TickEngine.RmvFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) Engine.Ticker.RmvUpdate(this as IUpdate);
+            if (this is ILateUpdate) Engine.Ticker.RmvLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) Engine.Ticker.RmvFixedUpdate(this as IFixedUpdate);
         }
     }
 }
