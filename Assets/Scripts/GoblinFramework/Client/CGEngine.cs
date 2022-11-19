@@ -24,14 +24,14 @@ namespace GoblinFramework.Client
         {
             base.OnCreate();
 
+            // 引擎 Tick
+            TickEngine = AddComp<TickEngine>();
+            TickEngine.Create();
+
             // 游戏资源
             GameRes = AddComp<YooGameRes>();
             GameRes.Create();
             await GameRes.InitialGameRes();
-
-            // 引擎 Tick
-            TickEngine = AddComp<TickEngine>();
-            TickEngine.Create();
 
             // U3D API
             U3D = AddComp<U3DTool>();
