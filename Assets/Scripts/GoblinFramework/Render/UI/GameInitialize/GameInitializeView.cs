@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Base;
-using GoblinFramework.Client.UI;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Base;
+using GoblinFramework.Render.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GoblinFramework.Client.UI.GameInitialize
+namespace GoblinFramework.Render.UI.GameInitialize
 {
     public class GameInitializeView : UIBaseView, IUpdate
     {
@@ -35,7 +35,12 @@ namespace GoblinFramework.Client.UI.GameInitialize
             Mathf.Clamp(progress, 0, 1);
             sliderProgress.value = progress;
 
-            if (progress >= 1) return;
+            if (progress >= 1)
+            {
+                Engine.GameUI.CloseView(this);
+                Engine.GameUI.OpenView<Login.LoginView>();
+                return;
+            }
             progress += tick * speed;
 
             if (progress <= 0.3f)

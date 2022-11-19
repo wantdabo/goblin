@@ -1,15 +1,15 @@
 ﻿using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine;
-using GoblinFramework.Client.Common;
+using GoblinFramework.Render.Common;
 using GoblinFramework.Core;
 
-namespace GoblinFramework.Client.GameResource
+namespace GoblinFramework.Render.GameResource
 {
     /// <summary>
     /// Game-Resources-Comp 资源加载组件
     /// </summary>
-    public abstract class GameRes : CComp
+    public abstract class GameRes : RComp
     {
         /// <summary>
         /// 资源加载定位器，具体的加载在这里实现

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace GoblinFramework.Common
 {
-    public static class GoblinDebug
+    /// <summary>
+    /// Goblin-Debug
+    /// </summary>
+    public static class GDebug
     {
         public static void Log(string message) 
         {

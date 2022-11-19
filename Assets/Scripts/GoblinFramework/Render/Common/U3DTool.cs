@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.Common
+namespace GoblinFramework.Render.Common
 {
     /// <summary>
     /// Unity3D 工具组件
     /// </summary>
-    public class U3DTool : CComp
+    public class U3DTool : RComp
     {
         /// <summary>
         /// 获取 Unity3D 节点/组件
@@ -36,9 +36,11 @@ namespace GoblinFramework.Client.Common
         public T GetNode<T>(GameObject go, string path) where T : UnityEngine.Object
         {
             var node = go.transform.Find(path).gameObject;
+
             if (null == node) return null;
 
             if (node is T) return node as T;
+
             return node.GetComponent<T>();
         }
 
@@ -57,6 +59,7 @@ namespace GoblinFramework.Client.Common
                 if (node.name.Equals(nodeName))
                 {
                     if (node is T) return node as T;
+
                     return node.GetComponent<T>();
                 }
 
@@ -64,6 +67,7 @@ namespace GoblinFramework.Client.Common
                 if (null == child) continue;
 
                 if (child is T) return child as T;
+
                 return (child as GameObject).GetComponent<T>();
             }
 

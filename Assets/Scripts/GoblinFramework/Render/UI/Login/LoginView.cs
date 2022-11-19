@@ -1,6 +1,6 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Base;
-using GoblinFramework.Client.UI;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Base;
+using GoblinFramework.Render.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GoblinFramework.Client.UI.Login
+namespace GoblinFramework.Render.UI.Login
 {
     public class LoginView : UIBaseView
     {

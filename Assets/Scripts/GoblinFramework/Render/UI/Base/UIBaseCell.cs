@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI.Base
+namespace GoblinFramework.Render.UI.Base
 {
     /// <summary>
     /// UI 小组件，基础类

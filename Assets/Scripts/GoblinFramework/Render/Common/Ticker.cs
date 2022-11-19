@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Client.Common
+namespace GoblinFramework.Render.Common
 {
     /// <summary>
     /// 对应 Unity Update
@@ -23,9 +23,9 @@ namespace GoblinFramework.Client.Common
     public interface IFixedUpdate { public void FixedUpdate(float tick); }
 
     /// <summary>
-    /// Client-Tick-Engine, 客户端 Tick 驱动组件
+    /// Render-Tick, 渲染层 Tick 驱动组件
     /// </summary>
-    public class TickEngine : Comp<CGEngine>
+    public class Ticker : Comp<CGEngine>
     {
         private List<IUpdate> updates = new List<IUpdate>();
         private List<ILateUpdate> lateUpdates = new List<ILateUpdate>();

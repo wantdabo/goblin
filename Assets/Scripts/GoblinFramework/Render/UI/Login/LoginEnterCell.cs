@@ -1,11 +1,11 @@
-﻿using GoblinFramework.Client.UI.Base;
+﻿using GoblinFramework.Render.UI.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Client.UI.Login
+namespace GoblinFramework.Render.UI.Login
 {
     public class LoginEnterCell : UIBaseCell
     {

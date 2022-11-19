@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static GoblinFramework.Client.UI.GameUI;
+using static GoblinFramework.Render.UI.GameUI;
 
-namespace GoblinFramework.Client.UI.Base
+namespace GoblinFramework.Render.UI.Base
 {
     /// <summary>
     /// UI 界面，基础类

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Client.Common
+namespace GoblinFramework.Render.Common
 {
     /// <summary>
-    /// Clock 客户端计时器
+    /// Goblin-Timer 渲染层计时器
     /// </summary>
-    public class Clock : CComp, IUpdate
+    public class GTimer : RComp, IUpdate
     {
         private bool isRunning = false;
         public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }

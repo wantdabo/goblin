@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Base;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Base;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI
+namespace GoblinFramework.Render.UI
 {
     /// <summary>
     /// Game-UI 游戏 UI 组件
     /// </summary>
-    public class GameUI : CComp
+    public class GameUI : RComp
     {
         #region 枚举
         /// <summary>
@@ -69,10 +69,10 @@ namespace GoblinFramework.Client.UI
             rtf.localPosition = Vector3.zero;
             rtf.localScale = Vector3.one;
 
-            // 设定 CanvasGroup
-            var cg = layerNode.AddComponent<Canvas>();
-            cg.overrideSorting = true;
-            cg.sortingLayerName = layer.ToString();
+            // 设定 Canvas
+            var canvas = layerNode.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingLayerName = layer.ToString();
         }
 
         public GameObject GetLayerNode(UILayer layer) 
@@ -103,6 +103,7 @@ namespace GoblinFramework.Client.UI
         public void CloseView(UIBaseView view) 
         {
             view.Close();
+            RmvComp(view);
         }
     }
 }

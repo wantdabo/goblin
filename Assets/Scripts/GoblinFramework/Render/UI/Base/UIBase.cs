@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Common;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Common;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GoblinFramework.Client.UI.Base
+namespace GoblinFramework.Render.UI.Base
 {
     /// <summary>
     /// UI 基础类
     /// </summary>
-    public abstract class UIBase : CComp
+    public abstract class UIBase : RComp
     {
         protected abstract string UIRes { get; }
 
@@ -89,8 +89,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <typeparam name="T">小组件类型</typeparam>
         public void RmvUICell<T>() where T : UIBaseCell
         {
-            for (int i = cellList.Count - 1; i >= 0; i--)
-                if (cellList[i] is T) base.RmvComp(cellList[i]);
+            for (int i = cellList.Count - 1; i >= 0; i--) if (cellList[i] is T) RmvUICell(cellList[i]);
         }
 
         /// <summary>
