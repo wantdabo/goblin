@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Core;
+using GoblinFramework.Logic.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,15 @@ namespace GoblinFramework.Logic
 {
     public class LGEngine : GameEngine<LGEngine>
     {
+        public Ticker Ticker;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+
+            // 引擎 Tick
+            Ticker = AddComp<Ticker>();
+            Ticker.Create();
+        }
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Logic\LGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\RGEngine.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Common\Ticker.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\Common\LComp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
