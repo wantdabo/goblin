@@ -32,13 +32,11 @@ namespace GoblinFramework.Client.UI.GameInitialize
         {
             if (null == gameObject) return;
 
-            if (progress >= 1) return;
-
+            Mathf.Clamp(progress, 0, 1);
             sliderProgress.value = progress;
 
+            if (progress >= 1) return;
             progress += tick * speed;
-
-            Mathf.Clamp(progress, 0, 1);
 
             if (progress <= 0.3f)
                 textProgress.text = "检查更新...";

@@ -23,6 +23,10 @@ namespace GoblinFramework.Client.GameResource
             Location.Create();
         }
 
+        /// <summary>
+        /// 异步初始化资源组件
+        /// </summary>
+        /// <returns>Task</returns>
         public abstract Task InitialGameRes();
 
         /// <summary>
