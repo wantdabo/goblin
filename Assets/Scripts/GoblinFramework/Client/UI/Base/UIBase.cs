@@ -20,14 +20,6 @@ namespace GoblinFramework.Client.UI.Base
 
         public GameObject gameObject;
 
-        protected override void OnCreate()
-        {
-        }
-
-        protected override void OnDestroy()
-        {
-        }
-
         /// <summary>
         /// 获得一些 UI 小组件
         /// </summary>

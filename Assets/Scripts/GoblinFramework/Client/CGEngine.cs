@@ -1,6 +1,5 @@
 ﻿using GoblinFramework.Client.Common;
 using GoblinFramework.Client.GameResource;
-using GoblinFramework.Client.GameStages;
 using GoblinFramework.Client.UI;
 using GoblinFramework.Core;
 using System;
@@ -20,7 +19,6 @@ namespace GoblinFramework.Client
         public U3DTool U3D = null;
         public GameUI GameUI = null;
         public GameRes GameRes = null;
-        public GameStage GameStage = null;
 
         protected override void OnCreate()
         {
@@ -34,8 +32,6 @@ namespace GoblinFramework.Client
             GameUI = AddComp<GameUI>();
             // 游戏资源
             GameRes = Engine.AddComp<YooGameRes>();
-            // 游戏阶段总控
-            GameStage = AddComp<GameStage>();
         }
 
         protected override void OnDestroy()
@@ -46,7 +42,6 @@ namespace GoblinFramework.Client
             U3D = null;
             GameUI = null;
             GameRes = null;
-            GameStage = null;
         }
     }
 }

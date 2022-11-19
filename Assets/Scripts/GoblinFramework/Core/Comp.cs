@@ -116,15 +116,6 @@ namespace GoblinFramework.Core
 
             comp.Destroy();
         }
-
-        /// <summary>
-        /// 移除已挂载指定类型的所有组件
-        /// </summary>
-        /// <typeparam name="T">组件类型</typeparam>
-        public virtual void RmvComp<T>()
-        {
-            if (compsDict.TryGetValue(typeof(T), out List<Comp> comps)) for (int i = comps.Count - 1; i >= 0; i--) RmvComp(comps[i]);
-        }
     }
 
     /// <summary>

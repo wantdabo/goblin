@@ -102,6 +102,5 @@ namespace GoblinFramework.Client.UI.Common
             if (false == eventDic.ContainsKey(eventType)) return;
             foreach (var item in eventDic[eventType]) item.Invoke(eventData);
         }
-
     }
 }

@@ -103,7 +103,6 @@ namespace GoblinFramework.Client.UI
         public void CloseView(UIBaseView view) 
         {
             view.Close();
-            RmvComp(view);
         }
     }
 }
