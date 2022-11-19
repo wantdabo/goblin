@@ -14,32 +14,25 @@ namespace GoblinFramework.Client.GameResource
     /// </summary>
     public class YooGameRes : GameRes
     {
-        protected async override void OnCreate()
+        public override Task InitialGameRes()
         {
             base.OnCreate();
 #if YOOASSETS_OFFLINE
-            var initParameters = new YooAssets.OfflinePlayModeParameters();
+                        var initParameters = new YooAssets.OfflinePlayModeParameters();
 #elif UNITY_EDITOR
             var initParameters = new YooAssets.EditorSimulateModeParameters();
 #else
-            var initParameters = new YooAssets.HostPlayModeParameters();
-            initParameters.DecryptionServices = null;
-            initParameters.ClearCacheWhenDirty = false;
-            initParameters.DefaultHostServer = "http://127.0.0.1/CDN1/Android";
-            initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
-            initParameters.VerifyLevel = EVerifyLevel.High;
+                        var initParameters = new YooAssets.HostPlayModeParameters();
+                        initParameters.DecryptionServices = null;
+                        initParameters.ClearCacheWhenDirty = false;
+                        initParameters.DefaultHostServer = "http://127.0.0.1/CDN1/Android";
+                        initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
+                        initParameters.VerifyLevel = EVerifyLevel.High;
 #endif
             initParameters.LocationServices = new DefaultLocationServices("Assets/GameRes");
             var handle = YooAssets.InitializeAsync(initParameters);
-            await handle.Task;
 
-            // 资源组件初始化就绪了
-            Ready = true;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+            return handle.Task;
         }
 
         public async override Task<T> LoadAssetAsync<T>(string resName)

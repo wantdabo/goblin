@@ -25,7 +25,12 @@ namespace GoblinFramework.Core
 
         protected override void OnDestroy()
         {
-            for (int i = compList.Count - 1; i >= 0; i--) RmvComp(compList[i]);
+            for (int i = compList.Count - 1; i >= 0; i--)
+            {
+                var comp = compList[i];
+                RmvComp(comp);
+                comp.Destroy();
+            }
             compList.Clear();
             compList = null;
 
@@ -83,24 +88,18 @@ namespace GoblinFramework.Core
         /// 添加组件
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
-        /// <param name="createAheadAction"></param>
         /// <returns>组件</returns>
-        public virtual T AddComp<T>(Action<T> createAheadAction = null) where T : Comp, new()
+        public virtual T AddComp<T>() where T : Comp, new()
         {
             T comp = new T();
-
             if (false == compsDict.TryGetValue(typeof(T), out List<Comp> comps))
             {
                 comps = new List<Comp>();
                 compsDict.Add(typeof(T), comps);
             }
+            comp.parent = this;
             comps.Add(comp);
             compList.Add(comp);
-
-            comp.parent = this;
-
-            createAheadAction?.Invoke(comp);
-            comp.Create();
 
             return comp;
         }
@@ -113,8 +112,6 @@ namespace GoblinFramework.Core
         {
             if (compsDict.TryGetValue(comp.GetType(), out List<Comp> comps)) comps.Remove(comp);
             compList.Remove(comp);
-
-            comp.Destroy();
         }
     }
 
@@ -133,17 +130,14 @@ namespace GoblinFramework.Core
         /// 添加组件
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
-        /// <param name="createAheadAction"></param>
         /// <returns>返回一个就绪的组件</returns>
-        public override T AddComp<T>(Action<T> createAheadAction = null)
+        public override T AddComp<T>()
         {
-            return base.AddComp<T>((comp) =>
-            {
-                var engineComp = (comp as Comp<E>);
-                if (null != engineComp) engineComp.Engine = Engine;
+            var comp = base.AddComp<T>();
+            var engineComp = comp as Comp<E>;
+            if (null != engineComp) engineComp.Engine = Engine;
 
-                createAheadAction?.Invoke(comp);
-            });
+            return comp;
         }
     }
 }

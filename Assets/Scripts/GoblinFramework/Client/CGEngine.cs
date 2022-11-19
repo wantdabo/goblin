@@ -20,18 +20,28 @@ namespace GoblinFramework.Client
         public GameUI GameUI = null;
         public GameRes GameRes = null;
 
-        protected override void OnCreate()
+        protected async override void OnCreate()
         {
             base.OnCreate();
 
-            // 开发引擎（Unity3D）Tick
+            // 引擎 Tick
             TickEngine = AddComp<TickEngine>();
+            TickEngine.Create();
+
+            // 游戏资源
+            GameRes = AddComp<YooGameRes>();
+            GameRes.Create();
+            await GameRes.InitialGameRes();
+
             // U3D API
             U3D = AddComp<U3DTool>();
+            U3D.Create();
+
             // 游戏 UI
             GameUI = AddComp<GameUI>();
-            // 游戏资源
-            GameRes = Engine.AddComp<YooGameRes>();
+            GameUI.Create();
+
+            GameUI.OpenView<UI.GameInitialize.GameInitializeView>();
         }
 
         protected override void OnDestroy()

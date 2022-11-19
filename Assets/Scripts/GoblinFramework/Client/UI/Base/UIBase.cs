@@ -59,9 +59,10 @@ namespace GoblinFramework.Client.UI.Base
         /// <returns>小组件</returns>
         public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
-            var comp = base.AddComp<T>();
-            cellList.Add(comp);
+            var comp = AddComp<T>();
+            comp.Create();
 
+            cellList.Add(comp);
             comp.Container = parentNode;
             comp.Load();
             comp.SetActive(active);
@@ -76,9 +77,10 @@ namespace GoblinFramework.Client.UI.Base
         public void RmvUICell(UIBaseCell comp)
         {
             cellList.Remove(comp);
-
             comp.Unload();
-            base.RmvComp(comp);
+
+            RmvComp(comp);
+            comp.Destroy();
         }
 
         /// <summary>
