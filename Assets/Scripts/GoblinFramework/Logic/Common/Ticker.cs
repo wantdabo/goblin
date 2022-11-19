@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Core;
-using Numerics.Fixed;
+﻿using FixMath.NET;
+using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +11,12 @@ namespace GoblinFramework.Logic.Common
     /// <summary>
     /// ILogicLoop，战斗循环
     /// </summary>
-    public interface ILoop { public void PLoop(int frame, Fixed64 detailTime); }
+    public interface ILoop { public void PLoop(int frame, Fix64 detailTime); }
 
     /// <summary>
     /// ILogicLateLoop，战斗循环，延后
     /// </summary>
-    public interface ILateLoop { public void PLateLoop(int frame, Fixed64 detailTime); }
+    public interface ILateLoop { public void PLateLoop(int frame, Fix64 detailTime); }
 
     /// <summary>
     /// Logic-Tick, 逻辑层 Tick 驱动组件
@@ -26,7 +26,7 @@ namespace GoblinFramework.Logic.Common
         private int mFrame = 0;
         public int frame { get { return mFrame; } private set { mFrame = value; } }
 
-        public readonly Fixed64 detailTime = 625 * Fixed64.EN4;
+        public readonly Fix64 detailTime = 625 * Fix64.EN4;
 
         private List<ILoop> loops = new();
         private List<ILateLoop> lateLoops = new();
