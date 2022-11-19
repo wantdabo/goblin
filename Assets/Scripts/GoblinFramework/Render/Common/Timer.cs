@@ -12,8 +12,8 @@ namespace GoblinFramework.Render.Common
     /// </summary>
     public class Timer : RComp, IUpdate
     {
-        private bool isRunning = false;
-        public bool IsRunning { get { return isRunning; } private set { isRunning = value; } }
+        private bool mIsRunning = false;
+        public bool isRunning { get { return mIsRunning; } private set { mIsRunning = value; } }
 
         private Action action;
         private float interval;
@@ -29,19 +29,19 @@ namespace GoblinFramework.Render.Common
             this.count = count;
             this.elapse = 0;
 
-            IsRunning = true;
+            isRunning = true;
         }
 
         public void Stop()
         {
-            IsRunning = false;
+            isRunning = false;
             parent.RmvComp(this);
             Destroy();
         }
 
         public void Update(float tick)
         {
-            if (false == IsRunning) return;
+            if (false == isRunning) return;
 
             elapse = elapse + tick;
             if (elapse > interval)
