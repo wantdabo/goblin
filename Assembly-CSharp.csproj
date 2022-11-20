@@ -112,6 +112,8 @@
     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Common\Ticker.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\VolatilePhysics\Internals\Broadphase\IBroadphase.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\VolatilePhysics\Util\Pooling\VoltPool.cs" />
+    <Compile Include="Assets\Scripts\VoltPhysics\VoltPhysics.cs" />
+    <Compile Include="Assets\Scripts\VoltPhysics\VolatileUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Art\Shaders\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />
