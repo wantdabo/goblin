@@ -35,12 +35,12 @@ namespace Volatile
     public static readonly Fix64 DEFAULT_RESTITUTION = (Fix64)0.5M;
     public static readonly Fix64 DEFAULT_FRICTION = (Fix64)0.8M;
 
-    internal static readonly Fix64 DEFAULT_DELTA_TIME = (Fix64)0.02M;
+    internal static readonly Fix64 DEFAULT_DELTA_TIME = (Fix64)0.0625M;
     internal static readonly Fix64 DEFAULT_DAMPING = (Fix64)0.999M;
     internal const int DEFAULT_ITERATION_COUNT = 20;
 
     // AABB extension for the dynamic tree
-    internal static readonly Fix64 AABB_EXTENSION = (Fix64)0.2M;
+    internal static readonly Fix64 AABB_EXTENSION = (Fix64)0.625M;
 
     // Maximum contacts for collision resolution.
     internal const int MAX_CONTACTS = 3;

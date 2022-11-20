@@ -12,16 +12,16 @@ public class VoltPhysics : MonoBehaviour
     void Start()
     {
         world = new VoltWorld();
-        voltCircle = world.CreateCircleWorldSpace(VoltVector2.zero, Fix64.Half);
+        voltCircle = world.CreateCircleWorldSpace(VoltVector2.zero, Fix64.Half, VoltConfig.DEFAULT_DENSITY, 0, 0);
         world.CreateDynamicBody(VoltVector2.zero, 0, voltCircle);
-
+        
         voltPolygon = world.CreatePolygonWorldSpace(new VoltVector2[] {
             new VoltVector2(10, -2),
             new VoltVector2(10, -4),
             new VoltVector2(-10, -4),
             new VoltVector2(-10, -2),
         });
-        world.CreateStaticBody(VoltVector2.zero, 0, voltPolygon);
+        world.CreateStaticBody(new VoltVector2(0, -10), 0, voltPolygon);
     }
 
     private void OnDrawGizmos()
@@ -40,8 +40,10 @@ public class VoltPhysics : MonoBehaviour
     private void FixedUpdate()
     {
         world.Update();
-        var force = new VoltVector2(0, -2 * Fix64.EN1);
+        var force = new VoltVector2(0, -16 * Fix64.EN2);
         voltCircle.Body.AddForce(force);
         //voltCircle.Body.Set(voltCircle.Body.Position + force, 0);
+
+        voltPolygon.Body.Set(voltPolygon.Body.Position + force * Fix64.Half, 0);
     }
 }
