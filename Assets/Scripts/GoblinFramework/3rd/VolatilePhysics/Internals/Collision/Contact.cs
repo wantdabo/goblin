@@ -18,10 +18,6 @@
  *  3. This notice may not be removed or altered from any source distribution.
 */
 
-#if UNITY
-using UnityEngine;
-#endif
-
 using FixMath.NET;
 
 namespace Volatile

@@ -44,10 +44,6 @@ using FixMath.NET;
 using System;
 using System.Collections.Generic;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   /// <summary>
@@ -706,27 +702,6 @@ namespace Volatile
       int height2 = ComputeHeight(node.right);
       return 1 + Math.Max(height1, height2);
     }
-    #endregion
-
-    #region Debug
-#if UNITY && DEBUG
-    public void GizmoDraw(Color aabbColor)
-    {
-      this.DoGizmoDraw(aabbColor, this.rootId);
-    }
-
-    private void DoGizmoDraw(Color color, int nodeId)
-    {
-      if (nodeId == TreeBroadphase.NULL_NODE)
-        return;
-
-      Node node = this.nodes[nodeId];
-      node.aabb.GizmoDraw(color);
-
-      this.DoGizmoDraw(color, node.left);
-      this.DoGizmoDraw(color, node.right);
-    }
-#endif
     #endregion
   }
 }

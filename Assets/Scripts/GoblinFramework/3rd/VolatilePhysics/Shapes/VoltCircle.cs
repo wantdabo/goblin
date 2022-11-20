@@ -22,10 +22,6 @@ using FixMath.NET;
 using System;
 using System.Collections.Generic;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   public sealed class VoltCircle : VoltShape
@@ -148,27 +144,6 @@ namespace Volatile
         ref bodySpaceRay,
         ref result);
     }
-    #endregion
-
-    #region Debug
-#if UNITY && DEBUG
-    public override void GizmoDraw(
-      Color edgeColor, 
-      Color normalColor, 
-      Color originColor, 
-      Color aabbColor, 
-      Fix64 normalLength)
-    {
-      Color current = Gizmos.color;
-
-      Gizmos.color = edgeColor;
-      Gizmos.DrawWireSphere(this.worldSpaceOrigin, this.radius);
-
-      this.AABB.GizmoDraw(aabbColor);
-
-      Gizmos.color = current;
-    }
-#endif
     #endregion
   }
 }

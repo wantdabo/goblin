@@ -18,10 +18,6 @@
  *  3. This notice may not be removed or altered from any source distribution.
 */
 
-#if UNITY
-using UnityEngine;
-#endif
-
 using FixMath.NET;
 
 namespace Volatile
@@ -216,17 +212,6 @@ namespace Volatile
       ref VoltRayCast bodySpaceRay,
       Fix64 radius,
       ref VoltRayResult result);
-    #endregion
-
-    #region Debug
-#if UNITY && DEBUG
-    public abstract void GizmoDraw(
-      Color edgeColor,
-      Color normalColor,
-      Color originColor,
-      Color aabbColor,
-      Fix64 normalLength);
-#endif
     #endregion
   }
 }

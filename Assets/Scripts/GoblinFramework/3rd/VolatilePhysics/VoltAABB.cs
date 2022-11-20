@@ -22,10 +22,6 @@ using FixMath.NET;
 using System;
 using System.Collections.Generic;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   public struct VoltAABB
@@ -267,27 +263,5 @@ namespace Volatile
         (this.Width / (Fix64)2) + this.left, 
         (this.Height / (Fix64)2) + this.bottom);
     }
-
-    #region Debug
-#if UNITY && DEBUG
-    public void GizmoDraw(Color aabbColor)
-    {
-      Color current = Gizmos.color;
-
-      Vector2 A = new Vector2(this.Left, this.Top);
-      Vector2 B = new Vector2(this.Right, this.Top);
-      Vector2 C = new Vector2(this.Right, this.Bottom);
-      Vector2 D = new Vector2(this.Left, this.Bottom);
-
-      Gizmos.color = aabbColor;
-      Gizmos.DrawLine(A, B);
-      Gizmos.DrawLine(B, C);
-      Gizmos.DrawLine(C, D);
-      Gizmos.DrawLine(D, A);
-
-      Gizmos.color = current;
-    }
-#endif
-    #endregion
   }
 }

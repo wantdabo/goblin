@@ -21,10 +21,6 @@
 using FixMath.NET;
 using System;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   public delegate void VoltExplosionCallback(

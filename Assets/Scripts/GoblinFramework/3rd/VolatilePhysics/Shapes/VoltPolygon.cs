@@ -22,10 +22,6 @@ using FixMath.NET;
 using System;
 using System.Collections.Generic;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   public sealed class VoltPolygon : VoltShape
@@ -534,42 +530,6 @@ namespace Volatile
 
       return castHit;
     }
-    #endregion
-
-    #region Debug
-#if UNITY && DEBUG
-    public override void GizmoDraw(
-      Color edgeColor,
-      Color normalColor,
-      Color originColor,
-      Color aabbColor,
-      Fix64 normalLength)
-    {
-      Color current = Gizmos.color;
-
-      for (int i = 0; i < this.countWorld; i++)
-      {
-        Vector2 u = this.worldVertices[i];
-        Vector2 v = this.worldVertices[(i + 1) % this.countWorld];
-        Vector2 n = worldAxes[i].Normal;
-
-        Vector2 delta = v - u;
-        Vector2 midPoint = u + (delta * 0.5f);
-
-        // Draw edge
-        Gizmos.color = edgeColor;
-        Gizmos.DrawLine(u, v);
-
-        // Draw normal
-        Gizmos.color = normalColor;
-        Gizmos.DrawLine(midPoint, midPoint + (n * normalLength));
-      }
-
-      this.AABB.GizmoDraw(aabbColor);
-
-      Gizmos.color = current;
-    }
-#endif
     #endregion
   }
 }

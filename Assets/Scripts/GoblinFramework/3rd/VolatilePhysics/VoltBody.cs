@@ -21,10 +21,6 @@
 using FixMath.NET;
 using System;
 
-#if UNITY
-using UnityEngine;
-#endif
-
 namespace Volatile
 {
   public enum VoltBodyType
@@ -675,54 +671,5 @@ namespace Volatile
       this.BodyType = VoltBodyType.Static;
     }
 #endregion
-
-    #region Debug
-#if UNITY && DEBUG
-    public void GizmoDraw(
-      Color edgeColor,
-      Color normalColor,
-      Color bodyOriginColor,
-      Color shapeOriginColor,
-      Color bodyAabbColor,
-      Color shapeAabbColor,
-      Fix64 normalLength)
-    {
-      Color current = Gizmos.color;
-
-      // Draw origin
-      Gizmos.color = bodyOriginColor;
-      Gizmos.DrawWireSphere(this.Position, 0.1f);
-
-      // Draw facing
-      Gizmos.color = normalColor;
-      Gizmos.DrawLine(
-        this.Position,
-        this.Position + this.Facing * normalLength);
-
-      this.AABB.GizmoDraw(bodyAabbColor);
-
-      for (int i = 0; i < this.shapeCount; i++)
-        this.shapes[i].GizmoDraw(
-          edgeColor,
-          normalColor,
-          shapeOriginColor,
-          shapeAabbColor,
-          normalLength);
-
-      Gizmos.color = current;
-    }
-
-    public void GizmoDrawHistory(Color aabbColor)
-    {
-      Color current = Gizmos.color;
-
-      if (this.history != null)
-        foreach (HistoryRecord record in this.history.GetValues())
-          record.aabb.GizmoDraw(aabbColor);
-
-      Gizmos.color = current;
-    }
-#endif
-    #endregion
   }
 }
