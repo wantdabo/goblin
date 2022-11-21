@@ -22,8 +22,6 @@ namespace GoblinFramework.Render.UI.Login
         {
             base.OnBuildUI();
 
-            Hoshi = Engine.GameRes.Location.LoadActorPrefabSync("Hoshi/Hoshi");
-
             // 挂载一个 UI 组件
             AddUICell<LoginEnterCell>("LoginEnterContent");
         }
