@@ -87,18 +87,18 @@
     <Compile Include="Assets\Scripts\Shell.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Render\GameRes\YooGameRes.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Common\Ticker.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\Fix64.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\Fix64SinLut.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSMatrix.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSRandom.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSVector4.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSVector2.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\Fix64TanLut.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSMatrix4x4.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSQuaternion.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\Fix64AcosLut.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSMath.cs" />
-    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync_math\TSVector.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\Fix64.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\Fix64SinLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSMatrix.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSRandom.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSVector4.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSVector2.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\Fix64TanLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSMatrix4x4.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSQuaternion.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\Fix64AcosLut.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSMath.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSVector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
