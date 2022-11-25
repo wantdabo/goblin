@@ -13,9 +13,8 @@ namespace GoblinFramework.Logic.Gameplay
     /// Finite-State-Machine，有限状态机
     /// </summary>
     /// <typeparam name="MT">状态机类型</typeparam>
-    /// <typeparam name="MIT">状态机 BeaviorInfo 类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMachine<MT, MIT, ST> : Behavior<MIT>, ILoop where MIT : BehaviorInfo, new() where MT : FSMachine<MT, MIT, ST>, new() where ST : FSMState<MT, MIT, ST>, new()
+    public abstract class FSMachine<MT, ST> : Behavior, ILoop where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         protected ST state;
         public ST State { get { return state; } private set { state = value; } }
@@ -42,8 +41,11 @@ namespace GoblinFramework.Logic.Gameplay
         {
             var state = AddComp<T>();
             state.Behavior = this as MT;
+            
             stateDict.Add(typeof(T), state);
             stateList.Add(state);
+
+            state.Create();
         }
 
         public void SetEntrance<T>() where T : ST

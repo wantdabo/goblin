@@ -13,9 +13,8 @@ namespace GoblinFramework.Logic.Gameplay
     /// Finite-State-Machine，有限状态机，状态
     /// </summary>
     /// <typeparam name="MT">状态机类型</typeparam>
-    /// <typeparam name="MIT">状态机 BeaviorInfo 类型</typeparam>
     /// <typeparam name="ST">状态类型</typeparam>
-    public abstract class FSMState<MT, MIT, ST> : LComp where MT : FSMachine<MT, MIT, ST>, new() where MIT : BehaviorInfo, new() where ST : FSMState<MT, MIT, ST>, new()
+    public abstract class FSMState<MT, ST> : Comp where MT : FSMachine<MT, ST>, new() where ST : FSMState<MT, ST>, new()
     {
         /// <summary>
         /// 定义可通行的状态类型列表，如果下一个装填类型不在此列表中，将不允通过

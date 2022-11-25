@@ -21,8 +21,8 @@ namespace GoblinFramework.Logic.Gameplay
         Joystick,
         BA,
         BB,
-        BC,
-        BD,
+        BX,
+        BY,
     }
 
     /// <summary>
@@ -106,8 +106,8 @@ namespace GoblinFramework.Logic.Gameplay
                 {InputType.Joystick, new Input(){press = false, dire = TSVector2.zero}},
                 {InputType.BA, new Input(){press = false, dire = TSVector2.zero}},
                 {InputType.BB, new Input(){press = false, dire = TSVector2.zero}},
-                {InputType.BC, new Input(){press = false, dire = TSVector2.zero}},
-                {InputType.BD, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BX, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BY, new Input(){press = false, dire = TSVector2.zero}},
             };
         }
         #endregion
