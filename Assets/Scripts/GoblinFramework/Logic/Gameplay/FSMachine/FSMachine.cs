@@ -1,11 +1,11 @@
-﻿using FixMath.NET;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using GoblinFramework.Logic.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TrueSync;
 
 namespace GoblinFramework.Logic.Gameplay
 {
@@ -105,7 +105,7 @@ namespace GoblinFramework.Logic.Gameplay
             Entrance();
         }
 
-        public virtual void PLoop(int frame, Fix64 detailTime)
+        public virtual void PLoop(int frame, FP detailTime)
         {
             if (State != null && State.OnDetectLeave()) State.Leave();
             StateDetect();

@@ -1,12 +1,11 @@
-﻿using FixMath.NET;
-using GoblinFramework.Core;
+﻿using GoblinFramework.Core;
 using GoblinFramework.Logic.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Volatile;
+using TrueSync;
 
 namespace GoblinFramework.Logic.Gameplay
 {
@@ -14,7 +13,7 @@ namespace GoblinFramework.Logic.Gameplay
     {
         public bool press;
         public bool release;
-        public VoltVector2 dire;
+        public TSVector2 dire;
     }
 
     public enum InputType
@@ -87,7 +86,7 @@ namespace GoblinFramework.Logic.Gameplay
             return false;
         }
 
-        public void PLateLoop(int frame, Fix64 detailTime)
+        public void PLateLoop(int frame, FP detailTime)
         {
             // 清理 Release 状态
             foreach (var key in totalInputKeys)
@@ -104,11 +103,11 @@ namespace GoblinFramework.Logic.Gameplay
         {
             public Dictionary<InputType, Input> InputMap = new Dictionary<InputType, Input>
             {
-                {InputType.Joystick, new Input(){press = false, dire = VoltVector2.zero}},
-                {InputType.BA, new Input(){press = false, dire = VoltVector2.zero}},
-                {InputType.BB, new Input(){press = false, dire = VoltVector2.zero}},
-                {InputType.BC, new Input(){press = false, dire = VoltVector2.zero}},
-                {InputType.BD, new Input(){press = false, dire = VoltVector2.zero}},
+                {InputType.Joystick, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BA, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BB, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BC, new Input(){press = false, dire = TSVector2.zero}},
+                {InputType.BD, new Input(){press = false, dire = TSVector2.zero}},
             };
         }
         #endregion
