@@ -99,6 +99,9 @@
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\Fix64AcosLut.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSMath.cs" />
     <Compile Include="Assets\Scripts\GoblinFramework\3rd\truesync.math\TSVector.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Physics\Shape\GCircle.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Physics\Shape\GPolygon.cs" />
+    <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Physics\Collision\GCollisionTesting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

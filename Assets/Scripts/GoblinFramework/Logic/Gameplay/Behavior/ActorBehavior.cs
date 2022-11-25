@@ -14,9 +14,9 @@ namespace GoblinFramework.Logic.Gameplay
         {
             public int actorId;
 
-            public event Action<TSVector2> posChanged;
-            private TSVector2 mPos;
-            public TSVector2 pos
+            public event Action<TSVector> posChanged;
+            private TSVector mPos;
+            public TSVector pos
             {
                 get { return mPos; }
                 set
@@ -38,9 +38,9 @@ namespace GoblinFramework.Logic.Gameplay
                 }
             }
 
-            public event Action<TSVector2> scaleChanged;
-            private TSVector2 mScale;
-            public TSVector2 scale
+            public event Action<TSVector> scaleChanged;
+            private TSVector mScale;
+            public TSVector scale
             {
                 get { return mScale; }
                 set
