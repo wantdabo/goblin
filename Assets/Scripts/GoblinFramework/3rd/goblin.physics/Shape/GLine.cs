@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TrueSync;
 
-namespace GoblinFramework.Logic.Gameplay.Physics.Shape
+namespace GoblinFramework.Physics.Shape
 {
-    public struct GCircle
+    public struct GLine
     {
-        public TSVector2 position;
-        public FP radius;
+        public TSVector2 p0;
+        public TSVector2 p1;
     }
 }
