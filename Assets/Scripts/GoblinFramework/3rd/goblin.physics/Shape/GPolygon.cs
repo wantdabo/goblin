@@ -41,21 +41,11 @@ namespace GoblinFramework.Physics.Shape
         /// </summary>
         /// <param name="normalize">是否归一化/标准化向量</param>
         /// <returns>多边形的法线列表</returns>
-        /// <exception cref="Exception">顶点未初始化/未拥有顶点</exception>
         public TSVector2[] GetNormals(bool normalize = false)
         {
-            if (null == vertexes) throw new Exception("donot has vertexes.");
-
             var lines = GetLines();
             TSVector2[] normals = new TSVector2[lines.Length];
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var dire = lines[i].p1 - lines[i].p0;
-                normals[i] = new TSVector2(-dire.y, dire.x);
-
-                // 需要归一化
-                if (normalize) normals[i].Normalize();
-            }
+            for (int i = 0; i < lines.Length; i++) normals[i] = lines[i].GetNormal(normalize);
 
             return normals;
         }

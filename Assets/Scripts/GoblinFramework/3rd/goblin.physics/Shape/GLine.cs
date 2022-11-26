@@ -11,5 +11,21 @@ namespace GoblinFramework.Physics.Shape
     {
         public TSVector2 p0;
         public TSVector2 p1;
+
+        /// <summary>
+        /// 获得法线
+        /// </summary>
+        /// <param name="normalize">是否归一化/标准化向量</param>
+        /// <returns>法线</returns>
+        public TSVector2 GetNormal(bool normalize = false) 
+        {
+            var dire = p1 - p0;
+            var normal = new TSVector2(-dire.y, dire.x);
+
+            // 需要归一化
+            if (normalize) return normal.normalized;
+
+            return normal;
+        }
     }
 }
