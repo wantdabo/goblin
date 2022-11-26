@@ -59,11 +59,13 @@ namespace GoblinFramework.Physics.Collision
         /// <returns>是否碰撞</returns>
         public static bool Test(TSVector2 p0, GPolygon p1)
         {
-            var normals = p1.GetNormals();
-            for (int i = 0; i < normals.Length; i++)
+            // from https://docs.godotengine.org/zh_CN/latest/tutorials/math/vectors_advanced.html#distance-to-plane
+            var planes = p1.GetPlanes();
+            for (int i = 0; i < planes.Length; i++)
             {
-                // side > 0 表示该点位于法线的外部，反之则是内部。此处凸面多边形，如果点在任意一条法线的外部，表示未碰撞。
-                var side = TSVector2.Dot(p0, normals[i]);
+                var plane = planes[i];
+                // side > 0 表示该点位于平面的外部，反之则是内部。此处凸面多边形，如果点在任意一条平面的外部，表示未碰撞。
+                var side = TSVector2.Dot(p0, plane.ToTSVector2()) - plane.z;
                 if (side > 0) return false;
             }
 

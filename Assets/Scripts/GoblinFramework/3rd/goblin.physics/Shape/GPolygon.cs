@@ -9,12 +9,10 @@ namespace GoblinFramework.Physics.Shape
 {
     public struct GPolygon
     {
-        public TSVector2 position;
         public List<TSVector2> vertexes;
 
         public GPolygon(TSVector2 position, List<TSVector2> vertexes) 
         {
-            this.position = position;
             this.vertexes = vertexes;
         }
 
@@ -54,6 +52,21 @@ namespace GoblinFramework.Physics.Shape
             for (int i = 0; i < lines.Length; i++) normals[i] = lines[i].GetNormal(normalize);
 
             return normals;
+        }
+
+        /// <summary>
+        /// 获取平面列表
+        /// </summary>
+        /// <returns></returns>
+        public TSVector[] GetPlanes() 
+        {
+            var lines = GetLines();
+            TSVector[] planes = new TSVector[lines.Length];
+            for (int i = 0; i < lines.Length; i++) { 
+                planes[i] = lines[i].GetPlane();
+            }
+
+            return planes;
         }
     }
 }
