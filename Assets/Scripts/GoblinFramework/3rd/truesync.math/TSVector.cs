@@ -18,7 +18,6 @@
 */
 
 using System;
-using UnityEngine;
 
 namespace TrueSync
 {
@@ -865,12 +864,6 @@ namespace TrueSync
         {
             return new TSVector4(this.x, this.y, this.z, FP.One);
         }
-
-        public Vector3 ToVector3()
-        {
-            return new Vector3(this.x.AsFloat(), this.y.AsFloat(), this.z.AsFloat());
-        }
-
     }
 
 }

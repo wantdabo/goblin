@@ -11,5 +11,11 @@ namespace GoblinFramework.Physics.Shape
     {
         public TSVector2 position;
         public FP radius;
+
+        public GCircle(TSVector2 position, FP radius)
+        {
+            this.position = position;
+            this.radius = radius;
+        }
     }
 }

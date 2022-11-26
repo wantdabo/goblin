@@ -12,6 +12,12 @@ namespace GoblinFramework.Physics.Shape
         public TSVector2 p0;
         public TSVector2 p1;
 
+        public GLine(TSVector2 p0, TSVector2 p1) 
+        {
+            this.p0 = p0;
+            this.p1 = p1;
+        }
+
         /// <summary>
         /// 获得法线
         /// </summary>

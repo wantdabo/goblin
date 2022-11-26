@@ -12,6 +12,12 @@ namespace GoblinFramework.Physics.Shape
         public TSVector2 position;
         public List<TSVector2> vertexes;
 
+        public GPolygon(TSVector2 position, List<TSVector2> vertexes) 
+        {
+            this.position = position;
+            this.vertexes = vertexes;
+        }
+
         public GLine[] GetLines()
         {
             if (null == vertexes) throw new Exception("donot has vertexes.");

@@ -18,7 +18,6 @@
 */
 
 using System;
-using UnityEngine;
 
 namespace TrueSync
 {

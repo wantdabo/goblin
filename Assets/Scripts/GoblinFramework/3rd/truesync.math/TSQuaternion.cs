@@ -550,11 +550,6 @@ namespace TrueSync
             return result;
         }
 
-        public UnityEngine.Quaternion ToQuaternion()
-        {
-            return new UnityEngine.Quaternion(this.x.AsFloat(), this.y.AsFloat(), this.z.AsFloat(), this.w.AsFloat());
-        }
-
         public override string ToString()
         {
             return string.Format("({0:f1}, {1:f1}, {2:f1}, {3:f1})", x.AsFloat(), y.AsFloat(), z.AsFloat(), w.AsFloat());
