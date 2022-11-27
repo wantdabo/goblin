@@ -107,44 +107,32 @@ namespace GoblinFramework.Physics.Collision
             // 快速检测，两点是否在圆内
             if (Test(l0.p0, c0) || Test(l0.p1, c0)) return true;
 
-            void lineProduct(TSVector2 normal, GLine line, out FP min, out FP max)
-            {
-                min = FP.MaxValue;
-                max = FP.MinValue;
+            // 快速检测，两点是否在圆内
+            if (Test(l0.p0, c0) || Test(l0.p1, c0)) return true;
 
-                var dot0 = TSVector2.Dot(normal, line.p0);
-                min = TSMath.Min(dot0, min);
-                max = TSMath.Max(dot0, max);
+            // from https://github.com/XXHolic/blog/issues/61#situation3
+            // (x1, y1) 线的一个端点
+            // (x2, y2) 线的另一个端点
+            // (px, py) 圆心的坐标
+            // radius   圆的半径
+            FP x1 = l0.p0.x; FP y1 = l0.p0.y;
+            FP x2 = l0.p1.x; FP y2 = l0.p1.y;
+            FP cx = c0.position.x; FP cy = c0.position.y;
+            FP radius = c0.radius;
 
-                var dot1 = TSVector2.Dot(normal, line.p1);
-                max = TSMath.Min(dot1, max);
-                max = TSMath.Max(dot1, max);
-            }
+            FP pointVectorX = x1 - x2;
+            FP pointVectorY = y1 - y2;
+            FP t = (pointVectorX * (cx - x1) + pointVectorY * (cy - y1)) / (pointVectorX * pointVectorX + pointVectorY * pointVectorY);
+            FP closestX = x1 + t * pointVectorX;
+            FP closestY = y1 + t * pointVectorY;
 
-            void circleProduct(TSVector2 normal, GCircle circle, out FP min, out FP max) 
-            {
-                min = FP.MaxValue;
-                max = FP.MinValue;
+            if (false == Test(new TSVector2(closestX, closestY), l0)) return false;
 
-                var rad = TSMath.Atan2(normal.y, normal.x);
-                var circlePoint = new TSVector2(TSMath.Cos(rad) * circle.radius, TSMath.Sin(rad) * circle.radius);
-                var p1 = circle.position - circlePoint;
+            FP distX = closestX - cx;
+            FP distY = closestY - cy;
+            FP distance = TSMath.Sqrt((distX * distX) + (distY * distY));
 
-                var dot0 = TSVector2.Dot(normal, circle.position + circlePoint);
-                min = TSMath.Min(dot0, min);
-                max = TSMath.Max(dot0, max);
-
-                var dot1 = TSVector2.Dot(normal, circle.position - circlePoint);
-                min = TSMath.Min(dot1, min);
-                max = TSMath.Max(dot1, max);
-            }
-
-            var normal = l0.GetNormal(true);
-            lineProduct(normal, l0, out var l0Min, out var l0Max);
-            circleProduct(normal, c0, out var c0Min, out var c0Max);
-
-            // 检测重叠
-            return l0Min <= c0Max && l0Min >= c0Min || l0Max <= c0Max && l0Max >= c0Min;
+            return distance <= radius;
         }
 
         /// <summary>
@@ -155,6 +143,9 @@ namespace GoblinFramework.Physics.Collision
         /// <returns>是否相撞</returns>
         public static bool Test(GLine l0, GPolygon p0)
         {
+            // 检测线的端点是否在多边形内
+            if (Test(l0.p0, p0) || Test(l0.p1, p0)) return true;
+
             var lines = p0.GetLines();
             for (int i = 0; i < lines.Length; i++) if (Test(l0, lines[i])) return true;
 
@@ -194,29 +185,13 @@ namespace GoblinFramework.Physics.Collision
         /// <returns>是否碰撞</returns>
         public static bool Test(GPolygon p0, GPolygon p1)
         {
-            // 投影到一维
-            void dotProduct(TSVector2[] normals, List<TSVector2> vertexes, out FP min, out FP max)
-            {
-                min = FP.MaxValue;
-                max = FP.MinValue;
-                for (int i = 0; i < normals.Length; i++)
-                {
-                    var normal = normals[i];
-                    foreach (var vec in vertexes)
-                    {
-                        var dot = TSVector2.Dot(normal, vec);
-                        min = TSMath.Min(dot, min);
-                        max = TSMath.Max(dot, max);
-                    }
-                }
-            }
+            var lines0 = p0.GetLines();
+            for (int i = 0; i < lines0.Length; i++) if (Test(lines0[i], p1)) return true;
 
-            var normals = p0.GetNormals();
-            dotProduct(normals, p0.vertexes, out var p0Min, out var p0Max);
-            dotProduct(normals, p1.vertexes, out var p1Min, out var p1Max);
+            var lines1 = p1.GetLines();
+            for (int i = 0; i < lines1.Length; i++) if (Test(lines1[i], p0)) return true;
 
-            // 检测重叠
-            return p0Min <= p1Max && p0Min >= p1Min || p0Max <= p1Max && p0Max >= p1Min;
+            return false;
         }
     }
 }

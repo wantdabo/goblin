@@ -11,7 +11,7 @@ namespace GoblinFramework.Physics.Shape
     {
         public List<TSVector2> vertexes;
 
-        public GPolygon(TSVector2 position, List<TSVector2> vertexes) 
+        public GPolygon(List<TSVector2> vertexes) 
         {
             this.vertexes = vertexes;
         }
