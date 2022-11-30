@@ -32,12 +32,13 @@ SOFTWARE.
 
 using System;
 
-namespace TrueSync {
+namespace TrueSync
+{
 
     [Serializable]
     public struct TSVector2 : IEquatable<TSVector2>
     {
-#region Private Fields
+        #region Private Fields
 
         private static TSVector2 zeroVector = new TSVector2(0, 0);
         private static TSVector2 oneVector = new TSVector2(1, 1);
@@ -57,7 +58,7 @@ namespace TrueSync {
 
         #endregion Public Fields
 
-#region Properties
+        #region Properties
 
         public static TSVector2 zero
         {
@@ -74,7 +75,8 @@ namespace TrueSync {
             get { return rightVector; }
         }
 
-        public static TSVector2 left {
+        public static TSVector2 left
+        {
             get { return leftVector; }
         }
 
@@ -83,7 +85,8 @@ namespace TrueSync {
             get { return upVector; }
         }
 
-        public static TSVector2 down {
+        public static TSVector2 down
+        {
             get { return downVector; }
         }
 
@@ -118,7 +121,8 @@ namespace TrueSync {
             y = value;
         }
 
-        public void Set(FP x, FP y) {
+        public void Set(FP x, FP y)
+        {
             this.x = x;
             this.y = y;
         }
@@ -130,8 +134,8 @@ namespace TrueSync {
         public static void Reflect(ref TSVector2 vector, ref TSVector2 normal, out TSVector2 result)
         {
             FP dot = Dot(vector, normal);
-            result.x = vector.x - ((2f*dot)*normal.x);
-            result.y = vector.y - ((2f*dot)*normal.y);
+            result.x = vector.x - ((2f * dot) * normal.x);
+            result.y = vector.y - ((2f * dot) * normal.y);
         }
 
         public static TSVector2 Reflect(TSVector2 vector, TSVector2 normal)
@@ -214,14 +218,14 @@ namespace TrueSync {
         {
             FP result;
             DistanceSquared(ref value1, ref value2, out result);
-            return (FP) FP.Sqrt(result);
+            return (FP)FP.Sqrt(result);
         }
 
 
         public static void Distance(ref TSVector2 value1, ref TSVector2 value2, out FP result)
         {
             DistanceSquared(ref value1, ref value2, out result);
-            result = (FP) FP.Sqrt(result);
+            result = (FP)FP.Sqrt(result);
         }
 
         public static FP DistanceSquared(TSVector2 value1, TSVector2 value2)
@@ -233,7 +237,7 @@ namespace TrueSync {
 
         public static void DistanceSquared(ref TSVector2 value1, ref TSVector2 value2, out FP result)
         {
-            result = (value1.x - value2.x)*(value1.x - value2.x) + (value1.y - value2.y)*(value1.y - value2.y);
+            result = (value1.x - value2.x) * (value1.x - value2.x) + (value1.y - value2.y) * (value1.y - value2.y);
         }
 
         /// <summary>
@@ -257,13 +261,13 @@ namespace TrueSync {
 
         public static void Divide(ref TSVector2 value1, ref TSVector2 value2, out TSVector2 result)
         {
-            result.x = value1.x/value2.x;
-            result.y = value1.y/value2.y;
+            result.x = value1.x / value2.x;
+            result.y = value1.y / value2.y;
         }
 
         public static TSVector2 Divide(TSVector2 value1, FP divider)
         {
-            FP factor = 1/divider;
+            FP factor = 1 / divider;
             value1.x *= factor;
             value1.y *= factor;
             return value1;
@@ -271,24 +275,24 @@ namespace TrueSync {
 
         public static void Divide(ref TSVector2 value1, FP divider, out TSVector2 result)
         {
-            FP factor = 1/divider;
-            result.x = value1.x*factor;
-            result.y = value1.y*factor;
+            FP factor = 1 / divider;
+            result.x = value1.x * factor;
+            result.y = value1.y * factor;
         }
 
         public static FP Dot(TSVector2 value1, TSVector2 value2)
         {
-            return value1.x*value2.x + value1.y*value2.y;
+            return value1.x * value2.x + value1.y * value2.y;
         }
 
         public static void Dot(ref TSVector2 value1, ref TSVector2 value2, out FP result)
         {
-            result = value1.x*value2.x + value1.y*value2.y;
+            result = value1.x * value2.x + value1.y * value2.y;
         }
 
         public override bool Equals(object obj)
         {
-            return (obj is TSVector2) ? this == ((TSVector2) obj) : false;
+            return (obj is TSVector2) ? this == ((TSVector2)obj) : false;
         }
 
         public bool Equals(TSVector2 other)
@@ -298,7 +302,7 @@ namespace TrueSync {
 
         public override int GetHashCode()
         {
-            return (int) (x + y);
+            return (int)(x + y);
         }
 
         public static TSVector2 Hermite(TSVector2 value1, TSVector2 tangent1, TSVector2 value2, TSVector2 tangent2, FP amount)
@@ -315,15 +319,18 @@ namespace TrueSync {
             result.y = TSMath.Hermite(value1.y, tangent1.y, value2.y, tangent2.y, amount);
         }
 
-        public FP magnitude {
-            get {
+        public FP magnitude
+        {
+            get
+            {
                 FP result;
                 DistanceSquared(ref this, ref zeroVector, out result);
                 return FP.Sqrt(result);
             }
         }
 
-        public static TSVector2 ClampMagnitude(TSVector2 vector, FP maxLength) {
+        public static TSVector2 ClampMagnitude(TSVector2 vector, FP maxLength)
+        {
             return Normalize(vector) * maxLength;
         }
 
@@ -334,7 +341,8 @@ namespace TrueSync {
             return result;
         }
 
-        public static TSVector2 Lerp(TSVector2 value1, TSVector2 value2, FP amount) {
+        public static TSVector2 Lerp(TSVector2 value1, TSVector2 value2, FP amount)
+        {
             amount = TSMath.Clamp(amount, 0, 1);
 
             return new TSVector2(
@@ -382,12 +390,14 @@ namespace TrueSync {
             result.y = TSMath.Min(value1.y, value2.y);
         }
 
-        public void Scale(TSVector2 other) {
+        public void Scale(TSVector2 other)
+        {
             this.x = x * other.x;
             this.y = y * other.y;
         }
 
-        public static TSVector2 Scale(TSVector2 value1, TSVector2 value2) {
+        public static TSVector2 Scale(TSVector2 value1, TSVector2 value2)
+        {
             TSVector2 result;
             result.x = value1.x * value2.x;
             result.y = value1.y * value2.y;
@@ -411,14 +421,14 @@ namespace TrueSync {
 
         public static void Multiply(ref TSVector2 value1, FP scaleFactor, out TSVector2 result)
         {
-            result.x = value1.x*scaleFactor;
-            result.y = value1.y*scaleFactor;
+            result.x = value1.x * scaleFactor;
+            result.y = value1.y * scaleFactor;
         }
 
         public static void Multiply(ref TSVector2 value1, ref TSVector2 value2, out TSVector2 result)
         {
-            result.x = value1.x*value2.x;
-            result.y = value1.y*value2.y;
+            result.x = value1.x * value2.x;
+            result.y = value1.y * value2.y;
         }
 
         public static TSVector2 Negate(TSVector2 value)
@@ -445,8 +455,10 @@ namespace TrueSync {
             return value;
         }
 
-        public TSVector2 normalized {
-            get {
+        public TSVector2 normalized
+        {
+            get
+            {
                 TSVector2 result;
                 TSVector2.Normalize(ref this, out result);
 
@@ -458,9 +470,9 @@ namespace TrueSync {
         {
             FP factor;
             DistanceSquared(ref value, ref zeroVector, out factor);
-            factor = 1f/(FP) FP.Sqrt(factor);
-            result.x = value.x*factor;
-            result.y = value.y*factor;
+            factor = 1f / (FP)FP.Sqrt(factor);
+            result.x = value.x * factor;
+            result.y = value.y * factor;
         }
 
         public static TSVector2 SmoothStep(TSVector2 value1, TSVector2 value2, FP amount)
@@ -490,21 +502,36 @@ namespace TrueSync {
             result.y = value1.y - value2.y;
         }
 
-        public static FP Angle(TSVector2 a, TSVector2 b) {
+        public static FP Angle(TSVector2 a, TSVector2 b)
+        {
             return FP.Acos(a.normalized * b.normalized) * FP.Rad2Deg;
         }
 
-        public TSVector ToTSVector() {
+        public static TSVector2 Rotate(TSVector2 a, FP deg)
+        {
+            var rad = TSMath.Deg2Rad * deg;
+            var cosa = TSMath.Cos(rad);
+            var sina = TSMath.Sin(rad);
+
+            return new TSVector2(
+                a.x * cosa + a.y * sina,
+                a.y * cosa - a.x * sina
+             );
+        }
+
+        public TSVector ToTSVector()
+        {
             return new TSVector(this.x, this.y, 0);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return string.Format("({0:f1}, {1:f1})", x.AsFloat(), y.AsFloat());
         }
 
         #endregion Public Methods
 
-#region Operators
+        #region Operators
 
         public static TSVector2 operator -(TSVector2 value)
         {
@@ -574,7 +601,7 @@ namespace TrueSync {
 
         public static TSVector2 operator /(TSVector2 value1, FP divider)
         {
-            FP factor = 1/divider;
+            FP factor = 1 / divider;
             value1.x *= factor;
             value1.y *= factor;
             return value1;
