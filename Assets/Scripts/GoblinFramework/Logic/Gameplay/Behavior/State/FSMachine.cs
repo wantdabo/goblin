@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoblinFramework.Logic.Common;
 
-namespace GoblinFramework.Logic.Gameplay
+namespace GoblinFramework.Logic.Gameplay.State
 {
     public class FSMachine : LComp, ILoop
     {

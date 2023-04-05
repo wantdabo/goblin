@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using GoblinFramework.Logic.Common;
 
-namespace GoblinFramework.Logic.Gameplay
+namespace GoblinFramework.Logic.Gameplay.State
 {
     public abstract class FSMState : LComp
     {

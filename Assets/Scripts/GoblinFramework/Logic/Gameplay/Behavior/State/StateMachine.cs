@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GoblinFramework.Logic.Gameplay
+namespace GoblinFramework.Logic.Gameplay.State
 {
     public class StateMachineInfo : BehaviorInfo
     {
@@ -25,8 +25,8 @@ namespace GoblinFramework.Logic.Gameplay
             {
                 machine = AddComp<FSMachine>();
                 machine.stateNotify += (type) => NotifyStateInfo(layer, type);
-                
                 info.machines.Add(machine);
+                machine.Create();
             }
 
             machine.SetState<T>();

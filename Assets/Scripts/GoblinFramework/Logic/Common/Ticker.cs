@@ -9,12 +9,12 @@ using UnityEngine;
 namespace GoblinFramework.Logic.Common
 {
     /// <summary>
-    /// ILogicLoop，战斗循环
+    /// ILoop，战斗循环
     /// </summary>
     public interface ILoop { public void PLoop(int frame, float detailTime); }
 
     /// <summary>
-    /// ILogicLateLoop，战斗循环，延后
+    /// ILateLoop，战斗循环，延后
     /// </summary>
     public interface ILateLoop { public void PLateLoop(int frame, float detailTime); }
 
@@ -30,12 +30,7 @@ namespace GoblinFramework.Logic.Common
 
         private List<ILoop> loops = new();
         private List<ILateLoop> lateLoops = new();
-
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-        }
-
+        
         protected override void OnDestroy()
         {
             loops.Clear();
@@ -55,9 +50,8 @@ namespace GoblinFramework.Logic.Common
         public void PLoop()
         {
             frame += 1;
-            if (0 == loops.Count) return;
-            for (int i = loops.Count - 1; i >= 0; i--) loops[i].PLoop(frame, detailTime);
-            for (int i = lateLoops.Count - 1; i >= 0; i--) lateLoops[i].PLateLoop(frame, detailTime);
+            if (loops.Count > 0) for (int i = loops.Count - 1; i >= 0; i--) loops[i].PLoop(frame, detailTime);
+            if (lateLoops.Count > 0) for (int i = lateLoops.Count - 1; i >= 0; i--) lateLoops[i].PLateLoop(frame, detailTime);
         }
     }
 }
