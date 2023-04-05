@@ -17,19 +17,12 @@ namespace GoblinFramework.Render.UI.Login
 
         protected override string UIRes => "Login/LoginView";
 
-        private GameObject Hoshi;
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
 
             // 挂载一个 UI 组件
             AddUICell<LoginEnterCell>("LoginEnterContent");
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            GameObject.Destroy(Hoshi);
         }
     }
 }

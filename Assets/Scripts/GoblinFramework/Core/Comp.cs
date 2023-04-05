@@ -9,6 +9,7 @@ namespace GoblinFramework.Core
     public abstract class Comp : Goblin
     {
         protected Comp parent;
+        
         /// <summary>
         /// 组件列表
         /// </summary>
@@ -134,9 +135,8 @@ namespace GoblinFramework.Core
         public override T AddComp<T>()
         {
             var comp = base.AddComp<T>();
-            var engineComp = comp as Comp<E>;
-            if (null != engineComp) engineComp.Engine = Engine;
-
+            if (comp is Comp<E>) (comp as Comp<E>).Engine = Engine;
+            
             return comp;
         }
     }
