@@ -14,29 +14,10 @@ namespace GoblinFramework.Render.GameResource
     /// </summary>
     public class GameResLocation : RComp
     {
-        private const string actorsPath = "Actors/";
-        private const string uiprefabPath = "UIPrefabs/";
-        private const string spritesPath = "UISprites/";
-
-        /// <summary>
-        /// 异步 Actor 加载预制体
-        /// </summary>
-        /// <param name="resName"></param>
-        /// <returns>Actor GameObject</returns>
-        public async Task<GameObject> LoadActorPrefabAsync(string resName) 
-        {
-            return GameObject.Instantiate(await Engine.GameRes.LoadAssetAsync<GameObject>(actorsPath + resName));
-        }
-        /// <summary>
-        /// 同步 Actor 加载预制体
-        /// </summary>
-        /// <param name="resName"></param>
-        /// <returns>Actor GameObject</returns>
-
-        public GameObject LoadActorPrefabSync(string resName) 
-        {
-            return GameObject.Instantiate(Engine.GameRes.LoadAssetSync<GameObject>(actorsPath + resName));
-        }
+        private const string prefabPath = "GameRes/Prefabs/";
+        private const string uiprefabPath = "GameRes/UIPrefabs/";
+        private const string spritesPath = "GameRes/UISprites/";
+        private const string configPath = "GameRawRes/Configs/";
 
         /// <summary>
         /// 异步 UI 加载预制体
@@ -78,6 +59,16 @@ namespace GoblinFramework.Render.GameResource
         public Sprite LoadSpriteSync(string resName)
         {
             return Engine.GameRes.LoadAssetSync<Sprite>(spritesPath + resName);
+        }
+        
+        /// <summary>
+        /// 异步加载 Config 的 Bytes
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>RawBytes</returns>
+        public async Task<byte[]> LoadConfigAsync(string resName)
+        {
+            return await Engine.GameRes.LoadRawFileAsync(configPath + resName);
         }
     }
 }

@@ -17,19 +17,20 @@ namespace GoblinFramework.Render.GameResource
         public override Task InitialGameRes()
         {
             base.OnCreate();
-#if YOOASSETS_OFFLINE
-                        var initParameters = new YooAssets.OfflinePlayModeParameters();
-#elif UNITY_EDITOR
+            
+#if UNITY_EDITOR || UNITY_EDITOR_OSX
             var initParameters = new YooAssets.EditorSimulateModeParameters();
+#elif YOOASSETS_OFFLINE
+            var initParameters = new YooAssets.OfflinePlayModeParameters();
 #else
-                        var initParameters = new YooAssets.HostPlayModeParameters();
-                        initParameters.DecryptionServices = null;
-                        initParameters.ClearCacheWhenDirty = false;
-                        initParameters.DefaultHostServer = "http://127.0.0.1/CDN1/Android";
-                        initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
-                        initParameters.VerifyLevel = EVerifyLevel.High;
+            var initParameters = new YooAssets.HostPlayModeParameters();
+            initParameters.DecryptionServices = null;
+            initParameters.ClearCacheWhenDirty = false;
+            initParameters.DefaultHostServer = "http://127.0.0.1/CDN1/Android";
+            initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
+            initParameters.VerifyLevel = EVerifyLevel.High;
 #endif
-            initParameters.LocationServices = new DefaultLocationServices("Assets/GameRes");
+            initParameters.LocationServices = new DefaultLocationServices("Assets");
             var handle = YooAssets.InitializeAsync(initParameters);
 
             return handle.Task;

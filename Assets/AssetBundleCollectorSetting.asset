@@ -27,3 +27,14 @@ MonoBehaviour:
       PackRuleName: PackDirectory
       FilterRuleName: CollectAll
       AssetTags: 
+  - GroupName: GameRawRes
+    GroupDesc: 
+    AssetTags: 
+    ActiveRuleName: EnableGroup
+    Collectors:
+    - CollectPath: Assets/GameRawRes
+      CollectorType: 0
+      AddressRuleName: AddressByFileName
+      PackRuleName: PackRawFile
+      FilterRuleName: CollectAll
+      AssetTags: 
