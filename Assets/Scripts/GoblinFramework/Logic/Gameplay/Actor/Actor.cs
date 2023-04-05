@@ -1,60 +1,49 @@
-﻿using GoblinFramework.Logic.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GoblinFramework.Logic.Common;
 
 namespace GoblinFramework.Logic.Gameplay
 {
     public class Actor : LComp
     {
-        public ActorBehavior actorBehaivor;
-        private Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
+        public uint id;
 
-        protected override void OnCreate()
+        public Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
+
+        public T GetBehavior<T>() where T : Behavior
         {
-            base.OnCreate();
-            actorBehaivor = AddBehavior<ActorBehavior>();
+            var behavior = GetBehavior(typeof(T));
+            if (null == behavior) return null;
+
+            return behavior as T;
         }
 
-        /// <summary>
-        /// 获取行为逻辑组件
-        /// </summary>
-        /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        /// <returns>行为逻辑组件</returns>
-        public T GetBehavior<T>() where T : Behavior, new()
+        public Behavior GetBehavior(Type type)
         {
-            if (behaviorDict.TryGetValue(typeof(T), out var behavior)) return behavior as T;
+            if (behaviorDict.TryGetValue(type, out var behavior)) return behavior;
 
             return null;
         }
 
-        /// <summary>
-        /// 添加行为逻辑组件
-        /// </summary>
-        /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        /// <returns>Behavior</returns>
         public T AddBehavior<T>() where T : Behavior, new()
         {
-            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception("can't add same behavior to one actor");
-
+            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can't add same behavior -> {typeof(T)}");
+            
             var behavior = AddComp<T>();
             behavior.actor = this;
-            behavior.Create();
+            behaviorDict.Add(typeof(T), behavior);
 
             return behavior;
         }
 
-        /// <summary>
-        /// 移除行为逻辑组件
-        /// </summary>
-        /// <typeparam name="T">行为逻辑组件类型</typeparam>
-        public void RmvBehavior<T>() where T : Behavior, new()
+        public void RmvBehavior<T>()
         {
-            if (false == behaviorDict.TryGetValue(typeof(T), out var behavior)) return;
-            RmvComp(behavior);
-            behavior.Destroy();
+            RmvBehavior(GetBehavior(typeof(T)));
+        }
+
+        public void RmvBehavior(Behavior behavior)
+        {
+            behaviorDict.Remove(behavior.GetType());
         }
     }
 }
