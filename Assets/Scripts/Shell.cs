@@ -1,5 +1,5 @@
 using GoblinFramework.Core;
-using GoblinFramework.Render;
+using GoblinFramework.Client;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     public static Shell Instance = null;
-    public static RGEngine Engine = null;
+    public static CGEngine Engine = null;
 
     private void GameSettings()
     {
@@ -18,7 +18,7 @@ public class Shell : MonoBehaviour
     private void Start()
     {
         GameSettings();
-        Engine = GameEngine<RGEngine>.CreateGameEngine();
+        Engine = GameEngine<CGEngine>.CreateGameEngine();
     }
 
     private void OnDestroy()

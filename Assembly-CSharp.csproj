@@ -41,89 +41,90 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Login/LoginEnterCell.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Base/UIBaseCell.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Core/Goblin.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Gameplay/GameplayView.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Login/LoginView.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Common/LComp.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/Common/RComp.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/Common/Timer.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Base/UIBase.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/LGEngine.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Core/Comp.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/GameUI.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Core/GameEngine.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Common/GDebug.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/Common/Ticker.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/GameRes/GameRes.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Base/UIBaseView.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/Common/UIEventListener.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/UI/GameInitialize/GameInitializeView.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/GameRes/GameResLocation.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/Common/U3DTool.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/RGEngine.cs" />
-     <Compile Include="Assets/Scripts/Shell.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Render/GameRes/YooGameRes.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Common/Ticker.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfos.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Common/Tables.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfo.cs" />
-     <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBuf.cs" />
-     <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBufExtensions.cs" />
-     <Compile Include="Assets/Scripts/3rd/LubanLib/BeanBase.cs" />
-     <Compile Include="Assets/Scripts/3rd/LubanLib/ITypeId.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginEnterCell.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/StringUtil.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/GameStage/GameStage.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/Actor/Actor.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/Behavior/Behavior.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\Buffs\Buff.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\Buffs\BuffManager.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\Phys\BoxCollider.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\Phys\CircleCollider.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\Phys\Collider.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\State\StateMachine.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\State\FSMachine.cs" />
-     <Compile Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\State\FSMState.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/Behavior/Phys/Rigibody.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseCell.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Phys/Rigibody.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Core/Goblin.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay/GameplayView.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginView.cs" />
+     <Compile Include="Assets/Scripts/3rd/LubanLib/BeanBase.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/CComp.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Timer.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Phys/Collider.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/State/StateMachine.cs" />
+     <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBuf.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBase.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/GameStage/GameStage.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Core/Comp.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Common/Tables.cs" />
+     <Compile Include="Assets/Scripts/3rd/LubanLib/ITypeId.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Buffs/Buff.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Buffs/BuffManager.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/GameUI.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Core/GameEngine.cs" />
+     <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBufExtensions.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Common/GDebug.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Phys/BoxCollider.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Ticker.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/GameConfig.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Behavior.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/GameRes.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseView.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Common/UIEventListener.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/State/FSMachine.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfo.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/GameInitialize/GameInitializeView.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/GameResLocation.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/U3DTool.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/CGEngine.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Phys/CircleCollider.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfos.cs" />
+     <Compile Include="Assets/Scripts/Shell.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/YooGameRes.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/State/FSMState.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Actor/Actor.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI/Gameplay" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Logic/Gameplay" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay" />
      <Folder Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay" />
-     <Folder Include="Assets\Scripts\GoblinFramework\Logic\Gameplay\Behavior\State" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/State" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI" />
      <Folder Include="Assets/StreamingAssets" />
      <Folder Include="Assets/Scripts/GoblinFramework/Core" />
      <Folder Include="Assets/Scripts/GoblinFramework/Common/Conf" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI/Common" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/GameStage" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Common" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/GameStage" />
      <Folder Include="Assets/GameRes/UIPrefabs" />
      <Folder Include="Assets/GameRes/UIPrefabs/Gameplay" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Logic" />
      <Folder Include="Assets/Scripts/3rd/LubanLib" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI/Login" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Login" />
      <Folder Include="Assets/GameRes/UIPrefabs/GameInitialize" />
      <Folder Include="Assets/Scripts/GoblinFramework/Common" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client" />
      <Folder Include="Assets/GameRes/Scenes" />
      <Folder Include="Assets/Scripts/3rd" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/GameRes" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Logic/Common" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/GameRes" />
      <Folder Include="Assets/Scripts/GoblinFramework" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI/Base" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Base" />
      <Folder Include="Assets/GameRes/SpriteAtlas" />
      <Folder Include="Assets/GameRes/UISprites/General" />
      <Folder Include="Assets/GameRawRes/Configs" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Logic/Gameplay/Actor" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/UI/GameInitialize" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Actor" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/GameInitialize" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Buffs" />
      <Folder Include="Assets/GameRes" />
      <Folder Include="Assets/Scripts" />
      <Folder Include="Assets/GameRes/UISprites" />
      <Folder Include="Assets/GameRes/UISprites/Login" />
      <Folder Include="Assets/Resources" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Render/Common" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Common" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Client/Gameplay/Behavior/Phys" />
      <Folder Include="Assets/GameRes/UIPrefabs/Login" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Server" />
      <Folder Include="Assets/StreamingAssets/YooAssets" />
      <Reference Include="UnityEngine">
      <HintPath>/Applications/Unity/Hub/Editor/2021.3.16f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -767,11 +768,11 @@
      <Reference Include="UnityEditor.UI">
      <HintPath>/Users/goho/Documents/github/goblin/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
      </Reference>
-     <Reference Include="UnityEngine.UI">
-     <HintPath>/Users/goho/Documents/github/goblin/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.Rider.Editor">
      <HintPath>/Users/goho/Documents/github/goblin/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="UnityEngine.UI">
+     <HintPath>/Users/goho/Documents/github/goblin/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
      </Reference>
   </ItemGroup>
   <ItemGroup>
