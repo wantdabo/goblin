@@ -1,6 +1,4 @@
 using GoblinFramework.Logic.Common;
-using GoblinFramework.Render.Common;
-using TrueSync;
 
 namespace GoblinFramework.Logic.Gameplay
 {
@@ -87,14 +85,14 @@ namespace GoblinFramework.Logic.Gameplay
         /// </summary>
         /// <param name="frame">FRAME</param>
         /// <param name="tick">帧率 (ms)</param>
-        public void Gaming(int frame, FP tick)
+        public void Gaming(int frame, float tick)
         {
             if (StageState.Gaming != stageState) return;
 
             OnGaming(frame, tick);
         }
 
-        public void PLoop(int frame, FP detailTime)
+        public void PLoop(int frame, float detailTime)
         {
             Gaming(frame, detailTime);
         }
@@ -124,7 +122,7 @@ namespace GoblinFramework.Logic.Gameplay
         /// 游戏中/Gameplay 循环回调
         /// </summary>
         /// <param name="tick">流逝的时间 (ms)</param>
-        public abstract void OnGaming(int frame, FP tick);
+        public abstract void OnGaming(int frame, float tick);
     }
 
     /// <summary>

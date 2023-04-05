@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TrueSync;
+using UnityEngine;
 
 namespace GoblinFramework.Logic.Common
 {
     /// <summary>
     /// ILogicLoop，战斗循环
     /// </summary>
-    public interface ILoop { public void PLoop(int frame, FP detailTime); }
+    public interface ILoop { public void PLoop(int frame, float detailTime); }
 
     /// <summary>
     /// ILogicLateLoop，战斗循环，延后
     /// </summary>
-    public interface ILateLoop { public void PLateLoop(int frame, FP detailTime); }
+    public interface ILateLoop { public void PLateLoop(int frame, float detailTime); }
 
     /// <summary>
     /// Logic-Tick, 逻辑层 Tick 驱动组件
@@ -26,7 +26,7 @@ namespace GoblinFramework.Logic.Common
         private int mFrame = 0;
         public int frame { get { return mFrame; } private set { mFrame = value; } }
 
-        public readonly FP detailTime = 625 * FP.EN4;
+        public readonly float detailTime = Time.fixedTime;
 
         private List<ILoop> loops = new();
         private List<ILateLoop> lateLoops = new();

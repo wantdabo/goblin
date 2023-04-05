@@ -2,24 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GoblinFramework.Logic.Common;
-using TrueSync;
 
 namespace GoblinFramework.Logic.Gameplay
 {
-    public abstract class FSMState : LComp
-    {
-        public abstract List<Type> passStates { get; }
-        public FSMachine machine;
-        public abstract void OnEnter();
-        public abstract void OnLeave();
-        public abstract bool OnDetect();
-        public abstract void OnProcess(int frame, FP detailTime);
-    }
-
     public class FSMachine : LComp, ILoop
     {
         public StateMachine stateMachine;
-        
+        public event Action<Type> stateNotify;
+
         private FSMState current;
         private List<FSMState> states = new List<FSMState>();
 
@@ -41,13 +31,14 @@ namespace GoblinFramework.Logic.Gameplay
                 if (false == state.OnDetect()) continue;
                 
                 current?.OnLeave();
-                
                 current = state;
                 current.OnEnter();
+                
+                stateNotify?.Invoke(current.GetType());
             }
         }
 
-        public void PLoop(int frame, FP detailTime)
+        public void PLoop(int frame, float detailTime)
         {
             StateDetect();
             current?.OnProcess(frame, detailTime);
