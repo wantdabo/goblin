@@ -1,4 +1,4 @@
-namespace GoblinFramework.Client.Gameplay.Phys
+namespace GoblinFramework.Gameplay.Phys
 {
     public class RigibodyInfo : BehaviorInfo
     {

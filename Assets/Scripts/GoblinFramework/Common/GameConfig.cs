@@ -5,6 +5,11 @@ using GoblinFramework.Client.Common;
 
 namespace GoblinFramework.Common
 {
+    public interface IConfigLoader
+    {
+        public Task<byte[]> LoadConfigAsync(string cfgName);
+    }
+
     public class GameConfig : CComp
     {
         /// <summary>
@@ -29,11 +34,11 @@ namespace GoblinFramework.Common
         /// 初始化配置表
         /// </summary>
         /// <returns>Task</returns>
-        public async Task InitialGameCfg()
+        public async Task InitialGameCfg(IConfigLoader configLoader)
         {
             foreach (var cfgName in cfgNames)
             {
-                var bytes = await Engine.GameRes.Location.LoadConfigAsync(cfgName);
+                var bytes = await configLoader.LoadConfigAsync(cfgName);
                 cfgBytesDict.Add(cfgName, bytes);
             }
             Location = new Tables((cfgName) => new ByteBuf(cfgBytesDict[cfgName]));

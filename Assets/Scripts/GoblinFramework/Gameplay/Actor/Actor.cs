@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using GoblinFramework.Client.Common;
+using GoblinFramework.Gameplay.Common;
 
-namespace GoblinFramework.Client.Gameplay
+namespace GoblinFramework.Gameplay
 {
-    public class Actor : CComp
+    public class Actor : PComp
     {
         public uint id;
 

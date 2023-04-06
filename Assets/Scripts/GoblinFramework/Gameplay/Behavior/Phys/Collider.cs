@@ -1,4 +1,4 @@
-namespace GoblinFramework.Client.Gameplay.Phys
+namespace GoblinFramework.Gameplay.Phys
 {
     public class ColliderInfo<E> : BehaviorInfo where E : UnityEngine.Collider2D
     {

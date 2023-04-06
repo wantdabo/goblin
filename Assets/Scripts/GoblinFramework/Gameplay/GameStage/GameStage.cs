@@ -1,8 +1,11 @@
-using GoblinFramework.Client.Common;
+using System.Collections.Generic;
+using GoblinFramework.Common;
+using GoblinFramework.Gameplay;
+using GoblinFramework.Gameplay.Common;
 
 namespace GoblinFramework.Client.Gameplay
 {
-   /// <summary>
+    /// <summary>
     /// 关卡状态
     /// </summary>
     public enum StageState
@@ -11,45 +14,108 @@ namespace GoblinFramework.Client.Gameplay
         /// 解析中
         /// </summary>
         Analyze,
+
         /// <summary>
         /// 暂停
         /// </summary>
         Pause,
+
         /// <summary>
         /// 结束
         /// </summary>
         End,
+
         /// <summary>
         /// 游戏中
         /// </summary>
         Gaming
     }
 
-    public abstract class GameStage : CComp, IFixedUpdate
+    public abstract class GameStage : PComp
     {
-        private StageState mStageState = StageState.End;
+        private StageState mState = StageState.End;
+
         /// <summary>
         /// 关卡状态
         /// </summary>
-        public StageState stageState
+        public StageState state
         {
-            get { return mStageState; }
-            private set { mStageState = value; }
+            get { return mState; }
+            private set { mState = value; }
         }
         
         /// <summary>
         /// 关卡配置
         /// </summary>
-        protected GameStageConf baseStageConf;
+        protected GameStageConf rawStageConf;
+        
+        public Ticker ticker = null;
+        public GameConfig config = null;
 
+        private List<Actor> actors = new List<Actor>();
+        private Dictionary<uint, Actor> actorDict = new Dictionary<uint, Actor>();
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            ticker = AddComp<Ticker>();
+            ticker.Create();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            ticker = null;
+            config = null;
+        }
+
+        public Actor GetActor(uint id)
+        {
+            if (actorDict.TryGetValue(id, out var actor)) return actor;
+
+            return null;
+        }
+
+        private uint actorIncrementId = 0;
+        public Actor AddActor<T>() where T : Actor, new()
+        {
+            var actor = AddComp<T>();
+            actor.id = ++actorIncrementId;
+            actor.stage = this;
+            actors.Add(actor);
+            actorDict.Add(actor.id, actor);
+
+            return actor;
+        }
+
+        public void RmvActor(uint id)
+        {
+            var actor = GetActor(id);
+            if (null == actor) return;
+            
+            RmvActor(actor);
+        }
+
+        public void RmvActor(Actor actor)
+        {
+            actors.Remove(actor);
+            actorDict.Remove(actor.id);
+        }
+        
+        public void OnTick(float tick)
+        {
+            Gaming(tick);
+            ticker.PLoop(tick);
+        }
+        
         /// <summary>
         /// 解析配置，构造关卡
         /// </summary>
         /// <param name="stageConf">关卡配置</param>
         public void Analyze(GameStageConf stageConf)
         {
-            this.baseStageConf = stageConf;
-            stageState = StageState.Analyze;
+            this.rawStageConf = stageConf;
+            state = StageState.Analyze;
             OnAnalyze(stageConf);
         }
 
@@ -58,7 +124,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         public void Play()
         {
-            stageState = StageState.Gaming;
+            state = StageState.Gaming;
             OnPlay();
         }
 
@@ -67,7 +133,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         public void Pause()
         {
-            stageState = StageState.Pause;
+            state = StageState.Pause;
             OnPause();
         }
 
@@ -76,7 +142,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         public void End()
         {
-            stageState = StageState.End;
+            state = StageState.End;
             OnEnd();
         }
 
@@ -86,14 +152,9 @@ namespace GoblinFramework.Client.Gameplay
         /// <param name="tick">帧率 (ms)</param>
         public void Gaming(float tick)
         {
-            if (StageState.Gaming != stageState) return;
+            if (StageState.Gaming != state) return;
 
             OnGaming(tick);
-        }
-
-        public void FixedUpdate(float tick)
-        {
-            Gaming(tick);
         }
 
         /// <summary>
@@ -101,22 +162,22 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         /// <param name="stageConf">关卡配置</param>
         public abstract void OnAnalyze(GameStageConf stageConf);
-        
+
         /// <summary>
         /// 开始/继续游戏回调
         /// </summary>
         public abstract void OnPlay();
-        
+
         /// <summary>
         /// 暂停游戏回调
         /// </summary>
         public abstract void OnPause();
-        
+
         /// <summary>
         /// 结束游戏回调
         /// </summary>
         public abstract void OnEnd();
-        
+
         /// <summary>
         /// 游戏中/Gameplay 循环回调
         /// </summary>
@@ -132,20 +193,19 @@ namespace GoblinFramework.Client.Gameplay
     {
         protected T stageConf
         {
-            get { return baseStageConf as T; }
-            private set { baseStageConf = value; }
+            get { return rawStageConf as T; }
+            private set { rawStageConf = value; }
         }
 
         public override void OnAnalyze(GameStageConf stageConf)
         {
             OnAnalyze(stageConf as T);
         }
-        
+
         public abstract void OnAnalyze(T stageConf);
     }
 
     public abstract class GameStageConf
     {
-
     }
 }

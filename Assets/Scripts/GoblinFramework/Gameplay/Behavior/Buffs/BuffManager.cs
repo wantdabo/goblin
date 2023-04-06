@@ -1,4 +1,4 @@
-namespace GoblinFramework.Client.Gameplay.Buffs
+namespace GoblinFramework.Gameplay.Buffs
 {
     public class BuffManagerInfo : BehaviorInfo
     {

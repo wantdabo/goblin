@@ -1,13 +1,15 @@
 using GoblinFramework.Client.Common;
+using GoblinFramework.Common;
+using GoblinFramework.Gameplay.Common;
 
-namespace GoblinFramework.Client.Gameplay
+namespace GoblinFramework.Gameplay
 {
-    public class Behavior : CComp
+    public class Behavior : PComp
     {
         public Actor actor;
     }
 
-    public class BehaviorInfo : CComp
+    public class BehaviorInfo : PComp
     {
     }
 

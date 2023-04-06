@@ -1,4 +1,4 @@
-namespace GoblinFramework.Client.Gameplay.Phys
+namespace GoblinFramework.Gameplay.Phys
 {
     public class CircleColliderInfo : ColliderInfo<UnityEngine.CircleCollider2D>
     {
