@@ -140,7 +140,7 @@ namespace GoblinFramework.Client.UI
             if (UIState.Open == view.state) return;
 
             sorting += sortingSpacing;
-            view.Sorting = sorting;
+            view.sorting = sorting;
             view.Open();
         }
 

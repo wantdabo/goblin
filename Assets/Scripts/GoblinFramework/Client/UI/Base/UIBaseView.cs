@@ -18,18 +18,18 @@ namespace GoblinFramework.Client.UI.Base
         private UIState mState = UIState.Free;
         public UIState state { get { return mState; } private set { mState = value; } }
 
-        private int sorting = 0;
-        public int Sorting
+        private int mSorting = 0;
+        public int sorting
         {
             get
             {
-                return sorting;
+                return mSorting;
             }
             set
             {
-                sorting = value;
+                mSorting = value;
                 if (null == canvas) return;
-                canvas.sortingOrder = sorting;
+                canvas.sortingOrder = mSorting;
             }
         }
 
@@ -41,7 +41,7 @@ namespace GoblinFramework.Client.UI.Base
             gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
-            Sorting = sorting;
+            sorting = mSorting;
             
             OnLoad();
             OnBuildUI();
