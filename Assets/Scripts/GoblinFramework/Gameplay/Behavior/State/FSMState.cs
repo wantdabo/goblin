@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 
 namespace GoblinFramework.Gameplay.State
 {
-    public abstract class FSMState : PComp
+    public abstract class FSMState : Comp
     {
         public abstract List<Type> passStates { get; }
         public FSMachine machine;

@@ -3,6 +3,8 @@ using GoblinFramework.Common;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Phys;
+using GoblinFramework.Gameplay.State;
 
 namespace GoblinFramework.Client.Gameplay
 {

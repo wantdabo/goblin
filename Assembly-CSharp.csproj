@@ -67,7 +67,6 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Core/GameEngine.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBufExtensions.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Common/GDebug.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/BoxCollider.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Ticker.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Common/GameConfig.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Behavior.cs" />
@@ -80,14 +79,14 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/GameResLocation.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/U3DTool.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/CGEngine.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/CircleCollider.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfos.cs" />
      <Compile Include="Assets/Scripts/Shell.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/YooGameRes.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMState.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXBinding.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysAssis.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXU3D.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />

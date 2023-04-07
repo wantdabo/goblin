@@ -12,19 +12,11 @@ namespace GoblinFramework.Gameplay
 
         public T GetBehavior<T>() where T : Behavior
         {
-            var behavior = GetBehavior(typeof(T));
-            if (null == behavior) return null;
-
-            return behavior as T;
-        }
-
-        public Behavior GetBehavior(Type type)
-        {
-            if (behaviorDict.TryGetValue(type, out var behavior)) return behavior;
-
+            if (behaviorDict.TryGetValue(typeof(T), out var behavior)) return behavior as T;
+            
             return null;
         }
-
+        
         public T AddBehavior<T>() where T : Behavior, new()
         {
             if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can't add same behavior -> {typeof(T)}");
@@ -36,9 +28,9 @@ namespace GoblinFramework.Gameplay
             return behavior;
         }
 
-        public void RmvBehavior<T>()
+        public void RmvBehavior<T>() where T : Behavior
         {
-            RmvBehavior(GetBehavior(typeof(T)));
+            RmvBehavior(GetBehavior<T>());
         }
 
         public void RmvBehavior(Behavior behavior)

@@ -1,22 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using GoblinFramework.Core;
+using UnityEngine;
+
 namespace GoblinFramework.Gameplay.Phys
 {
-    public class RigibodyInfo : BehaviorInfo
+    public class PhysAssisInfo : BehaviorInfo
     {
-        public PhysAssis physAssis;
+        public PhysXU3D physxU3D;
     }
 
-    public class Rigibody : Behavior<RigibodyInfo>
+    public class PhysAssis : Behavior<PhysAssisInfo>
     {
         protected override void OnCreate()
         {
             base.OnCreate();
-            info.physAssis = actor.GetBehavior<PhysAssis>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            info.physAssis = null;
         }
     }
 }
