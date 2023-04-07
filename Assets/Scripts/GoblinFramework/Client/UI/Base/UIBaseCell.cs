@@ -10,7 +10,7 @@ namespace GoblinFramework.Client.UI.Base
     /// <summary>
     /// UI 小组件，基础类
     /// </summary>
-    public abstract class UIBaseCell : UIBase
+    public abstract class UIBaseCell : UIBase<UIBaseCell>
     {
         private GameObject container;
 
@@ -30,12 +30,14 @@ namespace GoblinFramework.Client.UI.Base
             OnActive();
         }
 
-        public override void Load()
+        public override async Task<UIBaseCell> Load()
         {
-            gameObject = Engine.GameRes.Location.LoadUIPrefabSync(UIRes, Container.transform);
+            gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Container.transform);
+            OnLoad();
             OnBuildUI();
             OnBindEvent();
-            base.Load();
+            
+            return this;
         }
 
         /// <summary>

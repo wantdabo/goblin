@@ -41,7 +41,7 @@ namespace GoblinFramework.Client
             GameUI = AddComp<GameUI>();
             GameUI.Create();
 
-            GameUI.OpenView<UI.GameInitialize.GameInitializeView>();
+            Engine.GameUI.OpenUI<UI.GameInitialize.GameInitializeView>();
         }
 
         protected override void OnDestroy()

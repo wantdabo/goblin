@@ -32,23 +32,28 @@ namespace GoblinFramework.Client.UI.GameInitialize
         {
             if (null == gameObject) return;
 
+            if (progress >= 1) return;
+            
+            progress += tick * speed;
+
             Mathf.Clamp(progress, 0, 1);
             sliderProgress.value = progress;
 
             if (progress >= 1)
             {
-                Engine.GameUI.CloseView(this);
-                Engine.GameUI.OpenView<Login.LoginView>();
+                Engine.GameUI.OpenUI<Login.LoginView>();
+                Engine.GameUI.Close<GameInitializeView>();
                 return;
             }
-            progress += tick * speed;
 
-            if (progress <= 0.3f)
-                textProgress.text = "检查更新...";
-            else if (progress >= 0.3f && progress <= 0.6f)
-                textProgress.text = "初始化配置...";
-            else if (progress >= 0.6f)
+            if (progress >= 0.6f)
                 textProgress.text = "正在初始化游戏...";
+            
+            if (progress >= 0.3f)
+                textProgress.text = "初始化配置...";
+            
+            if (progress >= 0f)
+                textProgress.text = "检查更新...";
         }
     }
 }

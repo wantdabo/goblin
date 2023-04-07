@@ -11,10 +11,14 @@ using UnityEngine.EventSystems;
 
 namespace GoblinFramework.Client.UI.Base
 {
+    public class UIBase : CComp
+    {
+    }
+
     /// <summary>
     /// UI 基础类
     /// </summary>
-    public abstract class UIBase : CComp
+    public abstract class UIBase<T> : UIBase where T : UIBase
     {
         protected abstract string UIRes { get; }
 
@@ -42,7 +46,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点名字</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
+        public Task<T> AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
             var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
             if (null == parentNode) Engine.U3D.SeekNode<GameObject>(gameObject, parentNodePath);
@@ -57,14 +61,14 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="parentNodePath">挂载的节点</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public T AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
+        public async Task<T> AddUICell<T>(GameObject parentNode, bool active = true) where T : UIBaseCell, new()
         {
             var comp = AddComp<T>();
             cellList.Add(comp);
             comp.Create();
 
             comp.Container = parentNode;
-            comp.Load();
+            await comp.Load();
             comp.SetActive(active);
 
             return comp;
@@ -95,15 +99,12 @@ namespace GoblinFramework.Client.UI.Base
         /// <summary>
         /// 加载 UI
         /// </summary>
-        public virtual void Load()
-        {
-            OnLoad();
-        }
+        public abstract Task<T> Load();
 
         /// <summary>
         /// 卸载 UI
         /// </summary>
-        public virtual void Unload()
+        public void Unload()
         {
             OnUnload();
             GameObject.Destroy(gameObject);
@@ -112,7 +113,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <summary>
         /// 打开 UI
         /// </summary>
-        public virtual void Open()
+        public void Open()
         {
             foreach (var cell in cellList) cell.Open();
             OnOpen();
@@ -121,41 +122,47 @@ namespace GoblinFramework.Client.UI.Base
         /// <summary>
         /// 关闭 UI
         /// </summary>
-        public virtual void Close()
+        public void Close()
         {
             foreach (var cell in cellList) cell.Close();
             OnClose();
         }
 
-        /// <summary>
-        /// UI 加载回调
-        /// </summary>
-        protected virtual void OnLoad() { base.OnCreate(); }
+        protected virtual void OnLoad()
+        {
+        }
 
-        /// <summary>
-        /// UI 卸载回调
-        /// </summary>
-        protected virtual void OnUnload() { base.OnDestroy(); }
+        protected virtual void OnUnload()
+        {
+        }
 
         /// <summary>
         /// UI 打开回调
         /// </summary>
-        protected virtual void OnOpen() { }
+        protected virtual void OnOpen()
+        {
+        }
 
         /// <summary>
         /// UI 关闭回调
         /// </summary>
-        protected virtual void OnClose() { }
+        protected virtual void OnClose()
+        {
+        }
 
         /// <summary>
         /// 构建 UI 回调，用于添加小组件，获取并缓存指定的动态 Unity3D 组件
         /// </summary>
-        protected virtual void OnBuildUI() { }
+        protected virtual void OnBuildUI()
+        {
+        }
 
         /// <summary>
         /// 绑定事件回调可以集中写在这里
         /// </summary>
-        protected virtual void OnBindEvent() { }
+        protected virtual void OnBindEvent()
+        {
+        }
 
         /// <summary>
         /// 注册 UI 事件

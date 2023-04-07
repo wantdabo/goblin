@@ -44,9 +44,11 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginEnterCell.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/StringUtil.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseCell.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/PComp.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Rigibody.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Core/Goblin.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay/GameplayView.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/Ticker.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginView.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/BeanBase.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/CComp.cs" />
@@ -85,8 +87,6 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMState.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/PComp.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/Ticker.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />

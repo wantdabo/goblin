@@ -11,12 +11,12 @@ namespace GoblinFramework.Client.UI.Base
     /// <summary>
     /// UI 界面，基础类
     /// </summary>
-    public abstract class UIBaseView : UIBase
+    public abstract class UIBaseView : UIBase<UIBaseView>
     {
         public abstract UILayer UILayer { get; }
 
-        private UIState uiState = UIState.Free;
-        public UIState UIState { get { return uiState; } private set { uiState = value; } }
+        private UIState mState = UIState.Free;
+        public UIState state { get { return mState; } private set { mState = value; } }
 
         private int sorting = 0;
         public int Sorting
@@ -35,38 +35,34 @@ namespace GoblinFramework.Client.UI.Base
 
         private Canvas canvas;
 
-        public override async void Load()
+        public override async Task<UIBaseView> Load()
         {
-            UIState = UIState.Loading;
+            state = UIState.Loading;
             gameObject = await Engine.GameRes.Location.LoadUIPrefabAsync(UIRes, Engine.GameUI.GetLayerNode(UILayer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
             Sorting = sorting;
-
+            
+            OnLoad();
             OnBuildUI();
             OnBindEvent();
 
-            base.Load();
+            return this;
         }
 
-        public override void Unload()
+        protected override void OnUnload()
         {
-            UIState = UIState.Free;
-            base.Unload();
+            state = UIState.Free;
         }
 
-        public override void Open()
+        protected override void OnOpen()
         {
-            if (null == gameObject) Load();
-            UIState = UIState.Open;
-            base.Open();
+            state = UIState.Open;
         }
 
-        public override void Close()
+        protected override void OnClose()
         {
-            UIState = UIState.Close;
-            base.Close();
-            Unload();
+            state = UIState.Close;
         }
     }
 }
