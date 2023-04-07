@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GoblinFramework.Common;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Common;
 
@@ -31,7 +32,7 @@ namespace GoblinFramework.Client.Gameplay
         Gaming
     }
 
-    public abstract class GameStage : PComp
+    public abstract class GameStage : Comp
     {
         private StageState mState = StageState.End;
 

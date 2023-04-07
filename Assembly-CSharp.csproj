@@ -87,6 +87,7 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMState.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXBinding.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />

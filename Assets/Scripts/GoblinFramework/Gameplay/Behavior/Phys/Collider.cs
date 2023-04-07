@@ -1,11 +1,14 @@
+using System;
+
 namespace GoblinFramework.Gameplay.Phys
 {
-    public class ColliderInfo<E> : BehaviorInfo where E : UnityEngine.Collider2D
+    public class ColliderInfo : BehaviorInfo
     {
-        public E u3dcollider;
+        public PhysXBinding physXBinding;
+        public event Action<Actor> onCollision;
     }
 
-    public class Collider<T, E> : Behavior<T> where T : ColliderInfo<E>, new() where E : UnityEngine.Collider2D
+    public class Collider<T> : Behavior<ColliderInfo>
     {
     }
 }

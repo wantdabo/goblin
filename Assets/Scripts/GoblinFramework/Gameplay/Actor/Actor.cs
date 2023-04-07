@@ -8,7 +8,7 @@ namespace GoblinFramework.Gameplay
     {
         public uint id;
 
-        public Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
+        private Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
 
         public T GetBehavior<T>() where T : Behavior
         {

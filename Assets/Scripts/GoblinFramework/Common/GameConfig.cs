@@ -15,7 +15,7 @@ namespace GoblinFramework.Common
         /// <summary>
         /// 配置表定位器
         /// </summary>
-        public Tables Location;
+        public Tables location;
 
         /// <summary>
         /// 配置表的名字
@@ -41,7 +41,7 @@ namespace GoblinFramework.Common
                 var bytes = await configLoader.LoadConfigAsync(cfgName);
                 cfgBytesDict.Add(cfgName, bytes);
             }
-            Location = new Tables((cfgName) => new ByteBuf(cfgBytesDict[cfgName]));
+            location = new Tables((cfgName) => new ByteBuf(cfgBytesDict[cfgName]));
         }
     }
 }

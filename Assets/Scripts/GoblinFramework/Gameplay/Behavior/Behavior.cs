@@ -1,18 +1,18 @@
-using GoblinFramework.Client.Common;
-using GoblinFramework.Common;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 
 namespace GoblinFramework.Gameplay
 {
+    public class BehaviorInfo : Comp
+    {
+        public Behavior behavior;
+    }
+    
     public class Behavior : PComp
     {
         public Actor actor;
     }
-
-    public class BehaviorInfo : PComp
-    {
-    }
-
+    
     public class Behavior<T> : Behavior where T : BehaviorInfo, new()
     {
         public T info;
@@ -22,6 +22,7 @@ namespace GoblinFramework.Gameplay
             base.OnCreate();
 
             info = AddComp<T>();
+            info.behavior = this;
             info.Create();
         }
 
