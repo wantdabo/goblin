@@ -20,6 +20,7 @@ namespace GoblinFramework.Core
         public static E CreateGameEngine() 
         {
             E engine = new E();
+            engine.parent = engine;
             engine.Engine = engine;
             engine.Create();
 

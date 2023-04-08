@@ -18,12 +18,12 @@ namespace GoblinFramework.Client.Gameplay
             get { return mState; }
             private set { mState = value; }
         }
-        
+
         /// <summary>
         /// 关卡配置
         /// </summary>
         protected GameStageConf rawStageConf;
-        
+
         public Ticker ticker = null;
         public GameConfig config = null;
 
@@ -43,13 +43,13 @@ namespace GoblinFramework.Client.Gameplay
             ticker = null;
             config = null;
         }
-        
+
         public void Tick(float tick)
         {
             Gaming(tick);
             ticker.Tick(tick);
         }
-        
+
         /// <summary>
         /// 解析配置，构造关卡
         /// </summary>
@@ -60,7 +60,7 @@ namespace GoblinFramework.Client.Gameplay
             state = StageState.Analyze;
             OnAnalyze(conf);
         }
-        
+
         /// <summary>
         /// 解析配置，构造关卡回调
         /// </summary>
@@ -75,7 +75,7 @@ namespace GoblinFramework.Client.Gameplay
             state = StageState.Gaming;
             OnPlay();
         }
-        
+
         /// <summary>
         /// 开始/继续游戏回调
         /// </summary>
@@ -89,12 +89,12 @@ namespace GoblinFramework.Client.Gameplay
             state = StageState.Pause;
             OnPause();
         }
-        
+
         /// <summary>
         /// 暂停游戏回调
         /// </summary>
         public abstract void OnPause();
-        
+
         /// <summary>
         /// 游戏中/Gameplay 循环
         /// </summary>
@@ -105,7 +105,7 @@ namespace GoblinFramework.Client.Gameplay
 
             OnGaming(tick);
         }
-        
+
         /// <summary>
         /// 游戏中/Gameplay 循环回调
         /// </summary>
@@ -120,7 +120,7 @@ namespace GoblinFramework.Client.Gameplay
             state = StageState.End;
             OnEnd();
         }
-        
+
         /// <summary>
         /// 结束游戏回调
         /// </summary>
@@ -134,6 +134,7 @@ namespace GoblinFramework.Client.Gameplay
         }
 
         private uint actorIncrementId = 0;
+
         public Actor AddActor<T>() where T : Actor, new()
         {
             var actor = AddComp<T>();
@@ -150,7 +151,7 @@ namespace GoblinFramework.Client.Gameplay
         {
             var actor = GetActor(id);
             if (null == actor) return;
-            
+
             RmvActor(actor);
         }
 
@@ -179,12 +180,23 @@ namespace GoblinFramework.Client.Gameplay
         }
 
         public abstract void OnAnalyze(T stageConf);
+
+        public static S CreateGameStage<S>(GameConfig config) where S : GameStage<T>, new()
+        {
+            var stage = new S();
+            stage.parent = stage;
+            stage.stage = stage;
+            stage.eventor = stage.AddBehavior<Eventor>();
+            stage.config = config;
+                
+            return stage;
+        }
     }
 
     public abstract class GameStageConf
     {
     }
-    
+
     /// <summary>
     /// 关卡状态
     /// </summary>
