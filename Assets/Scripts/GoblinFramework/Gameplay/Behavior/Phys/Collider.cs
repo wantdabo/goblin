@@ -12,11 +12,13 @@ namespace GoblinFramework.Gameplay.Phys
         protected override void OnCreate()
         {
             base.OnCreate();
+            info.physAssis = actor.GetBehavior<PhysAssis>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            info.physAssis = null;
         }
     }
 }
