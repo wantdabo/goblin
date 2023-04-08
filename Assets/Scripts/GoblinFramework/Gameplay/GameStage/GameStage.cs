@@ -1,39 +1,12 @@
 using System.Collections.Generic;
 using GoblinFramework.Common;
-using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Client.Gameplay
 {
-    /// <summary>
-    /// 关卡状态
-    /// </summary>
-    public enum StageState
-    {
-        /// <summary>
-        /// 解析中
-        /// </summary>
-        Analyze,
-
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        Pause,
-
-        /// <summary>
-        /// 结束
-        /// </summary>
-        End,
-
-        /// <summary>
-        /// 游戏中
-        /// </summary>
-        Gaming
-    }
-
-    public abstract class GameStage : Comp
+    public abstract class GameStage : Actor
     {
         private StageState mState = StageState.End;
 
@@ -70,6 +43,88 @@ namespace GoblinFramework.Client.Gameplay
             ticker = null;
             config = null;
         }
+        
+        public void Tick(float tick)
+        {
+            Gaming(tick);
+            ticker.Tick(tick);
+        }
+        
+        /// <summary>
+        /// 解析配置，构造关卡
+        /// </summary>
+        /// <param name="conf">关卡配置</param>
+        public void Analyze(GameStageConf conf)
+        {
+            rawStageConf = conf;
+            state = StageState.Analyze;
+            OnAnalyze(conf);
+        }
+        
+        /// <summary>
+        /// 解析配置，构造关卡回调
+        /// </summary>
+        /// <param name="conf">关卡配置</param>
+        public abstract void OnAnalyze(GameStageConf conf);
+
+        /// <summary>
+        /// 开始/继续游戏
+        /// </summary>
+        public void Play()
+        {
+            state = StageState.Gaming;
+            OnPlay();
+        }
+        
+        /// <summary>
+        /// 开始/继续游戏回调
+        /// </summary>
+        public abstract void OnPlay();
+
+        /// <summary>
+        /// 暂停游戏
+        /// </summary>
+        public void Pause()
+        {
+            state = StageState.Pause;
+            OnPause();
+        }
+        
+        /// <summary>
+        /// 暂停游戏回调
+        /// </summary>
+        public abstract void OnPause();
+        
+        /// <summary>
+        /// 游戏中/Gameplay 循环
+        /// </summary>
+        /// <param name="tick">帧率 (ms)</param>
+        public void Gaming(float tick)
+        {
+            if (StageState.Gaming != state) return;
+
+            OnGaming(tick);
+        }
+        
+        /// <summary>
+        /// 游戏中/Gameplay 循环回调
+        /// </summary>
+        /// <param name="tick">流逝的时间 (ms)</param>
+        public abstract void OnGaming(float tick);
+
+        /// <summary>
+        /// 结束游戏
+        /// </summary>
+        public void End()
+        {
+            state = StageState.End;
+            OnEnd();
+        }
+        
+        /// <summary>
+        /// 结束游戏回调
+        /// </summary>
+        public abstract void OnEnd();
 
         public Actor GetActor(uint id)
         {
@@ -104,88 +159,6 @@ namespace GoblinFramework.Client.Gameplay
             actors.Remove(actor);
             actorDict.Remove(actor.id);
         }
-        
-        public void Tick(float tick)
-        {
-            Gaming(tick);
-            ticker.Tick(tick);
-        }
-        
-        /// <summary>
-        /// 解析配置，构造关卡
-        /// </summary>
-        /// <param name="stageConf">关卡配置</param>
-        public void Analyze(GameStageConf stageConf)
-        {
-            this.rawStageConf = stageConf;
-            state = StageState.Analyze;
-            OnAnalyze(stageConf);
-        }
-
-        /// <summary>
-        /// 开始/继续游戏
-        /// </summary>
-        public void Play()
-        {
-            state = StageState.Gaming;
-            OnPlay();
-        }
-
-        /// <summary>
-        /// 暂停游戏
-        /// </summary>
-        public void Pause()
-        {
-            state = StageState.Pause;
-            OnPause();
-        }
-
-        /// <summary>
-        /// 结束游戏
-        /// </summary>
-        public void End()
-        {
-            state = StageState.End;
-            OnEnd();
-        }
-
-        /// <summary>
-        /// 游戏中/Gameplay 循环
-        /// </summary>
-        /// <param name="tick">帧率 (ms)</param>
-        public void Gaming(float tick)
-        {
-            if (StageState.Gaming != state) return;
-
-            OnGaming(tick);
-        }
-
-        /// <summary>
-        /// 解析配置，构造关卡回调
-        /// </summary>
-        /// <param name="stageConf">关卡配置</param>
-        public abstract void OnAnalyze(GameStageConf stageConf);
-
-        /// <summary>
-        /// 开始/继续游戏回调
-        /// </summary>
-        public abstract void OnPlay();
-
-        /// <summary>
-        /// 暂停游戏回调
-        /// </summary>
-        public abstract void OnPause();
-
-        /// <summary>
-        /// 结束游戏回调
-        /// </summary>
-        public abstract void OnEnd();
-
-        /// <summary>
-        /// 游戏中/Gameplay 循环回调
-        /// </summary>
-        /// <param name="tick">流逝的时间 (ms)</param>
-        public abstract void OnGaming(float tick);
     }
 
     /// <summary>
@@ -200,9 +173,9 @@ namespace GoblinFramework.Client.Gameplay
             private set { rawStageConf = value; }
         }
 
-        public override void OnAnalyze(GameStageConf stageConf)
+        public override void OnAnalyze(GameStageConf conf)
         {
-            OnAnalyze(stageConf as T);
+            OnAnalyze(conf as T);
         }
 
         public abstract void OnAnalyze(T stageConf);
@@ -210,5 +183,31 @@ namespace GoblinFramework.Client.Gameplay
 
     public abstract class GameStageConf
     {
+    }
+    
+    /// <summary>
+    /// 关卡状态
+    /// </summary>
+    public enum StageState
+    {
+        /// <summary>
+        /// 解析中
+        /// </summary>
+        Analyze,
+
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        Pause,
+
+        /// <summary>
+        /// 结束
+        /// </summary>
+        End,
+
+        /// <summary>
+        /// 游戏中
+        /// </summary>
+        Gaming
     }
 }
