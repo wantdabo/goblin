@@ -5,18 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GoblinFramework.Client.Gameplay;
+using GoblinFramework.Client.UI.Gameplay;
 
 namespace GoblinFramework.Client.UI.Login
 {
     public class LoginEnterCell : UIBaseCell
     {
-        protected override string UIRes => "Login/LoginEnterCell";
+        protected override string layer => "Login/LoginEnterCell";
 
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
             AddUIEventListener("TryBtn", (eventData) =>
             {
+                engine.ui.Close<LoginView>();
+                engine.ui.Open<GameplayView>();
             });
         }
     }

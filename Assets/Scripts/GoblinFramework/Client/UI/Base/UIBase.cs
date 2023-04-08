@@ -20,7 +20,7 @@ namespace GoblinFramework.Client.UI.Base
     /// </summary>
     public abstract class UIBase<T> : UIBase where T : UIBase
     {
-        protected abstract string UIRes { get; }
+        protected abstract string layer { get; }
 
         public GameObject gameObject;
 
@@ -48,8 +48,8 @@ namespace GoblinFramework.Client.UI.Base
         /// <returns>小组件</returns>
         public Task<T> AddUICell<T>(string parentNodePath, bool active = true) where T : UIBaseCell, new()
         {
-            var parentNode = Engine.U3D.GetNode<GameObject>(gameObject, parentNodePath);
-            if (null == parentNode) Engine.U3D.SeekNode<GameObject>(gameObject, parentNodePath);
+            var parentNode = engine.u3d.GetNode<GameObject>(gameObject, parentNodePath);
+            if (null == parentNode) engine.u3d.SeekNode<GameObject>(gameObject, parentNodePath);
 
             return AddUICell<T>(parentNode, active);
         }
@@ -172,7 +172,7 @@ namespace GoblinFramework.Client.UI.Base
         /// <param name="eventType">事件类型，默认点击</param>
         public void AddUIEventListener(string nodeName, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick)
         {
-            AddUIEventListener(Engine.U3D.SeekNode<GameObject>(gameObject, nodeName), action, eventType);
+            AddUIEventListener(engine.u3d.SeekNode<GameObject>(gameObject, nodeName), action, eventType);
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace GoblinFramework.Client.UI.Base
         {
             if (null == node) throw new Exception($"node can't be null, plz check.");
 
-            var listener = Engine.U3D.GetNode<UIEventListener>(node);
+            var listener = engine.u3d.GetNode<UIEventListener>(node);
             if (null == listener) listener = node.AddComponent<UIEventListener>();
 
             listener.AddListener(eventType, action);

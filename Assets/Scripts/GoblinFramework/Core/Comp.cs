@@ -125,7 +125,7 @@ namespace GoblinFramework.Core
         /// <summary>
         /// 引擎组件
         /// </summary>
-        public E Engine;
+        public E engine;
 
         /// <summary>
         /// 添加组件
@@ -135,7 +135,7 @@ namespace GoblinFramework.Core
         public override T AddComp<T>()
         {
             var comp = base.AddComp<T>();
-            if (comp is Comp<E>) (comp as Comp<E>).Engine = Engine;
+            if (comp is Comp<E>) (comp as Comp<E>).engine = engine;
             
             return comp;
         }

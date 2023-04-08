@@ -5,7 +5,7 @@ using GoblinFramework.Common;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 
-namespace GoblinFramework.Gameplay.State
+namespace GoblinFramework.Gameplay.States
 {
     public class FSMachine : Comp
     {

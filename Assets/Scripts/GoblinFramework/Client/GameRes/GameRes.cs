@@ -14,13 +14,13 @@ namespace GoblinFramework.Client.GameResource
         /// <summary>
         /// 资源加载定位器，具体的加载在这里实现
         /// </summary>
-        public GameResLocation Location;
+        public GameResLocation location;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            Location = AddComp<GameResLocation>();
-            Location.Create();
+            location = AddComp<GameResLocation>();
+            location.Create();
         }
 
         /// <summary>

@@ -13,17 +13,17 @@ namespace GoblinFramework.Client.UI.GameInitialize
 {
     public class GameInitializeView : UIBaseView, IUpdate
     {
-        public override GameUI.UILayer UILayer => GameUI.UILayer.UITop;
+        public override GameUI.UILayer uilayer => GameUI.UILayer.UITop;
 
-        protected override string UIRes => "GameInitialize/GameInitializeView";
+        protected override string layer => "GameInitialize/GameInitializeView";
 
         private Slider sliderProgress;
         private Text textProgress;
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            sliderProgress = Engine.U3D.SeekNode<Slider>(gameObject, "Progress");
-            textProgress = Engine.U3D.SeekNode<Text>(gameObject, "ProgressDesctText");
+            sliderProgress = engine.u3d.SeekNode<Slider>(gameObject, "Progress");
+            textProgress = engine.u3d.SeekNode<Text>(gameObject, "ProgressDesctText");
         }
 
         private float speed = 1f;
@@ -41,8 +41,8 @@ namespace GoblinFramework.Client.UI.GameInitialize
 
             if (progress >= 1)
             {
-                Engine.GameUI.OpenUI<Login.LoginView>();
-                Engine.GameUI.Close<GameInitializeView>();
+                engine.ui.Open<Login.LoginView>();
+                engine.ui.Close<GameInitializeView>();
                 return;
             }
 

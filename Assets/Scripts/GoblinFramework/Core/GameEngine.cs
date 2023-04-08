@@ -21,7 +21,7 @@ namespace GoblinFramework.Core
         {
             E engine = new E();
             engine.parent = engine;
-            engine.Engine = engine;
+            engine.engine = engine;
             engine.Create();
 
             return engine;

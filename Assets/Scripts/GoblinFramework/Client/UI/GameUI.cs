@@ -85,16 +85,16 @@ namespace GoblinFramework.Client.UI
 
         private Dictionary<Type, UIBaseView> viewDict = new Dictionary<Type, UIBaseView>();
 
-        public T GetUI<T>() where T : UIBaseView
+        public T Get<T>() where T : UIBaseView
         {
             if (viewDict.TryGetValue(typeof(T), out var view)) return view as T;
 
             return null;
         }
 
-        public async Task<T> LoadUI<T>() where T : UIBaseView, new()
+        public async Task<T> Load<T>() where T : UIBaseView, new()
         {
-            var view = GetUI<T>();
+            var view = Get<T>();
             if (null != view) return view;
 
             view = AddComp<T>();
@@ -106,9 +106,9 @@ namespace GoblinFramework.Client.UI
             return view;
         }
 
-        public void UnLoadUI<T>() where T : UIBaseView
+        public void UnLoad<T>() where T : UIBaseView
         {
-            var view = GetUI<T>();
+            var view = Get<T>();
             if (null == view) return;
 
             view.Unload();
@@ -128,13 +128,13 @@ namespace GoblinFramework.Client.UI
         /// </summary>
         private const int sortingSpacing = 10;
 
-        public async void OpenUI<T>(bool autoload = true) where T : UIBaseView, new()
+        public async void Open<T>(bool autoload = true) where T : UIBaseView, new()
         {
-            var view = GetUI<T>();
+            var view = Get<T>();
             if (null == view)
             {
                 if (false == autoload) return;
-                view = await LoadUI<T>();
+                view = await Load<T>();
             }
 
             if (UIState.Open == view.state) return;
@@ -146,13 +146,13 @@ namespace GoblinFramework.Client.UI
 
         public async void Close<T>(bool autounload = true) where T : UIBaseView
         {
-            var view = GetUI<T>();
+            var view = Get<T>();
             
             if (null == view) return;
             if (UIState.Close == view.state) return;
             
             view.Close();
-            UnLoadUI<T>();
+            UnLoad<T>();
         }
     }
 }

@@ -16,17 +16,17 @@ namespace GoblinFramework.Client.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            if (this is IUpdate) Engine.Ticker.AddUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.Ticker.AddLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.Ticker.AddFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) engine.ticker.AddUpdate(this as IUpdate);
+            if (this is ILateUpdate) engine.ticker.AddLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) engine.ticker.AddFixedUpdate(this as IFixedUpdate);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (this is IUpdate) Engine.Ticker.RmvUpdate(this as IUpdate);
-            if (this is ILateUpdate) Engine.Ticker.RmvLateUpdate(this as ILateUpdate);
-            if (this is IFixedUpdate) Engine.Ticker.RmvFixedUpdate(this as IFixedUpdate);
+            if (this is IUpdate) engine.ticker.RmvUpdate(this as IUpdate);
+            if (this is ILateUpdate) engine.ticker.RmvLateUpdate(this as ILateUpdate);
+            if (this is IFixedUpdate) engine.ticker.RmvFixedUpdate(this as IFixedUpdate);
         }
     }
 }

@@ -141,6 +141,7 @@ namespace GoblinFramework.Client.Gameplay
             actor.id = ++actorIncrementId;
             actor.stage = this;
             actor.eventor = actor.AddBehavior<Eventor>();
+            actor.eventor.Create();
             actors.Add(actor);
             actorDict.Add(actor.id, actor);
 
@@ -165,8 +166,9 @@ namespace GoblinFramework.Client.Gameplay
     /// <summary>
     /// 玩法关卡基类
     /// </summary>
+    /// <typeparam name="S">关卡本身</typeparam>
     /// <typeparam name="T">玩法配置</typeparam>
-    public abstract class GameStage<T> : GameStage where T : GameStageConf
+    public abstract class GameStage<S, T> : GameStage where S : GameStage<S, T>, new() where T : GameStageConf
     {
         protected T stageConf
         {
@@ -181,14 +183,16 @@ namespace GoblinFramework.Client.Gameplay
 
         public abstract void OnAnalyze(T stageConf);
 
-        public static S CreateGameStage<S>(GameConfig config) where S : GameStage<T>, new()
+        public static S CreateGameStage(GameConfig config)
         {
             var stage = new S();
             stage.parent = stage;
             stage.stage = stage;
             stage.eventor = stage.AddBehavior<Eventor>();
+            stage.eventor.Create();
             stage.config = config;
-                
+            stage.Create();
+
             return stage;
         }
     }

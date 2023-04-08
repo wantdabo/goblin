@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GoblinFramework.Gameplay.State
+namespace GoblinFramework.Gameplay.States
 {
     public class StateMachineInfo : BehaviorInfo
     {

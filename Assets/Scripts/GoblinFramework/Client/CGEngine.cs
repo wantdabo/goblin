@@ -15,43 +15,43 @@ namespace GoblinFramework.Client
     /// </summary>
     public class CGEngine : GameEngine<CGEngine>
     {
-        public Ticker Ticker = null;
-        public U3DTool U3D = null;
-        public GameUI GameUI = null;
-        public GameRes GameRes = null;
+        public Ticker ticker = null;
+        public U3DTool u3d = null;
+        public GameUI ui = null;
+        public GameRes res = null;
 
         protected async override void OnCreate()
         {
             base.OnCreate();
 
             // 引擎 Tick
-            Ticker = AddComp<Ticker>();
-            Ticker.Create();
+            ticker = AddComp<Ticker>();
+            ticker.Create();
 
             // 游戏资源
-            GameRes = AddComp<YooGameRes>();
-            GameRes.Create();
-            await GameRes.InitialGameRes();
+            res = AddComp<YooGameRes>();
+            res.Create();
+            await res.InitialGameRes();
 
             // U3D API
-            U3D = AddComp<U3DTool>();
-            U3D.Create();
+            u3d = AddComp<U3DTool>();
+            u3d.Create();
 
             // 游戏 UI
-            GameUI = AddComp<GameUI>();
-            GameUI.Create();
+            ui = AddComp<GameUI>();
+            ui.Create();
 
-            Engine.GameUI.OpenUI<UI.GameInitialize.GameInitializeView>();
+            engine.ui.Open<UI.GameInitialize.GameInitializeView>();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
-            Ticker = null;
-            U3D = null;
-            GameUI = null;
-            GameRes = null;
+            ticker = null;
+            u3d = null;
+            ui = null;
+            res = null;
         }
     }
 }

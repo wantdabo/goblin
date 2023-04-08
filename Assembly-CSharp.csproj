@@ -56,7 +56,7 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Timer.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Collider.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events/Eventor.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/StateMachine.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/States/StateMachine.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBuf.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBase.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysAssis.cs" />
@@ -76,7 +76,7 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/GameRes.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseView.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Common/UIEventListener.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMachine.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/States/FSMachine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfo.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/GameInitialize/GameInitializeView.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/GameResLocation.cs" />
@@ -85,15 +85,16 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay/UpgradeInfos.cs" />
      <Compile Include="Assets/Scripts/Shell.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/GameRes/YooGameRes.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMState.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/States/FSMState.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/GameStage/TestGameStage.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />
      <Folder Include="Assets/Scripts/GoblinFramework/Gameplay" />
      <Folder Include="Assets/Scripts/GoblinFramework/Common/Conf/Gameplay" />
-     <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/States" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI" />
      <Folder Include="Assets/StreamingAssets" />
      <Folder Include="Assets/Scripts/GoblinFramework/Core" />

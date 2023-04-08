@@ -27,7 +27,7 @@ namespace GoblinFramework.Client.GameResource
         /// <returns>UIPrefab UI 预制体</returns>
         public async Task<GameObject> LoadUIPrefabAsync(string resName, Transform parent = null)
         {
-            return GameObject.Instantiate(await Engine.GameRes.LoadAssetAsync<GameObject>(uiprefabPath + resName), parent ?? Engine.GameUI.UIRoot.transform);
+            return GameObject.Instantiate(await engine.res.LoadAssetAsync<GameObject>(uiprefabPath + resName), parent ?? engine.ui.UIRoot.transform);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace GoblinFramework.Client.GameResource
         /// <returns>UIPrefab UI 预制体</returns>
         public GameObject LoadUIPrefabSync(string resName, Transform parent = null)
         {
-            return GameObject.Instantiate(Engine.GameRes.LoadAssetSync<GameObject>(uiprefabPath + resName), parent ?? Engine.GameUI.UIRoot.transform); 
+            return GameObject.Instantiate(engine.res.LoadAssetSync<GameObject>(uiprefabPath + resName), parent ?? engine.ui.UIRoot.transform); 
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace GoblinFramework.Client.GameResource
         /// <returns>Sprite 精灵</returns>
         public async Task<Sprite> LoadSpriteAsync(string resName)
         {
-            return await Engine.GameRes.LoadAssetAsync<Sprite>(spritesPath + resName);
+            return await engine.res.LoadAssetAsync<Sprite>(spritesPath + resName);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace GoblinFramework.Client.GameResource
         /// <returns>Sprite 精灵</returns>
         public Sprite LoadSpriteSync(string resName)
         {
-            return Engine.GameRes.LoadAssetSync<Sprite>(spritesPath + resName);
+            return engine.res.LoadAssetSync<Sprite>(spritesPath + resName);
         }
         
         /// <summary>
@@ -68,7 +68,7 @@ namespace GoblinFramework.Client.GameResource
         /// <returns>RawBytes</returns>
         public async Task<byte[]> LoadConfigAsync(string resName)
         {
-            return await Engine.GameRes.LoadRawFileAsync(configPath + resName);
+            return await engine.res.LoadRawFileAsync(configPath + resName);
         }
     }
 }
