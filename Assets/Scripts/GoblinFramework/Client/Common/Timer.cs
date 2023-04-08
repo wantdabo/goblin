@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Client.Common
 {
     /// <summary>
-    /// Goblin-Timer 渲染层计时器
+    /// Timer 渲染层计时器
     /// </summary>
     public class Timer : CComp, IUpdate
     {

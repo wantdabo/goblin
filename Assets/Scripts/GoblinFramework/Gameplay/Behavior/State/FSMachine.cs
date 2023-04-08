@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GoblinFramework.Common;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 
 namespace GoblinFramework.Gameplay.State
 {
-    public class FSMachine : PComp, ILoop
+    public class FSMachine : Comp
     {
         public StateMachine stateMachine;
         public event Action<Type> stateNotify;
@@ -39,7 +40,7 @@ namespace GoblinFramework.Gameplay.State
             }
         }
         
-        public void PLoop(int frame, float tick)
+        public void OnTick(int frame, float tick)
         {
             StateDetect();
             current?.OnProcess(tick);

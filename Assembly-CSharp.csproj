@@ -44,8 +44,9 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginEnterCell.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/StringUtil.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseCell.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/PComp.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Rigibody.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXU3D.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events/Event.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Core/Goblin.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay/GameplayView.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Common/Ticker.cs" />
@@ -54,9 +55,11 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/CComp.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Timer.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Collider.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events/Eventor.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/StateMachine.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBuf.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBase.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysAssis.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/GameStage/GameStage.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Core/Comp.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Common/Tables.cs" />
@@ -85,8 +88,6 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/State/FSMState.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysAssis.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXU3D.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />
@@ -110,6 +111,7 @@
      <Folder Include="Assets/GameRes/Scenes" />
      <Folder Include="Assets/Scripts/3rd" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/GameRes" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events" />
      <Folder Include="Assets/Scripts/GoblinFramework" />
      <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Base" />

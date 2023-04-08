@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using GoblinFramework.Client.Gameplay;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Gameplay
 {
-    public class Actor : PComp
+    public class Actor : Comp
     {
         public uint id;
+        public GameStage stage;
+        public Eventor eventor;
 
         private Dictionary<Type, Behavior> behaviorDict = new Dictionary<Type, Behavior>();
 

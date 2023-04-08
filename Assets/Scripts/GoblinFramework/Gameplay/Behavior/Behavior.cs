@@ -8,7 +8,7 @@ namespace GoblinFramework.Gameplay
         public Behavior behavior;
     }
     
-    public class Behavior : PComp
+    public class Behavior : Comp
     {
         public Actor actor;
     }

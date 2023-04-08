@@ -3,8 +3,7 @@ using GoblinFramework.Common;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Common;
-using GoblinFramework.Gameplay.Phys;
-using GoblinFramework.Gameplay.State;
+using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Client.Gameplay
 {
@@ -85,6 +84,7 @@ namespace GoblinFramework.Client.Gameplay
             var actor = AddComp<T>();
             actor.id = ++actorIncrementId;
             actor.stage = this;
+            actor.eventor = actor.AddBehavior<Eventor>();
             actors.Add(actor);
             actorDict.Add(actor.id, actor);
 
@@ -105,10 +105,10 @@ namespace GoblinFramework.Client.Gameplay
             actorDict.Remove(actor.id);
         }
         
-        public void OnTick(float tick)
+        public void Tick(float tick)
         {
             Gaming(tick);
-            ticker.PLoop(tick);
+            ticker.Tick(tick);
         }
         
         /// <summary>
