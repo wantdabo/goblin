@@ -13,7 +13,7 @@ namespace GoblinFramework.Gameplay.Events
     }
 
     #region SkillPipelineEvent
-    public class SPStartEvent : Event
+    public class SPBeginEvent : Event
     {
         public Actor caster;
     }
@@ -43,14 +43,9 @@ namespace GoblinFramework.Gameplay.Events
         public Actor target;
     }
     
-    public class SPFinishEvent : Event
+    public class SPEndEvent : Event
     {
         public Actor caster;
-    }
-    
-    public class SPBreakEvent : Event
-    {
-        public Actor interrupter;
     }
     #endregion
 }

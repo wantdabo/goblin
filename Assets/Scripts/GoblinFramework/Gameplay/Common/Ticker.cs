@@ -28,7 +28,7 @@ namespace GoblinFramework.Gameplay.Common
             private set { mTick = value; }
         }
 
-        public event Action<float> onTick;
+        public event Action<int ,float> onTick;
         public event Action<int, float> onLateTick;
 
         public void Tick(float t)
@@ -36,7 +36,7 @@ namespace GoblinFramework.Gameplay.Common
             tick = t;
             frame += 1;
 
-            onTick?.Invoke(t);
+            onTick?.Invoke(frame, t);
             onLateTick?.Invoke(frame, t);
         }
     }

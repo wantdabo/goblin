@@ -26,8 +26,7 @@ namespace GoblinFramework.Gameplay.Events
             if (false == info.eventDict.TryGetValue(typeof(T), out var funcs))
                 return;
 
-            foreach (var func in funcs)
-                (func as Action<T>).Invoke(content);
+            foreach (var func in funcs)  (func as Action<T>).Invoke(content);
         }
     }
 }
