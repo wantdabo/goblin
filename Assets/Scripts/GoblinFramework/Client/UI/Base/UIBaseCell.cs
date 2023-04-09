@@ -32,7 +32,7 @@ namespace GoblinFramework.Client.UI.Base
 
         public override async Task<UIBaseCell> Load()
         {
-            gameObject = await engine.res.location.LoadUIPrefabAsync(layer, Container.transform);
+            gameObject = await engine.res.location.LoadUIPrefabAsync(res, Container.transform);
             OnLoad();
             OnBuildUI();
             OnBindEvent();

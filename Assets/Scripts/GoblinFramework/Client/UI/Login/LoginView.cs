@@ -13,9 +13,9 @@ namespace GoblinFramework.Client.UI.Login
 {
     public class LoginView : UIBaseView
     {
-        public override GameUI.UILayer uilayer => GameUI.UILayer.UIMain;
+        public override GameUI.UILayer layer => GameUI.UILayer.UIMain;
 
-        protected override string layer => "Login/LoginView";
+        protected override string res => "Login/LoginView";
 
         protected override void OnBuildUI()
         {

@@ -11,7 +11,7 @@ namespace GoblinFramework.Client.UI.Login
 {
     public class LoginEnterCell : UIBaseCell
     {
-        protected override string layer => "Login/LoginEnterCell";
+        protected override string res => "Login/LoginEnterCell";
 
         protected override void OnBindEvent()
         {

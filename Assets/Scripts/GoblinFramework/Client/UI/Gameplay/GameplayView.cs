@@ -14,9 +14,9 @@ namespace GoblinFramework.Client.UI.Gameplay
 {
     public class GameplayView : UIBaseView, IUpdate
     {
-        public override GameUI.UILayer uilayer => GameUI.UILayer.UIMain;
+        public override GameUI.UILayer layer => GameUI.UILayer.UIMain;
 
-        protected override string layer => "Gameplay/GameplayView";
+        protected override string res => "Gameplay/GameplayView";
 
         private Text clockText;
         protected override void OnBuildUI()

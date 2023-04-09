@@ -13,7 +13,7 @@ namespace GoblinFramework.Client.UI.Base
     /// </summary>
     public abstract class UIBaseView : UIBase<UIBaseView>
     {
-        public abstract UILayer uilayer { get; }
+        public abstract UILayer layer { get; }
 
         private UIState mState = UIState.Free;
         public UIState state { get { return mState; } private set { mState = value; } }
@@ -38,7 +38,7 @@ namespace GoblinFramework.Client.UI.Base
         public override async Task<UIBaseView> Load()
         {
             state = UIState.Loading;
-            gameObject = await engine.res.location.LoadUIPrefabAsync(layer, engine.ui.GetLayerNode(uilayer).transform);
+            gameObject = await engine.res.location.LoadUIPrefabAsync(res, engine.ui.GetLayerNode(layer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
             sorting = mSorting;

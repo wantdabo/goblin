@@ -3,7 +3,7 @@ using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Events;
 using GoblinFramework.Gameplay.States;
 
-namespace GoblinFramework.Gameplay.Skills.Pipeline
+namespace GoblinFramework.Gameplay.Skills
 {
     public enum SkillPipelineState
     {

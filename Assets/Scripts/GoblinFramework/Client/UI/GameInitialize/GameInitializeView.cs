@@ -13,9 +13,9 @@ namespace GoblinFramework.Client.UI.GameInitialize
 {
     public class GameInitializeView : UIBaseView, IUpdate
     {
-        public override GameUI.UILayer uilayer => GameUI.UILayer.UITop;
+        public override GameUI.UILayer layer => GameUI.UILayer.UITop;
 
-        protected override string layer => "GameInitialize/GameInitializeView";
+        protected override string res => "GameInitialize/GameInitializeView";
 
         private Slider sliderProgress;
         private Text textProgress;

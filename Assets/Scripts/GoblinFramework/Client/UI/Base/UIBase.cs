@@ -20,7 +20,7 @@ namespace GoblinFramework.Client.UI.Base
     /// </summary>
     public abstract class UIBase<T> : UIBase where T : UIBase
     {
-        protected abstract string layer { get; }
+        protected abstract string res { get; }
 
         public GameObject gameObject;
 
