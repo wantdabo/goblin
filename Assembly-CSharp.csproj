@@ -89,6 +89,7 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Server/SGEngine.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Actor/Actor.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/GameStage/TestGameStage.cs" />
+     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Skills/SkillPipeline.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets/GameRawRes" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Gameplay" />
@@ -115,6 +116,7 @@
      <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events" />
      <Folder Include="Assets/Scripts/GoblinFramework" />
      <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior" />
+     <Folder Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Skills" />
      <Folder Include="Assets/Scripts/GoblinFramework/Client/UI/Base" />
      <Folder Include="Assets/GameRes/SpriteAtlas" />
      <Folder Include="Assets/GameRes/UISprites/General" />

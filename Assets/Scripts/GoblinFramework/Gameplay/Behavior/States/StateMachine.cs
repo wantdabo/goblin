@@ -9,7 +9,7 @@ namespace GoblinFramework.Gameplay.States
         public Dictionary<int, Type> stateDict = new Dictionary<int, Type>();
     }
 
-    public class StateMachine : Behavior<StateMachineInfo>
+    public class StateMachine<T> : Behavior<T> where T : StateMachineInfo, new()
     {
         private FSMachine GetMachine(int layer = 0)
         {
@@ -37,5 +37,9 @@ namespace GoblinFramework.Gameplay.States
             if (info.stateDict.ContainsKey(layer)) info.stateDict.Remove(layer);
             info.stateDict.Add(layer, type);
         }
+    }
+
+    public class StateMachine : StateMachine<StateMachineInfo>
+    {
     }
 }

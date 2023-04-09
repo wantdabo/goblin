@@ -9,9 +9,9 @@ namespace GoblinFramework.Gameplay.States
     {
         public abstract List<Type> passStates { get; }
         public FSMachine machine;
+        public abstract bool OnDetect();
         public abstract void OnEnter();
         public abstract void OnLeave();
-        public abstract bool OnDetect();
         public abstract void OnProcess(float tick);
     }
 }
