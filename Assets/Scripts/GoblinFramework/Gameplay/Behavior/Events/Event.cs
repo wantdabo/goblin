@@ -1,4 +1,5 @@
 using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Phys;
 
 namespace GoblinFramework.Gameplay.Events
 {
@@ -10,6 +11,16 @@ namespace GoblinFramework.Gameplay.Events
     public class TestEvent : Event
     {
         public string testStr;
+    }
+
+    public class CollisionEnterEvent : Event
+    {
+        public uint actorId;
+    }
+
+    public class CollisionLeaveEvent : Event
+    {
+        public uint actorId;
     }
 
     #region SkillPipelineEvent

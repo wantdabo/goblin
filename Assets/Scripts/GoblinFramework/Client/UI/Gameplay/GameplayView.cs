@@ -30,12 +30,15 @@ namespace GoblinFramework.Client.UI.Gameplay
         {
             base.OnOpen();
             stage = TestGameStage.CreateGameStage(null);
-            stage.eventor.Hear<TestEvent>((e) =>
-            {
-                Debug.Log(e.testStr);
-            });
+            stage.eventor.Listen<TestEvent>(TestEventFunc);
         }
-        
+
+        private void TestEventFunc(TestEvent evt)
+        {
+            Debug.Log(evt.testStr);
+            // stage.eventor.UnListen<TestEvent>(TestEventFunc);
+        }
+
         public void Update(float tick)
         {
             if (null == clockText) return;
@@ -45,7 +48,7 @@ namespace GoblinFramework.Client.UI.Gameplay
             
             var e = new TestEvent();
             e.testStr = "Hello World.";
-            stage.eventor.Tell<TestEvent>(e);
+            stage.eventor.Tell(e);
         }
     }
 }

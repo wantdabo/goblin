@@ -44,7 +44,6 @@
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Login/LoginEnterCell.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/StringUtil.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/UI/Base/UIBaseCell.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Rigibody.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/PhysXU3D.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events/Event.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Core/Goblin.cs" />
@@ -54,7 +53,6 @@
      <Compile Include="Assets/Scripts/3rd/LubanLib/BeanBase.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/CComp.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Client/Common/Timer.cs" />
-     <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Phys/Collider.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/Events/Eventor.cs" />
      <Compile Include="Assets/Scripts/GoblinFramework/Gameplay/Behavior/States/StateMachine.cs" />
      <Compile Include="Assets/Scripts/3rd/LubanLib/ByteBuf.cs" />

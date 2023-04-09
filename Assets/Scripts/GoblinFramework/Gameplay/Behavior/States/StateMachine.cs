@@ -3,17 +3,14 @@ using System.Collections.Generic;
 
 namespace GoblinFramework.Gameplay.States
 {
-    public class StateMachineInfo : BehaviorInfo
+    public class StateMachine : Behavior
     {
-        public List<FSMachine> machines = new List<FSMachine>();
-        public Dictionary<int, Type> stateDict = new Dictionary<int, Type>();
-    }
-
-    public class StateMachine<T> : Behavior<T> where T : StateMachineInfo, new()
-    {
+        private List<FSMachine> machines = new List<FSMachine>();
+        private Dictionary<int, Type> stateDict = new Dictionary<int, Type>();
+        
         private FSMachine GetMachine(int layer = 0)
         {
-            if (info.machines.Count >= layer + 1) return info.machines[layer];
+            if (machines.Count >= layer + 1) return machines[layer];
 
             return null;
         }
@@ -25,7 +22,7 @@ namespace GoblinFramework.Gameplay.States
             {
                 machine = AddComp<FSMachine>();
                 machine.stateNotify += (type) => NotifyStateInfo(layer, type);
-                info.machines.Add(machine);
+                machines.Add(machine);
                 machine.Create();
             }
 
@@ -34,12 +31,8 @@ namespace GoblinFramework.Gameplay.States
 
         private void NotifyStateInfo(int layer, Type type)
         {
-            if (info.stateDict.ContainsKey(layer)) info.stateDict.Remove(layer);
-            info.stateDict.Add(layer, type);
+            if (stateDict.ContainsKey(layer)) stateDict.Remove(layer);
+            stateDict.Add(layer, type);
         }
-    }
-
-    public class StateMachine : StateMachine<StateMachineInfo>
-    {
     }
 }
