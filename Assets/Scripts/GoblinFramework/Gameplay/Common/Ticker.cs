@@ -1,4 +1,5 @@
 using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace GoblinFramework.Gameplay.Common
 {
     /// <summary>
-    /// Play-Tick, 逻辑层 Tick 驱动组件
+    /// Ticker, 逻辑层 Tick 驱动组件
     /// </summary>
-    public class Ticker : Comp
+    public class Ticker : Actor
     {
         private int mFrame = 0;
 
@@ -28,16 +29,20 @@ namespace GoblinFramework.Gameplay.Common
             private set { mTick = value; }
         }
 
-        public event Action<int ,float> onTick;
-        public event Action<int, float> onLateTick;
-
         public void Tick(float t)
         {
             tick = t;
             frame += 1;
 
-            onTick?.Invoke(frame, t);
-            onLateTick?.Invoke(frame, t);
+            var tickEvent = new TickEvent();
+            tickEvent.frame = frame;
+            tickEvent.tick = tick;
+            eventor.Tell(tickEvent);
+
+            var lateTickEvent = new LateTickEvent();
+            tickEvent.frame = frame;
+            tickEvent.tick = tick;
+            eventor.Tell(lateTickEvent);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         protected GameStageConf rawStageConf;
 
-        public Ticker ticker = null;
+        private Ticker ticker = null;
         public GameConfig config = null;
 
         private List<Actor> actors = new List<Actor>();
@@ -33,7 +33,7 @@ namespace GoblinFramework.Client.Gameplay
         protected override void OnCreate()
         {
             base.OnCreate();
-            ticker = AddComp<Ticker>();
+            ticker = AddActor<Ticker>();
             ticker.Create();
         }
 
@@ -126,6 +126,15 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         public abstract void OnEnd();
 
+        public T GetActor<T>(uint id) where T : Actor
+        {
+            var actor = GetActor(id);
+
+            if (null != actor) return actor as T;
+
+            return null;
+        }
+
         public Actor GetActor(uint id)
         {
             if (actorDict.TryGetValue(id, out var actor)) return actor;
@@ -135,7 +144,7 @@ namespace GoblinFramework.Client.Gameplay
 
         private uint actorIncrementId = 0;
 
-        public Actor AddActor<T>() where T : Actor, new()
+        public T AddActor<T>() where T : Actor, new()
         {
             var actor = AddComp<T>();
             actor.id = ++actorIncrementId;

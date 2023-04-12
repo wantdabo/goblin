@@ -3,58 +3,70 @@ using GoblinFramework.Gameplay.Phys;
 
 namespace GoblinFramework.Gameplay.Events
 {
-    public class Event
+    public interface Event
     {
         
     }
 
-    public class TestEvent : Event
+    public struct TestEvent : Event
     {
         public string testStr;
     }
 
-    public class CollisionEnterEvent : Event
+    public struct TickEvent : Event 
+    {
+        public int frame;
+        public float tick;
+    }
+
+    public struct LateTickEvent : Event 
+    {
+        public int frame;
+        public float tick;
+    }
+
+    public struct CollisionEnterEvent : Event
     {
         public uint actorId;
     }
 
-    public class CollisionLeaveEvent : Event
+    public struct CollisionLeaveEvent : Event
     {
         public uint actorId;
     }
 
     #region SkillPipelineEvent
-    public class SPBeginEvent : Event
+    public struct SPBeginEvent : Event
     {
         public Actor caster;
     }
     
-    public class SPCostEvent : Event
+    public struct SPCostEvent : Event
     {
         public Actor caster;
     }
 
-    public class SPReadingEvent : Event
+    public struct SPReadingEvent : Event
     {
         public Actor caster;
     }
 
-    public class SPCastEvent : Event
+    public struct SPCastEvent : Event
     {
         public Actor caster;
     }
 
-    public class SPProjectEvent : Event
+    public struct SPProjectEvent : Event
     {
         public Actor caster;
     }
 
-    public class SPHitEvent : Event
+    public struct SPHitEvent : Event
     {
         public Actor target;
     }
     
-    public class SPEndEvent : Event
+    public struct SPEndEvent : Event
     {
         public Actor caster;
     }
