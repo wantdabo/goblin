@@ -13,9 +13,9 @@ namespace GoblinFramework.Gameplay.Common
     /// </summary>
     public class Ticker : Actor
     {
-        private int mFrame = 0;
+        private uint mFrame = 0;
 
-        public int frame
+        public uint frame
         {
             get { return mFrame; }
             private set { mFrame = value; }

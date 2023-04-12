@@ -1,4 +1,5 @@
 ﻿using GoblinFramework.Core;
+using GoblinFramework.Gameplay.Common;
 
 namespace GoblinFramework.Gameplay.Skills
 {
@@ -8,6 +9,9 @@ namespace GoblinFramework.Gameplay.Skills
 
         public void Launch() 
         {
+            var timer = AddComp<Timer>();
+            timer.Create(launcher.actor.stage.ticker);
+            timer.Create();
         }
     }
 }

@@ -24,8 +24,8 @@ namespace GoblinFramework.Client.Gameplay
         /// </summary>
         protected GameStageConf rawStageConf;
 
-        private Ticker ticker = null;
         public GameConfig config = null;
+        public Ticker ticker;
 
         private List<Actor> actors = new List<Actor>();
         private Dictionary<uint, Actor> actorDict = new Dictionary<uint, Actor>();

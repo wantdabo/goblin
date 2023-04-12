@@ -15,13 +15,13 @@ namespace GoblinFramework.Gameplay.Events
 
     public struct TickEvent : Event 
     {
-        public int frame;
+        public uint frame;
         public float tick;
     }
 
     public struct LateTickEvent : Event 
     {
-        public int frame;
+        public uint frame;
         public float tick;
     }
 
