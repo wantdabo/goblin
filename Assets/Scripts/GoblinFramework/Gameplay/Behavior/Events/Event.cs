@@ -1,5 +1,6 @@
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Phys;
+using GoblinFramework.Gameplay.Skills;
 
 namespace GoblinFramework.Gameplay.Events
 {
@@ -35,40 +36,9 @@ namespace GoblinFramework.Gameplay.Events
         public uint actorId;
     }
 
-    #region SkillPipelineEvent
-    public struct SPBeginEvent : Event
+    public struct SkillPipelineStateEvent : Event
     {
         public Actor caster;
+        public SkillPipelineState state;
     }
-    
-    public struct SPCostEvent : Event
-    {
-        public Actor caster;
-    }
-
-    public struct SPReadingEvent : Event
-    {
-        public Actor caster;
-    }
-
-    public struct SPCastEvent : Event
-    {
-        public Actor caster;
-    }
-
-    public struct SPProjectEvent : Event
-    {
-        public Actor caster;
-    }
-
-    public struct SPHitEvent : Event
-    {
-        public Actor target;
-    }
-    
-    public struct SPEndEvent : Event
-    {
-        public Actor caster;
-    }
-    #endregion
 }
