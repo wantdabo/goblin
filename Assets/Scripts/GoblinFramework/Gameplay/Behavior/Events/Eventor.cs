@@ -7,6 +7,17 @@ namespace GoblinFramework.Gameplay.Events
     {
         private Dictionary<Type, List<Delegate>> eventDict = new ();
 
+        public override void Create()
+        {
+            base.Create();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            eventDict.Clear();
+        }
+
         public void UnListen<T>(Action<T> func) where T : Event
         {
             if (false == eventDict.TryGetValue(typeof(T), out var funcs)) return;
@@ -24,11 +35,11 @@ namespace GoblinFramework.Gameplay.Events
             funcs.Add(func);
         }
     
-        public void Tell<T>(T evt) where T : Event
+        public void Tell<T>(T e) where T : Event
         {
             if (false == eventDict.TryGetValue(typeof(T), out var funcs)) return;
             
-            for(int i = funcs.Count - 1; i >= 0; i--) (funcs[i] as Action<T>).Invoke(evt);
+            for(int i = funcs.Count - 1; i >= 0; i--) (funcs[i] as Action<T>).Invoke(e);
         }
     }
 }

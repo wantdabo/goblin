@@ -28,10 +28,9 @@ namespace GoblinFramework.Gameplay
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
             RmvComp(info);
             info.Destroy();
-            
-            base.OnDestroy();
         }
     }
 }

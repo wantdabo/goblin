@@ -36,8 +36,6 @@ namespace GoblinFramework.Gameplay.Skills
             state++;
             switch (state)
             {
-                case SkillPipelineState.None:
-                    break;
                 case SkillPipelineState.Start:
                     OnStart();
                     break;
