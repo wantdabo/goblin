@@ -38,7 +38,7 @@ namespace GoblinFramework.Render.UI.Base
         public override async Task<UIBaseView> Load()
         {
             state = UIState.Loading;
-            gameObject = await engine.res.location.LoadUIPrefabAsync(res, engine.ui.GetLayerNode(layer).transform);
+            gameObject = await engine.gameRes.location.LoadUIPrefabAsync(res, engine.gameui.GetLayerNode(layer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
             sorting = mSorting;

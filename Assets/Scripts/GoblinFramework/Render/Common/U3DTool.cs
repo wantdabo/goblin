@@ -11,7 +11,7 @@ namespace GoblinFramework.Render.Common
     /// <summary>
     /// Unity3D 工具组件
     /// </summary>
-    public class U3DTool : CComp
+    public class U3DTool : RComp
     {
         /// <summary>
         /// 获取 Unity3D 节点/组件

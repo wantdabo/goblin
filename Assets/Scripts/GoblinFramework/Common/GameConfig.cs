@@ -10,7 +10,7 @@ namespace GoblinFramework.Common
         public Task<byte[]> LoadConfigAsync(string cfgName);
     }
 
-    public class GameConfig : CComp
+    public class GameConfig : RComp
     {
         /// <summary>
         /// 配置表定位器

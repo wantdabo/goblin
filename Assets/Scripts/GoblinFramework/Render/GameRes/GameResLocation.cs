@@ -12,7 +12,7 @@ namespace GoblinFramework.Render.GameResource
     /// <summary>
     /// 资源加载定位器，加载框架包装定位资源地址
     /// </summary>
-    public class GameResLocation : CComp
+    public class GameResLocation : RComp
     {
         private const string prefabPath = "GameRes/Prefabs/";
         private const string uiprefabPath = "GameRes/UIPrefabs/";
@@ -27,7 +27,7 @@ namespace GoblinFramework.Render.GameResource
         /// <returns>UIPrefab UI 预制体</returns>
         public async Task<GameObject> LoadUIPrefabAsync(string resName, Transform parent = null)
         {
-            return GameObject.Instantiate(await engine.res.LoadAssetAsync<GameObject>(uiprefabPath + resName), parent ?? engine.ui.UIRoot.transform);
+            return GameObject.Instantiate(await engine.gameRes.LoadAssetAsync<GameObject>(uiprefabPath + resName), parent ?? engine.gameui.UIRoot.transform);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace GoblinFramework.Render.GameResource
         /// <returns>UIPrefab UI 预制体</returns>
         public GameObject LoadUIPrefabSync(string resName, Transform parent = null)
         {
-            return GameObject.Instantiate(engine.res.LoadAssetSync<GameObject>(uiprefabPath + resName), parent ?? engine.ui.UIRoot.transform); 
+            return GameObject.Instantiate(engine.gameRes.LoadAssetSync<GameObject>(uiprefabPath + resName), parent ?? engine.gameui.UIRoot.transform); 
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace GoblinFramework.Render.GameResource
         /// <returns>Sprite 精灵</returns>
         public async Task<Sprite> LoadSpriteAsync(string resName)
         {
-            return await engine.res.LoadAssetAsync<Sprite>(spritesPath + resName);
+            return await engine.gameRes.LoadAssetAsync<Sprite>(spritesPath + resName);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace GoblinFramework.Render.GameResource
         /// <returns>Sprite 精灵</returns>
         public Sprite LoadSpriteSync(string resName)
         {
-            return engine.res.LoadAssetSync<Sprite>(spritesPath + resName);
+            return engine.gameRes.LoadAssetSync<Sprite>(spritesPath + resName);
         }
         
         /// <summary>
@@ -68,7 +68,7 @@ namespace GoblinFramework.Render.GameResource
         /// <returns>RawBytes</returns>
         public async Task<byte[]> LoadConfigAsync(string resName)
         {
-            return await engine.res.LoadRawFileAsync(configPath + resName);
+            return await engine.gameRes.LoadRawFileAsync(configPath + resName);
         }
     }
 }

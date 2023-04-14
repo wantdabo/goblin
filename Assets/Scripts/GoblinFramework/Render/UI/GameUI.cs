@@ -13,7 +13,7 @@ namespace GoblinFramework.Render.UI
     /// <summary>
     /// Game-UI 游戏 UI 组件
     /// </summary>
-    public class GameUI : CComp
+    public class GameUI : RComp
     {
         /// <summary>
         /// UILayer 层级

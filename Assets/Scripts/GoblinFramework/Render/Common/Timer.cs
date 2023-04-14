@@ -10,7 +10,7 @@ namespace GoblinFramework.Render.Common
     /// <summary>
     /// Timer 渲染层计时器
     /// </summary>
-    public class Timer : CComp, IUpdate
+    public class Timer : RComp, IUpdate
     {
         private bool mIsRunning = false;
         public bool isRunning { get { return mIsRunning; } private set { mIsRunning = value; } }

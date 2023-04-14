@@ -17,8 +17,8 @@ namespace GoblinFramework.Render.UI.Login
             base.OnBindEvent();
             AddUIEventListener("TryBtn", (eventData) =>
             {
-                engine.ui.Close<LoginView>();
-                engine.ui.Open<GameplayView>();
+                engine.gameui.Close<LoginView>();
+                engine.gameui.Open<GameplayView>();
             });
         }
     }

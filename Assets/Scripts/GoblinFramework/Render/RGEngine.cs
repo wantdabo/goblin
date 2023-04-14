@@ -16,9 +16,9 @@ namespace GoblinFramework.Render
     public class RGEngine : GameEngine<RGEngine>
     {
         public Ticker ticker = null;
-        public U3DTool u3d = null;
-        public GameUI ui = null;
-        public GameRes res = null;
+        public U3DTool u3dTool = null;
+        public GameUI gameui = null;
+        public GameRes gameRes = null;
 
         protected async override void OnCreate()
         {
@@ -29,19 +29,19 @@ namespace GoblinFramework.Render
             ticker.Create();
 
             // 游戏资源
-            res = AddComp<YooGameRes>();
-            res.Create();
-            await res.InitialGameRes();
+            gameRes = AddComp<YooGameRes>();
+            gameRes.Create();
+            await gameRes.InitialGameRes();
 
             // U3D API
-            u3d = AddComp<U3DTool>();
-            u3d.Create();
+            u3dTool = AddComp<U3DTool>();
+            u3dTool.Create();
 
             // 游戏 UI
-            ui = AddComp<GameUI>();
-            ui.Create();
+            gameui = AddComp<GameUI>();
+            gameui.Create();
 
-            engine.ui.Open<UI.GameInitialize.GameInitializeView>();
+            engine.gameui.Open<UI.GameInitialize.GameInitializeView>();
         }
 
         protected override void OnDestroy()
@@ -49,9 +49,9 @@ namespace GoblinFramework.Render
             base.OnDestroy();
 
             ticker = null;
-            u3d = null;
-            ui = null;
-            res = null;
+            u3dTool = null;
+            gameui = null;
+            gameRes = null;
         }
     }
 }

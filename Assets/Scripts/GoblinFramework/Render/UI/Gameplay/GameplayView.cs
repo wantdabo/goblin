@@ -22,7 +22,7 @@ namespace GoblinFramework.Render.UI.Gameplay
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            clockText = engine.u3d.SeekNode<Text>(gameObject, "ClockText");
+            clockText = engine.u3dTool.SeekNode<Text>(gameObject, "ClockText");
         }
 
         private TestGameStage stage;
