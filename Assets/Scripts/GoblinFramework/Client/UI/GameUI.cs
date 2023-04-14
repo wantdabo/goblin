@@ -144,7 +144,7 @@ namespace GoblinFramework.Client.UI
             view.Open();
         }
 
-        public async void Close<T>(bool autounload = true) where T : UIBaseView
+        public void Close<T>(bool autounload = true) where T : UIBaseView
         {
             var view = Get<T>();
             

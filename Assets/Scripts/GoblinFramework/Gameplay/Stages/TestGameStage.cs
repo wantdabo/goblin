@@ -1,4 +1,4 @@
-namespace GoblinFramework.Client.Gameplay
+namespace GoblinFramework.Gameplay
 {
     public class TestGameStageConf : GameStageConf
     {

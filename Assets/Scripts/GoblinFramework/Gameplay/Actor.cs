@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GoblinFramework.Client.Gameplay;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Events;

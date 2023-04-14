@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GoblinFramework.Client.Gameplay;
 using GoblinFramework.Client.UI.Gameplay;
 
 namespace GoblinFramework.Client.UI.Login

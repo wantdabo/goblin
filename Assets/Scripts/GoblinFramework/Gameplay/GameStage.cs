@@ -4,7 +4,7 @@ using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Events;
 
-namespace GoblinFramework.Client.Gameplay
+namespace GoblinFramework.Gameplay
 {
     public abstract class GameStage : Actor
     {

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GoblinFramework.Client.Gameplay;
 using GoblinFramework.Gameplay.Events;
 using UnityEngine;
 using UnityEngine.UI;
+using GoblinFramework.Gameplay;
 
 namespace GoblinFramework.Client.UI.Gameplay
 {
