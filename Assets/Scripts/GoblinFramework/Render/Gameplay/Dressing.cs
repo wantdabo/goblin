@@ -6,6 +6,6 @@ namespace GoblinFramework.Render.Gameplay
 {
     public class Dressing : RComp
     {
-
+        public Surface surface;
     }
 }

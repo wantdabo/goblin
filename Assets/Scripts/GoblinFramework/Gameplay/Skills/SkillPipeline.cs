@@ -1,4 +1,5 @@
-﻿using GoblinFramework.Core;
+﻿using GoblinFramework.Common.Events;
+using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
 using GoblinFramework.Gameplay.Events;
 

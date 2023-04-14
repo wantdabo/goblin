@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GoblinFramework.Gameplay.Events;
+using GoblinFramework.Common.Events;
 using UnityEngine;
 using UnityEngine.UI;
 using GoblinFramework.Gameplay;
+using GoblinFramework.Render.Gameplay;
 
 namespace GoblinFramework.Render.UI.Gameplay
 {
@@ -22,21 +23,24 @@ namespace GoblinFramework.Render.UI.Gameplay
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            clockText = engine.u3dTool.SeekNode<Text>(gameObject, "ClockText");
+            clockText = engine.u3dtool.SeekNode<Text>(gameObject, "ClockText");
         }
 
         private TestGameStage stage;
+        private SurfaceDirector director;
         protected override void OnOpen()
         {
             base.OnOpen();
             stage = TestGameStage.CreateGameStage(null);
-            stage.eventor.Listen<TestEvent>(TestEventFunc);
-        }
-
-        private void TestEventFunc(TestEvent evt)
-        {
-            Debug.Log(evt.testStr);
-            // stage.eventor.UnListen<TestEvent>(TestEventFunc);
+            director = AddComp<SurfaceDirector>();
+            director.Create(stage);
+            stage.Analyze(null);
+            stage.Play();
+            stage.Pause();
+            stage.Play();
+            var actor = stage.AddActor<Actor>();
+            actor.Create();
+            stage.RmvActor(actor);
         }
 
         public void Update(float tick)
@@ -45,10 +49,6 @@ namespace GoblinFramework.Render.UI.Gameplay
             if (null == stage) return;
             
             clockText.text = DateTime.Now.ToLongTimeString();
-            
-            var e = new TestEvent();
-            e.testStr = "Hello World.";
-            stage.eventor.Tell(e);
         }
     }
 }

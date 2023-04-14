@@ -1,7 +1,8 @@
 ﻿using GoblinFramework.Core;
-using GoblinFramework.Gameplay.Events;
 using System;
 using System.Collections.Generic;
+using GoblinFramework.Common.Events;
+using GoblinFramework.Gameplay.Events;
 using UnityEditor.PackageManager;
 
 namespace GoblinFramework.Gameplay.Common
@@ -37,6 +38,7 @@ namespace GoblinFramework.Gameplay.Common
         public override void Create()
         {
             if (null == ticker) throw new Exception("plz use method Create(t : Ticker) to create timer.");
+            base.Create();
         }
 
         protected override void OnCreate()

@@ -6,23 +6,23 @@ namespace GoblinFramework.Gameplay
 
     public class TestGameStage : GameStage<TestGameStage, TestGameStageConf>
     {
-        public override void OnAnalyze(TestGameStageConf stageConf)
+        protected override void OnAnalyze(TestGameStageConf stageConf)
         {
         }
         
-        public override void OnPlay()
+        protected override void OnPlay()
         {
         }
 
-        public override void OnPause()
+        protected override void OnPause()
         {
         }
 
-        public override void OnGaming(float tick)
+        protected override void OnGaming(float tick)
         {
         }
 
-        public override void OnEnd()
+        protected override void OnEnd()
         {
         }
     }

@@ -16,7 +16,7 @@ namespace GoblinFramework.Render
     public class RGEngine : GameEngine<RGEngine>
     {
         public Ticker ticker = null;
-        public U3DTool u3dTool = null;
+        public U3DTool u3dtool = null;
         public GameUI gameui = null;
         public GameRes gameRes = null;
 
@@ -34,8 +34,8 @@ namespace GoblinFramework.Render
             await gameRes.InitialGameRes();
 
             // U3D API
-            u3dTool = AddComp<U3DTool>();
-            u3dTool.Create();
+            u3dtool = AddComp<U3DTool>();
+            u3dtool.Create();
 
             // 游戏 UI
             gameui = AddComp<GameUI>();
@@ -49,7 +49,7 @@ namespace GoblinFramework.Render
             base.OnDestroy();
 
             ticker = null;
-            u3dTool = null;
+            u3dtool = null;
             gameui = null;
             gameRes = null;
         }

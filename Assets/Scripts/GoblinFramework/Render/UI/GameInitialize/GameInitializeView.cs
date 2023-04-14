@@ -22,8 +22,8 @@ namespace GoblinFramework.Render.UI.GameInitialize
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            sliderProgress = engine.u3dTool.SeekNode<Slider>(gameObject, "Progress");
-            textProgress = engine.u3dTool.SeekNode<Text>(gameObject, "ProgressDesctText");
+            sliderProgress = engine.u3dtool.SeekNode<Slider>(gameObject, "Progress");
+            textProgress = engine.u3dtool.SeekNode<Text>(gameObject, "ProgressDesctText");
         }
 
         private float speed = 1f;

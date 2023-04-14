@@ -1,42 +1,46 @@
-using GoblinFramework.Core;
-using GoblinFramework.Gameplay.Phys;
+using GoblinFramework.Common.Events;
 using GoblinFramework.Gameplay.Skills;
 
 namespace GoblinFramework.Gameplay.Events
 {
-    public interface Event
-    {
-        
-    }
-
-    public struct TestEvent : Event
-    {
-        public string testStr;
-    }
-
-    public struct TickEvent : Event 
+    public struct TickEvent : IEvent 
     {
         public uint frame;
         public float tick;
     }
 
-    public struct LateTickEvent : Event 
+    public struct LateTickEvent : IEvent 
     {
         public uint frame;
         public float tick;
     }
-
-    public struct CollisionEnterEvent : Event
+    
+    public struct GameStatusEvent : IEvent
     {
-        public uint actorId;
+        public GameStatus state;
     }
 
-    public struct CollisionLeaveEvent : Event
+    public struct AddActorEvent : IEvent
     {
-        public uint actorId;
+        public uint actor;
     }
 
-    public struct SkillPipelineStateEvent : Event
+    public struct RmvActorEvent : IEvent
+    {
+        public uint actor;
+    }
+
+    public struct CollisionEnterEvent : IEvent
+    {
+        public uint actor;
+    }
+
+    public struct CollisionLeaveEvent : IEvent
+    {
+        public uint actor;
+    }
+
+    public struct SkillPipelineStateEvent : IEvent
     {
         public Actor caster;
         public SkillPipelineState state;

@@ -1,18 +1,21 @@
 using GoblinFramework.Core;
-using GoblinFramework.Gameplay.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoblinFramework.Common.Events;
+using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Gameplay.Common
 {
     /// <summary>
     /// Ticker, 逻辑层 Tick 驱动组件
     /// </summary>
-    public class Ticker : Actor
+    public class Ticker : Comp
     {
+        public Eventor eventor;
+        
         private uint mFrame = 0;
 
         public uint frame
