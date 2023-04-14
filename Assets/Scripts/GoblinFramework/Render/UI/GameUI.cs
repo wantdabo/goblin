@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Base;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Base;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.UI
+namespace GoblinFramework.Render.UI
 {
     /// <summary>
     /// Game-UI 游戏 UI 组件

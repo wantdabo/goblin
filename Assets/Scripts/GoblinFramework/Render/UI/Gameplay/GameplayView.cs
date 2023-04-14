@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Base;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GoblinFramework.Gameplay;
 
-namespace GoblinFramework.Client.UI.Gameplay
+namespace GoblinFramework.Render.UI.Gameplay
 {
     public class GameplayView : UIBaseView, IUpdate
     {

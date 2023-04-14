@@ -1,10 +1,10 @@
 ﻿using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine;
-using GoblinFramework.Client.Common;
+using GoblinFramework.Render.Common;
 using GoblinFramework.Core;
 
-namespace GoblinFramework.Client.GameResource
+namespace GoblinFramework.Render.GameResource
 {
     /// <summary>
     /// Game-Resources-Comp 资源加载组件

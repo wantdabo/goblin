@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Client.Common
+namespace GoblinFramework.Render.Common
 {
     /// <summary>
     /// Timer 渲染层计时器

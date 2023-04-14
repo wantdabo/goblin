@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace GoblinFramework.Client.UI.Common
+namespace GoblinFramework.Render.UI.Common
 {
     public enum UIEventEnum
     {

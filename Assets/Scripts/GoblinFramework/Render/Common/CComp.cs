@@ -1,4 +1,4 @@
-﻿using GoblinFramework.Client;
+﻿using GoblinFramework.Render;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoblinFramework.Client.Common
+namespace GoblinFramework.Render.Common
 {
     /// <summary>
     /// Client-Comp，客户端组件
     /// </summary>
-    public class CComp : Comp<CGEngine>
+    public class CComp : Comp<RGEngine>
     {
         protected override void OnCreate()
         {

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YooAsset;
 
-namespace GoblinFramework.Client.GameResource
+namespace GoblinFramework.Render.GameResource
 {
     /// <summary>
     /// YooAsset 资源加载组件

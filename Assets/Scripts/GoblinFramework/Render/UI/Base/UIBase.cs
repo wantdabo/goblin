@@ -1,5 +1,5 @@
-﻿using GoblinFramework.Client.Common;
-using GoblinFramework.Client.UI.Common;
+﻿using GoblinFramework.Render.Common;
+using GoblinFramework.Render.UI.Common;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GoblinFramework.Client.UI.Base
+namespace GoblinFramework.Render.UI.Base
 {
     public class UIBase : CComp
     {

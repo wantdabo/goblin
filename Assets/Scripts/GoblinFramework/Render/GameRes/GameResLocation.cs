@@ -1,4 +1,4 @@
-﻿using GoblinFramework.Client.Common;
+﻿using GoblinFramework.Render.Common;
 using GoblinFramework.Core;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GoblinFramework.Client.GameResource
+namespace GoblinFramework.Render.GameResource
 {
     /// <summary>
     /// 资源加载定位器，加载框架包装定位资源地址

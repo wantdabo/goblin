@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bright.Serialization;
-using GoblinFramework.Client.Common;
+using GoblinFramework.Render.Common;
 
 namespace GoblinFramework.Common
 {
