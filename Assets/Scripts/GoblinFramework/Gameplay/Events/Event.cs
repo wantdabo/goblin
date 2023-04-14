@@ -1,8 +1,24 @@
+using System;
 using GoblinFramework.Common.Events;
 using GoblinFramework.Gameplay.Skills;
 
 namespace GoblinFramework.Gameplay.Events
 {
+    public struct UpdateEvent : IEvent
+    {
+        public float tick;
+    }
+
+    public struct LateUpdateEvent : IEvent
+    {
+        public float tick;
+    }
+
+    public struct FixedUpdateEvent : IEvent
+    {
+        public float tick;
+    }
+
     public struct TickEvent : IEvent 
     {
         public uint frame;
@@ -38,6 +54,12 @@ namespace GoblinFramework.Gameplay.Events
     public struct CollisionLeaveEvent : IEvent
     {
         public uint actor;
+    }
+
+    public struct StateChangeEvent : IEvent
+    {
+        public int layer;
+        public Type type;
     }
 
     public struct SkillPipelineStateEvent : IEvent

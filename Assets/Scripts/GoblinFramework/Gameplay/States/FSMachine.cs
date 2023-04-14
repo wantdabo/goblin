@@ -4,20 +4,23 @@ using System.Linq;
 using GoblinFramework.Common;
 using GoblinFramework.Core;
 using GoblinFramework.Gameplay.Common;
+using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Gameplay.States
 {
     public class FSMachine : Comp
     {
         public StateMachine stateMachine;
-        public event Action<Type> stateNotify;
-
+        public int layer;
         private FSMState current;
-        private List<FSMState> states = new List<FSMState>();
+        private List<FSMState> states = new();
 
         public void SetState<T>() where T : FSMState, new()
         {
-            foreach (var s in states) if (typeof(T) == s.GetType()) throw new Exception($"can't set same state -> {typeof(T)}");
+            foreach (var s in states)
+            {
+                if (typeof(T) == s.GetType()) throw new Exception($"can't set same state -> {typeof(T)}");
+            }
 
             var state = AddComp<T>();
             state.machine = this;
@@ -29,18 +32,18 @@ namespace GoblinFramework.Gameplay.States
         {
             foreach (var state in states)
             {
-                if(null != current && current.passStates.Contains(state.GetType())) continue;
+                if (null != current && current.passStates.Contains(state.GetType())) continue;
                 if (false == state.OnDetect()) continue;
-                
+
                 current?.OnLeave();
                 current = state;
                 current.OnEnter();
-                
-                stateNotify?.Invoke(current.GetType());
+
+                stateMachine.actor.eventor.Tell(new StateChangeEvent() { layer = layer, type = current.GetType() });
             }
         }
-        
-        public void OnTick(int frame, float tick)
+
+        public void OnTick(uint frame, float tick)
         {
             StateDetect();
             current?.OnProcess(tick);

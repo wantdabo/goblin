@@ -6,16 +6,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoblinFramework.Gameplay.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GoblinFramework.Render.UI.GameInitialize
 {
-    public class GameInitializeView : UIBaseView, IUpdate
+    public class GameInitializeView : UIBaseView
     {
         public override GameUI.UILayer layer => GameUI.UILayer.UITop;
 
         protected override string res => "GameInitialize/GameInitializeView";
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            engine.ticker.eventor.Listen<UpdateEvent>(OnUpdate);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            engine.ticker.eventor.UnListen<UpdateEvent>(OnUpdate);
+        }
 
         private Slider sliderProgress;
         private Text textProgress;
@@ -28,13 +41,13 @@ namespace GoblinFramework.Render.UI.GameInitialize
 
         private float speed = 1f;
         public float progress = 0;
-        public void Update(float tick)
+        public void OnUpdate(UpdateEvent e)
         {
             if (null == gameObject) return;
 
             if (progress >= 1) return;
             
-            progress += tick * speed;
+            progress += e.tick * speed;
 
             Mathf.Clamp(progress, 0, 1);
             sliderProgress.value = progress;

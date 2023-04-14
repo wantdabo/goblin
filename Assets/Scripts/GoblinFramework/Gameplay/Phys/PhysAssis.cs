@@ -5,12 +5,7 @@ using UnityEngine;
 
 namespace GoblinFramework.Gameplay.Phys
 {
-    public class PhysAssisInfo : BehaviorInfo
-    {
-        public PhysXU3D physxU3D;
-    }
-
-    public class PhysAssis : Behavior<PhysAssisInfo>
+    public class PhysAssis : Behavior
     {
         protected override void OnCreate()
         {

@@ -12,7 +12,6 @@ namespace GoblinFramework.Render.Gameplay
         public uint id;
         public SurfaceDirector director;
         public Eventor eventor;
-
         private Dictionary<Type, Dressing> dressingDict = new();
         
         public T GetDressing<T>() where T : Dressing

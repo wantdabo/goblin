@@ -9,15 +9,28 @@ using GoblinFramework.Common.Events;
 using UnityEngine;
 using UnityEngine.UI;
 using GoblinFramework.Gameplay;
+using GoblinFramework.Gameplay.Events;
 using GoblinFramework.Render.Gameplay;
 
 namespace GoblinFramework.Render.UI.Gameplay
 {
-    public class GameplayView : UIBaseView, IUpdate
+    public class GameplayView : UIBaseView
     {
         public override GameUI.UILayer layer => GameUI.UILayer.UIMain;
 
         protected override string res => "Gameplay/GameplayView";
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            engine.ticker.eventor.Listen<UpdateEvent>(OnUpdate);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            engine.ticker.eventor.UnListen<UpdateEvent>(OnUpdate);
+        }
 
         private Text clockText;
         protected override void OnBuildUI()
@@ -38,16 +51,16 @@ namespace GoblinFramework.Render.UI.Gameplay
             stage.Play();
             stage.Pause();
             stage.Play();
-            var actor = stage.AddActor<Actor>();
-            actor.Create();
-            stage.RmvActor(actor);
+            
+            var jianhun = stage.AddActor<Jianhun>();
+            jianhun.Create();
         }
 
-        public void Update(float tick)
+        public void OnUpdate(UpdateEvent e)
         {
             if (null == clockText) return;
             if (null == stage) return;
-            
+            stage.Tick(e.tick);
             clockText.text = DateTime.Now.ToLongTimeString();
         }
     }

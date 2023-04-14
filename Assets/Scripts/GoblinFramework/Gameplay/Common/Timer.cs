@@ -26,10 +26,10 @@ namespace GoblinFramework.Gameplay.Common
 
         public Ticker ticker;
         private uint timerIncrementId = 0;
-        private List<TimeInfo> timeInfos = new List<TimeInfo>();
-        private List<TimeInfo> lateTimeInfos = new List<TimeInfo>();
+        private List<TimeInfo> timeInfos = new();
+        private List<TimeInfo> lateTimeInfos = new();
 
-        public void Create(Ticker t) 
+        public void Create(Ticker t)
         {
             ticker = t;
             Create();
@@ -86,7 +86,8 @@ namespace GoblinFramework.Gameplay.Common
             info.duration = frame;
             info.loop = loop;
 
-            if (TimerTickDef.Tick == tickDef) timeInfos.Add(info); else lateTimeInfos.Add(info);
+            if (TimerTickDef.Tick == tickDef) timeInfos.Add(info);
+            else lateTimeInfos.Add(info);
 
             return info.id;
         }

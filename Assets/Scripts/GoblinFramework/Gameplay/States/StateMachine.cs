@@ -1,13 +1,28 @@
 using System;
 using System.Collections.Generic;
+using GoblinFramework.Gameplay.Events;
 
 namespace GoblinFramework.Gameplay.States
 {
     public class StateMachine : Behavior
     {
-        private List<FSMachine> machines = new List<FSMachine>();
-        private Dictionary<int, Type> stateDict = new Dictionary<int, Type>();
-        
+        private List<FSMachine> machines = new();
+        private Dictionary<int, Type> stateDict = new();
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            actor.stage.ticker.eventor.Listen<TickEvent>(OnTick);
+            actor.eventor.Listen<StateChangeEvent>(OnStateChange);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            actor.stage.ticker.eventor.UnListen<TickEvent>(OnTick);
+            actor.eventor.UnListen<StateChangeEvent>(OnStateChange);
+        }
+
         private FSMachine GetMachine(int layer = 0)
         {
             if (machines.Count >= layer + 1) return machines[layer];
@@ -21,7 +36,8 @@ namespace GoblinFramework.Gameplay.States
             if (null == machine)
             {
                 machine = AddComp<FSMachine>();
-                machine.stateNotify += (type) => NotifyStateInfo(layer, type);
+                machine.stateMachine = this;
+                machine.layer = layer;
                 machines.Add(machine);
                 machine.Create();
             }
@@ -29,10 +45,15 @@ namespace GoblinFramework.Gameplay.States
             machine.SetState<T>();
         }
 
-        private void NotifyStateInfo(int layer, Type type)
+        private void OnStateChange(StateChangeEvent e)
         {
-            if (stateDict.ContainsKey(layer)) stateDict.Remove(layer);
-            stateDict.Add(layer, type);
+            if (stateDict.ContainsKey(e.layer)) stateDict.Remove(e.layer);
+            stateDict.Add(e.layer, e.type);
+        }
+
+        private void OnTick(TickEvent e)
+        {
+            foreach (var machine in machines) machine.OnTick(e.frame, e.tick);    
         }
     }
 }
