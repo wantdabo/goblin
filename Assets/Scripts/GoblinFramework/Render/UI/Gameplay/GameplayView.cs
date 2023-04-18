@@ -47,9 +47,6 @@ namespace GoblinFramework.Render.UI.Gameplay
             stage.Play();
             stage.Pause();
             stage.Play();
-            
-            var jianhun = stage.AddActor<Jianhun>();
-            jianhun.Create();
         }
 
         public void OnUpdate(UpdateEvent e)
