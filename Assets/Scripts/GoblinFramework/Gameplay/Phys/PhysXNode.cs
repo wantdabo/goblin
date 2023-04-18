@@ -40,7 +40,7 @@ namespace GoblinFramework.Gameplay.Phys
                 if (null == mBoxcollider2d)
                 {
                     mBoxcollider2d = gameObject.AddComponent<BoxCollider2D>();
-                    // TODO ÉèÖÃÎïÀí²ÄÖÊ£¬Ä¦éßÁ¦²»Òª£¬µ¯Á¦Ò²²»Òª
+                    // TODO åŠ å…¥ç‰©ç†æè´¨ï¼Œæ‘©æ“¦ä»¥åŠå¼¹è·³åŠ›ä¸º 0
                 }
 
                 return mBoxcollider2d;
@@ -56,7 +56,7 @@ namespace GoblinFramework.Gameplay.Phys
                 if (null == mCirclecollider2d)
                 {
                     mCirclecollider2d = gameObject.AddComponent<CircleCollider2D>();
-                    // TODO ÉèÖÃÎïÀí²ÄÖÊ£¬Ä¦éßÁ¦²»Òª£¬µ¯Á¦Ò²²»Òª
+                    // TODO åŠ å…¥ç‰©ç†æè´¨ï¼Œæ‘©æ“¦ä»¥åŠå¼¹è·³åŠ›ä¸º 0
                 }
 
                 return mCirclecollider2d;
