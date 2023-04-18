@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GoblinFramework.Gameplay.Render
 {
-    public class ModelAnimation : Behavior
+    public class ModelAnimation : Surface
     {
     }
 }
