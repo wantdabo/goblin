@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using GoblinFramework.Gameplay;
 using GoblinFramework.Gameplay.Events;
-using GoblinFramework.Render.Gameplay;
 
 namespace GoblinFramework.Render.UI.Gameplay
 {
@@ -40,13 +39,10 @@ namespace GoblinFramework.Render.UI.Gameplay
         }
 
         private TestGameStage stage;
-        private SurfaceDirector director;
         protected override void OnOpen()
         {
             base.OnOpen();
             stage = TestGameStage.CreateGameStage(null);
-            director = AddComp<SurfaceDirector>();
-            director.Create(stage);
             stage.Analyze(null);
             stage.Play();
             stage.Pause();
