@@ -34,28 +34,38 @@ namespace Goblin.Common.Res
         {
             var handle = YooAssets.LoadAssetAsync<T>(resName);
             await handle.Task;
+            var result = handle.AssetObject as T;
+            handle.Release();
 
-            return handle.AssetObject as T;
+            return result;
         }
 
         public override T LoadAssetSync<T>(string resName)
         {
             var handle = YooAssets.LoadAssetSync<T>(resName);
+            var result = handle.AssetObject as T;
+            handle.Release();
 
-            return handle.AssetObject as T;
+            return result;
         }
 
         public override async Task<byte[]> LoadRawFileAsync(string resName)
         {
             var handle = YooAssets.LoadRawFileAsync(resName);
             await handle.Task;
+            var result = handle.GetRawFileData();
+            handle.Release();
 
-            return handle.GetRawFileData();
+            return result;
         }
 
         public override byte[] LoadRawFileSync(string resName) 
         {
-            return YooAssets.LoadRawFileSync(resName).GetRawFileData();
+            var handle = YooAssets.LoadRawFileSync(resName);
+            var result = handle.GetRawFileData();
+            handle.Release();
+
+            return result;
         }
 
         public override async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)

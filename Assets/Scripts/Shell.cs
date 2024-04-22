@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Goblin.Core;
+//using Goblin.Core;
 using UnityEngine;
 
 /// <summary>
@@ -21,16 +21,16 @@ public class Shell : MonoBehaviour
     private void Start()
     {
         GameSettings();
-        GoblinExport.InitGoblin();
+        HotfixScript.Init();
     }
 
     private void Update()
     {
-        GoblinExport.Tick(Time.deltaTime);
+        HotfixScript.Tick();
     }
 
     private void FixedUpdate()
     {
-        GoblinExport.FixedTick(Time.fixedDeltaTime);
+        HotfixScript.FixedTick();
     }
 }
