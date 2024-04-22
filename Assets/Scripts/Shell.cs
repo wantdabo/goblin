@@ -1,44 +1,36 @@
-using GoblinFramework.Core;
-using GoblinFramework.Render;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Goblin.Core;
 using UnityEngine;
 
+/// <summary>
+/// Shell/游戏入口
+/// </summary>
 public class Shell : MonoBehaviour
 {
-    public static Shell Instance = null;
-    public static RGEngine engine = null;
-
     private void GameSettings()
     {
-        Instance = this;
         Application.runInBackground = true;
+        Application.targetFrameRate = 120;
     }
 
     private void Start()
     {
         GameSettings();
-        engine = RGEngine.CreateGameEngine();
-    }
-
-    private void OnDestroy()
-    {
-        engine.Destroy();
-        engine = null;
+        GoblinExport.InitGoblin();
     }
 
     private void Update()
     {
-        engine.ticker.Update(Time.deltaTime);
-    }
-
-    private void LateUpdate()
-    {
-        engine.ticker.LateUpdate(Time.deltaTime);
+        GoblinExport.Tick(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        engine.ticker.FixedUpdate(Time.fixedDeltaTime);
+        GoblinExport.FixedTick(Time.fixedDeltaTime);
     }
 }

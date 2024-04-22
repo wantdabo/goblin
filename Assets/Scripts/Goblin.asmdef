@@ -1,0 +1,17 @@
+{
+    "name": "Goblin",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3cf61fed0e2ac7a41bb077cc5c6a9675",
+        "GUID:e34a5702dd353724aa315fb8011f08c3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

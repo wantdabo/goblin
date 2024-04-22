@@ -24,7 +24,7 @@ MonoBehaviour:
     - CollectPath: Assets/GameRes
       CollectorType: 0
       AddressRuleName: AddressByCollectorAndFileName
-      PackRuleName: PackDirectory
+      PackRuleName: PackSeparately
       FilterRuleName: CollectAll
       AssetTags: 
   - GroupName: GameRawRes

@@ -1,15 +1,24 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{b97c29fb-ed2d-bc3b-615a-9f755da639ff}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goblin", "Goblin.csproj", "{243BA6D3-C80D-1B7C-9002-2ACC1D578CF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LubanLib", "LubanLib.csproj", "{B1D03544-C7FA-AE86-621C-E6A396BBE003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{b97c29fb-ed2d-bc3b-615a-9f755da639ff}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{b97c29fb-ed2d-bc3b-615a-9f755da639ff}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{243BA6D3-C80D-1B7C-9002-2ACC1D578CF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{243BA6D3-C80D-1B7C-9002-2ACC1D578CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{243BA6D3-C80D-1B7C-9002-2ACC1D578CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{243BA6D3-C80D-1B7C-9002-2ACC1D578CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1D03544-C7FA-AE86-621C-E6A396BBE003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1D03544-C7FA-AE86-621C-E6A396BBE003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1D03544-C7FA-AE86-621C-E6A396BBE003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1D03544-C7FA-AE86-621C-E6A396BBE003}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

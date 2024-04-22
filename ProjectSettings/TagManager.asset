@@ -11,7 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Actor
+  - Player
+  - Monster
+  - Bullet
+  - MonsterBullet
+  - Drop
   - 
   - 
   - 
@@ -28,15 +32,11 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - WaterGround
+  - Landscape
+  - ViewFence
+  - Ground
+  - Trigger
   m_SortingLayers:
   - name: Default
     uniqueID: 0
@@ -49,4 +49,22 @@ TagManager:
     locked: 0
   - name: UITop
     uniqueID: 4168467849
+    locked: 0
+  - name: Monster
+    uniqueID: 3171665433
+    locked: 0
+  - name: Player
+    uniqueID: 4261795317
+    locked: 0
+  - name: Front
+    uniqueID: 2020387817
+    locked: 0
+  - name: Drop
+    uniqueID: 1543391163
+    locked: 0
+  - name: Skill
+    uniqueID: 122980065
+    locked: 0
+  - name: BloodDance
+    uniqueID: 2663767827
     locked: 0
