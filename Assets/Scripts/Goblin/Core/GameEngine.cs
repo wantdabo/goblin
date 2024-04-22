@@ -1,5 +1,5 @@
 ﻿using Goblin.Common;
-using Goblin.GameResource;
+using Goblin.Common.Res;
 using Goblin.Sys.Common;
 using System;
 using System.Collections.Generic;
@@ -57,7 +57,6 @@ namespace Goblin.Core
 
             // 配置表
             cfg = AddComp<GameConfig>();
-            await cfg.Initial();
             cfg.Create();
 
             // Proxy

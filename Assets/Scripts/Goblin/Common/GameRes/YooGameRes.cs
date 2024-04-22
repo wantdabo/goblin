@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Goblin.Common.Res;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YooAsset;
 
-namespace Goblin.GameResource
+namespace Goblin.Common.Res
 {
     /// <summary>
     /// YooAsset 资源加载组件
@@ -16,22 +17,17 @@ namespace Goblin.GameResource
     {
         public override Task Initial()
         {
+            YooAssets.Initialize();
+            var package = YooAssets.CreatePackage("Package");
+            YooAssets.SetDefaultPackage(package);
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
-            var initParameters = new YooAssets.EditorSimulateModeParameters();
+            var initParameters = new EditorSimulateModeParameters();
+            var simulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild("Package");
+            initParameters.SimulateManifestFilePath = simulateManifestFilePath;
 #elif YOOASSETS_OFFLINE
-            var initParameters = new YooAssets.OfflinePlayModeParameters();
-#else
-            var initParameters = new YooAssets.HostPlayModeParameters();
-            initParameters.DecryptionServices = null;
-            initParameters.ClearCacheWhenDirty = false;
-            initParameters.DefaultHostServer = "http://127.0.0.1/CDN1/Android";
-            initParameters.FallbackHostServer = "http://127.0.0.1/CDN2/Android";
-            initParameters.VerifyLevel = EVerifyLevel.High;
+            var initParameters = new OfflinePlayModeParameters();
 #endif
-            initParameters.LocationServices = new DefaultLocationServices("Assets");
-            var handle = YooAssets.InitializeAsync(initParameters);
-
-            return handle.Task;
+            return package.InitializeAsync(initParameters).Task;
         }
 
         public async override Task<T> LoadAssetAsync<T>(string resName)
@@ -51,10 +47,15 @@ namespace Goblin.GameResource
 
         public override async Task<byte[]> LoadRawFileAsync(string resName)
         {
-            var handle = YooAssets.GetRawFileAsync(resName);
+            var handle = YooAssets.LoadRawFileAsync(resName);
             await handle.Task;
 
-            return handle.LoadFileData();
+            return handle.GetRawFileData();
+        }
+
+        public override byte[] LoadRawFileSync(string resName) 
+        {
+            return YooAssets.LoadRawFileSync(resName).GetRawFileData();
         }
 
         public override async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)

@@ -110,6 +110,7 @@ namespace Goblin.Common
                 arr[i] = arr[index];
                 arr[index] = temp;
             }
+
             return arr;
         }
 
@@ -128,6 +129,7 @@ namespace Goblin.Common
                 list[i] = list[index];
                 list[index] = temp;
             }
+
             return list;
         }
 
@@ -143,6 +145,7 @@ namespace Goblin.Common
             var pos = originPos;
             var randPos = pos + RandCirclePoint() * intensity;
             pos = Vector2.Lerp(originPos, randPos, t);
+
             return pos;
         }
     }

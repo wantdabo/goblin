@@ -11,3 +11,6 @@
 /UserSettings
 *.csproj
 *.sln
+/Assets/StreamingAssets
+/Bundles
+/yoo

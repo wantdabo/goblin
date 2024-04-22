@@ -27,31 +27,15 @@ namespace Goblin.Common
         /// </summary>
         public float int2Float = 0.0001f;
 
-        /// <summary>
-        /// 配置表的名字
-        /// </summary>
-        private List<string> cfgNames = new()
+        protected override void OnCreate()
         {
-            "Conf.ItemInfo",
-        };
+            base.OnCreate();
+            location = new Tables((cfgName) => new ByteBuf(engine.gameRes.location.LoadConfigSync(cfgName)));
+        }
 
-        /// <summary>
-        /// 预加载所有配置的 bytes
-        /// </summary>
-        private Dictionary<string, byte[]> cfgBytesDict = new();
-
-        /// <summary>
-        /// 初始化配置表
-        /// </summary>
-        /// <returns>Task</returns>
-        public async Task Initial()
+        protected override void OnDestroy()
         {
-            foreach(var cfgName in cfgNames)
-            {
-                var bytes = await engine.gameRes.location.LoadConfigAsync(cfgName);
-                cfgBytesDict.Add(cfgName, bytes);
-            }
-            location = new Tables((cfgName) => new ByteBuf(cfgBytesDict[cfgName]));
+            base.OnDestroy();
         }
     }
 }

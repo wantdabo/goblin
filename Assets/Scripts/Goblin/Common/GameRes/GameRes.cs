@@ -4,7 +4,7 @@ using Goblin.Common;
 using UnityEngine;
 using Goblin.Core;
 
-namespace Goblin.GameResource
+namespace Goblin.Common.Res
 {
     /// <summary>
     /// Game-Resources-Comp 资源加载组件
@@ -49,6 +49,12 @@ namespace Goblin.GameResource
         /// <param name="resName">资源名</param>
         /// <returns>二进制资源</returns>
         public abstract Task<byte[]> LoadRawFileAsync(string resName);
+        /// <summary>
+        /// 同步加载二进制资源
+        /// </summary>
+        /// <param name="resName">资源名</param>
+        /// <returns>二进制资源</returns>
+        public abstract byte[] LoadRawFileSync(string resName);
         /// <summary>
         /// 异步加载场景
         /// </summary>
