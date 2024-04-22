@@ -13,7 +13,7 @@ namespace Goblin.Core
     /// <summary>
     /// 游戏引擎组件
     /// </summary>
-    public class GameEngine : Comp
+    public class Engine : Comp
     {
         public Eventor eventor;
         public ObjectPool pool;
@@ -21,7 +21,7 @@ namespace Goblin.Core
         public Ticker ticker;
         public GameRes gameRes;
         public U3DKit u3dkit;
-        public GameConfig cfg;
+        public Config cfg;
         public GameProxy proxy;
         public GameUI gameui;
 
@@ -56,7 +56,7 @@ namespace Goblin.Core
             u3dkit.Create();
 
             // 配置表
-            cfg = AddComp<GameConfig>();
+            cfg = AddComp<Config>();
             cfg.Create();
 
             // Proxy
@@ -86,9 +86,9 @@ namespace Goblin.Core
         /// 创建一个游戏引擎
         /// </summary>
         /// <returns>游戏引擎组件</returns>
-        public static GameEngine CreateGameEngine()
+        public static Engine CreateEngine()
         {
-            GameEngine engine = new();
+            Engine engine = new();
             engine.engine = engine;
             engine.Create();
 

@@ -10,7 +10,7 @@ namespace Goblin.Common
     /// <summary>
     /// 游戏配置
     /// </summary>
-    public class GameConfig: Comp
+    public class Config: Comp
     {
         /// <summary>
         /// 配置表定位器

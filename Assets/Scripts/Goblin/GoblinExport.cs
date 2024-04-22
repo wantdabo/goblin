@@ -5,14 +5,14 @@
     /// </summary>
     public class GoblinExport
     {
-        private static GameEngine engine;
+        private static Engine engine;
 
         /// <summary>
         /// 初始化 Goblin 逻辑
         /// </summary>
         public static void InitGoblin()
         {
-            engine = GameEngine.CreateGameEngine();
+            engine = Engine.CreateEngine();
         }
 
         /// <summary>

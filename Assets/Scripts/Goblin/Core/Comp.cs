@@ -14,7 +14,7 @@ namespace Goblin.Core
         /// <summary>
         /// 引擎
         /// </summary>
-        public GameEngine engine;
+        public Engine engine;
 
         /// <summary>
         /// 组件列表
