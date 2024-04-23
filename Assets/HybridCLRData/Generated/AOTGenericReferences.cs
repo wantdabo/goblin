@@ -5,6 +5,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// {{ AOT assemblies
 	public static readonly IReadOnlyList<string> PatchedAOTAssemblyList = new List<string>
 	{
+		"MessagePack.dll",
 		"System.Core.dll",
 		"UnityEngine.CoreModule.dll",
 		"YooAsset.dll",
@@ -16,11 +17,33 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// }} 
 
 	// {{ AOT generic types
+	// MessagePack.Formatters.IMessagePackFormatter<object>
+	// Nerdbank.Streams.Sequence.SequenceSegment<byte>
+	// Nerdbank.Streams.Sequence<byte>
 	// System.Action<Goblin.Common.TickEvent>
 	// System.Action<Goblin.Common.Ticker.TimerInfo>
 	// System.Action<float>
 	// System.Action<object,object>
 	// System.Action<object>
+	// System.ArraySegment.Enumerator<byte>
+	// System.ArraySegment<byte>
+	// System.Buffers.ArrayMemoryPool.ArrayMemoryPoolBuffer<byte>
+	// System.Buffers.ArrayMemoryPool<byte>
+	// System.Buffers.ArrayPool<byte>
+	// System.Buffers.ConfigurableArrayPool.Bucket<byte>
+	// System.Buffers.ConfigurableArrayPool<byte>
+	// System.Buffers.IMemoryOwner<byte>
+	// System.Buffers.MemoryManager<byte>
+	// System.Buffers.MemoryPool<byte>
+	// System.Buffers.ReadOnlySequence.<>c<byte>
+	// System.Buffers.ReadOnlySequence.Enumerator<byte>
+	// System.Buffers.ReadOnlySequence<byte>
+	// System.Buffers.ReadOnlySequenceSegment<byte>
+	// System.Buffers.SpanAction<ushort,System.Buffers.ReadOnlySequence<ushort>>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool.LockedStack<byte>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool.PerCoreLockedStacks<byte>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool<byte>
+	// System.ByReference<byte>
 	// System.Collections.Generic.ArraySortHelper<Goblin.Common.Ticker.TimerInfo>
 	// System.Collections.Generic.ArraySortHelper<object>
 	// System.Collections.Generic.Comparer<Goblin.Common.Ticker.TimerInfo>
@@ -53,11 +76,13 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IComparer<Goblin.Common.Ticker.TimerInfo>
 	// System.Collections.Generic.IComparer<object>
 	// System.Collections.Generic.IEnumerable<Goblin.Common.Ticker.TimerInfo>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.UIntPtr,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<object>
 	// System.Collections.Generic.IEnumerator<Goblin.Common.Ticker.TimerInfo>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.UIntPtr,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,object>>
@@ -66,6 +91,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEqualityComparer<object>
 	// System.Collections.Generic.IList<Goblin.Common.Ticker.TimerInfo>
 	// System.Collections.Generic.IList<object>
+	// System.Collections.Generic.KeyValuePair<System.UIntPtr,object>
 	// System.Collections.Generic.KeyValuePair<int,object>
 	// System.Collections.Generic.KeyValuePair<object,int>
 	// System.Collections.Generic.KeyValuePair<object,object>
@@ -79,16 +105,26 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectEqualityComparer<object>
 	// System.Collections.Generic.Queue.Enumerator<object>
 	// System.Collections.Generic.Queue<object>
+	// System.Collections.Generic.Stack.Enumerator<object>
+	// System.Collections.Generic.Stack<object>
 	// System.Collections.ObjectModel.ReadOnlyCollection<Goblin.Common.Ticker.TimerInfo>
 	// System.Collections.ObjectModel.ReadOnlyCollection<object>
 	// System.Comparison<Goblin.Common.Ticker.TimerInfo>
 	// System.Comparison<object>
+	// System.Func<System.Collections.Generic.KeyValuePair<int,object>,byte>
 	// System.Func<UnityEngine.SceneManagement.Scene>
 	// System.Func<object,UnityEngine.SceneManagement.Scene>
+	// System.Func<object,byte>
 	// System.Func<object,object>
 	// System.Func<object>
+	// System.Memory<byte>
+	// System.Nullable<byte>
+	// System.Nullable<int>
 	// System.Predicate<Goblin.Common.Ticker.TimerInfo>
 	// System.Predicate<object>
+	// System.ReadOnlyMemory<byte>
+	// System.ReadOnlySpan.Enumerator<byte>
+	// System.ReadOnlySpan<byte>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<UnityEngine.SceneManagement.Scene>
 	// System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable.ConfiguredTaskAwaiter<UnityEngine.SceneManagement.Scene>
@@ -97,6 +133,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.ConfiguredTaskAwaitable<object>
 	// System.Runtime.CompilerServices.TaskAwaiter<UnityEngine.SceneManagement.Scene>
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
+	// System.Span<byte>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<UnityEngine.SceneManagement.Scene>
 	// System.Threading.Tasks.ContinuationTaskFromResultTask<object>
 	// System.Threading.Tasks.Task<UnityEngine.SceneManagement.Scene>
@@ -107,9 +144,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	public void RefMethods()
 	{
+		// MessagePack.Formatters.IMessagePackFormatter<object> MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<object>(MessagePack.IFormatterResolver)
+		// MessagePack.Formatters.IMessagePackFormatter<object> MessagePack.IFormatterResolver.GetFormatter<object>()
+		// System.Void MessagePack.MessagePackSerializer.Serialize<object>(MessagePack.MessagePackWriter&,object,MessagePack.MessagePackSerializerOptions)
+		// byte[] MessagePack.MessagePackSerializer.Serialize<object>(object,MessagePack.MessagePackSerializerOptions,System.Threading.CancellationToken)
 		// object System.Activator.CreateInstance<object>()
 		// bool System.Enum.TryParse<int>(string,bool,int&)
 		// bool System.Enum.TryParse<int>(string,int&)
+		// System.Collections.Generic.KeyValuePair<int,object> System.Linq.Enumerable.First<System.Collections.Generic.KeyValuePair<int,object>>(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>,System.Func<System.Collections.Generic.KeyValuePair<int,object>,bool>)
 		// object System.Linq.Enumerable.Last<object>(System.Collections.Generic.IEnumerable<object>)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<UnityEngine.SceneManagement.Scene>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Goblin.Common.Res.GameRes.<LoadSceneASync>d__6>(System.Runtime.CompilerServices.TaskAwaiter&,Goblin.Common.Res.GameRes.<LoadSceneASync>d__6&)
 		// System.Void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<object>.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter,Goblin.Common.Res.GameRes.<LoadAssetAsync>d__2<object>>(System.Runtime.CompilerServices.TaskAwaiter&,Goblin.Common.Res.GameRes.<LoadAssetAsync>d__2<object>&)

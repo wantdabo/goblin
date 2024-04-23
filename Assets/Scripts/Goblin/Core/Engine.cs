@@ -1,6 +1,8 @@
 ﻿using Goblin.Common;
+using Goblin.Common.Network;
 using Goblin.Common.Res;
 using Goblin.Sys.Common;
+using Queen.Network.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +24,13 @@ namespace Goblin.Core
         public GameRes gameRes;
         public U3DKit u3dkit;
         public Config cfg;
+        public NetNode net;
         public GameProxy proxy;
         public GameUI gameui;
 
         protected async override void OnCreate()
         {
-            base.OnCreate();           
+            base.OnCreate();
 
             // 事件
             eventor = AddComp<Eventor>();
@@ -57,6 +60,10 @@ namespace Goblin.Core
             // 配置表
             cfg = AddComp<Config>();
             cfg.Create();
+
+            // 网络
+            net = AddComp<NetNode>();
+            net.Create();
 
             // Proxy
             proxy = AddComp<GameProxy>();

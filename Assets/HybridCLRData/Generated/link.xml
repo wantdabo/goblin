@@ -4,6 +4,11 @@
     <type fullname="Bright.Config.BeanBase" preserve="all" />
     <type fullname="Bright.Serialization.ByteBuf" preserve="all" />
   </assembly>
+  <assembly fullname="MessagePack">
+    <type fullname="MessagePack.MessagePackObjectAttribute" preserve="all" />
+    <type fullname="MessagePack.MessagePackSerializer" preserve="all" />
+    <type fullname="MessagePack.MessagePackSerializerOptions" preserve="all" />
+  </assembly>
   <assembly fullname="System">
     <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
   </assembly>
@@ -72,8 +77,15 @@
   <assembly fullname="mscorlib">
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Activator" preserve="all" />
+    <type fullname="System.Array" preserve="all" />
+    <type fullname="System.Attribute" preserve="all" />
+    <type fullname="System.AttributeTargets" preserve="all" />
+    <type fullname="System.AttributeUsageAttribute" preserve="all" />
+    <type fullname="System.BitConverter" preserve="all" />
+    <type fullname="System.Byte" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.IEnumerable`1" preserve="all" />
+    <type fullname="System.Collections.Generic.KeyValuePair`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Delegate" preserve="all" />
@@ -88,6 +100,8 @@
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Random" preserve="all" />
+    <type fullname="System.ReadOnlyMemory`1" preserve="all" />
+    <type fullname="System.ReadOnlySpan`1" preserve="all" />
     <type fullname="System.Reflection.DefaultMemberAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1" preserve="all" />
@@ -103,6 +117,7 @@
     <type fullname="System.Security.Permissions.SecurityPermissionAttribute" preserve="all" />
     <type fullname="System.Security.UnverifiableCodeAttribute" preserve="all" />
     <type fullname="System.String" preserve="all" />
+    <type fullname="System.Threading.CancellationToken" preserve="all" />
     <type fullname="System.Threading.Tasks.Task" preserve="all" />
     <type fullname="System.Threading.Tasks.Task`1" preserve="all" />
     <type fullname="System.Type" preserve="all" />
