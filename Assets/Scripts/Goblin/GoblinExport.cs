@@ -10,7 +10,7 @@
         /// <summary>
         /// 初始化 Goblin 逻辑
         /// </summary>
-        public static void InitGoblin()
+        public static void Init()
         {
             engine = Engine.CreateEngine();
         }

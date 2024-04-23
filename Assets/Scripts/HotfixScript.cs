@@ -25,9 +25,9 @@ public class HotfixScript
         foreach (var aotDllName in aotDllList)
         {
             handle = YooAssets.LoadRawFileSync($"{scriptsPath}{aotDllName}");
-            var err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(handle.GetRawFileData(), HybridCLR.HomologousImageMode.SuperSet);
+            var code = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(handle.GetRawFileData(), HybridCLR.HomologousImageMode.SuperSet);
             handle.Release();
-            Debug.Log($"LoadMetadata: {aotDllName}. ret: {err}");
+            Debug.Log($"LoadMetadata: {aotDllName}. ret: {code}");
         }
     }
 
@@ -39,10 +39,10 @@ public class HotfixScript
         Assembly ass = Assembly.Load(handle.GetRawFileData());
         handle.Release();
 #else
-        Assembly ass = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
+        Assembly ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
 #endif
         var export = ass.GetType("Goblin.Core.GoblinExport");
-        export.GetMethod("InitGoblin").Invoke(null, null);
+        export.GetMethod("Init").Invoke(null, null);
         tickFunc = export.GetMethod("Tick");
         fixedTickFunc = export.GetMethod("FixedTick");
     }

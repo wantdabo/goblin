@@ -33,8 +33,6 @@ public class ScriptPackageEditor : Editor
         Directory.CreateDirectory(scriptResPath);
         File.Copy($"{hotfixDLLPath}/Goblin.dll", $"{scriptResPath}/Goblin.dll.bytes");
 
-        var filesPath = Directory.GetFiles(aotDLLPath);
-
         var filePaths = Directory.GetFiles(aotDLLPath);
         string fileNames = "";
         for (int i = 0; i < filePaths.Length; i++)
@@ -46,6 +44,9 @@ public class ScriptPackageEditor : Editor
             fileNames += fileName + (i < filePaths.Length - 1 ? "|" : "");
         }
         File.WriteAllText($"{scriptResPath}AOT_DLL_LIST.bytes", fileNames);
+
+        Debug.Log("ScriptPackage Finished.");
+        AssetDatabase.Refresh();
     }
 }
 #endif
