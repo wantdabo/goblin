@@ -32,6 +32,7 @@ namespace Goblin.Common.Network
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            messageActionMap.Clear();
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
 

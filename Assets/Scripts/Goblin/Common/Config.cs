@@ -30,7 +30,7 @@ namespace Goblin.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            location = new Tables((cfgName) => new ByteBuf(engine.gameRes.location.LoadConfigSync(cfgName)));
+            location = new Tables((cfgName) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgName)));
         }
 
         protected override void OnDestroy()

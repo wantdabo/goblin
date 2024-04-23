@@ -31,27 +31,18 @@ namespace Goblin.Sys.Login
         {
             base.OnBindEvent();
 
-            AddUIEventListener("SkipBtn", (e) =>
-            {
-                engine.gameui.Close<LoginView>();
-                //engine.gameui.Open<GameplayView>();
-                //engine.gameui.Open<LobbyView>();
-            });
-
             AddUIEventListener("RegBtn", (e) =>
             {
                 var userName = userNameInputField.text;
                 var password = passwordInputField.text;
-                PlayerPrefs.SetString("userName", userName);
-                PlayerPrefs.SetString("password", password);
+                engine.proxy.login.C2SRegister(userName, password);
             });
 
             AddUIEventListener("LoginBtn", (e) =>
             {
                 var userName = userNameInputField.text;
                 var password = passwordInputField.text;
-                PlayerPrefs.SetString("userName", userName);
-                PlayerPrefs.SetString("password", password);
+                engine.proxy.login.C2SLogin(userName, password);
             });
         }
     }

@@ -14,7 +14,7 @@ namespace Queen.Network.Protocols
         /// <summary>
         /// 账号
         /// </summary>
-        public string userName { get; set; }
+        public string username { get; set; }
         /// <summary>
         /// 密码
         /// </summary>
@@ -27,7 +27,7 @@ namespace Queen.Network.Protocols
         /// <summary>
         /// 账号
         /// </summary>
-        public string userName { get; set; }
+        public string username { get; set; }
         /// <summary>
         /// 密码
         /// </summary>

@@ -21,7 +21,7 @@ namespace Goblin.Core
         public ObjectPool pool;
         public Common.Random random;
         public Ticker ticker;
-        public GameRes gameRes;
+        public GameRes gameres;
         public U3DKit u3dkit;
         public Config cfg;
         public NetNode net;
@@ -50,8 +50,8 @@ namespace Goblin.Core
             ticker.Create();
 
             // 游戏资源
-            gameRes = AddComp<GameRes>();
-            gameRes.Create();
+            gameres = AddComp<GameRes>();
+            gameres.Create();
 
             // U3D API
             u3dkit = AddComp<U3DKit>();
@@ -64,6 +64,7 @@ namespace Goblin.Core
             // 网络
             net = AddComp<NetNode>();
             net.Create();
+            net.Connect("127.0.0.1", 8080);
 
             // Proxy
             proxy = AddComp<GameProxy>();
@@ -85,7 +86,7 @@ namespace Goblin.Core
             ticker = null;
             u3dkit = null;
             gameui = null;
-            gameRes = null;
+            gameres = null;
         }
 
         /// <summary>

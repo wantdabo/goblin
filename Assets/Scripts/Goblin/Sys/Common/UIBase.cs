@@ -278,7 +278,7 @@ namespace Goblin.Sys.Common
         /// <param name="nativeSize">尺寸自适应</param>
         protected async void SetSprite(Image image, string resName, bool nativeSize = true)
         {
-            var sprite = await engine.gameRes.location.LoadSpriteAsync(resName);
+            var sprite = await engine.gameres.location.LoadSpriteAsync(resName);
             if (null == sprite) return;
 
             image.sprite = sprite;
@@ -293,7 +293,7 @@ namespace Goblin.Sys.Common
         /// <param name="nativeSize">尺寸自适应</param>
         protected async void SetSprite(RawImage rawImage, string resName, bool nativeSize = true)
         {
-            var sprite = await engine.gameRes.location.LoadSpriteAsync(resName);
+            var sprite = await engine.gameres.location.LoadSpriteAsync(resName);
             if (null == sprite) return;
 
             rawImage.texture = sprite.texture;

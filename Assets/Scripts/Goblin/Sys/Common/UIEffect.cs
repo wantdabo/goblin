@@ -23,7 +23,7 @@ namespace Goblin.Sys.Common
         /// <param name="resName">特效名</param>
         public void Load(GameObject node, string resName)
         {
-            var effGo = engine.gameRes.location.LoadUIEffectSync(resName);
+            var effGo = engine.gameres.location.LoadUIEffectSync(resName);
             uiec = effGo.GetComponent<UIEffectController>();
             uiec.transform.SetParent(node.transform, false);
             Stop();

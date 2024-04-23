@@ -53,9 +53,12 @@ namespace Goblin.Sys.Common
     {
         private Dictionary<Type, Proxy> proxyDict = new();
 
+        public LoginProxy login => GetProxy<LoginProxy>();
+
         protected override void OnCreate()
         {
             base.OnCreate();
+            Register<LoginProxy>();
         }
 
         protected override void OnDestroy()
@@ -65,8 +68,7 @@ namespace Goblin.Sys.Common
 
         public T GetProxy<T>() where T : Proxy
         {
-            if(proxyDict.TryGetValue(typeof(T), out var proxy))
-                return proxy as T;
+            if(proxyDict.TryGetValue(typeof(T), out var proxy)) return proxy as T;
 
             return null;
         }

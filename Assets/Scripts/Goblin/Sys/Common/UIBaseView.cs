@@ -53,7 +53,7 @@ namespace Goblin.Sys.Common
         public async Task<UIBaseView> Load()
         {
             state = UIState.Loading;
-            gameObject = await engine.gameRes.location.LoadUIPrefabAsync(res, engine.gameui.GetLayerNode(layer).transform);
+            gameObject = await engine.gameres.location.LoadUIPrefabAsync(res, engine.gameui.GetLayerNode(layer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
             sorting = mSorting;

@@ -41,7 +41,7 @@ namespace Goblin.Sys.Common
 
         public UIBaseCell Load()
         {
-            gameObject = engine.gameRes.location.LoadUIPrefabSync(res, container.transform);
+            gameObject = engine.gameres.location.LoadUIPrefabSync(res, container.transform);
             OnLoad();
             OnBuildUI();
             OnBindEvent();
