@@ -47,8 +47,7 @@ namespace Goblin.Core
             ticker.Create();
 
             // 游戏资源
-            gameRes = AddComp<YooGameRes>();
-            await gameRes.Initial();
+            gameRes = AddComp<GameRes>();
             gameRes.Create();
 
             // U3D API

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using HybridCLR;
+using YooAsset;
 
 /// <summary>
 /// 热更新逻辑加载模块
@@ -14,10 +14,30 @@ public class HotfixScript
     private static MethodInfo tickFunc;
     private static MethodInfo fixedTickFunc;
 
+    private static string scriptsPath = "Assets/GameRawRes/Scripts/";
+
+    private static void LoadMetadata()
+    {
+        var handle = YooAssets.LoadRawFileSync($"{scriptsPath}AOT_DLL_LIST");
+        string[] aotDllList = handle.GetRawFileText().Split('|');
+        handle.Release();
+
+        foreach (var aotDllName in aotDllList)
+        {
+            handle = YooAssets.LoadRawFileSync($"{scriptsPath}{aotDllName}");
+            var err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(handle.GetRawFileData(), HybridCLR.HomologousImageMode.SuperSet);
+            handle.Release();
+            Debug.Log($"LoadMetadata: {aotDllName}. ret: {err}");
+        }
+    }
+
     public static void Init()
     {
+        LoadMetadata();
 #if !UNITY_EDITOR
-        Assembly ass = Assembly.Load(File.ReadAllBytes($"{Application.streamingAssetsPath}/Goblin.dll.bytes"));
+        var handle = YooAssets.LoadRawFileSync($"{scriptsPath}Goblin.dll");
+        Assembly ass = Assembly.Load(handle.GetRawFileData());
+        handle.Release();
 #else
         Assembly ass = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
 #endif
@@ -29,11 +49,11 @@ public class HotfixScript
 
     public static void Tick()
     {
-        tickFunc.Invoke(null, new object[] { Time.deltaTime });
+        tickFunc?.Invoke(null, new object[] { Time.deltaTime });
     }
 
     public static void FixedTick()
     {
-        fixedTickFunc.Invoke(null, new object[] { Time.fixedDeltaTime });
+        fixedTickFunc?.Invoke(null, new object[] { Time.fixedDeltaTime });
     }
 }

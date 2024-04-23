@@ -1,15 +1,20 @@
-﻿using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
-using Goblin.Common;
-using UnityEngine;
+﻿using Goblin.Common.Res;
 using Goblin.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using YooAsset;
 
 namespace Goblin.Common.Res
 {
     /// <summary>
-    /// Game-Resources-Comp 资源加载组件
+    /// GameRes 资源加载组件
     /// </summary>
-    public abstract class GameRes : Comp
+    public class GameRes : Comp
     {
         /// <summary>
         /// 资源加载定位器，具体的加载在这里实现
@@ -23,43 +28,50 @@ namespace Goblin.Common.Res
             location.Create();
         }
 
-        /// <summary>
-        /// 异步初始化资源组件
-        /// </summary>
-        /// <returns>Task</returns>
-        public abstract Task Initial();
+        public async Task<T> LoadAssetAsync<T>(string resName) where T : UnityEngine.Object
+        {
+            var handle = YooAssets.LoadAssetAsync<T>(resName);
+            await handle.Task;
+            var result = handle.AssetObject as T;
+            handle.Release();
 
-        /// <summary>
-        /// 异步加载资源
-        /// </summary>
-        /// <typeparam name="T">资源类型</typeparam>
-        /// <param name="resName">资源名</param>
-        /// <returns>资源</returns>
-        public abstract Task<T> LoadAssetAsync<T>(string resName) where T : Object;
-        /// <summary>
-        /// 同步加载资源
-        /// </summary>
-        /// <typeparam name="T">资源类型</typeparam>
-        /// <param name="resName">资源名</param>
-        /// <returns>资源</returns>
-        public abstract T LoadAssetSync<T>(string resName) where T : Object;
-        /// <summary>
-        /// 异步加载二进制资源
-        /// </summary>
-        /// <param name="resName">资源名</param>
-        /// <returns>二进制资源</returns>
-        public abstract Task<byte[]> LoadRawFileAsync(string resName);
-        /// <summary>
-        /// 同步加载二进制资源
-        /// </summary>
-        /// <param name="resName">资源名</param>
-        /// <returns>二进制资源</returns>
-        public abstract byte[] LoadRawFileSync(string resName);
-        /// <summary>
-        /// 异步加载场景
-        /// </summary>
-        /// <param name="resName">场景名</param>
-        /// <returns>场景</returns>
-        public abstract Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single);
+            return result;
+        }
+
+        public T LoadAssetSync<T>(string resName) where T : UnityEngine.Object
+        {
+            var handle = YooAssets.LoadAssetSync<T>(resName);
+            var result = handle.AssetObject as T;
+            handle.Release();
+
+            return result;
+        }
+
+        public async Task<byte[]> LoadRawFileAsync(string resName)
+        {
+            var handle = YooAssets.LoadRawFileAsync(resName);
+            await handle.Task;
+            var result = handle.GetRawFileData();
+            handle.Release();
+
+            return result;
+        }
+
+        public byte[] LoadRawFileSync(string resName) 
+        {
+            var handle = YooAssets.LoadRawFileSync(resName);
+            var result = handle.GetRawFileData();
+            handle.Release();
+
+            return result;
+        }
+
+        public async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        {
+            var handle = YooAssets.LoadSceneAsync(resName, loadSceneMode);
+            await handle.Task;
+
+            return handle.SceneObject;
+        }
     }
 }

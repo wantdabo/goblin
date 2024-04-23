@@ -64,14 +64,8 @@
   </assembly>
   <assembly fullname="YooAsset">
     <type fullname="YooAsset.AssetOperationHandle" preserve="all" />
-    <type fullname="YooAsset.AsyncOperationBase" preserve="all" />
-    <type fullname="YooAsset.ILogger" preserve="all" />
-    <type fullname="YooAsset.InitializationOperation" preserve="all" />
-    <type fullname="YooAsset.InitializeParameters" preserve="all" />
-    <type fullname="YooAsset.OfflinePlayModeParameters" preserve="all" />
     <type fullname="YooAsset.OperationHandleBase" preserve="all" />
     <type fullname="YooAsset.RawFileOperationHandle" preserve="all" />
-    <type fullname="YooAsset.ResourcePackage" preserve="all" />
     <type fullname="YooAsset.SceneOperationHandle" preserve="all" />
     <type fullname="YooAsset.YooAssets" preserve="all" />
   </assembly>
