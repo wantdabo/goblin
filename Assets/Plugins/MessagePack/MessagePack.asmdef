@@ -1,9 +1,9 @@
 {
     "name": "MessagePack",
+    "rootNamespace": "",
     "references": [
         "MessagePack.Annotations"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
@@ -16,7 +16,8 @@
         "Microsoft.NET.StringTools.dll",
         "System.Runtime.Extensions.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

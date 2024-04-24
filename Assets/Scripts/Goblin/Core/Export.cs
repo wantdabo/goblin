@@ -3,7 +3,7 @@
     /// <summary>
     /// Goblin 对外暴露
     /// </summary>
-    public class GoblinExport
+    public class Export
     {
         private static Engine engine;
 
