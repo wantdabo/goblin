@@ -64,7 +64,7 @@ namespace Goblin.Core
             // 网络
             net = AddComp<NetNode>();
             net.Create();
-            net.Connect("127.0.0.1", 8080);
+            net.Connect("192.168.2.156", 8080);
 
             // Proxy
             proxy = AddComp<GameProxy>();

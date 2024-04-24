@@ -138,10 +138,7 @@ namespace Supyrb
                     case ENet.EventType.Receive:
                         var startIndex = 0;
                         var length = netEvent.Packet.Length;
-                        if (bufferPointer.Count > 0)
-                        {
-                            startIndex = bufferPointer.Peek().Start;
-                        }
+                        if (bufferPointer.Count > 0) startIndex = bufferPointer.Peek().Start;
 
                         Marshal.Copy(netEvent.Packet.Data, buffer, startIndex, length);
                         bufferPointer.Enqueue(new BufferPointer(startIndex, length));

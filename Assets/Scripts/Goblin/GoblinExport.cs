@@ -1,4 +1,6 @@
-﻿namespace Goblin.Core
+﻿using Goblin.Core;
+
+namespace Goblin
 {
     /// <summary>
     /// Goblin 对外暴露
