@@ -1,22 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
-  <assembly fullname="ENetRuntime">
-    <type fullname="Supyrb.BufferPointer" preserve="all" />
-    <type fullname="Supyrb.ENetClient" preserve="all" />
-  </assembly>
   <assembly fullname="LubanLib">
     <type fullname="Bright.Config.BeanBase" preserve="all" />
     <type fullname="Bright.Serialization.ByteBuf" preserve="all" />
   </assembly>
   <assembly fullname="MessagePack">
-    <type fullname="MessagePack.Formatters.IMessagePackFormatter`1" preserve="all" />
-    <type fullname="MessagePack.IFormatterResolver" preserve="all" />
     <type fullname="MessagePack.MessagePackObjectAttribute" preserve="all" />
     <type fullname="MessagePack.MessagePackSerializer" preserve="all" />
     <type fullname="MessagePack.MessagePackSerializerOptions" preserve="all" />
-    <type fullname="MessagePack.Resolvers.CompositeResolver" preserve="all" />
-    <type fullname="MessagePack.Resolvers.DynamicObjectResolver" preserve="all" />
-    <type fullname="MessagePack.Resolvers.StandardResolver" preserve="all" />
   </assembly>
   <assembly fullname="System">
     <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
@@ -31,7 +22,6 @@
     <type fullname="UnityEngine.Behaviour" preserve="all" />
     <type fullname="UnityEngine.Camera" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
-    <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.DisallowMultipleComponent" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.HideInInspector" preserve="all" />
@@ -85,7 +75,6 @@
     <type fullname="YooAsset.YooAssets" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
-    <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Activator" preserve="all" />
     <type fullname="System.Array" preserve="all" />

@@ -103,9 +103,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectComparer<object>
 	// System.Collections.Generic.ObjectEqualityComparer<int>
 	// System.Collections.Generic.ObjectEqualityComparer<object>
-	// System.Collections.Generic.Queue.Enumerator<Supyrb.BufferPointer>
 	// System.Collections.Generic.Queue.Enumerator<object>
-	// System.Collections.Generic.Queue<Supyrb.BufferPointer>
 	// System.Collections.Generic.Queue<object>
 	// System.Collections.Generic.Stack.Enumerator<object>
 	// System.Collections.Generic.Stack<object>
@@ -174,7 +172,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Goblin.Sys.Common.GameUI.<Open>d__12<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Goblin.Sys.Common.GameUI.<Open>d__12<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Goblin.Sys.Common.UIBase.<SetSprite>d__23<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Goblin.Sys.Common.UIBase.<SetSprite>d__23<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<object>,Goblin.Sys.Common.UIBase.<SetSprite>d__24<object>>(System.Runtime.CompilerServices.TaskAwaiter<object>&,Goblin.Sys.Common.UIBase.<SetSprite>d__24<object>&)
-		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Goblin.Core.Engine.<OnCreate>d__10>(Goblin.Core.Engine.<OnCreate>d__10&)
+		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Goblin.Core.Engine.<OnCreate>d__9>(Goblin.Core.Engine.<OnCreate>d__9&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Goblin.Sys.Common.GameUI.<Open>d__12<object>>(Goblin.Sys.Common.GameUI.<Open>d__12<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Goblin.Sys.Common.UIBase.<SetSprite>d__23<object>>(Goblin.Sys.Common.UIBase.<SetSprite>d__23<object>&)
 		// System.Void System.Runtime.CompilerServices.AsyncVoidMethodBuilder.Start<Goblin.Sys.Common.UIBase.<SetSprite>d__24<object>>(Goblin.Sys.Common.UIBase.<SetSprite>d__24<object>&)
