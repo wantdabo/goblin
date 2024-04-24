@@ -80,14 +80,14 @@ namespace Supyrb
             this.address.SetHost(address);
             this.address.Port = (ushort)port;
             peer = host.Connect(this.address, 4);
-
+            
             listenTask = Task.Factory.StartNew(Listen, TaskCreationOptions.LongRunning);
             IsDisposed = false;
         }
 
         public void Send(byte[] message)
         {
-            SendUnreliable(message, 0, peer);
+            Send(message, 0, peer);
         }
 
         public void Disconnect()
@@ -157,19 +157,10 @@ namespace Supyrb
         public Action OnDisconnect;
         public Action OnTimeout;
 
-        private void SendReliable(byte[] data, byte channelID, Peer peer)
+        private void Send(byte[] data, byte channelID, Peer peer)
         {
-            Packet packet = default(Packet);
-
+            var packet = new Packet();
             packet.Create(data, data.Length, PacketFlags.Reliable | PacketFlags.NoAllocate); // Reliable Sequenced
-            peer.Send(channelID, ref packet);
-        }
-
-        private void SendUnreliable(byte[] data, byte channelID, Peer peer)
-        {
-            Packet packet = default(Packet);
-
-            packet.Create(data, data.Length, PacketFlags.None | PacketFlags.NoAllocate); // Unreliable Sequenced
             peer.Send(channelID, ref packet);
         }
     }

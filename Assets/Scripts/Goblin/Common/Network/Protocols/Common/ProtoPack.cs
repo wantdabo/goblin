@@ -1,8 +1,6 @@
 ﻿using MessagePack;
-using MessagePack.Resolvers;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -81,30 +79,11 @@ namespace Queen.Network.Protocols.Common
         /// </summary>
         private static Dictionary<int, Type> messageIdMap = new()
         {
-            {10001, typeof(C2SLoginMsg)},
-            {10002, typeof(C2SRegisterMsg)},
-            {10003, typeof(S2CLoginMsg)},
-            {10004, typeof(S2CRegisterMsg)},
+            {10001, typeof(NodePingMsg)},
+            {20001, typeof(C2SLoginMsg)},
+            {20002, typeof(C2SRegisterMsg)},
+            {20003, typeof(S2CLoginMsg)},
+            {20004, typeof(S2CRegisterMsg)},
         };
-
-        private static bool serializerRegistered = false;
-        
-        /// <summary>
-        /// 初始化自定义解析器
-        /// </summary>
-        static ProtoPack() 
-        {
-            if (serializerRegistered) return;
-
-            StaticCompositeResolver.Instance.Register(
-                 GeneratedResolver.Instance,
-                 StandardResolver.Instance
-            );
-
-            var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
-            MessagePackSerializer.DefaultOptions = option;
-
-            serializerRegistered = true;
-        }
     }
 }

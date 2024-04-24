@@ -23,10 +23,15 @@ namespace Goblin.Common.Network
         /// </summary>
         private Dictionary<Type, List<Delegate>> messageActionMap = new();
 
+        private uint sendPingTimingId;
+
         protected override void OnCreate()
         {
             base.OnCreate();
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
+            Listen<NodePingMsg>(OnNodePing);
+
+            sendPingTimingId = engine.ticker.Timing((t) => { SendPing(); }, 0.5f, -1);
         }
 
         protected override void OnDestroy()
@@ -34,6 +39,8 @@ namespace Goblin.Common.Network
             base.OnDestroy();
             messageActionMap.Clear();
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
+            Listen<NodePingMsg>(OnNodePing);
+            engine.ticker.StopTimer(sendPingTimingId);
         }
 
         /// <summary>
@@ -127,6 +134,30 @@ namespace Goblin.Common.Network
                 Array.Copy(client.Buffer, pointer.Start, bytes, 0, pointer.Length);
                 if (ProtoPack.UnPack(bytes, out var msgType, out var msg)) Notify(msgType, msg);
             }
+        }
+
+        private struct PingInfo
+        {
+            public int seconds;
+            public int millisecond;
+        }
+
+        private PingInfo sping;
+        private PingInfo rping;
+        public int ping { get; private set; }
+
+        private void SendPing()
+        {
+            sping.seconds = DateTime.UtcNow.Second;
+            sping.millisecond = DateTime.UtcNow.Millisecond;
+            Send(new NodePingMsg());
+        }
+
+        private void OnNodePing(NodePingMsg msg)
+        {
+            rping.seconds = DateTime.UtcNow.Second;
+            rping.millisecond = DateTime.UtcNow.Millisecond;
+            ping = (rping.seconds * 1000 + rping.millisecond) - (sping.seconds * 1000 + sping.millisecond);
         }
     }
 }

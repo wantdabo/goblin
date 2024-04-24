@@ -47,16 +47,17 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(8)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(9)
             {
                 { typeof(global::Queen.Network.Protocols.C2SLoginMsg), 0 },
                 { typeof(global::Queen.Network.Protocols.C2SRegisterMsg), 1 },
                 { typeof(global::Queen.Network.Protocols.Common.NodeConnectMsg), 2 },
                 { typeof(global::Queen.Network.Protocols.Common.NodeDisconnectMsg), 3 },
-                { typeof(global::Queen.Network.Protocols.Common.NodeReceiveMsg), 4 },
-                { typeof(global::Queen.Network.Protocols.Common.NodeTimeoutMsg), 5 },
-                { typeof(global::Queen.Network.Protocols.S2CLoginMsg), 6 },
-                { typeof(global::Queen.Network.Protocols.S2CRegisterMsg), 7 },
+                { typeof(global::Queen.Network.Protocols.Common.NodePingMsg), 4 },
+                { typeof(global::Queen.Network.Protocols.Common.NodeReceiveMsg), 5 },
+                { typeof(global::Queen.Network.Protocols.Common.NodeTimeoutMsg), 6 },
+                { typeof(global::Queen.Network.Protocols.S2CLoginMsg), 7 },
+                { typeof(global::Queen.Network.Protocols.S2CRegisterMsg), 8 },
             };
         }
 
@@ -74,10 +75,11 @@ namespace MessagePack.Resolvers
                 case 1: return new MessagePack.Formatters.Queen.Network.Protocols.C2SRegisterMsgFormatter();
                 case 2: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeConnectMsgFormatter();
                 case 3: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeDisconnectMsgFormatter();
-                case 4: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeReceiveMsgFormatter();
-                case 5: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeTimeoutMsgFormatter();
-                case 6: return new MessagePack.Formatters.Queen.Network.Protocols.S2CLoginMsgFormatter();
-                case 7: return new MessagePack.Formatters.Queen.Network.Protocols.S2CRegisterMsgFormatter();
+                case 4: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodePingMsgFormatter();
+                case 5: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeReceiveMsgFormatter();
+                case 6: return new MessagePack.Formatters.Queen.Network.Protocols.Common.NodeTimeoutMsgFormatter();
+                case 7: return new MessagePack.Formatters.Queen.Network.Protocols.S2CLoginMsgFormatter();
+                case 8: return new MessagePack.Formatters.Queen.Network.Protocols.S2CRegisterMsgFormatter();
                 default: return null;
             }
         }
@@ -424,6 +426,32 @@ namespace MessagePack.Formatters.Queen.Network.Protocols.Common
 
             reader.Skip();
             var ____result = new global::Queen.Network.Protocols.Common.NodeDisconnectMsg();
+            return ____result;
+        }
+    }
+
+    public sealed class NodePingMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Network.Protocols.Common.NodePingMsg>
+    {
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Network.Protocols.Common.NodePingMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(0);
+        }
+
+        public global::Queen.Network.Protocols.Common.NodePingMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            reader.Skip();
+            var ____result = new global::Queen.Network.Protocols.Common.NodePingMsg();
             return ____result;
         }
     }

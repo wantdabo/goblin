@@ -28,7 +28,7 @@ namespace Goblin.Core
         public GameProxy proxy;
         public GameUI gameui;
 
-        protected async override void OnCreate()
+        protected override void OnCreate()
         {
             base.OnCreate();
 
@@ -79,14 +79,6 @@ namespace Goblin.Core
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
-            eventor = null;
-            pool = null;
-            random = null;
-            ticker = null;
-            u3dkit = null;
-            gameui = null;
-            gameres = null;
         }
 
         /// <summary>

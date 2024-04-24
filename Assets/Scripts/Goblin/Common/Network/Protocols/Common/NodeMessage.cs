@@ -33,4 +33,10 @@ namespace Queen.Network.Protocols.Common
     {
         public byte[] data;
     }
+
+    /// <summary>
+    /// 网络节点延迟
+    /// </summary>
+    [MessagePackObject(true)]
+    public class NodePingMsg : INetMessage { }
 }
