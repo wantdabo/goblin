@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using MessagePack.Resolvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,5 +86,25 @@ namespace Queen.Network.Protocols.Common
             {20003, typeof(S2CLoginMsg)},
             {20004, typeof(S2CRegisterMsg)},
         };
+
+        private static bool serializerRegistered = false;
+
+        /// <summary>
+        /// 初始化自定义解析器
+        /// </summary>
+        static ProtoPack()
+        {
+            if (serializerRegistered) return;
+
+            StaticCompositeResolver.Instance.Register(
+                 GeneratedResolver.Instance,
+                 StandardResolver.Instance
+            );
+
+            var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
+            MessagePackSerializer.DefaultOptions = option;
+
+            serializerRegistered = true;
+        }
     }
 }
