@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using ENet;
 using UnityEngine;
 
-namespace Goblin.Common.Network.ENetRuntime
+namespace Supyrb
 {
     public class ENetClient
     {

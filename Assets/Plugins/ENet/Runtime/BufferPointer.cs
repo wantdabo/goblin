@@ -8,7 +8,7 @@
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Goblin.Common.Network.ENetRuntime
+namespace Supyrb
 {
 	public readonly struct BufferPointer
 	{
