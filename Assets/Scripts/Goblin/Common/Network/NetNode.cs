@@ -60,7 +60,6 @@ namespace Goblin.Common.Network
             base.OnCreate();
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
 
-            Recv<NodePingMsg>(OnNodePing);
             sendPingTimingId = engine.ticker.Timing((t) =>
             {
                 if (false == connected) return;
@@ -90,6 +89,11 @@ namespace Goblin.Common.Network
                             netEvent.Packet.CopyTo(data);
                             netEvent.Packet.Dispose();
                             if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) return;
+                            if (typeof(NodePingMsg) == msgType) 
+                            {
+                                OnNodePing(msg as NodePingMsg);
+                                break;
+                            }
 
                             EnqueuePackage(msgType, msg);
                             break;
@@ -116,7 +120,7 @@ namespace Goblin.Common.Network
         /// <param name="ip">地址</param>
         /// <param name="port">端口</param>
         /// <param name="timeout">端口</param>
-        public void Connect(string ip, ushort port, int timeout = 15)
+        public void Connect(string ip, ushort port, int timeout = 1)
         {
             this.ip = ip;
             this.port = port;
