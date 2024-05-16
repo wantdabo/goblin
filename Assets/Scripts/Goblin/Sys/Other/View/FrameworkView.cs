@@ -35,7 +35,7 @@ namespace Goblin.Sys.Other.View
 
         protected override string res => "Other/FrameworkView";
 
-        private Text netDesc;
+        private Text connectState;
         private GameObject connectBtn;
         private GameObject disconnectBtn;
         private GameObject messageContent;
@@ -44,7 +44,7 @@ namespace Goblin.Sys.Other.View
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            netDesc = engine.u3dkit.SeekNode<Text>(gameObject, "NetDesc");
+            connectState = engine.u3dkit.SeekNode<Text>(gameObject, "ConnectState");
             connectBtn = engine.u3dkit.SeekNode<GameObject>(gameObject, "ConnectBtn");
             disconnectBtn = engine.u3dkit.SeekNode<GameObject>(gameObject, "DisconnectBtn");
             messageContent = engine.u3dkit.SeekNode<GameObject>(gameObject, "MessageContent");
@@ -71,8 +71,6 @@ namespace Goblin.Sys.Other.View
             base.OnLoad();
             engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
-            engine.net.Recv<NodeConnectMsg>(OnNodeConnect);
-            engine.net.Recv<NodeDisconnectMsg>(OnNodeDisconnect);
         }
 
         protected override void OnUnload()
@@ -80,21 +78,6 @@ namespace Goblin.Sys.Other.View
             base.OnUnload();
             engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
-            engine.net.UnRecv<NodeConnectMsg>(OnNodeConnect);
-            engine.net.UnRecv<NodeDisconnectMsg>(OnNodeDisconnect);
-        }
-
-        protected override void OnOpen()
-        {
-            base.OnOpen();
-            UpdateInfo();
-        }
-
-        private void UpdateInfo()
-        {
-            connectBtn.SetActive(false == engine.net.connected);
-            disconnectBtn.SetActive(engine.net.connected);
-            netDesc.text = engine.net.connected ? "<color=#C3F002>CONNECTED</color>" : "<color=#D93500>DISCONNECTED</color>";
         }
 
         private void OnMessageBlow(MessageBlowEvent e)
@@ -120,18 +103,14 @@ namespace Goblin.Sys.Other.View
 
         private void OnTick(TickEvent e)
         {
-            var str = engine.net.connected ? $"PING : {engine.net.ping} MS" : "";
-            engine.u3dkit.SeekNode<Text>(gameObject, "Ping").text = str;
-        }
+            connectBtn.SetActive(false == engine.net.connected);
+            disconnectBtn.SetActive(engine.net.connected);
+            connectState.text = engine.net.connected ? "<color=#C3F002>CONNECTED</color>" : "<color=#D93500>DISCONNECTED</color>";
 
-        private void OnNodeConnect(NodeConnectMsg msg)
-        {
-            UpdateInfo();
-        }
-
-        private void OnNodeDisconnect(NodeDisconnectMsg msg)
-        {
-            UpdateInfo();
+            var ping = engine.net.connected ? $"PING : {engine.net.ping} MS" : "";
+            engine.u3dkit.SeekNode<Text>(gameObject, "Ping").text = ping;
+            var bytessr = engine.net.connected ? $"UPLOAD : {engine.net.bytesSentPerSeconds*0.001f}KB /S \tDOWNLOAD : {engine.net.bytesRecvPerSeconds * 0.001f}KB /S" : "";
+            engine.u3dkit.SeekNode<Text>(gameObject, "BytesSR").text = bytessr;
         }
     }
 }

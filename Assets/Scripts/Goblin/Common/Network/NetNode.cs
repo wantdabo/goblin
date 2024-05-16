@@ -26,7 +26,13 @@ namespace Goblin.Common.Network
         /// </summary>
         private struct NetPackage
         {
+            /// <summary>
+            /// 消息类型
+            /// </summary>
             public Type msgType;
+            /// <summary>
+            /// 消息
+            /// </summary>
             public INetMessage msg;
         }
 
@@ -39,32 +45,94 @@ namespace Goblin.Common.Network
         /// </summary>
         private ConcurrentQueue<NetPackage> netPackages = new();
 
+        /// <summary>
+        /// ENet 线程
+        /// </summary>
         private Thread thread;
+        /// <summary>
+        /// ENet.Host
+        /// </summary>
         private Host host;
+        /// <summary>
+        /// ENet.Peer
+        /// </summary>
         private Peer peer;
+        /// <summary>
+        /// 服务器 IP
+        /// </summary>
         public string ip { get; private set; }
+        /// <summary>
+        /// 服务器端口
+        /// </summary>
         public ushort port { get; private set; }
+        /// <summary>
+        /// ENet 轮询超时时间
+        /// </summary>
         public int timeout { get; private set; }
-
+        /// <summary>
+        /// 是否在运行中
+        /// </summary>
         public bool running { get; private set; }
-
         /// <summary>
         /// 连接状态
         /// </summary>
         public bool connected => PeerState.Connected == peer.State;
+        /// <summary>
+        /// 网络延迟
+        /// </summary>
+        public int ping { get; private set; }
+        /// <summary>
+        /// 发送检测包计时
+        /// </summary>
+        private PingInfo sping;
+        /// <summary>
+        /// 接收检测包计时
+        /// </summary>
+        private PingInfo rping;
+        /// <summary>
+        /// 每秒接收数据
+        /// </summary>
+        public ulong bytesRecvPerSeconds { get; private set; }
+        /// <summary>
+        /// 每秒发送数据
+        /// </summary>
+        public ulong bytesSentPerSeconds { get; private set; }
+        /// <summary>
+        /// 记录每秒间隔上一次接收的数据量
+        /// </summary>
+        private ulong bytesRecv = 0;
+        /// <summary>
+        /// 记录每秒间隔上一次发送的数据量
+        /// </summary>
+        private ulong bytesSent = 0;
 
-        private uint sendPingTimingId;
+        /// <summary>
+        /// PING 计时器 ID
+        /// </summary>
+        private uint pingTimingId;
+        /// <summary>
+        /// 计算每秒收发数据量的计时器 ID
+        /// </summary>
+        private uint bytesSRTimingId;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
-
-            sendPingTimingId = engine.ticker.Timing((t) =>
+            pingTimingId = engine.ticker.Timing((t) =>
             {
                 if (false == connected) return;
                 SendPing();
             }, 0.5f, -1);
+
+            bytesSRTimingId = engine.ticker.Timing((t) =>
+            {
+                if (false == connected) return;
+                bytesRecvPerSeconds = peer.BytesReceived - bytesRecv;
+                bytesSentPerSeconds = peer.BytesSent - bytesSent;
+                bytesRecv = peer.BytesReceived;
+                bytesSent = peer.BytesSent;
+            }, 1, -1);
 
             host = new Host();
             host.Create();
@@ -89,7 +157,7 @@ namespace Goblin.Common.Network
                             netEvent.Packet.CopyTo(data);
                             netEvent.Packet.Dispose();
                             if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) return;
-                            if (typeof(NodePingMsg) == msgType) 
+                            if (typeof(NodePingMsg) == msgType)
                             {
                                 OnNodePing(msg as NodePingMsg);
                                 break;
@@ -109,7 +177,11 @@ namespace Goblin.Common.Network
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
+            engine.ticker.StopTimer(pingTimingId);
+            engine.ticker.StopTimer(bytesSRTimingId);
             thread.Abort();
+            host.Flush();
             host.Dispose();
             running = false;
         }
@@ -122,6 +194,13 @@ namespace Goblin.Common.Network
         /// <param name="timeout">端口</param>
         public void Connect(string ip, ushort port, int timeout = 1)
         {
+            rping = default;
+            sping = default;
+            bytesRecv = 0;
+            bytesSent = 0;
+            bytesRecvPerSeconds = 0;
+            bytesSentPerSeconds = 0;
+
             this.ip = ip;
             this.port = port;
             this.timeout = timeout;
@@ -211,7 +290,6 @@ namespace Goblin.Common.Network
         private void Notify()
         {
             if (false == running) return;
-
             while (netPackages.TryDequeue(out var package))
             {
                 if (false == messageActionMap.TryGetValue(package.msgType, out var actions)) return;
@@ -225,16 +303,22 @@ namespace Goblin.Common.Network
             Notify();
         }
 
+        #region PING
         private struct PingInfo
         {
+            /// <summary>
+            /// 秒
+            /// </summary>
             public int seconds;
+            /// <summary>
+            /// 毫秒
+            /// </summary>
             public int millisecond;
         }
 
-        private PingInfo sping;
-        private PingInfo rping;
-        public int ping { get; private set; }
-
+        /// <summary>
+        /// 发送延迟检测
+        /// </summary>
         private void SendPing()
         {
             sping.seconds = DateTime.UtcNow.Second;
@@ -242,11 +326,16 @@ namespace Goblin.Common.Network
             Send(new NodePingMsg());
         }
 
+        /// <summary>
+        /// 接收服务器返回的延迟检测包
+        /// </summary>
+        /// <param name="msg">消息</param>
         private void OnNodePing(NodePingMsg msg)
         {
             rping.seconds = DateTime.UtcNow.Second;
             rping.millisecond = DateTime.UtcNow.Millisecond;
             ping = (rping.seconds * 1000 + rping.millisecond) - (sping.seconds * 1000 + sping.millisecond);
         }
+        #endregion
     }
 }
