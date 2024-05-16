@@ -103,6 +103,13 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未登录." });
             }
+            else if (3 == msg.code) 
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
+                pid = null;
+                engine.gameui.Close<LobbyView>();
+                engine.gameui.Open<LoginView>();
+            }
         }
 
         private void OnS2CRegister(S2CRegisterMsg msg)

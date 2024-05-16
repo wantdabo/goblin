@@ -61,7 +61,7 @@ namespace Queen.Network.Protocols
     public class S2CLogoutMsg : INetMessage
     {
         /// <summary>
-        /// 操作码/ 1 登出成功，2 该用户未登录
+        /// 操作码/ 1 登出成功，2 该用户未登录，3 被顶号了
         /// </summary>
         public int code { get; set; }
 
