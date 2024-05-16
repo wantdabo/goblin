@@ -13,7 +13,7 @@ namespace Goblin.Sys.GameInitialize
 {
     public class GameInitializeView : UIBaseView
     {
-        public override UILayer layer => UILayer.UITop;
+        public override UILayer layer => UILayer.UIMain;
 
         protected override string res => "GameInitialize/GameInitializeView";
 

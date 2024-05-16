@@ -41,6 +41,34 @@ namespace Queen.Network.Protocols
         /// 操作码/ 1 登录成功，2 用户不存在，3 密码错误
         /// </summary>
         public int code { get; set; }
+
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
+    }
+
+    [MessagePackObject(true)]
+    public class C2SLogoutMsg : INetMessage
+    {
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
+    }
+
+    [MessagePackObject(true)]
+    public class S2CLogoutMsg : INetMessage
+    {
+        /// <summary>
+        /// 操作码/ 1 登出成功，2 该用户未登录
+        /// </summary>
+        public int code { get; set; }
+
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
     }
 
     [MessagePackObject(true)]

@@ -1,6 +1,9 @@
 ﻿using Goblin.Sys.Common;
 using Goblin.Sys.Lobby;
+using Goblin.Sys.Lobby.View;
+using Goblin.Sys.Other.View;
 using Queen.Network.Protocols;
+using Queen.Network.Protocols.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,18 +18,29 @@ namespace Goblin.Sys.Login
     /// </summary>
     public class LoginProxy : Proxy
     {
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        private string pid;
+
         protected override void OnCreate()
         {
             base.OnCreate();
-            engine.net.Listen<S2CLoginMsg>(OnS2CLogin);
-            engine.net.Listen<S2CRegisterMsg>(OnS2CRegister);
+            engine.net.Recv<NodeConnectMsg>(OnNodeConnect);
+            engine.net.Recv<NodeDisconnectMsg>(OnNodeDisconnect);
+            engine.net.Recv<S2CLoginMsg>(OnS2CLogin);
+            engine.net.Recv<S2CLogoutMsg>(OnS2CLogout);
+            engine.net.Recv<S2CRegisterMsg>(OnS2CRegister);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            engine.net.UnListen<S2CLoginMsg>(OnS2CLogin);
-            engine.net.UnListen<S2CRegisterMsg>(OnS2CRegister);
+            engine.net.UnRecv<NodeConnectMsg>(OnNodeConnect);
+            engine.net.UnRecv<NodeDisconnectMsg>(OnNodeDisconnect);
+            engine.net.UnRecv<S2CLoginMsg>(OnS2CLogin);
+            engine.net.UnRecv<S2CLogoutMsg>(OnS2CLogout);
+            engine.net.UnRecv<S2CRegisterMsg>(OnS2CRegister);
         }
 
         public void C2SLogin(string username, string password)
@@ -34,26 +48,60 @@ namespace Goblin.Sys.Login
             engine.net.Send(new C2SLoginMsg { username = username, password = password });
         }
 
+        public void C2SLogout()
+        {
+            engine.net.Send(new C2SLogoutMsg { pid = pid });
+        }
+
         public void C2SRegister(string username, string password)
         {
             engine.net.Send(new C2SRegisterMsg { username = username, password = password });
+        }
+
+        private void OnNodeConnect(NodeConnectMsg msg)
+        {
+            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "连接成功." });
+        }
+
+        private void OnNodeDisconnect(NodeDisconnectMsg msg)
+        {
+            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "连接断开." });
+            pid = null;
+            engine.gameui.Close<LobbyView>();
+            engine.gameui.Open<LoginView>();
         }
 
         private void OnS2CLogin(S2CLoginMsg msg)
         {
             if (1 == msg.code)
             {
-                UnityEngine.Debug.Log("登录成功了");
+                pid = msg.pid;
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
                 engine.gameui.Close<LoginView>();
                 engine.gameui.Open<LobbyView>();
             }
             else if (2 == msg.code)
             {
-                UnityEngine.Debug.Log("用户未注册");
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未注册." });
             }
             else if (3 == msg.code)
             {
-                UnityEngine.Debug.Log("密码错误了");
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户密码错误." });
+            }
+        }
+
+        private void OnS2CLogout(S2CLogoutMsg msg)
+        {
+            if (1 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登出成功." });
+                pid = null;
+                engine.gameui.Close<LobbyView>();
+                engine.gameui.Open<LoginView>();
+            }
+            else if (2 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未登录." });
             }
         }
 
@@ -61,11 +109,11 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
-                UnityEngine.Debug.Log("注册成功了");
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "注册成功." });
             }
             else if (2 == msg.code)
             {
-                UnityEngine.Debug.Log("用户已存在");
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户已存在." });
             }
         }
     }

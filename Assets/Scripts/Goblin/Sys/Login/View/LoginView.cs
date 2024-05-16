@@ -1,4 +1,5 @@
 ﻿using Goblin.Sys.Common;
+using Queen.Network.Protocols.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,6 @@ namespace Goblin.Sys.Login
             base.OnBuildUI();
             userNameInputField = engine.u3dkit.SeekNode<InputField>(gameObject, "UserName");
             passwordInputField = engine.u3dkit.SeekNode<InputField>(gameObject, "Password");
-            userNameInputField.text = PlayerPrefs.GetString("userName");
-            passwordInputField.text = PlayerPrefs.GetString("password");
         }
 
         protected override void OnBindEvent()

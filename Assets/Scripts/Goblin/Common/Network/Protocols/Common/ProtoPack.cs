@@ -81,10 +81,12 @@ namespace Queen.Network.Protocols.Common
         private static Dictionary<int, Type> messageIdMap = new()
         {
             {10001, typeof(NodePingMsg)},
-            {20001, typeof(C2SLoginMsg)},
+            {20001, typeof(S2CRegisterMsg)},
             {20002, typeof(C2SRegisterMsg)},
             {20003, typeof(S2CLoginMsg)},
-            {20004, typeof(S2CRegisterMsg)},
+            {20004, typeof(C2SLoginMsg)},
+            {20005, typeof(S2CLogoutMsg)},
+            {20006, typeof(C2SLogoutMsg)},
         };
 
         private static bool serializerRegistered = false;

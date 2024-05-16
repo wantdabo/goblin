@@ -1,12 +1,17 @@
-﻿using Goblin.Core;
+﻿using ENet;
+using Goblin.Core;
+using Goblin.Sys.Other.View;
 using Queen.Network.Protocols;
 using Queen.Network.Protocols.Common;
 using Supyrb;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Goblin.Common.Network
@@ -16,12 +21,37 @@ namespace Goblin.Common.Network
     /// </summary>
     public class NetNode : Comp
     {
-        private ENetClient client;
+        /// <summary>
+        /// 消息包结构
+        /// </summary>
+        private struct NetPackage
+        {
+            public Type msgType;
+            public INetMessage msg;
+        }
 
         /// <summary>
         /// 注册消息回调集合
         /// </summary>
         private Dictionary<Type, List<Delegate>> messageActionMap = new();
+        /// <summary>
+        /// 网络消息包缓存
+        /// </summary>
+        private ConcurrentQueue<NetPackage> netPackages = new();
+
+        private Thread thread;
+        private Host host;
+        private Peer peer;
+        public string ip { get; private set; }
+        public ushort port { get; private set; }
+        public int timeout { get; private set; }
+
+        public bool running { get; private set; }
+
+        /// <summary>
+        /// 连接状态
+        /// </summary>
+        public bool connected => PeerState.Connected == peer.State;
 
         private uint sendPingTimingId;
 
@@ -29,18 +59,55 @@ namespace Goblin.Common.Network
         {
             base.OnCreate();
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
-            Listen<NodePingMsg>(OnNodePing);
 
-            sendPingTimingId = engine.ticker.Timing((t) => { SendPing(); }, 0.5f, -1);
+            Recv<NodePingMsg>(OnNodePing);
+            sendPingTimingId = engine.ticker.Timing((t) =>
+            {
+                if (false == connected) return;
+                SendPing();
+            }, 0.5f, -1);
+
+            host = new Host();
+            host.Create();
+            thread = new Thread(() =>
+            {
+                while (true)
+                {
+                    if (host.CheckEvents(out var netEvent) <= 0) if (host.Service(timeout, out netEvent) <= 0) continue;
+                    switch (netEvent.Type)
+                    {
+                        case EventType.Connect:
+                            EnqueuePackage(typeof(NodeConnectMsg), new NodeConnectMsg());
+                            break;
+                        case EventType.Disconnect:
+                            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
+                            break;
+                        case EventType.Timeout:
+                            EnqueuePackage(typeof(NodeTimeoutMsg), new NodeTimeoutMsg());
+                            break;
+                        case EventType.Receive:
+                            var data = new byte[netEvent.Packet.Length];
+                            netEvent.Packet.CopyTo(data);
+                            netEvent.Packet.Dispose();
+                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) return;
+
+                            EnqueuePackage(msgType, msg);
+                            break;
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
+
+            running = true;
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            messageActionMap.Clear();
-            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
-            Listen<NodePingMsg>(OnNodePing);
-            engine.ticker.StopTimer(sendPingTimingId);
+            thread.Abort();
+            host.Dispose();
+            running = false;
         }
 
         /// <summary>
@@ -48,15 +115,16 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <param name="ip">地址</param>
         /// <param name="port">端口</param>
-        public void Connect(string ip, int port)
+        /// <param name="timeout">端口</param>
+        public void Connect(string ip, ushort port, int timeout = 15)
         {
-            if (null != client) client.Dispose();
-
-            client = new ENetClient();
-            client.OnConnect = () => { Notify(typeof(NodeConnectMsg), new NodeConnectMsg { }); };
-            client.OnDisconnect = () => { Notify(typeof(NodeDisconnectMsg), new NodeDisconnectMsg { }); };
-            client.OnTimeout = () => { Notify(typeof(NodeTimeoutMsg), new NodeTimeoutMsg { }); };
-            client.Connect(ip, port);
+            this.ip = ip;
+            this.port = port;
+            this.timeout = timeout;
+            var address = new Address();
+            address.SetIP(ip);
+            address.Port = port;
+            peer = host.Connect(address);
         }
 
         /// <summary>
@@ -64,8 +132,9 @@ namespace Goblin.Common.Network
         /// </summary>
         public void Disconnect()
         {
-            if (null == client) return;
-            client.Disconnect();
+            if (false == connected) return;
+            peer.DisconnectNow(0);
+            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
         }
 
         /// <summary>
@@ -73,7 +142,7 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="action">回调方法</param>
-        public void UnListen<T>(Action<T> action) where T : INetMessage
+        public void UnRecv<T>(Action<T> action) where T : INetMessage
         {
             if (false == messageActionMap.TryGetValue(typeof(T), out var actions)) return;
             if (false == actions.Contains(action)) return;
@@ -86,7 +155,7 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="action">回调方法</param>
-        public void Listen<T>(Action<T> action) where T : INetMessage
+        public void Recv<T>(Action<T> action) where T : INetMessage
         {
             if (false == messageActionMap.TryGetValue(typeof(T), out var actions))
             {
@@ -105,35 +174,51 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         public void Send<T>(T msg) where T : INetMessage
         {
-            if (ProtoPack.Pack(msg, out var bytes)) client.Send(bytes);
+            if (false == connected)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此操作需要网络连接，请检查是否正确连接服务器." });
+
+                return;
+            }
+
+            if (ProtoPack.Pack(msg, out var bytes))
+            {
+                var packet = new Packet();
+                packet.Create(bytes, bytes.Length, PacketFlags.Reliable | PacketFlags.NoAllocate);
+                peer.Send(0, ref packet);
+                packet.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// 消息包入队
+        /// </summary>
+        /// <param name="channel">通信渠道</param>
+        /// <param name="msgType">消息类型</param>
+        /// <param name="msg">消息</param>
+        private void EnqueuePackage(Type msgType, INetMessage msg)
+        {
+            netPackages.Enqueue(new NetPackage { msgType = msgType, msg = msg });
         }
 
         /// <summary>
         /// 消息通知
         /// </summary>
-        private void Notify(Type msgType, INetMessage msg)
+        private void Notify()
         {
-            if (false == messageActionMap.TryGetValue(msgType, out var actions)) return;
-            if (null == actions) return;
-            for (int i = actions.Count - 1; i >= 0; i--) actions[i].DynamicInvoke(msg);
+            if (false == running) return;
+
+            while (netPackages.TryDequeue(out var package))
+            {
+                if (false == messageActionMap.TryGetValue(package.msgType, out var actions)) return;
+                if (null == actions) return;
+                for (int i = actions.Count - 1; i >= 0; i--) actions[i].DynamicInvoke(package.msg);
+            }
         }
 
         private void OnTick(TickEvent e)
         {
-            bool connected = client != null && client.IsConnected;
-
-            if (!connected || client.BufferPointer.Count == 0)
-            {
-                return;
-            }
-
-            while (client.BufferPointer.Count > 0)
-            {
-                var pointer = client.BufferPointer.Dequeue();
-                var bytes = new byte[pointer.Length];
-                Array.Copy(client.Buffer, pointer.Start, bytes, 0, pointer.Length);
-                if (ProtoPack.UnPack(bytes, out var msgType, out var msg)) Notify(msgType, msg);
-            }
+            Notify();
         }
 
         private struct PingInfo
