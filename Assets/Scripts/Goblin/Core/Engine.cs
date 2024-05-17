@@ -74,7 +74,7 @@ namespace Goblin.Core
             gameui.Create();
 
             gameui.Open<Sys.Other.View.FrameworkView>();
-            gameui.Open<Sys.GameInitialize.GameInitializeView>();
+            gameui.Open<Sys.Login.View.LoginView>();
         }
 
         protected override void OnDestroy()

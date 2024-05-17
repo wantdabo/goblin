@@ -1,6 +1,6 @@
 ﻿using Goblin.Sys.Common;
-using Goblin.Sys.Lobby;
 using Goblin.Sys.Lobby.View;
+using Goblin.Sys.Login.View;
 using Goblin.Sys.Other.View;
 using Queen.Network.Protocols;
 using Queen.Network.Protocols.Common;
@@ -22,6 +22,10 @@ namespace Goblin.Sys.Login
         /// 玩家 ID
         /// </summary>
         private string pid;
+        /// <summary>
+        /// 登录状态
+        /// </summary>
+        public bool signined { get; private set; }
 
         protected override void OnCreate()
         {
@@ -65,8 +69,9 @@ namespace Goblin.Sys.Login
 
         private void OnNodeDisconnect(NodeDisconnectMsg msg)
         {
-            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "连接断开." });
+            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = signined ? "强制登出，连接断开." : "连接断开." });
             pid = null;
+            signined = false;
             engine.gameui.Close<LobbyView>();
             engine.gameui.Open<LoginView>();
         }
@@ -75,8 +80,9 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
-                pid = msg.pid;
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
+                signined = true;
+                pid = msg.pid;
                 engine.gameui.Close<LoginView>();
                 engine.gameui.Open<LobbyView>();
             }
@@ -96,6 +102,7 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登出成功." });
                 pid = null;
+                signined = false;
                 engine.gameui.Close<LobbyView>();
                 engine.gameui.Open<LoginView>();
             }
@@ -103,7 +110,7 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未登录." });
             }
-            else if (3 == msg.code) 
+            else if (3 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
                 pid = null;

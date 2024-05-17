@@ -122,12 +122,14 @@ namespace Goblin.Common.Network
             pingTimingId = engine.ticker.Timing((t) =>
             {
                 if (false == connected) return;
+
                 SendPing();
-            }, 0.5f, -1);
+            }, 1f, -1);
 
             bytesSRTimingId = engine.ticker.Timing((t) =>
             {
                 if (false == connected) return;
+
                 bytesRecvPerSeconds = peer.BytesReceived - bytesRecv;
                 bytesSentPerSeconds = peer.BytesSent - bytesSent;
                 bytesRecv = peer.BytesReceived;
@@ -141,6 +143,7 @@ namespace Goblin.Common.Network
                 while (true)
                 {
                     if (host.CheckEvents(out var netEvent) <= 0) if (host.Service(timeout, out netEvent) <= 0) continue;
+
                     switch (netEvent.Type)
                     {
                         case EventType.Connect:
@@ -156,10 +159,10 @@ namespace Goblin.Common.Network
                             var data = new byte[netEvent.Packet.Length];
                             netEvent.Packet.CopyTo(data);
                             netEvent.Packet.Dispose();
-                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) return;
+                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) break;
                             if (typeof(NodePingMsg) == msgType)
                             {
-                                OnNodePing(msg as NodePingMsg);
+                                RecvPing(msg as NodePingMsg);
                                 break;
                             }
 
@@ -191,8 +194,8 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <param name="ip">地址</param>
         /// <param name="port">端口</param>
-        /// <param name="timeout">端口</param>
-        public void Connect(string ip, ushort port, int timeout = 1)
+        /// <param name="timeout">网络轮询时间（ms）</param>
+        public void Connect(string ip, ushort port, int timeout = 15)
         {
             rping = default;
             sping = default;
@@ -290,10 +293,10 @@ namespace Goblin.Common.Network
         private void Notify()
         {
             if (false == running) return;
+
             while (netPackages.TryDequeue(out var package))
             {
-                if (false == messageActionMap.TryGetValue(package.msgType, out var actions)) return;
-                if (null == actions) return;
+                if (false == messageActionMap.TryGetValue(package.msgType, out var actions)) continue;
                 for (int i = actions.Count - 1; i >= 0; i--) actions[i].DynamicInvoke(package.msg);
             }
         }
@@ -330,7 +333,7 @@ namespace Goblin.Common.Network
         /// 接收服务器返回的延迟检测包
         /// </summary>
         /// <param name="msg">消息</param>
-        private void OnNodePing(NodePingMsg msg)
+        private void RecvPing(NodePingMsg msg)
         {
             rping.seconds = DateTime.UtcNow.Second;
             rping.millisecond = DateTime.UtcNow.Millisecond;

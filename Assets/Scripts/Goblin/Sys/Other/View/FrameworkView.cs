@@ -109,7 +109,7 @@ namespace Goblin.Sys.Other.View
 
             var ping = engine.net.connected ? $"PING : {engine.net.ping} MS" : "";
             engine.u3dkit.SeekNode<Text>(gameObject, "Ping").text = ping;
-            var bytessr = engine.net.connected ? $"UPLOAD : {engine.net.bytesSentPerSeconds*0.001f}KB /S \tDOWNLOAD : {engine.net.bytesRecvPerSeconds * 0.001f}KB /S" : "";
+            var bytessr = engine.net.connected ? $"UPLOAD : {engine.net.bytesSentPerSeconds / 1024f} KB /S \tDOWNLOAD : {engine.net.bytesRecvPerSeconds / 1024f} KB /S" : "";
             engine.u3dkit.SeekNode<Text>(gameObject, "BytesSR").text = bytessr;
         }
     }

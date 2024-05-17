@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Goblin.Sys.Login
+namespace Goblin.Sys.Login.View
 {
     public class LoginView : UIBaseView
     {
