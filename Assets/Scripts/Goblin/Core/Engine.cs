@@ -31,6 +31,7 @@ namespace Goblin.Core
         protected override void OnCreate()
         {
             base.OnCreate();
+            ENet.Library.Initialize();
 
             // 事件
             eventor = AddComp<Eventor>();
@@ -80,6 +81,7 @@ namespace Goblin.Core
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            ENet.Library.Deinitialize();
         }
 
         /// <summary>

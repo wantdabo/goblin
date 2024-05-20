@@ -154,6 +154,8 @@ namespace Goblin.Common.Network
                             break;
                         case EventType.Timeout:
                             EnqueuePackage(typeof(NodeTimeoutMsg), new NodeTimeoutMsg());
+                            peer.DisconnectNow(0);
+                            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
                             break;
                         case EventType.Receive:
                             var data = new byte[netEvent.Packet.Length];

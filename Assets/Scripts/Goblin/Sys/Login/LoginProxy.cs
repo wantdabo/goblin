@@ -62,20 +62,6 @@ namespace Goblin.Sys.Login
             engine.net.Send(new C2SRegisterMsg { username = username, password = password });
         }
 
-        private void OnNodeConnect(NodeConnectMsg msg)
-        {
-            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "连接成功." });
-        }
-
-        private void OnNodeDisconnect(NodeDisconnectMsg msg)
-        {
-            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = signined ? "强制登出，连接断开." : "连接断开." });
-            pid = null;
-            signined = false;
-            engine.gameui.Close<LobbyView>();
-            engine.gameui.Open<LoginView>();
-        }
-
         private void OnS2CLogin(S2CLoginMsg msg)
         {
             if (1 == msg.code)
@@ -129,6 +115,20 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户已存在." });
             }
+        }
+
+        private void OnNodeConnect(NodeConnectMsg msg)
+        {
+            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "连接成功." });
+        }
+
+        private void OnNodeDisconnect(NodeDisconnectMsg msg)
+        {
+            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = signined ? "强制登出，连接断开." : "连接断开." });
+            pid = null;
+            signined = false;
+            engine.gameui.Close<LobbyView>();
+            engine.gameui.Open<LoginView>();
         }
     }
 }

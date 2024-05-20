@@ -57,7 +57,7 @@ namespace Goblin.Sys.Other.View
 
             AddUIEventListener("ConnectBtn", (e) =>
             {
-                engine.net.Connect("127.0.0.1", 8080);
+                engine.net.Connect("127.0.0.1", 12801);
             });
 
             AddUIEventListener("DisconnectBtn", (e) =>
