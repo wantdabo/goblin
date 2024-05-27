@@ -1,13 +1,28 @@
 ﻿using MessagePack;
-using Queen.Network.Protocols.Common;
+using Queen.Protocols.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Queen.Network.Protocols
+namespace Queen.Protocols
 {
+    /// <summary>
+    /// 请求登出消息
+    /// </summary>
+    [MessagePackObject(true)]
+    public class C2SLogoutMsg : INetMessage
+    {
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
+    }
+
+    /// <summary>
+    /// 请求登录消息
+    /// </summary>
     [MessagePackObject(true)]
     public class C2SLoginMsg : INetMessage
     {
@@ -21,6 +36,9 @@ namespace Queen.Network.Protocols
         public string password { get; set; }
     }
 
+    /// <summary>
+    /// 请求注册消息
+    /// </summary>
     [MessagePackObject(true)]
     public class C2SRegisterMsg : INetMessage
     {
@@ -34,29 +52,9 @@ namespace Queen.Network.Protocols
         public string password { get; set; }
     }
 
-    [MessagePackObject(true)]
-    public class S2CLoginMsg : INetMessage
-    {
-        /// <summary>
-        /// 操作码/ 1 登录成功，2 用户不存在，3 密码错误
-        /// </summary>
-        public int code { get; set; }
-
-        /// <summary>
-        /// 玩家 ID
-        /// </summary>
-        public string pid { get; set; }
-    }
-
-    [MessagePackObject(true)]
-    public class C2SLogoutMsg : INetMessage
-    {
-        /// <summary>
-        /// 玩家 ID
-        /// </summary>
-        public string pid { get; set; }
-    }
-
+    /// <summary>
+    /// 响应登出消息
+    /// </summary>
     [MessagePackObject(true)]
     public class S2CLogoutMsg : INetMessage
     {
@@ -71,6 +69,26 @@ namespace Queen.Network.Protocols
         public string pid { get; set; }
     }
 
+    /// <summary>
+    /// 响应登录消息
+    /// </summay>
+    [MessagePackObject(true)]
+    public class S2CLoginMsg : INetMessage
+    {
+        /// <summary>
+        /// 操作码/ 1 登录成功，2 用户不存在，3 密码错误
+        /// </summary>
+        public int code { get; set; }
+
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
+    }
+
+    /// <summary>
+    /// 响应注册消息
+    /// </summary>
     [MessagePackObject(true)]
     public class S2CRegisterMsg : INetMessage
     {

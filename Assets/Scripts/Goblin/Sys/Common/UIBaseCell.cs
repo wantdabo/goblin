@@ -32,7 +32,7 @@ namespace Goblin.Sys.Common
         /// 设置父级 transform
         /// </summary>
         /// <param name="parent">父级 transform</param>
-        public void SetParent(Transform parent) 
+        public void SetParent(Transform parent)
         {
             if (null == parent) return;
             gameObject.transform.SetParent(parent, false);
@@ -48,6 +48,8 @@ namespace Goblin.Sys.Common
 
             return this;
         }
+
+        public void Open() { OnOpen(); }
 
         /// <summary>
         /// UI 激活/失活回调

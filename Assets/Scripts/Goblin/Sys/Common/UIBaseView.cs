@@ -68,6 +68,20 @@ namespace Goblin.Sys.Common
             return this;
         }
 
+        /// <summary>
+        /// 打开 UI
+        /// </summary>
+        public void Open()
+        {
+            if (UIState.Loading == state) return;
+            if (UIState.Open == state) return;
+
+            layerName = layer.ToString();
+            sorting = engine.gameui.AllotSorting();
+
+            OnOpen();
+        }
+
         protected override void OnUnload()
         {
             state = UIState.Free;

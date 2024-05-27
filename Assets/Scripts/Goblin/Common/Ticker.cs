@@ -99,7 +99,6 @@ namespace Goblin.Common
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            //eventor = null;
         }
 
         private uint mFrame = 0;

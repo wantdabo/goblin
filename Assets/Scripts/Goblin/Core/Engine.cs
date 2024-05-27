@@ -2,7 +2,6 @@
 using Goblin.Common.Network;
 using Goblin.Common.Res;
 using Goblin.Sys.Common;
-using Queen.Network.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +16,45 @@ namespace Goblin.Core
     /// </summary>
     public class Engine : Comp
     {
+        /// <summary>
+        /// 事件
+        /// </summary>
         public Eventor eventor;
+        /// <summary>
+        /// 对象池
+        /// </summary>
         public ObjectPool pool;
+        /// <summary>
+        /// 随机器
+        /// </summary>
         public Common.Random random;
+        /// <summary>
+        /// 引擎 Tick
+        /// </summary>
         public Ticker ticker;
+        /// <summary>
+        /// 游戏资源
+        /// </summary>
         public GameRes gameres;
+        /// <summary>
+        /// U3D API
+        /// </summary>
         public U3DKit u3dkit;
+        /// <summary>
+        /// 配置表
+        /// </summary>
         public Config cfg;
+        /// <summary>
+        /// 网络
+        /// </summary>
         public NetNode net;
+        /// <summary>
+        /// Proxy
+        /// </summary>
         public GameProxy proxy;
+        /// <summary>
+        /// 游戏 UI
+        /// </summary>
         public GameUI gameui;
 
         protected override void OnCreate()
@@ -33,44 +62,34 @@ namespace Goblin.Core
             base.OnCreate();
             ENet.Library.Initialize();
 
-            // 事件
             eventor = AddComp<Eventor>();
             eventor.Create();
 
-            // 对象池
             pool = AddComp<ObjectPool>();
             pool.Create();
 
-            // 随机数
             random = AddComp<Common.Random>();
             random.Initial(int.MaxValue);
             random.Create();
 
-            // 引擎 Tick
             ticker = AddComp<Ticker>();
             ticker.Create();
 
-            // 游戏资源
             gameres = AddComp<GameRes>();
             gameres.Create();
 
-            // U3D API
             u3dkit = AddComp<U3DKit>();
             u3dkit.Create();
 
-            // 配置表
             cfg = AddComp<Config>();
             cfg.Create();
 
-            // 网络
             net = AddComp<NetNode>();
             net.Create();
 
-            // Proxy
             proxy = AddComp<GameProxy>();
             proxy.Create();
 
-            // 游戏 UI
             gameui = AddComp<GameUI>();
             gameui.Create();
 

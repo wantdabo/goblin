@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Queen.Network.Protocols.Common
+namespace Queen.Protocols.Common
 {
     /// <summary>
     /// 网络节点连接消息

@@ -149,12 +149,23 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// UI 当前最顶 Sorting
         /// </summary>
-        private int sorting = 0;
+        public int sorting { get; private set; } = 0;
 
         /// <summary>
         /// UI 之间 Sorting 间距
         /// </summary>
-        private const int sortingSpacing = 10;
+        public int sortingSpacing { get; private set; } = 10;
+
+        /// <summary>
+        /// UI 根据 Sorting 间距分配 Sorting
+        /// </summary>
+        /// <returns></returns>
+        public int AllotSorting() 
+        {
+            sorting += sortingSpacing;
+
+            return sorting;
+        }
 
         public async void Open<T>(bool autoload = true) where T : UIBaseView, new()
         {
@@ -165,12 +176,6 @@ namespace Goblin.Sys.Common
                 view = await Load<T>();
             }
 
-            if (UIState.Loading == view.state) return;
-            if (UIState.Open == view.state) return;
-
-            sorting += sortingSpacing;
-            view.layerName = view.layer.ToString();
-            view.sorting = sorting;
             view.Open();
         }
 
@@ -187,7 +192,7 @@ namespace Goblin.Sys.Common
             if (UIState.Close == view.state) return;
 
             view.Close();
-            if(autounload) UnLoad<T>();
+            if (autounload) UnLoad<T>();
         }
     }
 }

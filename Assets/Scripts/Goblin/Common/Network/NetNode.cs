@@ -1,8 +1,7 @@
 ﻿using ENet;
 using Goblin.Core;
 using Goblin.Sys.Other.View;
-using Queen.Network.Protocols;
-using Queen.Network.Protocols.Common;
+using Queen.Protocols.Common;
 using Supyrb;
 using System;
 using System.Collections.Concurrent;

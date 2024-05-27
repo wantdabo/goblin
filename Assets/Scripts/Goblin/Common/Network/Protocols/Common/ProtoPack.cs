@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using MessagePack.Resolvers;
+using Queen.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Queen.Network.Protocols.Common
+namespace Queen.Protocols.Common
 {
     /// <summary>
     /// 消息结构接口
@@ -75,29 +76,12 @@ namespace Queen.Network.Protocols.Common
             return false;
         }
 
-        /// <summary>
-        /// 协议号定义
-        /// </summary>
-        private static Dictionary<int, Type> messageIdMap = new()
-        {
-            {10001, typeof(NodePingMsg)},
-            {20001, typeof(S2CRegisterMsg)},
-            {20002, typeof(C2SRegisterMsg)},
-            {20003, typeof(S2CLoginMsg)},
-            {20004, typeof(C2SLoginMsg)},
-            {20005, typeof(S2CLogoutMsg)},
-            {20006, typeof(C2SLogoutMsg)},
-        };
-
-        private static bool serializerRegistered = false;
 
         /// <summary>
         /// 初始化自定义解析器
         /// </summary>
         static ProtoPack()
         {
-            if (serializerRegistered) return;
-
             StaticCompositeResolver.Instance.Register(
                  GeneratedResolver.Instance,
                  StandardResolver.Instance
@@ -105,8 +89,36 @@ namespace Queen.Network.Protocols.Common
 
             var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
             MessagePackSerializer.DefaultOptions = option;
-
-            serializerRegistered = true;
         }
+
+        /// <summary>
+        /// 协议号定义
+        /// </summary>
+        private static Dictionary<int, Type> messageIdMap = new()
+        {
+            // 系统
+            {10001, typeof(NodePingMsg)},
+            // 登录
+            {20001, typeof(C2SLogoutMsg)},
+            {20002, typeof(C2SLoginMsg)},
+            {20003, typeof(C2SRegisterMsg)},
+            {20004, typeof(S2CLogoutMsg)},
+            {20005, typeof(S2CLoginMsg)},
+            {20006, typeof(S2CRegisterMsg)},
+            // 大厅
+            {20007, typeof(C2S_ExitRoomMsg)},
+            {20008, typeof(C2S_KickRoomMsg)},
+            {20009, typeof(C2S_JoinRoomMsg)},
+            {20010, typeof(C2S_DestroyRoomMsg)},
+            {20011, typeof(C2S_CreateRoomMsg)},
+            {20012, typeof(C2S_PullRoomsMsg)},
+            {20013, typeof(S2C_ExitRoomMsg)},
+            {20014, typeof(S2C_KickRoomMsg)},
+            {20015, typeof(S2C_JoinRoomMsg)},
+            {20016, typeof(S2C_DestroyRoomMsg)},
+            {20017, typeof(S2C_CreateRoomMsg)},
+            {20018, typeof(S2C_PushRoomsMsg)},
+            {20019, typeof(S2C_PushRoomMsg)},
+        };
     }
 }

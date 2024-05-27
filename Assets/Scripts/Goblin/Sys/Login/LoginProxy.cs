@@ -2,12 +2,13 @@
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Login.View;
 using Goblin.Sys.Other.View;
-using Queen.Network.Protocols;
-using Queen.Network.Protocols.Common;
+using Queen.Protocols;
+using Queen.Protocols.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,17 +17,8 @@ namespace Goblin.Sys.Login
     /// <summary>
     /// 登录
     /// </summary>
-    public class LoginProxy : Proxy
+    public class LoginProxy : Proxy<LoginModule>
     {
-        /// <summary>
-        /// 玩家 ID
-        /// </summary>
-        private string pid;
-        /// <summary>
-        /// 登录状态
-        /// </summary>
-        public bool signined { get; private set; }
-
         protected override void OnCreate()
         {
             base.OnCreate();
@@ -47,16 +39,29 @@ namespace Goblin.Sys.Login
             engine.net.UnRecv<S2CRegisterMsg>(OnS2CRegister);
         }
 
+        /// <summary>
+        /// 请求登录
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <param name="password">密码</param>
         public void C2SLogin(string username, string password)
         {
             engine.net.Send(new C2SLoginMsg { username = username, password = password });
         }
 
+        /// <summary>
+        /// 请求登出
+        /// </summary>
         public void C2SLogout()
         {
-            engine.net.Send(new C2SLogoutMsg { pid = pid });
+            engine.net.Send(new C2SLogoutMsg { pid = data.pid });
         }
 
+        /// <summary>
+        /// 请求注册
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <param name="password">密码</param>
         public void C2SRegister(string username, string password)
         {
             engine.net.Send(new C2SRegisterMsg { username = username, password = password });
@@ -67,8 +72,8 @@ namespace Goblin.Sys.Login
             if (1 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
-                signined = true;
-                pid = msg.pid;
+                data.signined = true;
+                data.pid = msg.pid;
                 engine.gameui.Close<LoginView>();
                 engine.gameui.Open<LobbyView>();
             }
@@ -86,9 +91,9 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登出成功." });
-                pid = null;
-                signined = false;
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户登出." });
+                data.pid = null;
+                data.signined = false;
                 engine.gameui.Close<LobbyView>();
                 engine.gameui.Open<LoginView>();
             }
@@ -99,7 +104,7 @@ namespace Goblin.Sys.Login
             else if (3 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
-                pid = null;
+                data.pid = null;
                 engine.gameui.Close<LobbyView>();
                 engine.gameui.Open<LoginView>();
             }
@@ -124,9 +129,9 @@ namespace Goblin.Sys.Login
 
         private void OnNodeDisconnect(NodeDisconnectMsg msg)
         {
-            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = signined ? "强制登出，连接断开." : "连接断开." });
-            pid = null;
-            signined = false;
+            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "强制登出，连接断开." : "连接断开." });
+            data.pid = null;
+            data.signined = false;
             engine.gameui.Close<LobbyView>();
             engine.gameui.Open<LoginView>();
         }

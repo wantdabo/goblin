@@ -1,6 +1,5 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
-using Queen.Network.Protocols.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +40,20 @@ namespace Goblin.Sys.Other.View
         private GameObject messageContent;
         private GameObject messageOrg;
 
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+            engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
+            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
+        }
+
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
@@ -64,20 +77,6 @@ namespace Goblin.Sys.Other.View
             {
                 engine.net.Disconnect();
             });
-        }
-
-        protected override void OnLoad()
-        {
-            base.OnLoad();
-            engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
-            engine.ticker.eventor.Listen<TickEvent>(OnTick);
-        }
-
-        protected override void OnUnload()
-        {
-            base.OnUnload();
-            engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
-            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
 
         private void OnMessageBlow(MessageBlowEvent e)

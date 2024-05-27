@@ -158,16 +158,6 @@ namespace Goblin.Sys.Common
         }
 
         /// <summary>
-        /// 打开 UI
-        /// </summary>
-        public void Open()
-        {
-            foreach (var cell in cellList) cell.Open();
-            OnOpen();
-            foreach (var eff in uieffectList) eff.Sorting(layerName, sorting);
-        }
-
-        /// <summary>
         /// 关闭 UI
         /// </summary>
         public void Close()
@@ -195,6 +185,8 @@ namespace Goblin.Sys.Common
         /// </summary>
         protected virtual void OnOpen()
         {
+            foreach (var cell in cellList) cell.Open();
+            foreach (var eff in uieffectList) eff.Sorting(layerName, sorting);
         }
 
         /// <summary>
