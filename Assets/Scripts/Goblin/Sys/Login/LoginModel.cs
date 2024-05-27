@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Goblin.Sys.Login
 {
-    public class LoginModule : Module<LoginProxy>
+    public class LoginModel : Module<LoginProxy>
     {
         /// <summary>
         /// 玩家 ID

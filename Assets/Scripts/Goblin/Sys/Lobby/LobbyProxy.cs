@@ -31,7 +31,7 @@ namespace Goblin.Sys.Lobby
     /// <summary>
     /// 大厅
     /// </summary>
-    public class LobbyProxy : Proxy<LobbyModule>
+    public class LobbyProxy : Proxy<LobbyModel>
     {
         protected override void OnCreate()
         {

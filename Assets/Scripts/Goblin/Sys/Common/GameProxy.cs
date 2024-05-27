@@ -34,7 +34,7 @@ namespace Goblin.Sys.Common
     /// <summary>
     /// 数据结构
     /// </summary>
-    public abstract class Module : Comp
+    public abstract class Model : Comp
     {
         /// <summary>
         /// Proxy
@@ -46,7 +46,7 @@ namespace Goblin.Sys.Common
     /// 数据结构
     /// </summary>
     /// <typeparam name="T">Proxy 类型</typeparam>
-    public class Module<T> : Module where T : Proxy
+    public class Module<T> : Model where T : Proxy
     {
         /// <summary>
         /// Proxy
@@ -61,7 +61,7 @@ namespace Goblin.Sys.Common
     /// 数据缓存的 Proxy
     /// </summary>
     /// <typeparam name="T">数据类型</typeparam>
-    public class Proxy<T> : Proxy where T : Module, new()
+    public class Proxy<T> : Proxy where T : Model, new()
     {
         /// <summary>
         /// 数据

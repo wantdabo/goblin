@@ -17,7 +17,7 @@ namespace Goblin.Sys.Login
     /// <summary>
     /// 登录
     /// </summary>
-    public class LoginProxy : Proxy<LoginModule>
+    public class LoginProxy : Proxy<LoginModel>
     {
         protected override void OnCreate()
         {

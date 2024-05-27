@@ -26,7 +26,7 @@ namespace Goblin.Sys.Lobby
     /// <summary>
     /// 大厅数据
     /// </summary>
-    public class LobbyModule : Module<LobbyProxy>
+    public class LobbyModel : Module<LobbyProxy>
     {
         /// <summary>
         /// 我的房间 ID
