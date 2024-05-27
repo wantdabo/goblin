@@ -70,9 +70,9 @@ namespace Goblin.Sys.Lobby
         /// 请求踢出房间
         /// </summary>
         /// <param name="pid">玩家 ID</param>
-        public void C2SKickRoom(string pid) 
+        public void C2SKickRoom(string pid)
         {
-            engine.net.Send(new C2S_KickRoomMsg {  pid = pid});
+            engine.net.Send(new C2S_KickRoomMsg { pid = pid });
         }
 
         /// <summary>
@@ -130,22 +130,22 @@ namespace Goblin.Sys.Lobby
             }
         }
 
-        private void OnS2CKickRoom(S2C_KickRoomMsg msg) 
+        private void OnS2CKickRoom(S2C_KickRoomMsg msg)
         {
             if (1 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent {  type =1, desc = "该成员已被请离房间." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "该成员已被请离房间." });
             }
             else if (2 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "您已被请离房间." });
                 engine.gameui.Close<LobbyRoomView>();
             }
-            else if (3 == msg.code) 
+            else if (3 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "该成员不存在此房间." });
             }
-            else if (4 == msg.code) 
+            else if (4 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "您没有该权限这么做." });
             }
@@ -183,12 +183,15 @@ namespace Goblin.Sys.Lobby
             if (1 == msg.code)
             {
                 var room = data.rooms.FirstOrDefault(r => r.id == msg.id);
-                if (null != room) 
+                if (null != room)
                 {
+                    if (engine.proxy.lobby.data.myRoom == room.id)
+                    {
+                        engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间已被销毁." });
+                        engine.gameui.Close<LobbyRoomView>();
+                    }
                     data.rooms.Remove(room);
-                    engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间已被销毁." });
                     eventor.Tell<RoomsChangedEvent>();
-                    engine.gameui.Close<LobbyRoomView>();
                 }
             }
             else if (2 == msg.code)

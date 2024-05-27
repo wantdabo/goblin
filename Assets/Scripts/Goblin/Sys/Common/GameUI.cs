@@ -175,7 +175,6 @@ namespace Goblin.Sys.Common
                 if (false == autoload) return;
                 view = await Load<T>();
             }
-
             view.Open();
         }
 

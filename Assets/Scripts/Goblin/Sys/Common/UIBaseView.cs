@@ -74,7 +74,7 @@ namespace Goblin.Sys.Common
         public void Open()
         {
             if (UIState.Loading == state) return;
-            if (UIState.Open == state) return;
+            if (UIState.Open == state) Close();
 
             layerName = layer.ToString();
             sorting = engine.gameui.AllotSorting();
