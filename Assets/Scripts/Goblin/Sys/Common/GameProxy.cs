@@ -46,7 +46,7 @@ namespace Goblin.Sys.Common
     /// 数据结构
     /// </summary>
     /// <typeparam name="T">Proxy 类型</typeparam>
-    public class Module<T> : Model where T : Proxy
+    public class Model<T> : Model where T : Proxy
     {
         /// <summary>
         /// Proxy
