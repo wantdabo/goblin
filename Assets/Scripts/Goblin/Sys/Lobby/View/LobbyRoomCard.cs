@@ -18,6 +18,7 @@ namespace Goblin.Sys.Lobby.View
 
         private uint id;
 
+        private Image bgImg;
         private Text idenityText;
         private Text nameText;
         private Text memberText;
@@ -38,6 +39,7 @@ namespace Goblin.Sys.Lobby.View
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
+            bgImg = engine.u3dkit.SeekNode<Image>(gameObject, "BG");
             idenityText = engine.u3dkit.SeekNode<Text>(gameObject, "Idenity");
             nameText = engine.u3dkit.SeekNode<Text>(gameObject, "Name");
             memberText = engine.u3dkit.SeekNode<Text>(gameObject, "Member");
@@ -49,9 +51,9 @@ namespace Goblin.Sys.Lobby.View
             base.OnBindEvent();
             AddUIEventListener("BG", async (e) =>
             {
-                if (id == engine.proxy.lobby.data.myRoom) 
+                if (id == engine.proxy.lobby.data.myRoom)
                 {
-                    engine.eventor.Tell(new MessageBlowEvent {  type = 2, desc = "您已在此房间中."});
+                    engine.gameui.Open<LobbyRoomView>();
 
                     return;
                 }
@@ -67,6 +69,7 @@ namespace Goblin.Sys.Lobby.View
             var room = engine.proxy.lobby.GetRoom(id);
             if (null == room) return;
 
+            bgImg.color = id == engine.proxy.lobby.data.myRoom ? new UnityEngine.Color(195f / 255f, 240f / 255f, 2f / 255f, 255f / 255f) : new UnityEngine.Color(195f / 255f, 240f / 255f, 2f / 255f, 150f / 255f);
             var idenity = room.needpwd ? "PRIVATE" : "PUBLIC";
             idenity += id == engine.proxy.lobby.data.myRoom ? ".SELF" : ".OTHER";
             idenityText.text = idenity;
@@ -81,7 +84,7 @@ namespace Goblin.Sys.Lobby.View
             UpateInfo();
         }
 
-        private void OnRoomChanged(RoomChangedEvent e) 
+        private void OnRoomChanged(RoomChangedEvent e)
         {
             if (e.id != id) return;
             UpateInfo();

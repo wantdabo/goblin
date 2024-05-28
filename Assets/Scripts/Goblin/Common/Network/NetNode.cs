@@ -79,15 +79,15 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 网络延迟
         /// </summary>
-        public int ping { get; private set; }
+        public long ping { get; private set; }
         /// <summary>
         /// 发送检测包计时
         /// </summary>
-        private PingInfo sping;
+        private long sping;
         /// <summary>
         /// 接收检测包计时
         /// </summary>
-        private PingInfo rping;
+        private long rping;
         /// <summary>
         /// 每秒接收数据
         /// </summary>
@@ -308,25 +308,12 @@ namespace Goblin.Common.Network
         }
 
         #region PING
-        private struct PingInfo
-        {
-            /// <summary>
-            /// 秒
-            /// </summary>
-            public int seconds;
-            /// <summary>
-            /// 毫秒
-            /// </summary>
-            public int millisecond;
-        }
-
         /// <summary>
         /// 发送延迟检测
         /// </summary>
         private void SendPing()
         {
-            sping.seconds = DateTime.UtcNow.Second;
-            sping.millisecond = DateTime.UtcNow.Millisecond;
+            sping = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             Send(new NodePingMsg());
         }
 
@@ -336,9 +323,8 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         private void RecvPing(NodePingMsg msg)
         {
-            rping.seconds = DateTime.UtcNow.Second;
-            rping.millisecond = DateTime.UtcNow.Millisecond;
-            ping = (rping.seconds * 1000 + rping.millisecond) - (sping.seconds * 1000 + sping.millisecond);
+            rping = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            ping = rping - sping;
         }
         #endregion
     }
