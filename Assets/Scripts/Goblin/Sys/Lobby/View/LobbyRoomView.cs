@@ -47,14 +47,19 @@ namespace Goblin.Sys.Lobby.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
-            AddUIEventListener("ExitRoomBtn", (e) =>
+            AddUIEventListener("PlayBtn", (e) =>
             {
-                engine.proxy.lobby.C2SExitRoom();
+                engine.proxy.lobby.C2SRoom2Game();
             });
 
             AddUIEventListener("BackBtn", (e) =>
             {
                 engine.gameui.Close<LobbyRoomView>();
+            });
+
+            AddUIEventListener("ExitRoomBtn", (e) =>
+            {
+                engine.proxy.lobby.C2SExitRoom();
             });
         }
 

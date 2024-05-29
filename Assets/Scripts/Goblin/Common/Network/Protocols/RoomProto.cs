@@ -44,13 +44,21 @@ namespace Queen.Protocols
     }
 
     /// <summary>
+    /// 请求房间开局消息
+    /// </summary>
+    [MessagePackObject(true)]
+    public class C2S_Room2GameMsg : INetMessage
+    {
+
+    }
+
+    /// <summary>
     /// 请求销毁房间消息
     /// </summary>
     [MessagePackObject(true)]
     public class C2S_DestroyRoomMsg : INetMessage
     {
     }
-
 
     /// <summary>
     /// 请求创建房间消息
@@ -118,6 +126,50 @@ namespace Queen.Protocols
         /// 操作码/ 1 加入成功，2 密码错误，3 房间不存在，4 已有加入的房间，5 房间成员已满
         /// </summary>
         public int code { get; set; }
+    }
+
+    /// <summary>
+    /// 响应房间开局消息
+    /// </summary>
+    [MessagePackObject(true)]
+    public class S2C_Room2GameMsg : INetMessage
+    {
+        /// <summary>
+        /// 操作码/ 1 开局成功，2 房间已经在对局中，3 房间不存在，4 无法开启房间
+        /// </summary>
+        public int code { get; set; }
+    }
+
+    /// <summary>
+    /// 响应游戏开局消息
+    /// </summary>
+    [MessagePackObject(true)]
+    public class S2C_GameInfoMsg : INetMessage 
+    {
+        /// <summary>
+        /// 主机
+        /// </summary>
+        public string host { get; set; }
+        /// <summary>
+        /// 端口
+        /// </summary>
+        public uint port { get; set; }
+        /// <summary>
+        /// 对局房间 ID
+        /// </summary>
+        public uint id { get; set; }
+        /// <summary>
+        /// 座位
+        /// </summary>
+        public uint seat { get; set; }
+        /// <summary>
+        /// 玩家 ID
+        /// </summary>
+        public string pid { get; set; }
+        /// <summary>
+        /// 座位，密码
+        /// </summary>
+        public string password { get; set; }
     }
 
     /// <summary>

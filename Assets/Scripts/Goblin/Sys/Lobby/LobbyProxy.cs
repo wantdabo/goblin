@@ -39,6 +39,8 @@ namespace Goblin.Sys.Lobby
             engine.net.Recv<S2C_ExitRoomMsg>(OnS2CExitRoom);
             engine.net.Recv<S2C_KickRoomMsg>(OnS2CKickRoom);
             engine.net.Recv<S2C_JoinRoomMsg>(OnS2CJoinRoom);
+            engine.net.Recv<S2C_Room2GameMsg>(OnS2CRoom2Game);
+            engine.net.Recv<S2C_GameInfoMsg>(OnS2CGameInfo);
             engine.net.Recv<S2C_DestroyRoomMsg>(OnS2CDestroyRoom);
             engine.net.Recv<S2C_CreateRoomMsg>(OnS2CCreateRoom);
             engine.net.Recv<S2C_PushRoomsMsg>(OnS2CPushRooms);
@@ -83,6 +85,14 @@ namespace Goblin.Sys.Lobby
         public void C2SJoinRoom(uint id, uint password)
         {
             engine.net.Send(new C2S_JoinRoomMsg { id = id, password = password });
+        }
+
+        /// <summary>
+        /// 请求房间开局
+        /// </summary>
+        public void C2SRoom2Game()
+        {
+            engine.net.Send(new C2S_Room2GameMsg { });
         }
 
         /// <summary>
@@ -176,6 +186,35 @@ namespace Goblin.Sys.Lobby
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间成员已满." });
             }
+            else if (6 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间已经在对局中." });
+            }
+        }
+
+        private void OnS2CRoom2Game(S2C_Room2GameMsg msg) 
+        {
+            if (1 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "房间开局成功." });
+            }
+            else if (2 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间已经在对局中." });
+            }
+            else if (3 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间不存在." });
+            }
+            else if (4 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "无法开启房间." });
+            }
+        }
+
+        private void OnS2CGameInfo(S2C_GameInfoMsg msg) 
+        {
+            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "正在进入对局房间." });
         }
 
         private void OnS2CDestroyRoom(S2C_DestroyRoomMsg msg)

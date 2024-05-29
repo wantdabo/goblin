@@ -47,36 +47,51 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(28)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(43)
             {
-                { typeof(global::Queen.Protocols.RoomInfo[]), 0 },
-                { typeof(global::Queen.Protocols.RoomMemberInfo[]), 1 },
-                { typeof(global::Queen.Protocols.C2S_CreateRoomMsg), 2 },
-                { typeof(global::Queen.Protocols.C2S_DestroyRoomMsg), 3 },
-                { typeof(global::Queen.Protocols.C2S_ExitRoomMsg), 4 },
-                { typeof(global::Queen.Protocols.C2S_JoinRoomMsg), 5 },
-                { typeof(global::Queen.Protocols.C2S_KickRoomMsg), 6 },
-                { typeof(global::Queen.Protocols.C2S_PullRoomsMsg), 7 },
-                { typeof(global::Queen.Protocols.C2SLoginMsg), 8 },
-                { typeof(global::Queen.Protocols.C2SLogoutMsg), 9 },
-                { typeof(global::Queen.Protocols.C2SRegisterMsg), 10 },
-                { typeof(global::Queen.Protocols.Common.NodeConnectMsg), 11 },
-                { typeof(global::Queen.Protocols.Common.NodeDisconnectMsg), 12 },
-                { typeof(global::Queen.Protocols.Common.NodePingMsg), 13 },
-                { typeof(global::Queen.Protocols.Common.NodeReceiveMsg), 14 },
-                { typeof(global::Queen.Protocols.Common.NodeTimeoutMsg), 15 },
-                { typeof(global::Queen.Protocols.RoomInfo), 16 },
-                { typeof(global::Queen.Protocols.RoomMemberInfo), 17 },
-                { typeof(global::Queen.Protocols.S2C_CreateRoomMsg), 18 },
-                { typeof(global::Queen.Protocols.S2C_DestroyRoomMsg), 19 },
-                { typeof(global::Queen.Protocols.S2C_ExitRoomMsg), 20 },
-                { typeof(global::Queen.Protocols.S2C_JoinRoomMsg), 21 },
-                { typeof(global::Queen.Protocols.S2C_KickRoomMsg), 22 },
-                { typeof(global::Queen.Protocols.S2C_PushRoomMsg), 23 },
-                { typeof(global::Queen.Protocols.S2C_PushRoomsMsg), 24 },
-                { typeof(global::Queen.Protocols.S2CLoginMsg), 25 },
-                { typeof(global::Queen.Protocols.S2CLogoutMsg), 26 },
-                { typeof(global::Queen.Protocols.S2CRegisterMsg), 27 },
+                { typeof(global::Queen.Protocols.FrameInfo[]), 0 },
+                { typeof(global::Queen.Protocols.RoomInfo[]), 1 },
+                { typeof(global::Queen.Protocols.RoomMemberInfo[]), 2 },
+                { typeof(global::Queen.Protocols.SeatInfo[]), 3 },
+                { typeof(global::Queen.Protocols.SeatInputInfo[]), 4 },
+                { typeof(global::Queen.Protocols.C2G_SetInputMsg), 5 },
+                { typeof(global::Queen.Protocols.C2G_StartStageMsg), 6 },
+                { typeof(global::Queen.Protocols.C2S_CreateRoomMsg), 7 },
+                { typeof(global::Queen.Protocols.C2S_DestroyRoomMsg), 8 },
+                { typeof(global::Queen.Protocols.C2S_ExitRoomMsg), 9 },
+                { typeof(global::Queen.Protocols.C2S_JoinRoomMsg), 10 },
+                { typeof(global::Queen.Protocols.C2S_KickRoomMsg), 11 },
+                { typeof(global::Queen.Protocols.C2S_PullRoomsMsg), 12 },
+                { typeof(global::Queen.Protocols.C2S_Room2GameMsg), 13 },
+                { typeof(global::Queen.Protocols.C2SLoginMsg), 14 },
+                { typeof(global::Queen.Protocols.C2SLogoutMsg), 15 },
+                { typeof(global::Queen.Protocols.C2SRegisterMsg), 16 },
+                { typeof(global::Queen.Protocols.Common.NodeConnectMsg), 17 },
+                { typeof(global::Queen.Protocols.Common.NodeDisconnectMsg), 18 },
+                { typeof(global::Queen.Protocols.Common.NodePingMsg), 19 },
+                { typeof(global::Queen.Protocols.Common.NodeReceiveMsg), 20 },
+                { typeof(global::Queen.Protocols.Common.NodeTimeoutMsg), 21 },
+                { typeof(global::Queen.Protocols.FrameInfo), 22 },
+                { typeof(global::Queen.Protocols.G2C_LogicTickMsg), 23 },
+                { typeof(global::Queen.Protocols.G2C_StartStageMsg), 24 },
+                { typeof(global::Queen.Protocols.G2S_CreateStageMsg), 25 },
+                { typeof(global::Queen.Protocols.RoomInfo), 26 },
+                { typeof(global::Queen.Protocols.RoomMemberInfo), 27 },
+                { typeof(global::Queen.Protocols.S2C_CreateRoomMsg), 28 },
+                { typeof(global::Queen.Protocols.S2C_DestroyRoomMsg), 29 },
+                { typeof(global::Queen.Protocols.S2C_ExitRoomMsg), 30 },
+                { typeof(global::Queen.Protocols.S2C_GameInfoMsg), 31 },
+                { typeof(global::Queen.Protocols.S2C_JoinRoomMsg), 32 },
+                { typeof(global::Queen.Protocols.S2C_KickRoomMsg), 33 },
+                { typeof(global::Queen.Protocols.S2C_PushRoomMsg), 34 },
+                { typeof(global::Queen.Protocols.S2C_PushRoomsMsg), 35 },
+                { typeof(global::Queen.Protocols.S2C_Room2GameMsg), 36 },
+                { typeof(global::Queen.Protocols.S2CLoginMsg), 37 },
+                { typeof(global::Queen.Protocols.S2CLogoutMsg), 38 },
+                { typeof(global::Queen.Protocols.S2CRegisterMsg), 39 },
+                { typeof(global::Queen.Protocols.S2G_CreateStageMsg), 40 },
+                { typeof(global::Queen.Protocols.SeatInfo), 41 },
+                { typeof(global::Queen.Protocols.SeatInputInfo), 42 },
             };
         }
 
@@ -90,34 +105,49 @@ namespace MessagePack.Resolvers
 
             switch (key)
             {
-                case 0: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.RoomInfo>();
-                case 1: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.RoomMemberInfo>();
-                case 2: return new MessagePack.Formatters.Queen.Protocols.C2S_CreateRoomMsgFormatter();
-                case 3: return new MessagePack.Formatters.Queen.Protocols.C2S_DestroyRoomMsgFormatter();
-                case 4: return new MessagePack.Formatters.Queen.Protocols.C2S_ExitRoomMsgFormatter();
-                case 5: return new MessagePack.Formatters.Queen.Protocols.C2S_JoinRoomMsgFormatter();
-                case 6: return new MessagePack.Formatters.Queen.Protocols.C2S_KickRoomMsgFormatter();
-                case 7: return new MessagePack.Formatters.Queen.Protocols.C2S_PullRoomsMsgFormatter();
-                case 8: return new MessagePack.Formatters.Queen.Protocols.C2SLoginMsgFormatter();
-                case 9: return new MessagePack.Formatters.Queen.Protocols.C2SLogoutMsgFormatter();
-                case 10: return new MessagePack.Formatters.Queen.Protocols.C2SRegisterMsgFormatter();
-                case 11: return new MessagePack.Formatters.Queen.Protocols.Common.NodeConnectMsgFormatter();
-                case 12: return new MessagePack.Formatters.Queen.Protocols.Common.NodeDisconnectMsgFormatter();
-                case 13: return new MessagePack.Formatters.Queen.Protocols.Common.NodePingMsgFormatter();
-                case 14: return new MessagePack.Formatters.Queen.Protocols.Common.NodeReceiveMsgFormatter();
-                case 15: return new MessagePack.Formatters.Queen.Protocols.Common.NodeTimeoutMsgFormatter();
-                case 16: return new MessagePack.Formatters.Queen.Protocols.RoomInfoFormatter();
-                case 17: return new MessagePack.Formatters.Queen.Protocols.RoomMemberInfoFormatter();
-                case 18: return new MessagePack.Formatters.Queen.Protocols.S2C_CreateRoomMsgFormatter();
-                case 19: return new MessagePack.Formatters.Queen.Protocols.S2C_DestroyRoomMsgFormatter();
-                case 20: return new MessagePack.Formatters.Queen.Protocols.S2C_ExitRoomMsgFormatter();
-                case 21: return new MessagePack.Formatters.Queen.Protocols.S2C_JoinRoomMsgFormatter();
-                case 22: return new MessagePack.Formatters.Queen.Protocols.S2C_KickRoomMsgFormatter();
-                case 23: return new MessagePack.Formatters.Queen.Protocols.S2C_PushRoomMsgFormatter();
-                case 24: return new MessagePack.Formatters.Queen.Protocols.S2C_PushRoomsMsgFormatter();
-                case 25: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
-                case 26: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
-                case 27: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
+                case 0: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.FrameInfo>();
+                case 1: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.RoomInfo>();
+                case 2: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.RoomMemberInfo>();
+                case 3: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.SeatInfo>();
+                case 4: return new global::MessagePack.Formatters.ArrayFormatter<global::Queen.Protocols.SeatInputInfo>();
+                case 5: return new MessagePack.Formatters.Queen.Protocols.C2G_SetInputMsgFormatter();
+                case 6: return new MessagePack.Formatters.Queen.Protocols.C2G_StartStageMsgFormatter();
+                case 7: return new MessagePack.Formatters.Queen.Protocols.C2S_CreateRoomMsgFormatter();
+                case 8: return new MessagePack.Formatters.Queen.Protocols.C2S_DestroyRoomMsgFormatter();
+                case 9: return new MessagePack.Formatters.Queen.Protocols.C2S_ExitRoomMsgFormatter();
+                case 10: return new MessagePack.Formatters.Queen.Protocols.C2S_JoinRoomMsgFormatter();
+                case 11: return new MessagePack.Formatters.Queen.Protocols.C2S_KickRoomMsgFormatter();
+                case 12: return new MessagePack.Formatters.Queen.Protocols.C2S_PullRoomsMsgFormatter();
+                case 13: return new MessagePack.Formatters.Queen.Protocols.C2S_Room2GameMsgFormatter();
+                case 14: return new MessagePack.Formatters.Queen.Protocols.C2SLoginMsgFormatter();
+                case 15: return new MessagePack.Formatters.Queen.Protocols.C2SLogoutMsgFormatter();
+                case 16: return new MessagePack.Formatters.Queen.Protocols.C2SRegisterMsgFormatter();
+                case 17: return new MessagePack.Formatters.Queen.Protocols.Common.NodeConnectMsgFormatter();
+                case 18: return new MessagePack.Formatters.Queen.Protocols.Common.NodeDisconnectMsgFormatter();
+                case 19: return new MessagePack.Formatters.Queen.Protocols.Common.NodePingMsgFormatter();
+                case 20: return new MessagePack.Formatters.Queen.Protocols.Common.NodeReceiveMsgFormatter();
+                case 21: return new MessagePack.Formatters.Queen.Protocols.Common.NodeTimeoutMsgFormatter();
+                case 22: return new MessagePack.Formatters.Queen.Protocols.FrameInfoFormatter();
+                case 23: return new MessagePack.Formatters.Queen.Protocols.G2C_LogicTickMsgFormatter();
+                case 24: return new MessagePack.Formatters.Queen.Protocols.G2C_StartStageMsgFormatter();
+                case 25: return new MessagePack.Formatters.Queen.Protocols.G2S_CreateStageMsgFormatter();
+                case 26: return new MessagePack.Formatters.Queen.Protocols.RoomInfoFormatter();
+                case 27: return new MessagePack.Formatters.Queen.Protocols.RoomMemberInfoFormatter();
+                case 28: return new MessagePack.Formatters.Queen.Protocols.S2C_CreateRoomMsgFormatter();
+                case 29: return new MessagePack.Formatters.Queen.Protocols.S2C_DestroyRoomMsgFormatter();
+                case 30: return new MessagePack.Formatters.Queen.Protocols.S2C_ExitRoomMsgFormatter();
+                case 31: return new MessagePack.Formatters.Queen.Protocols.S2C_GameInfoMsgFormatter();
+                case 32: return new MessagePack.Formatters.Queen.Protocols.S2C_JoinRoomMsgFormatter();
+                case 33: return new MessagePack.Formatters.Queen.Protocols.S2C_KickRoomMsgFormatter();
+                case 34: return new MessagePack.Formatters.Queen.Protocols.S2C_PushRoomMsgFormatter();
+                case 35: return new MessagePack.Formatters.Queen.Protocols.S2C_PushRoomsMsgFormatter();
+                case 36: return new MessagePack.Formatters.Queen.Protocols.S2C_Room2GameMsgFormatter();
+                case 37: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
+                case 38: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
+                case 39: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
+                case 40: return new MessagePack.Formatters.Queen.Protocols.S2G_CreateStageMsgFormatter();
+                case 41: return new MessagePack.Formatters.Queen.Protocols.SeatInfoFormatter();
+                case 42: return new MessagePack.Formatters.Queen.Protocols.SeatInputInfoFormatter();
                 default: return null;
             }
         }
@@ -153,6 +183,141 @@ namespace MessagePack.Resolvers
 
 namespace MessagePack.Formatters.Queen.Protocols
 {
+    public sealed class C2G_SetInputMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2G_SetInputMsg>
+    {
+        // inputInfo
+        private static global::System.ReadOnlySpan<byte> GetSpan_inputInfo() => new byte[1 + 9] { 169, 105, 110, 112, 117, 116, 73, 110, 102, 111 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.C2G_SetInputMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(1);
+            writer.WriteRaw(GetSpan_inputInfo());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInputInfo>(formatterResolver).Serialize(ref writer, value.inputInfo, options);
+        }
+
+        public global::Queen.Protocols.C2G_SetInputMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.C2G_SetInputMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 9:
+                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_inputInfo().Slice(1))) { goto FAIL; }
+
+                        ____result.inputInfo = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInputInfo>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class C2G_StartStageMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2G_StartStageMsg>
+    {
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+        // seat
+        private static global::System.ReadOnlySpan<byte> GetSpan_seat() => new byte[1 + 4] { 164, 115, 101, 97, 116 };
+        // pid
+        private static global::System.ReadOnlySpan<byte> GetSpan_pid() => new byte[1 + 3] { 163, 112, 105, 100 };
+        // password
+        private static global::System.ReadOnlySpan<byte> GetSpan_password() => new byte[1 + 8] { 168, 112, 97, 115, 115, 119, 111, 114, 100 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.C2G_StartStageMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(4);
+            writer.WriteRaw(GetSpan_id());
+            writer.Write(value.id);
+            writer.WriteRaw(GetSpan_seat());
+            writer.Write(value.seat);
+            writer.WriteRaw(GetSpan_pid());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.pid, options);
+            writer.WriteRaw(GetSpan_password());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.password, options);
+        }
+
+        public global::Queen.Protocols.C2G_StartStageMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.C2G_StartStageMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = reader.ReadUInt32();
+                        continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1952540019UL) { goto FAIL; }
+
+                        ____result.seat = reader.ReadUInt32();
+                        continue;
+                    case 3:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 6580592UL) { goto FAIL; }
+
+                        ____result.pid = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+                    case 8:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7237970109966541168UL) { goto FAIL; }
+
+                        ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class C2S_CreateRoomMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2S_CreateRoomMsg>
     {
         // name
@@ -427,6 +592,32 @@ namespace MessagePack.Formatters.Queen.Protocols
         }
     }
 
+    public sealed class C2S_Room2GameMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2S_Room2GameMsg>
+    {
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.C2S_Room2GameMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(0);
+        }
+
+        public global::Queen.Protocols.C2S_Room2GameMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            reader.Skip();
+            var ____result = new global::Queen.Protocols.C2S_Room2GameMsg();
+            return ____result;
+        }
+    }
+
     public sealed class C2SLoginMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2SLoginMsg>
     {
         // username
@@ -600,6 +791,256 @@ namespace MessagePack.Formatters.Queen.Protocols
                                 ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                                 continue;
                         }
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class FrameInfoFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.FrameInfo>
+    {
+        // frame
+        private static global::System.ReadOnlySpan<byte> GetSpan_frame() => new byte[1 + 5] { 165, 102, 114, 97, 109, 101 };
+        // seatInputInfos
+        private static global::System.ReadOnlySpan<byte> GetSpan_seatInputInfos() => new byte[1 + 14] { 174, 115, 101, 97, 116, 73, 110, 112, 117, 116, 73, 110, 102, 111, 115 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.FrameInfo value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(2);
+            writer.WriteRaw(GetSpan_frame());
+            writer.Write(value.frame);
+            writer.WriteRaw(GetSpan_seatInputInfos());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInputInfo[]>(formatterResolver).Serialize(ref writer, value.seatInputInfos, options);
+        }
+
+        public global::Queen.Protocols.FrameInfo Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.FrameInfo();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 5:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 435626799718UL) { goto FAIL; }
+
+                        ____result.frame = reader.ReadUInt32();
+                        continue;
+                    case 14:
+                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_seatInputInfos().Slice(1))) { goto FAIL; }
+
+                        ____result.seatInputInfos = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInputInfo[]>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class G2C_LogicTickMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.G2C_LogicTickMsg>
+    {
+        // frame
+        private static global::System.ReadOnlySpan<byte> GetSpan_frame() => new byte[1 + 5] { 165, 102, 114, 97, 109, 101 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.G2C_LogicTickMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(1);
+            writer.WriteRaw(GetSpan_frame());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.FrameInfo>(formatterResolver).Serialize(ref writer, value.frame, options);
+        }
+
+        public global::Queen.Protocols.G2C_LogicTickMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.G2C_LogicTickMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 5:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 435626799718UL) { goto FAIL; }
+
+                        ____result.frame = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.FrameInfo>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class G2C_StartStageMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.G2C_StartStageMsg>
+    {
+        // code
+        private static global::System.ReadOnlySpan<byte> GetSpan_code() => new byte[1 + 4] { 164, 99, 111, 100, 101 };
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+        // frames
+        private static global::System.ReadOnlySpan<byte> GetSpan_frames() => new byte[1 + 6] { 166, 102, 114, 97, 109, 101, 115 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.G2C_StartStageMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(3);
+            writer.WriteRaw(GetSpan_code());
+            writer.Write(value.code);
+            writer.WriteRaw(GetSpan_id());
+            writer.Write(value.id);
+            writer.WriteRaw(GetSpan_frames());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.FrameInfo[]>(formatterResolver).Serialize(ref writer, value.frames, options);
+        }
+
+        public global::Queen.Protocols.G2C_StartStageMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.G2C_StartStageMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701080931UL) { goto FAIL; }
+
+                        ____result.code = reader.ReadInt32();
+                        continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = reader.ReadUInt32();
+                        continue;
+                    case 6:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 126879463993958UL) { goto FAIL; }
+
+                        ____result.frames = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.FrameInfo[]>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class G2S_CreateStageMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.G2S_CreateStageMsg>
+    {
+        // code
+        private static global::System.ReadOnlySpan<byte> GetSpan_code() => new byte[1 + 4] { 164, 99, 111, 100, 101 };
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.G2S_CreateStageMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(2);
+            writer.WriteRaw(GetSpan_code());
+            writer.Write(value.code);
+            writer.WriteRaw(GetSpan_id());
+            writer.Write(value.id);
+        }
+
+        public global::Queen.Protocols.G2S_CreateStageMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.G2S_CreateStageMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701080931UL) { goto FAIL; }
+
+                        ____result.code = reader.ReadInt32();
+                        continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = reader.ReadUInt32();
+                        continue;
 
                 }
             }
@@ -956,6 +1397,104 @@ namespace MessagePack.Formatters.Queen.Protocols
         }
     }
 
+    public sealed class S2C_GameInfoMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2C_GameInfoMsg>
+    {
+        // host
+        private static global::System.ReadOnlySpan<byte> GetSpan_host() => new byte[1 + 4] { 164, 104, 111, 115, 116 };
+        // port
+        private static global::System.ReadOnlySpan<byte> GetSpan_port() => new byte[1 + 4] { 164, 112, 111, 114, 116 };
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+        // seat
+        private static global::System.ReadOnlySpan<byte> GetSpan_seat() => new byte[1 + 4] { 164, 115, 101, 97, 116 };
+        // pid
+        private static global::System.ReadOnlySpan<byte> GetSpan_pid() => new byte[1 + 3] { 163, 112, 105, 100 };
+        // password
+        private static global::System.ReadOnlySpan<byte> GetSpan_password() => new byte[1 + 8] { 168, 112, 97, 115, 115, 119, 111, 114, 100 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.S2C_GameInfoMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(6);
+            writer.WriteRaw(GetSpan_host());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.host, options);
+            writer.WriteRaw(GetSpan_port());
+            writer.Write(value.port);
+            writer.WriteRaw(GetSpan_id());
+            writer.Write(value.id);
+            writer.WriteRaw(GetSpan_seat());
+            writer.Write(value.seat);
+            writer.WriteRaw(GetSpan_pid());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.pid, options);
+            writer.WriteRaw(GetSpan_password());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.password, options);
+        }
+
+        public global::Queen.Protocols.S2C_GameInfoMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.S2C_GameInfoMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
+                        {
+                            default: goto FAIL;
+                            case 1953722216UL:
+                                ____result.host = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                                continue;
+                            case 1953656688UL:
+                                ____result.port = reader.ReadUInt32();
+                                continue;
+                            case 1952540019UL:
+                                ____result.seat = reader.ReadUInt32();
+                                continue;
+                        }
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = reader.ReadUInt32();
+                        continue;
+                    case 3:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 6580592UL) { goto FAIL; }
+
+                        ____result.pid = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+                    case 8:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 7237970109966541168UL) { goto FAIL; }
+
+                        ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class S2C_JoinRoomMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2C_JoinRoomMsg>
     {
         // code
@@ -1168,6 +1707,58 @@ namespace MessagePack.Formatters.Queen.Protocols
         }
     }
 
+    public sealed class S2C_Room2GameMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2C_Room2GameMsg>
+    {
+        // code
+        private static global::System.ReadOnlySpan<byte> GetSpan_code() => new byte[1 + 4] { 164, 99, 111, 100, 101 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.S2C_Room2GameMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(1);
+            writer.WriteRaw(GetSpan_code());
+            writer.Write(value.code);
+        }
+
+        public global::Queen.Protocols.S2C_Room2GameMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.S2C_Room2GameMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701080931UL) { goto FAIL; }
+
+                        ____result.code = reader.ReadInt32();
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class S2CLoginMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2CLoginMsg>
     {
         // code
@@ -1337,6 +1928,241 @@ namespace MessagePack.Formatters.Queen.Protocols
 
                         ____result.code = reader.ReadInt32();
                         continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class S2G_CreateStageMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2G_CreateStageMsg>
+    {
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+        // name
+        private static global::System.ReadOnlySpan<byte> GetSpan_name() => new byte[1 + 4] { 164, 110, 97, 109, 101 };
+        // seats
+        private static global::System.ReadOnlySpan<byte> GetSpan_seats() => new byte[1 + 5] { 165, 115, 101, 97, 116, 115 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.S2G_CreateStageMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(3);
+            writer.WriteRaw(GetSpan_id());
+            writer.Write(value.id);
+            writer.WriteRaw(GetSpan_name());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.name, options);
+            writer.WriteRaw(GetSpan_seats());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInfo[]>(formatterResolver).Serialize(ref writer, value.seats, options);
+        }
+
+        public global::Queen.Protocols.S2G_CreateStageMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.S2G_CreateStageMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = reader.ReadUInt32();
+                        continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701667182UL) { goto FAIL; }
+
+                        ____result.name = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+                    case 5:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 495873779059UL) { goto FAIL; }
+
+                        ____result.seats = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::Queen.Protocols.SeatInfo[]>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class SeatInfoFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.SeatInfo>
+    {
+        // seat
+        private static global::System.ReadOnlySpan<byte> GetSpan_seat() => new byte[1 + 4] { 164, 115, 101, 97, 116 };
+        // pid
+        private static global::System.ReadOnlySpan<byte> GetSpan_pid() => new byte[1 + 3] { 163, 112, 105, 100 };
+        // nickname
+        private static global::System.ReadOnlySpan<byte> GetSpan_nickname() => new byte[1 + 8] { 168, 110, 105, 99, 107, 110, 97, 109, 101 };
+        // password
+        private static global::System.ReadOnlySpan<byte> GetSpan_password() => new byte[1 + 8] { 168, 112, 97, 115, 115, 119, 111, 114, 100 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.SeatInfo value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(4);
+            writer.WriteRaw(GetSpan_seat());
+            writer.Write(value.seat);
+            writer.WriteRaw(GetSpan_pid());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.pid, options);
+            writer.WriteRaw(GetSpan_nickname());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.nickname, options);
+            writer.WriteRaw(GetSpan_password());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.password, options);
+        }
+
+        public global::Queen.Protocols.SeatInfo Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.SeatInfo();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1952540019UL) { goto FAIL; }
+
+                        ____result.seat = reader.ReadUInt32();
+                        continue;
+                    case 3:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 6580592UL) { goto FAIL; }
+
+                        ____result.pid = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+                    case 8:
+                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
+                        {
+                            default: goto FAIL;
+                            case 7308604897168157038UL:
+                                ____result.nickname = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                                continue;
+                            case 7237970109966541168UL:
+                                ____result.password = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                                continue;
+                        }
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class SeatInputInfoFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.SeatInputInfo>
+    {
+        // seat
+        private static global::System.ReadOnlySpan<byte> GetSpan_seat() => new byte[1 + 4] { 164, 115, 101, 97, 116 };
+        // moveX
+        private static global::System.ReadOnlySpan<byte> GetSpan_moveX() => new byte[1 + 5] { 165, 109, 111, 118, 101, 88 };
+        // moveY
+        private static global::System.ReadOnlySpan<byte> GetSpan_moveY() => new byte[1 + 5] { 165, 109, 111, 118, 101, 89 };
+        // jump
+        private static global::System.ReadOnlySpan<byte> GetSpan_jump() => new byte[1 + 4] { 164, 106, 117, 109, 112 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.SeatInputInfo value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(4);
+            writer.WriteRaw(GetSpan_seat());
+            writer.Write(value.seat);
+            writer.WriteRaw(GetSpan_moveX());
+            writer.Write(value.moveX);
+            writer.WriteRaw(GetSpan_moveY());
+            writer.Write(value.moveY);
+            writer.WriteRaw(GetSpan_jump());
+            writer.Write(value.jump);
+        }
+
+        public global::Queen.Protocols.SeatInputInfo Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.SeatInputInfo();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 4:
+                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
+                        {
+                            default: goto FAIL;
+                            case 1952540019UL:
+                                ____result.seat = reader.ReadUInt32();
+                                continue;
+                            case 1886221674UL:
+                                ____result.jump = reader.ReadBoolean();
+                                continue;
+                        }
+                    case 5:
+                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
+                        {
+                            default: goto FAIL;
+                            case 379659382637UL:
+                                ____result.moveX = reader.ReadInt32();
+                                continue;
+                            case 383954349933UL:
+                                ____result.moveY = reader.ReadInt32();
+                                continue;
+                        }
 
                 }
             }

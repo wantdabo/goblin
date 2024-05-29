@@ -68,7 +68,6 @@ namespace Goblin.Sys.Lobby.View
         {
             var room = engine.proxy.lobby.GetRoom(id);
             if (null == room) return;
-
             bgImg.color = id == engine.proxy.lobby.data.myRoom ? new UnityEngine.Color(195f / 255f, 240f / 255f, 2f / 255f, 255f / 255f) : new UnityEngine.Color(195f / 255f, 240f / 255f, 2f / 255f, 150f / 255f);
             var idenity = room.needpwd ? "PRIVATE" : "PUBLIC";
             idenity += id == engine.proxy.lobby.data.myRoom ? ".SELF" : ".OTHER";

@@ -18,7 +18,7 @@ namespace Queen.Protocols.Common
     /// <summary>
     /// 协议序列化
     /// </summary>
-    public class ProtoPack
+    public partial class ProtoPack
     {
         /// <summary>
         /// 协议号长度
@@ -35,20 +35,18 @@ namespace Queen.Protocols.Common
         public static bool UnPack(byte[] bytes, out Type? msgType, out INetMessage? msg)
         {
             msg = null;
+            msgType = null;
             byte[] header = new byte[INT32_LEN];
             byte[] data = new byte[bytes.Length - INT32_LEN];
             Array.Copy(bytes, header, INT32_LEN);
             Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
 
             var msgId = BitConverter.ToInt32(header);
+            if (msgId >= messageIds.Count) return false;
+            msgType = messageIds[msgId];
+            msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
 
-            if (messageIdMap.TryGetValue(msgId, out msgType))
-            {
-                msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -61,21 +59,18 @@ namespace Queen.Protocols.Common
         public static bool Pack<T>(T msg, out byte[]? bytes) where T : INetMessage
         {
             bytes = null;
-            var kv = messageIdMap.First(kv => kv.Value.Equals(msg.GetType()));
-            if (null != kv.Value)
-            {
-                var header = BitConverter.GetBytes(kv.Key);
-                var data = MessagePackSerializer.Serialize(msg);
-                bytes = new byte[header.Length + data.Length];
-                Array.Copy(header, 0, bytes, 0, header.Length);
-                Array.Copy(data, 0, bytes, header.Length, data.Length);
+            var index = messageIds.IndexOf(msg.GetType());
 
-                return true;
-            }
+            if (0 > index) return false;
 
-            return false;
+            var header = BitConverter.GetBytes(index);
+            var data = MessagePackSerializer.Serialize(msg);
+            bytes = new byte[header.Length + data.Length];
+            Array.Copy(header, 0, bytes, 0, header.Length);
+            Array.Copy(data, 0, bytes, header.Length, data.Length);
+
+            return true;
         }
-
 
         /// <summary>
         /// 初始化自定义解析器
@@ -90,35 +85,5 @@ namespace Queen.Protocols.Common
             var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
             MessagePackSerializer.DefaultOptions = option;
         }
-
-        /// <summary>
-        /// 协议号定义
-        /// </summary>
-        private static Dictionary<int, Type> messageIdMap = new()
-        {
-            // 系统
-            {10001, typeof(NodePingMsg)},
-            // 登录
-            {20001, typeof(C2SLogoutMsg)},
-            {20002, typeof(C2SLoginMsg)},
-            {20003, typeof(C2SRegisterMsg)},
-            {20004, typeof(S2CLogoutMsg)},
-            {20005, typeof(S2CLoginMsg)},
-            {20006, typeof(S2CRegisterMsg)},
-            // 大厅
-            {20007, typeof(C2S_ExitRoomMsg)},
-            {20008, typeof(C2S_KickRoomMsg)},
-            {20009, typeof(C2S_JoinRoomMsg)},
-            {20010, typeof(C2S_DestroyRoomMsg)},
-            {20011, typeof(C2S_CreateRoomMsg)},
-            {20012, typeof(C2S_PullRoomsMsg)},
-            {20013, typeof(S2C_ExitRoomMsg)},
-            {20014, typeof(S2C_KickRoomMsg)},
-            {20015, typeof(S2C_JoinRoomMsg)},
-            {20016, typeof(S2C_DestroyRoomMsg)},
-            {20017, typeof(S2C_CreateRoomMsg)},
-            {20018, typeof(S2C_PushRoomsMsg)},
-            {20019, typeof(S2C_PushRoomMsg)},
-        };
     }
 }
