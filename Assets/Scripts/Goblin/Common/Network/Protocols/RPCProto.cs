@@ -37,4 +37,22 @@ namespace Queen.Protocols
         /// </summary>
         public uint id { get; set; }
     }
+
+    [MessagePackObject(true)]
+    public class S2G_DestroyStageMsg : INetMessage
+    {
+        /// <summary>
+        /// 对局房间 ID
+        /// </summary>
+        public uint id { get; set; }
+    }
+
+    [MessagePackObject(true)]
+    public class G2S_DestroyStageMsg : INetMessage
+    {
+        /// <summary>
+        /// 对局房间 ID
+        /// </summary>
+        public uint id { get; set; }
+    }
 }

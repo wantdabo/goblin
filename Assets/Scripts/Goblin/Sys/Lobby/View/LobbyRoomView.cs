@@ -21,6 +21,7 @@ namespace Goblin.Sys.Lobby.View
         private Text roomNameText;
         private Text roomMemberCountText;
         private GameObject memberContentGo;
+        private GameObject playBtnGo;
 
         private List<LobbyRoomMember> roomMembers = new();
 
@@ -39,6 +40,7 @@ namespace Goblin.Sys.Lobby.View
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
+            playBtnGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "PlayBtn");
             roomNameText = engine.u3dkit.SeekNode<Text>(gameObject, "RoomName");
             roomMemberCountText = engine.u3dkit.SeekNode<Text>(gameObject, "RoomMemberCount");
             memberContentGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "MemberContent");
@@ -47,14 +49,14 @@ namespace Goblin.Sys.Lobby.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
-            AddUIEventListener("PlayBtn", (e) =>
-            {
-                engine.proxy.lobby.C2SRoom2Game();
-            });
-
             AddUIEventListener("BackBtn", (e) =>
             {
                 engine.gameui.Close<LobbyRoomView>();
+            });
+
+            AddUIEventListener("PlayBtn", (e) =>
+            {
+                engine.proxy.lobby.C2SRoom2Game();
             });
 
             AddUIEventListener("ExitRoomBtn", (e) =>
@@ -73,6 +75,7 @@ namespace Goblin.Sys.Lobby.View
         {
             var room = engine.proxy.lobby.GetRoom(engine.proxy.lobby.data.myRoom);
             if (null == room) return;
+            playBtnGo.SetActive(room.owner.Equals(engine.proxy.login.data.pid));
             roomNameText.text = room.name;
             roomMemberCountText.text = $"房间人数 : {room.members.Length}/{room.mlimit}";
 

@@ -1,5 +1,7 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common;
 using Goblin.Sys.Common;
+using Goblin.Sys.Gameplay.View;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
 using Queen.Protocols;
@@ -12,6 +14,28 @@ using System.Threading.Tasks;
 
 namespace Goblin.Sys.Lobby
 {
+    /// <summary>
+    /// 房间创建事件
+    /// </summary>
+    public struct RoomCreatedEvent : IEvent
+    {
+        /// <summary>
+        /// 房间 ID
+        /// </summary>
+        public uint id;
+    }
+
+    /// <summary>
+    /// 房间销毁事件
+    /// </summary>
+    public struct RoomDestroyedEvent : IEvent
+    {
+        /// <summary>
+        /// 房间 ID
+        /// </summary>
+        public uint id;
+    }
+
     /// <summary>
     /// 房间列表变化事件
     /// </summary>
@@ -40,7 +64,6 @@ namespace Goblin.Sys.Lobby
             engine.net.Recv<S2C_KickRoomMsg>(OnS2CKickRoom);
             engine.net.Recv<S2C_JoinRoomMsg>(OnS2CJoinRoom);
             engine.net.Recv<S2C_Room2GameMsg>(OnS2CRoom2Game);
-            engine.net.Recv<S2C_GameInfoMsg>(OnS2CGameInfo);
             engine.net.Recv<S2C_DestroyRoomMsg>(OnS2CDestroyRoom);
             engine.net.Recv<S2C_CreateRoomMsg>(OnS2CCreateRoom);
             engine.net.Recv<S2C_PushRoomsMsg>(OnS2CPushRooms);
@@ -192,7 +215,7 @@ namespace Goblin.Sys.Lobby
             }
         }
 
-        private void OnS2CRoom2Game(S2C_Room2GameMsg msg) 
+        private void OnS2CRoom2Game(S2C_Room2GameMsg msg)
         {
             if (1 == msg.code)
             {
@@ -210,11 +233,10 @@ namespace Goblin.Sys.Lobby
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "无法开启房间." });
             }
-        }
-
-        private void OnS2CGameInfo(S2C_GameInfoMsg msg) 
-        {
-            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "正在进入对局房间." });
+            else if (5 == msg.code)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "您没有权限这么做." });
+            }
         }
 
         private void OnS2CDestroyRoom(S2C_DestroyRoomMsg msg)
@@ -224,10 +246,13 @@ namespace Goblin.Sys.Lobby
                 var room = data.rooms.FirstOrDefault(r => r.id == msg.id);
                 if (null != room)
                 {
+                    eventor.Tell(new RoomDestroyedEvent { id = msg.id });
                     if (engine.proxy.lobby.data.myRoom == room.id)
                     {
                         engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "房间已被销毁." });
+                        engine.gameui.Close<GameplayView>();
                         engine.gameui.Close<LobbyRoomView>();
+                        engine.gameui.Open<LobbyView>();
                     }
                     data.rooms.Remove(room);
                     eventor.Tell<RoomsChangedEvent>();
@@ -247,6 +272,7 @@ namespace Goblin.Sys.Lobby
         {
             if (1 == msg.code)
             {
+                eventor.Tell(new RoomCreatedEvent { id = msg.id });
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "创建房间成功." });
             }
             else if (2 == msg.code)

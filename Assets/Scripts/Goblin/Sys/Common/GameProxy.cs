@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Sys.Gameplay;
 using Goblin.Sys.Lobby;
 using Goblin.Sys.Login;
 using System;
@@ -94,12 +95,14 @@ namespace Goblin.Sys.Common
 
         public LoginProxy login => GetProxy<LoginProxy>();
         public LobbyProxy lobby => GetProxy<LobbyProxy>();
+        public GameplayProxy gameplay => GetProxy<GameplayProxy>();
 
         protected override void OnCreate()
         {
             base.OnCreate();
             Register<LoginProxy>();
             Register<LobbyProxy>();
+            Register<GameplayProxy>();
         }
 
         protected override void OnDestroy()

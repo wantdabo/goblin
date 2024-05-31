@@ -14,10 +14,31 @@ namespace Goblin.Common.Res
     /// </summary>
     public class GameResLocation : Comp
     {
+        private const string modelPath = "Assets/GameRes/Models/";
         private const string uieffectPath = "Assets/GameRes/UIEffects/";
         private const string uiprefabPath = "Assets/GameRes/UIPrefabs/";
         private const string spritesPath = "Assets/GameRes/UISprites/";
         private const string configPath = "Assets/GameRawRes/Configs/";
+
+        /// <summary>
+        /// 异步 Model 加载预制体
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>Model 预制体</returns>
+        public async Task<GameObject> LoadModelAsync(string resName)
+        {
+            return GameObject.Instantiate(await engine.gameres.LoadAssetAsync<GameObject>(modelPath + resName));
+        }
+
+        /// <summary>
+        /// 同步 Model 加载预制体
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>Model 预制体</returns>
+        public GameObject LoadModelSync(string resName)
+        {
+            return GameObject.Instantiate(engine.gameres.LoadAssetSync<GameObject>(modelPath + resName));
+        }
 
         /// <summary>
         /// 同步 UIEffect 加载预制体

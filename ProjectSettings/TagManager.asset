@@ -11,11 +11,6 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - Monster
-  - Bullet
-  - MonsterBullet
-  - Drop
   - 
   - 
   - 
@@ -32,11 +27,16 @@ TagManager:
   - 
   - 
   - 
-  - WaterGround
-  - Landscape
-  - ViewFence
-  - Ground
-  - Trigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

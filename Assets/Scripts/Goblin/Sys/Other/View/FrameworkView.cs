@@ -34,11 +34,11 @@ namespace Goblin.Sys.Other.View
 
         protected override string res => "Other/FrameworkView";
 
-        private Text connectState;
-        private GameObject connectBtn;
-        private GameObject disconnectBtn;
-        private GameObject messageContent;
-        private GameObject messageOrg;
+        private Text connectStateText;
+        private GameObject connectBtnGo;
+        private GameObject disconnectBtnGo;
+        private GameObject messageContentGo;
+        private GameObject messageOrgGo;
 
         protected override void OnLoad()
         {
@@ -57,11 +57,11 @@ namespace Goblin.Sys.Other.View
         protected override void OnBuildUI()
         {
             base.OnBuildUI();
-            connectState = engine.u3dkit.SeekNode<Text>(gameObject, "ConnectState");
-            connectBtn = engine.u3dkit.SeekNode<GameObject>(gameObject, "ConnectBtn");
-            disconnectBtn = engine.u3dkit.SeekNode<GameObject>(gameObject, "DisconnectBtn");
-            messageContent = engine.u3dkit.SeekNode<GameObject>(gameObject, "MessageContent");
-            messageOrg = engine.u3dkit.SeekNode<GameObject>(gameObject, "MessageORG");
+            connectStateText = engine.u3dkit.SeekNode<Text>(gameObject, "ConnectState");
+            connectBtnGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "ConnectBtn");
+            disconnectBtnGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "DisconnectBtn");
+            messageContentGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "MessageContent");
+            messageOrgGo = engine.u3dkit.SeekNode<GameObject>(gameObject, "MessageORG");
         }
 
         protected override void OnBindEvent()
@@ -84,7 +84,7 @@ namespace Goblin.Sys.Other.View
             var msgGo = engine.pool.Get<GameObject>("MESSAGE_BLOW_GO_KEY");
             if (null == msgGo)
             {
-                msgGo = GameObject.Instantiate(messageOrg, messageContent.transform);
+                msgGo = GameObject.Instantiate(messageOrgGo, messageContentGo.transform);
             }
 
             msgGo.transform.SetAsLastSibling();
@@ -102,9 +102,9 @@ namespace Goblin.Sys.Other.View
 
         private void OnTick(TickEvent e)
         {
-            connectBtn.SetActive(false == engine.net.connected);
-            disconnectBtn.SetActive(engine.net.connected);
-            connectState.text = engine.net.connected ? "<color=#C3F002>CONNECTED</color>" : "<color=#D93500>DISCONNECTED</color>";
+            connectBtnGo.SetActive(false == engine.net.connected);
+            disconnectBtnGo.SetActive(engine.net.connected);
+            connectStateText.text = engine.net.connected ? "<color=#C3F002>CONNECTED</color>" : "<color=#D93500>DISCONNECTED</color>";
 
             var ping = engine.net.connected ? $"PING : {engine.net.ping} MS" : "";
             engine.u3dkit.SeekNode<Text>(gameObject, "Ping").text = ping;

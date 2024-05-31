@@ -1,4 +1,6 @@
-﻿using Goblin.Sys.Common;
+﻿using Goblin.Common;
+using Goblin.Sys.Common;
+using Goblin.Sys.Gameplay.View;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Login.View;
 using Goblin.Sys.Other.View;
@@ -14,6 +16,16 @@ using System.Threading.Tasks;
 
 namespace Goblin.Sys.Login
 {
+    /// <summary>
+    /// 登入事件
+    /// </summary>
+    public struct LoginEvent : IEvent {}
+
+    /// <summary>
+    /// 登出事件
+    /// </summary>
+    public struct LogoutEvent : IEvent { }
+
     /// <summary>
     /// 登录
     /// </summary>
@@ -71,6 +83,7 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
+                eventor.Tell<LoginEvent>();
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
                 data.signined = true;
                 data.pid = msg.pid;
@@ -91,10 +104,13 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
+                eventor.Tell<LogoutEvent>();
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户登出." });
                 data.pid = null;
                 data.signined = false;
                 engine.gameui.Close<LobbyView>();
+                engine.gameui.Close<LobbyRoomView>();
+                engine.gameui.Close<GameplayView>();
                 engine.gameui.Open<LoginView>();
             }
             else if (2 == msg.code)
@@ -106,6 +122,8 @@ namespace Goblin.Sys.Login
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
                 data.pid = null;
                 engine.gameui.Close<LobbyView>();
+                engine.gameui.Close<LobbyRoomView>();
+                engine.gameui.Close<GameplayView>();
                 engine.gameui.Open<LoginView>();
             }
         }
@@ -133,6 +151,8 @@ namespace Goblin.Sys.Login
             data.pid = null;
             data.signined = false;
             engine.gameui.Close<LobbyView>();
+            engine.gameui.Close<LobbyRoomView>();
+            engine.gameui.Close<GameplayView>();
             engine.gameui.Open<LoginView>();
         }
     }
