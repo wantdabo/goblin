@@ -129,7 +129,7 @@ namespace Goblin.Gameplay.Common
         public void Analyze(S2C_GameInfoMsg conf)
         {
             this.conf = conf;
-            net.Connect(conf.host, conf.port);
+            net.Connect(conf.host, conf.port, 1);
             engine.ticker.Timing((t) =>
             {
                 net.Send(new C2G_StartStageMsg { id = conf.id, seat = conf.seat, pid = conf.pid, password = conf.password });
