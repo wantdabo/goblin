@@ -115,8 +115,8 @@ namespace Goblin.Gameplay.Common
 
         protected override void OnDestroy()
         {
-            for (int i = actors.Count - 1; i >= 0; i--) actors[i].Destroy();
             base.OnDestroy();
+            for (int i = actors.Count - 1; i >= 0; i--) actors[i].Destroy();
             net.UnRecv<G2C_StartStageMsg>(OnG2CStartStage);
             net.UnRecv<G2C_LogicTickMsg>(OnG2CLogicTick);
             net.Disconnect();
@@ -148,8 +148,7 @@ namespace Goblin.Gameplay.Common
         public void Gaming(FrameInfo frameInfo)
         {
             ticker.Tick();
-            frame++;
-
+            frame = frameInfo.frame;
             if (null == frameInfo.seatInputInfos) return;
             foreach (var input in frameInfo.seatInputInfos)
             {

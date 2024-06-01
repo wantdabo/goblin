@@ -111,6 +111,7 @@ namespace Goblin.Core
         {
             Engine engine = new();
             engine.engine = engine;
+            engine.parent = engine;
             engine.Create();
 
             return engine;

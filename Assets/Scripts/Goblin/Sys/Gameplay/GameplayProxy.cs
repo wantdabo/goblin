@@ -48,7 +48,6 @@ namespace Goblin.Sys.Gameplay
             if (null == stage) return;
 
             stage.Destroy();
-            RmvComp(stage);
             stage = null;
         }
 

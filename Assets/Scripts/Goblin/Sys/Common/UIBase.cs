@@ -133,8 +133,6 @@ namespace Goblin.Sys.Common
         {
             comp.Unload();
             cellList.Remove(comp);
-
-            RmvComp(comp);
             comp.Destroy();
         }
 

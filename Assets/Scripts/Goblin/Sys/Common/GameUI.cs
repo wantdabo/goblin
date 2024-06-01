@@ -140,7 +140,6 @@ namespace Goblin.Sys.Common
             if (null == view) return;
 
             view.Unload();
-            RmvComp(view);
             view.Destroy();
 
             viewDict.Remove(typeof(T));

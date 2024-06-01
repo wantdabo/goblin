@@ -41,8 +41,9 @@ namespace Queen.Protocols.Common
             Array.Copy(bytes, header, INT32_LEN);
             Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
 
-            var msgId = BitConverter.ToInt32(header);
-            if (msgId >= messageIds.Count) return false;
+            var msgId = BitConverter.ToUInt32(header);
+            if (false == messageIds.TryGetValue(msgId, out msgType)) return false;
+
             msgType = messageIds[msgId];
             msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
 
@@ -59,11 +60,9 @@ namespace Queen.Protocols.Common
         public static bool Pack<T>(T msg, out byte[]? bytes) where T : INetMessage
         {
             bytes = null;
-            var index = messageIds.IndexOf(msg.GetType());
-
-            if (0 > index) return false;
-
-            var header = BitConverter.GetBytes(index);
+            var kv = messageIds.FirstOrDefault((kv) => kv.Value == msg.GetType());
+            if (null == kv.Value) return false;
+            var header = BitConverter.GetBytes(kv.Key);
             var data = MessagePackSerializer.Serialize(msg);
             bytes = new byte[header.Length + data.Length];
             Array.Copy(header, 0, bytes, 0, header.Length);

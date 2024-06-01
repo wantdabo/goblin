@@ -196,7 +196,7 @@ namespace Goblin.Common.Network
         /// <param name="ip">地址</param>
         /// <param name="port">端口</param>
         /// <param name="timeout">网络轮询时间（ms）</param>
-        public void Connect(string ip, ushort port, int timeout = 15)
+        public void Connect(string ip, ushort port, int timeout = 0)
         {
             rping = default;
             sping = default;

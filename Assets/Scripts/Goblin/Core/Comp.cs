@@ -9,12 +9,22 @@ namespace Goblin.Core
     /// <summary>
     /// 组件
     /// </summary>
-    public abstract class Comp : Goblin
+    public abstract class Comp
     {
+        /// <summary>
+        /// 销毁了
+        /// </summary>
+        public bool destroyed { get; private set; } = false;
+
         /// <summary>
         /// 引擎
         /// </summary>
         public Engine engine;
+
+        /// <summary>
+        /// 父组件
+        /// </summary>
+        public Comp parent;
 
         /// <summary>
         /// 组件列表
@@ -26,12 +36,30 @@ namespace Goblin.Core
         /// </summary>
         private Dictionary<Type, List<Comp>> compDict = null;
 
+        /// <summary>
+        /// 创建一个 Goblin 对象
+        /// </summary>
+        public virtual void Create()
+        {
+            OnCreate();
+        }
 
-        protected override void OnCreate()
+        /// <summary>
+        /// 销毁一个 Goblin 对象
+        /// </summary>
+        public virtual void Destroy()
+        {
+            if (destroyed) return;
+
+            OnDestroy();
+            destroyed = true;
+        }
+
+        protected virtual void OnCreate()
         {
         }
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if (null == compList) return;
             for (int i = compList.Count - 1; i >= 0; i--)
@@ -41,10 +69,8 @@ namespace Goblin.Core
                 comp.Destroy();
             }
             compList.Clear();
-            compList = null;
-
             compDict.Clear();
-            compDict = null;
+            parent.RmvComp(this);
         }
 
         /// <summary>
@@ -105,6 +131,7 @@ namespace Goblin.Core
 
             T comp = new();
             comp.engine = engine;
+            comp.parent = this;
             if (false == compDict.TryGetValue(typeof(T), out var comps))
             {
                 comps = new();

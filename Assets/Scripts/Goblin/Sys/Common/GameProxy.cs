@@ -120,8 +120,6 @@ namespace Goblin.Sys.Common
         private void UnRegister<T>() where T : Proxy
         {
             if (false == proxyDict.TryGetValue(typeof(T), out var p)) return;
-
-            RmvComp(p);
             p.Destroy();
         }
 
