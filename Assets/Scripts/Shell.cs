@@ -33,7 +33,6 @@ public class Shell : MonoBehaviour
         return package.InitializeAsync(initParameters).Task;
     }
     #endregion
-
     #region HybridCLR
     private void LoadMetadata()
     {

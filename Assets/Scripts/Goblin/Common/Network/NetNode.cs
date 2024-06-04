@@ -75,7 +75,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 连接状态
         /// </summary>
-        public bool connected => PeerState.Connected == peer.State || PeerState.Connecting == peer.State;
+        public bool connected => PeerState.Connected == peer.State;
         /// <summary>
         /// 网络延迟
         /// </summary>

@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class ScriptPackageEditor : Editor
 {
-    [MenuItem("Package/ScriptPackage")]
+    [MenuItem("Tools/Package/Scripts Copy")]
     public static void ScriptPackage()
     {
         var rootPath = Application.dataPath.Replace("/Assets", "/");
