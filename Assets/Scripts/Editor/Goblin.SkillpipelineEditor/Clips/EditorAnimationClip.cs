@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace Goblin.SkillPipelineEditor
 {
-    [Name("动画片段")]
-    [Description("播放一个动画剪辑的行为")]
+    [Name("动画")]
     [Color(0.48f, 0.71f, 0.84f)]
     [Attachable(typeof(EditorAnimationTrack))]
     public class EditorAnimationClip : ActionClip, ISubClipContainable
@@ -43,6 +42,6 @@ namespace Goblin.SkillPipelineEditor
 
         public override string info => isValid ? animationClip.name : base.info;
 
-        public EditorAudioTrack Track => (EditorAudioTrack)parent;
+        public EditorAnimationTrack track => (EditorAnimationTrack)parent;
     }
 }

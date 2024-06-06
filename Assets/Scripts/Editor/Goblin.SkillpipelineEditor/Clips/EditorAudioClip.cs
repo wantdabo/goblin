@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace Goblin.SkillPipelineEditor
 {
-    [Name("声音片段")]
-    [Description("播放音频的一个行为")]
+    [Name("声音")]
     [Color(1f, 0.63f, 0f)]
     [Attachable(typeof(EditorAudioTrack))]
     public class EditorAudioClip : ActionClip, ISubClipContainable
@@ -63,7 +62,7 @@ namespace Goblin.SkillPipelineEditor
 
         public override string info => isValid ? audioClip.name : base.info;
 
-        public EditorAudioTrack Track => (EditorAudioTrack)parent;
+        public EditorAudioTrack track => (EditorAudioTrack)parent;
 
 #if UNITY_EDITOR
         protected override void OnClipGUI(Rect rect)

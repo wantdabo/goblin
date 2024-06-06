@@ -15,7 +15,9 @@ namespace Goblin.SkillPipelineEditor
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
             ShowCommonInspector();
+            if (EditorGUI.EndChangeCheck()) SceneView.RepaintAll();
         }
 
         protected void ShowCommonInspector(bool showBaseInspector = true)

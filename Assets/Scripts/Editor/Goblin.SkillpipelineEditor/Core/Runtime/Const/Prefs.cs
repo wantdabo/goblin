@@ -27,7 +27,8 @@ namespace Goblin.SkillPipelineEditor
             public float SnapInterval = 1 / 60f;
             [NonSerialized]
             public int FrameRate = 60;
-
+            [NonSerialized]
+            public float timeScale = 1f;
             public int AutoSaveSeconds;
             public string SavePath = "Assets/";
             public bool ScrollWheelZooms = true;
@@ -131,6 +132,12 @@ namespace Goblin.SkillPipelineEditor
         public static int frameRate
         {
             get => data.FrameRate;
+        }
+
+        public static float timeScale
+        {
+            get => data.timeScale;
+            set => data.timeScale = value;
         }
 
         public static float snapInterval

@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Goblin.SkillPipelineEditor
@@ -23,6 +24,11 @@ namespace Goblin.SkillPipelineEditor
             GUILayout.FlexibleSpace();
 
             DrawPlayControlRight();
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.Label(Lan.TimeScale);
+            Prefs.timeScale = EditorGUILayout.Slider(Prefs.timeScale, 0.1f, 10);
 
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
@@ -152,6 +158,14 @@ namespace Goblin.SkillPipelineEditor
                 App.AutoSave(); //先保存当前的
                 ObjectSelectorWindow.ShowObjectPicker<Asset>(App.AssetData, App.OnObjectPickerConfig);
             }
+
+            GUILayout.Label(Lan.HeaderModel);
+            EditorGUI.BeginChangeCheck();
+            player.Asset.model = (GameObject)EditorGUILayout.ObjectField(player.Asset.model, typeof(GameObject), false);
+            if (GUILayout.Button(Lan.HeaderReload))
+            {
+                App.LoadWorkdspaces();
+            }
         }
 
         protected virtual void DrawToolbarRight()
@@ -162,12 +176,12 @@ namespace Goblin.SkillPipelineEditor
                 $"<size=11>{string.Format(Lan.HeaderLastSaveTime, App.LastSaveTime.ToString("HH:mm:ss"))}</size>");
             GUI.color = Color.white;
 
-            
+
             if (GUILayout.Button(new GUIContent(Styles.saveIcon, Lan.Save), EditorStyles.toolbarButton, GUILayout.Width(26)))
             {
                 App.AutoSave(); //先保存当前的
             }
-            
+
             if (GUILayout.Button(new GUIContent(Styles.settingsIcon, Lan.OpenPreferencesTips), EditorStyles.toolbarButton, GUILayout.Width(26)))
             {
                 PreferencesWindow.Show(new Rect(G.ScreenWidth - 5 - 400, Styles.TOOLBAR_HEIGHT + 5, 400,

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -28,6 +29,16 @@ namespace Goblin.SkillPipelineEditor
             {
                 AssetData = a;
             }
+            LoadWorkdspaces();
+        }
+
+        public static void LoadWorkdspaces() 
+        {
+            EditorSceneManager.OpenScene("Assets/UERes/Gameplay/Workspaces/Scene.unity");
+            if (null == AssetData.model) return;
+            AssetData.cloneModel = GameObject.Instantiate(AssetData.model);
+            AssetData.cloneModel.transform.position = Vector3.zero;
+            AssetData.cloneModel.transform.localScale = Vector3.one;
         }
 
         public static void SaveAsset()
@@ -36,7 +47,7 @@ namespace Goblin.SkillPipelineEditor
                 EditorUtility.SetDirty(AssetData);
         }
 
-        
+
         #region AutoSave
 
         public static DateTime LastSaveTime => _lastSaveTime;
@@ -62,7 +73,7 @@ namespace Goblin.SkillPipelineEditor
         }
 
         #endregion
-        
+
         #region 播放相关
 
         private static AssetPlayer _player => AssetPlayer.Inst;
@@ -75,7 +86,7 @@ namespace Goblin.SkillPipelineEditor
         internal static EditorPlaybackState EditorPlaybackState = EditorPlaybackState.Stoped;
 
         public static WrapMode EditorPlaybackWrapMode = WrapMode.Loop;
-        
+
         public static bool IsPlay => _player.CurrentTime > 0;
 
         public static void Play(Action callback = null)
@@ -93,7 +104,7 @@ namespace Goblin.SkillPipelineEditor
             EditorPlaybackState = playbackState;
             OnPlay?.Invoke();
         }
-        
+
         public static void Pause()
         {
             EditorPlaybackState = EditorPlaybackState.Stoped;

@@ -83,7 +83,7 @@ namespace Goblin.SkillPipelineEditor
         public static float LEFT_MARGIN
         {
             get => Prefs.trackListLeftMargin;
-            set => Prefs.trackListLeftMargin = Mathf.Clamp(value, 230, 400);
+            set => Prefs.trackListLeftMargin = Mathf.Clamp(value, 350, 350);
         }
         
         static Styles()

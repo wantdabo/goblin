@@ -1,4 +1,8 @@
-﻿using UnityEditor.Animations;
+﻿using Animancer;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Goblin.SkillPipelineEditor
@@ -9,60 +13,40 @@ namespace Goblin.SkillPipelineEditor
     [CustomPreview(typeof(EditorAnimationClip))]
     public class EditorAnimationClipPreview : PreviewBase<EditorAnimationClip>
     {
-        private Animator _animator;
-        private AnimationClip _animationClip;
-
-        public override void Update(float time, float previousTime)
-        {
-            if (_animator != null && _animationClip != null)
-            {
-                Preview(_animationClip, _animator.gameObject, time);
-            }
-        }
+        private AnimancerComponent animancer;
+        private AnimationClip animationClip;
 
         public override void Enter()
         {
-            var model = new GameObject();
+            var model = clip.Parent.Parent.Parent.cloneModel;
             if (model != null)
             {
-                _animator = model.GetComponent<Animator>();
+                animancer = model.GetComponent<AnimancerComponent>();
             }
 
-            if (_animator != null)
+            if (animancer != null)
             {
-                var audioClipName = string.Empty;
+                var animationClipName = string.Empty;
                 if (clip.animationClip != null)
                 {
-                    audioClipName = clip.animationClip.name;
+                    animationClipName = clip.animationClip.name;
                 }
 
-                if (_animator.runtimeAnimatorController is AnimatorController animatorController)
-                {
-                    var layer = animatorController.layers[0];
-                    var states = layer.stateMachine.states;
-                    foreach (var child in states)
-                    {
-                        if (child.state.name == audioClipName)
-                        {
-                            if (child.state.motion is AnimationClip c)
-                            {
-                                _animationClip = c;
-                            }
-                        }
-                    }
-                }
+                var clips = new List<AnimationClip>();
+                animancer.GetAnimationClips(clips);
+                animationClip = clips.FirstOrDefault(c => c.name == animationClipName);
             }
         }
 
-        /// <summary>
-        /// 这里直接采样播放，如果项目需要，请自行通过AnimationMixerPlayable来扩展动画融合播放
-        /// </summary>
-        /// <param name="animationClip"></param>
-        /// <param name="gameObject"></param>
-        /// <param name="currentTime"></param>
-        public void Preview(AnimationClip animationClip, GameObject gameObject, float currentTime)
+        public override void Update(float time, float previousTime)
         {
-            animationClip.SampleAnimation(gameObject, currentTime);
+            if (Application.isPlaying) return;
+            if (time > clip.GetLength()) return;
+
+            if (animancer != null && animationClip != null)
+            {
+                animationClip.SampleAnimation(animancer.gameObject, time);
+            }
         }
     }
 }

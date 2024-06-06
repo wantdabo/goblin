@@ -52,12 +52,15 @@ namespace Goblin.SkillPipelineEditor
         //**********  Header *********
         public static string HeaderLastSaveTime = "最后保存时间：{0}";
         public static string HeaderSelectAsset = "选中：[{0}]";
+        public static string HeaderModel = "模型：";
+        public static string HeaderReload = "重载";
         public static string OpenPreferencesTips = "打开首选项界面";
         public static string SelectAssetTips = "点击切换技能管线";
         public static string OpenMagnetSnappingTips = "开启剪辑磁性吸附";
         public static string NewAssetTips = "新建技能管线";
         public static string BackMenuTips = "返回主菜单";
         public static string PlayLoopTips = "循环播放";
+        public static string TimeScale = "速度：";
         public static string PlayForwardTips = "跳转结尾处";
         public static string StepForwardTips = "跳转下一帧";
         public static string PauseTips = "点击暂停";

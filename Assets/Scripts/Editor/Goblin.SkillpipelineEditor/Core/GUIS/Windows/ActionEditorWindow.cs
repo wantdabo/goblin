@@ -142,7 +142,7 @@ namespace Goblin.SkillPipelineEditor
 
             App.TryAutoSave();
 
-            var delta = (Time.realtimeSinceStartup - editorPreviousTime) * Time.timeScale;
+            var delta = (Time.realtimeSinceStartup - editorPreviousTime) * Prefs.timeScale;
 
             editorPreviousTime = Time.realtimeSinceStartup;
 
