@@ -31,19 +31,18 @@ namespace Goblin.Sys.Login.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            AddUIEventListener("LoginBtn", (e) =>
+            {
+                var userName = userNameInput.text;
+                var password = passwordInput.text;
+                engine.proxy.login.C2SLogin(userName, password);
+            });
 
             AddUIEventListener("RegBtn", (e) =>
             {
                 var userName = userNameInput.text;
                 var password = passwordInput.text;
                 engine.proxy.login.C2SRegister(userName, password);
-            });
-
-            AddUIEventListener("LoginBtn", (e) =>
-            {
-                var userName = userNameInput.text;
-                var password = passwordInput.text;
-                engine.proxy.login.C2SLogin(userName, password);
             });
         }
     }

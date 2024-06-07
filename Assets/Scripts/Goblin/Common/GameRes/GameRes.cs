@@ -49,21 +49,21 @@ namespace Goblin.Common.Res
 
         public async Task<byte[]> LoadRawFileAsync(string resName)
         {
-            var handle = YooAssets.LoadRawFileAsync(resName);
+            var handle = YooAssets.LoadAssetSync<TextAsset>(resName);
             await handle.Task;
-            var result = handle.GetRawFileData();
+            var ta = handle.AssetObject as TextAsset;
             handle.Release();
 
-            return result;
+            return ta.bytes;
         }
 
         public byte[] LoadRawFileSync(string resName) 
         {
-            var handle = YooAssets.LoadRawFileSync(resName);
-            var result = handle.GetRawFileData();
+            var handle  = YooAssets.LoadAssetSync<TextAsset>(resName);
+            var ta = handle.AssetObject as TextAsset;
             handle.Release();
 
-            return result;
+            return ta.bytes;
         }
 
         public async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)

@@ -21,8 +21,8 @@ MonoBehaviour:
     EnableAddressable: 0
     LocationToLower: 0
     IncludeAssetGUID: 0
-    IgnoreDefaultType: 1
-    AutoCollectShaders: 1
+    AutoCollectShaders: 0
+    IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: GameRes
       GroupDesc: 
@@ -43,10 +43,10 @@ MonoBehaviour:
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Assets/GameRawRes
-        CollectorGUID: 10d09e92e94a54548ab75a7b26f49b22
+        CollectorGUID: 3a11628382a872649bb0bafc42cc240d
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackRawFile
+        PackRuleName: PackSeparately
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

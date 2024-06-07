@@ -25,26 +25,29 @@ public class Shell : MonoBehaviour
         YooAssets.SetDefaultPackage(package);
 #if UNITY_EDITOR || UNITY_EDITOR_OSX
         var initParameters = new EditorSimulateModeParameters();
-        var simulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild("Package");
+        var simulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, "Package");
         initParameters.SimulateManifestFilePath = simulateManifestFilePath;
-#elif YOOASSETS_OFFLINE
-            var initParameters = new OfflinePlayModeParameters();
+#else
+        string defaultHostServer = "http://192.168.2.156/CDN/v1.0/Android";
+        string fallbackHostServer = "http://192.168.2.156/CDN/v1.0/Android";
+        var initParameters = new HostPlayModeParameters();
+        initParameters.BuildinQueryServices = new GameQueryServices();
+        initParameters.DecryptionServices = new FileStreamDecryption();
+        initParameters.RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
 #endif
+
         return package.InitializeAsync(initParameters).Task;
     }
     #endregion
     #region HybridCLR
     private void LoadMetadata()
     {
-        var handle = YooAssets.LoadRawFileSync($"{scriptsPath}AOT_DLL_LIST");
-        string[] aotDllList = handle.GetRawFileText().Split('|');
-        handle.Release();
-
+        var ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}AOT_DLL_LIST");
+        string[] aotDllList = ta.text.Split('|');
         foreach (var aotDllName in aotDllList)
         {
-            handle = YooAssets.LoadRawFileSync($"{scriptsPath}{aotDllName}");
-            var code = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(handle.GetRawFileData(), HybridCLR.HomologousImageMode.SuperSet);
-            handle.Release();
+            ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}{aotDllName}");
+            var code = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HybridCLR.HomologousImageMode.SuperSet);
         }
     }
 
@@ -52,9 +55,8 @@ public class Shell : MonoBehaviour
     {
 #if !UNITY_EDITOR
         LoadMetadata();
-        var handle = YooAssets.LoadRawFileSync($"{scriptsPath}Goblin.dll");
-        Assembly ass = Assembly.Load(handle.GetRawFileData());
-        handle.Release();
+        var ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}Goblin.dll");
+        Assembly ass = Assembly.Load(ta.bytes);
 #else
         Assembly ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
 #endif
@@ -65,7 +67,7 @@ public class Shell : MonoBehaviour
 
         return Task.CompletedTask;
     }
-    #endregion
+#endregion
 
     private async Task GameSettings()
     {
@@ -74,6 +76,7 @@ public class Shell : MonoBehaviour
 
         await GameResSettings();
         await ScriptSettings();
+        await GameResHelper.UpdateRes();
     }
 
     private async void Start()

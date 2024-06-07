@@ -64,7 +64,8 @@ namespace Goblin.Gameplay.States.Common
         /// <summary>
         /// 状态驱动
         /// </summary>
+        /// <param name="frame">帧</param>
         /// <param name="fixedTick">s/秒</param>
-        public virtual void OnFPTick(FP fixedTick) { }
+        public virtual void OnFPTick(uint frame, FP fixedTick) { }
     }
 }
