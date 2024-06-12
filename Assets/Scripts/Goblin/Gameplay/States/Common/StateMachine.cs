@@ -63,7 +63,6 @@ namespace Goblin.Gameplay.States.Common
         /// 当前状态集合
         /// </summary>
         private FSMState[] states = new FSMState[2];
-
         /// <summary>
         /// 当前状态
         /// </summary>

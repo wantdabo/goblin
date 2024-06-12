@@ -19,14 +19,8 @@ public sealed class StreamingAssetsHelper
     public static bool FileExists(string packageName, string fileName, string fileCRC)
     {
         string filePath = Path.Combine(Application.streamingAssetsPath, StreamingAssetsDefine.RootFolderName, packageName, fileName);
-        if (File.Exists(filePath))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+
+        return File.Exists(filePath);
     }
 }
 #else

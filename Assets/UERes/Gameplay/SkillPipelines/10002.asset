@@ -398,7 +398,7 @@ MonoBehaviour:
   resPath: Assets/GameRes/Effects/vfx_skill_10001.prefab
   position: {x: 0, y: 0, z: 0}
   euler: {x: 0, y: 0, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  scale: 1
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1
