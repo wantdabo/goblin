@@ -41,7 +41,7 @@ namespace Goblin.Common.FSM
         /// <returns>状态</returns>
         public T GetState<T>() where T : State
         {
-            foreach (var s in states) if (typeof(T) == s.GetType()) return s as T;
+            foreach (var state in states) if (typeof(T) == state.GetType()) return state as T;
 
             return null;
         }

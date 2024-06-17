@@ -156,15 +156,6 @@ namespace Goblin.Sys.Common
         }
 
         /// <summary>
-        /// 关闭 UI
-        /// </summary>
-        public void Close()
-        {
-            foreach (var cell in cellList) cell.Close();
-            OnClose();
-        }
-
-        /// <summary>
         /// UI 加载回调
         /// </summary>
         protected virtual void OnLoad()
@@ -185,6 +176,15 @@ namespace Goblin.Sys.Common
         {
             foreach (var cell in cellList) cell.Open();
             foreach (var eff in uieffectList) eff.Sorting(layerName, sorting);
+        }
+
+        /// <summary>
+        /// 关闭 UI
+        /// </summary>
+        public void Close()
+        {
+            foreach (var cell in cellList) cell.Close();
+            OnClose();
         }
 
         /// <summary>

@@ -13,14 +13,27 @@ namespace Goblin.Sys.Common
     /// </summary>
     public abstract class UIBaseView : UIBase<UIBaseView>
     {
+        /// <summary>
+        /// UILayer 层级
+        /// </summary>
         public abstract UILayer layer { get; }
-
-        private UIState mState = UIState.Free;
-        public UIState state { get { return mState; } private set { mState = value; } }
-
+        /// <summary>
+        /// UI 状态
+        /// </summary>
+        public UIState state { get; private set; }
+        /// <summary>
+        /// 支持快速关闭
+        /// </summary>
+        public virtual bool quickclose { get; } = true;
+        /// <summary>
+        /// Canvas
+        /// </summary>
         private Canvas canvas;
 
         private string mLayerName;
+        /// <summary>
+        /// Layer 名字
+        /// </summary>
         public override string layerName
         {
             get
@@ -36,6 +49,9 @@ namespace Goblin.Sys.Common
         }
 
         private int mSorting = 0;
+        /// <summary>
+        /// Sorting 值
+        /// </summary>
         public override int sorting
         {
             get
@@ -50,6 +66,10 @@ namespace Goblin.Sys.Common
             }
         }
 
+        /// <summary>
+        /// 加载 UI
+        /// </summary>
+        /// <returns>返回 UI</returns>
         public async Task<UIBaseView> Load()
         {
             state = UIState.Loading;
@@ -82,19 +102,29 @@ namespace Goblin.Sys.Common
             OnOpen();
         }
 
+        /// <summary>
+        /// 卸载 UI 回调
+        /// </summary>
         protected override void OnUnload()
         {
             state = UIState.Free;
         }
 
+        /// <summary>
+        /// 打开 UI 回调
+        /// </summary>
         protected override void OnOpen()
         {
             state = UIState.Open;
         }
 
+        /// <summary>
+        /// 关闭 UI 回调
+        /// </summary>
         protected override void OnClose()
         {
             state = UIState.Close;
+            engine.gameui.Close(GetType());
         }
     }
 }

@@ -6,9 +6,11 @@ using YooAsset;
 
 public class GameResHelper
 {
+    private static string scriptsPath = "Assets/GameRawRes/Scripts/";
+
     public static TextAsset LoadTextAssetSync(string resName)
     {
-        var handle = YooAssets.LoadAssetSync<TextAsset>(resName);
+        var handle = YooAssets.LoadAssetSync<TextAsset>(scriptsPath + resName);
         var ta = handle.AssetObject as TextAsset;
         handle.Release();
 
@@ -40,6 +42,7 @@ public class GameResHelper
                 int downloadingMaxNum = 10;
                 int failedTryAgain = 3;
                 package = YooAssets.GetPackage("Package");
+
                 var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
 
                 //没有需要下载的资源
@@ -52,7 +55,6 @@ public class GameResHelper
                 int totalDownloadCount = downloader.TotalDownloadCount;
                 long totalDownloadBytes = downloader.TotalDownloadBytes;
                 Debug.Log($"需要下载的文件总数和总大小 ===============> {totalDownloadCount}, {totalDownloadBytes}");
-
                 //开启下载
                 downloader.BeginDownload();
                 await downloader.Task;

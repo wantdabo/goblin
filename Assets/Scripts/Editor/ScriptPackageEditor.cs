@@ -9,7 +9,7 @@ using UnityEngine;
 public class ScriptPackageEditor : Editor
 {
     [MenuItem("Tools/Package/Scripts Copy")]
-    public static void ScriptPackage()
+    public static void ScriptsCopy()
     {
         var rootPath = Application.dataPath.Replace("/Assets", "/");
         var scriptResPath = Application.dataPath + "/GameRawRes/Scripts/";

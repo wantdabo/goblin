@@ -85,10 +85,8 @@ namespace Goblin.Sys.Login
             {
                 eventor.Tell<LoginEvent>();
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
-                data.signined = true;
                 data.pid = msg.pid;
-                engine.gameui.Close<LoginView>();
-                engine.gameui.Open<LobbyView>();
+                data.signined = true;
             }
             else if (2 == msg.code)
             {
@@ -108,10 +106,7 @@ namespace Goblin.Sys.Login
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户登出." });
                 data.pid = null;
                 data.signined = false;
-                engine.gameui.Close<LobbyView>();
-                engine.gameui.Close<LobbyRoomView>();
-                engine.gameui.Close<GameplayView>();
-                engine.gameui.Open<LoginView>();
+                engine.gameui.QuickClose();
             }
             else if (2 == msg.code)
             {
@@ -121,10 +116,8 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
                 data.pid = null;
-                engine.gameui.Close<LobbyView>();
-                engine.gameui.Close<LobbyRoomView>();
-                engine.gameui.Close<GameplayView>();
-                engine.gameui.Open<LoginView>();
+                data.signined = false;
+                engine.gameui.QuickClose();
             }
         }
 
@@ -150,10 +143,7 @@ namespace Goblin.Sys.Login
             engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "强制登出，连接断开." : "连接断开." });
             data.pid = null;
             data.signined = false;
-            engine.gameui.Close<LobbyView>();
-            engine.gameui.Close<LobbyRoomView>();
-            engine.gameui.Close<GameplayView>();
-            engine.gameui.Open<LoginView>();
+            engine.gameui.QuickClose();
         }
     }
 }

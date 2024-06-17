@@ -1,6 +1,8 @@
 ﻿using Goblin.Common;
+using Goblin.Common.FSM;
 using Goblin.Common.Network;
 using Goblin.Common.Res;
+using Goblin.Phases.Common;
 using Goblin.Sys.Common;
 using System;
 using System.Collections.Generic;
@@ -56,6 +58,10 @@ namespace Goblin.Core
         /// 游戏 UI
         /// </summary>
         public GameUI gameui;
+        /// <summary>
+        /// 游戏阶段
+        /// </summary>
+        public Phase phase;
 
         protected override void OnCreate()
         {
@@ -93,8 +99,8 @@ namespace Goblin.Core
             gameui = AddComp<GameUI>();
             gameui.Create();
 
-            gameui.Open<Sys.Other.View.FrameworkView>();
-            gameui.Open<Sys.Login.View.LoginView>();
+            phase = AddComp<Phase>();
+            phase.Create();
         }
 
         protected override void OnDestroy()
@@ -106,7 +112,7 @@ namespace Goblin.Core
         /// <summary>
         /// 创建一个游戏引擎
         /// </summary>
-        /// <returns>游戏引擎组件</returns>
+        /// <returns>游戏引擎组件</returns>   
         public static Engine CreateEngine()
         {
             Engine engine = new();

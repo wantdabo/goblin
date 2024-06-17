@@ -13,9 +13,8 @@ using YooAsset;
 /// </summary>
 public class Shell : MonoBehaviour
 {
-    private static MethodInfo tickFunc;
-    private static MethodInfo fixedTickFunc;
-    private static string scriptsPath = "Assets/GameRawRes/Scripts/";
+    private MethodInfo tickFunc;
+    private MethodInfo fixedTickFunc;
 
     #region YooAssets
     private Task GameResSettings()
@@ -39,14 +38,15 @@ public class Shell : MonoBehaviour
         return package.InitializeAsync(initParameters).Task;
     }
     #endregion
+
     #region HybridCLR
     private void LoadMetadata()
     {
-        var ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}AOT_DLL_LIST");
+        var ta = LoadScriptTASync("AOT_DLL_LIST");
         string[] aotDllList = ta.text.Split('|');
         foreach (var aotDllName in aotDllList)
         {
-            ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}{aotDllName}");
+            ta = LoadScriptTASync(aotDllName);
             var code = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HybridCLR.HomologousImageMode.SuperSet);
         }
     }
@@ -69,7 +69,7 @@ public class Shell : MonoBehaviour
     }
 #endregion
 
-    private async Task GameSettings()
+    private async void Start()
     {
         Application.runInBackground = true;
         Application.targetFrameRate = 120;
@@ -77,11 +77,6 @@ public class Shell : MonoBehaviour
         await GameResSettings();
         await ScriptSettings();
         await GameResHelper.UpdateRes();
-    }
-
-    private async void Start()
-    {
-        await GameSettings();
     }
 
     private void Update()
@@ -94,5 +89,14 @@ public class Shell : MonoBehaviour
     {
         if (null == fixedTickFunc) return;
         fixedTickFunc.Invoke(null, new object[] { Time.fixedDeltaTime });
+    }
+
+    private TextAsset LoadScriptTASync(string resName)
+    {
+        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRawRes/Scripts/" + resName);
+        var ta = handle.AssetObject as TextAsset;
+        handle.Release();
+
+        return ta;
     }
 }

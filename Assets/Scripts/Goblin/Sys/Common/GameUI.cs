@@ -116,7 +116,15 @@ namespace Goblin.Sys.Common
 
         public T Get<T>() where T : UIBaseView
         {
-            if (viewDict.TryGetValue(typeof(T), out var view)) return view as T;
+            var view = Get(typeof(T));
+            if (null == view) return null;
+
+            return view as T;
+        }
+
+        public UIBaseView Get(Type type)
+        {
+            if (viewDict.TryGetValue(type, out var view)) return view;
 
             return null;
         }
@@ -134,15 +142,20 @@ namespace Goblin.Sys.Common
             return view;
         }
 
-        public void UnLoad<T>() where T : UIBaseView
+        public void Unload<T>() where T : UIBaseView
         {
-            var view = Get<T>();
+            Unload(typeof(T));
+        }
+
+        public void Unload(Type type)
+        {
+            var view = Get(type);
             if (null == view) return;
 
             view.Unload();
             view.Destroy();
 
-            viewDict.Remove(typeof(T));
+            viewDict.Remove(type);
         }
 
         /// <summary>
@@ -158,8 +171,8 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// UI 根据 Sorting 间距分配 Sorting
         /// </summary>
-        /// <returns></returns>
-        public int AllotSorting() 
+        /// <returns>分配 Sorting</returns>
+        public int AllotSorting()
         {
             sorting += sortingSpacing;
 
@@ -184,13 +197,38 @@ namespace Goblin.Sys.Common
         /// <param name="autounload">是否自动卸载</param>
         public void Close<T>(bool autounload = true) where T : UIBaseView
         {
-            var view = Get<T>();
+            Close(typeof(T), autounload);
+        }
+
+        /// <summary>
+        /// 关闭 UI 界面
+        /// </summary>
+        /// <param name="type">界面类型</param>
+        /// <param name="autounload">是否自动卸载</param>
+        public void Close(Type type, bool autounload = true)
+        {
+            var view = Get(type);
 
             if (null == view) return;
             if (UIState.Close == view.state) return;
 
             view.Close();
-            if (autounload) UnLoad<T>();
+            if (autounload) Unload(type);
+        }
+
+        /// <summary>
+        /// 关闭所有 UI 界面
+        /// </summary>
+        /// <param name="autounload">是否自动卸载</param>
+        public void QuickClose(bool autounload = true)
+        {
+            var types = viewDict.Keys.ToArray();
+            foreach (var type in types)
+            {
+                var view = Get(type);
+                if (null == view) continue;
+                if (view.quickclose) Close(type, autounload);
+            }
         }
     }
 }

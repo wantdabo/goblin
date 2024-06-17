@@ -34,6 +34,8 @@ namespace Goblin.Sys.Other.View
 
         protected override string res => "Other/FrameworkView";
 
+        public override bool quickclose => false;
+
         private Text connectStateText;
         private GameObject connectBtnGo;
         private GameObject disconnectBtnGo;
