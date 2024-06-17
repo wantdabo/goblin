@@ -61,8 +61,24 @@ namespace Goblin.Sys.Common
     /// </summary>
     public class GameUI : Comp
     {
-        public GameObject uiroot;
-        public Camera uicamera;
+        /// <summary>
+        /// UI 根节点
+        /// </summary>
+        public GameObject uiroot { get; private set; }
+        /// <summary>
+        /// UI 相机
+        /// </summary>
+        public Camera uicamera { get; private set; }
+
+        /// <summary>
+        /// UI 层级根节点
+        /// </summary>
+        private Dictionary<UILayer, GameObject> layerNodeDict = new();
+
+        /// <summary>
+        /// UI 界面集合
+        /// </summary>
+        private Dictionary<Type, UIBaseView> viewDict = new();
 
         protected override void OnCreate()
         {
@@ -80,8 +96,10 @@ namespace Goblin.Sys.Common
             }
         }
 
-        private Dictionary<UILayer, GameObject> layerNodeDict = new();
-
+        /// <summary>
+        /// 生成 UI 层级根节点
+        /// </summary>
+        /// <param name="layer">UI 层级</param>
         private void GenUILayerNode(UILayer layer)
         {
             if (layerNodeDict.ContainsKey(layer)) return;
@@ -105,6 +123,11 @@ namespace Goblin.Sys.Common
             canvas.sortingLayerName = layer.ToString();
         }
 
+        /// <summary>
+        /// 获取 UI 层级根节点
+        /// </summary>
+        /// <param name="layer">UI 层级</param>
+        /// <returns>UI 层级根节点</returns>
         public GameObject GetLayerNode(UILayer layer)
         {
             layerNodeDict.TryGetValue(layer, out GameObject layerNode);
@@ -112,8 +135,11 @@ namespace Goblin.Sys.Common
             return layerNode;
         }
 
-        private Dictionary<Type, UIBaseView> viewDict = new();
-
+        /// <summary>
+        /// 获取 UI 界面
+        /// </summary>
+        /// <typeparam name="T">界面类型</typeparam>
+        /// <returns>UI 界面</returns>
         public T Get<T>() where T : UIBaseView
         {
             var view = Get(typeof(T));
@@ -122,6 +148,11 @@ namespace Goblin.Sys.Common
             return view as T;
         }
 
+        /// <summary>
+        /// 获取 UI 界面
+        /// </summary>
+        /// <param name="type">界面类型</param>
+        /// <returns>UI 界面</returns>
         public UIBaseView Get(Type type)
         {
             if (viewDict.TryGetValue(type, out var view)) return view;
@@ -129,6 +160,11 @@ namespace Goblin.Sys.Common
             return null;
         }
 
+        /// <summary>
+        /// 加载 UI 界面
+        /// </summary>
+        /// <typeparam name="T">界面类型</typeparam>
+        /// <returns>UI 界面</returns>
         public async Task<T> Load<T>() where T : UIBaseView, new()
         {
             var view = Get<T>();
@@ -142,11 +178,19 @@ namespace Goblin.Sys.Common
             return view;
         }
 
+        /// <summary>
+        /// 卸载 UI 界面
+        /// </summary>
+        /// <typeparam name="T">界面类型</param>
         public void Unload<T>() where T : UIBaseView
         {
             Unload(typeof(T));
         }
 
+        /// <summary>
+        /// 卸载 UI 界面
+        /// </summary>
+        /// <param name="type">界面类型</param>
         public void Unload(Type type)
         {
             var view = Get(type);
@@ -179,6 +223,11 @@ namespace Goblin.Sys.Common
             return sorting;
         }
 
+        /// <summary>
+        /// 打开 UI 界面
+        /// </summary>
+        /// <typeparam name="T">界面类型</typeparam>
+        /// <param name="autoload">自动加载</param>
         public async void Open<T>(bool autoload = true) where T : UIBaseView, new()
         {
             var view = Get<T>();
