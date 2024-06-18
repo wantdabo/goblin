@@ -55,7 +55,7 @@ public class Shell : MonoBehaviour
     {
 #if !UNITY_EDITOR
         LoadMetadata();
-        var ta = GameResHelper.LoadTextAssetSync($"{scriptsPath}Goblin.dll");
+        var ta = LoadScriptTASync("Goblin.dll");
         Assembly ass = Assembly.Load(ta.bytes);
 #else
         Assembly ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
