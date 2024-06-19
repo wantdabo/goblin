@@ -1,3 +1,4 @@
+using UnityEngine;
 using YooAsset;
 
 /// <summary>
@@ -5,20 +6,27 @@ using YooAsset;
 /// </summary>
 public class RemoteServices : IRemoteServices
 {
-    private readonly string _defaultHostServer;
-    private readonly string _fallbackHostServer;
+    private string remoteHost = null;
 
-    public RemoteServices(string defaultHostServer, string fallbackHostServer)
+    private string GetHostServer()
     {
-        _defaultHostServer = defaultHostServer;
-        _fallbackHostServer = fallbackHostServer;
+        if (null != remoteHost) return remoteHost;
+
+        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRawRes/YA_REMOTE_INFO");
+        var ta = handle.AssetObject as TextAsset;
+        handle.Release();
+        remoteHost = ta.text;
+
+        return remoteHost;
     }
+
     string IRemoteServices.GetRemoteMainURL(string fileName)
     {
-        return $"{_defaultHostServer}/{fileName}";
+        return $"{GetHostServer()}/{fileName}";
     }
+
     string IRemoteServices.GetRemoteFallbackURL(string fileName)
     {
-        return $"{_fallbackHostServer}/{fileName}";
+        return $"{GetHostServer()}/{fileName}";
     }
 }

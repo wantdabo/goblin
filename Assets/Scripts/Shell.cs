@@ -27,12 +27,10 @@ public class Shell : MonoBehaviour
         var simulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, "Package");
         initParameters.SimulateManifestFilePath = simulateManifestFilePath;
 #else
-        string defaultHostServer = "http://192.168.2.156/CDN/v1.0/Android";
-        string fallbackHostServer = "http://192.168.2.156/CDN/v1.0/Android";
         var initParameters = new HostPlayModeParameters();
         initParameters.BuildinQueryServices = new GameQueryServices();
         initParameters.DecryptionServices = new FileStreamDecryption();
-        initParameters.RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+        initParameters.RemoteServices = new RemoteServices();
 #endif
 
         return package.InitializeAsync(initParameters).Task;
@@ -76,7 +74,6 @@ public class Shell : MonoBehaviour
 
         await GameResSettings();
         await ScriptSettings();
-        await GameResHelper.UpdateRes();
     }
 
     private void Update()

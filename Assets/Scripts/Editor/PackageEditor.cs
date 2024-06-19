@@ -19,7 +19,7 @@ public class PackageEditor : Editor
     {
         BuildScripts();
         BuildAssetBundles(BuildTarget.Android);
-        Release(BuildTarget.Android, BuildOptions.None, "android/game.apk");
+        Release(BuildTarget.Android, "android/game.apk");
     }
 
     [MenuItem("工具/构建/发布/发布 EXE32")]
@@ -27,7 +27,7 @@ public class PackageEditor : Editor
     {
         BuildScripts();
         BuildAssetBundles(BuildTarget.StandaloneWindows);
-        Release(BuildTarget.StandaloneWindows, BuildOptions.None, "win/32/game.exe");
+        Release(BuildTarget.StandaloneWindows, "win/32/game.exe");
     }
 
     [MenuItem("工具/构建/发布/发布 EXE64")]
@@ -35,10 +35,10 @@ public class PackageEditor : Editor
     {
         BuildScripts();
         BuildAssetBundles(BuildTarget.StandaloneWindows64);
-        Release(BuildTarget.StandaloneWindows64, BuildOptions.None, "win/64/game.exe");
+        Release(BuildTarget.StandaloneWindows64, "win/64/game.exe");
     }
 
-    private static void Release(BuildTarget buildTarget, BuildOptions buildOptions, string fileName)
+    private static void Release(BuildTarget buildTarget, string fileName)
     {
         var scenes = EditorBuildSettings.scenes;
         string[] scenePaths = new string[scenes.Length];
@@ -57,6 +57,14 @@ public class PackageEditor : Editor
         else
         {
             Debug.LogError("Build failed");
+        }
+    }
+
+    private static BuildOptions buildOptions
+    {
+        get
+        {
+            return BuildOptions.Development | BuildOptions.ConnectWithProfiler;
         }
     }
 
@@ -107,7 +115,7 @@ public class PackageEditor : Editor
         buildParameters.PackageName = "Package";
         buildParameters.PackageVersion = version;
         buildParameters.VerifyBuildingResult = true;
-        buildParameters.FileNameStyle = EFileNameStyle.BundleName;
+        buildParameters.FileNameStyle = EFileNameStyle.HashName;
         buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.ClearAndCopyAll;
         buildParameters.BuildinFileCopyParams = string.Empty;
         buildParameters.EncryptionServices = new EncryptionNone();
