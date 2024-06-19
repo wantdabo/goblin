@@ -38,7 +38,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 注册消息回调集合
         /// </summary>
-        private Dictionary<Type, List<Delegate>> messageActionMap = new();
+        private Dictionary<Type, List<Delegate>> messageActionDict = new();
         /// <summary>
         /// 网络消息包缓存
         /// </summary>
@@ -231,7 +231,7 @@ namespace Goblin.Common.Network
         /// <param name="action">回调方法</param>
         public void UnRecv<T>(Action<T> action) where T : INetMessage
         {
-            if (false == messageActionMap.TryGetValue(typeof(T), out var actions)) return;
+            if (false == messageActionDict.TryGetValue(typeof(T), out var actions)) return;
             if (false == actions.Contains(action)) return;
 
             actions.Remove(action);
@@ -244,10 +244,10 @@ namespace Goblin.Common.Network
         /// <param name="action">回调方法</param>
         public void Recv<T>(Action<T> action) where T : INetMessage
         {
-            if (false == messageActionMap.TryGetValue(typeof(T), out var actions))
+            if (false == messageActionDict.TryGetValue(typeof(T), out var actions))
             {
                 actions = new();
-                messageActionMap.Add(typeof(T), actions);
+                messageActionDict.Add(typeof(T), actions);
             }
 
             if (actions.Contains(action)) return;
@@ -297,7 +297,7 @@ namespace Goblin.Common.Network
 
             while (netPackages.TryDequeue(out var package))
             {
-                if (false == messageActionMap.TryGetValue(package.msgType, out var actions)) continue;
+                if (false == messageActionDict.TryGetValue(package.msgType, out var actions)) continue;
                 for (int i = actions.Count - 1; i >= 0; i--) actions[i].DynamicInvoke(package.msg);
             }
         }

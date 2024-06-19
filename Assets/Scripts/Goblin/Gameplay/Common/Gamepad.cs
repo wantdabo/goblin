@@ -55,7 +55,7 @@ namespace Goblin.Gameplay.Common
     /// </summary>
     public class Gamepad : Behavior
     {
-        private Dictionary<InputType, InputInfo> InputMap = new()
+        private Dictionary<InputType, InputInfo> InputDict = new()
         {
             { InputType.Joystick, new InputInfo { press = false, dire = TSVector2.zero } },
         };
@@ -87,7 +87,7 @@ namespace Goblin.Gameplay.Common
         /// <exception cref="Exception">未找到该类型按键的数据</exception>
         public InputInfo GetInput(InputType inputType)
         {
-            if (InputMap.TryGetValue(inputType, out InputInfo input)) return input;
+            if (InputDict.TryGetValue(inputType, out InputInfo input)) return input;
 
             throw new Exception($"inputType not found {inputType}");
         }
@@ -101,14 +101,14 @@ namespace Goblin.Gameplay.Common
         {
             if (InputLockMap[inputType]) return;
 
-            if (InputMap.TryGetValue(inputType, out var oldInput))
+            if (InputDict.TryGetValue(inputType, out var oldInput))
             {
                 // 上一次是 press，新的是 unpress 表示技能释放出去了。
                 if (oldInput.press && false == input.press) input.release = true;
-                InputMap.Remove(inputType);
+                InputDict.Remove(inputType);
             }
 
-            InputMap.Add(inputType, input);
+            InputDict.Add(inputType, input);
         }
 
         private void OnFPLateTick(FPLateTickEvent e)
@@ -141,8 +141,8 @@ namespace Goblin.Gameplay.Common
         {
             var input = GetInput(inputType);
             input.release = false;
-            InputMap.Remove(inputType);
-            InputMap.Add(inputType, input);
+            InputDict.Remove(inputType);
+            InputDict.Add(inputType, input);
         }
     }
 }
