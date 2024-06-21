@@ -76,52 +76,17 @@ namespace Goblin.Common
         }
 
         /// <summary>
-        /// 世界坐标转UI本地坐标
+        /// 世界坐标转 UI 本地坐标
         /// </summary>
-        /// <param name="parentRect">父节点RectTransform</param>
+        /// <param name="parentRect">父节点 RectTransform</param>
         /// <param name="worldPoint">世界坐标</param>
-        /// <returns>UI本地坐标</returns>
+        /// <returns>UI 本地坐标</returns>
         public Vector2 WorldToUILoaclPoint(RectTransform parentRect, Vector3 worldPoint)
         {
             Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPoint);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, screenPos, engine.gameui.uicamera, out Vector2 uiPoint);
 
             return uiPoint;
-        }
-
-        /// <summary>
-        /// 标准创建item函数
-        /// </summary>
-        /// <param name="需要创建的物体"></param>
-        /// <param name="需要创建的物体的缓存列表"></param>
-        /// <param name="当前检查数量"></param>
-        /// <param name="创建位置"></param>
-        public void CheckItemCreate(GameObject item, List<GameObject> itemList, int count, Transform parent)
-        {
-            if(itemList.Count < count)
-            {
-                for(int i = itemList.Count; i < count; i++)
-                {
-                    GameObject newItem = GameObject.Instantiate(item,parent);
-                    newItem.transform.localScale = Vector3.one;
-                    // 一般加在滚动视图里 位置自动调整 主要把z轴归零
-                    newItem.transform.localPosition = Vector3.zero;
-                    itemList.Add(newItem);
-                    newItem.name = i.ToString();
-                    newItem.SetActive(true);
-                }
-            }
-            else
-            {
-                for(int i = 0; i < count; i++)
-                {
-                    itemList[i].SetActive(true);
-                }
-                for(int i = count; i < itemList.Count; i++)
-                {
-                    itemList[i].SetActive(false);
-                }
-            }
         }
     }
 }
