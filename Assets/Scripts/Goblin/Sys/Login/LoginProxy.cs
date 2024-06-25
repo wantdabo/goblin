@@ -140,10 +140,10 @@ namespace Goblin.Sys.Login
 
         private void OnNodeDisconnect(NodeDisconnectMsg msg)
         {
+            if(data.signined) engine.gameui.QuickClose();
             engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "强制登出，连接断开." : "连接断开." });
             data.pid = null;
             data.signined = false;
-            engine.gameui.QuickClose();
         }
     }
 }
