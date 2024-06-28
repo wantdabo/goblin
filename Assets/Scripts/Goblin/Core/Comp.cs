@@ -61,6 +61,8 @@ namespace Goblin.Core
 
         protected virtual void OnDestroy()
         {
+            parent.RmvComp(this);
+
             if (null == compList) return;
             for (int i = compList.Count - 1; i >= 0; i--)
             {
@@ -70,7 +72,6 @@ namespace Goblin.Core
             }
             compList.Clear();
             compDict.Clear();
-            parent.RmvComp(this);
         }
 
         /// <summary>
