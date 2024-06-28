@@ -114,10 +114,9 @@ namespace Goblin.Core
         /// <returns>组件</returns>
         public virtual T GetComp<T>(bool force = false) where T : Comp
         {
-            var comps = GetComps<T>(force);
-            if (null == comps) return null;
+            if (false == compDict.TryGetValue(typeof(T), out var comps)) return null;
 
-            return comps.Last();
+            return comps.Last() as T;
         }
 
         /// <summary>
