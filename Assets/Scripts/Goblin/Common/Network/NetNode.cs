@@ -77,6 +77,10 @@ namespace Goblin.Common.Network
         /// </summary>
         public bool connected => PeerState.Connected == peer.State;
         /// <summary>
+        /// 连接中
+        /// </summary>
+        public bool connecting => PeerState.Connecting == peer.State;
+        /// <summary>
         /// 网络延迟
         /// </summary>
         public long ping { get; private set; }
@@ -141,7 +145,9 @@ namespace Goblin.Common.Network
             {
                 while (true)
                 {
-                    if (host.CheckEvents(out var netEvent) <= 0) if (host.Service(timeout, out netEvent) <= 0) continue;
+                    if (host.CheckEvents(out var netEvent) <= 0)
+                        if (host.Service(timeout, out netEvent) <= 0)
+                            continue;
 
                     switch (netEvent.Type)
                     {
@@ -219,7 +225,7 @@ namespace Goblin.Common.Network
         /// </summary>
         public void Disconnect()
         {
-            if (false == connected) return;
+            if (false == connected && false == connecting) return;
             peer.DisconnectNow(0);
             EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
         }
@@ -261,7 +267,7 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         public void Send<T>(T msg) where T : INetMessage
         {
-            if (false == connected)
+            if (false == connected && false == connecting)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此操作需要网络连接，请检查是否正确连接服务器." });
 
