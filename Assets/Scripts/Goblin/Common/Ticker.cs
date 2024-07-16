@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Goblin.Common;
 using UnityEngine;
 
 namespace Goblin.Common
@@ -148,10 +147,10 @@ namespace Goblin.Common
         public void Tick(float t)
         {
             tick = t * timeScale;
-
             frame++;
+            while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
             // 驱动计时器
-            TickTimerInfos(timerInfos, tick);
+            TickTimerInfos(TimerType.Tick, timerDict, tick);
             // 派发事件，时间流逝
             eventor.Tell(new TickEvent { frame = frame, tick = tick });
             eventor.Tell(new LateTickEvent { frame = frame, tick = tick });
@@ -173,8 +172,9 @@ namespace Goblin.Common
                 elapsed -= ft;
 
                 fixedFrame++;
+                while (recyFixedTimers.TryDequeue(out var tid)) fixedTimerDict.Remove(tid);
                 // 驱动 Fixed 计时器
-                TickTimerInfos(fixedTimerInfos, fixedTick);
+                TickTimerInfos(TimerType.FixedTick, fixedTimerDict, fixedTick);
                 // 派发事件，时间流逝
                 eventor.Tell(new FixedTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
                 eventor.Tell(new FixedLateTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
@@ -182,6 +182,21 @@ namespace Goblin.Common
         }
 
         #region Timer
+        /// <summary>
+        /// 计时器类型
+        /// </summary>
+        private enum TimerType
+        {
+            /// <summary>
+            /// Tick 驱动
+            /// </summary>
+            Tick,
+            /// <summary>
+            /// Fixed 驱动
+            /// </summary>
+            FixedTick,
+        }
+
         /// <summary>
         /// 计时器结构体
         /// </summary>
@@ -213,8 +228,10 @@ namespace Goblin.Common
         /// 自增的 TimerID
         /// </summary>
         private uint timerIncrementId = 0;
-        private List<TimerInfo> timerInfos = new();
-        private List<TimerInfo> fixedTimerInfos = new();
+        private Dictionary<uint, TimerInfo> timerDict = new();
+        private Queue<uint> recyTimers = new();
+        private Dictionary<uint, TimerInfo> fixedTimerDict = new();
+        private Queue<uint> recyFixedTimers = new();
 
         /// <summary>
         /// 停止计时器
@@ -223,16 +240,8 @@ namespace Goblin.Common
         /// <param name="tickDef">计时器类型</param>
         public void StopTimer(uint id)
         {
-            if (0 == timerInfos.Count) return;
-
-            for (int i = timerInfos.Count - 1; i >= 0; i--)
-            {
-                var info = timerInfos[i];
-                if (id != info.id) continue;
-
-                timerInfos.RemoveAt(i);
-                break;
-            }
+            if (recyTimers.Contains(id)) return;
+            recyTimers.Enqueue(id);
         }
 
         /// <summary>
@@ -242,16 +251,8 @@ namespace Goblin.Common
         /// <param name="tickDef">计时器类型</param>
         public void StopFixedTimer(uint id)
         {
-            if (0 == fixedTimerInfos.Count) return;
-
-            for (int i = fixedTimerInfos.Count - 1; i >= 0; i--)
-            {
-                var info = fixedTimerInfos[i];
-                if (id != info.id) continue;
-
-                fixedTimerInfos.RemoveAt(i);
-                break;
-            }
+            if (recyFixedTimers.Contains(id)) return;
+            recyFixedTimers.Enqueue(id);
         }
 
         /// <summary>
@@ -272,7 +273,7 @@ namespace Goblin.Common
                 duration = duration,
                 loop = loop
             };
-            timerInfos.Add(info);
+            timerDict.Add(info.id, info);
 
             return info.id;
         }
@@ -295,29 +296,43 @@ namespace Goblin.Common
                 duration = duration,
                 loop = loop
             };
-            fixedTimerInfos.Add(info);
+            fixedTimerDict.Add(info.id, info);
 
             return info.id;
         }
 
-        private void TickTimerInfos(List<TimerInfo> infos, float tick)
+        private List<TimerInfo> infoTemps = new();
+        private List<Action<float>> actionTemps = new();
+        private void TickTimerInfos(TimerType tt, Dictionary<uint, TimerInfo> infos, float tick)
         {
             if (0 == infos.Count) return;
-
-            for (int i = infos.Count - 1; i >= 0; i--)
+            infoTemps.Clear();
+            actionTemps.Clear();
+            foreach (var kv in infos)
             {
-                var info = infos[i];
+                var info = kv.Value;
                 info.elapsed += tick;
-                infos[i] = info;
+                infoTemps.Add(info);
                 if (info.duration > info.elapsed) continue;
 
                 info.elapsed = Mathf.Max(0, info.elapsed - info.duration);
                 info.loop--;
-                infos[i] = info;
-                if (0 == info.loop) infos.RemoveAt(i);
-
-                info.action.Invoke(tick);
+                infoTemps.Add(info);
+                if (0 == info.loop)
+                {
+                    if (TimerType.Tick == tt) StopTimer(info.id);
+                    else if (TimerType.FixedTick == tt) StopFixedTimer(info.id);
+                }
+                actionTemps.Add(info.action);
             }
+            
+            foreach (var infoTemp in infoTemps)
+            {
+                infos.Remove(infoTemp.id);
+                infos.Add(infoTemp.id, infoTemp);
+            }
+            
+            foreach (var actionTemp in actionTemps) actionTemp.Invoke(tick);
         }
         #endregion
     }
