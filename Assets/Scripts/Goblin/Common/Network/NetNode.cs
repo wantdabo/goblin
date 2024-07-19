@@ -1,6 +1,5 @@
 ﻿using ENet;
 using Goblin.Core;
-using Goblin.Sys.Other.View;
 using Queen.Protocols.Common;
 using Supyrb;
 using System;
@@ -34,11 +33,46 @@ namespace Goblin.Common.Network
             /// </summary>
             public INetMessage msg;
         }
+        
+        /// <summary>
+        /// 消息回调接口
+        /// </summary>
+        private interface INetMessageAction
+        {
+            /// <summary>
+            /// 消息执行
+            /// </summary>
+            /// <param name="msg">消息</param>
+            void Invoke(object msg);
+        }
+        
+        /// <summary>
+        /// 消息回调代理类
+        /// </summary>
+        /// <typeparam name="T">消息类型</typeparam>
+        private class NetMessageAction<T> : INetMessageAction
+        {
+            private readonly Action<T> action;
+
+            public NetMessageAction(Action<T> action)
+            {
+                this.action = action;
+            }
+            
+            public void Invoke(object msg)
+            {
+                action.Invoke((T)msg);
+            }
+        }
 
         /// <summary>
-        /// 注册消息回调集合
+        /// 消息回调映射
         /// </summary>
         private Dictionary<Type, List<Delegate>> messageActionDict = new();
+        /// <summary>
+        /// 消息回调
+        /// </summary>
+        private Dictionary<Delegate, INetMessageAction> netMessageActionDict = new();
         /// <summary>
         /// 网络消息包缓存
         /// </summary>
@@ -239,7 +273,7 @@ namespace Goblin.Common.Network
         {
             if (false == messageActionDict.TryGetValue(typeof(T), out var actions)) return;
             if (false == actions.Contains(action)) return;
-
+            netMessageActionDict.Remove(action);
             actions.Remove(action);
         }
 
@@ -257,6 +291,7 @@ namespace Goblin.Common.Network
             }
 
             if (actions.Contains(action)) return;
+            netMessageActionDict.Add(action, new NetMessageAction<T>(action));
             actions.Add(action);
         }
 
@@ -267,12 +302,7 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         public void Send<T>(T msg) where T : INetMessage
         {
-            if (false == connected && false == connecting)
-            {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此操作需要网络连接，请检查是否正确连接服务器." });
-
-                return;
-            }
+            if (false == connected && false == connecting) return;
 
             if (ProtoPack.Pack(msg, out var bytes))
             {
@@ -304,7 +334,10 @@ namespace Goblin.Common.Network
             while (netPackages.TryDequeue(out var package))
             {
                 if (false == messageActionDict.TryGetValue(package.msgType, out var actions)) continue;
-                for (int i = actions.Count - 1; i >= 0; i--) actions[i].DynamicInvoke(package.msg);
+                for (int i = actions.Count - 1; i >= 0; i--)
+                {
+                    if (netMessageActionDict.TryGetValue(actions[i], out var action)) action.Invoke(package.msg);
+                }
             }
         }
 
