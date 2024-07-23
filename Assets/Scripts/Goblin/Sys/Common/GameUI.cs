@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Goblin.Common;
 using UnityEngine;
 using Goblin.Sys.Common;
+using UnityEngine.UI;
 
 namespace Goblin.Sys.Common
 {
@@ -85,7 +86,10 @@ namespace Goblin.Sys.Common
             base.OnCreate();
             uiroot = GameObject.Find("UI/UIRoot");
             uicamera = GameObject.Find("UI/UICamera").GetComponent<Camera>();
-
+            var canvasScaler = engine.u3dkit.GetNode<CanvasScaler>(uiroot);
+            //如果小于设计宽高比，匹配宽，反之，匹配高
+            canvasScaler.matchWidthOrHeight = (float)Screen.width / Screen.height < (canvasScaler.referenceResolution.x / canvasScaler.referenceResolution.y) ? 0 : 1;
+            
             // 批量生成 UILayer
             foreach (var name in Enum.GetNames(typeof(UILayer)))
             {
