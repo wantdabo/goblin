@@ -6,7 +6,7 @@ using YooAsset;
 
 public class GameResHelper
 {
-    private static string scriptsPath = "Assets/GameRawRes/Scripts/";
+    private static string scriptsPath = "Assets/GameRes/Raws/Scripts/";
 
     public static TextAsset LoadTextAssetSync(string resName)
     {
@@ -25,12 +25,12 @@ public class GameResHelper
 
         if (PackageVersionOperation.Status == EOperationStatus.Succeed)
         {
-            //¸üÐÂ³É¹¦
+            //ï¿½ï¿½ï¿½Â³É¹ï¿½
             string packageVersion = PackageVersionOperation.PackageVersion;
             Debug.Log($"Updated package Version : {packageVersion}");
 
-            // ¸üÐÂ³É¹¦ºó×Ô¶¯±£´æ°æ±¾ºÅ£¬×÷ÎªÏÂ´Î³õÊ¼»¯µÄ°æ±¾¡£
-            // Ò²¿ÉÒÔÍ¨¹ýoperation.SavePackageVersion()·½·¨±£´æ¡£
+            // ï¿½ï¿½ï¿½Â³É¹ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾ï¿½Å£ï¿½ï¿½ï¿½Îªï¿½Â´Î³ï¿½Ê¼ï¿½ï¿½ï¿½Ä°æ±¾ï¿½ï¿½
+            // Ò²ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½operation.SavePackageVersion()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ¡£
             bool savePackageVersion = true;
             package = YooAssets.GetPackage("Package");
             var PackageMannifestOperation = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);
@@ -38,43 +38,43 @@ public class GameResHelper
 
             if (PackageMannifestOperation.Status == EOperationStatus.Succeed)
             {
-                //¸üÐÂ³É¹¦
+                //ï¿½ï¿½ï¿½Â³É¹ï¿½
                 int downloadingMaxNum = 10;
                 int failedTryAgain = 3;
                 package = YooAssets.GetPackage("Package");
 
                 var downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
 
-                //Ã»ÓÐÐèÒªÏÂÔØµÄ×ÊÔ´
+                //Ã»ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½Ô´
                 if (downloader.TotalDownloadCount == 0)
                 {
                     return false;
                 }
 
-                //ÐèÒªÏÂÔØµÄÎÄ¼þ×ÜÊýºÍ×Ü´óÐ¡
+                //ï¿½ï¿½Òªï¿½ï¿½ï¿½Øµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½Ð¡
                 int totalDownloadCount = downloader.TotalDownloadCount;
                 long totalDownloadBytes = downloader.TotalDownloadBytes;
-                Debug.Log($"ÐèÒªÏÂÔØµÄÎÄ¼þ×ÜÊýºÍ×Ü´óÐ¡ ===============> {totalDownloadCount}, {totalDownloadBytes}");
-                //¿ªÆôÏÂÔØ
+                Debug.Log($"ï¿½ï¿½Òªï¿½ï¿½ï¿½Øµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½Ð¡ ===============> {totalDownloadCount}, {totalDownloadBytes}");
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 downloader.BeginDownload();
                 await downloader.Task;
 
-                //¼ì²âÏÂÔØ½á¹û
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½
                 if (downloader.Status == EOperationStatus.Succeed)
                 {
-                    //ÏÂÔØ³É¹¦
+                    //ï¿½ï¿½ï¿½Ø³É¹ï¿½
                     return true;
                 }
                 else
                 {
-                    //ÏÂÔØÊ§°Ü
+                    //ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 
                     return false;
                 }
             }
             else
             {
-                //¸üÐÂÊ§°Ü
+                //ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
                 Debug.LogError(PackageMannifestOperation.Error);
 
                 return false;
@@ -82,7 +82,7 @@ public class GameResHelper
         }
         else
         {
-            //¸üÐÂÊ§°Ü
+            //ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
             Debug.LogError(PackageVersionOperation.Error);
 
             return false;

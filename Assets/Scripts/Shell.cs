@@ -90,7 +90,7 @@ public class Shell : MonoBehaviour
 
     private TextAsset LoadScriptTASync(string resName)
     {
-        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRawRes/Scripts/" + resName);
+        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRes/Raws/Scripts/" + resName);
         var ta = handle.AssetObject as TextAsset;
         handle.Release();
 

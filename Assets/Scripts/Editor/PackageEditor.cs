@@ -10,11 +10,11 @@ using UnityEngine;
 using YooAsset.Editor;
 
 /// <summary>
-/// ´ò°ü±à¼­Æ÷
+/// ï¿½ï¿½ï¿½ï¿½à¼­ï¿½ï¿½
 /// </summary>
 public class PackageEditor : Editor
 {
-    [MenuItem("¹¤¾ß/¹¹½¨/·¢²¼/·¢²¼ APK")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ APK")]
     public static void BuildAPK()
     {
         BuildScripts();
@@ -22,7 +22,7 @@ public class PackageEditor : Editor
         Release(BuildTarget.Android, "android/game.apk");
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/·¢²¼/·¢²¼ EXE32")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ EXE32")]
     public static void BuildEXE32()
     {
         BuildScripts();
@@ -30,7 +30,7 @@ public class PackageEditor : Editor
         Release(BuildTarget.StandaloneWindows, "win/32/game.exe");
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/·¢²¼/·¢²¼ EXE64")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ EXE64")]
     public static void BuildEXE64()
     {
         BuildScripts();
@@ -49,7 +49,7 @@ public class PackageEditor : Editor
 
         UnityEditor.Build.Reporting.BuildReport report = BuildPipeline.BuildPlayer(scenePaths, $"build/{fileName}", buildTarget, buildOptions);
 
-        // ¼ì²é¹¹½¨½á¹û
+        // ï¿½ï¿½é¹¹ï¿½ï¿½ï¿½ï¿½ï¿½
         if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
         {
             Debug.Log("Build succeeded: " + report.summary.totalSize + " bytes");
@@ -68,7 +68,7 @@ public class PackageEditor : Editor
         }
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/²¹¶¡/APK ²¹¶¡°ü")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/APK ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public static void BuildPatchAPK()
     {
         BuildScripts();
@@ -76,7 +76,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/Android/Package/" + version;
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/²¹¶¡/EXE32 ²¹¶¡°ü")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/EXE32 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public static void BuildPatchEXE32()
     {
         BuildScripts();
@@ -84,7 +84,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows/Package/" + version;
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/²¹¶¡/EXE64 ²¹¶¡°ü")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/EXE64 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public static void BuildPatchEXE64()
     {
         BuildScripts();
@@ -92,7 +92,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows64/Package/" + version;
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/¹¹½¨×ÊÔ´")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´")]
     public static void BuildAssetBundles()
     {
         BuildAssetBundles(EditorUserBuildSettings.activeBuildTarget);
@@ -100,12 +100,12 @@ public class PackageEditor : Editor
 
     private static string BuildAssetBundles(BuildTarget buildTarget)
     {
-        Debug.Log($"¿ªÊ¼¹¹½¨ : {buildTarget}");
+        Debug.Log($"ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ : {buildTarget}");
 
         var buildoutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
         var streamingAssetsRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
         var version = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-        // ¹¹½¨²ÎÊý
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         BuiltinBuildParameters buildParameters = new BuiltinBuildParameters();
         buildParameters.BuildOutputRoot = buildoutputRoot;
         buildParameters.BuildinFileRoot = streamingAssetsRoot;
@@ -121,22 +121,22 @@ public class PackageEditor : Editor
         buildParameters.EncryptionServices = new EncryptionNone();
         buildParameters.CompressOption = ECompressOption.LZ4;
 
-        // Ö´ÐÐ¹¹½¨
+        // Ö´ï¿½Ð¹ï¿½ï¿½ï¿½
         BuiltinBuildPipeline pipeline = new BuiltinBuildPipeline();
         var buildResult = pipeline.Run(buildParameters, true);
         if (buildResult.Success)
         {
-            Debug.Log($"¹¹½¨³É¹¦ : {buildResult.OutputPackageDirectory}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ : {buildResult.OutputPackageDirectory}");
         }
         else
         {
-            Debug.LogError($"¹¹½¨Ê§°Ü : {buildResult.ErrorInfo}");
+            Debug.LogError($"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ : {buildResult.ErrorInfo}");
         }
 
         return version;
     }
 
-    [MenuItem("¹¤¾ß/¹¹½¨/¹¹½¨´úÂë")]
+    [MenuItem("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public static void BuildScripts()
     {
         GenScripts();
@@ -151,7 +151,7 @@ public class PackageEditor : Editor
     private static void ScriptsCopy()
     {
         var rootPath = Application.dataPath.Replace("/Assets", "/");
-        var scriptResPath = Application.dataPath + "/GameRawRes/Scripts/";
+        var scriptResPath = Application.dataPath + "/GameRes/Raws/Scripts/";
 #if UNITY_STANDALONE_WIN
         var hotfixDLLPath = rootPath + HybridCLRSettings.Instance.hotUpdateDllCompileOutputRootDir + "/StandaloneWindows64/";
         var aotDLLPath = rootPath + HybridCLRSettings.Instance.strippedAOTDllOutputRootDir + "/StandaloneWindows64/";

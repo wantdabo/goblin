@@ -2,7 +2,7 @@ using UnityEngine;
 using YooAsset;
 
 /// <summary>
-/// Ô¶¶Ë×ÊÔ´µØÖ·²éÑ¯·þÎñÀà
+/// Ô¶ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ö·ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class RemoteServices : IRemoteServices
 {
@@ -12,7 +12,7 @@ public class RemoteServices : IRemoteServices
     {
         if (null != remoteHost) return remoteHost;
 
-        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRawRes/YA_REMOTE_INFO");
+        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRes/Raws/YA_REMOTE_INFO");
         var ta = handle.AssetObject as TextAsset;
         handle.Release();
         remoteHost = ta.text;

@@ -18,7 +18,7 @@ namespace Goblin.Common.Res
         private const string uieffectPath = "Assets/GameRes/UIEffects/";
         private const string uiprefabPath = "Assets/GameRes/UIPrefabs/";
         private const string spritesPath = "Assets/GameRes/UISprites/";
-        private const string configPath = "Assets/GameRawRes/Configs/";
+        private const string configPath = "Assets/GameRes/Raws/Configs/";
 
         /// <summary>
         /// 异步 Model 加载预制体

@@ -24,25 +24,51 @@ MonoBehaviour:
     AutoCollectShaders: 0
     IgnoreRuleName: NormalIgnoreRule
     Groups:
-    - GroupName: GameRes
+    - GroupName: Effects
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes
-        CollectorGUID: dbaa6bc380b2d8c458375d2fdc605663
+      - CollectPath: Assets/GameRes/Effects
+        CollectorGUID: 5d8a6b3b7ed020846b2f4a1bc8da8d80
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: GameRawRes
+    - GroupName: Models
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRawRes
+      - CollectPath: Assets/GameRes/Models
+        CollectorGUID: c29bc8acf5495054683a5bad2db5ea48
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: UIPrefabs
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/UIPrefabs
+        CollectorGUID: 2391824d3dd3e7f46bb30b1eba185912
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Raws
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Raws
         CollectorGUID: 3a11628382a872649bb0bafc42cc240d
         CollectorType: 0
         AddressRuleName: AddressByFileName
