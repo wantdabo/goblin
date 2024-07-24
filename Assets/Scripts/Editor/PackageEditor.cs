@@ -104,7 +104,7 @@ public class PackageEditor : Editor
         var buildoutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
         var streamingAssetsRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
         var version = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-        // ��������
+        
         BuiltinBuildParameters buildParameters = new BuiltinBuildParameters();
         buildParameters.BuildOutputRoot = buildoutputRoot;
         buildParameters.BuildinFileRoot = streamingAssetsRoot;
