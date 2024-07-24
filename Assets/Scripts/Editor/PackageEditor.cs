@@ -10,11 +10,11 @@ using UnityEngine;
 using YooAsset.Editor;
 
 /// <summary>
-/// ����༭��
+/// 打包编辑工具
 /// </summary>
 public class PackageEditor : Editor
 {
-    [MenuItem("����/����/����/���� APK")]
+    [MenuItem("工具/构建/发布/发布 APK")]
     public static void BuildAPK()
     {
         BuildScripts();
@@ -22,7 +22,7 @@ public class PackageEditor : Editor
         Release(BuildTarget.Android, "android/game.apk");
     }
 
-    [MenuItem("����/����/����/���� EXE32")]
+    [MenuItem("工具/构建/发布/发布 EXE32")]
     public static void BuildEXE32()
     {
         BuildScripts();
@@ -30,7 +30,7 @@ public class PackageEditor : Editor
         Release(BuildTarget.StandaloneWindows, "win/32/game.exe");
     }
 
-    [MenuItem("����/����/����/���� EXE64")]
+    [MenuItem("工具/构建/发布/发布 EXE64")]
     public static void BuildEXE64()
     {
         BuildScripts();
@@ -48,8 +48,7 @@ public class PackageEditor : Editor
         }
 
         UnityEditor.Build.Reporting.BuildReport report = BuildPipeline.BuildPlayer(scenePaths, $"build/{fileName}", buildTarget, buildOptions);
-
-        // ��鹹�����
+        
         if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
         {
             Debug.Log("Build succeeded: " + report.summary.totalSize + " bytes");
@@ -68,7 +67,7 @@ public class PackageEditor : Editor
         }
     }
 
-    [MenuItem("����/����/����/APK ������")]
+    [MenuItem("工具/构建/补丁/APK")]
     public static void BuildPatchAPK()
     {
         BuildScripts();
@@ -76,7 +75,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/Android/Package/" + version;
     }
 
-    [MenuItem("����/����/����/EXE32 ������")]
+    [MenuItem("工具/构建/补丁/EXE32")]
     public static void BuildPatchEXE32()
     {
         BuildScripts();
@@ -84,7 +83,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows/Package/" + version;
     }
 
-    [MenuItem("����/����/����/EXE64 ������")]
+    [MenuItem("工具/构建/补丁/EXE64")]
     public static void BuildPatchEXE64()
     {
         BuildScripts();
@@ -92,7 +91,7 @@ public class PackageEditor : Editor
         var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows64/Package/" + version;
     }
 
-    [MenuItem("����/����/������Դ")]
+    [MenuItem("工具/构建/构建资源")]
     public static void BuildAssetBundles()
     {
         BuildAssetBundles(EditorUserBuildSettings.activeBuildTarget);
@@ -100,7 +99,7 @@ public class PackageEditor : Editor
 
     private static string BuildAssetBundles(BuildTarget buildTarget)
     {
-        Debug.Log($"��ʼ���� : {buildTarget}");
+        Debug.Log($"构建平台目标 : {buildTarget}");
 
         var buildoutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
         var streamingAssetsRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
@@ -120,23 +119,22 @@ public class PackageEditor : Editor
         buildParameters.BuildinFileCopyParams = string.Empty;
         buildParameters.EncryptionServices = new EncryptionNone();
         buildParameters.CompressOption = ECompressOption.LZ4;
-
-        // ִ�й���
+        
         BuiltinBuildPipeline pipeline = new BuiltinBuildPipeline();
         var buildResult = pipeline.Run(buildParameters, true);
         if (buildResult.Success)
         {
-            Debug.Log($"�����ɹ� : {buildResult.OutputPackageDirectory}");
+            Debug.Log($"构建资源成功 : {buildResult.OutputPackageDirectory}");
         }
         else
         {
-            Debug.LogError($"����ʧ�� : {buildResult.ErrorInfo}");
+            Debug.LogError($"构建资源失败 : {buildResult.ErrorInfo}");
         }
 
         return version;
     }
 
-    [MenuItem("����/����/��������")]
+    [MenuItem("工具/构建/构建代码")]
     public static void BuildScripts()
     {
         GenScripts();
