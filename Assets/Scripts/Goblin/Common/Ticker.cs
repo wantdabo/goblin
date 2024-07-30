@@ -148,9 +148,8 @@ namespace Goblin.Common
         {
             tick = t * timeScale;
             frame++;
-            while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
             // 驱动计时器
-            TickTimerInfos(TimerType.Tick, timerDict, tick);
+            TickTimerInfos(TimerType.Tick, tick);
             // 派发事件，时间流逝
             eventor.Tell(new TickEvent { frame = frame, tick = tick });
             eventor.Tell(new LateTickEvent { frame = frame, tick = tick });
@@ -172,9 +171,8 @@ namespace Goblin.Common
                 elapsed -= ft;
 
                 fixedFrame++;
-                while (recyFixedTimers.TryDequeue(out var tid)) fixedTimerDict.Remove(tid);
                 // 驱动 Fixed 计时器
-                TickTimerInfos(TimerType.FixedTick, fixedTimerDict, fixedTick);
+                TickTimerInfos(TimerType.FixedTick, fixedTick);
                 // 派发事件，时间流逝
                 eventor.Tell(new FixedTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
                 eventor.Tell(new FixedLateTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
@@ -302,12 +300,17 @@ namespace Goblin.Common
         }
 
         private List<TimerInfo> infoTemps = new();
-        private List<Action<float>> actionTemps = new();
-        private void TickTimerInfos(TimerType tt, Dictionary<uint, TimerInfo> infos, float tick)
+        private List<uint> timerTemps = new();
+        private void TickTimerInfos(TimerType tt, float tick)
         {
+            var infos = TimerType.Tick == tt ? timerDict : fixedTimerDict;
+            var recyList = TimerType.Tick == tt ? recyTimers : recyFixedTimers;
+            Action<uint> stopTimerAction = TimerType.Tick == tt ?  StopTimer : StopFixedTimer;
+            while (recyList.TryDequeue(out var tid)) infos.Remove(tid);
+            
             if (0 == infos.Count) return;
             infoTemps.Clear();
-            actionTemps.Clear();
+            timerTemps.Clear();
             foreach (var kv in infos)
             {
                 var info = kv.Value;
@@ -318,12 +321,8 @@ namespace Goblin.Common
                 info.elapsed = Mathf.Max(0, info.elapsed - info.duration);
                 info.loop--;
                 infoTemps.Add(info);
-                if (0 == info.loop)
-                {
-                    if (TimerType.Tick == tt) StopTimer(info.id);
-                    else if (TimerType.FixedTick == tt) StopFixedTimer(info.id);
-                }
-                actionTemps.Add(info.action);
+
+                timerTemps.Add(info.id);
             }
             
             foreach (var infoTemp in infoTemps)
@@ -331,8 +330,15 @@ namespace Goblin.Common
                 infos.Remove(infoTemp.id);
                 infos.Add(infoTemp.id, infoTemp);
             }
-            
-            foreach (var actionTemp in actionTemps) actionTemp.Invoke(tick);
+
+            foreach (var timer in timerTemps)
+            {
+                if (infos.TryGetValue(timer, out var action) && false == recyList.Contains(action.id))
+                {
+                    action.action.Invoke(tick);
+                    if (0 == action.loop) stopTimerAction(action.id);
+                }
+            }
         }
         #endregion
     }
