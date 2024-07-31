@@ -17,7 +17,6 @@
 - [2.环境配置](#installenv)
   
   - [1.安装 .NET](#installenv.1)
-  - [2.安装 Unity](#installenv.2)
 
 ##### [项目结构](#projectcatalog)
 
