@@ -1,63 +1,38 @@
 # Goblin
-
 这是基于 Unity 开发的一套框架，支持网络游戏开发
-
 ### 大致全貌
-
 - ENet 套字节
 - MessagePack 协议
 - Yooasset 资源管理
 - HybridCLR 代码热更
 - Luban 配置
-
 ### <span id="catalog">目录</span>
-
 - [1.快速开始](#qstart)
-
 - [2.环境配置](#installenv)
-  
   - [1.安装 .NET](#installenv.1)
-
 ### [项目结构](#projectdire)
-
 ---
-
 ### TODO
-
 - 初始化界面（资源预热，热更新资源）
-
 - 支持，Goblin 以内，不重启游戏资源更新
-
 - Gameplay 战斗模块
-  
   - 支持，帧同步，状态帧同步
   - 渲染逻辑分离
   - 技能管线设计
   - 技能编辑器
   - 支持技能管线
   - 音效编辑
-
 ---
-
 #### <span id="qstart">1.快速开始</span>
-
 - 1.开发环境中，需要安装 [**.NET8+**](#installenv.1)
-
 - 2.安装，Unity，推荐使用 Unity 2021+ 以上的版本
-
 - 3.此时，如果上述步骤，顺利完成。使用 Unity 打开此项目即可
-
 #### <span id="installenv">2.环境配置</span>
-
 - ##### <span id="installenv.1">1.安装 .NET</span>
-  
   - 该项目，是基于 .NET8 来开发。因此，需要在开发环境中，安装好 [**.NET8+**](https://dotnet.microsoft.com/zh-cn/download)
   - 同时，Luban 配置工具也是基于 .NET 来开发的。因此，.NET 的环境在接下来的环节中，非常重要，请确保 .NET 开发环境成功配置
-
 ---
-
 #### <span id="projectdire">项目结构</span>
-
 ```text
 ├─Assets
 │  ├─GameRes
