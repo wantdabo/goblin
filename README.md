@@ -10,6 +10,7 @@
 - [1.快速开始](#qstart)
 - [2.环境配置](#installenv)
   - [1.安装 .NET](#installenv.1)
+  - [2.安装 Unity](#installenv.2)
 ### [项目结构](#projectdire)
 ---
 ### TODO
@@ -29,8 +30,10 @@
 - 3.此时，如果上述步骤，顺利完成。使用 Unity 打开此项目即可
 #### <span id="installenv">2.环境配置</span>
 - ##### <span id="installenv.1">1.安装 .NET</span>
-  - 该项目，是基于 .NET8 来开发。因此，需要在开发环境中，安装好 [**.NET8+**](https://dotnet.microsoft.com/zh-cn/download)
-  - 同时，Luban 配置工具也是基于 .NET 来开发的。因此，.NET 的环境在接下来的环节中，非常重要，请确保 .NET 开发环境成功配置
+  - 该项目，Luban 配置工具依赖，需要安装 [**.NET8+**](https://dotnet.microsoft.com/zh-cn/download)
+  - 同时，Luban 配置工具，以及配套的第三方插件，也是基于 .NET 来开发或调用。因此，.NET 的环境在接下来的环节中，非常重要，请确保 .NET 开发环境成功配置
+- ##### <span id="installenv.2">2.安装 Unity</span>
+  - 该项目，是基于 Unity 来开发。因此，需要在开发环境中，安装好 [**Unity**](https://unity.com) 推荐 Unity 2021+ 版本
 ---
 #### <span id="projectdire">项目结构</span>
 ```text
