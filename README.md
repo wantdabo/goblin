@@ -53,8 +53,8 @@
   
   - 该项目，是基于 .NET8 来开发。因此，需要在开发环境中，安装好 [**.NET8+**](https://dotnet.microsoft.com/zh-cn/download)
   - 同时，Luban 配置工具也是基于 .NET 来开发的。因此，.NET 的环境在接下来的环节中，非常重要，请确保 .NET 开发环境成功配置
-  
-  ---
+
+---
 
 #### <span id="projectdire">项目结构</span>
 
@@ -74,10 +74,10 @@
 └─ProjectSettings
 ```
 
-- **Asset/GameRes**  动态加载资源的目录，包含但不限，图集、贴图、预制体、场景
-- **Asset/Plugins**  第三方插件库
-- **Asset/Scripts**  业务逻辑代码
-- **Asset/UERes** Unity 的资源，例如，Texture、Mesh、Material、编辑器的中间配置
-- **Configs** 配置表，使用方式，请参考 [Luban](https://github.com/focus-creative-games/luban)
-- **Packages** Unity 的包引用
-- **ProjectSettings** Unity 项目设置
+- **Asset/GameRes/**  动态加载资源的目录，包含但不限，图集、贴图、预制体、场景
+- **Asset/Plugins/**  第三方插件库
+- **Asset/Scripts/**  业务逻辑代码
+- **Asset/UERes/** Unity 的资源，例如，Texture、Mesh、Material、编辑器的中间配置
+- **Configs/** 配置表，使用方式，请参考 [Luban](https://github.com/focus-creative-games/luban)
+- **Packages/** Unity 的包引用
+- **ProjectSettings/** Unity 项目设置
