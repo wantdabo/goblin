@@ -36,16 +36,22 @@ namespace Queen.Protocols.Common
         {
             msg = null;
             msgType = null;
-            byte[] header = new byte[INT32_LEN];
-            byte[] data = new byte[bytes.Length - INT32_LEN];
-            Array.Copy(bytes, header, INT32_LEN);
-            Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
-
-            var msgId = BitConverter.ToUInt32(header);
-            if (false == messageIds.TryGetValue(msgId, out msgType)) return false;
-
-            msgType = messageIds[msgId];
-            msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
+            try
+            {
+                byte[] header = new byte[INT32_LEN];
+                byte[] data = new byte[bytes.Length - INT32_LEN];
+                Array.Copy(bytes, header, INT32_LEN);
+                Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
+                var msgId = BitConverter.ToUInt32(header);
+                if (false == messageDict.TryGetValue(msgId, out msgType)) return false;
+                
+                msgType = messageDict[msgId];
+                msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -60,7 +66,7 @@ namespace Queen.Protocols.Common
         public static bool Pack<T>(T msg, out byte[]? bytes) where T : INetMessage
         {
             bytes = null;
-            var kv = messageIds.FirstOrDefault((kv) => kv.Value == msg.GetType());
+            var kv = messageDict.FirstOrDefault((kv) => kv.Value == msg.GetType());
             if (null == kv.Value) return false;
             var header = BitConverter.GetBytes(kv.Key);
             var data = MessagePackSerializer.Serialize(msg);

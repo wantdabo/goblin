@@ -8,7 +8,7 @@ namespace Queen.Protocols.Common
         /// <summary>
         /// 协议号定义
         /// </summary>
-        private static Dictionary<uint, Type> messageIds = new()
+        private static Dictionary<uint, Type> messageDict = new()
         {
             { 10001, typeof(Queen.Protocols.S2C_GameInfoMsg)},
             { 10002, typeof(Queen.Protocols.C2SLogoutMsg)},
