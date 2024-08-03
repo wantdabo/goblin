@@ -50,9 +50,21 @@ namespace Goblin.Core
         public virtual void Destroy()
         {
             if (destroyed) return;
-
-            OnDestroy();
             destroyed = true;
+            
+            parent.RmvComp(this);
+            if (null != compList)
+            {
+                for (int i = compList.Count - 1; i >= 0; i--)
+                {
+                    var comp = compList[i];
+                    RmvComp(comp);
+                    comp.Destroy();
+                }
+                compList.Clear();
+                compDict.Clear();
+            }
+            OnDestroy();
         }
 
         protected virtual void OnCreate()
@@ -61,17 +73,7 @@ namespace Goblin.Core
 
         protected virtual void OnDestroy()
         {
-            parent.RmvComp(this);
 
-            if (null == compList) return;
-            for (int i = compList.Count - 1; i >= 0; i--)
-            {
-                var comp = compList[i];
-                RmvComp(comp);
-                comp.Destroy();
-            }
-            compList.Clear();
-            compDict.Clear();
         }
 
         /// <summary>
