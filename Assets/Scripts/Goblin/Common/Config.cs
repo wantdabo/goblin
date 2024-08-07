@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Bright.Serialization;
 using Goblin.Core;
+using Luban;
 using UnityEngine;
 
 namespace Goblin.Common

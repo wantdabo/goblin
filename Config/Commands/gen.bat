@@ -1,12 +1,14 @@
-set GEN_CLIENT=../Tools/Luban.ClientServer/Luban.ClientServer.dll
+set LUBAN_DLL=../Tools/Luban/Luban.dll
 set GEN_CONFIG_CS_DIR=../Cfg/CS
 set GEN_CONFIG_Bytes_DIR=../Cfg/Bytes
+set CONF_ROOT=../
 
-dotnet %GEN_CLIENT% -j cfg --^
- -d ../Defines/__root__.xml ^
- --input_data_dir ../Datas ^
- --output_code_dir %GEN_CONFIG_CS_DIR% ^
- --output_data_dir %GEN_CONFIG_Bytes_DIR% ^
- --gen_types code_cs_bin,data_bin ^
- -s all
- pause
+dotnet %LUBAN_DLL% ^
+    -t all ^
+    -c cs-bin ^
+    -d bin ^
+    --conf %CONF_ROOT%/luban.conf ^
+    -x outputCodeDir=%GEN_CONFIG_CS_DIR% ^
+    -x outputDataDir=%GEN_CONFIG_Bytes_DIR%
+
+pause
