@@ -89,7 +89,7 @@ namespace Goblin.Sys.Common
             var canvasScaler = engine.u3dkit.GetNode<CanvasScaler>(uiroot);
             // 如果小于设计宽高比，匹配宽，反之，匹配高
             canvasScaler.matchWidthOrHeight = (float)Screen.width / Screen.height < (canvasScaler.referenceResolution.x / canvasScaler.referenceResolution.y) ? 0 : 1;
-            
+
             // 批量生成 UILayer
             foreach (var name in Enum.GetNames(typeof(UILayer)))
             {
@@ -169,7 +169,7 @@ namespace Goblin.Sys.Common
         /// </summary>
         /// <typeparam name="T">界面类型</typeparam>
         /// <returns>UI 界面</returns>
-        public async Task<T> Load<T>() where T : UIBaseView, new()
+        public T Load<T>() where T : UIBaseView, new()
         {
             var view = Get<T>();
             if (null != view) return view;
@@ -177,7 +177,7 @@ namespace Goblin.Sys.Common
             view = AddComp<T>();
             view.Create();
             viewDict.Add(typeof(T), view);
-            await view.Load();
+            view.Load();
 
             return view;
         }
@@ -231,16 +231,12 @@ namespace Goblin.Sys.Common
         /// 打开 UI 界面
         /// </summary>
         /// <typeparam name="T">界面类型</typeparam>
-        /// <param name="autoload">自动加载</param>
-        public async void Open<T>(bool autoload = true) where T : UIBaseView, new()
+        /// <param name="param">传参</param>
+        public void Open<T>(params object[] param) where T : UIBaseView, new()
         {
             var view = Get<T>();
-            if (null == view)
-            {
-                if (false == autoload) return;
-                view = await Load<T>();
-            }
-            view.Open();
+            if (null == view) view = Load<T>();
+            view.Open(param);
         }
 
         /// <summary>
@@ -267,6 +263,17 @@ namespace Goblin.Sys.Common
 
             view.Close();
             if (autounload) Unload(type);
+        }
+        
+        /// <summary>
+        /// 关闭 UI 界面
+        /// </summary>
+        /// <param name="view">View</param>
+        /// <param name="autounload">是否自动卸载</param>
+        /// <typeparam name="T">界面类型</typeparam>
+        public void Close<T>(T view, bool autounload = true) where T : UIBaseView
+        {
+            Close(view.GetType(), autounload);
         }
 
         /// <summary>

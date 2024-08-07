@@ -67,13 +67,18 @@ namespace Goblin.Sys.Common
         }
 
         /// <summary>
+        /// 参数
+        /// </summary>
+        protected object[] param;
+
+        /// <summary>
         /// 加载 UI
         /// </summary>
         /// <returns>返回 UI</returns>
-        public async Task<UIBaseView> Load()
+        public UIBaseView Load()
         {
             state = UIState.Loading;
-            gameObject = await engine.gameres.location.LoadUIPrefabAsync(res, engine.gameui.GetLayerNode(layer).transform);
+            gameObject = engine.gameres.location.LoadUIPrefabSync(res, engine.gameui.GetLayerNode(layer).transform);
 
             canvas = gameObject.GetComponent<Canvas>();
             sorting = mSorting;
@@ -91,8 +96,9 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// 打开 UI
         /// </summary>
-        public void Open()
+        public void Open(params object[] param)
         {
+            this.param = param;
             if (UIState.Loading == state) return;
             if (UIState.Open == state) Close();
 
