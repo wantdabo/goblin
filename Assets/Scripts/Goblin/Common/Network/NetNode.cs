@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
@@ -33,7 +34,7 @@ namespace Goblin.Common.Network
             /// </summary>
             public INetMessage msg;
         }
-        
+
         /// <summary>
         /// 消息回调接口
         /// </summary>
@@ -45,7 +46,7 @@ namespace Goblin.Common.Network
             /// <param name="msg">消息</param>
             void Invoke(object msg);
         }
-        
+
         /// <summary>
         /// 消息回调代理类
         /// </summary>
@@ -58,7 +59,7 @@ namespace Goblin.Common.Network
             {
                 this.action = action;
             }
-            
+
             public void Invoke(object msg)
             {
                 action.Invoke((T)msg);
@@ -79,17 +80,13 @@ namespace Goblin.Common.Network
         private ConcurrentQueue<NetPackage> netPackages = new();
 
         /// <summary>
-        /// ENet 线程
+        /// Socket 线程
         /// </summary>
-        private Thread thread;
+        private Thread thread { get; set; }
         /// <summary>
-        /// ENet.Host
+        /// 通信 Socket
         /// </summary>
-        private Host host;
-        /// <summary>
-        /// ENet.Peer
-        /// </summary>
-        private Peer peer;
+        private TcpClient socket { get; set; }
         /// <summary>
         /// 服务器 IP
         /// </summary>
@@ -99,21 +96,13 @@ namespace Goblin.Common.Network
         /// </summary>
         public ushort port { get; private set; }
         /// <summary>
-        /// ENet 轮询超时时间
-        /// </summary>
-        public int timeout { get; private set; }
-        /// <summary>
         /// 是否在运行中
         /// </summary>
         public bool running { get; private set; }
         /// <summary>
         /// 连接状态
         /// </summary>
-        public bool connected => PeerState.Connected == peer.State;
-        /// <summary>
-        /// 连接中
-        /// </summary>
-        public bool connecting => PeerState.Connecting == peer.State;
+        public bool connected => null != socket && socket.Connected;
         /// <summary>
         /// 网络延迟
         /// </summary>
@@ -142,7 +131,6 @@ namespace Goblin.Common.Network
         /// 记录每秒间隔上一次发送的数据量
         /// </summary>
         private ulong bytesSent = 0;
-
         /// <summary>
         /// PING 计时器 ID
         /// </summary>
@@ -159,7 +147,6 @@ namespace Goblin.Common.Network
             pingTimingId = engine.ticker.Timing((t) =>
             {
                 if (false == connected) return;
-
                 SendPing();
             }, 1f, -1);
 
@@ -167,53 +154,11 @@ namespace Goblin.Common.Network
             {
                 if (false == connected) return;
 
-                bytesRecvPerSeconds = peer.BytesReceived - bytesRecv;
-                bytesSentPerSeconds = peer.BytesSent - bytesSent;
-                bytesRecv = peer.BytesReceived;
-                bytesSent = peer.BytesSent;
+                // bytesRecvPerSeconds = peer.BytesReceived - bytesRecv;
+                // bytesSentPerSeconds = peer.BytesSent - bytesSent;
+                // bytesRecv = peer.BytesReceived;
+                // bytesSent = peer.BytesSent;
             }, 1, -1);
-
-            host = new Host();
-            host.Create();
-            thread = new Thread(() =>
-            {
-                while (true)
-                {
-                    if (host.CheckEvents(out var netEvent) <= 0)
-                        if (host.Service(timeout, out netEvent) <= 0)
-                            continue;
-
-                    switch (netEvent.Type)
-                    {
-                        case EventType.Connect:
-                            EnqueuePackage(typeof(NodeConnectMsg), new NodeConnectMsg());
-                            break;
-                        case EventType.Disconnect:
-                            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
-                            break;
-                        case EventType.Timeout:
-                            EnqueuePackage(typeof(NodeTimeoutMsg), new NodeTimeoutMsg());
-                            peer.DisconnectNow(0);
-                            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
-                            break;
-                        case EventType.Receive:
-                            var data = new byte[netEvent.Packet.Length];
-                            netEvent.Packet.CopyTo(data);
-                            netEvent.Packet.Dispose();
-                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) break;
-                            if (typeof(NodePingMsg) == msgType)
-                            {
-                                RecvPing(msg as NodePingMsg);
-                                break;
-                            }
-
-                            EnqueuePackage(msgType, msg);
-                            break;
-                    }
-                }
-            });
-            thread.IsBackground = true;
-            thread.Start();
 
             running = true;
         }
@@ -224,9 +169,6 @@ namespace Goblin.Common.Network
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             engine.ticker.StopTimer(pingTimingId);
             engine.ticker.StopTimer(bytesSRTimingId);
-            thread.Abort();
-            host.Flush();
-            host.Dispose();
             running = false;
         }
 
@@ -235,23 +177,59 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <param name="ip">地址</param>
         /// <param name="port">端口</param>
-        /// <param name="timeout">网络轮询时间（ms）</param>
-        public void Connect(string ip, ushort port, int timeout = 5)
+        public void Connect(string ip, ushort port)
         {
+            if (connected) return;
+
             rping = default;
             sping = default;
             bytesRecv = 0;
             bytesSent = 0;
             bytesRecvPerSeconds = 0;
             bytesSentPerSeconds = 0;
-
             this.ip = ip;
             this.port = port;
-            this.timeout = timeout;
-            var address = new Address();
-            address.SetIP(ip);
-            address.Port = port;
-            peer = host.Connect(address);
+
+            socket = new TcpClient();
+            socket.Connect(ip, port);
+            thread = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        if (false == connected) continue;
+                        var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
+                        for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
+                        if (buffer.Count >= 4)
+                        {
+                            psize[0] = buffer[0];
+                            psize[1] = buffer[1];
+                            psize[2] = buffer[2];
+                            psize[3] = buffer[3];
+                            var size = BitConverter.ToInt32(psize.ToArray()) + psize.Length;
+
+                            if (buffer.Count < size) continue;
+                            var data = buffer.GetRange(ProtoPack.INT32_LEN, size - ProtoPack.INT32_LEN).ToArray();
+                            buffer.RemoveRange(0, size);
+
+                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) continue;
+                            if (typeof(NodePingMsg) == msgType)
+                            {
+                                RecvPing(msg as NodePingMsg);
+                                continue;
+                            }
+
+                            EnqueuePackage(msgType, msg);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         /// <summary>
@@ -259,8 +237,9 @@ namespace Goblin.Common.Network
         /// </summary>
         public void Disconnect()
         {
-            if (false == connected && false == connecting) return;
-            peer.DisconnectNow(0);
+            if (false == connected) return;
+            if(thread.IsAlive) thread.Abort();
+            socket.Close();
             EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
         }
 
@@ -302,14 +281,14 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         public void Send<T>(T msg) where T : INetMessage
         {
-            if (false == connected && false == connecting) return;
-
+            if (false == connected) return;
             if (ProtoPack.Pack(msg, out var bytes))
             {
-                var packet = new Packet();
-                packet.Create(bytes, bytes.Length, PacketFlags.Reliable | PacketFlags.NoAllocate);
-                peer.Send(0, ref packet);
-                packet.Dispose();
+                var data = new byte[ProtoPack.INT32_LEN + bytes.Length];
+                var sizebs = BitConverter.GetBytes(bytes.Length);
+                Array.Copy(sizebs, 0, data, 0, sizebs.Length);
+                Array.Copy(bytes, 0, data, sizebs.Length, bytes.Length);
+                socket.GetStream().Write(data);
             }
         }
 
@@ -341,6 +320,18 @@ namespace Goblin.Common.Network
             }
         }
 
+        /// <summary>
+        /// 缓冲区
+        /// </summary>
+        private List<byte> buffer = new();
+        /// <summary>
+        /// bytes 读取区
+        /// </summary>
+        private byte[] readbytes = new byte[1024];
+        /// <summary>
+        /// 包尺寸
+        /// </summary>
+        private byte[] psize = new byte[ProtoPack.INT32_LEN];
         private void OnTick(TickEvent e)
         {
             Notify();

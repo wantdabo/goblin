@@ -23,7 +23,7 @@ namespace Queen.Protocols.Common
         /// <summary>
         /// 协议号长度
         /// </summary>
-        private static int INT32_LEN = 4;
+        public static int INT32_LEN = 4;
 
         /// <summary>
         /// 反序列化消息
