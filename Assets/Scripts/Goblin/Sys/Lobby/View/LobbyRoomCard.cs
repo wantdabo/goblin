@@ -58,7 +58,7 @@ namespace Goblin.Sys.Lobby.View
                     return;
                 }
 
-                var view = await engine.gameui.Load<LobbyRoomJoinView>();
+                var view = engine.gameui.Load<LobbyRoomJoinView>();
                 view.id = id;
                 view.Open();
             });
