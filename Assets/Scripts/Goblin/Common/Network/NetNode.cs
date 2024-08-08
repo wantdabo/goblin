@@ -1,5 +1,6 @@
 ﻿using ENet;
 using Goblin.Core;
+using Goblin.Sys.Other.View;
 using Queen.Protocols.Common;
 using Supyrb;
 using System;
@@ -191,45 +192,60 @@ namespace Goblin.Common.Network
             this.port = port;
 
             socket = new TcpClient();
-            socket.Connect(ip, port);
-            thread = new Thread(() =>
+            try
             {
-                try
+                socket.Connect(ip, port);
+                thread = new Thread(() =>
                 {
-                    while (true)
+                    try
                     {
-                        if (false == connected) continue;
-                        var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
-                        for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
-                        if (buffer.Count >= 4)
+                        while (true)
                         {
-                            psize[0] = buffer[0];
-                            psize[1] = buffer[1];
-                            psize[2] = buffer[2];
-                            psize[3] = buffer[3];
-                            var size = BitConverter.ToInt32(psize.ToArray()) + psize.Length;
-
-                            if (buffer.Count < size) continue;
-                            var data = buffer.GetRange(ProtoPack.INT32_LEN, size - ProtoPack.INT32_LEN).ToArray();
-                            buffer.RemoveRange(0, size);
-
-                            if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) continue;
-                            if (typeof(NodePingMsg) == msgType)
+                            if (false == connected) continue;
+                            var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
+                            for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
+                            if (buffer.Count >= 4)
                             {
-                                RecvPing(msg as NodePingMsg);
-                                continue;
-                            }
+                                psize[0] = buffer[0];
+                                psize[1] = buffer[1];
+                                psize[2] = buffer[2];
+                                psize[3] = buffer[3];
+                                var size = BitConverter.ToInt32(psize.ToArray()) + psize.Length;
 
-                            EnqueuePackage(msgType, msg);
+                                if (buffer.Count < size) continue;
+                                var data = buffer.GetRange(ProtoPack.INT32_LEN, size - ProtoPack.INT32_LEN).ToArray();
+                                buffer.RemoveRange(0, size);
+
+                                if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) continue;
+                                if (typeof(NodePingMsg) == msgType)
+                                {
+                                    RecvPing(msg as NodePingMsg);
+                                    continue;
+                                }
+
+                                EnqueuePackage(msgType, msg);
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                }
-            });
-            thread.IsBackground = true;
-            thread.Start();
+                    catch (Exception e)
+                    {
+                        socket.Close();
+                        socket.Dispose();
+                        socket = null;
+                        EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
+                    }
+                });
+                thread.IsBackground = true;
+                thread.Start();
+                EnqueuePackage(typeof(NodeConnectMsg), new NodeConnectMsg());
+            }
+            catch (Exception e)
+            {
+                engine.eventor.Tell(new MessageBlowEvent{ type = 2, desc = "服务器未响应，请检查网络."});
+                socket.Close();
+                socket.Dispose();
+                socket = null;
+            }
         }
 
         /// <summary>
@@ -238,8 +254,10 @@ namespace Goblin.Common.Network
         public void Disconnect()
         {
             if (false == connected) return;
-            if(thread.IsAlive) thread.Abort();
+            if (thread.IsAlive) thread.Abort();
             socket.Close();
+            socket.Dispose();
+            socket = null;
             EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
         }
 
