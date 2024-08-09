@@ -1,7 +1,7 @@
 # Goblin
 这是基于 Unity 开发的一套框架，支持网络游戏开发
 ### 大致全貌
-- TCP
+- TCP 通信
 - MessagePack 协议
 - Yooasset 资源管理
 - HybridCLR 代码热更
