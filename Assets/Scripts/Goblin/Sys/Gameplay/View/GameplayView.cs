@@ -54,7 +54,6 @@ namespace Goblin.Sys.Gameplay.View
             descText.text = $"<color=#C3F002>PRESS KEY 'Q' TO EXIT</color>\n\n" +
                 $"GAMEPLAY INFO\n" +
                 $"PING : {engine.proxy.gameplay.stage.net.ping} MS\n" +
-                $"UPLOAD : {engine.proxy.gameplay.stage.net.bytesSentPerSeconds / 1024f} KB /S \tDOWNLOAD : {engine.proxy.gameplay.stage.net.bytesRecvPerSeconds / 1024f} KB /S\n" +
                 $"FRAME : {engine.proxy.gameplay.stage.frame} / {engine.proxy.gameplay.stage.mframe}";
         }
     }

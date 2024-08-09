@@ -117,29 +117,9 @@ namespace Goblin.Common.Network
         /// </summary>
         private long rping;
         /// <summary>
-        /// 每秒接收数据
-        /// </summary>
-        public ulong bytesRecvPerSeconds { get; private set; }
-        /// <summary>
-        /// 每秒发送数据
-        /// </summary>
-        public ulong bytesSentPerSeconds { get; private set; }
-        /// <summary>
-        /// 记录每秒间隔上一次接收的数据量
-        /// </summary>
-        private ulong bytesRecv = 0;
-        /// <summary>
-        /// 记录每秒间隔上一次发送的数据量
-        /// </summary>
-        private ulong bytesSent = 0;
-        /// <summary>
         /// PING 计时器 ID
         /// </summary>
         private uint pingTimingId;
-        /// <summary>
-        /// 计算每秒收发数据量的计时器 ID
-        /// </summary>
-        private uint bytesSRTimingId;
 
         protected override void OnCreate()
         {
@@ -151,16 +131,6 @@ namespace Goblin.Common.Network
                 SendPing();
             }, 1f, -1);
 
-            bytesSRTimingId = engine.ticker.Timing((t) =>
-            {
-                if (false == connected) return;
-
-                // bytesRecvPerSeconds = peer.BytesReceived - bytesRecv;
-                // bytesSentPerSeconds = peer.BytesSent - bytesSent;
-                // bytesRecv = peer.BytesReceived;
-                // bytesSent = peer.BytesSent;
-            }, 1, -1);
-
             running = true;
         }
 
@@ -169,7 +139,6 @@ namespace Goblin.Common.Network
             base.OnDestroy();
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             engine.ticker.StopTimer(pingTimingId);
-            engine.ticker.StopTimer(bytesSRTimingId);
             running = false;
         }
 
@@ -184,10 +153,6 @@ namespace Goblin.Common.Network
 
             rping = default;
             sping = default;
-            bytesRecv = 0;
-            bytesSent = 0;
-            bytesRecvPerSeconds = 0;
-            bytesSentPerSeconds = 0;
             this.ip = ip;
             this.port = port;
 
