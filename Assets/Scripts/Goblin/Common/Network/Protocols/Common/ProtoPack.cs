@@ -13,7 +13,9 @@ namespace Queen.Protocols.Common
     /// <summary>
     /// 消息结构接口
     /// </summary>
-    public interface INetMessage { }
+    public interface INetMessage
+    {
+    }
 
     /// <summary>
     /// 协议序列化
@@ -38,11 +40,11 @@ namespace Queen.Protocols.Common
             msgType = null;
             try
             {
-                byte[] header = new byte[INT32_LEN];
+                byte[] proto = new byte[INT32_LEN];
                 byte[] data = new byte[bytes.Length - INT32_LEN];
-                Array.Copy(bytes, header, INT32_LEN);
+                Array.Copy(bytes, proto, INT32_LEN);
                 Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
-                var msgId = BitConverter.ToUInt32(header);
+                var msgId = BitConverter.ToUInt32(proto);
                 if (false == messageDict.TryGetValue(msgId, out msgType)) return false;
                 
                 msgType = messageDict[msgId];
@@ -68,11 +70,11 @@ namespace Queen.Protocols.Common
             bytes = null;
             var kv = messageDict.FirstOrDefault((kv) => kv.Value == msg.GetType());
             if (null == kv.Value) return false;
-            var header = BitConverter.GetBytes(kv.Key);
+            var proto = BitConverter.GetBytes(kv.Key);
             var data = MessagePackSerializer.Serialize(msg);
-            bytes = new byte[header.Length + data.Length];
-            Array.Copy(header, 0, bytes, 0, header.Length);
-            Array.Copy(data, 0, bytes, header.Length, data.Length);
+            bytes = new byte[proto.Length + data.Length];
+            Array.Copy(proto, 0, bytes, 0, proto.Length);
+            Array.Copy(data, 0, bytes, proto.Length, data.Length);
 
             return true;
         }
@@ -83,8 +85,8 @@ namespace Queen.Protocols.Common
         static ProtoPack()
         {
             StaticCompositeResolver.Instance.Register(
-                 GeneratedResolver.Instance,
-                 StandardResolver.Instance
+                GeneratedResolver.Instance,
+                StandardResolver.Instance
             );
 
             var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);

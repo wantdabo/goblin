@@ -12,7 +12,7 @@ namespace Goblin.Sys.Login
         /// <summary>
         /// 玩家 ID
         /// </summary>
-        public string pid { get; set; }
+        public string uuid { get; set; }
         /// <summary>
         /// 登录状态
         /// </summary>

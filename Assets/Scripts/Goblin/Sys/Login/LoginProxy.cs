@@ -1,6 +1,5 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
-using Goblin.Sys.Gameplay.View;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Login.View;
 using Goblin.Sys.Other.View;
@@ -66,7 +65,7 @@ namespace Goblin.Sys.Login
         /// </summary>
         public void C2SLogout()
         {
-            engine.net.Send(new C2SLogoutMsg { pid = data.pid });
+            engine.net.Send(new C2SLogoutMsg { uuid = data.uuid });
         }
 
         /// <summary>
@@ -85,7 +84,7 @@ namespace Goblin.Sys.Login
             {
                 eventor.Tell<LoginEvent>();
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
-                data.pid = msg.pid;
+                data.uuid = msg.uuid;
                 data.signined = true;
             }
             else if (2 == msg.code)
@@ -104,7 +103,7 @@ namespace Goblin.Sys.Login
             {
                 eventor.Tell<LogoutEvent>();
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户登出." });
-                data.pid = null;
+                data.uuid = null;
                 data.signined = false;
                 engine.gameui.QuickClose();
             }
@@ -115,7 +114,7 @@ namespace Goblin.Sys.Login
             else if (3 == msg.code)
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
-                data.pid = null;
+                data.uuid = null;
                 data.signined = false;
                 engine.gameui.QuickClose();
             }
@@ -142,7 +141,7 @@ namespace Goblin.Sys.Login
         {
             if(data.signined) engine.gameui.QuickClose();
             engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "强制登出，连接断开." : "连接断开." });
-            data.pid = null;
+            data.uuid = null;
             data.signined = false;
         }
     }
