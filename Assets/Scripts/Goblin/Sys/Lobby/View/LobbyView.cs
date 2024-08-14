@@ -1,6 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
 using Goblin.Sys.Other.View;
+using Queen.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,11 @@ namespace Goblin.Sys.Lobby.View
             AddUIEventListener("LogoutBtn", (e) =>
             {
                 engine.proxy.login.C2SLogout();
+            });
+
+            AddUIEventListener("TestBtn", (e) =>
+            {
+                engine.net.Send(new C2STestMsg { content = "Hello" });
             });
         }
     }

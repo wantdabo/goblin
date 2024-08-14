@@ -104,33 +104,11 @@ namespace Goblin.Common.Network
         /// 连接状态
         /// </summary>
         public bool connected => null != socket && socket.Connected;
-        /// <summary>
-        /// 网络延迟
-        /// </summary>
-        public long ping { get; private set; }
-        /// <summary>
-        /// 发送检测包计时
-        /// </summary>
-        private long sping;
-        /// <summary>
-        /// 接收检测包计时
-        /// </summary>
-        private long rping;
-        /// <summary>
-        /// PING 计时器 ID
-        /// </summary>
-        private uint pingTimingId;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
-            pingTimingId = engine.ticker.Timing((t) =>
-            {
-                if (false == connected) return;
-                SendPing();
-            }, 1f, -1);
-
             running = true;
         }
 
@@ -138,7 +116,6 @@ namespace Goblin.Common.Network
         {
             base.OnDestroy();
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
-            engine.ticker.StopTimer(pingTimingId);
             running = false;
         }
 
@@ -151,8 +128,6 @@ namespace Goblin.Common.Network
         {
             if (connected) return;
 
-            rping = default;
-            sping = default;
             this.ip = ip;
             this.port = port;
 
@@ -182,11 +157,6 @@ namespace Goblin.Common.Network
                                 buffer.RemoveRange(0, size);
 
                                 if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) continue;
-                                if (typeof(NodePingMsg) == msgType)
-                                {
-                                    RecvPing(msg as NodePingMsg);
-                                    continue;
-                                }
 
                                 EnqueuePackage(msgType, msg);
                             }
@@ -315,30 +285,10 @@ namespace Goblin.Common.Network
         /// 包尺寸
         /// </summary>
         private byte[] psize = new byte[ProtoPack.INT32_LEN];
+        
         private void OnTick(TickEvent e)
         {
             Notify();
         }
-
-        #region PING
-        /// <summary>
-        /// 发送延迟检测
-        /// </summary>
-        private void SendPing()
-        {
-            sping = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            Send(new NodePingMsg());
-        }
-
-        /// <summary>
-        /// 接收服务器返回的延迟检测包
-        /// </summary>
-        /// <param name="msg">消息</param>
-        private void RecvPing(NodePingMsg msg)
-        {
-            rping = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            ping = rping - sping;
-        }
-        #endregion
     }
 }

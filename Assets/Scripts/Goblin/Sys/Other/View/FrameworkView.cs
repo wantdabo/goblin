@@ -107,9 +107,6 @@ namespace Goblin.Sys.Other.View
             connectBtnGo.SetActive(false == engine.net.connected);
             disconnectBtnGo.SetActive(engine.net.connected);
             connectStateText.text = engine.net.connected ? "<color=#C3F002>CONNECTED</color>" : "<color=#D93500>DISCONNECTED</color>";
-
-            var ping = engine.net.connected ? $"PING : {engine.net.ping} MS" : "";
-            engine.u3dkit.SeekNode<Text>(gameObject, "Ping").text = ping;
         }
     }
 }
