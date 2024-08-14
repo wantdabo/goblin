@@ -141,10 +141,7 @@ namespace Goblin.Common.Network
                     {
                         while (true)
                         {
-                            if (false == connected) continue;
-                            var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
-                            for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
-                            if (buffer.Count >= 4)
+                            while (buffer.Count >= ProtoPack.INT32_LEN)
                             {
                                 psize[0] = buffer[0];
                                 psize[1] = buffer[1];
@@ -152,14 +149,18 @@ namespace Goblin.Common.Network
                                 psize[3] = buffer[3];
                                 var size = BitConverter.ToInt32(psize.ToArray()) + psize.Length;
 
-                                if (buffer.Count < size) continue;
+                                if (buffer.Count < size) break;
                                 var data = buffer.GetRange(ProtoPack.INT32_LEN, size - ProtoPack.INT32_LEN).ToArray();
                                 buffer.RemoveRange(0, size);
 
-                                if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) continue;
+                                if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) break;
 
                                 EnqueuePackage(msgType, msg);
                             }
+
+                            if (false == connected) continue;
+                            var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
+                            for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
                         }
                     }
                     catch (Exception e)
