@@ -79,6 +79,7 @@ namespace Queen.Protocols.Common
             return true;
         }
 
+#if GOBLIN
         /// <summary>
         /// 初始化自定义解析器
         /// </summary>
@@ -92,5 +93,6 @@ namespace Queen.Protocols.Common
             var option = MessagePackSerializerOptions.Standard.WithResolver(StaticCompositeResolver.Instance);
             MessagePackSerializer.DefaultOptions = option;
         }
+#endif
     }
 }
