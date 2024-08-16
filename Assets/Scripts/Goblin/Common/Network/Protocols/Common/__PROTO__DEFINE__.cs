@@ -8,7 +8,7 @@ namespace Queen.Protocols.Common
         /// <summary>
         /// 协议号定义
         /// </summary>
-        private static Dictionary<uint, Type> messageDict = new()
+        private static Dictionary<ushort, Type> messageDict = new()
         {
             { 10001, typeof(Queen.Protocols.C2SLogoutMsg)},
             { 10002, typeof(Queen.Protocols.C2SLoginMsg)},
@@ -18,7 +18,8 @@ namespace Queen.Protocols.Common
             { 10006, typeof(Queen.Protocols.S2CRegisterMsg)},
             { 10007, typeof(Queen.Protocols.C2STestMsg)},
             { 10008, typeof(Queen.Protocols.S2CTestMsg)},
-            { 10009, typeof(Queen.Protocols.Common.NodePingMsg)},
+            { 10009, typeof(Queen.Protocols.Common.NodeErrorMsg)},
+            { 10010, typeof(Queen.Protocols.Common.NodePingMsg)},
         };
     }
 }

@@ -23,9 +23,14 @@ namespace Queen.Protocols.Common
     public partial class ProtoPack
     {
         /// <summary>
-        /// 协议号长度
+        /// UInt16 字节数量
         /// </summary>
-        public static int INT32_LEN = 4;
+        public static byte UINT16_LEN = 2;
+        
+        /// <summary>
+        /// Int32 字节数量
+        /// </summary>
+        public static byte INT32_LEN = 4;
 
         /// <summary>
         /// 反序列化消息
@@ -40,11 +45,11 @@ namespace Queen.Protocols.Common
             msgType = null;
             try
             {
-                byte[] proto = new byte[INT32_LEN];
-                byte[] data = new byte[bytes.Length - INT32_LEN];
-                Array.Copy(bytes, proto, INT32_LEN);
-                Array.Copy(bytes, INT32_LEN, data, 0, bytes.Length - INT32_LEN);
-                var msgId = BitConverter.ToUInt32(proto);
+                byte[] proto = new byte[UINT16_LEN];
+                byte[] data = new byte[bytes.Length - UINT16_LEN];
+                Array.Copy(bytes, proto, UINT16_LEN);
+                Array.Copy(bytes, UINT16_LEN, data, 0, bytes.Length - UINT16_LEN);
+                var msgId = BitConverter.ToUInt16(proto);
                 if (false == messageDict.TryGetValue(msgId, out msgType)) return false;
                 
                 msgType = messageDict[msgId];
