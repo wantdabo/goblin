@@ -14,10 +14,6 @@ namespace Queen.Protocols
     [MessagePackObject(true)]
     public class C2SLogoutMsg : INetMessage
     {
-        /// <summary>
-        /// 玩家 ID
-        /// </summary>
-        public string uuid { get; set; }
     }
 
     /// <summary>
@@ -62,10 +58,6 @@ namespace Queen.Protocols
         /// 操作码/ 1 登出成功，2 该用户未登录，3 被顶号了
         /// </summary>
         public int code { get; set; }
-        /// <summary>
-        /// 玩家 ID
-        /// </summary>
-        public string uuid { get; set; }
     }
 
     /// <summary>

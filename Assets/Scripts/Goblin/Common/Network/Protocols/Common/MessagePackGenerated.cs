@@ -181,9 +181,6 @@ namespace MessagePack.Formatters.Queen.Protocols
 
     public sealed class C2SLogoutMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.C2SLogoutMsg>
     {
-        // uuid
-        private static global::System.ReadOnlySpan<byte> GetSpan_uuid() => new byte[1 + 4] { 164, 117, 117, 105, 100 };
-
         public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.C2SLogoutMsg value, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (value is null)
@@ -192,10 +189,7 @@ namespace MessagePack.Formatters.Queen.Protocols
                 return;
             }
 
-            var formatterResolver = options.Resolver;
-            writer.WriteMapHeader(1);
-            writer.WriteRaw(GetSpan_uuid());
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.uuid, options);
+            writer.WriteMapHeader(0);
         }
 
         public global::Queen.Protocols.C2SLogoutMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -205,30 +199,8 @@ namespace MessagePack.Formatters.Queen.Protocols
                 return null;
             }
 
-            options.Security.DepthStep(ref reader);
-            var formatterResolver = options.Resolver;
-            var length = reader.ReadMapHeader();
+            reader.Skip();
             var ____result = new global::Queen.Protocols.C2SLogoutMsg();
-
-            for (int i = 0; i < length; i++)
-            {
-                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
-                switch (stringKey.Length)
-                {
-                    default:
-                    FAIL:
-                      reader.Skip();
-                      continue;
-                    case 4:
-                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1684632949UL) { goto FAIL; }
-
-                        ____result.uuid = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
-                        continue;
-
-                }
-            }
-
-            reader.Depth--;
             return ____result;
         }
     }
@@ -419,8 +391,6 @@ namespace MessagePack.Formatters.Queen.Protocols
     {
         // code
         private static global::System.ReadOnlySpan<byte> GetSpan_code() => new byte[1 + 4] { 164, 99, 111, 100, 101 };
-        // uuid
-        private static global::System.ReadOnlySpan<byte> GetSpan_uuid() => new byte[1 + 4] { 164, 117, 117, 105, 100 };
 
         public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.S2CLogoutMsg value, global::MessagePack.MessagePackSerializerOptions options)
         {
@@ -430,12 +400,9 @@ namespace MessagePack.Formatters.Queen.Protocols
                 return;
             }
 
-            var formatterResolver = options.Resolver;
-            writer.WriteMapHeader(2);
+            writer.WriteMapHeader(1);
             writer.WriteRaw(GetSpan_code());
             writer.Write(value.code);
-            writer.WriteRaw(GetSpan_uuid());
-            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.uuid, options);
         }
 
         public global::Queen.Protocols.S2CLogoutMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -446,7 +413,6 @@ namespace MessagePack.Formatters.Queen.Protocols
             }
 
             options.Security.DepthStep(ref reader);
-            var formatterResolver = options.Resolver;
             var length = reader.ReadMapHeader();
             var ____result = new global::Queen.Protocols.S2CLogoutMsg();
 
@@ -460,16 +426,10 @@ namespace MessagePack.Formatters.Queen.Protocols
                       reader.Skip();
                       continue;
                     case 4:
-                        switch (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey))
-                        {
-                            default: goto FAIL;
-                            case 1701080931UL:
-                                ____result.code = reader.ReadInt32();
-                                continue;
-                            case 1684632949UL:
-                                ____result.uuid = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
-                                continue;
-                        }
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 1701080931UL) { goto FAIL; }
+
+                        ____result.code = reader.ReadInt32();
+                        continue;
 
                 }
             }

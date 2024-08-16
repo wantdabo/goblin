@@ -65,7 +65,7 @@ namespace Goblin.Sys.Login
         /// </summary>
         public void C2SLogout()
         {
-            engine.net.Send(new C2SLogoutMsg { uuid = data.uuid });
+            engine.net.Send(new C2SLogoutMsg { });
         }
 
         /// <summary>
