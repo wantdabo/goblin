@@ -48,7 +48,7 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(10)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(11)
             {
                 { typeof(global::Queen.Protocols.C2SLoginMsg), 0 },
                 { typeof(global::Queen.Protocols.C2SLogoutMsg), 1 },
@@ -56,10 +56,11 @@ namespace MessagePack.Resolvers
                 { typeof(global::Queen.Protocols.C2STestMsg), 3 },
                 { typeof(global::Queen.Protocols.Common.NodeErrorMsg), 4 },
                 { typeof(global::Queen.Protocols.Common.NodePingMsg), 5 },
-                { typeof(global::Queen.Protocols.S2CLoginMsg), 6 },
-                { typeof(global::Queen.Protocols.S2CLogoutMsg), 7 },
-                { typeof(global::Queen.Protocols.S2CRegisterMsg), 8 },
-                { typeof(global::Queen.Protocols.S2CTestMsg), 9 },
+                { typeof(global::Queen.Protocols.S2CHeartbeatMsg), 6 },
+                { typeof(global::Queen.Protocols.S2CLoginMsg), 7 },
+                { typeof(global::Queen.Protocols.S2CLogoutMsg), 8 },
+                { typeof(global::Queen.Protocols.S2CRegisterMsg), 9 },
+                { typeof(global::Queen.Protocols.S2CTestMsg), 10 },
             };
         }
 
@@ -79,10 +80,11 @@ namespace MessagePack.Resolvers
                 case 3: return new MessagePack.Formatters.Queen.Protocols.C2STestMsgFormatter();
                 case 4: return new MessagePack.Formatters.Queen.Protocols.Common.NodeErrorMsgFormatter();
                 case 5: return new MessagePack.Formatters.Queen.Protocols.Common.NodePingMsgFormatter();
-                case 6: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
-                case 7: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
-                case 8: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
-                case 9: return new MessagePack.Formatters.Queen.Protocols.S2CTestMsgFormatter();
+                case 6: return new MessagePack.Formatters.Queen.Protocols.S2CHeartbeatMsgFormatter();
+                case 7: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
+                case 8: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
+                case 9: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
+                case 10: return new MessagePack.Formatters.Queen.Protocols.S2CTestMsgFormatter();
                 default: return null;
             }
         }
@@ -316,6 +318,58 @@ namespace MessagePack.Formatters.Queen.Protocols
                         if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 32772479322582883UL) { goto FAIL; }
 
                         ____result.content = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class S2CHeartbeatMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.S2CHeartbeatMsg>
+    {
+        // timestamp
+        private static global::System.ReadOnlySpan<byte> GetSpan_timestamp() => new byte[1 + 9] { 169, 116, 105, 109, 101, 115, 116, 97, 109, 112 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.S2CHeartbeatMsg value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            writer.WriteMapHeader(1);
+            writer.WriteRaw(GetSpan_timestamp());
+            writer.Write(value.timestamp);
+        }
+
+        public global::Queen.Protocols.S2CHeartbeatMsg Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.S2CHeartbeatMsg();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 9:
+                        if (!global::System.MemoryExtensions.SequenceEqual(stringKey, GetSpan_timestamp().Slice(1))) { goto FAIL; }
+
+                        ____result.timestamp = reader.ReadInt64();
                         continue;
 
                 }

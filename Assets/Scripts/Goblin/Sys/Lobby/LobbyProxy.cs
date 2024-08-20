@@ -17,14 +17,25 @@ namespace Goblin.Sys.Lobby
     /// </summary>
     public class LobbyProxy : Proxy<LobbyModel>
     {
+        /// <summary>
+        /// 时间戳
+        /// </summary>
+        public long timestamp { get; private set; }
+
         protected override void OnCreate()
         {
             base.OnCreate();
+            engine.net.Recv<S2CHeartbeatMsg>(OnHeartbeat);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+        }
+
+        private void OnHeartbeat(S2CHeartbeatMsg msg)
+        {
+            timestamp = msg.timestamp;
         }
     }
 }
