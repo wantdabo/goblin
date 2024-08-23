@@ -104,6 +104,19 @@ namespace Goblin.Common.Network
         /// 连接状态
         /// </summary>
         public bool connected => null != socket && socket.Connected;
+        
+        /// <summary>
+        /// 缓冲区
+        /// </summary>
+        private List<byte> buffer = new();
+        /// <summary>
+        /// bytes 读取区
+        /// </summary>
+        private byte[] readbytes = new byte[1024];
+        /// <summary>
+        /// 包尺寸
+        /// </summary>
+        private byte[] psize = new byte[ProtoPack.INT32_LEN];
 
         protected override void OnCreate()
         {
@@ -118,7 +131,7 @@ namespace Goblin.Common.Network
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             running = false;
         }
-
+        
         /// <summary>
         /// 连接
         /// </summary>
@@ -167,7 +180,6 @@ namespace Goblin.Common.Network
                     {
                         socket.Close();
                         socket.Dispose();
-                        socket = null;
                         EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
                     }
                 });
@@ -180,7 +192,6 @@ namespace Goblin.Common.Network
                 engine.eventor.Tell(new MessageBlowEvent{ type = 2, desc = "服务器未响应，请检查网络."});
                 socket.Close();
                 socket.Dispose();
-                socket = null;
             }
         }
 
@@ -193,7 +204,6 @@ namespace Goblin.Common.Network
             if (thread.IsAlive) thread.Abort();
             socket.Close();
             socket.Dispose();
-            socket = null;
             EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
         }
 
@@ -273,20 +283,7 @@ namespace Goblin.Common.Network
                 }
             }
         }
-
-        /// <summary>
-        /// 缓冲区
-        /// </summary>
-        private List<byte> buffer = new();
-        /// <summary>
-        /// bytes 读取区
-        /// </summary>
-        private byte[] readbytes = new byte[1024];
-        /// <summary>
-        /// 包尺寸
-        /// </summary>
-        private byte[] psize = new byte[ProtoPack.INT32_LEN];
-        
+      
         private void OnTick(TickEvent e)
         {
             Notify();
