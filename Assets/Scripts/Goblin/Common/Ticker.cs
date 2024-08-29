@@ -67,6 +67,21 @@ namespace Goblin.Common
         /// </summary>
         public float fixedTick;
     }
+    
+    /// <summary>
+    /// Tick 类型
+    /// </summary>
+    public enum TickType
+    {
+        /// <summary>
+        /// Tick 驱动
+        /// </summary>
+        Tick,
+        /// <summary>
+        /// Fixed 驱动
+        /// </summary>
+        FixedTick,
+    }
 
     /// <summary>
     /// Ticker, 逻辑层 Tick 驱动组件
@@ -149,7 +164,7 @@ namespace Goblin.Common
             tick = t * timeScale;
             frame++;
             // 驱动计时器
-            TickTimerInfos(TimerType.Tick, tick);
+            TickTimerInfos(TickType.Tick, tick);
             // 派发事件，时间流逝
             eventor.Tell(new TickEvent { frame = frame, tick = tick });
             eventor.Tell(new LateTickEvent { frame = frame, tick = tick });
@@ -172,7 +187,7 @@ namespace Goblin.Common
 
                 fixedFrame++;
                 // 驱动 Fixed 计时器
-                TickTimerInfos(TimerType.FixedTick, fixedTick);
+                TickTimerInfos(TickType.FixedTick, fixedTick);
                 // 派发事件，时间流逝
                 eventor.Tell(new FixedTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
                 eventor.Tell(new FixedLateTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
@@ -180,21 +195,6 @@ namespace Goblin.Common
         }
 
         #region Timer
-        /// <summary>
-        /// 计时器类型
-        /// </summary>
-        private enum TimerType
-        {
-            /// <summary>
-            /// Tick 驱动
-            /// </summary>
-            Tick,
-            /// <summary>
-            /// Fixed 驱动
-            /// </summary>
-            FixedTick,
-        }
-
         /// <summary>
         /// 计时器结构体
         /// </summary>
@@ -301,11 +301,11 @@ namespace Goblin.Common
 
         private List<TimerInfo> infoTemps = new();
         private List<uint> timerTemps = new();
-        private void TickTimerInfos(TimerType tt, float tick)
+        private void TickTimerInfos(TickType tt, float tick)
         {
-            var infos = TimerType.Tick == tt ? timerDict : fixedTimerDict;
-            var recyList = TimerType.Tick == tt ? recyTimers : recyFixedTimers;
-            Action<uint> stopTimerAction = TimerType.Tick == tt ?  StopTimer : StopFixedTimer;
+            var infos = TickType.Tick == tt ? timerDict : fixedTimerDict;
+            var recyList = TickType.Tick == tt ? recyTimers : recyFixedTimers;
+            Action<uint> stopTimerAction = TickType.Tick == tt ?  StopTimer : StopFixedTimer;
             while (recyList.TryDequeue(out var tid)) infos.Remove(tid);
             
             if (0 == infos.Count) return;
