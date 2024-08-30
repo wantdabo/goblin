@@ -27,10 +27,6 @@ namespace Goblin.Common.Parallel
         /// </summary>
         private readonly Queue<Coroutine> caches = new();
         /// <summary>
-        /// 安全移除协程对象列表的中介列表
-        /// </summary>
-        private readonly List<Coroutine> removes = new();
-        /// <summary>
         /// 协程对象列表
         /// </summary>
         private readonly List<Coroutine> coroutines = new();
@@ -52,7 +48,7 @@ namespace Goblin.Common.Parallel
             else if (TickType.FixedTick == tt)
                 ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
         }
-        
+
         /// <summary>
         /// 初始化参数
         /// </summary>
@@ -63,7 +59,7 @@ namespace Goblin.Common.Parallel
             this.tt = tt;
             this.ticker = ticker;
         }
-        
+
         /// <summary>
         /// 结束协程
         /// </summary>
@@ -74,7 +70,7 @@ namespace Goblin.Common.Parallel
             caches.Enqueue(coroutine);
             coroutines.Remove(coroutine);
         }
-        
+
         /// <summary>
         /// 开始协程
         /// </summary>
@@ -88,26 +84,24 @@ namespace Goblin.Common.Parallel
 
             return coroutine;
         }
-        
+
         /// <summary>
         /// 驱动
         /// </summary>
         /// <param name="tick">tick</param>
         public void Update(float tick)
         {
-            foreach (var coroutine in coroutines)
+            for (int i = coroutines.Count - 1; i >= 0; i--)
             {
+                var coroutine = coroutines[i];
                 if (false == coroutine.Ready())
                 {
                     coroutine.Update(tick);
                     continue;
                 }
 
-                if (false == coroutine.Execute()) removes.Add(coroutine);
+                if (false == coroutine.Execute()) Shutdown(coroutine);
             }
-
-            foreach (var coroutine in removes) Shutdown(coroutine);
-            removes.Clear();
         }
 
         private void OnTick(TickEvent e)
