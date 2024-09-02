@@ -24,6 +24,11 @@ namespace Goblin.Sys.Login
     /// 登出事件
     /// </summary>
     public struct LogoutEvent : IEvent { }
+    
+    /// <summary>
+    /// Role 加入成功后事件
+    /// </summary>
+    public struct RoleJoinedEvent : IEvent { }
 
     /// <summary>
     /// 登录
