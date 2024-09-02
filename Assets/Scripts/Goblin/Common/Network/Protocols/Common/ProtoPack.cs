@@ -26,7 +26,7 @@ namespace Queen.Protocols.Common
         /// UInt16 字节数量
         /// </summary>
         public static byte UINT16_LEN = 2;
-        
+
         /// <summary>
         /// Int32 字节数量
         /// </summary>
@@ -51,7 +51,7 @@ namespace Queen.Protocols.Common
                 Array.Copy(bytes, UINT16_LEN, data, 0, bytes.Length - UINT16_LEN);
                 var msgId = BitConverter.ToUInt16(proto);
                 if (false == messageDict.TryGetValue(msgId, out msgType)) return false;
-                
+
                 msgType = messageDict[msgId];
                 msg = MessagePackSerializer.Deserialize(msgType, data) as INetMessage;
             }

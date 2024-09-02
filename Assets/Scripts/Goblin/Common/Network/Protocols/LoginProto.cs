@@ -75,6 +75,14 @@ namespace Queen.Protocols
         /// </summary>
         public string uuid { get; set; }
     }
+    
+    /// <summary>
+    /// Role 初始化完成消息
+    /// </summary>
+    [MessagePackObject(true)]
+    public class S2CRoleJoinedMsg : INetMessage
+    {
+    }
 
     /// <summary>
     /// 响应注册消息

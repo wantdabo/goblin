@@ -38,6 +38,7 @@ namespace Goblin.Sys.Login
             engine.net.Recv<S2CLoginMsg>(OnS2CLogin);
             engine.net.Recv<S2CLogoutMsg>(OnS2CLogout);
             engine.net.Recv<S2CRegisterMsg>(OnS2CRegister);
+            engine.net.Recv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
         }
 
         protected override void OnDestroy()
@@ -48,6 +49,7 @@ namespace Goblin.Sys.Login
             engine.net.UnRecv<S2CLoginMsg>(OnS2CLogin);
             engine.net.UnRecv<S2CLogoutMsg>(OnS2CLogout);
             engine.net.UnRecv<S2CRegisterMsg>(OnS2CRegister);
+            engine.net.UnRecv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
         }
 
         /// <summary>
@@ -130,6 +132,11 @@ namespace Goblin.Sys.Login
             {
                 engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户已存在." });
             }
+        }
+
+        private void OnS2CRoleJoined(S2CRoleJoinedMsg msg)
+        {
+            eventor.Tell<RoleJoinedEvent>();
         }
 
         private void OnNodeConnect(NodeConnectMsg msg)
