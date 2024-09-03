@@ -1,7 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Common.FSM;
+using Goblin.Common.GameRes;
 using Goblin.Common.Network;
-using Goblin.Common.Res;
 using Goblin.Phases.Common;
 using Goblin.Sys.Common;
 using System;

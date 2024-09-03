@@ -1,13 +1,8 @@
 ﻿using Goblin.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Goblin.Common;
 using UnityEngine;
 
-namespace Goblin.Common.Res
+namespace Goblin.Common.GameRes
 {
     /// <summary>
     /// 资源加载定位器，加载框架包装定位资源地址

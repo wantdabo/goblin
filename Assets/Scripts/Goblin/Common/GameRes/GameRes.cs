@@ -1,15 +1,10 @@
-﻿using Goblin.Common.Res;
-using Goblin.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Goblin.Core;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using YooAsset;
 
-namespace Goblin.Common.Res
+namespace Goblin.Common.GameRes
 {
     /// <summary>
     /// GameRes 资源加载组件
