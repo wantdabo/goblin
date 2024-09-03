@@ -16,7 +16,7 @@ namespace Goblin.Common.Parallel
         /// <summary>
         /// 协程驱动器
         /// </summary>
-        private Scheduler scheduler { get; set; }
+        private CoroutineScheduler scheduler { get; set; }
         /// <summary>
         /// 逻辑分片
         /// </summary>
@@ -28,7 +28,7 @@ namespace Goblin.Common.Parallel
         /// <param name="id">协程 ID</param>
         /// <param name="scheduler">协程驱动</param>
         /// <param name="enumerator">逻辑分片</param>
-        public void Reset(uint id, Scheduler scheduler, IEnumerator<Instruction> enumerator)
+        public void Reset(uint id, CoroutineScheduler scheduler, IEnumerator<Instruction> enumerator)
         {
             this.id = id;
             this.scheduler = scheduler;

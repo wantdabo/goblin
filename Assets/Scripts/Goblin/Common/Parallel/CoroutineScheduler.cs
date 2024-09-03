@@ -8,7 +8,7 @@ namespace Goblin.Common.Parallel
     /// <summary>
     /// 协程驱动器
     /// </summary>
-    public class Scheduler : Comp
+    public class CoroutineScheduler : Comp
     {
         /// <summary>
         /// Tick 类型
