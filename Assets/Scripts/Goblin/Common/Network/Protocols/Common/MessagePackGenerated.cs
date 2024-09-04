@@ -48,22 +48,23 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(14)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(15)
             {
                 { typeof(global::Queen.Protocols.C2SLoginMsg), 0 },
                 { typeof(global::Queen.Protocols.C2SLogoutMsg), 1 },
                 { typeof(global::Queen.Protocols.C2SRegisterMsg), 2 },
                 { typeof(global::Queen.Protocols.C2STestMsg), 3 },
-                { typeof(global::Queen.Protocols.Common.NodeErrorMsg), 4 },
-                { typeof(global::Queen.Protocols.Common.NodePingMsg), 5 },
-                { typeof(global::Queen.Protocols.Common.ReqCrossMessage), 6 },
-                { typeof(global::Queen.Protocols.Common.ResCrossMessage), 7 },
-                { typeof(global::Queen.Protocols.S2CHeartbeatMsg), 8 },
-                { typeof(global::Queen.Protocols.S2CLoginMsg), 9 },
-                { typeof(global::Queen.Protocols.S2CLogoutMsg), 10 },
-                { typeof(global::Queen.Protocols.S2CRegisterMsg), 11 },
-                { typeof(global::Queen.Protocols.S2CRoleJoinedMsg), 12 },
-                { typeof(global::Queen.Protocols.S2CTestMsg), 13 },
+                { typeof(global::Queen.Protocols.Common.ACKCrossMessage), 4 },
+                { typeof(global::Queen.Protocols.Common.NodeErrorMsg), 5 },
+                { typeof(global::Queen.Protocols.Common.NodePingMsg), 6 },
+                { typeof(global::Queen.Protocols.Common.ReqCrossMessage), 7 },
+                { typeof(global::Queen.Protocols.Common.ResCrossMessage), 8 },
+                { typeof(global::Queen.Protocols.S2CHeartbeatMsg), 9 },
+                { typeof(global::Queen.Protocols.S2CLoginMsg), 10 },
+                { typeof(global::Queen.Protocols.S2CLogoutMsg), 11 },
+                { typeof(global::Queen.Protocols.S2CRegisterMsg), 12 },
+                { typeof(global::Queen.Protocols.S2CRoleJoinedMsg), 13 },
+                { typeof(global::Queen.Protocols.S2CTestMsg), 14 },
             };
         }
 
@@ -81,16 +82,17 @@ namespace MessagePack.Resolvers
                 case 1: return new MessagePack.Formatters.Queen.Protocols.C2SLogoutMsgFormatter();
                 case 2: return new MessagePack.Formatters.Queen.Protocols.C2SRegisterMsgFormatter();
                 case 3: return new MessagePack.Formatters.Queen.Protocols.C2STestMsgFormatter();
-                case 4: return new MessagePack.Formatters.Queen.Protocols.Common.NodeErrorMsgFormatter();
-                case 5: return new MessagePack.Formatters.Queen.Protocols.Common.NodePingMsgFormatter();
-                case 6: return new MessagePack.Formatters.Queen.Protocols.Common.ReqCrossMessageFormatter();
-                case 7: return new MessagePack.Formatters.Queen.Protocols.Common.ResCrossMessageFormatter();
-                case 8: return new MessagePack.Formatters.Queen.Protocols.S2CHeartbeatMsgFormatter();
-                case 9: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
-                case 10: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
-                case 11: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
-                case 12: return new MessagePack.Formatters.Queen.Protocols.S2CRoleJoinedMsgFormatter();
-                case 13: return new MessagePack.Formatters.Queen.Protocols.S2CTestMsgFormatter();
+                case 4: return new MessagePack.Formatters.Queen.Protocols.Common.ACKCrossMessageFormatter();
+                case 5: return new MessagePack.Formatters.Queen.Protocols.Common.NodeErrorMsgFormatter();
+                case 6: return new MessagePack.Formatters.Queen.Protocols.Common.NodePingMsgFormatter();
+                case 7: return new MessagePack.Formatters.Queen.Protocols.Common.ReqCrossMessageFormatter();
+                case 8: return new MessagePack.Formatters.Queen.Protocols.Common.ResCrossMessageFormatter();
+                case 9: return new MessagePack.Formatters.Queen.Protocols.S2CHeartbeatMsgFormatter();
+                case 10: return new MessagePack.Formatters.Queen.Protocols.S2CLoginMsgFormatter();
+                case 11: return new MessagePack.Formatters.Queen.Protocols.S2CLogoutMsgFormatter();
+                case 12: return new MessagePack.Formatters.Queen.Protocols.S2CRegisterMsgFormatter();
+                case 13: return new MessagePack.Formatters.Queen.Protocols.S2CRoleJoinedMsgFormatter();
+                case 14: return new MessagePack.Formatters.Queen.Protocols.S2CTestMsgFormatter();
                 default: return null;
             }
         }
@@ -665,6 +667,60 @@ namespace MessagePack.Formatters.Queen.Protocols
 
 namespace MessagePack.Formatters.Queen.Protocols.Common
 {
+    public sealed class ACKCrossMessageFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.Common.ACKCrossMessage>
+    {
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Queen.Protocols.Common.ACKCrossMessage value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            var formatterResolver = options.Resolver;
+            writer.WriteMapHeader(1);
+            writer.WriteRaw(GetSpan_id());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.id, options);
+        }
+
+        public global::Queen.Protocols.Common.ACKCrossMessage Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            var formatterResolver = options.Resolver;
+            var length = reader.ReadMapHeader();
+            var ____result = new global::Queen.Protocols.Common.ACKCrossMessage();
+
+            for (int i = 0; i < length; i++)
+            {
+                var stringKey = global::MessagePack.Internal.CodeGenHelpers.ReadStringSpan(ref reader);
+                switch (stringKey.Length)
+                {
+                    default:
+                    FAIL:
+                      reader.Skip();
+                      continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
+
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class NodeErrorMsgFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.Common.NodeErrorMsg>
     {
         // code
@@ -756,6 +812,8 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
 
     public sealed class ReqCrossMessageFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.Common.ReqCrossMessage>
     {
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
         // route
         private static global::System.ReadOnlySpan<byte> GetSpan_route() => new byte[1 + 5] { 165, 114, 111, 117, 116, 101 };
         // content
@@ -770,7 +828,9 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
             }
 
             var formatterResolver = options.Resolver;
-            writer.WriteMapHeader(2);
+            writer.WriteMapHeader(3);
+            writer.WriteRaw(GetSpan_id());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.id, options);
             writer.WriteRaw(GetSpan_route());
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.route, options);
             writer.WriteRaw(GetSpan_content());
@@ -798,6 +858,11 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
                     FAIL:
                       reader.Skip();
                       continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
                     case 5:
                         if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 435745550194UL) { goto FAIL; }
 
@@ -819,6 +884,8 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
 
     public sealed class ResCrossMessageFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Queen.Protocols.Common.ResCrossMessage>
     {
+        // id
+        private static global::System.ReadOnlySpan<byte> GetSpan_id() => new byte[1 + 2] { 162, 105, 100 };
         // state
         private static global::System.ReadOnlySpan<byte> GetSpan_state() => new byte[1 + 5] { 165, 115, 116, 97, 116, 101 };
         // content
@@ -833,7 +900,9 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
             }
 
             var formatterResolver = options.Resolver;
-            writer.WriteMapHeader(2);
+            writer.WriteMapHeader(3);
+            writer.WriteRaw(GetSpan_id());
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.id, options);
             writer.WriteRaw(GetSpan_state());
             writer.Write(value.state);
             writer.WriteRaw(GetSpan_content());
@@ -861,6 +930,11 @@ namespace MessagePack.Formatters.Queen.Protocols.Common
                     FAIL:
                       reader.Skip();
                       continue;
+                    case 2:
+                        if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 25705UL) { goto FAIL; }
+
+                        ____result.id = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
+                        continue;
                     case 5:
                         if (global::MessagePack.Internal.AutomataKeyGen.GetKey(ref stringKey) != 435744240755UL) { goto FAIL; }
 
