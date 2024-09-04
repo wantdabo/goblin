@@ -104,7 +104,6 @@ namespace Goblin.Common.Network
         /// 连接状态
         /// </summary>
         public bool connected => null != socket && socket.Connected;
-        
         /// <summary>
         /// 缓冲区
         /// </summary>
@@ -178,8 +177,7 @@ namespace Goblin.Common.Network
                     }
                     catch (Exception e)
                     {
-                        socket.Close();
-                        socket.Dispose();
+                        RecycleSocket();
                         EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
                     }
                 });
@@ -190,8 +188,7 @@ namespace Goblin.Common.Network
             catch (Exception e)
             {
                 engine.eventor.Tell(new MessageBlowEvent{ type = 2, desc = "服务器未响应，请检查网络."});
-                socket.Close();
-                socket.Dispose();
+                RecycleSocket();
             }
         }
 
@@ -202,9 +199,15 @@ namespace Goblin.Common.Network
         {
             if (false == connected) return;
             if (thread.IsAlive) thread.Abort();
-            socket.Close();
-            socket.Dispose();
+            RecycleSocket();
             EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
+        }
+
+        private void RecycleSocket()
+        {
+            if (null == socket) return;
+            socket.Close();
+            socket = null;
         }
 
         /// <summary>
@@ -245,7 +248,13 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         public void Send<T>(T msg) where T : INetMessage
         {
-            if (false == connected) return;
+            if (false == connected)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "未连接网络，请检查网络连接后再尝试."});
+
+                return;
+            }
+            
             if (ProtoPack.Pack(msg, out var bytes))
             {
                 var data = new byte[ProtoPack.INT32_LEN + bytes.Length];
