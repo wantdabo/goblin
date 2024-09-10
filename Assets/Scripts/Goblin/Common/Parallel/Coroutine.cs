@@ -18,10 +18,14 @@ namespace Goblin.Common.Parallel
         /// </summary>
         private CoroutineScheduler coroutines { get; set; }
         /// <summary>
+        /// 协程工作中
+        /// </summary>
+        public bool working { get; private set; }
+        /// <summary>
         /// 逻辑分片
         /// </summary>
         private IEnumerator<Instruction> enumerator { get; set; }
-        
+
         /// <summary>
         /// 设置参数
         /// </summary>
@@ -34,7 +38,7 @@ namespace Goblin.Common.Parallel
             this.coroutines = coroutines;
             this.enumerator = enumerator;
         }
-        
+
         /// <summary>
         /// 协程指令就绪检查
         /// </summary>
@@ -55,14 +59,16 @@ namespace Goblin.Common.Parallel
             if (null == enumerator.Current) return;
             enumerator.Current.Update(tick);
         }
-        
+
         /// <summary>
         /// 执行协程
         /// </summary>
         /// <returns>YES/NO (true 表示逻辑分片未结束/ 否则就是逻辑分片已结束)</returns>
         public bool Execute()
         {
-            return enumerator.MoveNext();
+            working = enumerator.MoveNext();
+
+            return working;
         }
     }
 }
