@@ -90,7 +90,7 @@ namespace Goblin.Common.Parallel
         /// 驱动
         /// </summary>
         /// <param name="tick">tick</param>
-        public void Update(float tick)
+        private void Update(float tick)
         {
             for (int i = coroutines.Count - 1; i >= 0; i--)
             {
