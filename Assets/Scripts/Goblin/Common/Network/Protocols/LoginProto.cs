@@ -62,7 +62,7 @@ namespace Queen.Protocols
 
     /// <summary>
     /// 响应登录消息
-    /// </summay>
+    /// </summary>
     [MessagePackObject(true)]
     public class S2CLoginMsg : INetMessage
     {
