@@ -30,7 +30,7 @@ namespace Queen.Protocols.Common
         /// UInt32 字节数量
         /// </summary>
         public static byte INT32_LEN = 4;
-        
+
         /// <summary>
         /// 反序列化消息
         /// </summary>

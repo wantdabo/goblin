@@ -30,9 +30,9 @@ namespace Goblin.Sys.Lobby.View
                 engine.proxy.login.C2SLogout();
             });
 
-            AddUIEventListener("TestBtn", (e) =>
+            AddUIEventListener("LocalGame", (e) =>
             {
-                engine.net.Send(new C2STestMsg { content = "Hello" });
+                // TODO 本地游戏
             });
         }
     }
