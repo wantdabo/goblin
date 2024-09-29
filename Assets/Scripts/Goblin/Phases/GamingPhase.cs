@@ -25,12 +25,14 @@ namespace Goblin.Phases
         {
             base.OnEnter();
             engine.gameui.Open<Sys.Lobby.View.LobbyView>();
+            engine.gameui.Open<Sys.Gameplay.View.GameplayView>();
         }
 
         public override void OnExit()
         {
             base.OnExit();
             engine.gameui.Close<Sys.Lobby.View.LobbyView>();
+            engine.gameui.Close<Sys.Gameplay.View.GameplayView>();
         }
     }
 }
