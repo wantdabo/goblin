@@ -1,6 +1,8 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Translation;
+using Goblin.Gameplay.Logic.Translation.Common;
 using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -39,12 +41,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// Actor 自增 ID
         /// </summary>
         private uint incrementId = 0;
-
         /// <summary>
         /// 座位
         /// </summary>
         public uint seat { get; private set; }
-
         /// <summary>
         /// 确定性，Ticker/时间驱动器
         /// </summary>
@@ -53,21 +53,22 @@ namespace Goblin.Gameplay.Logic.Core
         /// 确定性，随机器
         /// </summary>
         public FPRandom random { get; private set; }
-
+        /// <summary>
+        /// RIL/ 渲染指令同步
+        /// </summary>
+        public RILSync rilsync { get; private set; }
         /// <summary>
         /// Actor 列表
         /// </summary>
         public List<Actor> actors { get; private set; } = new();
-
-        /// <summary>
-        /// 玩家列表
-        /// </summary>
-        public Player[] players { get; private set; }
-
         /// <summary>
         /// Actor 字典
         /// </summary>
         private Dictionary<uint, Actor> actorDict = new();
+        /// <summary>
+        /// 玩家列表
+        /// </summary>
+        public Player[] players { get; private set; }
 
         protected override void OnCreate()
         {
@@ -78,6 +79,9 @@ namespace Goblin.Gameplay.Logic.Core
             random = AddComp<FPRandom>();
             random.Initial(19491001);
             random.Create();
+
+            rilsync = AddComp<RILSync>();
+            rilsync.Create();
         }
 
         protected override void OnDestroy()
@@ -162,6 +166,15 @@ namespace Goblin.Gameplay.Logic.Core
             actors.Remove(actor);
             actorDict.Remove(actor.id);
             eventor.Tell(new RmvActorEvent { actor = actor });
+        }
+        
+        public static T CreateStage<T>() where T : Stage, new()
+        {
+            var stage = new T();
+            stage.stage = stage;
+            stage.Create();
+
+            return stage;
         }
     }
 }

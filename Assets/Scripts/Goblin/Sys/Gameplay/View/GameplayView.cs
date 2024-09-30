@@ -1,4 +1,9 @@
-﻿using Goblin.Sys.Common;
+﻿using Goblin.Common;
+using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Inputs;
+using Goblin.Sys.Common;
+using TrueSync;
 using UnityEngine;
 
 namespace Goblin.Sys.Gameplay.View
@@ -7,11 +12,27 @@ namespace Goblin.Sys.Gameplay.View
     {
         public override UILayer layer => UILayer.UIMain;
         protected override string res => "Gameplay/GameplayView";
-        
+
         private RectTransform joystickBgRTF;
         private Transform joystickHandleTrans;
         private Vector3 joystickBgPos;
         private float joystickBgRadius;
+
+        private Vector3 joystickDir = Vector3.zero;
+        private Stage stage;
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            stage = Stage.CreateStage<Stage>();
+            stage.AddActor<Player>().Create();
+            engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+            engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
+        }
 
         protected override void OnBuildUI()
         {
@@ -30,42 +51,56 @@ namespace Goblin.Sys.Gameplay.View
                 var worldPos = engine.gameui.uicamera.ScreenToWorldPoint(e.position);
                 worldPos.z = joystickBgPos.z;
                 joystickBgRTF.position = worldPos;
+                joystickDir = Vector3.zero;
             }, UIEventEnum.PointerDown);
-            
+
             AddUIEventListener("JoystickArea", (e) =>
             {
                 joystickBgRTF.position = joystickBgPos;
                 joystickHandleTrans.position = joystickBgPos;
+                joystickDir = Vector3.zero;
             }, UIEventEnum.PointerUp);
-            
+
             AddUIEventListener("JoystickArea", (e) =>
             {
             }, UIEventEnum.BeginDrag);
-            
+
             AddUIEventListener("JoystickArea", (e) =>
             {
                 var pos = engine.gameui.uicamera.WorldToScreenPoint(joystickBgRTF.transform.position);
                 var dir = (e.position - new Vector2(pos.x, pos.y)).normalized;
-                var dis  = Mathf.Clamp(Vector2.Distance(e.position, new Vector2(pos.x, pos.y)), 0, joystickBgRadius);
+                joystickDir = dir;
+                var dis = Mathf.Clamp(Vector2.Distance(e.position, new Vector2(pos.x, pos.y)), 0, joystickBgRadius);
                 var handlePos = engine.gameui.uicamera.ScreenToWorldPoint(dir * dis + new Vector2(pos.x, pos.y));
                 handlePos.z = pos.z;
                 joystickHandleTrans.position = handlePos;
             }, UIEventEnum.Drag);
-            
+
             AddUIEventListener("JoystickArea", (e) =>
             {
 
             }, UIEventEnum.EndDrag);
-            
+
             AddUIEventListener("SpeedBtn", (e) =>
             {
                 Debug.Log("Speed Btn Down");
             }, UIEventEnum.PointerDown);
-            
+
             AddUIEventListener("SpeedBtn", (e) =>
             {
                 Debug.Log("Speed Btn Up");
             }, UIEventEnum.PointerUp);
+        }
+
+        private void OnFixedTick(FixedTickEvent e)
+        {
+            var dir = joystickDir * engine.cfg.float2Int;
+            var tsdir = new TSVector2() { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = Mathf.CeilToInt(dir.y) * FP.EN3 };
+            var player = stage.GetActor(1);
+            var gamepad = player.GetBehavior<Gamepad>();
+            var joystick = new InputInfo() { press = tsdir != TSVector2.zero, dire = tsdir };
+            gamepad.SetInput(InputType.Joystick, joystick);
+            stage.Gaming();
         }
     }
 }

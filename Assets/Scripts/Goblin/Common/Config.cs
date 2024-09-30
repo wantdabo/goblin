@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Goblin.Core;
 using Luban;
+using TrueSync;
 using UnityEngine;
 
 namespace Goblin.Common
@@ -18,15 +19,15 @@ namespace Goblin.Common
         public Tables location;
 
         /// <summary>
-        /// 浮点数转整型的乘法系数（10000 表示 1）
+        /// 浮点数转整型的乘法系数（1000 表示 1）
         /// </summary>
-        public int float2Int = 10000;
+        public int float2Int = 1000;
 
         /// <summary>
-        /// 整型转浮点的乘法系数（10000 表示 1）
+        /// 整型转浮点的乘法系数（1000 表示 1）
         /// </summary>
-        public float int2Float = 0.0001f;
-
+        public float int2Float = 0.001f;
+        
         protected override void OnCreate()
         {
             base.OnCreate();

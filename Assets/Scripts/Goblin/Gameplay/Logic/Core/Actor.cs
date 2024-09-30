@@ -13,19 +13,19 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// ActorID/实体 ID
         /// </summary>
-        public uint id;
+        public uint id { get; set; }
         /// <summary>
         /// 场景
         /// </summary>
-        public Stage stage;
+        public Stage stage { get; set; }
         /// <summary>
         /// 事件订阅派发者
         /// </summary>
-        public Eventor eventor;
+        public Eventor eventor { get; set; }
         /// <summary>
         /// Behavior 集合
         /// </summary>
-        private Dictionary<Type, Behavior> behaviorDict;
+        private Dictionary<Type, Behavior> behaviorDict { get; set; }
 
         protected override void OnCreate()
         {

@@ -38,21 +38,6 @@ namespace Goblin.Gameplay.Logic.Inputs
     }
 
     /// <summary>
-    /// 按键状态改变
-    /// </summary>
-    public struct InputStateChangedEvent : IEvent
-    {
-        /// <summary>
-        /// 改变按键
-        /// </summary>
-        public InputType input;
-        /// <summary>
-        /// 按键状态
-        /// </summary>
-        public bool active;
-    }
-
-    /// <summary>
     /// Gamepad/手柄
     /// </summary>
     public class Gamepad : Behavior
@@ -62,23 +47,16 @@ namespace Goblin.Gameplay.Logic.Inputs
             { InputType.Joystick, new InputInfo { press = false, dire = TSVector2.zero } },
         };
 
-        private Dictionary<InputType, bool> InputLockDict = new()
-        {
-            { InputType.Joystick, false },
-        };
-
         protected override void OnCreate()
         {
             base.OnCreate();
             actor.stage.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
-            actor.stage.eventor.Listen<InputStateChangedEvent>(OnInputStateChanged);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             actor.stage.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
-            actor.stage.eventor.UnListen<InputStateChangedEvent>(OnInputStateChanged);
         }
 
         /// <summary>
@@ -101,8 +79,6 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// <param name="input">按键数据</param>
         public void SetInput(InputType inputType, InputInfo input)
         {
-            if (InputLockDict[inputType]) return;
-
             if (InputDict.TryGetValue(inputType, out var oldInput))
             {
                 // 上一次是 press，新的是 unpress 表示技能释放出去了。
@@ -116,15 +92,6 @@ namespace Goblin.Gameplay.Logic.Inputs
         private void OnFPLateTick(FPLateTickEvent e)
         {
             ClearReleaseTokenAll();
-        }
-
-        /// <summary>
-        /// 按键状态改变
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnInputStateChanged(InputStateChangedEvent e)
-        {
-            InputLockDict[e.input] = !e.active;
         }
 
         /// <summary>

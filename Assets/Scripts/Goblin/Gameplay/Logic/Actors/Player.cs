@@ -1,7 +1,7 @@
 ﻿using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
-using Goblin.Gameplay.Logic.Spatials;
+using Goblin.Gameplay.Logic.Transform;
 
 namespace Goblin.Gameplay.Logic.Actors
 {

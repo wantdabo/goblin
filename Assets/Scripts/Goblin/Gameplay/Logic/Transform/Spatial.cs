@@ -1,12 +1,13 @@
 ﻿using Goblin.Gameplay.Logic.Core;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Spatials
+namespace Goblin.Gameplay.Logic.Transform
 {
     public class Spatial : Behavior<Translator>
     {
         public TSVector position { get; set; }
         public TSQuaternion rotation { get; set; }
+        public TSVector scale { get; set; }
         public TSVector eulerAngle
         {
             get
@@ -18,6 +19,5 @@ namespace Goblin.Gameplay.Logic.Spatials
                 rotation = TSQuaternion.Euler(value.x, value.y, value.z);
             }
         }
-        public TSVector scale { get; set; }
     }
 }

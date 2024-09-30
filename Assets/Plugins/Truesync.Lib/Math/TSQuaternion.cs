@@ -552,7 +552,7 @@ namespace TrueSync
 
         public override string ToString()
         {
-            return string.Format("({0:f1}, {1:f1}, {2:f1}, {3:f1})", x.AsFloat(), y.AsFloat(), z.AsFloat(), w.AsFloat());
+            return string.Format("({0:f5}, {1:f5}, {2:f5}, {3:f5})", x.AsFloat(), y.AsFloat(), z.AsFloat(), w.AsFloat());
         }
 
         public static bool operator ==(TSQuaternion value1, TSQuaternion value2)
