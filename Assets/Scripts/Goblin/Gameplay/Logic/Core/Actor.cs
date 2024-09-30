@@ -3,7 +3,7 @@ using Goblin.Core;
 using System;
 using System.Collections.Generic;
 
-namespace Goblin.Gameplay.Core
+namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
     /// Actor/实体

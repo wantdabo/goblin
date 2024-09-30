@@ -1,16 +1,10 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TrueSync;
-using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
-namespace Goblin.Gameplay.Common
+namespace Goblin.Gameplay.Logic.Common
 {
     /// <summary>
     /// Tick 事件

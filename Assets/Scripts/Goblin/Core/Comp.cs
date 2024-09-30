@@ -82,7 +82,7 @@ namespace Goblin.Core
         /// <typeparam name="T">组件类型</typeparam>
         /// <param name="force">强制查询，如果字段快速查询未找到，并且 force 为 true，将以高代价的查询方式获取</typeparam>
         /// <returns>组件列表</returns>
-        public virtual List<T> GetComps<T>(bool force = false) where T : Comp
+        public List<T> GetComps<T>(bool force = false) where T : Comp
         {
             List<T> list = null;
             if (compDict.TryGetValue(typeof(T), out var comps))
@@ -114,7 +114,7 @@ namespace Goblin.Core
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
         /// <returns>组件</returns>
-        public virtual T GetComp<T>(bool force = false) where T : Comp
+        public T GetComp<T>(bool force = false) where T : Comp
         {
             if (false == compDict.TryGetValue(typeof(T), out var comps)) return null;
 
@@ -149,7 +149,7 @@ namespace Goblin.Core
         /// 移除组件
         /// </summary>
         /// <param name="comp">组件</param>
-        public virtual void RmvComp(Comp comp)
+        public void RmvComp(Comp comp)
         {
             if (compDict.TryGetValue(comp.GetType(), out var comps)) comps.Remove(comp);
             compList.Remove(comp);

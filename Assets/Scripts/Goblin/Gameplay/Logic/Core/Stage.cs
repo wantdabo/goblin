@@ -1,15 +1,9 @@
 ﻿using Goblin.Common;
-using Goblin.Common.Network;
-using Goblin.Gameplay.Actors;
-using Goblin.Gameplay.Common;
-using Queen.Protocols;
-using System;
+using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Common;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using TrueSync;
 
-namespace Goblin.Gameplay.Core
+namespace Goblin.Gameplay.Logic.Core
 {
     #region Events
     /// <summary>

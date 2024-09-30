@@ -1,11 +1,11 @@
 ﻿using Goblin.Common;
-using Goblin.Gameplay.Common;
-using Goblin.Gameplay.Core;
+using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Core;
 using System;
 using System.Collections.Generic;
 using TrueSync;
 
-namespace Goblin.Gameplay.Inputs
+namespace Goblin.Gameplay.Logic.Inputs
 {
     /// <summary>
     /// 按键输入的枚举

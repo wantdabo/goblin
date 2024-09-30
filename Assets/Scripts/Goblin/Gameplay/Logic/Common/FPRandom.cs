@@ -1,12 +1,7 @@
 ﻿using Goblin.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TrueSync;
 
-namespace Goblin.Gameplay.Common
+namespace Goblin.Gameplay.Logic.Common
 {
     /// <summary>
     /// 确定性，随机器
