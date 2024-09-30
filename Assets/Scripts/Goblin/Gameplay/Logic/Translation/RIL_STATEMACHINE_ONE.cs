@@ -3,14 +3,14 @@ using System;
 
 namespace Goblin.Gameplay.Logic.Translation
 {
-    public struct RIL_STATEMACHINE : IRIL
+    public struct RIL_STATEMACHINE_ONE : IRIL 
     {
-        public ushort id => IRIL.STATEMACHINE;
+        public ushort id => IRIL.STATEMACHINE_ONE;
         public uint sid { get; set; }
         public uint frames { get; set; }
         public byte layer { get; set; }
 
-        public RIL_STATEMACHINE(uint sid, uint frames, byte layer)
+        public RIL_STATEMACHINE_ONE(uint sid, uint frames, byte layer)
         {
             this.sid = sid;
             this.frames = frames;
@@ -25,9 +25,9 @@ namespace Goblin.Gameplay.Logic.Translation
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_STATEMACHINE ril)
+            if (other is RIL_STATEMACHINE_ZERO _other)
             {
-                return sid == ril.sid && layer == ril.layer;
+                return sid == _other.sid && frames == _other.frames && layer == _other.layer;
             }
             
             return false;

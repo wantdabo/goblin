@@ -18,8 +18,12 @@
         /// </summary>
         public const ushort SPATIAL_SCALE = 3;
         /// <summary>
-        /// STATEMACHINE 状态机指令
+        /// STATEMACHINE ZERO 层状态机指令
         /// </summary>
-        public const ushort STATEMACHINE = 4;
+        public const ushort STATEMACHINE_ZERO = 4;
+        /// <summary>
+        /// STATEMACHINE ONE 层状态机指令
+        /// </summary>
+        public const ushort STATEMACHINE_ONE = 5;
     }
 }
