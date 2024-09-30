@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 790684524071391418}
   - component: {fileID: 8649280501749460231}
   m_Layer: 5
-  m_Name: SplitBtn
+  m_Name: SpeedBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

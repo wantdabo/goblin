@@ -57,10 +57,15 @@ namespace Goblin.Sys.Gameplay.View
 
             }, UIEventEnum.EndDrag);
             
-            AddUIEventListener("SplitBtn", (e) =>
+            AddUIEventListener("SpeedBtn", (e) =>
             {
-                Debug.Log("Split");
+                Debug.Log("Speed Btn Down");
             }, UIEventEnum.PointerDown);
+            
+            AddUIEventListener("SpeedBtn", (e) =>
+            {
+                Debug.Log("Speed Btn Up");
+            }, UIEventEnum.PointerUp);
         }
     }
 }

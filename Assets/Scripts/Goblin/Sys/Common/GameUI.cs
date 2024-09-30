@@ -70,12 +70,10 @@ namespace Goblin.Sys.Common
         /// UI 相机
         /// </summary>
         public Camera uicamera { get; private set; }
-
         /// <summary>
         /// UI 层级根节点
         /// </summary>
         private Dictionary<UILayer, GameObject> layerNodeDict = new();
-
         /// <summary>
         /// UI 界面集合
         /// </summary>

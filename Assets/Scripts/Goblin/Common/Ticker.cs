@@ -91,7 +91,7 @@ namespace Goblin.Common
         /// <summary>
         /// 事件订阅/派发者
         /// </summary>
-        public Eventor eventor;
+        public Eventor eventor { get; set; }
 
         /// <summary>
         /// 固定的流逝时间 s/秒
