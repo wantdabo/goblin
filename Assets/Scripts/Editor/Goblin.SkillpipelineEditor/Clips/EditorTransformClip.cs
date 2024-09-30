@@ -1,38 +1,27 @@
-﻿using Goblin.SkillPipelineEditor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Goblin.SkillPipelineEditor
-{
-    [Name("特效")]
+{ 
+    [Name("变化")]
     [Color(0.0f, 1f, 1f)]
-    [Attachable(typeof(EditorEffectTrack))]
-    public class EditorEffectClip : ActionClip
+    [Attachable(typeof(EditorTransformTrack))]
+    public class EditorTransformClip : ActionClip
     {
         [SerializeField][HideInInspector] private float length = 1f;
 
-        [MenuName("特效对象")]
-        [SelectObjectPath(typeof(GameObject))]
-        public string resPath = "";
-
         [MenuName("平移")]
         [SerializeField]
-        public Vector3 position;
+        public Vector3 position = Vector3.zero;
 
         [FormerlySerializedAs("euler")]
         [MenuName("旋转")]
         [SerializeField]
-        public Vector3 eulerAngle;
+        public Vector3 eulerAngle = Vector3.zero;
 
         [MenuName("缩放")]
         [SerializeField]
-        [Range(0.0f, 10)]
+        [Range(-10, 10)]
         public float scale = 0f;
 
         public override float Length
@@ -41,7 +30,7 @@ namespace Goblin.SkillPipelineEditor
             set => length = value;
         }
 
-        public override bool isValid => false == string.IsNullOrEmpty(resPath);
+        public override bool isValid => true;
 
         public EditorEffectTrack track => (EditorEffectTrack)parent;
     }

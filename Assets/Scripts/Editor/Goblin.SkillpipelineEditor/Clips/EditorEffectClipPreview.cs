@@ -49,7 +49,7 @@ namespace Goblin.SkillPipelineEditor
 
             if (null == effect) return;
             effect.transform.position = clip.position;
-            effect.transform.rotation = Quaternion.Euler(clip.euler);
+            effect.transform.rotation = Quaternion.Euler(clip.eulerAngle);
             effect.transform.localScale = clip.scale * Vector3.one;
             effect.SetActive(time < clip.GetLength());
 
