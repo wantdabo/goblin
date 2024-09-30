@@ -110,7 +110,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         public void OnFPTick(uint frame, FP tick)
         {
             StateDetect();
-            current?.OnFPTick(frame, tick);
+            current?.OnTick(frame, tick);
         }
     }
 }

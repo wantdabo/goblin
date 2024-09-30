@@ -29,5 +29,10 @@ namespace Goblin.Gameplay.Logic.Translation
 
             return false;
         }
+        
+        public override string ToString()
+        {
+            return $"ID -> {id}, Scale -> ({scale.x}, {scale.y}, {scale.z})";
+        }
     }
 }

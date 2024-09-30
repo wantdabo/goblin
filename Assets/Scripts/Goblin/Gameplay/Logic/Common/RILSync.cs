@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.Common
                 
                 dict.Remove(ril.id);
             }
-
+            UnityEngine.Debug.Log(ril.ToString());
             dict.Add(ril.id, ril);
         }
     }

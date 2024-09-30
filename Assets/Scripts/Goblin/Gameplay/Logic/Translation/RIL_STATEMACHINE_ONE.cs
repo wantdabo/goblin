@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Logic.Translation
     public struct RIL_STATEMACHINE_ONE : IRIL 
     {
         public ushort id => IRIL.STATEMACHINE_ONE;
-        public uint sid { get; set; }
-        public uint frames { get; set; }
-        public byte layer { get; set; }
+        public uint sid { get; private set; }
+        public uint frames { get; private set; }
+        public byte layer { get; private set; }
 
         public RIL_STATEMACHINE_ONE(uint sid, uint frames, byte layer)
         {
@@ -31,6 +31,11 @@ namespace Goblin.Gameplay.Logic.Translation
             }
             
             return false;
+        }
+        
+        public override string ToString()
+        {
+            return $"ID -> {id}, State -> {sid}, Frames -> {frames}, Layer -> {layer}";
         }
     }
 }
