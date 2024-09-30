@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Logic.Translation
 {
     public struct RIL_SPATIAL_POSITION : IRIL
     {
-        public ushort id => RIL.SPATIAL_POSITION;
+        public ushort id => IRIL.SPATIAL_POSITION;
         public TSVector position { get; private set; }
 
         public RIL_SPATIAL_POSITION(TSVector position)
@@ -22,10 +22,12 @@ namespace Goblin.Gameplay.Logic.Translation
 
         public bool Equals(IRIL other)
         {
-            if (id != other.id) return false;
-            var _other = (RIL_SPATIAL_POSITION)other;
-            
-            return _other.position.Equals(position);
+            if (other is RIL_SPATIAL_POSITION _other)
+            {
+                return _other.position.Equals(position);
+            }
+
+            return false;
         }
     }
 }

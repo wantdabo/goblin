@@ -84,17 +84,17 @@ namespace Goblin.Common.FSM
         {
             if (null != current && null == current.aisles) return;
 
-            var nextState = current;
+            var next = current;
             foreach (var state in states)
             {
                 if (state == current) continue;
                 if (null != current && null == current.aisles) continue;
                 if (null != current && false == current.aisles.Contains(state.GetType())) continue;
                 if (false == state.OnCheck()) continue;
-                nextState = state;
+                next = state;
             }
 
-            ChangeState(nextState);
+            ChangeState(next);
         }
 
         private void OnTick(TickEvent e)

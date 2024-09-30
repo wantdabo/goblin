@@ -23,7 +23,7 @@ namespace Goblin.Common.FSM
         /// <summary>
         /// 有限状态机
         /// </summary>
-        public Machine machine;
+        public Machine machine { get; set; }
 
         /// <summary>
         /// 状态进行中
