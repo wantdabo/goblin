@@ -243,13 +243,12 @@ MonoBehaviour:
   model: {fileID: 4085347383930744380, guid: fff71f6b846f92e4aa777532ddf97749, type: 3}
   groups:
   - {fileID: -930255066919366942}
-  - {fileID: -6525972747663302581}
   - {fileID: 4297218808730817306}
   - {fileID: -1506784747434101577}
   cloneModel: {fileID: 0}
   length: 2.6000001
-  viewTimeMin: 0
-  viewTimeMax: 2.6000001
+  viewTimeMin: 0.23911595
+  viewTimeMax: 1.5642145
 --- !u!114 &381031694647703124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -336,7 +335,7 @@ MonoBehaviour:
   _parent: {fileID: -5463817850046295152}
   startTime: 0.40000004
   position: {x: 0, y: 0.5, z: 1.55}
-  length: 0.03333333
+  length: 0.099999964
   size: {x: 1, y: 1, z: 1}
 --- !u!114 &3655587556215656374
 MonoBehaviour:
@@ -515,7 +514,7 @@ MonoBehaviour:
   _parent: {fileID: 4575319684661668158}
   startTime: 0.40000004
   position: {x: 0, y: 0.5, z: 2}
-  length: 0.26666665
+  length: 0.43333334
   size: {x: 1, y: 3.26, z: 1}
 --- !u!114 &8622310745688355605
 MonoBehaviour:

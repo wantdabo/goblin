@@ -34,6 +34,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-7146853554279672834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.20000002
+  length: 0.01666668
+  position: {x: 0, y: 0, z: 0.25}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-6949782367824954679
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -101,6 +119,75 @@ MonoBehaviour:
   startTime: 0
   length: 1.5000001
   resPath: Assets/UERes/Art/Animations/Model/Goblin/Idle.anim
+--- !u!114 &-5859918033118072993
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4235805314445735913}
+  startTime: 0.18333334
+  position: {x: 0, y: 0.5, z: 0.5}
+  length: 0.050000012
+  size: {x: 1, y: 1, z: 1}
+--- !u!114 &-5747709117844394369
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 2806619973301625113}
+  startTime: 0.21666668
+  position: {x: 0, y: 0.5, z: 1.5}
+  length: 0.16666667
+  size: {x: 2, y: 1, z: 1.3}
+--- !u!114 &-4235805314445735913
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705c33c7421021340bc8990a019b94c7, type: 3}
+  m_Name: "\u78B0\u649E\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 1328038422028717257}
+  actionClips:
+  - {fileID: -5859918033118072993}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-4115025572068582905
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4235805314445735913}
+  startTime: 0.23333335
+  position: {x: 0, y: 0.5, z: 2.08}
+  length: 0.26666665
+  size: {x: 1, y: 1, z: 1}
 --- !u!114 &-3730813443085004206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -148,10 +235,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -2140477477535758407}
   actionClips:
-  - {fileID: -2191092972581154486}
+  - {fileID: 8285458254674167060}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-2326444229897978151
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u53D8\u5316"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 4404173715354118483}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &-2191092972581154486
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -220,6 +325,24 @@ MonoBehaviour:
   startTime: 0
   length: 1.5000001
   resPath: Assets/UERes/Art/Animations/Model/Goblin/Idle.anim
+--- !u!114 &-1443874715985313367
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.18333334
+  length: 0.01666668
+  position: {x: 0, y: 0, z: 0.25}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-1204919250882664811
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -250,14 +373,15 @@ MonoBehaviour:
   m_Name: 10002
   m_EditorClassIdentifier: 
   _parent: {fileID: 0}
-  model: {fileID: 4799326145583942314, guid: 16bcee226810db7408cc70ba7641a996, type: 3}
+  model: {fileID: 4085347383930744380, guid: fff71f6b846f92e4aa777532ddf97749, type: 3}
   groups:
   - {fileID: -2140477477535758407}
-  - {fileID: 5258374456231003853}
+  - {fileID: 1328038422028717257}
+  - {fileID: -2326444229897978151}
   cloneModel: {fileID: 0}
-  length: 1
-  viewTimeMin: -0.06449606
-  viewTimeMax: 1.7132506
+  length: 0.6833334
+  viewTimeMin: -0.31702372
+  viewTimeMax: 1.2453324
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,8 +395,7 @@ MonoBehaviour:
   m_Name: "\u7279\u6548\u8F68\u9053"
   m_EditorClassIdentifier: 
   _parent: {fileID: 5258374456231003853}
-  actionClips:
-  - {fileID: 6260777001762578757}
+  actionClips: []
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -311,6 +434,43 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &1328038422028717257
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u78B0\u649E"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: -4235805314445735913}
+  - {fileID: 2806619973301625113}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
+--- !u!114 &2806619973301625113
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705c33c7421021340bc8990a019b94c7, type: 3}
+  m_Name: "\u78B0\u649E\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 1328038422028717257}
+  actionClips:
+  - {fileID: -5747709117844394369}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2871060475739412829
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -325,6 +485,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -2140477477535758407}
   actionClips: []
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &4404173715354118483
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7982e2b9a8e44042af606329f975a170, type: 3}
+  m_Name: "\u53D8\u5316\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -2326444229897978151}
+  actionClips:
+  - {fileID: -1443874715985313367}
+  - {fileID: -7146853554279672834}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -397,7 +576,7 @@ MonoBehaviour:
   length: 0.56666666
   resPath: Assets/GameRes/Effects/vfx_skill_10001.prefab
   position: {x: 0, y: 0, z: 0}
-  euler: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
 --- !u!114 &6443744070008206342
 MonoBehaviour:
@@ -499,6 +678,22 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8285458254674167060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdd32f00f408824cb099abdafc8fee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3138357389343817379}
+  startTime: 0
+  length: 0.68333334
+  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_01.anim
 --- !u!114 &8349909203220435467
 MonoBehaviour:
   m_ObjectHideFlags: 1
