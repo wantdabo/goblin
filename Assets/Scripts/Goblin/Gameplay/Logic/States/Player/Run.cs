@@ -1,6 +1,6 @@
 ﻿using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
-using Goblin.Gameplay.Logic.Transform;
+using Goblin.Gameplay.Logic.Spatials;
 using System.Collections.Generic;
 using TrueSync;
 
@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             base.OnTick(frame, fixedTick);
             var joystick = gamepad.GetInput(InputType.Joystick);
             var motion = joystick.dire * 5 * fixedTick;
-            spatial.position += new TSVector(motion.x, 0, motion.y);
+            spatial.position += new TSVector(motion.x, motion.y, 0);
         }
     }
 }

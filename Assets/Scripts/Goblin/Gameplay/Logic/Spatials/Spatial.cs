@@ -1,7 +1,7 @@
 ﻿using Goblin.Gameplay.Logic.Core;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Transform
+namespace Goblin.Gameplay.Logic.Spatials
 {
     public class Spatial : Behavior<Translator>
     {

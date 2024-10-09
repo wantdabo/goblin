@@ -1,10 +1,14 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
+using Goblin.Gameplay.Logic.Lives;
+using Goblin.Gameplay.Logic.Translations.Common;
 using Goblin.Sys.Common;
 using TrueSync;
 using UnityEngine;
+using RStage = Goblin.Gameplay.Render.Core.Stage;
 
 namespace Goblin.Sys.Gameplay.View
 {
@@ -20,17 +24,27 @@ namespace Goblin.Sys.Gameplay.View
 
         private Vector3 joystickDir = Vector3.zero;
         private Stage stage;
+        private RStage rstage;
         protected override void OnLoad()
         {
             base.OnLoad();
-            stage = Stage.CreateStage<Stage>();
-            stage.AddActor<Player>().Create();
+            stage = AddComp<Stage>();
+            stage.Create();
+            rstage = AddComp<RStage>();
+            rstage.Create();
+            stage.eventor.Listen<RILSyncEvent>(OnRILSync);
+            var player = stage.AddActor<Player>();
+            player.Create();
+            player.eventor.Tell<LiveBornEvent>();
+            
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
             engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
+            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
         }
 
@@ -92,6 +106,16 @@ namespace Goblin.Sys.Gameplay.View
             }, UIEventEnum.PointerUp);
         }
 
+        private void OnRILSync(RILSyncEvent e)
+        {
+            rstage.rilsync.OnRILSync(e.id, e.frame, e.ril);
+        }
+        
+        private void OnTick(TickEvent e)
+        {
+            rstage.Tick(e.tick);
+        }
+
         private void OnFixedTick(FixedTickEvent e)
         {
             var dir = joystickDir * engine.cfg.float2Int;
@@ -100,7 +124,7 @@ namespace Goblin.Sys.Gameplay.View
             var gamepad = player.GetBehavior<Gamepad>();
             var joystick = new InputInfo() { press = tsdir != TSVector2.zero, dire = tsdir };
             gamepad.SetInput(InputType.Joystick, joystick);
-            stage.Gaming();
+            stage.Tick();
         }
     }
 }

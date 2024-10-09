@@ -1,6 +1,5 @@
 ﻿using Goblin.Core;
-using Goblin.Gameplay.Logic.Translation;
-using Goblin.Gameplay.Logic.Translation.Common;
+using Goblin.Gameplay.Logic.Translations.Common;
 
 namespace Goblin.Gameplay.Logic.Core
 {

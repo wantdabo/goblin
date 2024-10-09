@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Lives;
 using System;
 using System.Collections.Generic;
 
@@ -32,11 +33,8 @@ namespace Goblin.Gameplay.Logic.Core
             base.OnCreate();
             eventor = AddComp<Eventor>();
             eventor.Create();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+            
+            AddBehavior<Live>().Create();
         }
 
         /// <summary>
@@ -46,11 +44,11 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>Behavior</returns>
         public T GetBehavior<T>() where T : Behavior
         {
-            if (null == behaviorDict) return null;
+            if (null == behaviorDict) return default;
 
             if (behaviorDict.TryGetValue(typeof(T), out var behavior)) return behavior as T;
 
-            return null;
+            return default;
         }
 
         /// <summary>

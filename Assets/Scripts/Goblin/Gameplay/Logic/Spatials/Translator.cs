@@ -1,9 +1,9 @@
-﻿using Goblin.Gameplay.Logic.Translation;
-using Goblin.Gameplay.Logic.Translation.Common;
+﻿using Goblin.Gameplay.Logic.Translations;
+using Goblin.Gameplay.Logic.Translations.Common;
 using System;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Transform
+namespace Goblin.Gameplay.Logic.Spatials
 {
     public class Translator : Translator<Spatial>
     {
@@ -16,19 +16,19 @@ namespace Goblin.Gameplay.Logic.Transform
             if (false == behavior.position.Equals(position))
             {
                 position = behavior.position;
-                behavior.actor.stage.rilsync.SetRIL(behavior.actor.id, new RIL_SPATIAL_POSITION(position));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SPATIAL_POSITION(position));
             }
 
             if (false == behavior.rotation.Equals(rotation))
             {
                 rotation = behavior.rotation;
-                behavior.actor.stage.rilsync.SetRIL(behavior.actor.id, new RIL_SPATIAL_ROTATION(rotation));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SPATIAL_ROTATION(rotation));
             }
 
             if (false == behavior.scale.Equals(scale))
             {
                 scale = behavior.scale;
-                behavior.actor.stage.rilsync.SetRIL(behavior.actor.id, new RIL_SPATIAL_SCALE(scale));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SPATIAL_SCALE(scale));
             }
         }
     }

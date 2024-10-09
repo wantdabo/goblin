@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.States.Player;
-using Goblin.Gameplay.Logic.Transform;
+using Goblin.Gameplay.Logic.Spatials;
 
 namespace Goblin.Gameplay.Logic.Actors
 {

@@ -2,7 +2,7 @@
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.Translation.Common
+namespace Goblin.Gameplay.Logic.Translations.Common
 {
     /// <summary>
     /// 翻译 /RIL

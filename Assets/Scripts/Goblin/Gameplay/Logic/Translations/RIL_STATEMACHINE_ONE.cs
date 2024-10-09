@@ -1,7 +1,6 @@
-﻿using Goblin.Gameplay.Logic.Translation.Common;
-using System;
+﻿using Goblin.Gameplay.Logic.Translations.Common;
 
-namespace Goblin.Gameplay.Logic.Translation
+namespace Goblin.Gameplay.Logic.Translations
 {
     public struct RIL_STATEMACHINE_ONE : IRIL 
     {
@@ -19,8 +18,7 @@ namespace Goblin.Gameplay.Logic.Translation
 
         public byte[] Serialize()
         {
-            // TODO 序列化为二进制
-            return Array.Empty<byte>();
+            throw new System.NotImplementedException();
         }
 
         public bool Equals(IRIL other)

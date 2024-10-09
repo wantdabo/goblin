@@ -1,5 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Translation;
-using Goblin.Gameplay.Logic.Translation.Common;
+﻿using Goblin.Gameplay.Logic.Translations;
+using Goblin.Gameplay.Logic.Translations.Common;
 
 namespace Goblin.Gameplay.Logic.Common.StateMachine
 {
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
                     lzeroframes = 0;
                 }
                 lzerostate = zerostate;
-                behavior.actor.stage.rilsync.SetRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(lzerostate, lzeroframes, ParallelMachine.LAYER_ZERO));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(lzerostate, lzeroframes, ParallelMachine.LAYER_ZERO));
             }
 
             uint oneframes = loneframes;
@@ -57,7 +57,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
                 }
 
                 lonestate = onestate;
-                behavior.actor.stage.rilsync.SetRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(lonestate, loneframes, ParallelMachine.LAYER_ONE));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(lonestate, loneframes, ParallelMachine.LAYER_ONE));
             }
         }
     }

@@ -1,60 +1,31 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
-using Goblin.Gameplay.Logic.Actors;
-using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Render.Common;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace Goblin.Gameplay.Logic.Core
+namespace Goblin.Gameplay.Render.Core
 {
-    #region Events
-    /// <summary>
-    /// 添加 Actor/实体事件
-    /// </summary>
     public struct AddActorEvent : IEvent
     {
-        /// <summary>
-        /// Actor
-        /// </summary>
         public Actor actor { get; set; }
     }
-
-    /// <summary>
-    /// 移除 Actor/实体事件
-    /// </summary>
+    
     public struct RmvActorEvent : IEvent
     {
-        /// <summary>
-        /// Actor
-        /// </summary>
         public Actor actor { get; set; }
     }
-    #endregion
-
-    /// <summary>
-    /// Stage/关卡
-    /// </summary>
+    
     public class Stage : Comp
     {
-        /// <summary>
-        /// Actor 自增 ID
-        /// </summary>
-        private uint incrementId = 0;
-        /// <summary>
-        /// 座位
-        /// </summary>
-        public uint seat { get; private set; }
         /// <summary>
         /// 事件订阅派发者
         /// </summary>
         public Eventor eventor { get; private set; }
         /// <summary>
-        /// 确定性，Ticker/时间驱动器
+        /// Ticker/时间驱动器
         /// </summary>
-        public FPTicker ticker { get; private set; }
-        /// <summary>
-        /// 确定性，随机器
-        /// </summary>
-        public FPRandom random { get; private set; }
+        public Ticker ticker { get; private set; }
         /// <summary>
         /// RIL/ 渲染指令同步
         /// </summary>
@@ -67,10 +38,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// Actor 字典
         /// </summary>
         private Dictionary<uint, Actor> actorDict = new();
-        /// <summary>
-        /// 玩家列表
-        /// </summary>
-        public Player[] players { get; private set; }
 
         protected override void OnCreate()
         {
@@ -78,13 +45,9 @@ namespace Goblin.Gameplay.Logic.Core
             eventor = AddComp<Eventor>();
             eventor.Create();
             
-            ticker = AddComp<FPTicker>();
+            ticker = AddComp<Ticker>();
             ticker.Create();
-
-            random = AddComp<FPRandom>();
-            random.Initial(19491001);
-            random.Create();
-
+            
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;
             rilsync.Create();
@@ -99,9 +62,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 游戏中/Gameplay 循环
         /// </summary>
-        public void Tick()
+        /// <param name="tick">tick</param>
+        public void Tick(float tick)
         {
-            ticker.Tick();
+            ticker.Tick(tick);
         }
 
         /// <summary>
@@ -113,9 +77,9 @@ namespace Goblin.Gameplay.Logic.Core
         public T GetActor<T>(uint id) where T : Actor
         {
             var actor = GetActor(id);
-
+        
             if (null != actor) return actor as T;
-
+        
             return null;
         }
 
@@ -128,44 +92,43 @@ namespace Goblin.Gameplay.Logic.Core
         {
             return actorDict.GetValueOrDefault(id);
         }
-
+        
         /// <summary>
         /// 添加 Actor
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
         /// <returns>Actor</returns>
-        public T AddActor<T>() where T : Actor, new()
+        public Actor AddActor(uint id)
         {
-            var actor = AddComp<T>();
-            actor.id = ++incrementId;
+            var actor = AddComp<Actor>();
+            actor.id = id;
             actor.stage = this;
             actors.Add(actor);
             actorDict.Add(actor.id, actor);
             eventor.Tell(new AddActorEvent { actor = actor });
-
+        
             return actor;
         }
-
+        
         /// <summary>
         /// 根据 ID 移除 Actor
         /// </summary>
         /// <param name="id">ID</param>
-        public void RmvActor(uint id)
+        private void RmvActor(uint id)
         {
             var actor = GetActor(id);
             if (null == actor) return;
-
+        
             RmvActor(actor);
         }
-
+        
         /// <summary>
         /// 根据 Actor 实例移除 Actor
         /// </summary>
         /// <param name="actor">Actor 实例</param>
-        public void RmvActor(Actor actor)
+        private void RmvActor(Actor actor)
         {
             if (false == actors.Contains(actor)) return;
-
+        
             actors.Remove(actor);
             actorDict.Remove(actor.id);
             eventor.Tell(new RmvActorEvent { actor = actor });
