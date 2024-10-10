@@ -2742,9 +2742,7 @@ MonoBehaviour:
   _PlayAutomatically: 0
   _Animations:
   - {fileID: 7400000, guid: d83e98414ff72674c85c56a8f5659bdb, type: 2}
-  - {fileID: 7400000, guid: 2093f8c1a7f672c489f8b3311e684c4e, type: 2}
   - {fileID: 7400000, guid: 5c1560fd92659b34b931ee7d446b4cbd, type: 2}
-  - {fileID: 7400000, guid: 94710e4b73daa444da5331fa2a3f532c, type: 2}
   - {fileID: 7400000, guid: 8455988ea303eaa449df9b74366a359d, type: 2}
   - {fileID: 7400000, guid: 8c1a60f0cce4ee643b4c4eb6801dbe2d, type: 2}
   - {fileID: 7400000, guid: d7fdc62009f45fe40bd4604a2d6fe10f, type: 2}
@@ -2753,37 +2751,19 @@ MonoBehaviour:
   - {fileID: 7400000, guid: b90199b9d1f7d094199c7d676dd4f7e2, type: 2}
   - {fileID: 7400000, guid: eda07f7bb64bf0146930b0ced4c1d6f4, type: 2}
   - {fileID: 7400000, guid: 97038e2a3c61c294f96b7982fb13ca68, type: 2}
-  - {fileID: 7400000, guid: e23a407abde0caa4aa97ceb15051f8c5, type: 2}
-  - {fileID: 7400000, guid: b72e83ab89c72254c86f493c82146829, type: 2}
   - {fileID: 7400000, guid: d17ec10b3e9c1504fa55972381771889, type: 2}
   - {fileID: 7400000, guid: 782ce7bfc5061e94e82d8c0bee2708c8, type: 2}
-  - {fileID: 7400000, guid: 535d3ceebd136e74fb5a33ccdf20cfd7, type: 2}
-  - {fileID: 7400000, guid: c24d159a2dc336c46be0fa12c0aa2fd7, type: 2}
   - {fileID: 7400000, guid: 8aa11c4bc9d0c2a42a6684188cfb0b21, type: 2}
   - {fileID: 7400000, guid: 0c6327cab9f8c1345af9a4058041eb7d, type: 2}
-  - {fileID: 7400000, guid: 9b2b7c47931a7da408453c4e77c3ce42, type: 2}
-  - {fileID: 7400000, guid: 601717c06300fdb47b452e094b45f32a, type: 2}
   - {fileID: 7400000, guid: a5f3d09844b9fb048a55a8e7ff8db6f8, type: 2}
   - {fileID: 7400000, guid: 19fcb69ed5a367a49971b007120ac076, type: 2}
   - {fileID: 7400000, guid: 1e108ebf9df8a154fb49f2d9cfc5275b, type: 2}
   - {fileID: 7400000, guid: d0368b1616ec96145a4cfcb47e42cbe3, type: 2}
   - {fileID: 7400000, guid: 5af33b65a5229eb4c848fd6c48734b9b, type: 2}
-  - {fileID: 7400000, guid: 245ea0789d2e0784ba1db5605a3cd8f2, type: 2}
-  - {fileID: 7400000, guid: ea95a3bed97f8ff48a502a4c48440d57, type: 2}
-  - {fileID: 7400000, guid: 3ee132a0ac65067439ee883bb50cbb25, type: 2}
   - {fileID: 7400000, guid: 327a96f019d04f7458f4799c3e6bed31, type: 2}
   - {fileID: 7400000, guid: 5b465477e565f8745a8bd82263ffc67d, type: 2}
   - {fileID: 7400000, guid: 8c70ba72ca6383b4e9c2f04c5f58f031, type: 2}
-  - {fileID: 7400000, guid: 74530fa462b065140affe79948d6450e, type: 2}
-  - {fileID: 7400000, guid: ff8ad786cb5e7464ba9e24c88313c627, type: 2}
-  - {fileID: 7400000, guid: 357d9e4a4da472f46a269feee4962bd4, type: 2}
-  - {fileID: 7400000, guid: 97444c50590a2e74ea60043439fed2be, type: 2}
-  - {fileID: 7400000, guid: 9a2f703f5d2ea434499af3df49ab7519, type: 2}
-  - {fileID: 7400000, guid: 9f02cf37ac692d64687f7e501185895b, type: 2}
-  - {fileID: 7400000, guid: 34354da425c1a804e87abe27f558f1bf, type: 2}
   - {fileID: 7400000, guid: 375cad810cabe74408130f8ec718be93, type: 2}
-  - {fileID: 7400000, guid: 00a93d093919e124380b7616b234ae40, type: 2}
-  - {fileID: 7400000, guid: e782dcafebf9852418c18f3d911f0e54, type: 2}
 --- !u!95 &765214809339132998
 Animator:
   serializedVersion: 5
