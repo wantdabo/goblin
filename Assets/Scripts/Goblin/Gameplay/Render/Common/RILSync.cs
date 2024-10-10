@@ -1,7 +1,8 @@
 ﻿using Goblin.Core;
-using Goblin.Gameplay.Logic.Translations.Common;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Common
 {
@@ -20,10 +21,10 @@ namespace Goblin.Gameplay.Render.Common
             Actor actor = default;
             switch (ril.id)
             {
-                case IRIL.LIVE_BORN:
+                case RILDef.LIVE_BORN:
                     stage.AddActor(id).Create();
                     break;
-                case IRIL.LIVE_DEAD:
+                case RILDef.LIVE_DEAD:
                     stage.GetActor(id).Destroy();
                     break;
             }

@@ -1,4 +1,6 @@
-﻿using Goblin.Gameplay.Logic.Common;
+﻿using Goblin.Gameplay.Logic.Attributes;
+using Goblin.Gameplay.Logic.Attributes.Surfaces;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
@@ -15,6 +17,7 @@ namespace Goblin.Gameplay.Logic.Actors
         protected override void OnCreate()
         {
             base.OnCreate();
+            AddBehavior<Surface>().Create();
             AddBehavior<Spatial>().Create();
             AddBehavior<Gamepad>().Create();
             AddBehavior<ParallelMachine>().Create();

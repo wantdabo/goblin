@@ -1,8 +1,9 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Lives;
 
-namespace Goblin.Gameplay.Logic.Translations.Common
+namespace Goblin.Gameplay.Common.Translations.Common
 {
     /// <summary>
     /// 翻译 /RIL
@@ -29,15 +30,21 @@ namespace Goblin.Gameplay.Logic.Translations.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            // 预生成一次
-            OnRIL();
+            behavior.actor.eventor.Listen<LiveAwakenEvent>(OnLiveAwaken);
             behavior.actor.stage.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            behavior.actor.eventor.UnListen<LiveAwakenEvent>(OnLiveAwaken);
             behavior.actor.stage.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
+        }
+        
+        private void OnLiveAwaken(LiveAwakenEvent e)
+        {
+            // 预生成一次
+            OnRIL();
         }
 
         private void OnFPLateTick(FPLateTickEvent e)

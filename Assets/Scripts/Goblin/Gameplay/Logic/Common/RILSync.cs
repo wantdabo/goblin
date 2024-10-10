@@ -1,7 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Translations.Common;
 using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.Common

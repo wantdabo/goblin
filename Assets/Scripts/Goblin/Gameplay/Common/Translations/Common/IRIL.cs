@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 
-namespace Goblin.Gameplay.Logic.Translations.Common
+namespace Goblin.Gameplay.Common.Translations.Common
 {
     /// <summary>
     /// 渲染指令事件
@@ -40,6 +40,6 @@ namespace Goblin.Gameplay.Logic.Translations.Common
         /// </summary>
         /// <param name="other">目标指令</param>
         /// <returns>YES/NO</returns>
-        public bool Equals(Translations.Common.IRIL other);
+        public bool Equals(IRIL other);
     }
 }

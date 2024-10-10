@@ -1,11 +1,14 @@
-﻿using TrueSync;
-using IRIL = Goblin.Gameplay.Logic.Translations.Common.IRIL;
+﻿using Goblin.Gameplay.Common.Translations.Common;
+using TrueSync;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
-namespace Goblin.Gameplay.Logic.Translations
+namespace Goblin.Gameplay.Common.Translations
 {
+    using IRIL = Common.IRIL;
+
     public struct RIL_SPATIAL_POSITION : IRIL
     {
-        public ushort id => IRIL.SPATIAL_POSITION;
+        public ushort id => RILDef.SPATIAL_POSITION;
         public TSVector position { get; private set; }
 
         public RIL_SPATIAL_POSITION(TSVector position)

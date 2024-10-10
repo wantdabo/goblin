@@ -1,9 +1,9 @@
-﻿namespace Goblin.Gameplay.Logic.Translations.Common
+﻿namespace Goblin.Gameplay.Common.Translations.Common
 {
     /// <summary>
     /// RIL 定义
     /// </summary>
-    public partial interface IRIL
+    public class RILDef
     {
         /// <summary>
         /// LIVE 出生指令
@@ -33,5 +33,9 @@
         /// STATEMACHINE ONE 层状态机指令
         /// </summary>
         public const ushort STATEMACHINE_ONE = 6;
+        /// <summary>
+        /// ATTR SURFACE 指令
+        /// </summary>
+        public const ushort ATTR_SURFACE = 7;
     }
 }

@@ -1,12 +1,13 @@
-﻿using Goblin.Gameplay.Logic.Translations;
-using Goblin.Gameplay.Logic.Translations.Common;
+﻿using Goblin.Gameplay.Common.Translations;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Render.Core;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
     public class SpatialScale : Resolver<RIL_SPATIAL_SCALE>
     {
-        public override ushort id => IRIL.SPATIAL_SCALE;
+        public override ushort id => RILDef.SPATIAL_SCALE;
         
         protected override void OnAwake(uint frame, RIL_SPATIAL_SCALE ril)
         {

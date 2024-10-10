@@ -1,12 +1,13 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Lives;
-using Goblin.Gameplay.Logic.Translations.Common;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Resolvers;
 using System;
 using System.Collections.Generic;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Core
 {
@@ -51,8 +52,11 @@ namespace Goblin.Gameplay.Render.Core
         public T EnsureBehavior<T>() where T : Behavior, new()
         {
             var behavior = GetBehavior<T>();
-            if (null == behavior) behavior = AddBehavior<T>();
-            behavior.Create();
+            if (null == behavior)
+            {
+                behavior = AddBehavior<T>();
+                behavior.Create();
+            }
 
             return behavior;
         }
@@ -81,7 +85,7 @@ namespace Goblin.Gameplay.Render.Core
         {
             if (null == behaviorDict) behaviorDict = new();
 
-            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can'count add same behavior -> {typeof(T)}");
+            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can't add same behavior -> {typeof(T)}");
 
             var behavior = AddComp<T>();
             behavior.actor = this;
@@ -121,7 +125,7 @@ namespace Goblin.Gameplay.Render.Core
         {
             if (null == resolverDict) resolverDict = new();
 
-            if (resolverDict.ContainsKey(id)) throw new Exception($"can'count add same resolver -> {typeof(T)}");
+            if (resolverDict.ContainsKey(id)) throw new Exception($"can't add same resolver -> {typeof(T)}");
 
             var resolver = AddComp<T>();
             resolver.actor = this;
@@ -146,20 +150,23 @@ namespace Goblin.Gameplay.Render.Core
             {
                 switch (e.ril.id)
                 {
-                    case IRIL.SPATIAL_POSITION:
+                    case RILDef.SPATIAL_POSITION:
                         resolver = AddResolver<SpatialPosition>(e.ril.id);
                         break;
-                    case IRIL.SPATIAL_ROTATION:
+                    case RILDef.SPATIAL_ROTATION:
                         resolver = AddResolver<SpatialRotation>(e.ril.id);
                         break;
-                    case IRIL.SPATIAL_SCALE:
+                    case RILDef.SPATIAL_SCALE:
                         resolver = AddResolver<SpatialScale>(e.ril.id);
                         break;
-                    case IRIL.STATEMACHINE_ZERO:
+                    case RILDef.STATEMACHINE_ZERO:
                         resolver = AddResolver<StateMachineZero>(e.ril.id);
                         break;
-                    case IRIL.STATEMACHINE_ONE:
+                    case RILDef.STATEMACHINE_ONE:
                         resolver = AddResolver<StateMachineOne>(e.ril.id);
+                        break;
+                    case RILDef.ATTR_SURFACE:
+                        resolver = AddResolver<AttrSurface>(e.ril.id);
                         break;
                 }
 

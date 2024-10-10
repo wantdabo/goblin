@@ -21,6 +21,7 @@ namespace Goblin.Gameplay.Render.Behaviors
         protected override void OnCreate()
         {
             base.OnCreate();
+            Debug.Log("OnCreate ===========================>");
             go = engine.pool.Get<GameObject>("NODE_GO_KEY");
             if (null == go) go = new();
             go.SetActive(true);

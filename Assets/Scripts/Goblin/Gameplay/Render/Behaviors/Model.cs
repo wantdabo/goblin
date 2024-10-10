@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Behaviors
 {
-    public struct ModelChangedEvent : IEvent{}
+    public struct ModelChangedEvent : IEvent
+    {
+    }
 
     public class Model : Behavior
     {
@@ -43,7 +45,7 @@ namespace Goblin.Gameplay.Render.Behaviors
             model.transform.localPosition = Vector3.zero;
             model.transform.localRotation = Quaternion.identity;
             model.transform.localScale = Vector3.one;
-            
+
             actor.eventor.Tell<ModelChangedEvent>();
         }
     }

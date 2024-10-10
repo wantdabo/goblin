@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
     /// <summary>
     /// 有限状态机 - 状态
     /// </summary>
-    public abstract partial class State : Comp
+    public abstract class State : Comp
     {
         /// <summary>
         /// 状态 ID

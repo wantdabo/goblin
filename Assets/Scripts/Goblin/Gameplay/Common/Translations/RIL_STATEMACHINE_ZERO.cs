@@ -1,15 +1,19 @@
-﻿using Goblin.Gameplay.Logic.Translations.Common;
+﻿
+using Goblin.Gameplay.Common.Translations.Common;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
-namespace Goblin.Gameplay.Logic.Translations
+namespace Goblin.Gameplay.Common.Translations
 {
-    public struct RIL_STATEMACHINE_ONE : IRIL 
+    using IRIL = Common.IRIL;
+
+    public struct RIL_STATEMACHINE_ZERO : IRIL
     {
-        public ushort id => IRIL.STATEMACHINE_ONE;
+        public ushort id => RILDef.STATEMACHINE_ZERO;
         public uint sid { get; private set; }
         public uint frames { get; private set; }
         public byte layer { get; private set; }
 
-        public RIL_STATEMACHINE_ONE(uint sid, uint frames, byte layer)
+        public RIL_STATEMACHINE_ZERO(uint sid, uint frames, byte layer)
         {
             this.sid = sid;
             this.frames = frames;

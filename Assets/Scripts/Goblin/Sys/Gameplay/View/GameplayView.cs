@@ -1,10 +1,10 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Lives;
-using Goblin.Gameplay.Logic.Translations.Common;
 using Goblin.Sys.Common;
 using TrueSync;
 using UnityEngine;

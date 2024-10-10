@@ -1,4 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Common.StateMachine;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
 using System.Collections.Generic;
 
@@ -6,8 +7,8 @@ namespace Goblin.Gameplay.Logic.States.Player
 {
     public class Idle : State
     {
-        public override uint id => PLAYER_IDLE;
-        protected override List<uint> passes => new() { PLAYER_RUN };
+        public override uint id => StateDef.PLAYER_IDLE;
+        protected override List<uint> passes => new() { StateDef.PLAYER_RUN };
         private Gamepad gamepad { get; set; }
 
         protected override void OnCreate()

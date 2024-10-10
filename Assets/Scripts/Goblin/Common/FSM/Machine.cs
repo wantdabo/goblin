@@ -54,7 +54,7 @@ namespace Goblin.Common.FSM
         {
             foreach (var s in states)
             {
-                if (typeof(T) == s.GetType()) throw new Exception($"can'count set same state -> {typeof(T)}");
+                if (typeof(T) == s.GetType()) throw new Exception($"can't set same state -> {typeof(T)}");
             }
 
             var state = AddComp<T>();

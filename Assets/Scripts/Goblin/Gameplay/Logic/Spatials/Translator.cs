@@ -1,5 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Translations;
-using Goblin.Gameplay.Logic.Translations.Common;
+﻿using Goblin.Gameplay.Common.Translations;
+using Goblin.Gameplay.Common.Translations.Common;
 using System;
 using TrueSync;
 

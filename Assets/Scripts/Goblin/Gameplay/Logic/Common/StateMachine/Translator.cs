@@ -1,5 +1,6 @@
-﻿using Goblin.Gameplay.Logic.Translations;
-using Goblin.Gameplay.Logic.Translations.Common;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.Translations;
+using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Logic.Common.StateMachine
 {
@@ -13,16 +14,16 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         public override void Create()
         {
             base.Create();
-            lzerostate = State.NULL;
-            lonestate = State.NULL;
+            lzerostate = StateDef.NULL;
+            lonestate = StateDef.NULL;
         }
 
         protected override void OnRIL()
         {
             uint zeroframes = lzeroframes;
-            var machinez = behavior.GetMachine(ParallelMachine.LAYER_ZERO);
-            var zerostate = State.NULL;
-            if (null != machinez)
+            var machinez = behavior.GetMachine(StateDef.LAYER_ZERO);
+            var zerostate = StateDef.NULL;
+            if (null != machinez && null != machinez.current)
             {
                 zerostate = machinez.current.id;
                 zeroframes = machinez.current.frames;
@@ -36,13 +37,13 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
                     lzeroframes = 0;
                 }
                 lzerostate = zerostate;
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(lzerostate, lzeroframes, ParallelMachine.LAYER_ZERO));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(lzerostate, lzeroframes, StateDef.LAYER_ZERO));
             }
 
             uint oneframes = loneframes;
-            var machineo = behavior.GetMachine(ParallelMachine.LAYER_ONE);
-            var onestate = State.NULL;
-            if (null != machineo)
+            var machineo = behavior.GetMachine(StateDef.LAYER_ONE);
+            var onestate = StateDef.NULL;
+            if (null != machineo && null != machineo.current)
             {
                 onestate = machineo.current.id;
                 oneframes = machineo.current.frames;
@@ -57,7 +58,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
                 }
 
                 lonestate = onestate;
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(lonestate, loneframes, ParallelMachine.LAYER_ONE));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(lonestate, loneframes, StateDef.LAYER_ONE));
             }
         }
     }

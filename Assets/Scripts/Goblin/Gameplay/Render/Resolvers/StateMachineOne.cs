@@ -1,12 +1,13 @@
-﻿using Goblin.Gameplay.Logic.Translations;
-using Goblin.Gameplay.Logic.Translations.Common;
+﻿using Goblin.Gameplay.Common.Translations;
+using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Render.Core;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
     public class StateMachineOne : Resolver<RIL_STATEMACHINE_ONE>
     {
-        public override ushort id => IRIL.STATEMACHINE_ONE;
+        public override ushort id => RILDef.STATEMACHINE_ONE;
         
         protected override void OnAwake(uint frame, RIL_STATEMACHINE_ONE ril)
         {

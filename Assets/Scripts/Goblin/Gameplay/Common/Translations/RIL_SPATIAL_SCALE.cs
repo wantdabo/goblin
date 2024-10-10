@@ -1,11 +1,14 @@
-﻿using TrueSync;
-using IRIL = Goblin.Gameplay.Logic.Translations.Common.IRIL;
+﻿using Goblin.Gameplay.Common.Translations.Common;
+using TrueSync;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
-namespace Goblin.Gameplay.Logic.Translations
+namespace Goblin.Gameplay.Common.Translations
 {
+    using IRIL = Common.IRIL;
+
     public struct RIL_SPATIAL_SCALE : IRIL
     {
-        public ushort id => IRIL.SPATIAL_SCALE;
+        public ushort id => RILDef.SPATIAL_SCALE;
         public TSVector scale { get; private set; }        
         
         public RIL_SPATIAL_SCALE(TSVector scale)

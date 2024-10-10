@@ -61,7 +61,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (null == behaviorDict) behaviorDict = new();
 
-            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can'count add same behavior -> {typeof(T)}");
+            if (behaviorDict.ContainsKey(typeof(T))) throw new Exception($"can't add same behavior -> {typeof(T)}");
 
             var behavior = AddComp<T>();
             behavior.actor = this;

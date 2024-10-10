@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Common.StateMachine
@@ -51,12 +52,12 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
     /// <summary>
     /// 并发状态机
     /// </summary>
-    public partial class ParallelMachine : Behavior<Translator>
+    public class ParallelMachine : Behavior<Translator>
     {
         /// <summary>
         /// 有限状态机集合
         /// </summary>
-        private Machine[] machines = new Machine[MAX_LAYER];
+        private Machine[] machines = new Machine[StateDef.MAX_LAYER];
 
         protected override void OnCreate()
         {
@@ -75,7 +76,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// </summary>
         /// <param name="layer">层级</param>
         /// <returns>状态机</returns>
-        public Machine GetMachine(byte layer = LAYER_ZERO)
+        public Machine GetMachine(byte layer = StateDef.LAYER_ZERO)
         {
             return machines[layer];
         }
@@ -86,7 +87,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// <typeparam name="T">状态类型</typeparam>
         /// <param name="layer">层级</param>
         /// <returns>状态</returns>
-        public T GetState<T>(byte layer = LAYER_ZERO) where T : State
+        public T GetState<T>(byte layer = StateDef.LAYER_ZERO) where T : State
         {
             var machine = machines[layer];
             if (null == machine) return default;
@@ -100,7 +101,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// <param name="id">状态 ID</param>
         /// <param name="layer">层级</param>
         /// <returns>状态</returns>
-        public State GetState(uint id, byte layer = LAYER_ZERO)
+        public State GetState(uint id, byte layer = StateDef.LAYER_ZERO)
         {
             var machine = machines[layer];
             if (null == machine) return default;
@@ -113,7 +114,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// </summary>
         /// <typeparam name="T">状态类型</typeparam>
         /// <param name="layer">层级</param>
-        public void SetState<T>(byte layer = LAYER_ZERO) where T : State, new()
+        public void SetState<T>(byte layer = StateDef.LAYER_ZERO) where T : State, new()
         {
             var machine = machines[layer];
 

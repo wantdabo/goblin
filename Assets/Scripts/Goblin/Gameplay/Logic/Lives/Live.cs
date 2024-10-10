@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Translations;
 
 namespace Goblin.Gameplay.Logic.Lives
 {
@@ -10,6 +10,11 @@ namespace Goblin.Gameplay.Logic.Lives
     
     public struct LiveDeadEvent : IEvent
     {
+    }
+
+    public struct LiveAwakenEvent : IEvent
+    {
+        
     }
 
     public class Live : Behavior
@@ -31,6 +36,7 @@ namespace Goblin.Gameplay.Logic.Lives
         private void OnLiveBorn(LiveBornEvent e)
         {
             actor.stage.rilsync.PushRIL(actor.id, new RIL_LIVE_BORN());
+            actor.eventor.Tell<LiveAwakenEvent>();
         }
         
         private void OnLiveDead(LiveDeadEvent e)

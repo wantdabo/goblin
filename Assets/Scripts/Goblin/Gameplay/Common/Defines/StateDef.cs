@@ -1,6 +1,6 @@
-﻿namespace Goblin.Gameplay.Logic.Common.StateMachine
+﻿namespace Goblin.Gameplay.Common.Defines
 {
-    public partial class ParallelMachine
+    public class StateDef
     {
         /// <summary>
         /// 最大层数
@@ -14,10 +14,7 @@
         /// 第一层
         /// </summary>
         public const byte LAYER_ONE = 1;
-    }
-    
-    public abstract partial class State
-    {
+        
         public const uint NULL = uint.MaxValue;
         public const uint PLAYER_IDLE = 100001;
         public const uint PLAYER_RUN = 100002;

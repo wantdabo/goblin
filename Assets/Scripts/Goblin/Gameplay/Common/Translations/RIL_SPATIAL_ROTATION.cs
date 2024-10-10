@@ -1,11 +1,14 @@
-﻿using TrueSync;
-using IRIL = Goblin.Gameplay.Logic.Translations.Common.IRIL;
+﻿using Goblin.Gameplay.Common.Translations.Common;
+using TrueSync;
+using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
-namespace Goblin.Gameplay.Logic.Translations
+namespace Goblin.Gameplay.Common.Translations
 {
+    using IRIL = Common.IRIL;
+
     public struct RIL_SPATIAL_ROTATION : IRIL
     {
-        public ushort id => IRIL.SPATIAL_ROTATION;
+        public ushort id => RILDef.SPATIAL_ROTATION;
         public TSQuaternion rotation { get; private set; }
 
         public RIL_SPATIAL_ROTATION(TSQuaternion rotation)
