@@ -31,8 +31,18 @@ namespace Goblin.Gameplay.Logic.Skills
     /// </summary>
     public class SkillPipeline : Comp
     {
+        /// <summary>
+        /// 技能状态
+        /// </summary>
         public SkillPipelineState state { get; private set; } = SkillPipelineState.End;
+        /// <summary>
+        /// 技能发射器
+        /// </summary>
         public SkillLauncher launcher { get; set; }
+        /// <summary>
+        /// 当前执行帧号
+        /// </summary>
+        public uint frame { get; private set; }
 
         public void Break()
         {

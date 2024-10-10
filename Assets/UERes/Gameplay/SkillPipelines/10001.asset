@@ -247,8 +247,8 @@ MonoBehaviour:
   - {fileID: -1506784747434101577}
   cloneModel: {fileID: 0}
   length: 2.6000001
-  viewTimeMin: 0.23911595
-  viewTimeMax: 1.5642145
+  viewTimeMin: 0
+  viewTimeMax: 2.6000001
 --- !u!114 &381031694647703124
 MonoBehaviour:
   m_ObjectHideFlags: 1

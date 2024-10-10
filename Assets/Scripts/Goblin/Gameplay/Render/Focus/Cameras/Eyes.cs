@@ -47,7 +47,7 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
             var node = actor.GetBehavior<Node>();
             if (null == node || null == node.go) return;
             
-            var offset = node.go.transform.rotation.eulerAngles.y > 0 ? leftOffset : rightOffset;
+            var offset = node.go.transform.rotation.eulerAngles.y > 90f ? leftOffset : rightOffset;
             camera.transform.position = Vector3.Lerp(camera.transform.position, node.go.transform.position + offset, speed * Time.deltaTime);
         }
     }

@@ -21,7 +21,7 @@ namespace Goblin.SkillPipelineEditor
             var model = clip.Parent.Parent.Parent.cloneModel;
             if (model != null)
             {
-                animancer = model.GetComponent<AnimancerComponent>();
+                animancer = model.GetComponentInChildren<AnimancerComponent>();
             }
 
             if (animancer != null)
