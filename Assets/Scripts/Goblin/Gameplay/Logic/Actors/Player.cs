@@ -4,6 +4,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
+using Goblin.Gameplay.Logic.Skills;
 using Goblin.Gameplay.Logic.States.Player;
 using Goblin.Gameplay.Logic.Spatials;
 
@@ -21,6 +22,7 @@ namespace Goblin.Gameplay.Logic.Actors
             AddBehavior<Spatial>().Create();
             AddBehavior<Gamepad>().Create();
             AddBehavior<ParallelMachine>().Create();
+            AddBehavior<SkillLauncher>().Create();
             
             var paramachine = GetBehavior<ParallelMachine>();
             paramachine.SetState<Idle>();

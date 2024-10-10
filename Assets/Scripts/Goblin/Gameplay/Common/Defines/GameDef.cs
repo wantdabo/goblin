@@ -8,7 +8,7 @@
         /// <summary>
         /// 逻辑帧率
         /// </summary>
-        public const byte LOGIC_FRAME = 10;
+        public const byte LOGIC_FRAME = 5;
         /// <summary>
         /// 逻辑帧 Tick
         /// </summary>

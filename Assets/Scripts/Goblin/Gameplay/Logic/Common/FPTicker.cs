@@ -15,11 +15,11 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint frame;
+        public uint frame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public FP tick;
+        public FP tick { get; set; }
     }
 
     /// <summary>
@@ -30,11 +30,11 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint frame;
+        public uint frame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public FP tick;
+        public FP tick { get; set; }
     }
 
     /// <summary>
@@ -155,11 +155,11 @@ namespace Goblin.Gameplay.Logic.Common
 
         private List<TimerInfo> infoTemps = new();
         private List<uint> timerTemps = new();
-        
+
         private void TickTimerInfos()
         {
             while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
-            
+
             if (0 == timerDict.Count) return;
             infoTemps.Clear();
             timerTemps.Clear();
@@ -176,7 +176,7 @@ namespace Goblin.Gameplay.Logic.Common
 
                 timerTemps.Add(info.id);
             }
-            
+
             foreach (var infoTemp in infoTemps)
             {
                 timerDict.Remove(infoTemp.id);

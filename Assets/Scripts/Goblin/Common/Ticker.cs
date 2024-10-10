@@ -16,11 +16,11 @@ namespace Goblin.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint frame;
+        public uint frame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public float tick;
+        public float tick { get; set; }
     }
 
     /// <summary>
@@ -31,11 +31,11 @@ namespace Goblin.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint frame;
+        public uint frame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public float tick;
+        public float tick { get; set; }
     }
 
     /// <summary>
@@ -46,11 +46,11 @@ namespace Goblin.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint fixedFrame;
+        public uint fixedFrame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public float fixedTick;
+        public float fixedTick { get; set; }
     }
 
     /// <summary>

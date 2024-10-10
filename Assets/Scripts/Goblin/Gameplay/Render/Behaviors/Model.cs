@@ -26,6 +26,12 @@ namespace Goblin.Gameplay.Render.Behaviors
             node = actor.EnsureBehavior<Node>();
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (null != go) engine.pool.Set($"MODEL_GO_KEY_{res}", go, (g) => g.transform.SetParent(modelpool.transform));
+        }
+
         public void Load(string res)
         {
             if (null != this.res && res.Equals(this.res)) return;

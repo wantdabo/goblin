@@ -23,9 +23,11 @@ namespace Goblin.Sys.Gameplay.View
         private Vector3 joystickBgPos;
         private float joystickBgRadius;
 
+        private bool joystickFlag = false;
         private Vector3 joystickDir = Vector3.zero;
-        private Stage stage;
-        private RStage rstage;
+        private Stage stage { get; set; }
+        private RStage rstage { get; set; }
+
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -34,8 +36,8 @@ namespace Goblin.Sys.Gameplay.View
             stage.Create();
             rstage = AddComp<RStage>();
             rstage.Create();
-            rstage.eyes.SetFollow(1);
-            
+            rstage.foc.SetFollow(1);
+
             stage.eventor.Listen<RILSyncEvent>(OnRILSync);
             var player = stage.AddActor<Player>();
             player.Create();
@@ -66,6 +68,7 @@ namespace Goblin.Sys.Gameplay.View
             base.OnBindEvent();
             AddUIEventListener("JoystickArea", (e) =>
             {
+                joystickFlag = true;
                 var worldPos = engine.gameui.uicamera.ScreenToWorldPoint(e.position);
                 worldPos.z = joystickBgPos.z;
                 joystickBgRTF.position = worldPos;
@@ -74,6 +77,7 @@ namespace Goblin.Sys.Gameplay.View
 
             AddUIEventListener("JoystickArea", (e) =>
             {
+                joystickFlag = false;
                 joystickBgRTF.position = joystickBgPos;
                 joystickHandleTrans.position = joystickBgPos;
                 joystickDir = Vector3.zero;
@@ -118,6 +122,14 @@ namespace Goblin.Sys.Gameplay.View
         private void OnTick(TickEvent e)
         {
             rstage.Tick(e.tick);
+            
+            if (joystickFlag) return;
+            var v = Vector3.zero;
+            if (Input.GetKey(KeyCode.W)) v += Vector3.up;
+            if (Input.GetKey(KeyCode.S)) v += Vector3.down;
+            if (Input.GetKey(KeyCode.A)) v += Vector3.left;
+            if (Input.GetKey(KeyCode.D)) v += Vector3.right;
+            joystickDir = v.normalized;
         }
 
         private void OnFixedTick(FixedTickEvent e)

@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Common.Translations.Common
     /// <summary>
     /// 渲染指令接口
     /// </summary>
-    public partial interface IRIL
+    public interface IRIL
     {
         /// <summary>
         /// 指令

@@ -1,7 +1,9 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
-using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
+using Goblin.Gameplay.Render.Focus;
+using Goblin.Gameplay.Render.Focus.Cameras;
+using Goblin.Gameplay.Render.Focus.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,9 +34,9 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public RILSync rilsync { get; private set; }
         /// <summary>
-        /// 主相机
+        /// 专注/焦点
         /// </summary>
-        public Eyes eyes { get; private set; }
+        public Foc foc { get; private set; }
         /// <summary>
         /// Actor 列表
         /// </summary>
@@ -57,9 +59,9 @@ namespace Goblin.Gameplay.Render.Core
             rilsync.stage = this;
             rilsync.Create();
 
-            eyes = AddComp<Eyes>();
-            eyes.stage = this;
-            eyes.Create();
+            foc = AddComp<Foc>();
+            foc.stage = this;
+            foc.Create();
         }
 
         protected override void OnDestroy()
