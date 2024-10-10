@@ -85,8 +85,8 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// 状态驱动
         /// </summary>
         /// <param name="frame">帧</param>
-        /// <param name="fixedTick">s/秒</param>
-        public virtual void OnTick(uint frame, FP fixedTick)
+        /// <param name="tick">s/秒</param>
+        public virtual void OnTick(uint frame, FP tick)
         {
             frames++;
         }

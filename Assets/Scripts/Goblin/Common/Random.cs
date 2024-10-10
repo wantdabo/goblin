@@ -94,59 +94,5 @@ namespace Goblin.Common
         {
             return new Vector2(Range(-100, 100), Range(-100, 100)).normalized;
         }
-
-        /// <summary>
-        /// 打乱容器内元素
-        /// </summary>
-        /// <param name="arr">所有元素数组</param>
-        /// <returns>乱序元素数组</returns>
-        public T[] RandomElement<T>(T[] arr) where T : struct
-        {
-            // 打乱数组元素
-            for (int i = 0; i < arr.Length; i++)
-            {
-                int index = Range(0, arr.Length);
-                T temp = arr[i];
-                arr[i] = arr[index];
-                arr[index] = temp;
-            }
-
-            return arr;
-        }
-
-        /// <summary>
-        /// 打乱容器内元素
-        /// </summary>
-        /// <param name="list">所有元素数组</param>
-        /// <returns>乱序元素数组</returns>
-        public List<T> RandomElement<T>(List<T> list) where T : class
-        {
-            // 打乱数组元素
-            for (int i = 0; i < list.Count; i++)
-            {
-                int index = Range(0, list.Count);
-                T temp = list[i];
-                list[i] = list[index];
-                list[index] = temp;
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// 抖动算法
-        /// </summary>
-        /// <param name="originPos">初始位置</param>
-        /// <param name="intensity">抖动强度</param>
-        /// <param name="t">步长</param>
-        /// <returns>坐标</returns>
-        public Vector2 Shake(Vector2 originPos, float intensity, float t)
-        {
-            var pos = originPos;
-            var randPos = pos + RandCirclePoint() * intensity;
-            pos = Vector2.Lerp(originPos, randPos, t);
-
-            return pos;
-        }
     }
 }

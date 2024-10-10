@@ -27,17 +27,17 @@ namespace Goblin.Gameplay.Logic.States.Player
             return joystick.press;
         }
 
-        public override void OnTick(uint frame, FP fixedTick)
+        public override void OnTick(uint frame, FP tick)
         {
-            base.OnTick(frame, fixedTick);
+            base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * 75 * FP.EN1 * fixedTick;
+            var motion = joystick.dire * 75 * FP.EN1 * tick;
             spatial.position += new TSVector(motion.x, 0, motion.y);
             if (0 > motion.x)
             {
                 spatial.eulerAngle = TSVector.up * 180;
             }
-            else
+            else if(0 < motion.x)
             {
                 spatial.eulerAngle = TSVector.zero;
             }

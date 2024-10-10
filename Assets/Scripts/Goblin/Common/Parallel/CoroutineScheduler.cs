@@ -112,7 +112,7 @@ namespace Goblin.Common.Parallel
 
         private void OnFixedTick(FixedTickEvent e)
         {
-            Update(e.fixedTick);
+            Update(e.tick);
         }
     }
 }

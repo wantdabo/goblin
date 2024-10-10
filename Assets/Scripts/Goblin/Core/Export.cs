@@ -27,10 +27,10 @@
         /// <summary>
         /// FixedTick 驱动
         /// </summary>
-        /// <param name="fixedTick">固定步长</param>
-        public static void FixedTick(float fixedTick)
+        /// <param name="tick">固定步长</param>
+        public static void FixedTick(float tick)
         {
-            engine.ticker.FixedTick(fixedTick);
+            engine.ticker.FixedTick(tick);
         }
     }
 }

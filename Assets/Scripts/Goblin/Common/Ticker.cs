@@ -46,11 +46,11 @@ namespace Goblin.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint fixedFrame { get; set; }
+        public uint frame { get; set; }
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public float fixedTick { get; set; }
+        public float tick { get; set; }
     }
 
     /// <summary>
@@ -61,11 +61,11 @@ namespace Goblin.Common
         /// <summary>
         /// 帧号
         /// </summary>
-        public uint fixedFrame;
+        public uint frame;
         /// <summary>
         /// 流逝的时间 s/秒
         /// </summary>
-        public float fixedTick;
+        public float tick;
     }
 
     /// <summary>
@@ -92,11 +92,6 @@ namespace Goblin.Common
         /// 事件订阅/派发者
         /// </summary>
         public Eventor eventor { get; set; }
-
-        /// <summary>
-        /// 固定的流逝时间 s/秒
-        /// </summary>
-        public float unscaleFixedTick = 0.0166f;
 
         /// <summary>
         /// 时间缩放
@@ -189,8 +184,8 @@ namespace Goblin.Common
                 // 驱动 Fixed 计时器
                 TickTimerInfos(TickType.FixedTick, fixedTick);
                 // 派发事件，时间流逝
-                eventor.Tell(new FixedTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
-                eventor.Tell(new FixedLateTickEvent { fixedFrame = fixedFrame, fixedTick = fixedTick });
+                eventor.Tell(new FixedTickEvent { frame = fixedFrame, tick = fixedTick });
+                eventor.Tell(new FixedLateTickEvent { frame = fixedFrame, tick = fixedTick });
             }
         }
 
