@@ -39,7 +39,7 @@ namespace Goblin.Core
         /// <summary>
         /// 创建一个 Goblin 对象
         /// </summary>
-        public virtual void Create()
+        public void Create()
         {
             OnCreate();
         }
@@ -47,7 +47,7 @@ namespace Goblin.Core
         /// <summary>
         /// 销毁一个 Goblin 对象
         /// </summary>
-        public virtual void Destroy()
+        public void Destroy()
         {
             if (destroyed) return;
             destroyed = true;
@@ -126,7 +126,7 @@ namespace Goblin.Core
         /// </summary>
         /// <typeparam name="T">组件类型</typeparam>
         /// <returns>组件</returns>
-        public virtual T AddComp<T>() where T : Comp, new()
+        public T AddComp<T>() where T : Comp, new()
         {
             if (null == compList) compList = new();
             if (null == compDict) compDict = new();

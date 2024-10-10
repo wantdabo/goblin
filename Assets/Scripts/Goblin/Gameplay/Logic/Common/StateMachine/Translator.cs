@@ -9,9 +9,9 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         public uint lzerostate { get; set; }
         public uint lonestate { get; set; }
 
-        public override void Create()
+        protected override void OnCreate()
         {
-            base.Create();
+            base.OnCreate();
             lzerostate = StateDef.NULL;
             lonestate = StateDef.NULL;
         }
