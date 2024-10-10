@@ -41,7 +41,7 @@ namespace Goblin.Phases
     /// </summary>
     public class HotfixPhase : State
     {
-        protected override List<Type> passes => new() { typeof(LoginPhase) };
+        protected override List<Type> passes => new() { typeof(GamingPhase) };
 
         /// <summary>
         /// 就绪
