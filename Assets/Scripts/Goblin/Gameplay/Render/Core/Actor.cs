@@ -163,7 +163,7 @@ namespace Goblin.Gameplay.Render.Core
                         resolver = AddResolver<StateMachineOne>(e.ril.id);
                         break;
                     case RILDef.ATTR_SURFACE:
-                        resolver = AddResolver<AttrSurface>(e.ril.id);
+                        resolver = AddResolver<ATTRSurface>(e.ril.id);
                         break;
                 }
 

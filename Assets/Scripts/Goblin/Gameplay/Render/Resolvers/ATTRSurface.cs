@@ -6,7 +6,7 @@ using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class AttrSurface : Resolver<RIL_ATTR_SURFACE>
+    public class ATTRSurface : Resolver<RIL_ATTR_SURFACE>
     {
         public override ushort id => RILDef.ATTR_SURFACE;
         private Model model { get; set; }
