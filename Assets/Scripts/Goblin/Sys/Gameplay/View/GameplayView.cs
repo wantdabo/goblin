@@ -34,6 +34,8 @@ namespace Goblin.Sys.Gameplay.View
             stage.Create();
             rstage = AddComp<RStage>();
             rstage.Create();
+            rstage.eyes.SetFollow(1);
+            
             stage.eventor.Listen<RILSyncEvent>(OnRILSync);
             var player = stage.AddActor<Player>();
             player.Create();

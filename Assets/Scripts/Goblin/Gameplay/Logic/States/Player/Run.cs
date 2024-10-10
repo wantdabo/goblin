@@ -31,8 +31,16 @@ namespace Goblin.Gameplay.Logic.States.Player
         {
             base.OnTick(frame, fixedTick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * 2.5f * fixedTick;
-            spatial.position += new TSVector(motion.x, motion.y, 0);
+            var motion = joystick.dire * 5f * fixedTick;
+            spatial.position += new TSVector(motion.x, 0, motion.y);
+            if (0 > motion.x)
+            {
+                spatial.eulerAngle = TSVector.up * 180;
+            }
+            else
+            {
+                spatial.eulerAngle = TSVector.zero;
+            }
         }
     }
 }

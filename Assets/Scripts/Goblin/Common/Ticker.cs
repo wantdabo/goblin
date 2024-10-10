@@ -67,7 +67,7 @@ namespace Goblin.Common
         /// </summary>
         public float fixedTick;
     }
-    
+
     /// <summary>
     /// Tick 类型
     /// </summary>
@@ -305,9 +305,9 @@ namespace Goblin.Common
         {
             var infos = TickType.Tick == tt ? timerDict : fixedTimerDict;
             var recyList = TickType.Tick == tt ? recyTimers : recyFixedTimers;
-            Action<uint> stopTimerAction = TickType.Tick == tt ?  StopTimer : StopFixedTimer;
+            Action<uint> stopTimerAction = TickType.Tick == tt ? StopTimer : StopFixedTimer;
             while (recyList.TryDequeue(out var tid)) infos.Remove(tid);
-            
+
             if (0 == infos.Count) return;
             infoTemps.Clear();
             timerTemps.Clear();
@@ -324,7 +324,7 @@ namespace Goblin.Common
 
                 timerTemps.Add(info.id);
             }
-            
+
             foreach (var infoTemp in infoTemps)
             {
                 infos.Remove(infoTemp.id);

@@ -63,7 +63,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         /// <typeparam name="T">Behavior 类型</typeparam>
         /// <returns>Behavior</returns>
-        private T GetBehavior<T>() where T : Behavior
+        public T GetBehavior<T>() where T : Behavior
         {
             if (null == behaviorDict) return default;
 

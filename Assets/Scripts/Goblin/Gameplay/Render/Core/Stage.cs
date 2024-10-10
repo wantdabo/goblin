@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,10 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public RILSync rilsync { get; private set; }
         /// <summary>
+        /// 主相机
+        /// </summary>
+        public Eyes eyes { get; private set; }
+        /// <summary>
         /// Actor 列表
         /// </summary>
         public List<Actor> actors { get; private set; } = new();
@@ -51,6 +56,10 @@ namespace Goblin.Gameplay.Render.Core
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;
             rilsync.Create();
+
+            eyes = AddComp<Eyes>();
+            eyes.stage = this;
+            eyes.Create();
         }
 
         protected override void OnDestroy()

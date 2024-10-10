@@ -19,5 +19,10 @@ namespace Goblin.Gameplay.Render.Common.Extensions
         {
             return new Vector4(vector.x.AsFloat(), vector.y.AsFloat(), vector.z.AsFloat(), vector.w.AsFloat());
         }
+        
+        public static Quaternion ToQuaternion(this TSQuaternion quaternion)
+        {
+            return new Quaternion(quaternion.x.AsFloat(), quaternion.y.AsFloat(), quaternion.z.AsFloat(), quaternion.w.AsFloat());
+        }
     }
 }
