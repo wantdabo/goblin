@@ -1,10 +1,8 @@
-﻿using Goblin.Gameplay.Common.Translations.Common;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Common.Translations
 {
-    using IRIL = Common.IRIL;
-
     public class RIL_ATTR_SURFACE : IRIL
     {
         public ushort id => RILDef.ATTR_SURFACE;

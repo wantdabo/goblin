@@ -1,4 +1,4 @@
-﻿namespace Goblin.Gameplay.Common.Translations.Common
+﻿namespace Goblin.Gameplay.Common.Defines
 {
     /// <summary>
     /// RIL 定义

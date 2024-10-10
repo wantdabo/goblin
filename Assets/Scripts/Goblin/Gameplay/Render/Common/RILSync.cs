@@ -1,8 +1,8 @@
 ﻿using Goblin.Core;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Common
 {

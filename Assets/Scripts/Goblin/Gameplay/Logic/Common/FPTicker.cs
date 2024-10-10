@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Defines;
 using System;
 using System.Collections.Generic;
 using TrueSync;
@@ -57,7 +58,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 最新的流逝时间 s/秒
         /// </summary>
-        public FP tick { get; private set; } = FP.One / (2 * FP.Ten);
+        public FP tick { get; private set; } = FP.One / (GameDef.LOGIC_FRAME * FP.One);
 
         protected override void OnCreate()
         {

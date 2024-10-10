@@ -1,11 +1,9 @@
-﻿using Goblin.Gameplay.Common.Translations.Common;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.Translations.Common;
 using TrueSync;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Common.Translations
 {
-    using IRIL = Common.IRIL;
-
     public struct RIL_SPATIAL_ROTATION : IRIL
     {
         public ushort id => RILDef.SPATIAL_ROTATION;

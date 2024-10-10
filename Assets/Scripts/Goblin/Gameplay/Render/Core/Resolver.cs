@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
+using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Render.Core
 {

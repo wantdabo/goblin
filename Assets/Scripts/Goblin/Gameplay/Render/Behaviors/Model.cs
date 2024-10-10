@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Render.Behaviors
     public class Model : Behavior
     {
         public string res { get; private set; }
-        public GameObject model { get; private set; }
+        public GameObject go { get; private set; }
         private Node node { get; set; }
 
         private static GameObject modelpool = new("MODELPOOL");
@@ -29,22 +29,22 @@ namespace Goblin.Gameplay.Render.Behaviors
         public void Load(string res)
         {
             if (null != this.res && res.Equals(this.res)) return;
-            if (null != model) engine.pool.Set($"MODEL_GO_KEY_{res}", model, (go) => go.transform.SetParent(modelpool.transform));
+            if (null != go) engine.pool.Set($"MODEL_GO_KEY_{res}", go, (g) => g.transform.SetParent(modelpool.transform));
             this.res = res;
 
-            model = engine.pool.Get<GameObject>($"MODEL_GO_KEY_{res}");
-            if (null == model) model = engine.gameres.location.LoadModelSync(res);
-            if (null == model) return;
+            go = engine.pool.Get<GameObject>($"MODEL_GO_KEY_{res}");
+            if (null == go) go = engine.gameres.location.LoadModelSync(res);
+            if (null == go) return;
             if (null == node || null == node.go)
             {
-                engine.pool.Set($"MODEL_GO_KEY_{res}", model, (go) => go.transform.SetParent(modelpool.transform));
+                engine.pool.Set($"MODEL_GO_KEY_{res}", go, (g) => g.transform.SetParent(modelpool.transform));
                 return;
             }
 
-            model.transform.SetParent(node.go.transform, false);
-            model.transform.localPosition = Vector3.zero;
-            model.transform.localRotation = Quaternion.identity;
-            model.transform.localScale = Vector3.one;
+            go.transform.SetParent(node.go.transform, false);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.localScale = Vector3.one;
 
             actor.eventor.Tell<ModelChangedEvent>();
         }

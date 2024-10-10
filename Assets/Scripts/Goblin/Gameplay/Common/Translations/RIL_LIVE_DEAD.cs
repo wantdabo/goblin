@@ -1,10 +1,8 @@
-﻿using Goblin.Gameplay.Common.Translations.Common;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Common.Translations
 {
-    using IRIL = Common.IRIL;
-
     public struct RIL_LIVE_DEAD : IRIL
     {
         public ushort id => RILDef.LIVE_DEAD;

@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Common;
@@ -28,6 +29,7 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
+            Time.fixedDeltaTime = 1f / GameDef.LOGIC_FRAME;
             stage = AddComp<Stage>();
             stage.Create();
             rstage = AddComp<RStage>();
@@ -36,7 +38,7 @@ namespace Goblin.Sys.Gameplay.View
             var player = stage.AddActor<Player>();
             player.Create();
             player.eventor.Tell<LiveBornEvent>();
-            
+
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
             engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
         }
@@ -110,7 +112,7 @@ namespace Goblin.Sys.Gameplay.View
         {
             rstage.rilsync.OnRILSync(e.id, e.frame, e.ril);
         }
-        
+
         private void OnTick(TickEvent e)
         {
             rstage.Tick(e.tick);

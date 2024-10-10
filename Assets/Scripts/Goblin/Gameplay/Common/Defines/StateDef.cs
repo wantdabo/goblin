@@ -1,5 +1,8 @@
 ﻿namespace Goblin.Gameplay.Common.Defines
 {
+    /// <summary>
+    /// State 定义
+    /// </summary>
     public class StateDef
     {
         /// <summary>
@@ -15,8 +18,17 @@
         /// </summary>
         public const byte LAYER_ONE = 1;
         
+        /// <summary>
+        /// 空状态
+        /// </summary>
         public const uint NULL = uint.MaxValue;
+        /// <summary>
+        /// 玩家 IDLE 状态
+        /// </summary>
         public const uint PLAYER_IDLE = 100001;
+        /// <summary>
+        /// 玩家 RUN 状态
+        /// </summary>
         public const uint PLAYER_RUN = 100002;
     }
 }

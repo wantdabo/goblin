@@ -1,8 +1,8 @@
-﻿using Goblin.Gameplay.Common.Translations;
+﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Core;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {

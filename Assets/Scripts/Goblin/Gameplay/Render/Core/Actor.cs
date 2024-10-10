@@ -1,13 +1,10 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Lives;
-using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Resolvers;
 using System;
 using System.Collections.Generic;
-using IRIL = Goblin.Gameplay.Common.Translations.Common.IRIL;
 
 namespace Goblin.Gameplay.Render.Core
 {
