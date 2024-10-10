@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
-    public class Idle : State
+    public class PlayerIdle : State
     {
         public override uint id => StateDef.PLAYER_IDLE;
         protected override List<uint> passes => new() { StateDef.PLAYER_RUN };

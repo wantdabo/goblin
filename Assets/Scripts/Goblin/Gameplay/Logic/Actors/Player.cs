@@ -26,8 +26,8 @@ namespace Goblin.Gameplay.Logic.Actors
             AddBehavior<SkillLauncher>().Create();
             
             var paramachine = GetBehavior<ParallelMachine>();
-            paramachine.SetState<Idle>();
-            paramachine.SetState<Run>();
+            paramachine.SetState<PlayerIdle>();
+            paramachine.SetState<PlayerRun>();
             
             // 侧转
             GetBehavior<Spatial>().eulerAngle = TSVector.up * 90;

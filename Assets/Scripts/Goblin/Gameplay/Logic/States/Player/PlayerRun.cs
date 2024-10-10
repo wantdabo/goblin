@@ -7,7 +7,7 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
-    public class Run : State
+    public class PlayerRun : State
     {
         public override uint id => StateDef.PLAYER_RUN;
         protected override List<uint> passes => new() { StateDef.PLAYER_IDLE };
