@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
 using System;
@@ -186,4 +185,3 @@ public class PackageEditor : Editor
         AssetDatabase.Refresh();
     }
 }
-#endif
