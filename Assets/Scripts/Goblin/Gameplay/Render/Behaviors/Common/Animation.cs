@@ -39,17 +39,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
             if (null == model.go) return;
             OnModelChanged(model.go);
         }
-
-        private void OnTick(TickEvent e)
-        {
-            OnTick(e.tick);
-        }
-
-        private void OnModelChanged(ModelChangedEvent e)
-        {
-            CheckModelGo();
-        }
-
+        
         /// <summary>
         /// 播放动画
         /// </summary>
@@ -78,18 +68,26 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         {
             animseqs.Enqueue((name, layer));
         }
-        
-        /// <summary>
-        /// Tick
-        /// </summary>
-        /// <param name="tick">tick</param>
-        protected virtual void OnTick(float tick)
+
+        private void OnTick(TickEvent e)
         {
+            OnTick(e.tick);
             if (0 == animseqs.Count) return;
             if (false == OnNextSequeue()) return;
             var anim = animseqs.Dequeue();
             Play(anim.Item1, anim.Item2);
         }
+
+        private void OnModelChanged(ModelChangedEvent e)
+        {
+            CheckModelGo();
+        }
+
+        /// <summary>
+        /// Render
+        /// </summary>
+        /// <param name="tick">tick</param>
+        protected abstract void OnTick(float tick);
 
         /// <summary>
         /// 播放动画

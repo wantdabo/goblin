@@ -17,7 +17,6 @@ namespace Goblin.Gameplay.Render.Behaviors
 
         protected override void OnTick(float tick)
         {
-            base.OnTick(tick);
             if (null == state) return;
             state.Time += tick;
         }
