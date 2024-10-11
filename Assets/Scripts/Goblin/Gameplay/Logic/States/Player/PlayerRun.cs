@@ -33,25 +33,11 @@ namespace Goblin.Gameplay.Logic.States.Player
             var joystick = gamepad.GetInput(InputType.Joystick);
             var motion = joystick.dire * 75 * FP.EN1 * tick;
             spatial.position += new TSVector(motion.x, 0, motion.y);
-            var offset = 0;
-            if (0 < motion.y)
+
+            if (motion != TSVector2.zero)
             {
-                spatial.eulerAngle = TSVector.zero;
-                offset = 45;
-            }
-            else if (0 > motion.y)
-            {
-                spatial.eulerAngle = TSVector.up * 180;
-                offset = -45;
-            }
-            
-            if (0 < motion.x)
-            {
-                spatial.eulerAngle = TSVector.up * (90 - offset);
-            }
-            else if(0 > motion.x)
-            {
-                spatial.eulerAngle = TSVector.up * (-90 + offset);
+                FP angle = TSMath.Atan2(motion.x.AsFloat(), motion.y.AsFloat()) * TSMath.Rad2Deg;
+                spatial.eulerAngle = TSVector.up * angle;
             }
         }
     }
