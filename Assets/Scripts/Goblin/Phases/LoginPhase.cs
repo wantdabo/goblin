@@ -19,7 +19,7 @@ namespace Goblin.Phases
         {
             var hotfixp = engine.phase.GetPhase<HotfixPhase>();
 
-            return false;
+            return false == engine.proxy.login.data.signined && hotfixp.finished;
         }
 
         public override void OnEnter()

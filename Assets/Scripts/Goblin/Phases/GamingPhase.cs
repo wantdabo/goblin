@@ -18,7 +18,7 @@ namespace Goblin.Phases
         {
             var hotfixp = engine.phase.GetPhase<HotfixPhase>();
 
-            return hotfixp.finished;
+            return engine.proxy.login.data.signined && hotfixp.finished;
         }
 
         public override void OnEnter()

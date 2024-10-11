@@ -124,12 +124,13 @@ namespace Goblin.Sys.Gameplay.View
             rstage.Tick(e.tick);
             
             if (joystickFlag) return;
-            var v = Vector3.zero;
-            if (Input.GetKey(KeyCode.W)) v += Vector3.up;
-            if (Input.GetKey(KeyCode.S)) v += Vector3.down;
-            if (Input.GetKey(KeyCode.A)) v += Vector3.left;
-            if (Input.GetKey(KeyCode.D)) v += Vector3.right;
-            joystickDir = v.normalized;
+            
+            joystickDir = Vector3.zero;
+            if (Input.GetKey(KeyCode.W)) joystickDir += Vector3.up;
+            if (Input.GetKey(KeyCode.S)) joystickDir += Vector3.down;
+            if (Input.GetKey(KeyCode.A)) joystickDir += Vector3.left;
+            if (Input.GetKey(KeyCode.D)) joystickDir += Vector3.right;
+            joystickDir.Normalize();
         }
 
         private void OnFixedTick(FixedTickEvent e)

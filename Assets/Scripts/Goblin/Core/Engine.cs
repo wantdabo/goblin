@@ -97,8 +97,9 @@ namespace Goblin.Core
             gameui = AddComp<GameUI>();
             gameui.Create();
 
-            phase = AddComp<Phase>();
-            phase.Create();
+            gameui.Open<Sys.Gameplay.View.GameplayView>();
+            // phase = AddComp<Phase>();
+            // phase.Create();
         }
 
         protected override void OnDestroy()

@@ -16,7 +16,7 @@ namespace Goblin.Phases
     /// </summary>
     public class ResPhase : State
     {
-        protected override List<Type> passes => new() { typeof(HotfixPhase)};
+        protected override List<Type> passes => new() { typeof(HotfixPhase) };
 
         /// <summary>
         /// 就绪
