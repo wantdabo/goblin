@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class AnimationCompressEditor : Editor
+public class AssetsEditor : Editor
 {
     [MenuItem("Assets/美术/压缩动画")]
     public static void CompressAnimationClip()
