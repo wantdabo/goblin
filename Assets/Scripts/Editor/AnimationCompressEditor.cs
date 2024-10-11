@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 public class AnimationCompressEditor : Editor
 {
-    [MenuItem("工具/美术/压缩动画")]
+    [MenuItem("Assets/美术/压缩动画")]
     public static void CompressAnimationClip()
     {
         var objs = Selection.objects;
