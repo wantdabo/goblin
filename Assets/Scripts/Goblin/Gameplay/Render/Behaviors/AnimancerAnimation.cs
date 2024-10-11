@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Render.Behaviors
         private NamedAnimancerComponent namedanimancer { get; set; }
         private AnimancerState state { get; set; }
 
-        public override void Play(string name, byte layer = 0)
+        protected override void OnPlay(string name, byte layer = 0)
         {
             state = namedanimancer.TryPlay(name, 0.01f, FadeMode.NormalizedDuration);
             state.Speed = 0f;
@@ -17,8 +17,17 @@ namespace Goblin.Gameplay.Render.Behaviors
 
         protected override void OnTick(float tick)
         {
+            base.OnTick(tick);
             if (null == state) return;
             state.Time += tick;
+        }
+
+        protected override bool OnNextSequeue()
+        {
+            if (null == state) return true;
+            if (null != state && false == state.IsLooping) return state.Time > state.Length;
+            
+            return base.OnNextSequeue();
         }
 
         protected override void OnModelChanged(GameObject go)

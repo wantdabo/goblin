@@ -27,8 +27,8 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (zerostate != lzerostate)
             {
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(zerostate, lzerostate, StateDef.LAYER_ZERO));
                 lzerostate = zerostate;
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(lzerostate, StateDef.LAYER_ZERO));
             }
 
             var machineo = behavior.GetMachine(StateDef.LAYER_ONE);
@@ -40,9 +40,8 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (onestate != lonestate)
             {
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(onestate, lonestate, StateDef.LAYER_ONE));
                 lonestate = onestate;
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(lonestate, StateDef.LAYER_ONE));
-
             }
         }
     }
