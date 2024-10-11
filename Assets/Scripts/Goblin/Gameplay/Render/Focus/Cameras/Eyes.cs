@@ -11,10 +11,10 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
     {
         public Foc foc { get; set; }
 
-        private readonly Vector3 offset = new(0, 3f, -10f);
+        private readonly Vector3 offset = new(0, 2f, -10f);
         private readonly float followSpeed = 4.5f;
-        private (float, float) zoomRange = (5f, 45f);
-        private readonly float zoomSpeed = 15f;
+        private (float, float) zoomRange = (10f, 45f);
+        private readonly float zoomSpeed = 20f;
         
         private Camera camera { get; set; }
 
