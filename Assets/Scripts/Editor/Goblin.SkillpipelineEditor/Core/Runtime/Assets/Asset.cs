@@ -11,7 +11,7 @@ namespace Goblin.SkillPipelineEditor
     {
         public GameObject model;
         public List<Group> groups = new List<Group>();
-        [HideInInspector] public GameObject cloneModel;
+        [NonSerialized] public GameObject cloneModel;
         [SerializeField] private float length = 5f;
         [SerializeField] private float viewTimeMin = 0f;
         [SerializeField] private float viewTimeMax = 5f;

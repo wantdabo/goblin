@@ -1,3 +1,4 @@
+using Goblin.SkillPipelineEditor;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,6 +46,26 @@ public class AssetsEditor : Editor
                 string path = AssetDatabase.GetAssetPath(clip);
                 AssetDatabase.CreateAsset(Object.Instantiate(clip), path);
                 AssetDatabase.Refresh();
+            }
+        }
+    }
+
+    [MenuItem("Assets/技能管线读取数据")]
+    public static void SkillPipelineDataRead()
+    {
+        var objs = Selection.objects;
+        if (null == objs || 0 == objs.Length) return;
+        var obj = objs[0];
+
+        var asset = obj as Asset;
+        uint length = Convert.ToUInt32(asset.Length * Prefs.frameRate);
+
+        List<ActionClip> clips = new();
+        foreach (var group in asset.groups)
+        {
+            foreach (var track in group.Tracks)
+            {
+                clips.AddRange(track.Clips);
             }
         }
     }

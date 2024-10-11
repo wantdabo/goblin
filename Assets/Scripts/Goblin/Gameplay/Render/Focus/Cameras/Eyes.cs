@@ -11,8 +11,8 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
     {
         public Foc foc { get; set; }
 
-        private readonly Vector3 rightOffset = new(1f, 2.5f, -7.5f);
-        private readonly Vector3 leftOffset = new(-1f, 2.5f, -7.5f);
+        private readonly Vector3 rightOffset = new(1.5f, 2.5f, -6.5f);
+        private readonly Vector3 leftOffset = new(-1.5f, 2.5f, -6.5f);
         private readonly float speed = 4.5f;
         private Camera camera { get; set; }
 

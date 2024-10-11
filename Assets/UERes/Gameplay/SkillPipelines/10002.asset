@@ -378,7 +378,6 @@ MonoBehaviour:
   - {fileID: -2140477477535758407}
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
-  cloneModel: {fileID: 0}
   length: 0.6833334
   viewTimeMin: -0.31702372
   viewTimeMax: 1.2453324

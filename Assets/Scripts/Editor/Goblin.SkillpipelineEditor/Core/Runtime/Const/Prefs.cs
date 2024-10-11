@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-
+using Goblin.Gameplay.Common.Defines;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,18 +15,11 @@ namespace Goblin.SkillPipelineEditor
             $"{Application.dataPath}/../ProjectSettings/Goblin.SkillPipelineEditor.txt";
 
         [Serializable]
-        public enum TimeStepMode
-        {
-            Seconds,
-            Frames
-        }
-
-        [Serializable]
         class SerializedData
         {
-            public float SnapInterval = 1 / 60f;
+            public float SnapInterval = 1f / GameDef.SP_DATA_FRAME;
             [NonSerialized]
-            public int FrameRate = 60;
+            public int FrameRate = GameDef.SP_DATA_FRAME;
             [NonSerialized]
             public float timeScale = 1f;
             public int AutoSaveSeconds;
