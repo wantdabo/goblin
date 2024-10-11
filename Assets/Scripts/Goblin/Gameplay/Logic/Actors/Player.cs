@@ -28,9 +28,6 @@ namespace Goblin.Gameplay.Logic.Actors
             var paramachine = GetBehavior<ParallelMachine>();
             paramachine.SetState<PlayerIdle>();
             paramachine.SetState<PlayerRun>();
-            
-            // 侧转
-            GetBehavior<Spatial>().eulerAngle = TSVector.up * 90;
         }
 
         protected override void OnDestroy()

@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Render.Focus.Lights
             var light = go.AddComponent<Light>();
             light.type = LightType.Spot;
             light.range = 15;
-            light.spotAngle = 100;
+            light.spotAngle = 50f;
             light.intensity = 2f;
             light.shadows = LightShadows.Hard;
         }
