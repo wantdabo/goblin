@@ -1,12 +1,12 @@
 ﻿using Goblin.Core;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Skills.Behaviors.Common
+namespace Goblin.Gameplay.Logic.Skills.Actions.Common
 {
     /// <summary>
     /// SkillPipelineBehavior/技能管线行为
     /// </summary>
-    public abstract class SPB : Comp
+    public abstract class SkillPipelineAction : Comp
     {
         /// <summary>
         /// ID/技能行为 ID

@@ -1,9 +1,9 @@
-﻿namespace Goblin.Gameplay.Logic.Skills.Behaviors.Common
+﻿namespace Goblin.Gameplay.Logic.Skills.Actions.Common
 {
     /// <summary>
     /// SPB 定义
     /// </summary>
-    public class SPBDef
+    public class SkillPipelineActionDef
     {
         /// <summary>
         /// 空间变化

@@ -70,7 +70,7 @@ public class Shell : MonoBehaviour
     private async void Start()
     {
         Application.runInBackground = true;
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = int.MaxValue;
 
         await GameResSettings();
         await ScriptSettings();

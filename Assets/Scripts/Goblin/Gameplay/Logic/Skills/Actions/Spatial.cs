@@ -1,11 +1,11 @@
-﻿using Goblin.Gameplay.Logic.Skills.Behaviors.Common;
+﻿using Goblin.Gameplay.Logic.Skills.Actions.Common;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Skills.Behaviors
+namespace Goblin.Gameplay.Logic.Skills.Actions
 {
-    public class Spatial : SPB
+    public class Spatial : SkillPipelineAction
     {
-        public override ushort id => SPBDef.SPATIAL;
+        public override ushort id => SkillPipelineActionDef.SPATIAL;
         
         protected override void OnEnter()
         {
