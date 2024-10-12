@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
 
         private readonly Vector3 offset = new(0, 2f, -10f);
         private readonly float followSpeed = 4.5f;
-        private (float, float) zoomRange = (10f, 45f);
+        private (float min, float max) zoomRange = (10f, 45f);
         private readonly float zoomSpeed = 20f;
         
         private Camera camera { get; set; }
@@ -48,11 +48,11 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
             if (null == camera) return;
             if (Input.GetKey(KeyCode.Z))
             {
-                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView - e.tick * zoomSpeed, zoomRange.Item1, zoomRange.Item2);
+                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView - e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
             }
             else if (Input.GetKey(KeyCode.X))
             {
-                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView + e.tick * zoomSpeed, zoomRange.Item1, zoomRange.Item2);
+                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView + e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
             }
         }
 

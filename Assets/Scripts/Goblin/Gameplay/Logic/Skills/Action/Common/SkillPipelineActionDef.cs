@@ -1,7 +1,7 @@
 ﻿namespace Goblin.Gameplay.Logic.Skills.Actions.Common
 {
     /// <summary>
-    /// SPB 定义
+    /// 技能管线行为定义
     /// </summary>
     public class SkillPipelineActionDef
     {

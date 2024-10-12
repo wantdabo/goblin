@@ -5,8 +5,8 @@ namespace Goblin.SkillPipelineEditor
 { 
     [Name("变化")]
     [Color(0.0f, 1f, 1f)]
-    [Attachable(typeof(EditorTransformTrack))]
-    public class EditorTransformClip : ActionClip
+    [Attachable(typeof(EditorSpatialTrack))]
+    public class EditorSpatialClip : ActionClip
     {
         [SerializeField][HideInInspector] private float length = 1f;
 

@@ -1,9 +1,10 @@
-﻿using Goblin.Gameplay.Logic.Skills.Actions.Common;
+﻿using Goblin.Gameplay.Logic.Skills.Action.Common;
+using Goblin.Gameplay.Logic.Skills.Actions.Common;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Skills.Actions
+namespace Goblin.Gameplay.Logic.Skills.Action
 {
-    public class Spatial : SkillPipelineAction
+    public class SpatialAction : SkillPipelineAction
     {
         public override ushort id => SkillPipelineActionDef.SPATIAL;
         

@@ -1,10 +1,10 @@
 ﻿using Goblin.Core;
 using TrueSync;
 
-namespace Goblin.Gameplay.Logic.Skills.Actions.Common
+namespace Goblin.Gameplay.Logic.Skills.Action.Common
 {
     /// <summary>
-    /// SkillPipelineBehavior/技能管线行为
+    /// 技能管线行为
     /// </summary>
     public abstract class SkillPipelineAction : Comp
     {

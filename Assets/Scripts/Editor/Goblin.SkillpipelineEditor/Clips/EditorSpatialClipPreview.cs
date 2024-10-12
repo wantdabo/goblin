@@ -5,8 +5,8 @@ namespace Goblin.SkillPipelineEditor
     /// <summary>
     /// 变化预览
     /// </summary>
-    [CustomPreview(typeof(EditorTransformClip))]
-    public class EditorTransformClipPreview : PreviewBase<EditorTransformClip>
+    [CustomPreview(typeof(EditorSpatialClip))]
+    public class EditorSpatialClipPreview : PreviewBase<EditorSpatialClip>
     {
         public override void Reverse()
         {
