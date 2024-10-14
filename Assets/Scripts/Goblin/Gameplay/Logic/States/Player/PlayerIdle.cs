@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     public class PlayerIdle : State
     {
         public override uint id => StateDef.PLAYER_IDLE;
-        protected override List<uint> passes => new() { StateDef.PLAYER_RUN };
+        protected override List<uint> passes => new() { StateDef.PLAYER_RUN, StateDef.PLAYER_ATTACK };
         private Gamepad gamepad { get; set; }
 
         protected override void OnCreate()
@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         public override bool OnCheck()
         {
             var joystick = gamepad.GetInput(InputType.Joystick);
-            
+
             return false == joystick.press;
         }
     }

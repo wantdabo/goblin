@@ -50,7 +50,7 @@ namespace Goblin.Common
         /// <returns>结果</returns>
         public float Range(float min, float max)
         {
-            return random.Next((int)(min * engine.cfg.float2Int), (int)(max * engine.cfg.float2Int)) * engine.cfg.int2Float;
+            return random.Next((int)(min * Config.float2Int), (int)(max * Config.float2Int)) * Config.int2Float;
         }
 
         /// <summary>

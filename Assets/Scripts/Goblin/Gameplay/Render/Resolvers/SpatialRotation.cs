@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Render.Resolvers
             // 增加插值时间
             interpElapsed += Time.deltaTime;
             // 使用 Slerp 进行球形插值，平滑过渡到新的旋转
-            node.go.transform.rotation = Quaternion.Slerp(lastRotation, targetRotation, Mathf.Clamp01(interpElapsed / GameDef.LOGIC_TICK));
+            node.go.transform.rotation = Quaternion.Slerp(lastRotation, targetRotation, Mathf.Clamp01(interpElapsed / GameDef.LOGIC_TICK.AsFloat()));
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Goblin.Gameplay.Logic.Actors
             var paramachine = GetBehavior<ParallelMachine>();
             paramachine.SetState<PlayerIdle>();
             paramachine.SetState<PlayerRun>();
+            paramachine.SetState<PlayerAttack>();
         }
 
         protected override void OnDestroy()

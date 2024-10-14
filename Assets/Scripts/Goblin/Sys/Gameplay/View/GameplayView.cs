@@ -25,6 +25,10 @@ namespace Goblin.Sys.Gameplay.View
 
         private bool joystickFlag = false;
         private Vector3 joystickDir = Vector3.zero;
+
+        private bool baFlag = false;
+        private bool baPress = false;
+        
         private Stage stage { get; set; }
         private RStage rstage { get; set; }
 
@@ -85,10 +89,6 @@ namespace Goblin.Sys.Gameplay.View
 
             AddUIEventListener("JoystickArea", (e) =>
             {
-            }, UIEventEnum.BeginDrag);
-
-            AddUIEventListener("JoystickArea", (e) =>
-            {
                 var pos = engine.gameui.uicamera.WorldToScreenPoint(joystickBgRTF.transform.position);
                 var dir = (e.position - new Vector2(pos.x, pos.y)).normalized;
                 joystickDir = dir;
@@ -98,19 +98,16 @@ namespace Goblin.Sys.Gameplay.View
                 joystickHandleTrans.position = handlePos;
             }, UIEventEnum.Drag);
 
-            AddUIEventListener("JoystickArea", (e) =>
+            AddUIEventListener("AttackBtn", (e) =>
             {
-
-            }, UIEventEnum.EndDrag);
-
-            AddUIEventListener("SpeedBtn", (e) =>
-            {
-                Debug.Log("Speed Btn Down");
+                baFlag = true;
+                baPress = true;
             }, UIEventEnum.PointerDown);
 
-            AddUIEventListener("SpeedBtn", (e) =>
+            AddUIEventListener("AttackBtn", (e) =>
             {
-                Debug.Log("Speed Btn Up");
+                baFlag = false;
+                baPress = false;
             }, UIEventEnum.PointerUp);
         }
 
@@ -122,25 +119,33 @@ namespace Goblin.Sys.Gameplay.View
         private void OnTick(TickEvent e)
         {
             rstage.Tick(e.tick);
-            
-            if (joystickFlag) return;
-            
-            joystickDir = Vector3.zero;
-            if (Input.GetKey(KeyCode.W)) joystickDir += Vector3.up;
-            if (Input.GetKey(KeyCode.S)) joystickDir += Vector3.down;
-            if (Input.GetKey(KeyCode.A)) joystickDir += Vector3.left;
-            if (Input.GetKey(KeyCode.D)) joystickDir += Vector3.right;
-            joystickDir.Normalize();
+
+            if (false == joystickFlag)
+            {
+                joystickDir = Vector3.zero;
+                if (Input.GetKey(KeyCode.W)) joystickDir += Vector3.up;
+                if (Input.GetKey(KeyCode.S)) joystickDir += Vector3.down;
+                if (Input.GetKey(KeyCode.A)) joystickDir += Vector3.left;
+                if (Input.GetKey(KeyCode.D)) joystickDir += Vector3.right;
+                joystickDir.Normalize();
+            }
+
+            if (false == baFlag)
+            {
+                baPress = Input.GetKey(KeyCode.Space);
+            }
         }
 
         private void OnFixedTick(FixedTickEvent e)
         {
-            var dir = joystickDir * engine.cfg.float2Int;
+            var dir = joystickDir * Config.float2Int;
             var tsdir = new TSVector2() { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = Mathf.CeilToInt(dir.y) * FP.EN3 };
             var player = stage.GetActor(1);
             var gamepad = player.GetBehavior<Gamepad>();
             var joystick = new InputInfo() { press = tsdir != TSVector2.zero, dire = tsdir };
+
             gamepad.SetInput(InputType.Joystick, joystick);
+            gamepad.SetInput(InputType.BA, new InputInfo() { press = baPress, dire = TSVector2.zero });
             stage.Tick();
         }
     }

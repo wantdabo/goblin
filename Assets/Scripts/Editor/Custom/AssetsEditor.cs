@@ -1,10 +1,17 @@
+using Goblin.Common;
+using Goblin.Common.GameRes;
 using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Common.SkillDatas;
+using Goblin.Gameplay.Common.SkillDatas.Action;
+using Goblin.Gameplay.Common.SkillDatas.Action.Common;
 using Goblin.SkillPipelineEditor;
+using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Windows;
 using Object = UnityEngine.Object;
 
 namespace Goblin.Custom
@@ -70,6 +77,57 @@ namespace Goblin.Custom
                     clips.AddRange(track.Clips);
                 }
             }
+
+            List<(ushort, byte[])> actionDatas = new();
+            foreach (var clip in clips)
+            {
+                (ushort, byte[]) actionData = default;
+                if (clip is EditorAnimationClip animationClip)
+                {
+                    var val = new AnimationActionData();
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SkillActionDef.ANIMATION;
+                    val.name = animationClip.animationClip.name;
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorSpatialClip spatialClip)
+                {
+                    var val = new SpatialActionData();
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SkillActionDef.SPATIAL;
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(spatialClip.position.x * Config.float2Int),
+                        Convert.ToInt32(spatialClip.position.y * Config.float2Int),
+                        Convert.ToInt32(spatialClip.position.z * Config.float2Int)
+                    );
+                    val.eulerAngle = new Vector3Data(
+                        Convert.ToInt32(spatialClip.eulerAngle.x * Config.float2Int),
+                        Convert.ToInt32(spatialClip.eulerAngle.y * Config.float2Int),
+                        Convert.ToInt32(spatialClip.eulerAngle.z * Config.float2Int)
+                    );
+                    val.scale = Convert.ToInt32(spatialClip.scale * Config.float2Int);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+            }
+
+            SkillPipelineData spdata = new();
+            spdata.id = Convert.ToUInt32(asset.name);
+            spdata.length = length;
+            spdata.actionIds = new ushort[actionDatas.Count];
+            spdata.actionBytes = new byte[actionDatas.Count][];
+            for (int i = 0; i < actionDatas.Count; ++i)
+            {
+                spdata.actionIds[i] = actionDatas[i].Item1;
+                spdata.actionBytes[i] = actionDatas[i].Item2;
+            }
+            var bytes = MessagePackSerializer.Serialize(spdata);
+            var path = $"{Application.dataPath.Replace("/Assets", "/")}{Location.skilldataPath}{asset.name}.bytes";
+            if (File.Exists(path)) File.Delete(path);
+            System.IO.File.WriteAllBytes(path, bytes);
+            Debug.Log($"写入文件：{path}");
+            AssetDatabase.Refresh();
         }
     }
 }

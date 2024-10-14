@@ -34,8 +34,12 @@
         /// </summary>
         public const ushort STATEMACHINE_ONE = 6;
         /// <summary>
+        /// SKILLPIPELINE_INFO 技能管线信息指令
+        /// </summary>
+        public const ushort SKILLPIPELINE_INFO = 7;
+        /// <summary>
         /// ATTR SURFACE 指令
         /// </summary>
-        public const ushort ATTR_SURFACE = 7;
+        public const ushort ATTR_SURFACE = 8;
     }
 }

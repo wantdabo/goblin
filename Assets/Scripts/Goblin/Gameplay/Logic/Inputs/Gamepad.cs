@@ -16,6 +16,10 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// 摇杆
         /// </summary>
         Joystick,
+        /// <summary>
+        /// 按钮 A
+        /// </summary>
+        BA,
     }
 
     /// <summary>
@@ -45,6 +49,7 @@ namespace Goblin.Gameplay.Logic.Inputs
         private Dictionary<InputType, InputInfo> InputDict = new()
         {
             { InputType.Joystick, new InputInfo { press = false, dire = TSVector2.zero } },
+            { InputType.BA, new InputInfo { press = false, dire = TSVector2.zero } },
         };
 
         protected override void OnCreate()

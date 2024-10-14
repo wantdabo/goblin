@@ -30,5 +30,9 @@
         /// 玩家 RUN 状态
         /// </summary>
         public const uint PLAYER_RUN = 100002;
+        /// <summary>
+        /// 玩家 ATTACK 状态
+        /// </summary>
+        public const uint PLAYER_ATTACK = 100003;
     }
 }

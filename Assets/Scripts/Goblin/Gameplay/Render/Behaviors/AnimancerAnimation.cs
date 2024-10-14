@@ -18,6 +18,15 @@ namespace Goblin.Gameplay.Render.Behaviors
         protected override void OnTick(float tick)
         {
             if (null == state) return;
+            if (lerp)
+            {
+                var t = state.Time / state.Length;
+                if (t > st || t >= et) state.Time = state.Length * st;
+                state.Time = Mathf.Clamp(state.Time + tick, 0, state.Length);
+                
+                return;
+            }
+            
             state.Time += tick;
         }
 
@@ -25,7 +34,7 @@ namespace Goblin.Gameplay.Render.Behaviors
         {
             if (null == state) return true;
             if (null != state && false == state.IsLooping) return state.Time > state.Length;
-            
+
             return base.OnNextSequeue();
         }
 

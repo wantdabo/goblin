@@ -4,6 +4,7 @@ using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Core;
+using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -30,7 +31,21 @@ namespace Goblin.Gameplay.Render.Resolvers
                 animation.EmptySequeue();
                 animation.Play("Anbi_Run_Start", ril.layer);
             }
-            
+            else
+            {
+                switch (ril.state)
+                {
+                    case StateDef.PLAYER_IDLE:
+                        animation.Play("Anbi_Idle", ril.layer);
+                        break;
+                    case StateDef.PLAYER_RUN:
+                        animation.Play("Anbi_Run", ril.layer);
+                        break;
+                }
+                
+                return;
+            }
+
             switch (ril.state)
             {
                 case StateDef.PLAYER_IDLE:

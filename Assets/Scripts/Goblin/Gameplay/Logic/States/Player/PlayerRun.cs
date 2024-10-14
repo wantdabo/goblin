@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     public class PlayerRun : State
     {
         public override uint id => StateDef.PLAYER_RUN;
-        protected override List<uint> passes => new() { StateDef.PLAYER_IDLE };
+        protected override List<uint> passes => new() { StateDef.PLAYER_IDLE, StateDef.PLAYER_ATTACK };
         private Gamepad gamepad { get; set; }
         private Spatial spatial { get; set; }
 
@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         {
             base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * 75 * FP.EN1 * tick;
+            var motion = joystick.dire * 55 * FP.EN1 * tick;
             spatial.position += new TSVector(motion.x, 0, motion.y);
 
             if (motion != TSVector2.zero)

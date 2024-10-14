@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             interpElapsed += Time.deltaTime;
             // 使用 Lerp 进行线性插值，平滑过渡到新的位置
-            node.go.transform.position = Vector3.Lerp(lastPosition, position, Mathf.Clamp01(interpElapsed / GameDef.LOGIC_TICK));
+            node.go.transform.position = Vector3.Lerp(lastPosition, position, Mathf.Clamp01(interpElapsed / GameDef.LOGIC_TICK.AsFloat()));
         }
     }
 }

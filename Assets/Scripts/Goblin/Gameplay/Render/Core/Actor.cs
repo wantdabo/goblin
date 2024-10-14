@@ -121,7 +121,6 @@ namespace Goblin.Gameplay.Render.Core
         private Resolver AddResolver<T>(ushort id) where T : Resolver, new()
         {
             if (null == resolverDict) resolverDict = new();
-
             if (resolverDict.ContainsKey(id)) throw new Exception($"can't add same resolver -> {typeof(T)}");
 
             var resolver = AddComp<T>();
@@ -161,6 +160,9 @@ namespace Goblin.Gameplay.Render.Core
                         break;
                     case RILDef.STATEMACHINE_ONE:
                         resolver = AddResolver<StateMachineOne>(e.ril.id);
+                        break;
+                    case RILDef.SKILLPIPELINE_INFO:
+                        resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;
                     case RILDef.ATTR_SURFACE:
                         resolver = AddResolver<AttrSurface>(e.ril.id);

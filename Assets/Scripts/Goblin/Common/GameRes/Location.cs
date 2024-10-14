@@ -7,13 +7,14 @@ namespace Goblin.Common.GameRes
     /// <summary>
     /// 资源加载定位器，加载框架包装定位资源地址
     /// </summary>
-    public class GameResLocation : Comp
+    public class Location : Comp
     {
-        private const string modelPath = "Assets/GameRes/Models/";
-        private const string uieffectPath = "Assets/GameRes/UIEffects/";
-        private const string uiprefabPath = "Assets/GameRes/UIPrefabs/";
-        private const string spritesPath = "Assets/GameRes/UISprites/";
-        private const string configPath = "Assets/GameRes/Raws/Configs/";
+        public const string modelPath = "Assets/GameRes/Models/";
+        public const string uieffectPath = "Assets/GameRes/UIEffects/";
+        public const string uiprefabPath = "Assets/GameRes/UIPrefabs/";
+        public const string spritesPath = "Assets/GameRes/UISprites/";
+        public const string configPath = "Assets/GameRes/Raws/Configs/";
+        public const string skilldataPath = "Assets/GameRes/Raws/SkillDatas/";
 
         /// <summary>
         /// 异步 Model 加载预制体
@@ -40,7 +41,7 @@ namespace Goblin.Common.GameRes
         /// </summary>
         /// <param name="resName">资源地址</param>
         /// <returns>UIEffect 预制体</returns>
-        public GameObject LoadUIEffectSync(string resName) 
+        public GameObject LoadUIEffectSync(string resName)
         {
             return GameObject.Instantiate(engine.gameres.LoadAssetSync<GameObject>(uieffectPath + resName));
         }
@@ -106,6 +107,26 @@ namespace Goblin.Common.GameRes
         public async Task<byte[]> LoadConfigAsync(string resName)
         {
             return await engine.gameres.LoadRawFileAsync(configPath + resName);
+        }
+        
+        /// <summary>
+        /// 同步加载 SkillData 的 Bytes
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>RawBytes</returns>
+        public byte[] LoadSkillDataSync(string resName)
+        {
+            return engine.gameres.LoadRawFileSync(skilldataPath + resName);
+        }
+        
+        /// <summary>
+        /// 异步加载 SkillData 的 Bytes
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>RawBytes</returns>
+        public async Task<byte[]> LoadSkillDataAsync(string resName)
+        {
+            return await engine.gameres.LoadRawFileAsync(skilldataPath + resName);
         }
     }
 }

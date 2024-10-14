@@ -16,7 +16,22 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// 当前播放的动画名
         /// </summary>
         public string[] names { get; private set; } = new string[StateDef.MAX_LAYER];
+        /// <summary>
+        /// 动画序列
+        /// </summary>
         public Queue<(string, byte)> animseqs { get; private set; } = new();
+        /// <summary>
+        /// 插值播放
+        /// </summary>
+        protected bool lerp { get; private set; }
+        /// <summary>
+        /// 起始插值
+        /// </summary>
+        protected float st { get; private set; }
+        /// <summary>
+        /// 结束插值
+        /// </summary>
+        protected float et { get; private set; }
 
         protected override void OnCreate()
         {
@@ -47,10 +62,28 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// <param name="layer">层级</param>
         public void Play(string name, byte layer = 0)
         {
+            if (false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
+            names[layer] = name;
+            this.lerp = false;
+            OnPlay(name, layer);
+        }
+
+        /// <summary>
+        /// 播放动画
+        /// </summary>
+        /// <param name="name">动画名</param>
+        /// <param name="et">结束插值</param>
+        /// <param name="layer">层级</param>
+        public void Play(string name, float st, float et, byte layer = 0)
+        {
+            this.st = st;
+            this.et = et;
+            this.lerp = true;
+            if (false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
             names[layer] = name;
             OnPlay(name, layer);
         }
-        
+
         /// <summary>
         /// 清空动画序列
         /// </summary>
