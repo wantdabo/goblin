@@ -25,13 +25,9 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// </summary>
         protected bool lerp { get; private set; }
         /// <summary>
-        /// 起始插值
+        /// 最新插值
         /// </summary>
-        protected float st { get; private set; }
-        /// <summary>
-        /// 结束插值
-        /// </summary>
-        protected float et { get; private set; }
+        protected float lerpt { get; private set; }
 
         protected override void OnCreate()
         {
@@ -72,12 +68,11 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// 播放动画
         /// </summary>
         /// <param name="name">动画名</param>
-        /// <param name="et">结束插值</param>
+        /// <param name="lerpt">结束插值</param>
         /// <param name="layer">层级</param>
-        public void Play(string name, float st, float et, byte layer = 0)
+        public void Play(string name, float lerpt, byte layer = 0)
         {
-            this.st = st;
-            this.et = et;
+            this.lerpt = lerpt;
             this.lerp = true;
             if (false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
             names[layer] = name;

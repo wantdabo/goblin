@@ -2743,6 +2743,7 @@ MonoBehaviour:
   _Animations:
   - {fileID: 7400000, guid: d83e98414ff72674c85c56a8f5659bdb, type: 2}
   - {fileID: 7400000, guid: 5c1560fd92659b34b931ee7d446b4cbd, type: 2}
+  - {fileID: 7400000, guid: a25778d38b9d31d4a9b1d144327e9e82, type: 2}
   - {fileID: 7400000, guid: 8455988ea303eaa449df9b74366a359d, type: 2}
   - {fileID: 7400000, guid: 8c1a60f0cce4ee643b4c4eb6801dbe2d, type: 2}
   - {fileID: 7400000, guid: d7fdc62009f45fe40bd4604a2d6fe10f, type: 2}

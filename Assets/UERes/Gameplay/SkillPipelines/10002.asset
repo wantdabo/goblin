@@ -236,6 +236,7 @@ MonoBehaviour:
   _parent: {fileID: -2140477477535758407}
   actionClips:
   - {fileID: 8285458254674167060}
+  - {fileID: 2644102240244979895}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -378,9 +379,9 @@ MonoBehaviour:
   - {fileID: -2140477477535758407}
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
-  length: 0.6833334
-  viewTimeMin: -0.31702372
-  viewTimeMax: 1.2453324
+  length: 2.6666667
+  viewTimeMin: -0.61449105
+  viewTimeMax: 3.132916
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -452,6 +453,22 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &2644102240244979895
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdd32f00f408824cb099abdafc8fee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3138357389343817379}
+  startTime: 0.65
+  length: 2.0166667
+  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_02_End.anim
 --- !u!114 &2806619973301625113
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -691,8 +708,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -3138357389343817379}
   startTime: 0
-  length: 0.68333334
-  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_01.anim
+  length: 0.65
+  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_02.anim
 --- !u!114 &8349909203220435467
 MonoBehaviour:
   m_ObjectHideFlags: 1

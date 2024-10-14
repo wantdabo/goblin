@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Render.Behaviors
             if (lerp)
             {
                 var t = state.Time / state.Length;
-                if (t > st || t >= et) state.Time = state.Length * st;
+                if (t >= lerpt) state.Time = state.Length * lerpt;
                 state.Time = Mathf.Clamp(state.Time + tick, 0, state.Length);
                 
                 return;

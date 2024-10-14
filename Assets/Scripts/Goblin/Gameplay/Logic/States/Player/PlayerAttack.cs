@@ -33,14 +33,14 @@ namespace Goblin.Gameplay.Logic.States.Player
         public override bool OnCheck()
         {
             var ba = gamepad.GetInput(InputType.BA);
-            // TODO 新增 COMBO 之类的判定   
+            // TODO 新增 COMBO 之类的判定
             return ba.release;
         }
 
         public override void OnEnter()
         {
             base.OnEnter();
-            skillid = 10003;
+            skillid = 10001;
             skilllauncher.Load(skillid);
             skilllauncher.Launch(skillid);
         }
