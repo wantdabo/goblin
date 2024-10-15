@@ -5,7 +5,7 @@
     /// </summary>
     public class Export
     {
-        private static Engine engine;
+        public static Engine engine { get; private set; }
 
         /// <summary>
         /// 初始化 Goblin 逻辑
