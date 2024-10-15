@@ -21,47 +21,47 @@ namespace Goblin.Core
         /// <summary>
         /// 事件
         /// </summary>
-        public Eventor eventor { get; set; }
+        public Eventor eventor { get; private set; }
         /// <summary>
         /// 对象池
         /// </summary>
-        public ObjectPool pool { get; set; }
+        public ObjectPool pool { get; private set; }
         /// <summary>
         /// 随机器
         /// </summary>
-        public Common.Random random { get; set; }
+        public Common.Random random { get; private set; }
         /// <summary>
         /// 引擎 Tick
         /// </summary>
-        public Ticker ticker { get; set; }
+        public Ticker ticker { get; private set; }
         /// <summary>
         /// 游戏资源
         /// </summary>
-        public GameRes gameres { get; set; }
+        public GameRes gameres { get; private set; }
         /// <summary>
         /// U3D API
         /// </summary>
-        public U3DKit u3dkit { get; set; }
+        public U3DKit u3dkit { get; private set; }
         /// <summary>
         /// 配置表
         /// </summary>
-        public Config cfg { get; set; }
+        public Config cfg { get; private set; }
         /// <summary>
         /// 网络
         /// </summary>
-        public NetNode net { get; set; }
+        public NetNode net { get; private set; }
         /// <summary>
         /// Proxy
         /// </summary>
-        public GameProxy proxy { get; set; }
+        public GameProxy proxy { get; private set; }
         /// <summary>
         /// 游戏 UI
         /// </summary>
-        public GameUI gameui { get; set; }
+        public GameUI gameui { get; private set; }
         /// <summary>
         /// 游戏阶段
         /// </summary>
-        public Phase phase { get; set; }
+        public Phase phase { get; private set; }
 
         protected override void OnCreate()
         {
