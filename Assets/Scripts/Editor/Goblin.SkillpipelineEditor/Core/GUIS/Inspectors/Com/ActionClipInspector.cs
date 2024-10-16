@@ -58,19 +58,14 @@ namespace Goblin.SkillPipelineEditor
             if (canScale)
             {
                 GUILayout.Label("IN");
-                _in *= Prefs.frameRate;
-                _in = EditorGUILayout.DelayedIntField((int)_in);
-                _in *= (1f / Prefs.frameRate);
-
+                _in = EditorGUILayout.DelayedIntField(Mathf.CeilToInt(_in / Prefs.snapInterval));
+                _in *= Prefs.snapInterval;
                 GUILayout.Label("OUT", GUILayout.Width(30));
-                _out *= Prefs.frameRate;
-                _out = EditorGUILayout.DelayedIntField((int)_out);
-                _out *= (1f / Prefs.frameRate);
-                
+                _out = EditorGUILayout.DelayedIntField(Mathf.CeilToInt(_out / Prefs.snapInterval));
+                _out *= Prefs.snapInterval;
                 GUILayout.Label("LEN", GUILayout.Width(30));
-                _length *= Prefs.frameRate;
-                _length = EditorGUILayout.DelayedIntField((int)_length);
-                _length *= (1f / Prefs.frameRate);
+                _length = EditorGUILayout.DelayedIntField(Mathf.CeilToInt(_length / Prefs.snapInterval));
+                _length *= Prefs.snapInterval;
             }
 
             GUILayout.EndHorizontal();

@@ -103,6 +103,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-6093932961727714667
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.14
+  length: 0.02
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-5899350563758728281
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -132,9 +150,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -4235805314445735913}
-  startTime: 0.18333334
+  startTime: 0.17999999
   position: {x: 0, y: 0.5, z: 0.5}
-  length: 0.050000012
+  length: 0.019999996
   size: {x: 1, y: 1, z: 1}
 --- !u!114 &-5747709117844394369
 MonoBehaviour:
@@ -149,10 +167,26 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   _parent: {fileID: 2806619973301625113}
-  startTime: 0.21666668
+  startTime: 0.22
   position: {x: 0, y: 0.5, z: 1.5}
-  length: 0.16666667
+  length: 0.13999999
   size: {x: 2, y: 1, z: 1.3}
+--- !u!114 &-4749592929421374859
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdd32f00f408824cb099abdafc8fee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3138357389343817379}
+  startTime: 0.68
+  length: 2.2399998
+  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_01_End.anim
 --- !u!114 &-4235805314445735913
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -167,7 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 1328038422028717257}
   actionClips:
-  - {fileID: -5859918033118072993}
+  - {fileID: 7272158455136714253}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -188,6 +222,22 @@ MonoBehaviour:
   position: {x: 0, y: 0.5, z: 2.08}
   length: 0.26666665
   size: {x: 1, y: 1, z: 1}
+--- !u!114 &-3755739454104347872
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdd32f00f408824cb099abdafc8fee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3138357389343817379}
+  startTime: 0
+  length: 0.68
+  resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_01.anim
 --- !u!114 &-3730813443085004206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,6 +271,26 @@ MonoBehaviour:
   startTime: 1
   length: 1
   resPath: 
+--- !u!114 &-3392332010845992246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4565634262662017256}
+  startTime: 0.91999996
+  length: 1.9999999
+  joystick: 1
+  recvhurt: 1
+  recvcontrol: 1
+  skillcast: 1
+  comboskillcast: 1
 --- !u!114 &-3142269960152024497
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -252,11 +322,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -2140477477535758407}
   actionClips:
-  - {fileID: 8285458254674167060}
-  - {fileID: 2644102240244979895}
+  - {fileID: -3755739454104347872}
+  - {fileID: -4749592929421374859}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-3104796613785116758
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.17999999
+  length: 0.02
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-2326444229897978151
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -327,6 +415,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-1987552368098888981
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.19999999
+  length: 0.02
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-1658671338586536492
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -356,8 +462,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 4404173715354118483}
-  startTime: 0.18333334
-  length: 0.01666668
+  startTime: 10
+  length: 0
   position: {x: 0, y: 0, z: 0.25}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
@@ -397,7 +503,7 @@ MonoBehaviour:
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   - {fileID: 3126422824303122960}
-  length: 2.9333334
+  length: 2.9199998
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -415,6 +521,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &151165626560289927
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4235805314445735913}
+  startTime: 0.16
+  position: {x: 0, y: 0, z: 0}
+  length: 0.03999999
+  size: {x: 1, y: 1, z: 1}
 --- !u!114 &210960302903056966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -483,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -3138357389343817379}
   startTime: 0.68333334
-  length: 2.25
+  length: 2.2566664
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_01_End.anim
 --- !u!114 &2806619973301625113
 MonoBehaviour:
@@ -498,8 +621,7 @@ MonoBehaviour:
   m_Name: "\u78B0\u649E\u8F68\u9053"
   m_EditorClassIdentifier: 
   _parent: {fileID: 1328038422028717257}
-  actionClips:
-  - {fileID: -5747709117844394369}
+  actionClips: []
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -553,7 +675,6 @@ MonoBehaviour:
   _parent: {fileID: -2326444229897978151}
   actionClips:
   - {fileID: -1443874715985313367}
-  - {fileID: -7146853554279672834}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -571,7 +692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 3126422824303122960}
   actionClips:
-  - {fileID: 7753819959620609939}
+  - {fileID: -3392332010845992246}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -767,6 +888,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &7272158455136714253
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4235805314445735913}
+  startTime: 0.16
+  position: {x: 0, y: 0.5, z: 1}
+  length: 0.34000003
+  size: {x: 2, y: 1, z: 1.5}
 --- !u!114 &7346872455535314600
 MonoBehaviour:
   m_ObjectHideFlags: 1

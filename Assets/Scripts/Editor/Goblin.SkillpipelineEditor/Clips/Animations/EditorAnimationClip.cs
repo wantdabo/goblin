@@ -34,7 +34,7 @@ namespace Goblin.SkillPipelineEditor
             set { }
         }
 
-        float ISubClipContainable.SubClipLength => animationClip != null ? animationClip.length : 0;
+        float ISubClipContainable.SubClipLength => animationClip != null ? Mathf.CeilToInt(animationClip.length / Prefs.snapInterval) * Prefs.snapInterval : 0;
 
         float ISubClipContainable.SubClipSpeed => 1;
 

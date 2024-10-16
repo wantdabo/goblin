@@ -30,7 +30,6 @@ namespace Goblin.SkillPipelineEditor
             public float TrackListLeftMargin = 180f;
         }
 
-
         private static SerializedData _data;
 
         private static SerializedData data

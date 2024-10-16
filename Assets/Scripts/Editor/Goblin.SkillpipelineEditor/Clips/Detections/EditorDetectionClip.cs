@@ -17,7 +17,7 @@ namespace Goblin.SkillPipelineEditor
         public override float Length
         {
             get => length;
-            set => length = value;
+            set => length = Mathf.Max(value, Prefs.snapInterval);
         }
         public override bool isValid => true;
 

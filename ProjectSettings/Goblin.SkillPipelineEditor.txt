@@ -1,1 +1,1 @@
-{"SnapInterval":0.01666666753590107,"AutoSaveSeconds":5,"SavePath":"Assets/UERes/Gameplay/SkillPipelines","ScrollWheelZooms":true,"MagnetSnapping":false,"TrackListLeftMargin":350.0}
+{"SnapInterval":0.019999999552965165,"AutoSaveSeconds":5,"SavePath":"Assets/UERes/Gameplay/SkillPipelines","ScrollWheelZooms":true,"MagnetSnapping":true,"TrackListLeftMargin":350.0}

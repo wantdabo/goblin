@@ -27,8 +27,8 @@ namespace Goblin.SkillPipelineEditor
 
         public override float Length
         {
-            get => length;
-            set { }
+            get => Prefs.snapInterval;
+            set => length = Prefs.snapInterval;
         }
 
         public override bool isValid => true;
