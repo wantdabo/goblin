@@ -103,10 +103,13 @@ namespace Goblin.Gameplay.Logic.Skills
                         case SkillActionDef.SPATIAL:
                             action = AddAction<SpatialAction>(actionData.id);
                             break;
+                        case SkillActionDef.SKILL_BREAK_EVENT:
+                            action = AddAction<SkillBreakEventAction>(actionData.id);
+                            break;
                     }
                 }
 
-                if (actionData.sframe >= frame && actionData.eframe <= frame) action.Execute(actionData, frame, tick);
+                if (frame >= actionData.sframe && frame <= actionData.eframe) action.Execute(actionData, frame, tick);
             }
 
             frame++;
@@ -150,6 +153,12 @@ namespace Goblin.Gameplay.Logic.Skills
                         spatialData.sframe = (uint)(spatialData.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
                         spatialData.eframe = (uint)(spatialData.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
                         actionDatas.Add(spatialData);
+                        break;
+                    case SkillActionDef.SKILL_BREAK_EVENT:
+                        var skillBreakeventData = MessagePackSerializer.Deserialize<SkillBreakEventActionData>(spdata.actionBytes[i]);
+                        skillBreakeventData.sframe = (uint)(skillBreakeventData.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                        skillBreakeventData.eframe = (uint)(skillBreakeventData.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                        actionDatas.Add(skillBreakeventData);
                         break;
                 }
             }

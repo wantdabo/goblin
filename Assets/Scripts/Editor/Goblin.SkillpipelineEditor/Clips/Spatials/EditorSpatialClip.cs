@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Goblin.Gameplay.Common.Defines;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Goblin.SkillPipelineEditor
@@ -8,7 +9,7 @@ namespace Goblin.SkillPipelineEditor
     [Attachable(typeof(EditorSpatialTrack))]
     public class EditorSpatialClip : ActionClip
     {
-        [SerializeField][HideInInspector] private float length = 1f;
+        [SerializeField][HideInInspector] private float length = 1f / GameDef.SP_DATA_FRAME;
 
         [MenuName("平移")]
         [SerializeField]
@@ -27,7 +28,7 @@ namespace Goblin.SkillPipelineEditor
         public override float Length
         {
             get => length;
-            set => length = value;
+            set { }
         }
 
         public override bool isValid => true;

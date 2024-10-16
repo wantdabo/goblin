@@ -9,12 +9,12 @@ namespace Goblin.SkillPipelineEditor
     [Serializable]
     public class Asset : DirectableAsset, IDirector
     {
-        public GameObject model;
-        public List<Group> groups = new List<Group>();
-        [NonSerialized] public GameObject cloneModel;
-        [SerializeField] private float length = 5f;
-        [SerializeField] private float viewTimeMin = 0f;
-        [SerializeField] private float viewTimeMax = 5f;
+        [HideInInspector] public GameObject model;
+        [HideInInspector] public List<Group> groups = new List<Group>();
+        [HideInInspector] [NonSerialized] public GameObject cloneModel;
+        [HideInInspector] [SerializeField] private float length = 5f;
+        private float viewTimeMin = 0f;
+        private float viewTimeMax = 5f;
 
         public float Length
         {

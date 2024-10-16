@@ -85,18 +85,18 @@ namespace Goblin.Custom
                 if (clip is EditorAnimationClip animationClip)
                 {
                     var val = new AnimationActionData();
+                    val.id = SkillActionDef.ANIMATION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
-                    val.id = SkillActionDef.ANIMATION;
                     val.name = animationClip.animationClip.name;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorSpatialClip spatialClip)
                 {
                     var val = new SpatialActionData();
+                    val.id = SkillActionDef.SPATIAL;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
-                    val.id = SkillActionDef.SPATIAL;
                     val.position = new Vector3Data(
                         Convert.ToInt32(spatialClip.position.x * Config.float2Int),
                         Convert.ToInt32(spatialClip.position.y * Config.float2Int),
@@ -108,6 +108,20 @@ namespace Goblin.Custom
                         Convert.ToInt32(spatialClip.eulerAngle.z * Config.float2Int)
                     );
                     val.scale = Convert.ToInt32(spatialClip.scale * Config.float2Int);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorSkillBreakEventClip skillBreakeventClip)
+                {
+                    var val = new SkillBreakEventActionData();
+                    val.id = SkillActionDef.SKILL_BREAK_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.token = BreakTokenType.NONE;
+                    if (skillBreakeventClip.joystick) val.token |= BreakTokenType.JOYSTICK;
+                    if (skillBreakeventClip.recvhurt) val.token |= BreakTokenType.RECV_HURT;
+                    if (skillBreakeventClip.recvcontrol) val.token |= BreakTokenType.RECV_CONTROL;
+                    if (skillBreakeventClip.skillcast) val.token |= BreakTokenType.SKILL_CAST;
+                    if (skillBreakeventClip.comboskillcast) val.token |= BreakTokenType.COMBO_SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
             }

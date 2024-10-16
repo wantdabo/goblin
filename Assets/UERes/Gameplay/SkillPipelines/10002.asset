@@ -361,6 +361,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-374850667231989659
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.20000002
+  length: 0.02
+  position: {x: 0, y: 0, z: 0.25}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,8 +398,6 @@ MonoBehaviour:
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   length: 2.6666667
-  viewTimeMin: -0.61449105
-  viewTimeMax: 3.132916
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,7 +535,7 @@ MonoBehaviour:
   _parent: {fileID: -2326444229897978151}
   actionClips:
   - {fileID: -1443874715985313367}
-  - {fileID: -7146853554279672834}
+  - {fileID: -374850667231989659}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}

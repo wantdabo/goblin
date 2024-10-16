@@ -10,8 +10,8 @@ namespace Goblin.SkillPipelineEditor
     /// <summary>
     /// 立方体碰撞预览
     /// </summary>
-    [CustomPreview(typeof(EditorDetectionBoxClip))]
-    public class EditorDetectionBoxClipPreview : EditorDetectionClipPreview<EditorDetectionBoxClip>
+    [CustomPreview(typeof(EditorBoxDetectionClip))]
+    public class EditorBoxDetectionClipPreview : EditorDetectionClipPreview<EditorBoxDetectionClip>
     {
         public override void OnUpdate(float time, float previousTime)
         {

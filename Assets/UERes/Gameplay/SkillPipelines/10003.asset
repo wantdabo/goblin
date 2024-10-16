@@ -17,6 +17,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-8179323634173799064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.20000002
+  length: 0.01666668
+  position: {x: 0, y: 0, z: 0.25}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-8125210218954973223
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -153,6 +171,24 @@ MonoBehaviour:
   position: {x: 0, y: 0.5, z: 1.5}
   length: 0.5833334
   size: {x: 3, y: 1, z: 1.5}
+--- !u!114 &-5738183330824579744
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: (Clone)(Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.48333335
+  length: 0.01666668
+  position: {x: 0, y: 0, z: 0.25}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &-4235805314445735913
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -380,8 +416,6 @@ MonoBehaviour:
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   length: 2.9
-  viewTimeMin: 0.1335886
-  viewTimeMax: 0.3835886
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -522,6 +556,24 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0.25}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
+--- !u!114 &3811133631302087558
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352e33cfdf4e430eb64bf303976bfa36, type: 3}
+  m_Name: (Clone)(Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4404173715354118483}
+  startTime: 0.46666667
+  length: 0.01666668
+  position: {x: 0, y: 0, z: 0.5}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 0
 --- !u!114 &4404173715354118483
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -537,7 +589,7 @@ MonoBehaviour:
   _parent: {fileID: -2326444229897978151}
   actionClips:
   - {fileID: -1443874715985313367}
-  - {fileID: -7146853554279672834}
+  - {fileID: -8179323634173799064}
   - {fileID: 2905666295863004639}
   - {fileID: 7262240612175575148}
   active: 1

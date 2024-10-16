@@ -2,10 +2,10 @@
 
 namespace Goblin.SkillPipelineEditor
 {
-    [Name("信号轨道")]
-    [Attachable(typeof(Group))]
+    [Name("事件轨道")]
     [ShowIcon(typeof(EventSystem))]
-    public class EditorSignalTrack : Track
+    [Color(1f, 0.63f, 0f)]
+    public class EditorEventTrack : Track
     {
         
     }

@@ -21,6 +21,7 @@ namespace Goblin.SkillPipelineEditor
 
         public Color Color => color.a > 0.1f ? color : Color.white;
 
+        [HideInInspector]
         public string Name
         {
             get => name;

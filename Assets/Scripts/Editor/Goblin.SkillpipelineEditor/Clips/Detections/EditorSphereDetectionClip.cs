@@ -10,7 +10,7 @@ namespace Goblin.SkillPipelineEditor
     [Name("球体碰撞")]
     [Color(0.6f, 0.839f, 0.325f)]
     [Attachable(typeof(EditorDetectionTrack))]
-    public class EditorDetectionSphereClip : EditorDetectionClip
+    public class EditorSphereDetectionClip : EditorDetectionClip
     {
         [MenuName("半径")]
         [SerializeField]

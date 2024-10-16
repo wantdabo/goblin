@@ -11,7 +11,7 @@ namespace Goblin.SkillPipelineEditor
     [Name("立方体碰撞")]
     [Color(0.6f, 0.839f, 0.325f)]
     [Attachable(typeof(EditorDetectionTrack))]
-    public class EditorDetectionBoxClip : EditorDetectionClip
+    public class EditorBoxDetectionClip : EditorDetectionClip
     {
         [MenuName("尺寸")]
         [SerializeField]

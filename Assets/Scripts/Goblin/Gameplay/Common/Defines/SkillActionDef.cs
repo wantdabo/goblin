@@ -13,5 +13,9 @@
         /// 空间变化
         /// </summary>
         public const ushort SPATIAL = 1;
+        /// <summary>
+        /// 打断事件
+        /// </summary>
+        public const ushort SKILL_BREAK_EVENT = 2;
     }
 }
