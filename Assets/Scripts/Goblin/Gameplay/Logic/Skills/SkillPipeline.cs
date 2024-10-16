@@ -68,18 +68,18 @@ namespace Goblin.Gameplay.Logic.Skills
             Initialize();
         }
 
+        public void Launch()
+        {
+            if (SPStateDef.None != state) return;
+            Start();
+        }
+        
         public void Break()
         {
             if (SPStateDef.None == state) return;
             state = SPStateDef.Break;
             NotifyState();
             End();
-        }
-
-        public void Launch()
-        {
-            if (SPStateDef.None != state) return;
-            Start();
         }
 
         private void Start()
