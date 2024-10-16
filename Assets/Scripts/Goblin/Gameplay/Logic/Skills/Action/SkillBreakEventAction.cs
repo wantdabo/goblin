@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnCreate()
         {
             base.OnCreate();
-            gamepad = sp.launcher.actor.GetBehavior<Gamepad>();
+            gamepad = pipeline.launcher.actor.GetBehavior<Gamepad>();
         }
 
         protected override void OnExecute(SkillBreakEventActionData data, FP tick)
@@ -25,7 +25,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             if (BreakTokenType.JOYSTICK == (BreakTokenType.JOYSTICK & data.token) && null != gamepad)
             {
                 var joystick = gamepad.GetInput(InputType.Joystick);
-                if (joystick.press && joystick.dire != TSVector2.zero) sp.Break();
+                if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
             }
             else if (BreakTokenType.RECV_HURT == (BreakTokenType.RECV_HURT & data.token))
             {

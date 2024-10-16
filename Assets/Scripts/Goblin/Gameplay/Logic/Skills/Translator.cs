@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
         protected override void OnRIL()
         {
-            foreach (uint id in behavior.spids)
+            foreach (uint id in behavior.skills)
             {
                 var pipeline = behavior.Get(id);
                 if (null == pipeline) continue;

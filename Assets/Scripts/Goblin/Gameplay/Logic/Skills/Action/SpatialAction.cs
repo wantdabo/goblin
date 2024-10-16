@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnCreate()
         {
             base.OnCreate();
-            spatial = sp.launcher.actor.GetBehavior<Spatial>();
+            spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
         }
 
         protected override void OnExecute(SpatialActionData data, FP tick)

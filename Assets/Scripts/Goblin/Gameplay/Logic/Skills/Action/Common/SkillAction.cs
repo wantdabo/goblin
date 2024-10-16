@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         /// <summary>
         /// 技能管线
         /// </summary>
-        public SkillPipeline sp { get; set; }
+        public SkillPipeline pipeline { get; set; }
 
         public void Execute(SkillActionData data, uint frame, FP tick)
         {

@@ -177,7 +177,7 @@ namespace Goblin.Gameplay.Logic.Skills
             if (actionDict.ContainsKey(id)) throw new Exception($"can't add same skillaction -> {typeof(T)}");
 
             var action = AddComp<T>();
-            action.sp = this;
+            action.pipeline = this;
             action.Create();
             actionDict.Add(id, action);
 

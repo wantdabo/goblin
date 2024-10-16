@@ -29,6 +29,13 @@ namespace Goblin.Gameplay.Logic.Actors
             paramachine.SetState<PlayerIdle>();
             paramachine.SetState<PlayerRun>();
             paramachine.SetState<PlayerAttack>();
+            
+            // TODO 后续要改成配置文件读取
+            var launcher = GetBehavior<SkillLauncher>();
+            launcher.Load(10001);
+            launcher.Load(10002);
+            launcher.Load(10003);
+            launcher.Load(10004);
         }
 
         protected override void OnDestroy()

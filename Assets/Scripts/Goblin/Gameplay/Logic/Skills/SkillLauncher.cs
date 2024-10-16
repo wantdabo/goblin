@@ -9,13 +9,17 @@ namespace Goblin.Gameplay.Logic.Skills
 {
     public class SkillLauncher : Behavior<Translator>
     {
-        public List<uint> spids { get; private set; } = new();
-        private Dictionary<uint, SkillPipeline> spdict = new();
+        public List<uint> skills { get; private set; } = new();
+        private Dictionary<uint, SkillPipeline> skilldict = new();
+        public SkillNavigation nav { get; private set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
             actor.stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
+            nav = AddComp<SkillNavigation>();
+            nav.launcher = this;
+            nav.Create();
         }
 
         protected override void OnDestroy()
@@ -33,7 +37,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public SkillPipeline Get(uint id)
         {
-            return spdict.GetValueOrDefault(id);
+            return skilldict.GetValueOrDefault(id);
         }
 
         public void Load(uint id)
@@ -45,13 +49,13 @@ namespace Goblin.Gameplay.Logic.Skills
             sp.id = id;
             sp.launcher = this;
             sp.Create();
-            spids.Add(id);
-            spdict.Add(id, sp);
+            skills.Add(id);
+            skilldict.Add(id, sp);
         }
 
         private void OnFPTick(FPTickEvent e)
         {
-            foreach (var sp in spdict.Values) sp.OnFPTick(e.tick);
+            foreach (var sp in skilldict.Values) sp.OnFPTick(e.tick);
         }
     }
 }

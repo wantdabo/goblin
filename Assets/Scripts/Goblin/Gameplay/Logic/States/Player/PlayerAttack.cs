@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         protected override List<uint> passes => null;
         private uint skillid { get; set; }
         private Gamepad gamepad { get; set; }
-        private SkillLauncher skilllauncher { get; set; }
+        private SkillLauncher launcher { get; set; }
 
         protected override void OnCreate()
         {
@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             machine.paramachine.actor.eventor.Listen<SkillPipelineStateEvent>(OnSkillPipelineStateEvent);
             
             gamepad = machine.paramachine.actor.GetBehavior<Gamepad>();
-            skilllauncher = machine.paramachine.actor.GetBehavior<SkillLauncher>();
+            launcher = machine.paramachine.actor.GetBehavior<SkillLauncher>();
         }
 
         protected override void OnDestroy()
@@ -41,8 +41,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         {
             base.OnEnter();
             skillid = 10001;
-            skilllauncher.Load(skillid);
-            skilllauncher.Launch(skillid);
+            launcher.Launch(skillid);
         }
         
         private void OnSkillPipelineStateEvent(SkillPipelineStateEvent e)
