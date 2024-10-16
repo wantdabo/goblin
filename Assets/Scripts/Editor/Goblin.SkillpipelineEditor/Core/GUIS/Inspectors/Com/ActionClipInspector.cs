@@ -57,49 +57,23 @@ namespace Goblin.SkillPipelineEditor
 
             if (canScale)
             {
-                GUILayout.Label("IN", GUILayout.Width(30));
+                GUILayout.Label("IN");
                 _in *= Prefs.frameRate;
-                _in = EditorGUILayout.DelayedIntField((int)_in, GUILayout.Width(80));
+                _in = EditorGUILayout.DelayedIntField((int)_in);
                 _in *= (1f / Prefs.frameRate);
-
-                GUILayout.FlexibleSpace();
-                GUILayout.Label("◄");
-                _length *= Prefs.frameRate;
-                _length = EditorGUILayout.DelayedIntField((int)_length, GUILayout.Width(80));
-                _length *= (1f / Prefs.frameRate);
-                GUILayout.Label("►");
-                GUILayout.FlexibleSpace();
 
                 GUILayout.Label("OUT", GUILayout.Width(30));
                 _out *= Prefs.frameRate;
-                _out = EditorGUILayout.DelayedIntField((int)_out, GUILayout.Width(80));
+                _out = EditorGUILayout.DelayedIntField((int)_out);
                 _out *= (1f / Prefs.frameRate);
+                
+                GUILayout.Label("LEN", GUILayout.Width(30));
+                _length *= Prefs.frameRate;
+                _length = EditorGUILayout.DelayedIntField((int)_length);
+                _length *= (1f / Prefs.frameRate);
             }
 
             GUILayout.EndHorizontal();
-
-            if (canScale)
-            {
-                if (_in >= action.Parent.StartTime && _out <= action.Parent.EndTime)
-                {
-                    if (_out > _in)
-                    {
-                        EditorGUILayout.MinMaxSlider(ref _in, ref _out, previousTime, nextTime);
-                    }
-                    else
-                    {
-                        _in = EditorGUILayout.Slider(_in, previousTime, nextTime);
-                        _out = _in;
-                    }
-                }
-            }
-            else
-            {
-                GUILayout.Label("IN", GUILayout.Width(30));
-                _in = EditorGUILayout.Slider(_in, 0, action.Parent.EndTime);
-                _out = _in;
-            }
-
 
             if (GUI.changed)
             {
