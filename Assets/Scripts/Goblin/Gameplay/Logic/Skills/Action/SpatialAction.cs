@@ -27,6 +27,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             var scale = data.scale * FP.EN3;
 
             var t = FP.One / (1 + data.eframe - data.sframe);
+            // TODO 方向计算有 BUG，需要更换算法
             spatial.position += spatial.rotation * (position * t);
             spatial.eulerAngle += eulerAngle * t;
             spatial.scale += TSVector.one * scale * t;
