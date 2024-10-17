@@ -28,6 +28,10 @@ namespace Goblin.Sys.Gameplay.View
 
         private bool baFlag = false;
         private bool baPress = false;
+        private bool bbFlag = false;
+        private bool bbPress = false;
+        private bool bcFlag = false;
+        private bool bcPress = false;
         
         private Stage stage { get; set; }
         private RStage rstage { get; set; }
@@ -109,6 +113,30 @@ namespace Goblin.Sys.Gameplay.View
                 baFlag = false;
                 baPress = false;
             }, UIEventEnum.PointerUp);
+            
+            AddUIEventListener("SkillABtn", (e) =>
+            {
+                bbFlag = true;
+                bbPress = true;
+            }, UIEventEnum.PointerDown);
+
+            AddUIEventListener("SkillABtn", (e) =>
+            {
+                bbFlag = false;
+                bbPress = false;
+            }, UIEventEnum.PointerUp);
+            
+            AddUIEventListener("SkillBBtn", (e) =>
+            {
+                bcFlag = true;
+                bcPress = true;
+            }, UIEventEnum.PointerDown);
+
+            AddUIEventListener("SkillBBtn", (e) =>
+            {
+                bcFlag = false;
+                bcPress = false;
+            }, UIEventEnum.PointerUp);
         }
 
         private void OnRILSync(RILSyncEvent e)
@@ -132,7 +160,15 @@ namespace Goblin.Sys.Gameplay.View
 
             if (false == baFlag)
             {
-                baPress = Input.GetKey(KeyCode.Space);
+                baPress = Input.GetKey(KeyCode.J);
+            }
+            if (false == bbFlag)
+            {
+                bbPress = Input.GetKey(KeyCode.K);
+            }
+            if (false == bcFlag)
+            {
+                bcPress = Input.GetKey(KeyCode.L);
             }
         }
 
@@ -146,6 +182,8 @@ namespace Goblin.Sys.Gameplay.View
 
             gamepad.SetInput(InputType.Joystick, joystick);
             gamepad.SetInput(InputType.BA, new InputInfo() { press = baPress, dire = TSVector2.zero });
+            gamepad.SetInput(InputType.BB, new InputInfo() { press = bbPress, dire = TSVector2.zero });
+            gamepad.SetInput(InputType.BC, new InputInfo() { press = bcPress, dire = TSVector2.zero });
             stage.Tick();
         }
     }

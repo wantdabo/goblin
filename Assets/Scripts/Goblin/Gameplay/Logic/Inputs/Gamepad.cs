@@ -20,6 +20,14 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// 按钮 A
         /// </summary>
         BA,
+        /// <summary>
+        /// 按钮 B
+        /// </summary>
+        BB,
+        /// <summary>
+        /// 按钮 C
+        /// </summary>
+        BC,
     }
 
     /// <summary>
@@ -50,6 +58,8 @@ namespace Goblin.Gameplay.Logic.Inputs
         {
             { InputType.Joystick, new InputInfo { press = false, dire = TSVector2.zero } },
             { InputType.BA, new InputInfo { press = false, dire = TSVector2.zero } },
+            { InputType.BB, new InputInfo { press = false, dire = TSVector2.zero } },
+            { InputType.BC, new InputInfo { press = false, dire = TSVector2.zero } },
         };
 
         protected override void OnCreate()

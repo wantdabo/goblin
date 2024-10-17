@@ -116,12 +116,12 @@ namespace Goblin.Custom
                     val.id = SkillActionDef.SKILL_BREAK_EVENT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
-                    val.token = BreakTokenType.NONE;
-                    if (skillBreakeventClip.joystick) val.token |= BreakTokenType.JOYSTICK;
-                    if (skillBreakeventClip.recvhurt) val.token |= BreakTokenType.RECV_HURT;
-                    if (skillBreakeventClip.recvcontrol) val.token |= BreakTokenType.RECV_CONTROL;
-                    if (skillBreakeventClip.skillcast) val.token |= BreakTokenType.SKILL_CAST;
-                    if (skillBreakeventClip.comboskillcast) val.token |= BreakTokenType.COMBO_SKILL_CAST;
+                    val.token = BreakTokenDef.NONE;
+                    if (skillBreakeventClip.joystick) val.token |= BreakTokenDef.JOYSTICK;
+                    if (skillBreakeventClip.recvhurt) val.token |= BreakTokenDef.RECV_HURT;
+                    if (skillBreakeventClip.recvcontrol) val.token |= BreakTokenDef.RECV_CONTROL;
+                    if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
+                    if (skillBreakeventClip.comboskillcast) val.token |= BreakTokenDef.COMBO_SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
             }

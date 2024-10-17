@@ -3,7 +3,7 @@ using MessagePack;
 
 namespace Goblin.Gameplay.Common.SkillDatas.Action
 {
-    public class BreakTokenType
+    public class BreakTokenDef
     {
         public const int NONE = 0;
         public const int JOYSTICK = 1;

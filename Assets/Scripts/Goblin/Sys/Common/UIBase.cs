@@ -108,7 +108,7 @@ namespace Goblin.Sys.Common
         /// 添加 UI 小组件
         /// </summary>
         /// <typeparam name="UC">小组件类型</typeparam>
-        /// <param name="parentNodePath">挂载的节点</param>
+        /// <param name="parentNode">挂载的节点</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
         public UC AddUICell<UC>(GameObject parentNode, bool active = true) where UC : UIBaseCell, new()

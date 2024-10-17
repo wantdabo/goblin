@@ -20,28 +20,14 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
         protected override void OnExecute(SkillBreakEventActionData data, FP tick)
         {
-            if (BreakTokenType.NONE == data.token) return;
+            pipeline.SetBreakToken(data.token);
 
-            if (BreakTokenType.JOYSTICK == (BreakTokenType.JOYSTICK & data.token) && null != gamepad)
+            if (BreakTokenDef.NONE == data.token) return;
+
+            if (BreakTokenDef.JOYSTICK == (BreakTokenDef.JOYSTICK & data.token) && null != gamepad)
             {
                 var joystick = gamepad.GetInput(InputType.Joystick);
                 if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
-            }
-            else if (BreakTokenType.RECV_HURT == (BreakTokenType.RECV_HURT & data.token))
-            {
-                // TODO 支持受击打断
-            }
-            else if (BreakTokenType.RECV_CONTROL == (BreakTokenType.RECV_CONTROL & data.token))
-            {
-                // TODO 支持控制打断
-            }
-            else if (BreakTokenType.SKILL_CAST == (BreakTokenType.SKILL_CAST & data.token))
-            {
-                // TODO 支持技能打断
-            }
-            else if (BreakTokenType.COMBO_SKILL_CAST == (BreakTokenType.COMBO_SKILL_CAST & data.token))
-            {
-                // TODO 支持连招技能打断
             }
         }
     }

@@ -36,6 +36,8 @@ namespace Goblin.Gameplay.Logic.Actors
             launcher.Load(10002);
             launcher.Load(10003);
             launcher.Load(10004);
+            launcher.Load(10011);
+            launcher.Load(10012);
         }
 
         protected override void OnDestroy()

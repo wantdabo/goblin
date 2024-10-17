@@ -42,9 +42,9 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public byte state { get; private set; } = SPStateDef.None;
         /// <summary>
-        /// 技能发射器
+        /// 打断标记
         /// </summary>
-        public SkillLauncher launcher { get; set; }
+        public int breaktoken { get; private set; } = BreakTokenDef.NONE;
         /// <summary>
         /// 当前执行帧号
         /// </summary>
@@ -53,6 +53,10 @@ namespace Goblin.Gameplay.Logic.Skills
         /// 帧数
         /// </summary>
         public uint length { get; private set; }
+        /// <summary>
+        /// 技能发射器
+        /// </summary>
+        public SkillLauncher launcher { get; set; }
         /// <summary>
         /// 技能行为数据
         /// </summary>
@@ -68,12 +72,19 @@ namespace Goblin.Gameplay.Logic.Skills
             Initialize();
         }
 
-        public void Launch()
+        public bool Launch()
         {
-            if (SPStateDef.None != state) return;
+            if (SPStateDef.None != state) return false;
             Start();
+
+            return true;
         }
-        
+
+        public void SetBreakToken(int breaktoken)
+        {
+            this.breaktoken = breaktoken;
+        }
+
         public void Break()
         {
             if (SPStateDef.None == state) return;
@@ -85,6 +96,7 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Start()
         {
             state = SPStateDef.Start;
+            breaktoken = BreakTokenDef.NONE;
             NotifyState();
             frame = 0;
             state = SPStateDef.Casting;
