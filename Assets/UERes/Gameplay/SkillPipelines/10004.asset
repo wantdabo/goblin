@@ -238,6 +238,25 @@ MonoBehaviour:
   startTime: 1
   length: 1
   resPath: 
+--- !u!114 &-3366774569349485962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u4E8B\u4EF6"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 104353515450140411}
+  - {fileID: 6947123234415463659}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &-3138357389343817379
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -396,7 +415,26 @@ MonoBehaviour:
   - {fileID: -2140477477535758407}
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
+  - {fileID: -3366774569349485962}
   length: 4.18
+--- !u!114 &104353515450140411
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3366774569349485962}
+  actionClips:
+  - {fileID: 5844549745428297566}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &136614926458480067
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -604,6 +642,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &5844549745428297566
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 104353515450140411}
+  startTime: 1.06
+  length: 3.12
+  joystick: 0
+  recvhurt: 0
+  recvcontrol: 0
+  skillcast: 1
 --- !u!114 &6058086252915330039
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -673,6 +730,24 @@ MonoBehaviour:
   startTime: 0
   length: 1.5166667
   resPath: Assets/UERes/Art/Animations/Model/Goblin/Running.anim
+--- !u!114 &6947123234415463659
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3366774569349485962}
+  actionClips:
+  - {fileID: 8575701422220544464}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &6950944032191079129
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -824,6 +899,25 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8575701422220544464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6947123234415463659}
+  startTime: 2.28
+  length: 1.8999999
+  joystick: 1
+  recvhurt: 0
+  recvcontrol: 0
+  skillcast: 0
 --- !u!114 &8578159006994401063
 MonoBehaviour:
   m_ObjectHideFlags: 1

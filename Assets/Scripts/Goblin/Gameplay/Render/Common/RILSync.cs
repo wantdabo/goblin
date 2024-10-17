@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Render.Common
 
             actor = stage.GetActor(id);
             actor.eventor.Tell(new RILResolveEvent { frame = frame, ril = ril });
-            Debug.Log($"RILSync: {actor}, {id}, {frame}, {ril}");
+            Debug.Log($"RILSync -> {actor}, {id}, {frame}, {ril}");
         }
     }
 }

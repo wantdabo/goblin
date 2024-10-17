@@ -38,10 +38,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                             var animationData = (AnimationActionData)action;
                             var st = animationData.sframe / (float)length;
                             var et = animationData.eframe / (float)length;
-                            if (t >= st && t <= et + t)
-                            {
-                                animation.Play(animationData.name, (t - st) / et);
-                            }
+                            if (t >= st && t <= et + GameDef.SP_DATA_TICK) animation.Play(animationData.name, t / et);
                             break;
                     }
                 }

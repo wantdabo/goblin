@@ -171,6 +171,25 @@ MonoBehaviour:
   position: {x: 0, y: 0.5, z: 1.5}
   length: 0.13999999
   size: {x: 2, y: 1, z: 1.3}
+--- !u!114 &-5042440214737220125
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6583387795310898722}
+  startTime: 1.86
+  length: 1.0599998
+  joystick: 1
+  recvhurt: 0
+  recvcontrol: 0
+  skillcast: 0
 --- !u!114 &-4749592929421374859
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -284,13 +303,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 4565634262662017256}
-  startTime: 0.91999996
-  length: 1.9999999
-  joystick: 1
-  recvhurt: 1
-  recvcontrol: 1
+  startTime: 0.42
+  length: 2.4999998
+  joystick: 0
+  recvhurt: 0
+  recvcontrol: 0
   skillcast: 1
-  comboskillcast: 1
 --- !u!114 &-3142269960152024497
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -592,6 +610,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &2481091222500697643
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6583387795310898722}
+  startTime: 0.42
+  length: 0.58000004
+  joystick: 0
+  recvhurt: 0
+  recvcontrol: 0
+  skillcast: 1
 --- !u!114 &2644102240244979895
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -657,6 +694,7 @@ MonoBehaviour:
   _parent: {fileID: 11400000}
   tracks:
   - {fileID: 4565634262662017256}
+  - {fileID: 6583387795310898722}
   isCollapsed: 0
   active: 1
   isLocked: 0
@@ -802,6 +840,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &6583387795310898722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 3126422824303122960}
+  actionClips:
+  - {fileID: -5042440214737220125}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &6655863255213179963
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -821,7 +877,6 @@ MonoBehaviour:
   recvhurt: 1
   recvcontrol: 1
   skillcast: 1
-  comboskillcast: 1
 --- !u!114 &6741701409712339798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -903,7 +958,7 @@ MonoBehaviour:
   _parent: {fileID: -4235805314445735913}
   startTime: 0.16
   position: {x: 0, y: 0.5, z: 1}
-  length: 0.34000003
+  length: 0.26
   size: {x: 2, y: 1, z: 1.5}
 --- !u!114 &7346872455535314600
 MonoBehaviour:
@@ -941,7 +996,6 @@ MonoBehaviour:
   recvhurt: 1
   recvcontrol: 1
   skillcast: 1
-  comboskillcast: 1
 --- !u!114 &8285458254674167060
 MonoBehaviour:
   m_ObjectHideFlags: 1
