@@ -59,18 +59,10 @@ namespace Goblin.Gameplay.Logic.Skills
             }
             
             // 技能 A
-            if (bb.press)
-            {
-                launcher.Launch(10011);
-
-                return;
-            }
+            if (bb.press) if (launcher.Launch(10011)) return;
             
             // 技能 B
-            if (bc.press)
-            {
-                launcher.Launch(10012);
-            }
+            if (bc.press) launcher.Launch(10012);
         }
     }
 }
