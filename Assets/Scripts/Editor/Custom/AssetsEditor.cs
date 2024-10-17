@@ -102,11 +102,6 @@ namespace Goblin.Custom
                         Convert.ToInt32(spatialClip.position.y * Config.float2Int),
                         Convert.ToInt32(spatialClip.position.z * Config.float2Int)
                     );
-                    val.eulerAngle = new Vector3Data(
-                        Convert.ToInt32(spatialClip.eulerAngle.x * Config.float2Int),
-                        Convert.ToInt32(spatialClip.eulerAngle.y * Config.float2Int),
-                        Convert.ToInt32(spatialClip.eulerAngle.z * Config.float2Int)
-                    );
                     val.scale = Convert.ToInt32(spatialClip.scale * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }

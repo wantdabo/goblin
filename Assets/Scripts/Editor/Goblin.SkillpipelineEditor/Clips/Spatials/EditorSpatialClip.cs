@@ -15,11 +15,6 @@ namespace Goblin.SkillPipelineEditor
         [SerializeField]
         public Vector3 position = Vector3.zero;
 
-        [FormerlySerializedAs("euler")]
-        [MenuName("旋转")]
-        [SerializeField]
-        public Vector3 eulerAngle = Vector3.zero;
-
         [MenuName("缩放")]
         [SerializeField]
         [Range(-10, 10)]

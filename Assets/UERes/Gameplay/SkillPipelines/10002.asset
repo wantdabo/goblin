@@ -88,7 +88,6 @@ MonoBehaviour:
   startTime: 0.20000002
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-6949782367824954679
 MonoBehaviour:
@@ -398,7 +397,6 @@ MonoBehaviour:
   startTime: 0.18333334
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-1436057562513923285
 MonoBehaviour:
@@ -470,7 +468,6 @@ MonoBehaviour:
   startTime: 0.20000002
   length: 0.02
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &11400000
 MonoBehaviour:

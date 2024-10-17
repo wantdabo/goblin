@@ -50,7 +50,6 @@ MonoBehaviour:
   startTime: 0.20000002
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-6949782367824954679
 MonoBehaviour:
@@ -119,7 +118,6 @@ MonoBehaviour:
   startTime: 0.14
   length: 0.02
   position: {x: 0, y: 0, z: 0}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-5899350563758728281
 MonoBehaviour:
@@ -361,7 +359,6 @@ MonoBehaviour:
   startTime: 0.17999999
   length: 0.02
   position: {x: 0, y: 0, z: 0}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-2326444229897978151
 MonoBehaviour:
@@ -449,7 +446,6 @@ MonoBehaviour:
   startTime: 0.19999999
   length: 0.02
   position: {x: 0, y: 0, z: 0}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-1658671338586536492
 MonoBehaviour:
@@ -483,7 +479,6 @@ MonoBehaviour:
   startTime: 10
   length: 0
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-1204919250882664811
 MonoBehaviour:

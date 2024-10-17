@@ -23,13 +23,11 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             if (null == spatial) return;
 
             var position = data.position.ToVector();
-            var eulerAngle = data.eulerAngle.ToVector();
             var scale = data.scale * FP.EN3;
 
             var t = FP.One / (1 + data.eframe - data.sframe);
-            // TODO 方向计算有 BUG，需要更换算法
             spatial.position += spatial.rotation * (position * t);
-            spatial.eulerAngle += eulerAngle * t;
+            // TODO 支持角度变化
             spatial.scale += TSVector.one * scale * t;
         }
     }

@@ -12,8 +12,6 @@ namespace Goblin.SkillPipelineEditor
         {
             base.Reverse();
             App.AssetData.cloneModel.transform.position -= clip.position;
-            var euler = App.AssetData.cloneModel.transform.rotation.eulerAngles - clip.eulerAngle;
-            App.AssetData.cloneModel.transform.rotation = Quaternion.Euler(euler);
             App.AssetData.cloneModel.transform.localScale -= Vector3.one * clip.scale;
         }
 
@@ -21,8 +19,6 @@ namespace Goblin.SkillPipelineEditor
         {
             base.Enter();
             App.AssetData.cloneModel.transform.position += clip.position;
-            var euler = App.AssetData.cloneModel.transform.rotation.eulerAngles + clip.eulerAngle;
-            App.AssetData.cloneModel.transform.rotation = Quaternion.Euler(euler);
             App.AssetData.cloneModel.transform.localScale += Vector3.one * clip.scale;
         }
 
