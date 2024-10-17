@@ -10,7 +10,6 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action
         public const int RECV_HURT = 2;
         public const int RECV_CONTROL = 4;
         public const int SKILL_CAST = 8;
-        public const int COMBO_SKILL_CAST = 16;
     }
 
     [MessagePackObject(true)]

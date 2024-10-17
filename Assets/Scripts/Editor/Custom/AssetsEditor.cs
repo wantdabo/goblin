@@ -121,7 +121,6 @@ namespace Goblin.Custom
                     if (skillBreakeventClip.recvhurt) val.token |= BreakTokenDef.RECV_HURT;
                     if (skillBreakeventClip.recvcontrol) val.token |= BreakTokenDef.RECV_CONTROL;
                     if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
-                    if (skillBreakeventClip.comboskillcast) val.token |= BreakTokenDef.COMBO_SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
             }

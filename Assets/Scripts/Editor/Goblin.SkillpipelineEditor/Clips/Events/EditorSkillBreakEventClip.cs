@@ -19,7 +19,5 @@ namespace Goblin.SkillPipelineEditor
         public bool recvcontrol = false;
         [MenuName("技能释放")]
         public bool skillcast = false;
-        [MenuName("连招释放")]
-        public bool comboskillcast = false;
     }
 }
