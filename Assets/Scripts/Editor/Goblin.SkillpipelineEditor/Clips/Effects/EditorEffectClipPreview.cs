@@ -17,17 +17,18 @@ namespace Goblin.SkillPipelineEditor
     {
         private GameObject effect;
         private List<ParticleSystem> pss;
+        private List<Animator> animators;
 
         public override void Enter()
         {
             if (effect == null)
             {
-                var obj = AssetDatabase.LoadAssetAtPath<GameObject>(clip.resPath);
+                var obj = AssetDatabase.LoadAssetAtPath<GameObject>(clip.res);
                 if (null == obj) return;
                 effect = GameObject.Instantiate(obj);
                 effect.transform.position = Vector3.zero;
             }
-
+            
             ResolveEffect(effect);
         }
 
@@ -35,6 +36,7 @@ namespace Goblin.SkillPipelineEditor
         {
             if (null == effectObj) return;
             pss = effect.GetComponentsInChildren<ParticleSystem>().ToList();
+            animators = effect.GetComponentsInChildren<Animator>().ToList();
             if (null == pss) return;
             foreach (var ps in pss)
             {
@@ -48,15 +50,27 @@ namespace Goblin.SkillPipelineEditor
             if (Application.isPlaying) return;
 
             if (null == effect) return;
-            effect.transform.position = clip.position;
+            var posoffset = Vector3.zero;
+            if (clip.positionBinding) posoffset = App.AssetData.cloneModel.transform.position;
+            effect.transform.position = posoffset + clip.position;
             effect.transform.rotation = Quaternion.Euler(clip.eulerAngle);
             effect.transform.localScale = clip.scale * Vector3.one;
             effect.SetActive(time < clip.GetLength());
 
-            if (null == pss) return;
-            foreach (var ps in pss)
+            if (null != pss)
             {
-                ps.Simulate(time);
+                foreach (var ps in pss)
+                {
+                    ps.Simulate(time);
+                }
+            }
+            
+            if (null != animators)
+            {
+                foreach (var animator in animators)
+                {
+                    animator.Update(time);
+                }
             }
         }
     }

@@ -16,6 +16,24 @@ MonoBehaviour:
   startTime: 0
   length: 3.3333335
   resPath: Assets/UERes/Art/Animations/Model/RFA/RFA_Ability.fbx
+--- !u!114 &-7824066855196712175
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3e7b7c14280ef4ba86743109aabba4, type: 3}
+  m_Name: "\u7279\u6548\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 8568093981113545493}
+  actionClips:
+  - {fileID: 9073449753238918064}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-7111777677100243316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -120,7 +138,6 @@ MonoBehaviour:
   startTime: 0.45000002
   length: 0
   position: {x: 0, y: 0, z: 0.5}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-3471261919670933275
 MonoBehaviour:
@@ -155,7 +172,6 @@ MonoBehaviour:
   startTime: 0.4166667
   length: 0
   position: {x: 0, y: 0, z: 0.5}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-3117098449366989929
 MonoBehaviour:
@@ -281,7 +297,6 @@ MonoBehaviour:
   startTime: 0.43333337
   length: 0
   position: {x: 0, y: 0, z: 0.5}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-149131191484360334
 MonoBehaviour:
@@ -318,6 +333,7 @@ MonoBehaviour:
   model: {fileID: 4085347383930744380, guid: fff71f6b846f92e4aa777532ddf97749, type: 3}
   groups:
   - {fileID: -930255066919366942}
+  - {fileID: 8568093981113545493}
   - {fileID: 4297218808730817306}
   - {fileID: -1506784747434101577}
   - {fileID: -5765500523820016448}
@@ -657,6 +673,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8568093981113545493
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u7279\u6548"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: -7824066855196712175}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &8622310745688355605
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -673,7 +707,6 @@ MonoBehaviour:
   startTime: 0.40000004
   length: 0
   position: {x: 0, y: 0, z: 0.5}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &8670804725429902080
 MonoBehaviour:
@@ -707,6 +740,25 @@ MonoBehaviour:
   startTime: 2.1000001
   length: 0.01666665
   resPath: 
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 1
+--- !u!114 &9073449753238918064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d536c8334bef64bbdf7a8de12a63a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -7824066855196712175}
+  startTime: 0.26
+  length: 1.22
+  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-2.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1

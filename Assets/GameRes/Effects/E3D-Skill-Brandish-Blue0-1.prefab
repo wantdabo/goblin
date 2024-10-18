@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4960969053984642}
+  - component: {fileID: 4790100812458910911}
   m_Layer: 0
   m_Name: E3D-Skill-Brandish-Blue0-1
   m_TagString: Untagged
@@ -32,6 +33,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4790100812458910911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001054955284460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6269a05277449dcaf9c1a998f486efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animators: []
+  pss:
+  - {fileID: 198967603830313894}
+  - {fileID: 198848696387966330}
+  - {fileID: 198985521101849178}
+  - {fileID: 198831125797212464}
+  - {fileID: 198439232473346042}
+  - {fileID: 198021865982693652}
+  duration: -1
 --- !u!1 &1259144556215792
 GameObject:
   m_ObjectHideFlags: 0

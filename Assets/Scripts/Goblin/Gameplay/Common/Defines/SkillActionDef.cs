@@ -10,12 +10,16 @@
         /// </summary>
         public const ushort ANIMATION = 0;
         /// <summary>
+        /// 特效
+        /// </summary>
+        public const ushort EFFECT = 1;
+        /// <summary>
         /// 空间变化
         /// </summary>
-        public const ushort SPATIAL = 1;
+        public const ushort SPATIAL = 2;
         /// <summary>
         /// 打断事件
         /// </summary>
-        public const ushort SKILL_BREAK_EVENT = 2;
+        public const ushort SKILL_BREAK_EVENT = 3;
     }
 }

@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action.Common
     {
         /// <summary>
         /// 技能行为 ID
-        /// </summary>~
+        /// </summary>
         public ushort id { set; get; }
         /// <summary>
         /// 起始帧号

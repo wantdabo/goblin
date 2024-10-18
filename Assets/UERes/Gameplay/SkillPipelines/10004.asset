@@ -50,7 +50,6 @@ MonoBehaviour:
   startTime: 0.20000002
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-6949782367824954679
 MonoBehaviour:
@@ -168,8 +167,27 @@ MonoBehaviour:
   _parent: {fileID: -4235805314445735913}
   startTime: 0.14
   position: {x: 0, y: 0.5, z: 0.5}
-  length: 0.86
+  length: 0.78
   size: {x: 1.5, y: 2, z: 1.5}
+--- !u!114 &-4970765489393930932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d536c8334bef64bbdf7a8de12a63a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 1807503441029031862}
+  startTime: 1.7199999
+  length: 1
+  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-1.prefab
+  position: {x: -0.1, y: -0.3, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 1
 --- !u!114 &-4235805314445735913
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -205,6 +223,25 @@ MonoBehaviour:
   position: {x: 0, y: 0.5, z: 2.08}
   length: 0.26666665
   size: {x: 1, y: 1, z: 1}
+--- !u!114 &-4034796607219957921
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u7279\u6548"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 9126706862772519562}
+  - {fileID: 1807503441029031862}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &-3730813443085004206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,7 +415,6 @@ MonoBehaviour:
   startTime: 0.18333334
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &-1204919250882664811
 MonoBehaviour:
@@ -397,6 +433,25 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-499614267550885788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d536c8334bef64bbdf7a8de12a63a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 9126706862772519562}
+  startTime: 0.06
+  length: 0.71999997
+  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-2.prefab
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +468,7 @@ MonoBehaviour:
   model: {fileID: 4085347383930744380, guid: fff71f6b846f92e4aa777532ddf97749, type: 3}
   groups:
   - {fileID: -2140477477535758407}
+  - {fileID: -4034796607219957921}
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   - {fileID: -3366774569349485962}
@@ -506,6 +562,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &1807503441029031862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3e7b7c14280ef4ba86743109aabba4, type: 3}
+  m_Name: "\u7279\u6548\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4034796607219957921}
+  actionClips:
+  - {fileID: 3468244158834607520}
+  - {fileID: -4970765489393930932}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2302650135231807872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -588,8 +663,26 @@ MonoBehaviour:
   startTime: 0.23333332
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
+--- !u!114 &3468244158834607520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d536c8334bef64bbdf7a8de12a63a1, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 1807503441029031862}
+  startTime: 0.62
+  length: 0.91999996
+  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-Spear.prefab
+  position: {x: 0, y: -1.01, z: 0}
+  eulerAngle: {x: 0, y: -20, z: 0}
+  scale: 1
 --- !u!114 &4404173715354118483
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -814,7 +907,6 @@ MonoBehaviour:
   startTime: 0.25
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
 --- !u!114 &7346872455535314600
 MonoBehaviour:
@@ -934,5 +1026,22 @@ MonoBehaviour:
   startTime: 0.20000002
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
-  eulerAngle: {x: 0, y: 0, z: 0}
   scale: 0
+--- !u!114 &9126706862772519562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3e7b7c14280ef4ba86743109aabba4, type: 3}
+  m_Name: "\u7279\u6548\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4034796607219957921}
+  actionClips:
+  - {fileID: -499614267550885788}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}

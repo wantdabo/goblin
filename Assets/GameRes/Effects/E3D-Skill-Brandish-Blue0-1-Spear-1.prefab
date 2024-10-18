@@ -14473,6 +14473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4905122543433000}
+  - component: {fileID: 7920261843145617410}
   m_Layer: 0
   m_Name: E3D-Skill-Brandish-Blue0-1-Spear-1
   m_TagString: Untagged
@@ -14496,6 +14497,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7920261843145617410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462256940449748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6269a05277449dcaf9c1a998f486efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animators: []
+  pss:
+  - {fileID: 198174753423268054}
+  - {fileID: 198886318146478978}
+  - {fileID: 198838754029525618}
+  - {fileID: 198624856090405182}
+  - {fileID: 198909249366509876}
+  - {fileID: 198644904571043062}
+  - {fileID: 198156214884754600}
+  duration: -1
 --- !u!1 &1537485504582676
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,9 +9,10 @@ using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Windows;
+using File = UnityEngine.Windows.File;
 using Object = UnityEngine.Object;
 
 namespace Goblin.Custom
@@ -89,6 +90,27 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
                     val.name = animationClip.animationClip.name;
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorEffectClip effectClip)
+                {
+                    var val = new EffectActionData();
+                    val.id = SkillActionDef.EFFECT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.res =  Path.GetFileNameWithoutExtension(effectClip.res);
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(effectClip.position.x * Config.float2Int),
+                        Convert.ToInt32(effectClip.position.y * Config.float2Int),
+                        Convert.ToInt32(effectClip.position.z * Config.float2Int)
+                    );
+                    val.eulerAngle = new Vector3Data(
+                        Convert.ToInt32(effectClip.eulerAngle.x * Config.float2Int),
+                        Convert.ToInt32(effectClip.eulerAngle.y * Config.float2Int),
+                        Convert.ToInt32(effectClip.eulerAngle.z * Config.float2Int)
+                    );
+                    val.scale = Convert.ToInt32(effectClip.scale * Config.float2Int);
+                    val.positionBinding = effectClip.positionBinding;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorSpatialClip spatialClip)

@@ -469,6 +469,24 @@ MonoBehaviour:
   length: 0.02
   position: {x: 0, y: 0, z: 0.25}
   scale: 0
+--- !u!114 &-370527695876832466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u7279\u6548"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 2960137553245356948}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,6 +503,7 @@ MonoBehaviour:
   model: {fileID: 4085347383930744380, guid: fff71f6b846f92e4aa777532ddf97749, type: 3}
   groups:
   - {fileID: -2140477477535758407}
+  - {fileID: -370527695876832466}
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   - {fileID: -1436057562513923285}
@@ -643,6 +662,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &2960137553245356948
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3e7b7c14280ef4ba86743109aabba4, type: 3}
+  m_Name: "\u7279\u6548\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -370527695876832466}
+  actionClips:
+  - {fileID: 6336170222265632340}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &4404173715354118483
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -728,6 +765,25 @@ MonoBehaviour:
   startTime: 0.10000001
   length: 0.56666666
   resPath: Assets/GameRes/Effects/vfx_skill_10001.prefab
+  position: {x: 0, y: 0, z: 0}
+  eulerAngle: {x: 0, y: 0, z: 0}
+  scale: 1
+--- !u!114 &6336170222265632340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d536c8334bef64bbdf7a8de12a63a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 2960137553245356948}
+  startTime: 0
+  length: 0.64
+  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-2.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1

@@ -40,7 +40,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <summary>
         /// 技能状态
         /// </summary>
-        public byte state { get; private set; } = SPStateDef.None;
+        public byte state { get; private set; } = SkillPipelineStateDef.None;
         /// <summary>
         /// 打断标记
         /// </summary>
@@ -74,7 +74,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public bool Launch()
         {
-            if (SPStateDef.None != state) return false;
+            if (SkillPipelineStateDef.None != state) return false;
             Start();
 
             return true;
@@ -87,19 +87,19 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public void Break()
         {
-            if (SPStateDef.None == state) return;
-            state = SPStateDef.Break;
+            if (SkillPipelineStateDef.None == state) return;
+            state = SkillPipelineStateDef.Break;
             NotifyState();
             End();
         }
 
         private void Start()
         {
-            state = SPStateDef.Start;
+            state = SkillPipelineStateDef.Start;
             breaktoken = BreakTokenDef.NONE;
             NotifyState();
             frame = 0;
-            state = SPStateDef.Casting;
+            state = SkillPipelineStateDef.Casting;
             NotifyState();
         }
 
@@ -131,7 +131,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
         private void End()
         {
-            state = SPStateDef.End;
+            state = SkillPipelineStateDef.End;
             NotifyState();
         }
 
@@ -142,12 +142,12 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public void OnFPTick(FP tick)
         {
-            if (SPStateDef.End == state)
+            if (SkillPipelineStateDef.End == state)
             {
                 NotifyState();
-                state = SPStateDef.None;
+                state = SkillPipelineStateDef.None;
             }
-            if (SPStateDef.Casting != state) return;
+            if (SkillPipelineStateDef.Casting != state) return;
             Casting(tick);
         }
 

@@ -24218,6 +24218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 488248}
+  - component: {fileID: -2659876209627273814}
   m_Layer: 0
   m_Name: E3D-Skill-Brandish-Orange0
   m_TagString: Untagged
@@ -24241,6 +24242,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2659876209627273814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6269a05277449dcaf9c1a998f486efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animators:
+  - {fileID: 9544290}
+  pss:
+  - {fileID: 19800838}
+  - {fileID: 198910510003897276}
+  - {fileID: 19860536}
+  - {fileID: 198494126765750084}
+  - {fileID: 19899812}
+  - {fileID: 19874688}
+  - {fileID: 198057956203104132}
+  - {fileID: 198484051712363360}
+  - {fileID: 19874072}
+  - {fileID: 19852474}
+  - {fileID: 198295655767305250}
+  duration: -1
 --- !u!1 &172646
 GameObject:
   m_ObjectHideFlags: 0

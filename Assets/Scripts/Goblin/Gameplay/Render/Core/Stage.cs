@@ -1,6 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Render.Common;
+using Goblin.Gameplay.Render.Effects;
 using Goblin.Gameplay.Render.Focus;
 using Goblin.Gameplay.Render.Focus.Cameras;
 using Goblin.Gameplay.Render.Focus.Common;
@@ -30,6 +31,10 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public Ticker ticker { get; private set; }
         /// <summary>
+        /// 特效
+        /// </summary>
+        public VisualEffect vfx { get; private set; }
+        /// <summary>
         /// RIL/ 渲染指令同步
         /// </summary>
         public RILSync rilsync { get; private set; }
@@ -54,6 +59,10 @@ namespace Goblin.Gameplay.Render.Core
             
             ticker = AddComp<Ticker>();
             ticker.Create();
+
+            vfx = AddComp<VisualEffect>();
+            vfx.stage = this;
+            vfx.Create();
             
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;

@@ -34031,6 +34031,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4101360660056586}
+  - component: {fileID: -8926173289004744002}
   m_Layer: 0
   m_Name: E3D-Skill-Brandish-Orange0-2-Axe
   m_TagString: Untagged
@@ -34054,6 +34055,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8926173289004744002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750758901894474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6269a05277449dcaf9c1a998f486efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animators: []
+  pss:
+  - {fileID: 198408218779630958}
+  - {fileID: 198356399120350736}
+  - {fileID: 198968254612569598}
+  - {fileID: 198166755816403704}
+  - {fileID: 198696128920914288}
+  - {fileID: 198093063253049782}
+  - {fileID: 198953875064090874}
+  - {fileID: 198397478822198722}
+  duration: -1
 --- !u!1 &1968572793441778
 GameObject:
   m_ObjectHideFlags: 0
