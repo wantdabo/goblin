@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: E3D-Sample-Distort-Direct-Blade 36
+  m_Shader: {fileID: 4800000, guid: faa9262dbc6ea57439942129f434f852, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _EMISSION
+  - _FRECOLORINVERT_ON
+  - _FREDISINVERT_ON
+  - _FREINVERT_ON
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 4200
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Blend_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Blend_Texture01:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortMap:
+        m_Texture: {fileID: 2800000, guid: 7abc32cbcbe367844ac624c77a525a2d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 1}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 45cfdafb818692e4da347c736cdd356a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 2800000, guid: ccbfa8a432d319d46b5b62f2b2fb705d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 1}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: d1b49ea0ffdaa434f812ec454929af13, type: 3}
+        m_Scale: {x: 4, y: 4}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Alpha: 0.49
+    - _BumpScale: 1
+    - _ColorFrePower: 15.6
+    - _ColorFreScale: 1.36
+    - _ColorFreinvert: 0
+    - _ColorFrepower: 6.318185
+    - _Cutoff: 0.5
+    - _Depth: 0.01
+    - _DetailNormalMapScale: 1
+    - _DisFrePower: 30
+    - _DisFreScale: 0
+    - _DisFreinvert: 0
+    - _DistortOffset: 1.02
+    - _Distrot: 0.1
+    - _DstBlend: 0
+    - _Float0: 0
+    - _Float1: 3.85
+    - _Fogalpha: 5.74
+    - _FreBia: 0.7250201
+    - _FreColorinvert: 1
+    - _FreDisinvert: 1
+    - _FrePower: 1.3
+    - _FreScale: 2
+    - _Freinvert: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _HeatForce: 0.33
+    - _HeatTime: 0.008
+    - _InvFade: 1
+    - _Lighten: 1
+    - _LightenMain: 1
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Offset: 1.08
+    - _Parallax: 0.02
+    - _S1: -0.38
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Speed: 0.033
+    - _Speed01: 1
+    - _Speed02: 1
+    - _SrcBlend: 1
+    - _Tiling: 0.63
+    - _TilingU: 0.56
+    - _TilingV: 0
+    - _ToggleSwitch0: 0
+    - _UVSec: 0
+    - _ZWrite: 1
+    - __dirty: 0
+    m_Colors:
+    - _AutoUVDirection: {r: 0.1, g: 2, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color01: {r: 1, g: 1, b: 1, a: 1}
+    - _Color02: {r: 1, g: 1, b: 1, a: 1}
+    - _Color03: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FreColor: {r: 0, g: 0, b: 0, a: 1}
+    - _NTiling: {r: -0.1, g: 0.2, b: 0, a: 0}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5019608}
+  m_BuildTextureStacks: []

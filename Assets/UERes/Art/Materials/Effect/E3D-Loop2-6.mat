@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: E3D-Loop2-6
+  m_Shader: {fileID: 4800000, guid: 268f447a688d4e74480b0d180674defb, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 4000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 6886505889fcfbc4fb38cc8feaba76ef, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0.15, y: -0.15}
+    - _BaseMaskMap:
+        m_Texture: {fileID: 2800000, guid: e5e4f8d6f0dfeca45a8fcc8174dfa252, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MASK:
+        m_Texture: {fileID: 2800000, guid: f6664826a293606429d8e795d3334776, type: 3}
+        m_Scale: {x: 2, y: -1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: b53fd8cc16cf77e41b0d35a981f10054, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseMap:
+        m_Texture: {fileID: 2800000, guid: e5e4f8d6f0dfeca45a8fcc8174dfa252, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: -1.02, y: -1.5}
+    - _dissolveTex:
+        m_Texture: {fileID: 2800000, guid: d46e5c29ad815304e8c1d982c04fabd4, type: 3}
+        m_Scale: {x: 0.3, y: 0.8}
+        m_Offset: {x: 0, y: 0.1}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Cutoff: 0.5
+    - _Diss: 0.929
+    - _FaceBaseColor: 1
+    - _FaceEdgeColor: 1
+    - _Glow: 1
+    - _InvFade: 0.14
+    - _MainPower: 1
+    - _MainTex_Rotate: 0
+    - _Power: 0.5
+    - _Soft: 14.2
+    - _Strength: 3
+    - __dirty: 0
+    m_Colors:
+    - _BaseColor: {r: 5.8350005, g: 2.388443, b: 1.3729405, a: 1}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 3, g: 1.9131846, b: 1.3235295, a: 1}
+    - _TintColor: {r: 1, g: 0.66176474, b: 0.1544118, a: 1}
+  m_BuildTextureStacks: []
