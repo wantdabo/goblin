@@ -175,20 +175,25 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'KEY "Z" PRESS ZOOM IN
+  m_Text: 'KEY "J" PRESS ATTACK
 
-    KEY "X" PRESS ZOOM OUT
+    KEY "L"
 
 
-    KEY "W" PRESS
-    MOVE UP
+    KEY "Z" PRESS ZOOM IN
+
+    KEY
+    "X" PRESS ZOOM OUT
+
+
+    KEY "W" PRESS MOVE UP
 
     KEY "A"  PRESS MOVE LEFT
 
-    KEY "S"  PRESS MOVE DOWN
-
     KEY
-    "D"  PRESS MOVE RIGHT'
+    "S"  PRESS MOVE DOWN
+
+    KEY "D"  PRESS MOVE RIGHT'
 --- !u!114 &8525520755552331923
 MonoBehaviour:
   m_ObjectHideFlags: 0
