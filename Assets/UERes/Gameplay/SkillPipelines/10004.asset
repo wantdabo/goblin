@@ -184,10 +184,11 @@ MonoBehaviour:
   _parent: {fileID: 1807503441029031862}
   startTime: 1.7199999
   length: 1
-  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-1.prefab
+  res: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-1.prefab
   position: {x: -0.1, y: -0.3, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &-4235805314445735913
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,10 +449,11 @@ MonoBehaviour:
   _parent: {fileID: 9126706862772519562}
   startTime: 0.06
   length: 0.71999997
-  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-2.prefab
+  res: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-2.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,10 +681,11 @@ MonoBehaviour:
   _parent: {fileID: 1807503441029031862}
   startTime: 0.62
   length: 0.91999996
-  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-Spear.prefab
+  res: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-Spear.prefab
   position: {x: 0, y: -1.01, z: 0}
   eulerAngle: {x: 0, y: -20, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &4404173715354118483
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -786,10 +789,11 @@ MonoBehaviour:
   _parent: {fileID: 136614926458480067}
   startTime: 0.10000001
   length: 0.56666666
-  resPath: Assets/GameRes/Effects/vfx_skill_10001.prefab
+  res: Assets/GameRes/Effects/vfx_skill_10001.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1

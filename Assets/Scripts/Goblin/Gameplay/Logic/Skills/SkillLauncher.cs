@@ -72,8 +72,8 @@ namespace Goblin.Gameplay.Logic.Skills
 
         private void OnFPTick(FPTickEvent e)
         {
-            caster.OnFPTick(e.tick);
             foreach (var pipeline in skilldict.Values) pipeline.OnFPTick(e.tick);
+            caster.OnFPTick(e.tick);
         }
     }
 }

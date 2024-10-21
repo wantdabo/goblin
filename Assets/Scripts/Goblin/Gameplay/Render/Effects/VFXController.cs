@@ -32,6 +32,10 @@ namespace Goblin.Gameplay.Render.Effects
         /// </summary>
         public bool playing { get; private set; } = false;
 
+        private bool lerp { get; set; }
+        private float elapsed { get; set; }
+        private float lerpt { get; set; }
+
         private uint delayTimingId { get; set; }
         private uint autoStopTimingId { get; set; }
 
@@ -42,6 +46,11 @@ namespace Goblin.Gameplay.Render.Effects
         public void OnTick(float tick)
         {
             if (false == playing) return;
+            if (lerp)
+            {
+                elapsed += tick;
+                if (elapsed >= lerpt) return;
+            }
 
             foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Simulate(tick, true, false);
             foreach (var animator in animators) if (animator.gameObject.activeInHierarchy) animator.Update(tick);
@@ -50,8 +59,7 @@ namespace Goblin.Gameplay.Render.Effects
         /// <summary>
         /// 停止
         /// </summary>
-        /// <param name="name">状态机动画名</param>
-        public void Stop(string name = "")
+        public void Stop()
         {
             if (false == playing) return;
             if (null == vfx) return;
@@ -59,7 +67,7 @@ namespace Goblin.Gameplay.Render.Effects
             vfx.stage.ticker.StopTimer(delayTimingId);
             gameObject.SetActive(false);
             playing = false;
-            foreach (var animator in animators) if (animator.isActiveAndEnabled) animator.Play(name);
+            foreach (var animator in animators) if (animator.isActiveAndEnabled) animator.Play(string.Empty);
             foreach (var ps in pss)
             {
                 ps.Stop();
@@ -73,16 +81,28 @@ namespace Goblin.Gameplay.Render.Effects
         /// <summary>
         /// 播放
         /// </summary>
-        /// <param name="name">动画名</param>
-        /// <param name="callBack">播放回调</param>
-        public void Play(string name = "Play", Action callBack = null)
+        public void Play()
+        {
+            lerp = false;
+            Do();
+        }
+
+        public void Play(float lerpt)
+        {
+            this.lerp = true;
+            this.lerpt = lerpt;
+            if (playing) return;
+            elapsed = 0f;
+            Do();
+        }
+
+        private void Do()
         {
             playing = true;
             delayTimingId = vfx.stage.ticker.Timing((t) =>
             {
-                callBack?.Invoke();
                 gameObject.SetActive(true);
-                foreach (var animator in animators) if (animator.gameObject.activeInHierarchy) animator.Play(name);
+                foreach (var animator in animators) if (animator.gameObject.activeInHierarchy) animator.Play(string.Empty);
                 foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Play();
                 if (duration <= 0) return;
                 autoStopTimingId = vfx.stage.ticker.Timing((t) => Stop(), duration, 1);

@@ -18,17 +18,25 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             gamepad = pipeline.launcher.actor.GetBehavior<Gamepad>();
         }
 
+        protected override void OnEnter(SkillBreakEventActionData data)
+        {
+            pipeline.StampBreakToken(data.token);
+        }
+        
         protected override void OnExecute(SkillBreakEventActionData data, FP tick)
         {
-            pipeline.SetBreakToken(data.token);
-
             if (BreakTokenDef.NONE == data.token) return;
 
-            if (BreakTokenDef.JOYSTICK == (BreakTokenDef.JOYSTICK & data.token) && null != gamepad)
+            if (BreakTokenDef.JOYSTICK == (BreakTokenDef.JOYSTICK & pipeline.breaktoken) && null != gamepad)
             {
                 var joystick = gamepad.GetInput(InputType.Joystick);
                 if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
             }
+        }
+        
+        protected override void OnExit(SkillBreakEventActionData data)
+        {
+            pipeline.EraseBreakToken(data.token);
         }
     }
 }

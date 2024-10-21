@@ -896,7 +896,7 @@ MonoBehaviour:
   - {fileID: 6656838102287199398}
   - {fileID: 2912023177970516285}
   - {fileID: -762738597170021357}
-  length: 3.6799998
+  length: 2.7
 --- !u!114 &187290932934946478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 187290932934946478}
   startTime: 1.68
-  length: 2
+  length: 1.0200001
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Branch_04_End.anim
 --- !u!114 &2880413975967832350
 MonoBehaviour:
@@ -1049,8 +1049,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -3239577924843276542}
-  startTime: 1.64
-  length: 2.04
+  startTime: 1.4
+  length: 1.3000001
   joystick: 0
   recvhurt: 0
   recvcontrol: 0
@@ -1449,8 +1449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -3157445376952576177}
-  startTime: 2.08
-  length: 1.5999999
+  startTime: 2.26
+  length: 0.44000006
   joystick: 1
   recvhurt: 0
   recvcontrol: 0

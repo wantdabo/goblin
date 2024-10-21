@@ -34,14 +34,13 @@ namespace Goblin.Gameplay.Logic.Skills
             var ba = gamepad.GetInput(InputType.BA);
             var bb = gamepad.GetInput(InputType.BB);
             var bc = gamepad.GetInput(InputType.BC);
-
             uint lastskill = 0;
             if (launcher.launchskill.playing && ba.press || bb.press || bc.press)
             {
                 if (launcher.launchskill.playing)
                 {
                     var pipeline = launcher.Get(launcher.launchskill.skill);
-                    if (false == (BreakTokenDef.SKILL_CAST == (BreakTokenDef.SKILL_CAST & pipeline.breaktoken))) return;
+                    if (BreakTokenDef.SKILL_CAST != (BreakTokenDef.SKILL_CAST & pipeline.breaktoken)) return;
                     lastskill = pipeline.id;
                     pipeline.Break();
                 }

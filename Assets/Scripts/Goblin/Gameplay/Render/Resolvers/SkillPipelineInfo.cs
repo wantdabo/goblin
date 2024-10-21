@@ -5,6 +5,7 @@ using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Common.SkillDatas.Action.Common;
 using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.Common.Extensions;
+using Goblin.Gameplay.Logic.Skills;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
@@ -22,17 +23,27 @@ namespace Goblin.Gameplay.Render.Resolvers
         private AnimancerAnimation animation { get; set; }
         private Dictionary<uint, uint> skillLengths { get; set; } = new();
         private Dictionary<uint, List<SkillActionData>> skillActionDatas { get; set; } = new();
-        
+
         protected override void OnAwake(uint frame, RIL_SKILLPIPELINE_INFO ril)
         {
             node = actor.EnsureBehavior<Node>();
             animation = actor.EnsureBehavior<AnimancerAnimation>();
         }
 
-        private Dictionary<uint, VFXController> effdict = new();
+        private Dictionary<uint, Dictionary<string, VFXController>> effdict = new();
 
         protected override void OnResolve(uint frame, RIL_SKILLPIPELINE_INFO ril)
         {
+            if (SkillPipelineStateDef.End == ril.state || SkillPipelineStateDef.None == ril.state)
+            {
+                if (effdict.TryGetValue(ril.skillid, out var effs))
+                {
+                    foreach (var eff in effs.Values) eff.Stop();
+                    effs.Clear();
+                }
+                return;
+            }
+
             ReadyOrInitialize(ril.skillid);
             var t = ril.frame / (float)ril.length;
             var length = skillLengths[ril.skillid];
@@ -51,36 +62,44 @@ namespace Goblin.Gameplay.Render.Resolvers
                             animation.Play(animationData.name, t / et);
                             break;
                         case SkillActionDef.EFFECT:
-                            // TODO 还需要优化，非正式代码
-                            var key = ril.id + (uint)action.id + action.sframe + action.eframe;
+                            var effectData = (EffectActionData)action;
+                            if (false == effdict.TryGetValue(ril.skillid, out var effs))
+                            {
+                                effs = new();
+                                effdict.Add(ril.skillid, effs);
+                            }
+
                             if (false == between)
                             {
-                                if (effdict.TryGetValue(key, out var eff))
+                                if (effs.TryGetValue(effectData.res, out var e))
                                 {
-                                    eff.Stop();
-                                    actor.stage.vfx.UnloadVFX(eff);
-                                    effdict.Remove(key);
+                                    e.Stop();
+                                    effs.Remove(effectData.res);
                                 }
                                 break;
                             }
 
-                            var effectData = (EffectActionData)action;
-                            if (effectData.positionBinding)
+                            bool first = false;
+                            if (false == effs.TryGetValue(effectData.res, out var eff))
                             {
+                                eff = actor.stage.vfx.LoadVFX(effectData.res);
+                                effs.Add(effectData.res, eff);
+                                eff.transform.position = node.go.transform.position + effectData.position.ToVector().ToVector3();
+                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngle.ToVector().ToVector3());
+                                eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
+
+                                first = true;
                             }
-                            else
+                            
+                            if (false == first && effectData.positionBinding)
                             {
-                                effdict.TryGetValue(key, out var eff);
-                                if (null == eff)
-                                {
-                                    eff = actor.stage.vfx.LoadVFX(effectData.res);
-                                    eff.transform.position = node.go.transform.position + effectData.position.ToVector().ToVector3();
-                                    eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngle.ToVector().ToVector3());
-                                    eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
-                                    eff.Play();
-                                    effdict.Add(key, eff);
-                                }
+                                eff.transform.position = node.go.transform.position + effectData.position.ToVector().ToVector3();
+                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngle.ToVector().ToVector3());
+                                eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
                             }
+
+                            eff.Play((ril.frame - action.sframe) * GameDef.SP_DATA_TICK);
+
                             break;
                     }
                 }

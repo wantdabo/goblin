@@ -30,8 +30,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -6537480054594765392}
-  startTime: 0.52
-  length: 2.1399999
+  startTime: 0.44
+  length: 2.2199998
   joystick: 0
   recvhurt: 0
   recvcontrol: 0
@@ -764,10 +764,11 @@ MonoBehaviour:
   _parent: {fileID: 136614926458480067}
   startTime: 0.10000001
   length: 0.56666666
-  resPath: Assets/GameRes/Effects/vfx_skill_10001.prefab
+  res: Assets/GameRes/Effects/vfx_skill_10001.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &6336170222265632340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -783,10 +784,11 @@ MonoBehaviour:
   _parent: {fileID: 2960137553245356948}
   startTime: 0
   length: 0.64
-  resPath: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-2.prefab
+  res: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-2.prefab
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
+  positionBinding: 0
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1

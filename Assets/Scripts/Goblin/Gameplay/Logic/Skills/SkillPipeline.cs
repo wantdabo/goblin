@@ -80,9 +80,14 @@ namespace Goblin.Gameplay.Logic.Skills
             return true;
         }
 
-        public void SetBreakToken(int breaktoken)
+        public void EraseBreakToken(int token)
         {
-            this.breaktoken = breaktoken;
+            breaktoken &= ~token;
+        }
+
+        public void StampBreakToken(int token)
+        {
+            breaktoken |= token;
         }
 
         public void Break()
@@ -101,8 +106,9 @@ namespace Goblin.Gameplay.Logic.Skills
             frame = 0;
             state = SkillPipelineStateDef.Casting;
             NotifyState();
+            Casting(GameDef.LOGIC_TICK);
         }
-
+        
         private void Casting(FP tick)
         {
             foreach (var actionData in actionDatas)
@@ -120,8 +126,9 @@ namespace Goblin.Gameplay.Logic.Skills
                             break;
                     }
                 }
-
+                if (frame == actionData.sframe) action.Enter(actionData);
                 if (frame >= actionData.sframe && frame <= actionData.eframe) action.Execute(actionData, frame, tick);
+                if (frame == actionData.eframe) action.Exit(actionData);
             }
 
             frame++;
