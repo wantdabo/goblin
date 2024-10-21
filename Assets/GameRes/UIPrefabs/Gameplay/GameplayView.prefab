@@ -177,23 +177,26 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'KEY "J" PRESS ATTACK
 
-    KEY "L"
+    KEY "K" PRESS SKILL A
+
+    KEY "L" PRESS SKILL
+    B
 
 
     KEY "Z" PRESS ZOOM IN
 
-    KEY
-    "X" PRESS ZOOM OUT
+    KEY "X" PRESS ZOOM OUT
 
 
-    KEY "W" PRESS MOVE UP
+    KEY "W" PRESS
+    MOVE UP
 
     KEY "A"  PRESS MOVE LEFT
 
-    KEY
-    "S"  PRESS MOVE DOWN
+    KEY "S"  PRESS MOVE DOWN
 
-    KEY "D"  PRESS MOVE RIGHT'
+    KEY
+    "D"  PRESS MOVE RIGHT'
 --- !u!114 &8525520755552331923
 MonoBehaviour:
   m_ObjectHideFlags: 0
