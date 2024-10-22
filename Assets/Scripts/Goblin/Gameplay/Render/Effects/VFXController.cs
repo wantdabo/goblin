@@ -33,7 +33,6 @@ namespace Goblin.Gameplay.Render.Effects
         public bool playing { get; private set; } = false;
 
         private bool lerp { get; set; }
-        private float elapsed { get; set; }
         private float lerpt { get; set; }
 
         private uint delayTimingId { get; set; }
@@ -48,8 +47,8 @@ namespace Goblin.Gameplay.Render.Effects
             if (false == playing) return;
             if (lerp)
             {
-                elapsed += tick;
-                if (elapsed >= lerpt) return;
+                if (tick > lerpt) return;
+                lerpt -= tick;
             }
 
             foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Simulate(tick, true, false);
@@ -63,10 +62,10 @@ namespace Goblin.Gameplay.Render.Effects
         {
             if (false == playing) return;
             if (null == vfx) return;
-
+            playing = false;
+            lerpt = 0f;
             vfx.stage.ticker.StopTimer(delayTimingId);
             gameObject.SetActive(false);
-            playing = false;
             foreach (var animator in animators) if (animator.isActiveAndEnabled) animator.Play(string.Empty);
             foreach (var ps in pss)
             {
@@ -87,12 +86,11 @@ namespace Goblin.Gameplay.Render.Effects
             Do();
         }
 
-        public void Play(float lerpt)
+        public void Play(float tick)
         {
             this.lerp = true;
-            this.lerpt = lerpt;
+            this.lerpt += tick;
             if (playing) return;
-            elapsed = 0f;
             Do();
         }
 

@@ -21,7 +21,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         public override ushort id => RILDef.SKILLPIPELINE_INFO;
         private Node node { set; get; }
         private AnimancerAnimation animation { get; set; }
-        private Dictionary<uint, uint> skillLengths { get; set; } = new();
         private Dictionary<uint, List<SkillActionData>> skillActionDatas { get; set; } = new();
 
         protected override void OnAwake(uint frame, RIL_SKILLPIPELINE_INFO ril)
@@ -45,30 +44,27 @@ namespace Goblin.Gameplay.Render.Resolvers
             }
 
             ReadyOrInitialize(ril.skillid);
-            var t = ril.frame / (float)ril.length;
-            var length = skillLengths[ril.skillid];
+            var f = Mathf.Floor(ril.frame * GameDef.SP_DATA_LOGIC_FRAME_SCALE);
             if (skillActionDatas.TryGetValue(ril.skillid, out var actions))
             {
                 foreach (var action in actions)
                 {
-                    var st = action.sframe / (float)length;
-                    var et = action.eframe / (float)length;
-                    var between = (t >= st && t <= et + GameDef.SP_DATA_TICK);
+                    var between = (f >= action.sframe && f <= action.eframe);
                     switch (action.id)
                     {
                         case SkillActionDef.ANIMATION:
                             if (false == between) break;
                             var animationData = (AnimationActionData)action;
-                            animation.Play(animationData.name, t / et);
+                            animation.Play(animationData.name, f / action.eframe);
                             break;
                         case SkillActionDef.EFFECT:
-                            var effectData = (EffectActionData)action;
                             if (false == effdict.TryGetValue(ril.skillid, out var effs))
                             {
                                 effs = new();
                                 effdict.Add(ril.skillid, effs);
                             }
 
+                            EffectActionData effectData = (EffectActionData)action;
                             if (false == between)
                             {
                                 if (effs.TryGetValue(effectData.res, out var e))
@@ -78,7 +74,6 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 }
                                 break;
                             }
-
                             bool first = false;
                             if (false == effs.TryGetValue(effectData.res, out var eff))
                             {
@@ -90,7 +85,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
                                 first = true;
                             }
-                            
+
                             if (false == first && effectData.positionBinding)
                             {
                                 eff.transform.position = node.go.transform.position + effectData.position.ToVector().ToVector3();
@@ -98,7 +93,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
                             }
 
-                            eff.Play((ril.frame - action.sframe) * GameDef.SP_DATA_TICK);
+                            eff.Play(GameDef.SP_DATA_LOGIC_FRAME_SCALE * GameDef.SP_DATA_TICK);
 
                             break;
                     }
@@ -110,7 +105,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             if (skillActionDatas.ContainsKey(skill)) return;
             var spdata = MessagePackSerializer.Deserialize<SkillPipelineData>(engine.gameres.location.LoadSkillDataSync(skill.ToString()));
-            skillLengths.Add(skill, spdata.length);
             skillActionDatas.Add(skill, new List<SkillActionData>());
             for (int i = 0; i < spdata.actionIds.Length; i++)
             {

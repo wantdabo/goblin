@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 375685567546986379}
   startTime: 0.42
-  length: 0.58000004
+  length: 1.14
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Orange0-2-Axe-1.prefab
   position: {x: 0, y: 1.5, z: 0}
   eulerAngle: {x: 0, y: 0, z: -90}

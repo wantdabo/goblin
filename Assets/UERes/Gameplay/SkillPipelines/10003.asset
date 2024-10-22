@@ -845,7 +845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5188478402010481830}
   startTime: 0
-  length: 1.06
+  length: 1.1999999
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-Spear-1.prefab
   position: {x: 0, y: -0.5, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}

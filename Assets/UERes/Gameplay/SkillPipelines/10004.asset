@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 1807503441029031862}
   startTime: 1.7199999
-  length: 1
+  length: 1.0400001
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-1.prefab
   position: {x: -0.1, y: -0.3, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
@@ -680,9 +680,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 1807503441029031862}
   startTime: 0.62
-  length: 0.91999996
+  length: 1
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1-Spear.prefab
-  position: {x: 0, y: -1.01, z: 0}
+  position: {x: 0, y: -0.5, z: 0}
   eulerAngle: {x: 0, y: -20, z: 0}
   scale: 1
   positionBinding: 0
