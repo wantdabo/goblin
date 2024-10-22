@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Goblin.Gameplay.Common.Defines;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -104,7 +105,7 @@ namespace Goblin.Gameplay.Render.Effects
                 foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Play();
                 if (duration <= 0) return;
                 autoStopTimingId = vfx.stage.ticker.Timing((t) => Stop(), duration, 1);
-            }, 0.05f, 1);
+            }, GameDef.SP_DATA_TICK, 1);
         }
     }
 }

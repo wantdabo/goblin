@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 1807503441029031862}
   startTime: 1.7199999
-  length: 1.0400001
+  length: 1.2199999
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Red0-1.prefab
   position: {x: -0.1, y: -0.3, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
