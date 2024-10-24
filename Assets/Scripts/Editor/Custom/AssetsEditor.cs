@@ -127,6 +127,53 @@ namespace Goblin.Custom
                     val.scale = Convert.ToInt32(spatialClip.scale * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
+                else if (clip is EditorBoxDetectionClip boxDetectionClip)
+                {
+                    var val = new BoxDetectionActionData();
+                    val.id = SkillActionDef.BOX_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(boxDetectionClip.position.x * Config.float2Int),
+                        Convert.ToInt32(boxDetectionClip.position.y * Config.float2Int),
+                        Convert.ToInt32(boxDetectionClip.position.z * Config.float2Int)
+                    );
+                    val.size = new Vector3Data(
+                        Convert.ToInt32(boxDetectionClip.size.x * Config.float2Int),
+                        Convert.ToInt32(boxDetectionClip.size.y * Config.float2Int),
+                        Convert.ToInt32(boxDetectionClip.size.z * Config.float2Int)
+                    );
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorSphereDetectionClip sphereDetectionClip)
+                {
+                    var val = new SphereDetectionActionData();
+                    val.id = SkillActionDef.SPHERE_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(sphereDetectionClip.position.x * Config.float2Int),
+                        Convert.ToInt32(sphereDetectionClip.position.y * Config.float2Int),
+                        Convert.ToInt32(sphereDetectionClip.position.z * Config.float2Int)
+                    );
+                    val.radius = Convert.ToInt32(sphereDetectionClip.radius * Config.float2Int);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorDetectionCylinderClip cylinderClip)
+                {
+                    var val = new CylinderDetectionActionData();
+                    val.id = SkillActionDef.CYLINDER_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(cylinderClip.position.x * Config.float2Int),
+                        Convert.ToInt32(cylinderClip.position.y * Config.float2Int),
+                        Convert.ToInt32(cylinderClip.position.z * Config.float2Int)
+                    );
+                    val.radius = Convert.ToInt32(cylinderClip.radius * Config.float2Int);
+                    val.height = Convert.ToInt32(cylinderClip.height * Config.float2Int);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
                 else if (clip is EditorSkillBreakEventClip skillBreakeventClip)
                 {
                     var val = new SkillBreakEventActionData();

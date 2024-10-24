@@ -27,7 +27,22 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public byte state { get; set; }
     }
-    
+
+    /// <summary>
+    /// 技能碰撞事件
+    /// </summary>
+    public struct SkillCollisionEvent : IEvent
+    {
+        /// <summary>
+        /// 技能 ID
+        /// </summary>
+        public uint id { get; set; }
+        /// <summary>
+        /// 目标 ActorID
+        /// </summary>
+        public uint target { get; set; }
+    }
+
     /// <summary>
     /// 技能管线
     /// </summary>
@@ -108,7 +123,7 @@ namespace Goblin.Gameplay.Logic.Skills
             NotifyState();
             Casting(GameDef.LOGIC_TICK);
         }
-        
+
         private void Casting(FP tick)
         {
             foreach (var actionData in actionDatas)
@@ -124,8 +139,18 @@ namespace Goblin.Gameplay.Logic.Skills
                         case SkillActionDef.SKILL_BREAK_EVENT:
                             action = AddAction<SkillBreakEventAction>(actionData.id);
                             break;
+                        case SkillActionDef.BOX_DETECTION:
+                            action = AddAction<BoxDetectionAction>(actionData.id);
+                            break;
+                        case SkillActionDef.SPHERE_DETECTION:
+                            action = AddAction<SphereDetectionAction>(actionData.id);
+                            break;
+                        case SkillActionDef.CYLINDER_DETECTION:
+                            action = AddAction<CylinderDetectionAction>(actionData.id);
+                            break;
                     }
                 }
+
                 if (frame == actionData.sframe) action.Enter(actionData);
                 if (frame >= actionData.sframe && frame <= actionData.eframe) action.Execute(actionData, frame, tick);
                 if (frame == actionData.eframe) action.Exit(actionData);
@@ -144,7 +169,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
         private void NotifyState()
         {
-            launcher.actor.eventor.Tell(new SkillPipelineStateEvent { id = id, state = state});
+            launcher.actor.eventor.Tell(new SkillPipelineStateEvent { id = id, state = state });
         }
 
         public void OnFPTick(FP tick)
@@ -165,21 +190,30 @@ namespace Goblin.Gameplay.Logic.Skills
             for (int i = 0; i < spdata.actionIds.Length; i++)
             {
                 var actionId = spdata.actionIds[i];
+                SkillActionData data = default;
                 switch (actionId)
                 {
                     case SkillActionDef.SPATIAL:
-                        var spatialData = MessagePackSerializer.Deserialize<SpatialActionData>(spdata.actionBytes[i]);
-                        spatialData.sframe = (uint)(spatialData.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                        spatialData.eframe = (uint)(spatialData.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                        actionDatas.Add(spatialData);
+                        data = MessagePackSerializer.Deserialize<SpatialActionData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.SKILL_BREAK_EVENT:
-                        var skillBreakeventData = MessagePackSerializer.Deserialize<SkillBreakEventActionData>(spdata.actionBytes[i]);
-                        skillBreakeventData.sframe = (uint)(skillBreakeventData.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                        skillBreakeventData.eframe = (uint)(skillBreakeventData.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                        actionDatas.Add(skillBreakeventData);
+                        data = MessagePackSerializer.Deserialize<SkillBreakEventActionData>(spdata.actionBytes[i]);
+                        break;
+                    case SkillActionDef.BOX_DETECTION:
+                        data = MessagePackSerializer.Deserialize<BoxDetectionActionData>(spdata.actionBytes[i]);
+                        break;
+                    case SkillActionDef.SPHERE_DETECTION:
+                        data = MessagePackSerializer.Deserialize<SphereDetectionActionData>(spdata.actionBytes[i]);
+                        break;
+                    case SkillActionDef.CYLINDER_DETECTION:
+                        data = MessagePackSerializer.Deserialize<CylinderDetectionActionData>(spdata.actionBytes[i]);
                         break;
                 }
+
+                if (null == data) continue;
+                data.sframe = (uint)(data.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                data.eframe = (uint)(data.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                actionDatas.Add(data);
             }
         }
 

@@ -1,36 +1,47 @@
-﻿namespace TrueSync.Physics3D {
+﻿namespace TrueSync.Physics3D
+{
 
     /**
-     *  @brief Represents physical properties of a {@link RigidBody}. 
+     *  @brief Represents physical properties of a {@link RigidBody}.
      **/
-    public class BodyMaterial {
-
+    public class BodyMaterial
+    {
         internal FP kineticFriction = FP.One / 4;
         internal FP staticFriction = FP.One / 2;
         internal FP restitution = FP.Zero;
 
         public BodyMaterial() { }
 
+        public BodyMaterial(FP kineticFriction, FP staticFriction, FP restitution)
+        {
+            this.kineticFriction = kineticFriction;
+            this.staticFriction = staticFriction;
+            this.restitution = restitution;
+        }
+
         /**
-         *  @brief Elastic restituion. 
+         *  @brief Elastic restituion.
          **/
-        public FP Restitution {
+        public FP Restitution
+        {
             get { return restitution; }
             set { restitution = value; }
         }
 
         /**
-         *  @brief Static friction. 
+         *  @brief Static friction.
          **/
-        public FP StaticFriction {
+        public FP StaticFriction
+        {
             get { return staticFriction; }
             set { staticFriction = value; }
         }
 
         /**
-         *  @brief Kinectic friction. 
+         *  @brief Kinectic friction.
          **/
-        public FP KineticFriction {
+        public FP KineticFriction
+        {
             get { return kineticFriction; }
             set { kineticFriction = value; }
         }

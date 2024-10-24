@@ -49,7 +49,7 @@ MonoBehaviour:
   _parent: {fileID: -2629336020960242818}
   startTime: 0.44
   position: {x: 0, y: 2, z: 0}
-  length: 0.099999964
+  length: 0.35999995
   size: {x: 1, y: 5, z: 1}
 --- !u!114 &-7144244846984134382
 MonoBehaviour:
@@ -530,7 +530,6 @@ MonoBehaviour:
   _parent: {fileID: 6656838102287199398}
   actionClips:
   - {fileID: -7311858824324440865}
-  - {fileID: -598394308057032653}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -871,8 +870,7 @@ MonoBehaviour:
   m_Name: "\u78B0\u649E\u8F68\u9053"
   m_EditorClassIdentifier: 
   _parent: {fileID: 6656838102287199398}
-  actionClips:
-  - {fileID: 5316909454399655432}
+  actionClips: []
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}

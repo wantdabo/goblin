@@ -166,9 +166,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -4235805314445735913}
   startTime: 0.14
-  position: {x: 0, y: 0.5, z: 0.5}
+  position: {x: 0, y: 0.5, z: 1.81}
   length: 0.78
-  size: {x: 1.5, y: 2, z: 1.5}
+  size: {x: 7, y: 2, z: 5}
 --- !u!114 &-4970765489393930932
 MonoBehaviour:
   m_ObjectHideFlags: 1

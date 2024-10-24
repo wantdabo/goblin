@@ -36,6 +36,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override void OnResolve(uint frame, RIL_SPATIAL_POSITION ril)
         {
+            // TODO 后续需要统一插值算法
             // 记录前一帧的位置
             lastPosition = position;
             // 更新当前位置

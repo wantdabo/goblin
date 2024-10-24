@@ -703,8 +703,7 @@ MonoBehaviour:
   m_Name: "\u78B0\u649E\u8F68\u9053"
   m_EditorClassIdentifier: 
   _parent: {fileID: 1328038422028717257}
-  actionClips:
-  - {fileID: 4535950837581737644}
+  actionClips: []
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -774,7 +773,7 @@ MonoBehaviour:
   _parent: {fileID: -4235805314445735913}
   startTime: 0.19999999
   position: {x: 0, y: 0.5, z: 0.5}
-  length: 0.32
+  length: 0.62
   size: {x: 2, y: 1, z: 2}
 --- !u!114 &4404173715354118483
 MonoBehaviour:

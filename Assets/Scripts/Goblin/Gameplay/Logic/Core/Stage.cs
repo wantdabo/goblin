@@ -1,8 +1,14 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Physics.Common;
 using System.Collections.Generic;
+using TrueSync;
+using TrueSync.Physics2D;
+using TrueSync.Physics3D;
+using World = TrueSync.Physics3D.World;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -40,10 +46,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private uint incrementId = 0;
         /// <summary>
-        /// 座位
-        /// </summary>
-        public uint seat { get; private set; }
-        /// <summary>
         /// 事件订阅派发者
         /// </summary>
         public Eventor eventor { get; private set; }
@@ -60,6 +62,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public RILSync rilsync { get; private set; }
         /// <summary>
+        /// 物理
+        /// </summary>
+        public Phys phys { get; private set; }
+        /// <summary>
         /// Actor 列表
         /// </summary>
         public List<Actor> actors { get; private set; } = new();
@@ -67,10 +73,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// Actor 字典
         /// </summary>
         private Dictionary<uint, Actor> actorDict = new();
-        /// <summary>
-        /// 玩家列表
-        /// </summary>
-        public Player[] players { get; private set; }
 
         protected override void OnCreate()
         {
@@ -80,7 +82,7 @@ namespace Goblin.Gameplay.Logic.Core
             
             ticker = AddComp<FPTicker>();
             ticker.Create();
-
+            
             random = AddComp<FPRandom>();
             random.Initial(19491001);
             random.Create();
@@ -88,6 +90,11 @@ namespace Goblin.Gameplay.Logic.Core
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;
             rilsync.Create();
+            
+            phys = AddComp<Phys>();
+            phys.stage = this;
+            phys.Initialize<CollisionSystemPersistentSAP>();
+            phys.Create();
         }
 
         protected override void OnDestroy()

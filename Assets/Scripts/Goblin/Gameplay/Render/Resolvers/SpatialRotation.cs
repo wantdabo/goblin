@@ -38,6 +38,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override void OnResolve(uint frame, RIL_SPATIAL_ROTATION ril)
         {
+            // TODO 后续需要统一插值算法
             // 保存当前的旋转
             lastRotation = node.go.transform.rotation;
             // 更新目标旋转

@@ -51,6 +51,10 @@ namespace Goblin.Sys.Gameplay.View
             player.Create();
             player.eventor.Tell<LiveBornEvent>();
 
+            var player2 = stage.AddActor<Player>();
+            player2.Create();
+            player2.eventor.Tell<LiveBornEvent>();
+
             engine.ticker.eventor.Listen<TickEvent>(OnTick);
             engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
         }

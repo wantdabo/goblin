@@ -15,7 +15,7 @@ namespace Goblin.SkillPipelineEditor
     {
         public override void OnUpdate(float time, float previousTime)
         {
-            GizmosDrawer.I.DrawWireCylinder(clip.position, clip.radius, clip.height, new Color(153 / 255f, 214 / 255f, 83 / 255f));
+            GizmosDrawer.I.DrawWireCylinder(App.AssetData.cloneModel.transform.position + clip.position, clip.radius, clip.height, new Color(153 / 255f, 214 / 255f, 83 / 255f));
         }
     }
 }

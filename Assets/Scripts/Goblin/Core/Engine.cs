@@ -73,7 +73,7 @@ namespace Goblin.Core
             pool.Create();
 
             random = AddComp<Common.Random>();
-            random.Initial(int.MaxValue);
+            random.Initial(19491001);
             random.Create();
 
             ticker = AddComp<Ticker>();

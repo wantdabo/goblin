@@ -8,7 +8,7 @@ using TrueSync;
 namespace Goblin.Gameplay.Logic.Common
 {
     /// <summary>
-    /// Tick 事件
+    /// FPTick 事件
     /// </summary>
     public struct FPTickEvent : IEvent
     {
@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Logic.Common
     }
 
     /// <summary>
-    /// LateTick 事件
+    /// FPLateTick 事件
     /// </summary>
     public struct FPLateTickEvent : IEvent
     {
@@ -58,7 +58,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 最新的流逝时间 s/秒
         /// </summary>
-        public FP tick { get; private set; } = FP.One / (GameDef.LOGIC_FRAME * FP.One);
+        public FP tick { get; private set; } = GameDef.LOGIC_TICK;
 
         protected override void OnCreate()
         {

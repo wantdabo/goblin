@@ -1095,7 +1095,7 @@ MonoBehaviour:
   startTime: 0.17999999
   length: 0.67999995
   res: Assets/GameRes/Effects/E3D-Skill-Brandish-Blue0-1.prefab
-  position: {x: 0.45, y: -0.85, z: 0}
+  position: {x: 0.45, y: -0.85, z: 1}
   eulerAngle: {x: 0, y: -15, z: 0}
   scale: 1
   positionBinding: 0

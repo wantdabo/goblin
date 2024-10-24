@@ -29,10 +29,5 @@ namespace Goblin.Gameplay.Logic.Core
             translator.behavior = this;
             translator.Create();
         }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
     }
 }

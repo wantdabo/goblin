@@ -18,8 +18,20 @@
         /// </summary>
         public const ushort SPATIAL = 2;
         /// <summary>
+        /// 立方体碰撞检测
+        /// </summary>
+        public const ushort BOX_DETECTION = 3;
+        /// <summary>
+        /// 球体碰撞检测
+        /// </summary>
+        public const ushort SPHERE_DETECTION = 4;
+        /// <summary>
+        /// 圆柱体碰撞检测
+        /// </summary>
+        public const ushort CYLINDER_DETECTION = 5;
+        /// <summary>
         /// 打断事件
         /// </summary>
-        public const ushort SKILL_BREAK_EVENT = 3;
+        public const ushort SKILL_BREAK_EVENT = 6;
     }
 }
