@@ -20,8 +20,9 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
         protected override void OnExecute(BoxDetectionActionData data, FP tick)
         {
-            var result = pipeline.launcher.actor.stage.phys.OverlapBox(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.size.ToVector(), TSQuaternion.identity);
+            var result = pipeline.launcher.actor.stage.phys.OverlapBoxs(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.size.ToVector(), TSQuaternion.identity);
             if (false == result.hit) return;
+            pipeline.launcher.actor.eventor.Tell(new SkillCollisionEvent { id = pipeline.id, actorIds = result.actorIds });
         }
     }
 }

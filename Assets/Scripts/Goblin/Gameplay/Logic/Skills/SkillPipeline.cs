@@ -38,9 +38,9 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public uint id { get; set; }
         /// <summary>
-        /// 目标 ActorID
+        /// 碰撞的 ActorID 列表
         /// </summary>
-        public uint target { get; set; }
+        public uint[] actorIds { get; set; }
     }
 
     /// <summary>
