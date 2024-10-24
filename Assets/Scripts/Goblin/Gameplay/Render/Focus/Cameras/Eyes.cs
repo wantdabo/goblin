@@ -7,8 +7,14 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Focus.Cameras
 {
+    /// <summary>
+    /// Eyes/相机
+    /// </summary>
     public class Eyes : Comp
     {
+        /// <summary>
+        /// 专注/焦点
+        /// </summary>
         public Foc foc { get; set; }
 
         private readonly Vector3 offset = new(0, 2f, -10f);

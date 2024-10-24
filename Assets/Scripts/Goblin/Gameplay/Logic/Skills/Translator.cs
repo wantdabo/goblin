@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.Skills
 {
+    /// <summary>
+    /// 技能释放器翻译
+    /// </summary>
     public class Translator : Translator<SkillLauncher>
     {
         private Dictionary<uint, (byte state, uint frame)> pipelineinfos = new();

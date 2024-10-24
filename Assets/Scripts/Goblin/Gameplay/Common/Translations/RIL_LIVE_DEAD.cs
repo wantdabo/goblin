@@ -3,6 +3,9 @@ using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Common.Translations
 {
+    /// <summary>
+    /// Actor 死亡渲染指令
+    /// </summary>
     public struct RIL_LIVE_DEAD : IRIL
     {
         public ushort id => RILDef.LIVE_DEAD;

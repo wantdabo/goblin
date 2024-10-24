@@ -10,16 +10,31 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Core
 {
+    /// <summary>
+    /// 添加 Actor 事件
+    /// </summary>
     public struct AddActorEvent : IEvent
     {
+        /// <summary>
+        /// Actor
+        /// </summary>
         public Actor actor { get; set; }
     }
     
+    /// <summary>
+    /// 移除 Actor 事件
+    /// </summary>
     public struct RmvActorEvent : IEvent
     {
+        /// <summary>
+        /// Actor
+        /// </summary>
         public Actor actor { get; set; }
     }
     
+    /// <summary>
+    /// 场景
+    /// </summary>
     public class Stage : Comp
     {
         /// <summary>

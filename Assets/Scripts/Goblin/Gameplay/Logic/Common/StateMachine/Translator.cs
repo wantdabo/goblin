@@ -4,9 +4,18 @@ using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Logic.Common.StateMachine
 {
+    /// <summary>
+    /// 并发状态机翻译
+    /// </summary>
     public class Translator : Translator<ParallelMachine>
     {
+        /// <summary>
+        /// 零层状态
+        /// </summary>
         public uint lzerostate { get; set; }
+        /// <summary>
+        /// 一层状态
+        /// </summary>
         public uint lonestate { get; set; }
 
         protected override void OnCreate()

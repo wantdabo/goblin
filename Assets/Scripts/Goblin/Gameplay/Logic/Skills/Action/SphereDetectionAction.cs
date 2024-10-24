@@ -10,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     public class SphereDetectionAction : SkillAction<SphereDetectionActionData>
     {
         public override ushort id => SkillActionDef.SPHERE_DETECTION;
+        
         private Spatial spatial { get; set; }
 
         protected override void OnCreate()
@@ -18,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
         }
 
-        protected override void OnExecute(SphereDetectionActionData data, FP tick)
+        protected override void OnExecute(SphereDetectionActionData data, uint frame, FP tick)
         {
             var result = pipeline.launcher.actor.stage.phys.OverlapSpheres(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3);
             if (false == result.hit) return;

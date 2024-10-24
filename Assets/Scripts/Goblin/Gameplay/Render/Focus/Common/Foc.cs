@@ -5,6 +5,9 @@ using Goblin.Gameplay.Render.Focus.Lights;
 
 namespace Goblin.Gameplay.Render.Focus.Common
 {
+    /// <summary>
+    /// 专注/焦点
+    /// </summary>
     public class Foc : Comp
     {
         public Stage stage { get; set; }

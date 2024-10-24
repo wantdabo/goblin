@@ -5,6 +5,9 @@ using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 空间缩放解释器
+    /// </summary>
     public class SpatialScale : Resolver<RIL_SPATIAL_SCALE>
     {
         public override ushort id => RILDef.SPATIAL_SCALE;

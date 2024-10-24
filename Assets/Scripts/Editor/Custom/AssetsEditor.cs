@@ -110,7 +110,7 @@ namespace Goblin.Custom
                         Convert.ToInt32(effectClip.eulerAngle.z * Config.float2Int)
                     );
                     val.scale = Convert.ToInt32(effectClip.scale * Config.float2Int);
-                    val.positionBinding = effectClip.positionBinding;
+                    val.binding = effectClip.binding;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorSpatialClip spatialClip)

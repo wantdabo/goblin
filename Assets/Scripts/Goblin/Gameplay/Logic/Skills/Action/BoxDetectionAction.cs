@@ -10,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     public class BoxDetectionAction : SkillAction<BoxDetectionActionData>
     {
         public override ushort id => SkillActionDef.BOX_DETECTION;
+        
         private Spatial spatial { get; set; }
 
         protected override void OnCreate()
@@ -18,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
         }
 
-        protected override void OnExecute(BoxDetectionActionData data, FP tick)
+        protected override void OnExecute(BoxDetectionActionData data, uint frame, FP tick)
         {
             var result = pipeline.launcher.actor.stage.phys.OverlapBoxs(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.size.ToVector(), TSQuaternion.identity);
             if (false == result.hit) return;

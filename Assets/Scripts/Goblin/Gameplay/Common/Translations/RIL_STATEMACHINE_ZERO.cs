@@ -3,13 +3,31 @@ using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Common.Translations
 {
+    /// <summary>
+    /// 状态机零渲染指令
+    /// </summary>
     public struct RIL_STATEMACHINE_ZERO : IRIL
     {
         public ushort id => RILDef.STATEMACHINE_ZERO;
+        /// <summary>
+        /// 状态
+        /// </summary>
         public uint state { get; private set; }
+        /// <summary>
+        /// 上一个状态
+        /// </summary>
         public uint laststate { get; private set; }
+        /// <summary>
+        /// 状态机层
+        /// </summary>
         public byte layer { get; private set; }
 
+        /// <summary>
+        /// 状态机零层渲染指令
+        /// </summary>
+        /// <param name="state">状态</param>
+        /// <param name="lastsate">上一个状态</param>
+        /// <param name="layer">状态机层</param>
         public RIL_STATEMACHINE_ZERO(uint state, uint lastsate, byte layer)
         {
             this.state = state;

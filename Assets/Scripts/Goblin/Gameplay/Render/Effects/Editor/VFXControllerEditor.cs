@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Effects.Editor
 {
+    /// <summary>
+    /// VFXController 编辑器
+    /// </summary>
     [CustomEditor(typeof(VFXController)), CanEditMultipleObjects]
     public class VFXControllerEditor : UnityEditor.Editor
     {

@@ -38,8 +38,8 @@
         /// </summary>
         public const ushort SKILLPIPELINE_INFO = 7;
         /// <summary>
-        /// ATTR SURFACE 指令
+        /// SURFACE 指令
         /// </summary>
-        public const ushort ATTR_SURFACE = 8;
+        public const ushort SURFACE = 8;
     }
 }

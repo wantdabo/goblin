@@ -3,7 +3,7 @@
 namespace Goblin.Gameplay.Common.Defines
 {
     /// <summary>
-    /// Game 定义
+    /// Game 设定
     /// </summary>
     public class GameDef
     {

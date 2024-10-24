@@ -7,25 +7,49 @@ using TrueSync.Physics3D;
 
 namespace Goblin.Gameplay.Logic.Physics
 {
+    /// <summary>
+    /// 碰撞进入事件
+    /// </summary>
     public struct CollisionEnterEvent : IEvent
     {
-        public uint self { get; set; }
-        public uint target { get; set; }
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public uint actorId { get; set; }
     }
 
+    /// <summary>
+    /// 碰撞退出事件
+    /// </summary>
     public struct CollisionExitEvent : IEvent
     {
-        public uint self { get; set; }
-        public uint target { get; set; }
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public uint actorId { get; set; }
     }
 
+    /// <summary>
+    /// 物理代理
+    /// </summary>
     public class PhysAgent : Behavior
     {
+        /// <summary>
+        /// 默认物理材质
+        /// </summary>
         private static BodyMaterial defaultMaterial = new(FP.Zero, FP.Zero, FP.Zero);
+        /// <summary>
+        /// 默认物理几何体
+        /// </summary>
         private static BoxShape defaultShape = new(TSVector.one);
-
+        /// <summary>
+        /// 物理单位
+        /// </summary>
         public RigidBody rigidbody { get; private set; }
         
+        /// <summary>
+        /// 是否为动态
+        /// </summary>
         public bool kinematic
         {
             get
@@ -38,6 +62,9 @@ namespace Goblin.Gameplay.Logic.Physics
             }
         }
         
+        /// <summary>
+        /// 是否为触发器
+        /// </summary>
         public bool trigger
         {
             get
@@ -49,7 +76,10 @@ namespace Goblin.Gameplay.Logic.Physics
                 rigidbody.IsColliderOnly = value;
             }
         }
-
+        
+        /// <summary>
+        /// 立方体
+        /// </summary>
         public BoxShape boxshape
         {
             get
@@ -60,11 +90,14 @@ namespace Goblin.Gameplay.Logic.Physics
                     shape = new BoxShape(TSVector.one);
                     rigidbody.Shape = shape;
                 }
-                
+
                 return shape;
             }
         }
         
+        /// <summary>
+        /// 球体
+        /// </summary>
         public SphereShape sphereshape
         {
             get
@@ -73,6 +106,24 @@ namespace Goblin.Gameplay.Logic.Physics
                 if (null == shape)
                 {
                     shape = new SphereShape(FP.One);
+                    rigidbody.Shape = shape;
+                }
+
+                return shape;
+            }
+        }
+        
+        /// <summary>
+        /// 圆柱体
+        /// </summary>
+        public CylinderShape cylindershape
+        {
+            get
+            {
+                var shape = rigidbody.Shape as CylinderShape;
+                if (null == shape)
+                {
+                    shape = new CylinderShape(FP.One, FP.One);
                     rigidbody.Shape = shape;
                 }
                 
@@ -104,12 +155,12 @@ namespace Goblin.Gameplay.Logic.Physics
             actor.stage.eventor.UnListen<PhysTriggerExitEvent>(OnTriggerExit);
             actor.stage.phys.RmvBody(actor.id);
         }
-        
+
         private void OnSpatialPositionChanged(SpatialPositionChangedEvent e)
         {
             rigidbody.Position = e.position;
         }
-        
+
         private void OnSpatialRotationChanged(SpatialRotationChangedEvent e)
         {
             rigidbody.Orientation = TSMatrix.CreateFromQuaternion(e.rotation);
@@ -118,25 +169,25 @@ namespace Goblin.Gameplay.Logic.Physics
         private void OnCollisionEnter(PhysCollisionEnterEvent e)
         {
             var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { self = selfIsId0 ? e.id0 : e.id1, target = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnCollisionExit(PhysCollisionExitEvent e)
         {
             var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionExitEvent { self = selfIsId0 ? e.id0 : e.id1, target = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionExitEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnTriggerEnter(PhysTriggerEnterEvent e)
         {
             var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { self = selfIsId0 ? e.id0 : e.id1, target = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnTriggerExit(PhysTriggerExitEvent e)
         {
             var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { self = selfIsId0 ? e.id0 : e.id1, target = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
     }
 }

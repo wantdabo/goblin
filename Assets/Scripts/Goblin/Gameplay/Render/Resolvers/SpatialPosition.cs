@@ -8,12 +8,19 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 空间平移解释器
+    /// </summary>
     public class SpatialPosition : Resolver<RIL_SPATIAL_POSITION>
     {
         public override ushort id => RILDef.SPATIAL_POSITION;
+        
         private Node node { get; set; }
+        
         private Vector3 position { get; set; }
+        
         private Vector3 lastPosition { get; set; }
+        
         private float interpElapsed { get; set; }
 
         protected override void OnCreate()

@@ -46,6 +46,11 @@ namespace Goblin.Gameplay.Render.Core
             eventor.UnListen<RILResolveEvent>(OnRILResolve);
         }
 
+        /// <summary>
+        /// 确保行为存在
+        /// </summary>
+        /// <typeparam name="T">行为类型</typeparam>
+        /// <returns>行为</returns>
         public T EnsureBehavior<T>() where T : Behavior, new()
         {
             var behavior = GetBehavior<T>();
@@ -110,14 +115,26 @@ namespace Goblin.Gameplay.Render.Core
             behaviorDict.Remove(behavior.GetType());
             behavior.Destroy();
         }
-
+        
+        /// <summary>
+        /// 获取渲染指令解释器
+        /// </summary>
+        /// <param name="id">渲染指令 ID</param>
+        /// <returns>渲染指令解释器</returns>
         private Resolver GetResolver(ushort id)
         {
             if (null == resolverDict) return default;
 
             return resolverDict.GetValueOrDefault(id);
         }
-
+        
+        /// <summary>
+        /// 添加渲染指令解释器
+        /// </summary>
+        /// <param name="id">渲染指令 ID</param>
+        /// <typeparam name="T">渲染指令解释器类型</typeparam>
+        /// <returns>渲染指令解释器</returns>
+        /// <exception cref="Exception">不可添加重复的渲染指令解释器</exception>
         private Resolver AddResolver<T>(ushort id) where T : Resolver, new()
         {
             if (null == resolverDict) resolverDict = new();
@@ -130,7 +147,11 @@ namespace Goblin.Gameplay.Render.Core
 
             return resolver;
         }
-
+        
+        /// <summary>
+        /// 移除渲染指令解释器
+        /// </summary>
+        /// <param name="id">渲染指令 ID</param>
         private void RmvResolver(ushort id)
         {
             var resolver = GetResolver(id);
@@ -142,6 +163,7 @@ namespace Goblin.Gameplay.Render.Core
         private void OnRILResolve(RILResolveEvent e)
         {
             var resolver = GetResolver(e.ril.id);
+            // 渲染指令解释器不存在时，尝试添加
             if (null == resolver)
             {
                 switch (e.ril.id)
@@ -164,16 +186,18 @@ namespace Goblin.Gameplay.Render.Core
                     case RILDef.SKILLPIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;
-                    case RILDef.ATTR_SURFACE:
-                        resolver = AddResolver<AttrSurface>(e.ril.id);
+                    case RILDef.SURFACE:
+                        resolver = AddResolver<Surface>(e.ril.id);
                         break;
                 }
 
                 if (null == resolver) return;
                 resolver.Create();
+                // 初始化
                 resolver.Awake(e.frame, e.ril);
             }
-
+            
+            // 渲染指令执行
             resolver.Resolve(e.frame, e.ril);
         }
     }

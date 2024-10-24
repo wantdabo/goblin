@@ -9,12 +9,19 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 空间旋转解释器
+    /// </summary>
     public class SpatialRotation : Resolver<RIL_SPATIAL_ROTATION>
     {
         public override ushort id => RILDef.SPATIAL_ROTATION;
+        
         private Node node { get; set; }
+        
         private Quaternion lastRotation { get; set; }
+        
         private Quaternion targetRotation { get; set; }
+        
         private float interpElapsed { get; set; }
 
         protected override void OnCreate()

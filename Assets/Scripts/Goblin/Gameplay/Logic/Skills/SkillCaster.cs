@@ -8,11 +8,15 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills
 {
+    /// <summary>
+    /// 技能释放解析
+    /// </summary>
     public class SkillCaster : Comp
     {
         public SkillLauncher launcher { get; set; }
         private Gamepad gamepad { get; set; }
         
+        // TODO 后续改为读取配置
         private Dictionary<uint, uint> skillcomboDict = new()
         {
             { 10001, 10002 },
@@ -35,11 +39,11 @@ namespace Goblin.Gameplay.Logic.Skills
             var bb = gamepad.GetInput(InputType.BB);
             var bc = gamepad.GetInput(InputType.BC);
             uint lastskill = 0;
-            if (launcher.launchskill.playing && ba.press || bb.press || bc.press)
+            if (launcher.launching.playing && ba.press || bb.press || bc.press)
             {
-                if (launcher.launchskill.playing)
+                if (launcher.launching.playing)
                 {
-                    var pipeline = launcher.Get(launcher.launchskill.skill);
+                    var pipeline = launcher.Get(launcher.launching.skill);
                     if (BreakTokenDef.SKILL_CAST != (BreakTokenDef.SKILL_CAST & pipeline.breaktoken)) return;
                     lastskill = pipeline.id;
                     pipeline.Break();

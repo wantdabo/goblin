@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 状态机零层解释器
+    /// </summary>
     public class StateMachineZero : Resolver<RIL_STATEMACHINE_ZERO>
     {
         public override ushort id => RILDef.STATEMACHINE_ZERO;

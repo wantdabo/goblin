@@ -4,11 +4,21 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Common.Translations
 {
+    /// <summary>
+    /// 空间缩放渲染指令
+    /// </summary>
     public struct RIL_SPATIAL_SCALE : IRIL
     {
         public ushort id => RILDef.SPATIAL_SCALE;
+        /// <summary>
+        /// 缩放
+        /// </summary>
         public TSVector scale { get; private set; }        
         
+        /// <summary>
+        /// 空间缩放渲染指令
+        /// </summary>
+        /// <param name="scale"></param>
         public RIL_SPATIAL_SCALE(TSVector scale)
         {
             this.scale = scale;

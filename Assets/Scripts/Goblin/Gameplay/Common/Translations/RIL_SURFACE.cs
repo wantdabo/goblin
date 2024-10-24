@@ -3,13 +3,23 @@ using Goblin.Gameplay.Common.Translations.Common;
 
 namespace Goblin.Gameplay.Common.Translations
 {
-    public class RIL_ATTR_SURFACE : IRIL
+    /// <summary>
+    /// 外观渲染指令
+    /// </summary>
+    public class RIL_SURFACE : IRIL
     {
-        public ushort id => RILDef.ATTR_SURFACE;
-
+        public ushort id => RILDef.SURFACE;
+        
+        /// <summary>
+        /// 模型 ID
+        /// </summary>
         public uint model { get; private set; }
         
-        public RIL_ATTR_SURFACE(uint model)
+        /// <summary>
+        /// 外观渲染指令
+        /// </summary>
+        /// <param name="model">模型 ID</param>
+        public RIL_SURFACE(uint model)
         {
             this.model = model;
         }
@@ -21,7 +31,7 @@ namespace Goblin.Gameplay.Common.Translations
         
         public bool Equals(IRIL other)
         {
-            if (other is RIL_ATTR_SURFACE _other)
+            if (other is RIL_SURFACE _other)
             {
                 return _other.model == model;
             }

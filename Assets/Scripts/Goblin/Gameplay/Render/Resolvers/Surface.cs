@@ -5,17 +5,23 @@ using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class AttrSurface : Resolver<RIL_ATTR_SURFACE>
+    /// <summary>
+    /// 外观解釋器
+    /// </summary>
+    public class Surface : Resolver<RIL_SURFACE>
     {
-        public override ushort id => RILDef.ATTR_SURFACE;
+        public override ushort id => RILDef.SURFACE;
+        /// <summary>
+        /// 模型
+        /// </summary>
         private Model model { get; set; }
 
-        protected override void OnAwake(uint frame, RIL_ATTR_SURFACE ril)
+        protected override void OnAwake(uint frame, RIL_SURFACE ril)
         {
             model = actor.EnsureBehavior<Model>();
         }
 
-        protected override void OnResolve(uint frame, RIL_ATTR_SURFACE ril)
+        protected override void OnResolve(uint frame, RIL_SURFACE ril)
         {
             if (10000 == ril.model) model.Load("Anbi");
         }

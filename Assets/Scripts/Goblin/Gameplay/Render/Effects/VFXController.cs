@@ -25,18 +25,33 @@ namespace Goblin.Gameplay.Render.Effects
         /// 持续时间
         /// </summary>
         [HideInInspector] public float duration;
-
+        
+        /// <summary>
+        /// 特效管理器
+        /// </summary>
         public VisualEffect vfx { get; set; }
 
         /// <summary>
         /// 播放中
         /// </summary>
         public bool playing { get; private set; } = false;
-
+        
+        /// <summary>
+        /// 开启插值递进
+        /// </summary>
         private bool lerp { get; set; }
+        /// <summary>
+        /// 插值递进目标
+        /// </summary>
         private float lerpt { get; set; }
-
+        
+        /// <summary>
+        /// 延迟 Active 计时器
+        /// </summary>
         private uint delayTimingId { get; set; }
+        /// <summary>
+        /// 自动停止计时器
+        /// </summary>
         private uint autoStopTimingId { get; set; }
 
         /// <summary>
@@ -86,7 +101,11 @@ namespace Goblin.Gameplay.Render.Effects
             lerp = false;
             Do();
         }
-
+    
+        /// <summary>
+        /// 播放 (tick 插值递进)
+        /// </summary>
+        /// <param name="tick">递进 tick</param>
         public void Play(float tick)
         {
             this.lerp = true;
@@ -94,7 +113,10 @@ namespace Goblin.Gameplay.Render.Effects
             if (playing) return;
             Do();
         }
-
+        
+        /// <summary>
+        /// 播放 (持续时间)
+        /// </summary>
         private void Do()
         {
             playing = true;

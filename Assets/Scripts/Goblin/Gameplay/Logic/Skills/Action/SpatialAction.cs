@@ -10,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     public class SpatialAction : SkillAction<SpatialActionData>
     {
         public override ushort id => SkillActionDef.SPATIAL;
+        
         private Spatial spatial { get; set; }
 
         protected override void OnCreate()
@@ -18,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
         }
 
-        protected override void OnExecute(SpatialActionData data, FP tick)
+        protected override void OnExecute(SpatialActionData data, uint frame, FP tick)
         {
             if (null == spatial) return;
 

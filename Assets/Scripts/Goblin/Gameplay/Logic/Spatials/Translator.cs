@@ -5,10 +5,22 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Spatials
 {
+    /// <summary>
+    /// 空间翻译
+    /// </summary>
     public class Translator : Translator<Spatial>
     {
+        /// <summary>
+        /// 平移
+        /// </summary>
         private TSVector position { get; set; }
+        /// <summary>
+        /// 旋转
+        /// </summary>
         private TSQuaternion rotation { get; set; }
+        /// <summary>
+        /// 缩放
+        /// </summary>
         private TSVector scale { get; set; }
 
         protected override void OnRIL()

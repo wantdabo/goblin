@@ -7,11 +7,17 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
+    /// <summary>
+    /// 玩家奔跑状态
+    /// </summary>
     public class PlayerRun : State
     {
         public override uint id => StateDef.PLAYER_RUN;
+        
         protected override List<uint> passes => new() { StateDef.PLAYER_IDLE, StateDef.PLAYER_ATTACK };
+        
         private Gamepad gamepad { get; set; }
+        
         private Spatial spatial { get; set; }
 
         protected override void OnCreate()

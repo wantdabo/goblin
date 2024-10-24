@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
         }
 
-        protected override void OnExecute(CylinderDetectionActionData data, FP tick)
+        protected override void OnExecute(CylinderDetectionActionData data, uint frame, FP tick)
         {
             var result = pipeline.launcher.actor.stage.phys.OverlapCylinders(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3, data.height * FP.EN3, TSQuaternion.identity);
             if (false == result.hit) return;

@@ -51,7 +51,7 @@ namespace Goblin.SkillPipelineEditor
 
             if (null == effect) return;
             var posoffset = Vector3.zero;
-            if (clip.positionBinding) posoffset = App.AssetData.cloneModel.transform.position;
+            if (clip.binding) posoffset = App.AssetData.cloneModel.transform.position;
             effect.transform.position = posoffset + clip.position;
             effect.transform.rotation = Quaternion.Euler(clip.eulerAngle);
             effect.transform.localScale = clip.scale * Vector3.one;

@@ -43,7 +43,10 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
             actor.stage.ticker.eventor.UnListen<TickEvent>(OnTick);
             actor.eventor.UnListen<ModelChangedEvent>(OnModelChanged);
         }
-
+        
+        /// <summary>
+        /// 检查模型
+        /// </summary>
         private void CheckModelGo()
         {
             var model = actor.EnsureBehavior<Model>();

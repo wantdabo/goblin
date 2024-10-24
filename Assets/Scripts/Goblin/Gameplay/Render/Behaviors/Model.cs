@@ -4,21 +4,36 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Behaviors
 {
+    /// <summary>
+    /// 模型变化事件
+    /// </summary>
     public struct ModelChangedEvent : IEvent
     {
     }
 
+    /// <summary>
+    /// 模型
+    /// </summary>
     public class Model : Behavior
     {
-        public string res { get; private set; }
-        public GameObject go { get; private set; }
-        private Node node { get; set; }
-
+        /// <summary>
+        /// 模型节池
+        /// </summary>
         private static GameObject modelpool = new("MODELPOOL");
         static Model()
         {
             modelpool.SetActive(false);
         }
+        
+        /// <summary>
+        /// 资源名
+        /// </summary>
+        public string res { get; private set; }
+        /// <summary>
+        /// 模型 GameObject
+        /// </summary>
+        public GameObject go { get; private set; }
+        private Node node { get; set; }
 
         protected override void OnCreate()
         {
@@ -31,7 +46,11 @@ namespace Goblin.Gameplay.Render.Behaviors
             base.OnDestroy();
             if (null != go) engine.pool.Set($"MODEL_GO_KEY_{res}", go, (g) => g.transform.SetParent(modelpool.transform));
         }
-
+    
+        /// <summary>
+        /// 加载模型
+        /// </summary>
+        /// <param name="res">资源名</param>
         public void Load(string res)
         {
             if (null != this.res && res.Equals(this.res)) return;

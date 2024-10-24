@@ -4,11 +4,21 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Common.Translations
 {
+    /// <summary>
+    /// 空间旋转渲染指令
+    /// </summary>
     public struct RIL_SPATIAL_ROTATION : IRIL
     {
         public ushort id => RILDef.SPATIAL_ROTATION;
+        /// <summary>
+        /// 旋转
+        /// </summary>
         public TSQuaternion rotation { get; private set; }
 
+        /// <summary>
+        /// 空间旋转渲染指令
+        /// </summary>
+        /// <param name="rotation">旋转</param>
         public RIL_SPATIAL_ROTATION(TSQuaternion rotation)
         {
             this.rotation = rotation;

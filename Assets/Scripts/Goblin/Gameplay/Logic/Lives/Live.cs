@@ -4,19 +4,31 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Lives
 {
+    /// <summary>
+    /// Actor 诞生事件
+    /// </summary>
     public struct LiveBornEvent : IEvent
     {
     }
     
+    /// <summary>
+    /// Actor 死亡事件
+    /// </summary>
     public struct LiveDeadEvent : IEvent
     {
     }
 
+    /// <summary>
+    /// Actor 苏醒事件
+    /// </summary>
     public struct LiveAwakenEvent : IEvent
     {
         
     }
 
+    /// <summary>
+    /// 生命周期
+    /// </summary>
     public class Live : Behavior
     {
         protected override void OnCreate()

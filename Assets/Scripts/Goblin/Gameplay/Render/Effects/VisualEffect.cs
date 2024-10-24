@@ -8,23 +8,34 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Effects
 {
+    /// <summary>
+    /// 特效管理器
+    /// </summary>
     public class VisualEffect : Comp
     {
         /// <summary>
         /// 特效对象池
         /// </summary>
         private static GameObject vfxpool = new("VFXPOOL");
-
+        /// <summary>
+        /// 特效舞台
+        /// </summary>
         private static GameObject vfxstage = new("VFXSTAGES");
-
-        public Stage stage { get; set; }
-
-        private List<VFXController> vfxcs = new();
-
+        
         static VisualEffect()
         {
             vfxpool.SetActive(false);
         }
+        
+        /// <summary>
+        /// 场景
+        /// </summary>
+        public Stage stage { get; set; }
+
+        /// <summary>
+        /// 播放中的特效列表
+        /// </summary>
+        private List<VFXController> vfxcs = new();
 
         protected override void OnCreate()
         {

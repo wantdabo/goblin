@@ -34,11 +34,6 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
             aisles = passes;
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         /// <summary>
         /// 有限状态机
         /// </summary>

@@ -5,24 +5,44 @@ namespace Goblin.Gameplay.Render.Common.Extensions
 {
     public static class TrueSync
     {
-        public static Vector2 ToVector2(this TSVector2 vector)
+        /// <summary>
+        /// TSVector2 转 Vector2
+        /// </summary>
+        /// <param name="tsvector2">TSVector2</param>
+        /// <returns>Vector2</returns>
+        public static Vector2 ToVector2(this TSVector2 tsvector2)
         {
-            return new Vector2(vector.x.AsFloat(), vector.y.AsFloat());
+            return new Vector2(tsvector2.x.AsFloat(), tsvector2.y.AsFloat());
         }
         
-        public static Vector3 ToVector3(this TSVector vector)
+        /// <summary>
+        /// TSVector 转 Vector3
+        /// </summary>
+        /// <param name="tsvector">TSVector</param>
+        /// <returns>Vector3</returns>
+        public static Vector3 ToVector3(this TSVector tsvector)
         {
-            return new Vector3(vector.x.AsFloat(), vector.y.AsFloat(), vector.z.AsFloat());
+            return new Vector3(tsvector.x.AsFloat(), tsvector.y.AsFloat(), tsvector.z.AsFloat());
         }
         
-        public static Vector4 ToVector4(this TSVector4 vector)
+        /// <summary>
+        /// TSVector4 转 Vector4
+        /// </summary>
+        /// <param name="vector4">TSVector4</param>
+        /// <returns>Vector4</returns>
+        public static Vector4 ToVector4(this TSVector4 vector4)
         {
-            return new Vector4(vector.x.AsFloat(), vector.y.AsFloat(), vector.z.AsFloat(), vector.w.AsFloat());
+            return new Vector4(vector4.x.AsFloat(), vector4.y.AsFloat(), vector4.z.AsFloat(), vector4.w.AsFloat());
         }
         
-        public static Quaternion ToQuaternion(this TSQuaternion quaternion)
+        /// <summary>
+        /// TSQuaternion 转 Quaternion
+        /// </summary>
+        /// <param name="tsquaternion">TSQuaternion</param>
+        /// <returns>Quaternion</returns>
+        public static Quaternion ToQuaternion(this TSQuaternion tsquaternion)
         {
-            return new Quaternion(quaternion.x.AsFloat(), quaternion.y.AsFloat(), quaternion.z.AsFloat(), quaternion.w.AsFloat());
+            return new Quaternion(tsquaternion.x.AsFloat(), tsquaternion.y.AsFloat(), tsquaternion.z.AsFloat(), tsquaternion.w.AsFloat());
         }
     }
 }

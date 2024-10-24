@@ -16,20 +16,32 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 技能管线解释器
+    /// </summary>
     public class SkillPipelineInfo : Resolver<RIL_SKILLPIPELINE_INFO>
     {
         public override ushort id => RILDef.SKILLPIPELINE_INFO;
+        
         private Node node { set; get; }
+        
         private AnimancerAnimation animation { get; set; }
+        
+        /// <summary>
+        /// 技能行为数据列表
+        /// </summary>
         private Dictionary<uint, List<SkillActionData>> skillActionDatas { get; set; } = new();
+        
+        /// <summary>
+        /// 技能特效进行中列表
+        /// </summary>
+        private Dictionary<uint, Dictionary<string, VFXController>> effdict = new();
 
         protected override void OnAwake(uint frame, RIL_SKILLPIPELINE_INFO ril)
         {
             node = actor.EnsureBehavior<Node>();
             animation = actor.EnsureBehavior<AnimancerAnimation>();
         }
-
-        private Dictionary<uint, Dictionary<string, VFXController>> effdict = new();
 
         protected override void OnResolve(uint frame, RIL_SKILLPIPELINE_INFO ril)
         {
@@ -86,7 +98,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 first = true;
                             }
 
-                            if (false == first && effectData.positionBinding)
+                            if (false == first && effectData.binding)
                             {
                                 eff.transform.position = node.go.transform.position + effectData.position.ToVector().ToVector3();
                                 eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngle.ToVector().ToVector3());
@@ -100,7 +112,11 @@ namespace Goblin.Gameplay.Render.Resolvers
                 }
             }
         }
-
+        
+        /// <summary>
+        /// 就绪检查或者初始化技能行为数据
+        /// </summary>
+        /// <param name="skill">技能 ID</param>
         private void ReadyOrInitialize(uint skill)
         {
             if (skillActionDatas.ContainsKey(skill)) return;

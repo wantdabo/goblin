@@ -1,7 +1,7 @@
 ﻿namespace Goblin.Gameplay.Common.Defines
 {
     /// <summary>
-    /// SkillAction/技能管线行为定义
+    /// SkillAction/技能行为定义
     /// </summary>
     public class SkillActionDef
     {

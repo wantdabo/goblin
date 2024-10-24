@@ -4,9 +4,18 @@ using Animation = Goblin.Gameplay.Render.Behaviors.Common.Animation;
 
 namespace Goblin.Gameplay.Render.Behaviors
 {
+    /// <summary>
+    /// Animancer 动画播放
+    /// </summary>
     public class AnimancerAnimation : Animation
     {
+        /// <summary>
+        /// Animancer 组件
+        /// </summary>
         private NamedAnimancerComponent namedanimancer { get; set; }
+        /// <summary>
+        /// Animancer 播放状态
+        /// </summary>
         private AnimancerState state { get; set; }
 
         protected override void OnPlay(string name, byte layer = 0)

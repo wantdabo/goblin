@@ -4,24 +4,48 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Spatials
 {
+    /// <summary>
+    /// 空间平移变化事件
+    /// </summary>
     public struct SpatialPositionChangedEvent : IEvent
     {
+        /// <summary>
+        /// 平移
+        /// </summary>
         public TSVector position { get; set; }
     }
 
+    /// <summary>
+    /// 空间旋转变化事件
+    /// </summary>
     public struct SpatialRotationChangedEvent : IEvent
     {
+        /// <summary>
+        /// 旋转
+        /// </summary>
         public TSQuaternion rotation { get; set; }
     }
 
+    /// <summary>
+    /// 空间缩放事件
+    /// </summary>
     public struct SpatialScaleChangedEvent : IEvent
     {
+        /// <summary>
+        /// 缩放
+        /// </summary>
         public TSVector scale { get; set; }
     }
-
+    
+    /// <summary>
+    /// 空间
+    /// </summary>
     public class Spatial : Behavior<Translator>
     {
         private TSVector mposition { get; set; }
+        /// <summary>
+        /// 平移
+        /// </summary>
         public TSVector position
         {
             get
@@ -36,6 +60,9 @@ namespace Goblin.Gameplay.Logic.Spatials
         }
 
         private TSQuaternion mrotation { get; set; }
+        /// <summary>
+        /// 旋转
+        /// </summary>
         public TSQuaternion rotation
         {
             get
@@ -48,7 +75,11 @@ namespace Goblin.Gameplay.Logic.Spatials
                 actor.eventor.Tell(new SpatialRotationChangedEvent { rotation = mrotation });
             }
         }
+        
         private TSVector mscale { get; set; }
+        /// <summary>
+        /// 缩放
+        /// </summary>
         public TSVector scale
         {
             get
@@ -61,6 +92,10 @@ namespace Goblin.Gameplay.Logic.Spatials
                 actor.eventor.Tell(new SpatialScaleChangedEvent { scale = mscale });
             }
         }
+        
+        /// <summary>
+        /// 欧拉角
+        /// </summary>
         public TSVector eulerAngle
         {
             get

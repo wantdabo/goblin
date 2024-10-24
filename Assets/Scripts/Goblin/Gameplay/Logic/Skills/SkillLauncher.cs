@@ -7,15 +7,27 @@ using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.Skills
 {
+    /// <summary>
+    /// 技能释放器
+    /// </summary>
     public class SkillLauncher : Behavior<Translator>
     {
+        /// <summary>
+        /// 技能列表
+        /// </summary>
         public List<uint> skills { get; private set; } = new();
+        /// <summary>
+        /// 技能字典
+        /// </summary>
         private Dictionary<uint, SkillPipeline> skilldict = new();
+        /// <summary>
+        /// 技能释放解析
+        /// </summary>
         public SkillCaster caster { get; private set; }
         /// <summary>
-        /// 技能释放中
+        /// 进行中的技能 (进行中, 技能 ID)
         /// </summary>
-        public (bool playing, uint skill) launchskill
+        public (bool playing, uint skill) launching
         {
             get
             {
@@ -43,7 +55,12 @@ namespace Goblin.Gameplay.Logic.Skills
             base.OnDestroy();
             actor.stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
-
+        
+        /// <summary>
+        /// 技能释放
+        /// </summary>
+        /// <param name="id">技能 ID</param>
+        /// <returns>YES/NO</returns>
         public bool Launch(uint id)
         {
             var pipeline = Get(id);
@@ -52,11 +69,20 @@ namespace Goblin.Gameplay.Logic.Skills
             return pipeline.Launch();
         }
 
+        /// <summary>
+        /// 获取技能管线
+        /// </summary>
+        /// <param name="id">技能 ID</param>
+        /// <returns>技能管线</returns>
         public SkillPipeline Get(uint id)
         {
             return skilldict.GetValueOrDefault(id);
         }
-
+        
+        /// <summary>
+        /// 加载技能管线
+        /// </summary>
+        /// <param name="id">技能 ID</param>
         public void Load(uint id)
         {
             var pipeline = Get(id);

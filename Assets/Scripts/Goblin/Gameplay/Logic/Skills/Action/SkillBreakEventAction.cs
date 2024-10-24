@@ -22,8 +22,8 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         {
             pipeline.StampBreakToken(data.token);
         }
-        
-        protected override void OnExecute(SkillBreakEventActionData data, FP tick)
+
+        protected override void OnExecute(SkillBreakEventActionData data, uint frame, FP tick)
         {
             if (BreakTokenDef.NONE == data.token) return;
 
@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
                 if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
             }
         }
-        
+
         protected override void OnExit(SkillBreakEventActionData data)
         {
             pipeline.EraseBreakToken(data.token);

@@ -31,9 +31,10 @@ namespace Goblin.SkillPipelineEditor
         [SerializeField]
         [Range(0.0f, 10)]
         public float scale = 1f;
+        [FormerlySerializedAs("positionBinding")]
         [MenuName("平移.目标绑定")]
         [SerializeField]
-        public bool positionBinding = false;
+        public bool binding = false;
 
         public override float Length
         {

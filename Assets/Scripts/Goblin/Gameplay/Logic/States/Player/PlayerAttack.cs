@@ -8,10 +8,15 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
+    /// <summary>
+    /// 玩家攻击状态
+    /// </summary>
     public class PlayerAttack : State
     {
         public override uint id => StateDef.PLAYER_ATTACK;
+        
         protected override List<uint> passes => null;
+        
         private SkillLauncher launcher { get; set; }
 
         protected override void OnCreate()
@@ -22,13 +27,13 @@ namespace Goblin.Gameplay.Logic.States.Player
 
         public override bool OnCheck()
         {
-            return launcher.launchskill.playing;
+            return launcher.launching.playing;
         }
 
         public override void OnTick(uint frame, FP tick)
         {
             base.OnTick(frame, tick);
-            if (launcher.launchskill.playing) return;
+            if (launcher.launching.playing) return;
             Break();
         }
     }
