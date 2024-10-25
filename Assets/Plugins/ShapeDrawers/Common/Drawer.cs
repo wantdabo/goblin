@@ -10,6 +10,8 @@ namespace ShapeDrawers.Common
 
         public GameObject gameObject { get; private set; }
 
+        public Material mat { get; set; }
+
         public bool enabled
         {
             get
@@ -26,11 +28,15 @@ namespace ShapeDrawers.Common
             if (null == drawerpool) drawerpool = new("__SHAPE_DRAWER__");
             gameObject.transform.SetParent(drawerpool.transform, false);
             var mr = gameObject.GetComponent<MeshRenderer>();
-            var mat = new Material(Shader.Find("ShapeDrawer/Drawer"));
-            var color = Color.magenta;
+            mat = new Material(Shader.Find("ShapeDrawer/Drawer"));
+            SetColor(Color.magenta);
+            mr.material = mat;
+        }
+
+        public void SetColor(Color color)
+        {
             color.a *= 0.5f;
             mat.SetColor("_Color", color);
-            mr.material = mat;
         }
 
         public void Enabled()

@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public Actor actor { get; set; }
     }
-    
+
     /// <summary>
     /// 移除 Actor 事件
     /// </summary>
@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public Actor actor { get; set; }
     }
-    
+
     /// <summary>
     /// 场景
     /// </summary>
@@ -54,6 +54,10 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public RILSync rilsync { get; private set; }
         /// <summary>
+        /// 物理绘制器
+        /// </summary>
+        public PhysDrawer physdrawer { get; private set; }
+        /// <summary>
         /// 专注/焦点
         /// </summary>
         public Foc foc { get; private set; }
@@ -71,17 +75,21 @@ namespace Goblin.Gameplay.Render.Core
             base.OnCreate();
             eventor = AddComp<Eventor>();
             eventor.Create();
-            
+
             ticker = AddComp<Ticker>();
             ticker.Create();
 
             vfx = AddComp<VisualEffect>();
             vfx.stage = this;
             vfx.Create();
-            
+
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;
             rilsync.Create();
+
+            physdrawer = AddComp<PhysDrawer>();
+            physdrawer.stage = this;
+            physdrawer.Create();
 
             foc = AddComp<Foc>();
             foc.stage = this;
@@ -112,9 +120,9 @@ namespace Goblin.Gameplay.Render.Core
         public T GetActor<T>(uint id) where T : Actor
         {
             var actor = GetActor(id);
-        
+
             if (null != actor) return actor as T;
-        
+
             return null;
         }
 
@@ -127,7 +135,7 @@ namespace Goblin.Gameplay.Render.Core
         {
             return actorDict.GetValueOrDefault(id);
         }
-        
+
         /// <summary>
         /// 添加 Actor
         /// </summary>
@@ -140,10 +148,10 @@ namespace Goblin.Gameplay.Render.Core
             actors.Add(actor);
             actorDict.Add(actor.id, actor);
             eventor.Tell(new AddActorEvent { actor = actor });
-        
+
             return actor;
         }
-        
+
         /// <summary>
         /// 根据 ID 移除 Actor
         /// </summary>
@@ -152,10 +160,10 @@ namespace Goblin.Gameplay.Render.Core
         {
             var actor = GetActor(id);
             if (null == actor) return;
-        
+
             RmvActor(actor);
         }
-        
+
         /// <summary>
         /// 根据 Actor 实例移除 Actor
         /// </summary>
@@ -163,7 +171,7 @@ namespace Goblin.Gameplay.Render.Core
         private void RmvActor(Actor actor)
         {
             if (false == actors.Contains(actor)) return;
-        
+
             actors.Remove(actor);
             actorDict.Remove(actor.id);
             eventor.Tell(new RmvActorEvent { actor = actor });

@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using System.Collections.Generic;
@@ -9,6 +10,18 @@ using TrueSync.Physics3D;
 
 namespace Goblin.Gameplay.Logic.Physics.Common
 {
+    #region 物理事件
+    /// <summary>
+    /// 一帧碰撞几何体信息事件
+    /// </summary>
+    public struct PhysShapesEvent : IEvent
+    {
+        /// <summary>
+        /// 碰撞几何体
+        /// </summary>
+        public (ushort type, Shape shape, TSVector position, TSQuaternion rotation)[] physinfos { get; set; }
+    }
+
     /// <summary>
     /// 物理碰撞进入事件
     /// </summary>
@@ -53,7 +66,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// </summary>
         public uint id1 { get; set; }
     }
-    
+
     /// <summary>
     /// 物理触发退出事件
     /// </summary>
@@ -68,6 +81,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// </summary>
         public uint id1 { get; set; }
     }
+    #endregion
 
     /// <summary>
     /// 物理
@@ -94,6 +108,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// ActorID 临时列表
         /// </summary>
         private List<uint> actorIdTemps = new();
+        /// <summary>
+        /// 碰撞几何体数据缓存
+        /// </summary>
+        private List<(ushort type, Shape shape, TSVector position, TSQuaternion rotation)> physinfos = new();
 
         /// <summary>
         /// 创建
@@ -111,6 +129,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             base.OnCreate();
             stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
+            stage.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
             world.Events.BodiesBeginCollide += CollisionEnter;
             world.Events.BodiesEndCollide += CollisionExit;
             world.Events.TriggerBeginCollide += TriggerEnter;
@@ -122,6 +141,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             base.OnDestroy();
             stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
+            stage.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
             world.Events.BodiesBeginCollide -= CollisionEnter;
             world.Events.BodiesEndCollide -= CollisionExit;
             world.Events.TriggerBeginCollide -= TriggerEnter;
@@ -142,7 +162,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return body;
         }
-        
+
         /// <summary>
         /// 获取 ActorID
         /// </summary>
@@ -202,14 +222,15 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="size">尺寸</param>
-        /// <param name="orientation">方向</param>
+        /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID)</returns>
-        public (bool hit, uint actorId) OverlapBox(uint cullActor, TSVector point, TSVector size, TSQuaternion orientation)
+        public (bool hit, uint actorId) OverlapBox(uint cullActor, TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(orientation), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -219,21 +240,22 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return (false, 0);
         }
-        
+
         /// <summary>
         /// 群体立方体碰撞检测
         /// </summary>
         /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="size">尺寸</param>
-        /// <param name="orientation">方向</param>
+        /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID[])</returns>
-        public (bool hit, uint[] actorIds) OverlapBoxs(uint cullActor, TSVector point, TSVector size, TSQuaternion orientation)
+        public (bool hit, uint[] actorIds) OverlapBoxs(uint cullActor, TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(orientation), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -243,7 +265,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return (actorIdTemps.Count > 0, actorIdTemps.ToArray());
         }
-        
+
         /// <summary>
         /// 球体碰撞检测
         /// </summary>
@@ -254,9 +276,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint actorId) OverlapSphere(uint cullActor, TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -266,7 +289,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return (false, 0);
         }
-        
+
         /// <summary>
         /// 群体球体碰撞检测
         /// </summary>
@@ -277,9 +300,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint[] actorIds) OverlapSpheres(uint cullActor, TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -289,7 +313,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return (actorIdTemps.Count > 0, actorIdTemps.ToArray());
         }
-        
+
         /// <summary>
         /// 圆柱体碰撞检测
         /// </summary>
@@ -297,14 +321,15 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <param name="height">高度</param>
-        /// <param name="orientation">方向</param>
+        /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID)</returns>
-        public (bool hit, uint actorId) OverlapCylinder(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion orientation)
+        public (bool hit, uint actorId) OverlapCylinder(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(orientation), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -314,7 +339,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
             return (false, 0);
         }
-        
+
         /// <summary>
         /// 群体圆柱体碰撞检测
         /// </summary>
@@ -322,14 +347,15 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <param name="height">高度</param>
-        /// <param name="orientation">方向</param>
+        /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID[])</returns>
-        public (bool hit, uint[] actorIds) OverlapCylinders(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion orientation)
+        public (bool hit, uint[] actorIds) OverlapCylinders(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
+            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
             foreach (var kv in abdict)
             {
-                if (Overlap(shape, kv.Value.Shape, kv.Value.Orientation, TSMatrix.CreateFromQuaternion(orientation), kv.Value.Position, point))
+                if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
                     if (cullActor == kv.Key) continue;
 
@@ -359,6 +385,13 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         private void OnFPTick(FPTickEvent e)
         {
             world.Step(e.tick);
+        }
+
+        private void OnFPLateTick(FPLateTickEvent e)
+        {
+            foreach (var kv in abdict) physinfos.Add((PhysShapeDef.PLAYER, kv.Value.Shape, kv.Value.Position, TSQuaternion.CreateFromMatrix(kv.Value.Orientation)));
+            stage.eventor.Tell(new PhysShapesEvent { physinfos = physinfos.ToArray() });
+            physinfos.Clear();
         }
 
         #region Rigibody 事件

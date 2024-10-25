@@ -16,7 +16,7 @@ namespace Goblin.SkillPipelineEditor
     {
         public override void OnUpdate(float time, float previousTime)
         {
-            ShapeDrawer.DrawSphere(App.AssetData.cloneModel.transform.position + clip.position, clip.radius);
+            ShapeDrawer.DrawSphere(App.AssetData.cloneModel.transform.position + clip.position, clip.radius, Color.magenta);
         }
     }
 }

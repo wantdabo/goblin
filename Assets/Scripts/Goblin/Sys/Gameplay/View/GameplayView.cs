@@ -6,9 +6,11 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Lives;
+using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Sys.Common;
 using TrueSync;
 using UnityEngine;
+using UnityEngine.UI;
 using RStage = Goblin.Gameplay.Render.Core.Stage;
 
 namespace Goblin.Sys.Gameplay.View
@@ -32,7 +34,7 @@ namespace Goblin.Sys.Gameplay.View
         private bool bbPress = false;
         private bool bcFlag = false;
         private bool bcPress = false;
-        
+
         private Stage stage { get; set; }
         private RStage rstage { get; set; }
 
@@ -45,8 +47,15 @@ namespace Goblin.Sys.Gameplay.View
             rstage = AddComp<RStage>();
             rstage.Create();
             rstage.foc.SetFollow(1);
+            stage.eventor.Listen<RILSyncEvent>((e) =>
+            {
+                rstage.eventor.Tell(e);
+            });
+            stage.eventor.Listen<PhysShapesEvent>((e) =>
+            {
+                rstage.eventor.Tell(e);
+            });
 
-            stage.eventor.Listen<RILSyncEvent>(OnRILSync);
             var player = stage.AddActor<Player>();
             player.Create();
             player.eventor.Tell<LiveBornEvent>();
@@ -78,6 +87,12 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            AddUIEventListener("PhysDrawerCB", (e) =>
+            {
+                var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");
+                rstage.physdrawer.draw = toggle.isOn;
+            });
+
             AddUIEventListener("JoystickArea", (e) =>
             {
                 joystickFlag = true;
@@ -117,7 +132,7 @@ namespace Goblin.Sys.Gameplay.View
                 baFlag = false;
                 baPress = false;
             }, UIEventEnum.PointerUp);
-            
+
             AddUIEventListener("SkillABtn", (e) =>
             {
                 bbFlag = true;
@@ -129,7 +144,7 @@ namespace Goblin.Sys.Gameplay.View
                 bbFlag = false;
                 bbPress = false;
             }, UIEventEnum.PointerUp);
-            
+
             AddUIEventListener("SkillBBtn", (e) =>
             {
                 bcFlag = true;
@@ -141,11 +156,6 @@ namespace Goblin.Sys.Gameplay.View
                 bcFlag = false;
                 bcPress = false;
             }, UIEventEnum.PointerUp);
-        }
-
-        private void OnRILSync(RILSyncEvent e)
-        {
-            rstage.rilsync.OnRILSync(e.id, e.frame, e.ril);
         }
 
         private void OnTick(TickEvent e)

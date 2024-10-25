@@ -28,6 +28,8 @@ namespace Goblin.Gameplay.Logic.Actors
             AddBehavior<SkillLauncher>().Create();
             
             var physagent = GetBehavior<PhysAgent>();
+            physagent.rigidbodyoffset = new TSVector(0, 75 * FP.EN2, 0);
+            physagent.boxshape.Size = new TSVector(1, 15 * FP.EN1, 1);
             physagent.trigger = true;
             
             var paramachine = GetBehavior<ParallelMachine>();

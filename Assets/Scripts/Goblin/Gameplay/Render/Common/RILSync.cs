@@ -16,22 +16,34 @@ namespace Goblin.Gameplay.Render.Common
         /// </summary>
         public Stage stage { get; set; }
 
-        public void OnRILSync(uint id, uint frame, IRIL ril)
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            stage.eventor.Listen<RILSyncEvent>(OnRILSync);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            stage.eventor.UnListen<RILSyncEvent>(OnRILSync);
+        }
+
+        private void OnRILSync(RILSyncEvent e)
         {
             Actor actor = default;
-            switch (ril.id)
+            switch (e.ril.id)
             {
                 case RILDef.LIVE_BORN:
-                    stage.AddActor(id).Create();
+                    stage.AddActor(e.id).Create();
                     break;
                 case RILDef.LIVE_DEAD:
-                    stage.GetActor(id).Destroy();
+                    stage.GetActor(e.id).Destroy();
                     break;
             }
 
-            actor = stage.GetActor(id);
-            actor.eventor.Tell(new RILResolveEvent { frame = frame, ril = ril });
-            Debug.Log($"RILSync -> {actor}, {id}, {frame}, {ril}");
+            actor = stage.GetActor(e.id);
+            actor.eventor.Tell(new RILResolveEvent { frame = e.frame, ril = e.ril });
+            Debug.Log($"RILSync -> {actor}, {e.id}, {e.frame}, {e.ril}");
         }
     }
 }

@@ -51,27 +51,30 @@ namespace ShapeDrawers.Common
             queue.Enqueue(drawer);
         }
 
-        public static void DrawBox(Vector3 position, Vector3 size, Quaternion rotation = default)
+        public static void DrawBox(Vector3 position, Vector3 size, Quaternion rotation, Color color)
         {
             if (false == GetDrawer<BoxDrawer>(DrawerType.Box, out var drawer)) drawer = new BoxDrawer();
             drawer.Enabled();
             drawer.Settings(position, size);
+            drawer.SetColor(color);
             drawings.Add(drawer);
         }
 
-        public static void DrawSphere(Vector3 position, float radius)
+        public static void DrawSphere(Vector3 position, float radius, Color color)
         {
             if (false == GetDrawer<SphereDrawer>(DrawerType.Sphere, out var drawer)) drawer = new SphereDrawer();
             drawer.Enabled();
             drawer.Settings(position, radius);
+            drawer.SetColor(color);
             drawings.Add(drawer);
         }
 
-        public static void DrawCylinder(Vector3 position, float radius, float height, Quaternion rotation = default)
+        public static void DrawCylinder(Vector3 position, float radius, float height, Quaternion rotation, Color color)
         {
             if (false == GetDrawer<CylinderDrawer>(DrawerType.Cylinder, out var drawer)) drawer = new CylinderDrawer();
             drawer.Enabled();
             drawer.Settings(position, radius, height);
+            drawer.SetColor(color);
             drawings.Add(drawer);
         }
     }
