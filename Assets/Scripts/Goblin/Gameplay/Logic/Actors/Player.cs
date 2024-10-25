@@ -20,12 +20,19 @@ namespace Goblin.Gameplay.Logic.Actors
         protected override void OnCreate()
         {
             base.OnCreate();
+            AddBehavior<Attribute>().Create();
             AddBehavior<Surface>().Create();
             AddBehavior<Spatial>().Create();
             AddBehavior<PhysAgent>().Create();
             AddBehavior<Gamepad>().Create();
             AddBehavior<ParallelMachine>().Create();
             AddBehavior<SkillLauncher>().Create();
+
+            var attribute = GetBehavior<Attribute>();
+            attribute.hp = uint.MaxValue;
+            attribute.maxhp = uint.MaxValue;
+            attribute.movespeed = 55 * FP.EN1;
+            attribute.attack = 1000;
             
             var physagent = GetBehavior<PhysAgent>();
             physagent.rigidbodyoffset = new TSVector(0, 75 * FP.EN2, 0);
@@ -45,11 +52,6 @@ namespace Goblin.Gameplay.Logic.Actors
             launcher.Load(10004);
             launcher.Load(10011);
             launcher.Load(10012);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
         }
     }
 }

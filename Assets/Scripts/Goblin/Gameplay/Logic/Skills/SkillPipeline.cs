@@ -86,7 +86,7 @@ namespace Goblin.Gameplay.Logic.Skills
             base.OnCreate();
             Initialize();
         }
-        
+
         /// <summary>
         /// 技能释放
         /// </summary>
@@ -124,7 +124,7 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             breaktoken |= token;
         }
-        
+
         /// <summary>
         /// 技能打断
         /// </summary>
@@ -135,7 +135,7 @@ namespace Goblin.Gameplay.Logic.Skills
             NotifyState();
             End();
         }
-        
+
         /// <summary>
         /// 技能开始
         /// </summary>
@@ -149,7 +149,7 @@ namespace Goblin.Gameplay.Logic.Skills
             NotifyState();
             Casting(GameDef.LOGIC_TICK);
         }
-        
+
         /// <summary>
         /// 技能时间轴驱动
         /// </summary>
@@ -181,7 +181,7 @@ namespace Goblin.Gameplay.Logic.Skills
                             break;
                     }
                 }
-            
+
                 // 进入
                 if (frame == actionData.sframe) action.Enter(actionData);
                 // 执行
@@ -189,13 +189,13 @@ namespace Goblin.Gameplay.Logic.Skills
                 // 离开
                 if (frame == actionData.eframe) action.Exit(actionData);
             }
-        
+
             // 帧号递增
             frame++;
             // 结束
             if (frame >= length) End();
         }
-        
+
         /// <summary>
         /// 技能结束
         /// </summary>
@@ -220,13 +220,13 @@ namespace Goblin.Gameplay.Logic.Skills
                 NotifyState();
                 state = SkillPipelineStateDef.None;
             }
-            
+
             if (SkillPipelineStateDef.Casting != state) return;
-            
+
             // Tick
             Casting(tick);
         }
-        
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -235,7 +235,7 @@ namespace Goblin.Gameplay.Logic.Skills
             // 加载技能数据
             var spdata = MessagePackSerializer.Deserialize<SkillPipelineData>(engine.gameres.location.LoadSkillDataSync(id.ToString()));
             // 技能帧数
-            length = (uint)(spdata.length * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+            length = FP.ToUInt(spdata.length * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
             // 解析行为数据
             for (int i = 0; i < spdata.actionIds.Length; i++)
             {
@@ -261,12 +261,12 @@ namespace Goblin.Gameplay.Logic.Skills
                 }
 
                 if (null == data) continue;
-                data.sframe = (uint)(data.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                data.eframe = (uint)(data.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                data.sframe = FP.ToUInt(data.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                data.eframe = FP.ToUInt(data.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
                 actionDatas.Add(data);
             }
         }
-        
+
         /// <summary>
         /// 获取技能行为
         /// </summary>
@@ -278,7 +278,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
             return actionDict.GetValueOrDefault(id);
         }
-        
+
         /// <summary>
         /// 添加技能行为
         /// </summary>

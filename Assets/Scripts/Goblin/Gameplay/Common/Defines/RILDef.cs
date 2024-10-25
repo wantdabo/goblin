@@ -38,8 +38,24 @@
         /// </summary>
         public const ushort SKILLPIPELINE_INFO = 7;
         /// <summary>
+        /// ATTRIBUTE 生命值指令
+        /// </summary>
+        public const ushort ATTRIBUTE_HP = 8;
+        /// <summary>
+        /// ATTRIBUTE 最大生命值指令
+        /// </summary>
+        public const ushort ATTRIBUTE_MAXHP = 9;
+        /// <summary>
+        /// ATTRIBUTE 移动速度指令
+        /// </summary>
+        public const ushort ATTRIBUTE_MOVESPEED = 10;
+        /// <summary>
+        /// ATTRIBUTE 攻击力指令
+        /// </summary>
+        public const ushort ATTRIBUTE_ATTACK = 11;
+        /// <summary>
         /// SURFACE 指令
         /// </summary>
-        public const ushort SURFACE = 8;
+        public const ushort SURFACE = 12;
     }
 }

@@ -228,6 +228,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             BoxShape shape = new(size);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
@@ -253,6 +255,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             BoxShape shape = new(size);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
@@ -277,6 +281,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             SphereShape shape = new(radius);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
@@ -301,6 +307,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             SphereShape shape = new(radius);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
@@ -327,6 +335,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             CylinderShape shape = new(radius, height);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
@@ -353,6 +363,8 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         {
             CylinderShape shape = new(radius, height);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            
+            actorIdTemps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))

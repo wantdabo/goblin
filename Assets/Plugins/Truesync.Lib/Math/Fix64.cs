@@ -872,6 +872,10 @@ namespace TrueSync {
         public int AsInt() {
             return (int) this;
         }
+        
+        public uint AsUInt() {
+            return (uint) this;
+        }
 
         public long AsLong() {
             return (long)this;
@@ -891,6 +895,10 @@ namespace TrueSync {
 
         public static int ToInt(FP value) {
             return (int)value;
+        }
+        
+        public static uint ToUInt(FP value) {
+            return (uint)value;
         }
 
         public static FP FromFloat(float value) {

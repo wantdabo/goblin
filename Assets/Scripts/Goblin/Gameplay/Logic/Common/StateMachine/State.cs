@@ -18,11 +18,11 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// 设置可通行的状态，如果需要读取，请使用 aisles 字段，否则会造成 GC 性能问题。
         /// </summary>
         protected abstract List<uint> passes { get; }
-        private List<uint> mPasses = null;
+        private List<uint> mpasses = null;
         /// <summary>
         /// 读到的结果 passes 字段一致，如果是为了读取，请使用此字段。
         /// </summary>
-        public List<uint> aisles { get { return mPasses; } private set { mPasses = value; } }
+        public List<uint> aisles { get { return mpasses; } private set { mpasses = value; } }
         /// <summary>
         /// 状态进入持续了多少帧
         /// </summary>

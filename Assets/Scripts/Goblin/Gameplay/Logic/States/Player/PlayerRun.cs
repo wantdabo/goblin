@@ -1,4 +1,5 @@
 ﻿using Goblin.Gameplay.Common.Defines;
+using Goblin.Gameplay.Logic.Attributes;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Spatials;
@@ -15,14 +16,15 @@ namespace Goblin.Gameplay.Logic.States.Player
         public override uint id => StateDef.PLAYER_RUN;
         
         protected override List<uint> passes => new() { StateDef.PLAYER_IDLE, StateDef.PLAYER_ATTACK };
-        
-        private Gamepad gamepad { get; set; }
-        
+
+        private Attribute attribute { get; set; }
         private Spatial spatial { get; set; }
+        private Gamepad gamepad { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
+            attribute = machine.paramachine.actor.GetBehavior<Attribute>();
             gamepad = machine.paramachine.actor.GetBehavior<Gamepad>();
             spatial = machine.paramachine.actor.GetBehavior<Spatial>();
         }
@@ -37,7 +39,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         {
             base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * 55 * FP.EN1 * tick;
+            var motion = joystick.dire * attribute.movespeed * tick;
             spatial.position += new TSVector(motion.x, 0, motion.y);
 
             if (motion != TSVector2.zero)

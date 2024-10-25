@@ -14,11 +14,11 @@ namespace Goblin.Common.FSM
         /// </summary>
         protected abstract List<Type> passes { get; }
 
-        private List<Type> mPasses = null;
+        private List<Type> mpasses = null;
         /// <summary>
         /// 读到的结果 passes 字段一致，如果是为了读取，请使用此字段。
         /// </summary>
-        public List<Type> aisles { get { return mPasses; } private set { mPasses = value; } }
+        public List<Type> aisles { get { return mpasses; } private set { mpasses = value; } }
 
         /// <summary>
         /// 有限状态机

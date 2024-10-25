@@ -4,6 +4,7 @@ using Goblin.Common.GameRes;
 using Goblin.Common.Network;
 using Goblin.Phases.Common;
 using Goblin.Sys.Common;
+using Goblin.Sys.Gameplay.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,14 +99,11 @@ namespace Goblin.Core
             gameui.Create();
             
             gameui.Open<Sys.Other.View.FrameworkView>();
-            gameui.Open<Sys.Gameplay.View.GameplayView>();
+            gameui.Open<GameplayDanceView>();
+            engine.proxy.gameplay.Start();
+            engine.proxy.gameplay.Play();
             // phase = AddComp<Phase>();
             // phase.Create();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
         }
 
         /// <summary>

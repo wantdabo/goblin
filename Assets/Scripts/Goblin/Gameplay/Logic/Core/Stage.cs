@@ -2,6 +2,7 @@
 using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Attributes.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Physics.Common;
 using System.Collections.Generic;
@@ -58,6 +59,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public FPRandom random { get; private set; }
         /// <summary>
+        /// 数值计算器
+        /// </summary>
+        public Calculator calc { get; private set; }
+        /// <summary>
         /// RIL/ 渲染指令同步
         /// </summary>
         public RILSync rilsync { get; private set; }
@@ -79,18 +84,21 @@ namespace Goblin.Gameplay.Logic.Core
             base.OnCreate();
             eventor = AddComp<Eventor>();
             eventor.Create();
-            
+
             ticker = AddComp<FPTicker>();
             ticker.Create();
-            
+
             random = AddComp<FPRandom>();
             random.Initial(19491001);
             random.Create();
 
+            calc = AddComp<Calculator>();
+            calc.Create();
+
             rilsync = AddComp<RILSync>();
             rilsync.stage = this;
             rilsync.Create();
-            
+
             phys = AddComp<Phys>();
             phys.stage = this;
             phys.Initialize<CollisionSystemPersistentSAP>();

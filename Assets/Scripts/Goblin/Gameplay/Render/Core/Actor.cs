@@ -115,7 +115,7 @@ namespace Goblin.Gameplay.Render.Core
             behaviorDict.Remove(behavior.GetType());
             behavior.Destroy();
         }
-        
+
         /// <summary>
         /// 获取渲染指令解释器
         /// </summary>
@@ -127,7 +127,7 @@ namespace Goblin.Gameplay.Render.Core
 
             return resolverDict.GetValueOrDefault(id);
         }
-        
+
         /// <summary>
         /// 添加渲染指令解释器
         /// </summary>
@@ -147,7 +147,7 @@ namespace Goblin.Gameplay.Render.Core
 
             return resolver;
         }
-        
+
         /// <summary>
         /// 移除渲染指令解释器
         /// </summary>
@@ -186,6 +186,18 @@ namespace Goblin.Gameplay.Render.Core
                     case RILDef.SKILLPIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;
+                    case RILDef.ATTRIBUTE_HP:
+                        resolver = AddResolver<AttributeHP>(e.ril.id);
+                        break;
+                    case RILDef.ATTRIBUTE_MAXHP:
+                        resolver = AddResolver<AttributeMaxHP>(e.ril.id);
+                        break;
+                    case RILDef.ATTRIBUTE_MOVESPEED:
+                        resolver = AddResolver<AttributeMoveSpeed>(e.ril.id);
+                        break;
+                    case RILDef.ATTRIBUTE_ATTACK:
+                        resolver = AddResolver<AttributeAttack>(e.ril.id);
+                        break;
                     case RILDef.SURFACE:
                         resolver = AddResolver<Surface>(e.ril.id);
                         break;
@@ -196,7 +208,7 @@ namespace Goblin.Gameplay.Render.Core
                 // 初始化
                 resolver.Awake(e.frame, e.ril);
             }
-            
+
             // 渲染指令执行
             resolver.Resolve(e.frame, e.ril);
         }
