@@ -35,10 +35,13 @@ namespace Goblin.Sys.Gameplay.View
 
         private void OnCureDance(CureDanceEvent e)
         {
+            if (false == engine.proxy.gameplay.dancing) return;
         }
 
         private void OnDamageDance(DamageDanceEvent e)
         {
+            if (false == engine.proxy.gameplay.dancing) return;
+
             var obj = engine.pool.Get<GameplayDanceObject>("BLOOD_DANCE_DAMAGE");
             if (null == obj)
             {

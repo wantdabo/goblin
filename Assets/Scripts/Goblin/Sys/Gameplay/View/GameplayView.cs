@@ -45,10 +45,18 @@ namespace Goblin.Sys.Gameplay.View
         {
             base.OnBindEvent();
             
-            AddUIEventListener("GamingBtn", (e) =>
+            AddUIEventListener("GamingCB", (e) =>
             {
-                if (engine.proxy.gameplay.gaming) engine.proxy.gameplay.Pause(); else engine.proxy.gameplay.Resume();
+                var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
+                if (toggle.isOn) engine.proxy.gameplay.Resume(); else engine.proxy.gameplay.Pause();
             });
+            
+            AddUIEventListener("DanceCB", (e) =>
+            {
+                var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "DanceCB");
+                engine.proxy.gameplay.dancing = toggle.isOn;
+            });
+            
             AddUIEventListener("PhysDrawerCB", (e) =>
             {
                 var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");

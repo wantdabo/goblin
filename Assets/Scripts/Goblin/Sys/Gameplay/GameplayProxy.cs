@@ -68,6 +68,7 @@ namespace Goblin.Sys.Gameplay
     public class GameplayProxy : Proxy<GameplayModel>
     {
         public bool gaming { get; private set; }
+        public bool dancing { get; set; }
         public InputSystem input { get; private set; }
         public Stage stage { get; private set; }
         private LStage lstage { get; set; }

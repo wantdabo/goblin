@@ -3,6 +3,7 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Inputs;
+using Goblin.Gameplay.Logic.Spatials;
 using System.Collections.Generic;
 using TrueSync;
 
@@ -14,8 +15,9 @@ namespace Goblin.Gameplay.Logic.Skills
     public class SkillCaster : Comp
     {
         public SkillLauncher launcher { get; set; }
+        private Spatial spatial { get; set; }
         private Gamepad gamepad { get; set; }
-        
+
         // TODO 后续改为读取配置
         private Dictionary<uint, uint> skillcomboDict = new()
         {
@@ -28,7 +30,21 @@ namespace Goblin.Gameplay.Logic.Skills
         protected override void OnCreate()
         {
             base.OnCreate();
+            spatial = launcher.actor.GetBehavior<Spatial>();
             gamepad = launcher.actor.GetBehavior<Gamepad>();
+        }
+
+        private void JoystickForawrd()
+        {
+            var joystick = gamepad.GetInput(InputType.Joystick);
+            if (joystick.press)
+            {
+                if (TSVector2.zero != joystick.dire)
+                {
+                    FP angle = TSMath.Atan2(joystick.dire.x, joystick.dire.y) * TSMath.Rad2Deg;
+                    spatial.eulerAngle = TSVector.up * angle;
+                }
+            }
         }
 
         public void OnFPTick(FP tick)
@@ -57,15 +73,32 @@ namespace Goblin.Gameplay.Logic.Skills
                 foreach (uint skill in launcher.skills)
                 {
                     if (comboskill > 0 && skill != comboskill) continue;
-                    if (launcher.Launch(skill)) return;
+                    if (launcher.Launch(skill))
+                    {
+                        JoystickForawrd();
+                        return;
+                    }
                 }
             }
-            
+
             // 技能 A
-            if (bb.press) if (launcher.Launch(10011)) return;
-            
+            if (bb.press)
+            {
+                if (launcher.Launch(10011))
+                {
+                    JoystickForawrd();
+                    return;
+                }
+            }
+
             // 技能 B
-            if (bc.press) launcher.Launch(10012);
+            if (bc.press)
+            {
+                if (launcher.Launch(10012))
+                {
+                    JoystickForawrd();
+                }
+            }
         }
     }
 }
