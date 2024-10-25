@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Lives;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Eventor eventor { get; set; }
         /// <summary>
+        /// 确定性，Ticker/时间驱动器
+        /// </summary>
+        public FPTicker ticker { get; set; }
+        /// <summary>
         /// Behavior 集合
         /// </summary>
         private Dictionary<Type, Behavior> behaviorDict { get; set; }
@@ -33,8 +38,19 @@ namespace Goblin.Gameplay.Logic.Core
             base.OnCreate();
             eventor = AddComp<Eventor>();
             eventor.Create();
+
+            ticker = AddComp<FPTicker>();
+            ticker.Create();
+            
+            stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
             
             AddBehavior<Live>().Create();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
 
         /// <summary>
@@ -87,6 +103,11 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (null == behaviorDict) return;
             behaviorDict.Remove(behavior.GetType());
+        }
+        
+        private void OnFPTick(FPTickEvent e)
+        {
+            ticker.Tick();
         }
     }
 }

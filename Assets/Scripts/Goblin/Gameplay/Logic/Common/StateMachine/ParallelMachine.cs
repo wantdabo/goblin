@@ -62,13 +62,13 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         protected override void OnCreate()
         {
             base.OnCreate();
-            actor.stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
+            actor.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            actor.stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
+            actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
         
         /// <summary>

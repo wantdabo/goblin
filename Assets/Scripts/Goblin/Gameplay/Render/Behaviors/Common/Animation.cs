@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
             actor.stage.ticker.eventor.UnListen<TickEvent>(OnTick);
             actor.eventor.UnListen<ModelChangedEvent>(OnModelChanged);
         }
-        
+
         /// <summary>
         /// 检查模型
         /// </summary>
@@ -53,18 +53,19 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
             if (null == model.go) return;
             OnModelChanged(model.go);
         }
-        
+
         /// <summary>
         /// 播放动画
         /// </summary>
         /// <param name="name">动画名</param>
+        /// <param name="force">强制</param>
         /// <param name="layer">层级</param>
-        public void Play(string name, byte layer = 0)
+        public void Play(string name, bool force = false, byte layer = 0)
         {
-            if (false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
-            names[layer] = name;
+            if (false == force && false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
             this.lerp = false;
             OnPlay(name, layer);
+            names[layer] = name;
         }
 
         /// <summary>
@@ -72,14 +73,15 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// </summary>
         /// <param name="name">动画名</param>
         /// <param name="lerpt">结束插值</param>
+        /// <param name="force">强制</param>
         /// <param name="layer">层级</param>
-        public void Play(string name, float lerpt, byte layer = 0)
+        public void Play(string name, float lerpt, bool force = false, byte layer = 0)
         {
             this.lerpt = lerpt;
             this.lerp = true;
-            if (false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
-            names[layer] = name;
+            if (false == force && false == string.IsNullOrEmpty(names[layer]) && names[layer].Equals(name)) return;
             OnPlay(name, layer);
+            names[layer] = name;
         }
 
         /// <summary>
@@ -89,7 +91,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         {
             animseqs.Clear();
         }
-        
+
         /// <summary>
         /// 播放动画序列
         /// </summary>
@@ -106,7 +108,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
             if (0 == animseqs.Count) return;
             if (false == OnNextSequeue()) return;
             var anim = animseqs.Dequeue();
-            Play(anim.Item1, anim.Item2);
+            Play(anim.Item1, false, anim.Item2);
         }
 
         private void OnModelChanged(ModelChangedEvent e)
@@ -126,7 +128,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// <param name="name">动画名</param>
         /// <param name="layer">层级</param>
         protected abstract void OnPlay(string name, byte layer = 0);
-        
+
         /// <summary>
         /// 播放下一个动画
         /// </summary>

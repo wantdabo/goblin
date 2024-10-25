@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Logic.Skills
         protected override void OnCreate()
         {
             base.OnCreate();
-            actor.stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
+            actor.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
             caster = AddComp<SkillCaster>();
             caster.launcher = this;
             caster.Create();
@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.Skills
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            actor.stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
+            actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
         
         /// <summary>

@@ -28,28 +28,28 @@ namespace Goblin.Gameplay.Render.Resolvers
             if (StateDef.PLAYER_HURT == ril.state)
             {
                 animation.EmptySequeue();
-                animation.Play("Anbi_Hit_H_Back", ril.layer);
+                animation.Play("Anbi_Hit_H_Back", true);
             }
 
             if (StateDef.PLAYER_IDLE == ril.state && StateDef.PLAYER_RUN == ril.laststate)
             {
                 animation.EmptySequeue();
-                animation.Play("Anbi_Run_End", ril.layer);
+                animation.Play("Anbi_Run_End");
             }
             else if (StateDef.PLAYER_RUN == ril.state && StateDef.PLAYER_IDLE == ril.laststate)
             {
                 animation.EmptySequeue();
-                animation.Play("Anbi_Run_Start", ril.layer);
+                animation.Play("Anbi_Run_Start");
             }
             else
             {
                 switch (ril.state)
                 {
                     case StateDef.PLAYER_IDLE:
-                        animation.Play("Anbi_Idle", ril.layer);
+                        animation.Play("Anbi_Idle");
                         break;
                     case StateDef.PLAYER_RUN:
-                        animation.Play("Anbi_Run", ril.layer);
+                        animation.Play("Anbi_Run");
                         break;
                 }
                 
@@ -59,10 +59,10 @@ namespace Goblin.Gameplay.Render.Resolvers
             switch (ril.state)
             {
                 case StateDef.PLAYER_IDLE:
-                    animation.PlaySequeue("Anbi_Idle", ril.layer);
+                    animation.PlaySequeue("Anbi_Idle");
                     break;
                 case StateDef.PLAYER_RUN:
-                    animation.PlaySequeue("Anbi_Run", ril.layer);
+                    animation.PlaySequeue("Anbi_Run");
                     break;
             }
         }

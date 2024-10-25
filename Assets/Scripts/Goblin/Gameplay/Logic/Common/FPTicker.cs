@@ -46,6 +46,10 @@ namespace Goblin.Gameplay.Logic.Common
         /// 事件订阅/派发者
         /// </summary>
         public Eventor eventor { get; set; }
+        /// <summary>
+        /// 跳帧
+        /// </summary>
+        private uint breakframe { get; set; }
         private uint mFrame = 0;
         /// <summary>
         /// 最新的帧号
@@ -67,16 +71,18 @@ namespace Goblin.Gameplay.Logic.Common
             eventor.Create();
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         /// <summary>
         /// 流逝时间
         /// </summary>
         public void Tick()
         {
+            // 跳帧
+            if (breakframe > 0)
+            {
+                breakframe--;
+                return;
+            }
+            
             frame++;
             // 驱动计时器
             TickTimerInfos();

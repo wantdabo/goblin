@@ -82,6 +82,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
             current?.OnExit();
 
             current = state;
+            paramachine.translator.Force();
             if (null == current) return;
             current.OnEnter();
             paramachine.actor.eventor.Tell(new StateChangedEvent { state = current, layer = layer });
