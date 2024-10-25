@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     {
         public override uint id => StateDef.PLAYER_IDLE;
         
-        protected override List<uint> passes => new() { StateDef.PLAYER_RUN, StateDef.PLAYER_ATTACK };
+        protected override List<uint> passes => new() { StateDef.PLAYER_RUN, StateDef.PLAYER_HURT, StateDef.PLAYER_ATTACK };
         
         private Gamepad gamepad { get; set; }
 

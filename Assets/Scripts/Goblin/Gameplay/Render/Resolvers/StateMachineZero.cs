@@ -25,6 +25,12 @@ namespace Goblin.Gameplay.Render.Resolvers
         protected override void OnResolve(uint frame, RIL_STATEMACHINE_ZERO ril)
         {
             // TODO 后续要改为配置读取解析
+            if (StateDef.PLAYER_HURT == ril.state)
+            {
+                animation.EmptySequeue();
+                animation.Play("Anbi_Hit_H_Back", ril.layer);
+            }
+
             if (StateDef.PLAYER_IDLE == ril.state && StateDef.PLAYER_RUN == ril.laststate)
             {
                 animation.EmptySequeue();

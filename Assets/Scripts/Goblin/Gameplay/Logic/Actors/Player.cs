@@ -42,6 +42,7 @@ namespace Goblin.Gameplay.Logic.Actors
             var paramachine = GetBehavior<ParallelMachine>();
             paramachine.SetState<PlayerIdle>();
             paramachine.SetState<PlayerRun>();
+            paramachine.SetState<PlayerHurt>();
             paramachine.SetState<PlayerAttack>();
             
             // TODO 后续要改成配置文件读取

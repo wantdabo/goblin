@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Sys.Gameplay;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
@@ -13,10 +14,12 @@ namespace Goblin.Gameplay.Render.Resolvers
     {
         public override ushort id => RILDef.ATTRIBUTE_HP;
 
+        private Node node { get; set; }
         private Attribute attribute { get; set; }
 
         protected override void OnAwake(uint frame, RIL_ATTRIBUTE_HP ril)
         {
+            node = actor.EnsureBehavior<Node>();
             attribute = actor.EnsureBehavior<Attribute>();
             attribute.hp = ril.hp;
         }
@@ -25,11 +28,24 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             if (attribute.hp > ril.hp)
             {
-                Debug.Log($"OnHurt ID -> {actor.id}, {attribute.hp - ril.hp}");
+                engine.proxy.gameplay.eventor.Tell(new DamageDanceEvent
+                {
+                    position = node.go.transform.position,
+                    crit = false,
+                    damage = attribute.hp - ril.hp,
+                    from = actor.id,
+                    to = actor.id
+                });
             }
             else
             {
-                Debug.Log($"OnCure ID -> {actor.id}, {ril.hp - attribute.hp}");
+                engine.proxy.gameplay.eventor.Tell(new CureDanceEvent
+                {
+                    position = node.go.transform.position,
+                    cure = ril.hp - attribute.hp,
+                    from = actor.id,
+                    to = actor.id
+                });
             }
             
             attribute.hp = ril.hp;

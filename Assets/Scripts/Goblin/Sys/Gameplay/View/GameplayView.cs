@@ -44,6 +44,11 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            
+            AddUIEventListener("GamingBtn", (e) =>
+            {
+                if (engine.proxy.gameplay.gaming) engine.proxy.gameplay.Pause(); else engine.proxy.gameplay.Resume();
+            });
             AddUIEventListener("PhysDrawerCB", (e) =>
             {
                 var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");

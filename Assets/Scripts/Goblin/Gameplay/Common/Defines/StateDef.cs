@@ -34,5 +34,9 @@
         /// 玩家 ATTACK 状态
         /// </summary>
         public const uint PLAYER_ATTACK = 100003;
+        /// <summary>
+        /// 玩家 HURT 状态
+        /// </summary>
+        public const uint PLAYER_HURT = 100004;
     }
 }

@@ -21,6 +21,21 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// </summary>
         public uint from;
     }
+    
+    /// <summary>
+    /// 治疗事件（已经过受方计算）
+    /// </summary>
+    public struct RecvCureEvent : IEvent
+    {
+        /// <summary>
+        /// 治疗数值
+        /// </summary>
+        public uint cure;
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from;
+    }
 
     /// <summary>
     /// 伤害事件
@@ -35,6 +50,21 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// 来源/ActorID
         /// </summary>
         public uint from { get; set; }
+    }
+    
+    /// <summary>
+    /// 伤害事件（已经过受方计算）
+    /// </summary>
+    public struct RecvHurtEvent : IEvent
+    {
+        /// <summary>
+        /// 伤害
+        /// </summary>
+        public DamageInfo damage;
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from;
     }
 
     /// <summary>
@@ -79,12 +109,24 @@ namespace Goblin.Gameplay.Logic.Attributes
 
         private void OnCure(CureEvent e)
         {
+            actor.eventor.Tell(new RecvCureEvent()
+            {
+                cure = e.cure,
+                from = e.from,
+            });
         }
 
         private void OnHurt(HurtEvent e)
         {
             var damage = actor.stage.calc.DischargeDamage(actor.id, e.damage);
+            // TODO 后面修改使用 damage 的数值
+            damage.value = (uint)actor.stage.random.Range(100, 1000);
             hp = Math.Clamp(hp - damage.value, 0, maxhp);
+            actor.eventor.Tell(new RecvHurtEvent()
+            {
+                damage = damage,
+                from = e.from,
+            });
         }
 
         private void OnSkillCollision(SkillCollisionEvent e)

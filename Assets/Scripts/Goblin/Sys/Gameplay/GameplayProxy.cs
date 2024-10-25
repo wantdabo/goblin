@@ -13,9 +13,9 @@ using LStage = Goblin.Gameplay.Logic.Core.Stage;
 namespace Goblin.Sys.Gameplay
 {
     /// <summary>
-    /// 受到治疗
+    /// 治疗跳字
     /// </summary>
-    public struct RecvCureEvent : IEvent
+    public struct CureDanceEvent : IEvent
     {
         /// <summary>
         /// 坐标
@@ -36,9 +36,9 @@ namespace Goblin.Sys.Gameplay
     }
 
     /// <summary>
-    /// 受到伤害
+    /// 伤害跳字
     /// </summary>
-    public struct RecvHurtEvent : IEvent
+    public struct DamageDanceEvent : IEvent
     {
         /// <summary>
         /// 坐标
@@ -115,9 +115,11 @@ namespace Goblin.Sys.Gameplay
             player2.eventor.Tell<LiveBornEvent>();
             
             engine.gameui.Open<GameplayView>();
+            
+            Resume();
         }
 
-        public void Play()
+        public void Resume()
         {
             gaming = true;
         }

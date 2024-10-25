@@ -12,17 +12,19 @@ namespace Goblin.Gameplay.Render.Focus.Common
     {
         public Stage stage { get; set; }
         public uint actorId { get; private set; }
+        public Eyes eyes { get; private set; }
+        public FocusLight light { get; private set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            var eyes = AddComp<Eyes>();
+            eyes = AddComp<Eyes>();
             eyes.foc = this;
             eyes.Create();
             
-            var focusLight = AddComp<FocusLight>();
-            focusLight.foc = this;
-            focusLight.Create();
+            light = AddComp<FocusLight>();
+            light.foc = this;
+            light.Create();
         }
 
         public void SetFollow(uint id)

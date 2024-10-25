@@ -101,7 +101,7 @@ namespace Goblin.Core
             gameui.Open<Sys.Other.View.FrameworkView>();
             gameui.Open<GameplayDanceView>();
             engine.proxy.gameplay.Start();
-            engine.proxy.gameplay.Play();
+            engine.proxy.gameplay.Resume();
             // phase = AddComp<Phase>();
             // phase.Create();
         }
