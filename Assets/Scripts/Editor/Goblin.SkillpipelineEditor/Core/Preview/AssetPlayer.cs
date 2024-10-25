@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShapeDrawers.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -79,6 +80,7 @@ namespace Goblin.SkillPipelineEditor
 
         public void Sample()
         {
+            ShapeDrawer.Clear();
             Sample(currentTime);
         }
 

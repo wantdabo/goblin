@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShapeDrawers.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Goblin.SkillPipelineEditor
     {
         public override void OnUpdate(float time, float previousTime)
         {
-            GizmosDrawer.I.DrawWireCube(App.AssetData.cloneModel.transform.position + clip.position, clip.size, new Color(153 / 255f, 214 / 255f, 83 / 255f));
+            ShapeDrawer.DrawBox(App.AssetData.cloneModel.transform.position + clip.position, clip.size);
         }
     }
 }
