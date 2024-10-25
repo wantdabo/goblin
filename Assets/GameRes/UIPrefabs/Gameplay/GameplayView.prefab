@@ -80,7 +80,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ATTACK
+  m_Text: "\u653B\u51FB"
 --- !u!114 &1334577337460094126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 12
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 100
@@ -175,28 +175,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'KEY "J" PRESS ATTACK
-
-    KEY "K" PRESS SKILL A
-
-    KEY "L" PRESS SKILL
-    B
-
-
-    KEY "Z" PRESS ZOOM IN
-
-    KEY "X" PRESS ZOOM OUT
-
-
-    KEY "W" PRESS
-    MOVE UP
-
-    KEY "A"  PRESS MOVE LEFT
-
-    KEY "S"  PRESS MOVE DOWN
-
-    KEY
-    "D"  PRESS MOVE RIGHT'
+  m_Text: "\u6309\u952E \"J\" \u653B\u51FB\r\n\u6309\u952E \"K\" \u6280\u80FD A\r\n\u6309\u952E
+    \"L\" \u6280\u80FD B\r\n\r\n\u6309\u952E \"Z\" \u955C\u5934\u62C9\u8FD1\r\n\u6309\u952E
+    \"X\" \u955C\u5934\u62C9\u8FDC\r\n\r\n\u6309\u952E \"W\" \u5411\u4E0A\u8D70\r\n\u6309\u952E
+    \"A\" \u5411\u5DE6\u8D70\r\n\u6309\u952E \"S\" \u5411\u4E0B\u8D70\r\n\u6309\u952E
+    \"D\" \u5411\u53F3\u8D70"
 --- !u!114 &8525520755552331923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +396,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SKILL A
+  m_Text: "\u6280\u80FD A"
 --- !u!114 &2923262936637739155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,7 +731,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SKILL B
+  m_Text: "\u6280\u80FD B"
 --- !u!114 &8848483547010892233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,7 +1078,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6135130822094033735
 CanvasRenderer:
@@ -1462,7 +1445,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: OPEN PHYS SHAPE DRAWER
+  m_Text: "\u5F00\u542F\u7269\u7406\u68C0\u6D4B\u51E0\u4F55\u4F53"
 --- !u!114 &7935473277530853283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1675,7 +1658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 2.3, y: 1.3}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2487769614883426793
