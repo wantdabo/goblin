@@ -317,7 +317,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,7 +410,7 @@ MonoBehaviour:
   position: {x: 0, y: -0.6, z: 0}
   eulerAngle: {x: 0, y: -45, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &2019883300443135648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -657,6 +657,23 @@ MonoBehaviour:
   position: {x: 0, y: 0.5, z: 2}
   length: 0.43333334
   size: {x: 1, y: 3.26, z: 1}
+--- !u!114 &7381103243826887286
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 7911654569519271837}
+  startTime: 0.28
+  length: 0.060000002
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &7911654569519271837
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -671,6 +688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5765500523820016448}
   actionClips:
+  - {fileID: 7381103243826887286}
   - {fileID: 5061591297515216149}
   active: 1
   isLocked: 0
@@ -745,7 +763,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &9073449753238918064
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -765,4 +783,4 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0

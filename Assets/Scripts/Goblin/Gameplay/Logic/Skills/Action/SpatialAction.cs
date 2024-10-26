@@ -7,6 +7,9 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
+    /// <summary>
+    /// 空间变化行为
+    /// </summary>
     public class SpatialAction : SkillAction<SpatialActionData>
     {
         public override ushort id => SkillActionDef.SPATIAL;

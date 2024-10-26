@@ -6,6 +6,9 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
+    /// <summary>
+    /// 技能打断标记行为
+    /// </summary>
     public class SkillBreakEventAction : SkillAction<SkillBreakEventActionData>
     {
         public override ushort id => SkillActionDef.SKILL_BREAK_EVENT;

@@ -32,6 +32,23 @@ MonoBehaviour:
   startTime: 0
   length: 1.06
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_03.anim
+--- !u!114 &-9042193395041907335
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -5761939651432974209}
+  startTime: 0.44
+  length: 0.03999999
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &-8938884781110857061
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -118,6 +135,23 @@ MonoBehaviour:
   recvhurt: 0
   recvcontrol: 0
   skillcast: 1
+--- !u!114 &-7160137563323591965
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -5761939651432974209}
+  startTime: 0.22
+  length: 0.03999999
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &-7146853554279672834
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -233,6 +267,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 4661281520825555900}
   actionClips:
+  - {fileID: -7160137563323591965}
+  - {fileID: -9042193395041907335}
   - {fileID: 6752467845142886150}
   active: 1
   isLocked: 0
@@ -849,7 +885,7 @@ MonoBehaviour:
   position: {x: 0, y: -0.5, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 1
+  binding: 1
 --- !u!114 &5109804949441485828
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -921,7 +957,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -188,7 +188,7 @@ MonoBehaviour:
   position: {x: -0.1, y: -0.3, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &-4235805314445735913
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,6 +204,7 @@ MonoBehaviour:
   _parent: {fileID: 1328038422028717257}
   actionClips:
   - {fileID: -5485737572831981276}
+  - {fileID: 5195382461506783246}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -453,7 +454,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +511,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &210032085880791198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6947123234415463659}
+  startTime: 0.65999997
+  length: 0.04000002
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &210960302903056966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -666,6 +684,23 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
   scale: 0
+--- !u!114 &3356158177703977085
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6947123234415463659}
+  startTime: 0.16
+  length: 0.03999999
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &3468244158834607520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -685,7 +720,7 @@ MonoBehaviour:
   position: {x: 0, y: -0.5, z: 0}
   eulerAngle: {x: 0, y: -20, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &4404173715354118483
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -720,6 +755,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &5195382461506783246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d2138cb54203244bbfcad5f1882a87, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4235805314445735913}
+  startTime: 1.76
+  position: {x: 0, y: 0.5, z: 0}
+  length: 0.68000007
+  size: {x: 10, y: 2, z: 10}
 --- !u!114 &5258374456231003853
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -793,7 +845,24 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
+--- !u!114 &6372270824097256186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6947123234415463659}
+  startTime: 0.34
+  length: 0.03999999
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -841,6 +910,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -3366774569349485962}
   actionClips:
+  - {fileID: 3356158177703977085}
+  - {fileID: 6372270824097256186}
+  - {fileID: 210032085880791198}
   - {fileID: 8575701422220544464}
   active: 1
   isLocked: 0

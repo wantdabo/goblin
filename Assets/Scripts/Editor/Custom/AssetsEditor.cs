@@ -187,6 +187,16 @@ namespace Goblin.Custom
                     if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
+                else if(clip is EditorSkillBreakFramesEventClip skillBreakFramesEventClip)
+                {
+                    var val = new SkillBreakFramesActionData();
+                    val.id = SkillActionDef.SKILL_BREAK_FRAMES_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.selfbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.selfbreakframes);
+                    val.targetbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.targetbreakframes);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
             }
 
             SkillPipelineData spdata = new();

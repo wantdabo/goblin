@@ -105,6 +105,23 @@ MonoBehaviour:
   startTime: 0
   length: 1.5166667
   resPath: Assets/UERes/Art/Animations/Model/Goblin/Running.anim
+--- !u!114 &-6804937863173701139
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -401386002525596680}
+  startTime: 0.17999999
+  length: 0.060000002
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &-6537480054594765392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,6 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -1436057562513923285}
   actionClips:
+  - {fileID: -6804937863173701139}
   - {fileID: -7915345269915906284}
   active: 1
   isLocked: 0
@@ -768,7 +786,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &6336170222265632340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -788,7 +806,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1

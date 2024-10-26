@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 跳帧
         /// </summary>
-        private uint breakframe { get; set; }
+        public uint breakframes { get; set; }
         private uint mFrame = 0;
         /// <summary>
         /// 最新的帧号
@@ -77,12 +77,12 @@ namespace Goblin.Gameplay.Logic.Common
         public void Tick()
         {
             // 跳帧
-            if (breakframe > 0)
+            if (breakframes > 0)
             {
-                breakframe--;
+                breakframes--;
                 return;
             }
-            
+
             frame++;
             // 驱动计时器
             TickTimerInfos();

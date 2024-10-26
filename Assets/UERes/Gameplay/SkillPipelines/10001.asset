@@ -120,6 +120,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-6233088974832785947
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6583387795310898722}
+  startTime: 0.16
+  length: 0.26
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &-6093932961727714667
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,6 +241,23 @@ MonoBehaviour:
   recvhurt: 0
   recvcontrol: 0
   skillcast: 0
+--- !u!114 &-4855912918152271070
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6583387795310898722}
+  startTime: 0.16
+  length: 0.26
+  selfbreakframes: 0
+  targetbreakframes: 0
 --- !u!114 &-4749592929421374859
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -855,7 +889,7 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   eulerAngle: {x: 0, y: 0, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -887,6 +921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 3126422824303122960}
   actionClips:
+  - {fileID: 8279288022520669534}
   - {fileID: -5042440214737220125}
   active: 1
   isLocked: 0
@@ -1029,6 +1064,23 @@ MonoBehaviour:
   recvhurt: 1
   recvcontrol: 1
   skillcast: 1
+--- !u!114 &8279288022520669534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 6583387795310898722}
+  startTime: 0.16
+  length: 0.120000005
+  selfbreakframes: 2
+  targetbreakframes: 2
 --- !u!114 &8285458254674167060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1098,4 +1150,4 @@ MonoBehaviour:
   position: {x: 0.45, y: -0.85, z: 1}
   eulerAngle: {x: 0, y: -15, z: 0}
   scale: 1
-  positionBinding: 0
+  binding: 0

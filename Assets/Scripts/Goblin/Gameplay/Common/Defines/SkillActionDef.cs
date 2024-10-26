@@ -33,5 +33,9 @@
         /// 打断事件
         /// </summary>
         public const ushort SKILL_BREAK_EVENT = 6;
+        /// <summary>
+        /// 跳帧事件
+        /// </summary>
+        public const ushort SKILL_BREAK_FRAMES_EVENT = 7;
     }
 }

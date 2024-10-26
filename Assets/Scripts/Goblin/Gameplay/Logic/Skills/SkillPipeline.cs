@@ -61,6 +61,14 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public int breaktoken { get; private set; } = BreakTokenDef.NONE;
         /// <summary>
+        /// 自身跳帧
+        /// </summary>
+        public uint seflbreakframes { get; set; }
+        /// <summary>
+        /// 目标跳帧
+        /// </summary>
+        public uint targetbreakframes { get; set; }
+        /// <summary>
         /// 当前执行帧号
         /// </summary>
         public uint frame { get; private set; }
@@ -124,7 +132,7 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             breaktoken |= token;
         }
-
+        
         /// <summary>
         /// 技能打断
         /// </summary>
@@ -142,7 +150,9 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Start()
         {
             state = SkillPipelineStateDef.Start;
-            breaktoken = BreakTokenDef.NONE;
+            NoneBreakToken();
+            seflbreakframes = 0;
+            targetbreakframes = 0;
             NotifyState();
             frame = 0;
             state = SkillPipelineStateDef.Casting;
@@ -169,6 +179,9 @@ namespace Goblin.Gameplay.Logic.Skills
                             break;
                         case SkillActionDef.SKILL_BREAK_EVENT:
                             action = AddAction<SkillBreakEventAction>(actionData.id);
+                            break;
+                        case SkillActionDef.SKILL_BREAK_FRAMES_EVENT:
+                            action = AddAction<SkillBreakFramesAction>(actionData.id);
                             break;
                         case SkillActionDef.BOX_DETECTION:
                             action = AddAction<BoxDetectionAction>(actionData.id);
@@ -249,6 +262,9 @@ namespace Goblin.Gameplay.Logic.Skills
                     case SkillActionDef.SKILL_BREAK_EVENT:
                         data = MessagePackSerializer.Deserialize<SkillBreakEventActionData>(spdata.actionBytes[i]);
                         break;
+                    case SkillActionDef.SKILL_BREAK_FRAMES_EVENT:
+                        data = MessagePackSerializer.Deserialize<SkillBreakFramesActionData>(spdata.actionBytes[i]);
+                        break;
                     case SkillActionDef.BOX_DETECTION:
                         data = MessagePackSerializer.Deserialize<BoxDetectionActionData>(spdata.actionBytes[i]);
                         break;
@@ -297,6 +313,26 @@ namespace Goblin.Gameplay.Logic.Skills
             actionDict.Add(id, action);
 
             return action;
+        }
+        
+        /// <summary>
+        /// 技能命中
+        /// </summary>
+        /// <param name="actorIds"></param>
+        public void OnHit(uint[] actorIds)
+        {
+            if (null == actorIds || 0 == actorIds.Length) return;
+            
+            // 顿帧
+            launcher.actor.ticker.breakframes += seflbreakframes;
+            foreach (uint id in actorIds)
+            {
+                var target = launcher.actor.stage.GetActor(id);
+                if (null == target) continue;
+                target.ticker.breakframes += targetbreakframes;
+            }
+            
+            launcher.actor.eventor.Tell(new SkillCollisionEvent { id = id, actorIds = actorIds });
         }
     }
 }

@@ -7,6 +7,9 @@ using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
+    /// <summary>
+    /// 圆柱体碰撞检测行为
+    /// </summary>
     public class CylinderDetectionAction : SkillAction<CylinderDetectionActionData>
     {
         public override ushort id => SkillActionDef.CYLINDER_DETECTION;
