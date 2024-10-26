@@ -17,6 +17,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-8305388863833679431
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3366774569349485962}
+  actionClips:
+  - {fileID: 8837810427726393597}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-8125210218954973223
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -293,6 +311,7 @@ MonoBehaviour:
   tracks:
   - {fileID: 104353515450140411}
   - {fileID: 6947123234415463659}
+  - {fileID: -8305388863833679431}
   isCollapsed: 0
   active: 1
   isLocked: 0
@@ -526,8 +545,8 @@ MonoBehaviour:
   _parent: {fileID: 6947123234415463659}
   startTime: 0.65999997
   length: 0.04000002
-  selfbreakframes: 2
-  targetbreakframes: 2
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &210960302903056966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -699,8 +718,8 @@ MonoBehaviour:
   _parent: {fileID: 6947123234415463659}
   startTime: 0.16
   length: 0.03999999
-  selfbreakframes: 2
-  targetbreakframes: 2
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &3468244158834607520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -861,8 +880,8 @@ MonoBehaviour:
   _parent: {fileID: 6947123234415463659}
   startTime: 0.34
   length: 0.03999999
-  selfbreakframes: 2
-  targetbreakframes: 2
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &6443744070008206342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1103,6 +1122,23 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.25}
   scale: 0
+--- !u!114 &8837810427726393597
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4cd295554b48b2bac09d3a391a8f5b, type: 3}
+  m_Name: (Clone)(Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -8305388863833679431}
+  startTime: 1.76
+  length: 0.68000007
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &9126706862772519562
 MonoBehaviour:
   m_ObjectHideFlags: 1

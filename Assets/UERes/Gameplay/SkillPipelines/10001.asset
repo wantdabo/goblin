@@ -1079,8 +1079,8 @@ MonoBehaviour:
   _parent: {fileID: 6583387795310898722}
   startTime: 0.16
   length: 0.120000005
-  selfbreakframes: 2
-  targetbreakframes: 2
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &8285458254674167060
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -256,8 +256,8 @@ MonoBehaviour:
   _parent: {fileID: -3157445376952576177}
   startTime: 0.56
   length: 0.060000002
-  selfbreakframes: 2
-  targetbreakframes: 2
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &-4685597538528764979
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -461,7 +461,6 @@ MonoBehaviour:
   _parent: {fileID: -762738597170021357}
   actionClips:
   - {fileID: 5555084724448935527}
-  - {fileID: -5028495818557444394}
   - {fileID: 6998953312251697152}
   active: 1
   isLocked: 0
@@ -1363,9 +1362,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -3157445376952576177}
   startTime: 0.44
-  length: 0.060000002
-  selfbreakframes: 2
-  targetbreakframes: 2
+  length: 0.26
+  selfbreakframes: 1
+  targetbreakframes: 1
 --- !u!114 &5664961675270555858
 MonoBehaviour:
   m_ObjectHideFlags: 1
