@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action
     /// 跳帧事件数据
     /// </summary>
     [MessagePackObject(true)]
-    public class SkillBreakFramesActionData : SkillActionData
+    public class BreakFramesActionData : SkillActionData
     {
         /// <summary>
         /// 自身跳帧

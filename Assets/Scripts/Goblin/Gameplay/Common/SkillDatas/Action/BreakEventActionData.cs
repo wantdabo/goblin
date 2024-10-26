@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action
     /// 打断标记事件数据
     /// </summary>
     [MessagePackObject(true)]
-    public class SkillBreakEventActionData : SkillActionData
+    public class BreakEventActionData : SkillActionData
     {
         /// <summary>
         /// 打断标记

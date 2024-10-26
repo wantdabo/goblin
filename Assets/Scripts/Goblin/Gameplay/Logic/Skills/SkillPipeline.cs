@@ -177,11 +177,11 @@ namespace Goblin.Gameplay.Logic.Skills
                         case SkillActionDef.SPATIAL:
                             action = AddAction<SpatialAction>(actionData.id);
                             break;
-                        case SkillActionDef.SKILL_BREAK_EVENT:
-                            action = AddAction<SkillBreakEventAction>(actionData.id);
+                        case SkillActionDef.BREAK_EVENT:
+                            action = AddAction<BreakEventAction>(actionData.id);
                             break;
-                        case SkillActionDef.SKILL_BREAK_FRAMES_EVENT:
-                            action = AddAction<SkillBreakFramesAction>(actionData.id);
+                        case SkillActionDef.BREAK_FRAMES_EVENT:
+                            action = AddAction<BreakFramesAction>(actionData.id);
                             break;
                         case SkillActionDef.BOX_DETECTION:
                             action = AddAction<BoxDetectionAction>(actionData.id);
@@ -259,11 +259,11 @@ namespace Goblin.Gameplay.Logic.Skills
                     case SkillActionDef.SPATIAL:
                         data = MessagePackSerializer.Deserialize<SpatialActionData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.SKILL_BREAK_EVENT:
-                        data = MessagePackSerializer.Deserialize<SkillBreakEventActionData>(spdata.actionBytes[i]);
+                    case SkillActionDef.BREAK_EVENT:
+                        data = MessagePackSerializer.Deserialize<BreakEventActionData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.SKILL_BREAK_FRAMES_EVENT:
-                        data = MessagePackSerializer.Deserialize<SkillBreakFramesActionData>(spdata.actionBytes[i]);
+                    case SkillActionDef.BREAK_FRAMES_EVENT:
+                        data = MessagePackSerializer.Deserialize<BreakFramesActionData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.BOX_DETECTION:
                         data = MessagePackSerializer.Deserialize<BoxDetectionActionData>(spdata.actionBytes[i]);

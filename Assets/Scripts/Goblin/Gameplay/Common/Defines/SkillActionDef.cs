@@ -30,12 +30,12 @@
         /// </summary>
         public const ushort CYLINDER_DETECTION = 5;
         /// <summary>
-        /// 打断事件
+        /// 技能打断事件
         /// </summary>
-        public const ushort SKILL_BREAK_EVENT = 6;
+        public const ushort BREAK_EVENT = 6;
         /// <summary>
-        /// 跳帧事件
+        /// 技能跳帧事件
         /// </summary>
-        public const ushort SKILL_BREAK_FRAMES_EVENT = 7;
+        public const ushort BREAK_FRAMES_EVENT = 7;
     }
 }

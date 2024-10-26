@@ -9,22 +9,22 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// <summary>
     /// 技能跳帧行为
     /// </summary>
-    public class SkillBreakFramesAction : SkillAction<SkillBreakFramesActionData>
+    public class BreakFramesAction : SkillAction<BreakFramesActionData>
     {
-        public override ushort id => SkillActionDef.SKILL_BREAK_FRAMES_EVENT;
+        public override ushort id => SkillActionDef.BREAK_FRAMES_EVENT;
 
-        protected override void OnEnter(SkillBreakFramesActionData data)
+        protected override void OnEnter(BreakFramesActionData data)
         {
             base.OnEnter(data);
             pipeline.seflbreakframes += data.selfbreakframes;
             pipeline.targetbreakframes = data.targetbreakframes;
         }
 
-        protected override void OnExecute(SkillBreakFramesActionData data, uint frame, FP tick)
+        protected override void OnExecute(BreakFramesActionData data, uint frame, FP tick)
         {
         }
 
-        protected override void OnExit(SkillBreakFramesActionData data)
+        protected override void OnExit(BreakFramesActionData data)
         {
             base.OnExit(data);
             pipeline.seflbreakframes -= data.selfbreakframes;

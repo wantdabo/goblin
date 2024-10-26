@@ -5,7 +5,7 @@ namespace Goblin.SkillPipelineEditor
     [Name("跳帧事件")]
     [Color(0.8f, 0f, 1f)]
     [Attachable(typeof(EditorEventTrack))]
-    public class EditorSkillBreakFramesEventClip : EditorEventClip
+    public class EditorBreakFramesEventClip : EditorEventClip
     {
         [MenuName("自身跳帧")]
         public int selfbreakframes = 0;

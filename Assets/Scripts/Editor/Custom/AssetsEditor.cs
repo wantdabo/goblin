@@ -174,10 +174,10 @@ namespace Goblin.Custom
                     val.height = Convert.ToInt32(cylinderClip.height * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
-                else if (clip is EditorSkillBreakEventClip skillBreakeventClip)
+                else if (clip is EditorBreakEventClip skillBreakeventClip)
                 {
-                    var val = new SkillBreakEventActionData();
-                    val.id = SkillActionDef.SKILL_BREAK_EVENT;
+                    var val = new BreakEventActionData();
+                    val.id = SkillActionDef.BREAK_EVENT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
                     val.token = BreakTokenDef.NONE;
@@ -187,10 +187,10 @@ namespace Goblin.Custom
                     if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
-                else if(clip is EditorSkillBreakFramesEventClip skillBreakFramesEventClip)
+                else if(clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
                 {
-                    var val = new SkillBreakFramesActionData();
-                    val.id = SkillActionDef.SKILL_BREAK_FRAMES_EVENT;
+                    var val = new BreakFramesActionData();
+                    val.id = SkillActionDef.BREAK_FRAMES_EVENT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
                     val.selfbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.selfbreakframes);
