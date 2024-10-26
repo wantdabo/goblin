@@ -9,8 +9,9 @@ namespace Goblin.SkillPipelineEditor
 {
     public abstract class EditorDetectionClip : ActionClip
     {
+        [MenuName("检测次数")]
+        public int detectedcnt = 1;
         [MenuName("平移")]
-        [SerializeField]
         public Vector3 position;
 
         [SerializeField][HideInInspector] private float length = 1f;

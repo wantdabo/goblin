@@ -4,9 +4,12 @@ using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Lives;
 using Goblin.Gameplay.Logic.Physics.Common;
+using Goblin.Gameplay.Logic.Skills;
+using Goblin.Gameplay.Logic.Spatials;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
+using TrueSync;
 using UnityEngine;
 using LStage = Goblin.Gameplay.Logic.Core.Stage;
 
@@ -90,6 +93,44 @@ namespace Goblin.Sys.Gameplay
             engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
         }
 
+        private void GenEnemys()
+        {
+            for (int i = 12; i < 17; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    var enemy = lstage.AddActor<Player>();
+                    enemy.Create();
+                    var spatial = enemy.GetBehavior<Spatial>();
+                    spatial.position = new TSVector(i, FP.Zero, j);
+                    spatial.eulerAngle = new TSVector(0, 180, 0);
+                    enemy.eventor.Tell<LiveBornEvent>();
+                }
+            }
+
+            for (int i = 1; i < 10; i++)
+            {
+                var enemy = lstage.AddActor<Player>();
+                enemy.Create();
+                var spatial = enemy.GetBehavior<Spatial>();
+                spatial.position = new TSVector(i, FP.Zero, FP.Zero);
+                spatial.eulerAngle = new TSVector(0, 180, 0);
+                enemy.eventor.Tell<LiveBornEvent>();
+            }
+            
+            var enemy2 = lstage.AddActor<Player>();
+            enemy2.Create();
+            var spatial2 = enemy2.GetBehavior<Spatial>();
+            spatial2.position = new TSVector(19, FP.Zero, 0);
+            spatial2.eulerAngle = new TSVector(0, 180, 0);
+            enemy2.eventor.Tell<LiveBornEvent>();
+            var launcher2 = enemy2.GetBehavior<SkillLauncher>();
+            engine.ticker.Timing((t) =>
+            {
+                launcher2.Launch(10001);
+            }, 0.2f, -1);
+        }
+
         public void Start()
         {
             Time.fixedDeltaTime = 1f / GameDef.LOGIC_FRAME;
@@ -111,10 +152,8 @@ namespace Goblin.Sys.Gameplay
             var player = lstage.AddActor<Player>();
             player.Create();
             player.eventor.Tell<LiveBornEvent>();
-
-            var player2 = lstage.AddActor<Player>();
-            player2.Create();
-            player2.eventor.Tell<LiveBornEvent>();
+            
+            GenEnemys();
 
             engine.gameui.Open<GameplayView>();
 

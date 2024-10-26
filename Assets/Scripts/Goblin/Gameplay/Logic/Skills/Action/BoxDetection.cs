@@ -5,6 +5,7 @@ using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Skills.ActionCache;
 using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
 using Goblin.Gameplay.Logic.Spatials;
+using System.Collections.Generic;
 using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
@@ -28,7 +29,17 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         {
             var result = pipeline.launcher.actor.stage.phys.OverlapBoxs(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.size.ToVector(), spatial.rotation);
             if (false == result.hit) return;
-            pipeline.OnHit(result.actorIds);
+
+            List<uint> actors = new();
+            foreach (uint actorId in result.actorIds)
+            {
+                if (cache.Query(actorId) >= data.detectedcnt) continue;
+                
+                actors.Add(actorId);
+                cache.Stamp(actorId);
+            }
+
+            pipeline.OnHit(actors.ToArray());
         }
     }
 }

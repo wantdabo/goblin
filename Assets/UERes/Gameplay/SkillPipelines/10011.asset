@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 6372861647714933831}
   startTime: 1.2500001
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 0.5}
   length: 0.19999993
   size: {x: 3, y: 1, z: 2}
@@ -153,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 6372861647714933831}
   startTime: 1.6666667
+  detectedcnt: 1
   position: {x: 0, y: 0, z: 0}
   length: 0.100000024
   radius: 1
@@ -371,6 +373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 6372861647714933831}
   startTime: 1.95
+  detectedcnt: 1
   position: {x: 0, y: 0, z: 0}
   length: 1
   size: {x: 0, y: 0, z: 1}
@@ -388,6 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5463817850046295152}
   startTime: 0.4166667
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 5.59}
   length: 0.01666668
   size: {x: 1, y: 1, z: 1}
@@ -425,6 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5463817850046295152}
   startTime: 0.40000004
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 1.55}
   length: 0.099999964
   size: {x: 1, y: 1, z: 1}
@@ -442,6 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 6372861647714933831}
   startTime: 2.8833334
+  detectedcnt: 1
   position: {x: 0, y: 0, z: 0}
   length: 1
   radius: 1
@@ -549,6 +555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5463817850046295152}
   startTime: 0.43333337
+  detectedcnt: 1
   position: {x: 0, y: 0, z: 0}
   length: 0.03333333
   size: {x: 1, y: 1, z: 1}
@@ -566,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 6372861647714933831}
   startTime: 2.95
+  detectedcnt: 1
   position: {x: 0, y: 0, z: 0}
   length: 1
   radius: 1
@@ -637,6 +645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -5463817850046295152}
   startTime: 0.24
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 0.5}
   length: 1
   size: {x: 1, y: 2, z: 2}
@@ -654,6 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 4575319684661668158}
   startTime: 0.40000004
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 2}
   length: 0.43333334
   size: {x: 1, y: 3.26, z: 1}

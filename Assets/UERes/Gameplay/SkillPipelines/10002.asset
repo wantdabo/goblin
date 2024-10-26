@@ -205,6 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -4235805314445735913}
   startTime: 0.18333334
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 0.5}
   length: 0.050000012
   size: {x: 1, y: 1, z: 1}
@@ -222,6 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: 2806619973301625113}
   startTime: 0.21666668
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 1.5}
   length: 0.16666667
   size: {x: 2, y: 1, z: 1.3}
@@ -257,6 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -4235805314445735913}
   startTime: 0.23333335
+  detectedcnt: 1
   position: {x: 0, y: 0.5, z: 2.08}
   length: 0.26666665
   size: {x: 1, y: 1, z: 1}
@@ -592,6 +595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -4235805314445735913}
   startTime: 0.16
+  detectedcnt: 1
   position: {x: 0, y: 1, z: 0.8}
   length: 0.13999999
   size: {x: 1, y: 2, z: 1.5}

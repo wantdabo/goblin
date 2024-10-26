@@ -7,6 +7,9 @@ namespace Goblin.Gameplay.Logic.Skills.ActionCache.Common
     /// </summary>
     public class SkillActionCache
     {
+        /// <summary>
+        /// 重置
+        /// </summary>
         public virtual void OnReset()
         {
         }

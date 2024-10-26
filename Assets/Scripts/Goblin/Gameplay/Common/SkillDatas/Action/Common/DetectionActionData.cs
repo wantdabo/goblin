@@ -9,8 +9,12 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action.Common
     public abstract class DetectionActionData : SkillActionData
     {
         /// <summary>
-        /// 碰撞检测平移
+        /// 检测次数
         /// </summary>
-        public Vector3Data position { get; set; }        
+        public uint detectedcnt { get; set; }
+        /// <summary>
+        /// 平移
+        /// </summary>
+        public Vector3Data position { get; set; }
     }
 }
