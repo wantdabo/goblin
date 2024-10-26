@@ -4,18 +4,18 @@ using MessagePack;
 namespace Goblin.Gameplay.Common.SkillDatas.Action
 {
     /// <summary>
-    /// 空间行为数据
+    /// 跳帧事件数据
     /// </summary>
     [MessagePackObject(true)]
-    public class SpatialActionData : SkillActionData
+    public class BreakFramesData : SkillActionData
     {
         /// <summary>
-        /// 平移
+        /// 自身跳帧
         /// </summary>
-        public Vector3Data position { get; set; }
+        public uint selfbreakframes { get; set; }
         /// <summary>
-        /// 缩放
+        /// 目标跳帧
         /// </summary>
-        public int scale { get; set; }
+        public uint targetbreakframes { get; set; }
     }
 }

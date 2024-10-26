@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Common.SkillDatas.Action
     /// 特效行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public class EffectActionData : SkillActionData
+    public class EffectData : SkillActionData
     {
         /// <summary>
         /// 特效资源名

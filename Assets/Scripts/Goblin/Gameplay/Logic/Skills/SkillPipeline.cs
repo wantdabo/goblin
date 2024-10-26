@@ -6,6 +6,8 @@ using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Common.SkillDatas.Action.Common;
 using Goblin.Gameplay.Logic.Skills.Action;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
+using Goblin.Gameplay.Logic.Skills.ActionCache;
+using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
 using MessagePack;
 using System;
 using System.Collections.Generic;
@@ -83,11 +85,15 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <summary>
         /// 技能行为数据
         /// </summary>
-        private List<SkillActionData> actionDatas = new();
+        private List<SkillActionData> actiondatas = new();
+        /// <summary>
+        /// 技能行为缓存
+        /// </summary>
+        private Dictionary<SkillActionData, SkillActionCache> cachedict = new();
         /// <summary>
         /// 技能行为
         /// </summary>
-        private Dictionary<ushort, SkillAction> actionDict = new();
+        private Dictionary<ushort, SkillAction> actiondict = new();
 
         protected override void OnCreate()
         {
@@ -132,7 +138,7 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             breaktoken |= token;
         }
-        
+
         /// <summary>
         /// 技能打断
         /// </summary>
@@ -150,11 +156,7 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Start()
         {
             state = SkillPipelineStateDef.Start;
-            NoneBreakToken();
-            seflbreakframes = 0;
-            targetbreakframes = 0;
             NotifyState();
-            frame = 0;
             state = SkillPipelineStateDef.Casting;
             NotifyState();
             Casting(GameDef.LOGIC_TICK);
@@ -167,40 +169,46 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Casting(FP tick)
         {
             // 执行技能行为
-            foreach (var actionData in actionDatas)
+            foreach (var actionData in actiondatas)
             {
+                var cache = GetCache(actionData);
                 var action = GetAction(actionData.id);
-                if (null == action)
+                var nilcache = null == cache;
+                var nilaction = null == action;
+                switch (actionData.id)
                 {
-                    switch (actionData.id)
-                    {
-                        case SkillActionDef.SPATIAL:
-                            action = AddAction<SpatialAction>(actionData.id);
-                            break;
-                        case SkillActionDef.BREAK_EVENT:
-                            action = AddAction<BreakEventAction>(actionData.id);
-                            break;
-                        case SkillActionDef.BREAK_FRAMES_EVENT:
-                            action = AddAction<BreakFramesAction>(actionData.id);
-                            break;
-                        case SkillActionDef.BOX_DETECTION:
-                            action = AddAction<BoxDetectionAction>(actionData.id);
-                            break;
-                        case SkillActionDef.SPHERE_DETECTION:
-                            action = AddAction<SphereDetectionAction>(actionData.id);
-                            break;
-                        case SkillActionDef.CYLINDER_DETECTION:
-                            action = AddAction<CylinderDetectionAction>(actionData.id);
-                            break;
-                    }
+                    case SkillActionDef.SPATIAL:
+                        if (nilaction) action = AddAction<Spatial>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
+                    case SkillActionDef.BREAK_EVENT:
+                        if (nilaction) action = AddAction<BreakEvent>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
+                    case SkillActionDef.BREAK_FRAMES_EVENT:
+                        if (nilaction) action = AddAction<BreakFrames>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
+                    case SkillActionDef.BOX_DETECTION:
+                        if (nilaction) action = AddAction<BoxDetection>(actionData.id);
+                        if (nilcache) cache = GenCache<DetectionCache>(actionData);
+                        break;
+                    case SkillActionDef.SPHERE_DETECTION:
+                        if (nilaction) action = AddAction<SphereDetection>(actionData.id);
+                        if (nilcache) cache = GenCache<DetectionCache>(actionData);
+                        break;
+                    case SkillActionDef.CYLINDER_DETECTION:
+                        if (nilaction) action = AddAction<CylinderDetection>(actionData.id);
+                        if (nilcache) cache = GenCache<DetectionCache>(actionData);
+                        break;
                 }
 
                 // 进入
-                if (frame == actionData.sframe) action.Enter(actionData);
+                if (frame == actionData.sframe) action.Enter(actionData, cache);
                 // 执行
-                if (frame >= actionData.sframe && frame <= actionData.eframe) action.Execute(actionData, frame, tick);
+                if (frame >= actionData.sframe && frame <= actionData.eframe) action.Execute(actionData, cache, frame, tick);
                 // 离开
-                if (frame == actionData.eframe) action.Exit(actionData);
+                if (frame == actionData.eframe) action.Exit(actionData, cache);
             }
 
             // 帧号递增
@@ -216,6 +224,13 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             state = SkillPipelineStateDef.End;
             NotifyState();
+            
+            // 重置
+            NoneBreakToken();
+            seflbreakframes = 0;
+            targetbreakframes = 0;
+            frame = 0;
+            foreach (var kv in cachedict) kv.Value.OnReset();
         }
 
         /// <summary>
@@ -257,29 +272,29 @@ namespace Goblin.Gameplay.Logic.Skills
                 switch (actionId)
                 {
                     case SkillActionDef.SPATIAL:
-                        data = MessagePackSerializer.Deserialize<SpatialActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<SpatialData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.BREAK_EVENT:
-                        data = MessagePackSerializer.Deserialize<BreakEventActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<BreakEventData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.BREAK_FRAMES_EVENT:
-                        data = MessagePackSerializer.Deserialize<BreakFramesActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<BreakFramesData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.BOX_DETECTION:
-                        data = MessagePackSerializer.Deserialize<BoxDetectionActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<BoxDetectionData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.SPHERE_DETECTION:
-                        data = MessagePackSerializer.Deserialize<SphereDetectionActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<SphereDetectionData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.CYLINDER_DETECTION:
-                        data = MessagePackSerializer.Deserialize<CylinderDetectionActionData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<CylinderDetectionData>(spdata.actionBytes[i]);
                         break;
                 }
 
                 if (null == data) continue;
                 data.sframe = FP.ToUInt(data.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
                 data.eframe = FP.ToUInt(data.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                actionDatas.Add(data);
+                actiondatas.Add(data);
             }
         }
 
@@ -290,9 +305,35 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <returns>技能行为</returns>
         private SkillAction GetAction(ushort id)
         {
-            if (null == actionDict) return default;
+            if (null == actiondict) return default;
 
-            return actionDict.GetValueOrDefault(id);
+            return actiondict.GetValueOrDefault(id);
+        }
+
+        /// <summary>
+        /// 获取技能行为缓存
+        /// </summary>
+        /// <param name="data">技能行为数据</param>
+        /// <returns>技能行为缓存</returns>
+        public SkillActionCache GetCache(SkillActionData data)
+        {
+            var cache = cachedict.GetValueOrDefault(data);
+
+            return cache;
+        }
+
+        /// <summary>
+        /// 生成技能行为缓存
+        /// </summary>
+        /// <param name="data">技能行为数据</param>
+        /// <typeparam name="TC">技能行为缓存类型</typeparam>
+        /// <returns>技能行为缓存</returns>
+        public TC GenCache<TC>(SkillActionData data) where TC : SkillActionCache, new()
+        {
+            var cache = new TC();
+            cachedict.Add(data, cache);
+
+            return cache;
         }
 
         /// <summary>
@@ -304,17 +345,17 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <exception cref="Exception">无法添加相同的行为</exception>
         private SkillAction AddAction<T>(ushort id) where T : SkillAction, new()
         {
-            if (null == actionDict) actionDict = new();
-            if (actionDict.ContainsKey(id)) throw new Exception($"can't add same skillaction -> {typeof(T)}");
+            if (null == actiondict) actiondict = new();
+            if (actiondict.ContainsKey(id)) throw new Exception($"can't add same skillaction -> {typeof(T)}");
 
             var action = AddComp<T>();
             action.pipeline = this;
             action.Create();
-            actionDict.Add(id, action);
+            actiondict.Add(id, action);
 
             return action;
         }
-        
+
         /// <summary>
         /// 技能命中
         /// </summary>
@@ -322,7 +363,7 @@ namespace Goblin.Gameplay.Logic.Skills
         public void OnHit(uint[] actorIds)
         {
             if (null == actorIds || 0 == actorIds.Length) return;
-            
+
             // 顿帧
             launcher.actor.ticker.breakframes += seflbreakframes;
             foreach (uint id in actorIds)
@@ -331,7 +372,7 @@ namespace Goblin.Gameplay.Logic.Skills
                 if (null == target) continue;
                 target.ticker.breakframes += targetbreakframes;
             }
-            
+
             launcher.actor.eventor.Tell(new SkillCollisionEvent { id = id, actorIds = actorIds });
         }
     }

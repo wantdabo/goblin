@@ -4,18 +4,18 @@ using MessagePack;
 namespace Goblin.Gameplay.Common.SkillDatas.Action
 {
     /// <summary>
-    /// 圆柱体碰撞检测行为数据
+    /// 空间行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public class CylinderDetectionActionData : DetectionActionData
+    public class SpatialData : SkillActionData
     {
         /// <summary>
-        /// 圆柱体半径
+        /// 平移
         /// </summary>
-        public int radius { get; set; }
+        public Vector3Data position { get; set; }
         /// <summary>
-        /// 圆柱体高度
+        /// 缩放
         /// </summary>
-        public int height { get; set; }
+        public int scale { get; set; }
     }
 }

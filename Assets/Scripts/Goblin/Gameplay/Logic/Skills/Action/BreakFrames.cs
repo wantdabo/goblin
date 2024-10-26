@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Common.SkillDatas.Action.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
+using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
 using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
@@ -9,24 +10,24 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// <summary>
     /// 技能跳帧行为
     /// </summary>
-    public class BreakFramesAction : SkillAction<BreakFramesActionData>
+    public class BreakFrames : SkillAction<BreakFramesData, SkillActionCache>
     {
         public override ushort id => SkillActionDef.BREAK_FRAMES_EVENT;
 
-        protected override void OnEnter(BreakFramesActionData data)
+        protected override void OnEnter(BreakFramesData data, SkillActionCache cache)
         {
-            base.OnEnter(data);
+            base.OnEnter(data, cache);
             pipeline.seflbreakframes += data.selfbreakframes;
             pipeline.targetbreakframes = data.targetbreakframes;
         }
 
-        protected override void OnExecute(BreakFramesActionData data, uint frame, FP tick)
+        protected override void OnExecute(BreakFramesData data, SkillActionCache cache, uint frame, FP tick)
         {
         }
 
-        protected override void OnExit(BreakFramesActionData data)
+        protected override void OnExit(BreakFramesData data, SkillActionCache cache)
         {
-            base.OnExit(data);
+            base.OnExit(data, cache);
             pipeline.seflbreakframes -= data.selfbreakframes;
             pipeline.targetbreakframes -= data.targetbreakframes;
         }

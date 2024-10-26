@@ -4,14 +4,14 @@ using MessagePack;
 namespace Goblin.Gameplay.Common.SkillDatas.Action
 {
     /// <summary>
-    /// 球体碰撞检测行为数据
+    /// 动画行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public class SphereDetectionActionData : DetectionActionData
+    public class AnimationData : SkillActionData
     {
         /// <summary>
-        /// 球体半径
+        /// 动画名
         /// </summary>
-        public int radius { get; set; }
+        public string name { get; set; }
     }
 }

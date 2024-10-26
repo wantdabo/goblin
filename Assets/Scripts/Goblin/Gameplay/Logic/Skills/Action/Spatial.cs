@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
+using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
 using Goblin.Gameplay.Logic.Spatials;
 using TrueSync;
 
@@ -10,19 +11,19 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// <summary>
     /// 空间变化行为
     /// </summary>
-    public class SpatialAction : SkillAction<SpatialActionData>
+    public class Spatial : SkillAction<SpatialData, SkillActionCache>
     {
         public override ushort id => SkillActionDef.SPATIAL;
         
-        private Spatial spatial { get; set; }
+        private Spatials.Spatial spatial { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            spatial = pipeline.launcher.actor.GetBehavior<Spatial>();
+            spatial = pipeline.launcher.actor.GetBehavior<Spatials.Spatial>();
         }
 
-        protected override void OnExecute(SpatialActionData data, uint frame, FP tick)
+        protected override void OnExecute(SpatialData data, SkillActionCache cache, uint frame, FP tick)
         {
             if (null == spatial) return;
 

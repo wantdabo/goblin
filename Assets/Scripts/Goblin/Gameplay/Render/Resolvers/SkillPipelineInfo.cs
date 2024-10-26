@@ -66,7 +66,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                     {
                         case SkillActionDef.ANIMATION:
                             if (false == between) break;
-                            var animationData = (AnimationActionData)action;
+                            var animationData = (AnimationData)action;
                             animation.Play(animationData.name, f / action.eframe);
                             break;
                         case SkillActionDef.EFFECT:
@@ -76,7 +76,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 effdict.Add(ril.skillid, effs);
                             }
 
-                            EffectActionData effectData = (EffectActionData)action;
+                            EffectData effectData = (EffectData)action;
                             if (false == between)
                             {
                                 if (effs.TryGetValue(effectData.res, out var e))
@@ -128,10 +128,10 @@ namespace Goblin.Gameplay.Render.Resolvers
                 switch (actionId)
                 {
                     case SkillActionDef.ANIMATION:
-                        skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<AnimationActionData>(spdata.actionBytes[i]));
+                        skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<AnimationData>(spdata.actionBytes[i]));
                         break;
                     case SkillActionDef.EFFECT:
-                        skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<EffectActionData>(spdata.actionBytes[i]));
+                        skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<EffectData>(spdata.actionBytes[i]));
                         break;
                 }
             }

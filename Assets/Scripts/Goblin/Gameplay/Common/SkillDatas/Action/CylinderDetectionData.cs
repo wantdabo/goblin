@@ -4,18 +4,18 @@ using MessagePack;
 namespace Goblin.Gameplay.Common.SkillDatas.Action
 {
     /// <summary>
-    /// 跳帧事件数据
+    /// 圆柱体碰撞检测行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public class BreakFramesActionData : SkillActionData
+    public class CylinderDetectionData : DetectionActionData
     {
         /// <summary>
-        /// 自身跳帧
+        /// 圆柱体半径
         /// </summary>
-        public uint selfbreakframes { get; set; }
+        public int radius { get; set; }
         /// <summary>
-        /// 目标跳帧
+        /// 圆柱体高度
         /// </summary>
-        public uint targetbreakframes { get; set; }
+        public int height { get; set; }
     }
 }

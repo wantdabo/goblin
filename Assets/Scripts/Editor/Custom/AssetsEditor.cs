@@ -85,7 +85,7 @@ namespace Goblin.Custom
                 (ushort, byte[]) actionData = default;
                 if (clip is EditorAnimationClip animationClip)
                 {
-                    var val = new AnimationActionData();
+                    var val = new AnimationData();
                     val.id = SkillActionDef.ANIMATION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -94,7 +94,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorEffectClip effectClip)
                 {
-                    var val = new EffectActionData();
+                    var val = new EffectData();
                     val.id = SkillActionDef.EFFECT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -115,7 +115,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorSpatialClip spatialClip)
                 {
-                    var val = new SpatialActionData();
+                    var val = new SpatialData();
                     val.id = SkillActionDef.SPATIAL;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -129,7 +129,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorBoxDetectionClip boxDetectionClip)
                 {
-                    var val = new BoxDetectionActionData();
+                    var val = new BoxDetectionData();
                     val.id = SkillActionDef.BOX_DETECTION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -147,7 +147,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorSphereDetectionClip sphereDetectionClip)
                 {
-                    var val = new SphereDetectionActionData();
+                    var val = new SphereDetectionData();
                     val.id = SkillActionDef.SPHERE_DETECTION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -161,7 +161,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorDetectionCylinderClip cylinderClip)
                 {
-                    var val = new CylinderDetectionActionData();
+                    var val = new CylinderDetectionData();
                     val.id = SkillActionDef.CYLINDER_DETECTION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -176,7 +176,7 @@ namespace Goblin.Custom
                 }
                 else if (clip is EditorBreakEventClip skillBreakeventClip)
                 {
-                    var val = new BreakEventActionData();
+                    var val = new BreakEventData();
                     val.id = SkillActionDef.BREAK_EVENT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
@@ -189,7 +189,7 @@ namespace Goblin.Custom
                 }
                 else if(clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
                 {
-                    var val = new BreakFramesActionData();
+                    var val = new BreakFramesData();
                     val.id = SkillActionDef.BREAK_FRAMES_EVENT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
