@@ -55,7 +55,7 @@ namespace ShapeDrawers.Common
         {
             if (false == GetDrawer<BoxDrawer>(DrawerType.Box, out var drawer)) drawer = new BoxDrawer();
             drawer.Enabled();
-            drawer.Settings(position, rotation, size);
+            drawer.Settings(position, size, rotation);
             drawer.SetColor(color);
             drawings.Add(drawer);
         }
