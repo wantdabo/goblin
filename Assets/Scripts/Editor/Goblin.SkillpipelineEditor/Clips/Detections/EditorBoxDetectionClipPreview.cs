@@ -16,7 +16,7 @@ namespace Goblin.SkillPipelineEditor
     {
         public override void OnUpdate(float time, float previousTime)
         {
-            ShapeDrawer.DrawBox(App.AssetData.cloneModel.transform.position + clip.position, clip.size, Quaternion.identity, Color.magenta);
+            ShapeDrawer.DrawBox(App.AssetData.cloneModel.transform.position + clip.position, clip.size, Quaternion.identity, Color.yellow);
         }
     }
 }

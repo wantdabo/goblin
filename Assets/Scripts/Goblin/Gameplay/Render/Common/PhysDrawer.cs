@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Render.Common
                         color = Color.green;
                         break;
                     case PhysShapeDef.OVERLAP:
-                        color = Color.magenta;
+                        color = Color.yellow;
                         break;
                 }
                 
