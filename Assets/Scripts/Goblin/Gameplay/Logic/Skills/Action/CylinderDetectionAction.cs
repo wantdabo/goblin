@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
         protected override void OnExecute(CylinderDetectionActionData data, uint frame, FP tick)
         {
-            var result = pipeline.launcher.actor.stage.phys.OverlapCylinders(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3, data.height * FP.EN3, TSQuaternion.identity);
+            var result = pipeline.launcher.actor.stage.phys.OverlapCylinders(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3, data.height * FP.EN3, spatial.rotation);
             if (false == result.hit) return;
             pipeline.launcher.actor.eventor.Tell(new SkillCollisionEvent { id = pipeline.id, actorIds = result.actorIds });
         }

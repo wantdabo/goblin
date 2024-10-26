@@ -7,9 +7,10 @@ namespace ShapeDrawers
     {
         public override DrawerType type => DrawerType.Box;
         
-        public void Settings(Vector3 position, Vector3 size)
+        public void Settings(Vector3 position, Quaternion rotation, Vector3 size)
         {
             gameObject.transform.position = position;
+            gameObject.transform.rotation = rotation;
             gameObject.transform.localScale = size;
         }
 

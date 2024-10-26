@@ -27,16 +27,16 @@ namespace Goblin.Gameplay.Render.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            stage.eventor.Listen<PhysShapesEvent>(OnOverlapShapes);
+            stage.eventor.Listen<PhysShapesEvent>(OnPhysShapes);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            stage.eventor.UnListen<PhysShapesEvent>(OnOverlapShapes);
+            stage.eventor.UnListen<PhysShapesEvent>(OnPhysShapes);
         }
 
-        private void OnOverlapShapes(PhysShapesEvent e)
+        private void OnPhysShapes(PhysShapesEvent e)
         {
             ShapeDrawer.Clear();
 

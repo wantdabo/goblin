@@ -55,7 +55,7 @@ namespace ShapeDrawers.Common
         {
             if (false == GetDrawer<BoxDrawer>(DrawerType.Box, out var drawer)) drawer = new BoxDrawer();
             drawer.Enabled();
-            drawer.Settings(position, size);
+            drawer.Settings(position, rotation, size);
             drawer.SetColor(color);
             drawings.Add(drawer);
         }
@@ -73,7 +73,7 @@ namespace ShapeDrawers.Common
         {
             if (false == GetDrawer<CylinderDrawer>(DrawerType.Cylinder, out var drawer)) drawer = new CylinderDrawer();
             drawer.Enabled();
-            drawer.Settings(position, radius, height);
+            drawer.Settings(position, radius, height, rotation);
             drawer.SetColor(color);
             drawings.Add(drawer);
         }
