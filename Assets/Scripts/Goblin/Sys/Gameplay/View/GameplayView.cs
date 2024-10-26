@@ -45,6 +45,20 @@ namespace Goblin.Sys.Gameplay.View
         {
             base.OnBindEvent();
             
+            AddUIEventListener("GameSpeedSlider", (e) =>
+            {
+                var slider = engine.u3dkit.SeekNode<Slider>(gameObject, "GameSpeedSlider");
+                engine.proxy.gameplay.gamespeed = (sbyte)slider.value;
+                engine.u3dkit.SeekNode<Text>(gameObject, "GameSpeedDesc").text = engine.proxy.gameplay.gamespeed.ToString();
+            });
+            
+            AddUIEventListener("GameSpeedSlider", (e) =>
+            {
+                var slider = engine.u3dkit.SeekNode<Slider>(gameObject, "GameSpeedSlider");
+                engine.proxy.gameplay.gamespeed = (sbyte)slider.value;
+                engine.u3dkit.SeekNode<Text>(gameObject, "GameSpeedDesc").text = engine.proxy.gameplay.gamespeed.ToString();
+            }, UIEventEnum.EndDrag);
+            
             AddUIEventListener("GamingCB", (e) =>
             {
                 var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");

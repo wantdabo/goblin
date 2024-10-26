@@ -61,13 +61,14 @@ namespace Goblin.Sys.Gameplay
         /// </summary>
         public uint to { get; set; }
     }
-    
+
     /// <summary>
     /// 战斗 Proxy
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
         public bool gaming { get; private set; }
+        public sbyte gamespeed { get; set; } = 1;
         public bool dancing { get; set; }
         public InputSystem input { get; private set; }
         public Stage stage { get; private set; }
@@ -94,7 +95,7 @@ namespace Goblin.Sys.Gameplay
             Time.fixedDeltaTime = 1f / GameDef.LOGIC_FRAME;
             lstage = AddComp<LStage>();
             lstage.Create();
-            
+
             stage = AddComp<Stage>();
             stage.Create();
             stage.foc.SetFollow(1);
@@ -106,7 +107,7 @@ namespace Goblin.Sys.Gameplay
             {
                 stage.eventor.Tell(e);
             });
-            
+
             var player = lstage.AddActor<Player>();
             player.Create();
             player.eventor.Tell<LiveBornEvent>();
@@ -114,9 +115,9 @@ namespace Goblin.Sys.Gameplay
             var player2 = lstage.AddActor<Player>();
             player2.Create();
             player2.eventor.Tell<LiveBornEvent>();
-            
+
             engine.gameui.Open<GameplayView>();
-            
+
             Resume();
         }
 
@@ -135,14 +136,15 @@ namespace Goblin.Sys.Gameplay
         private void OnTick(TickEvent e)
         {
             if (false == gaming) return;
-            stage.Tick(e.tick);
+            for (int i = 0; i < gamespeed; i++) stage.Tick(e.tick);
         }
-        
+
         private void OnFixedTick(FixedTickEvent e)
         {
             if (false == gaming) return;
+
             input.Input(1, lstage);
-            lstage.Tick();
+            for (int i = 0; i < gamespeed; i++) lstage.Tick();
         }
     }
 }
