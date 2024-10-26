@@ -28,6 +28,10 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// 按钮 C
         /// </summary>
         BC,
+        /// <summary>
+        /// 按钮 D
+        /// </summary>
+        BD,
     }
 
     /// <summary>
@@ -60,6 +64,7 @@ namespace Goblin.Gameplay.Logic.Inputs
             { InputType.BA, new InputInfo { press = false, dire = TSVector2.zero } },
             { InputType.BB, new InputInfo { press = false, dire = TSVector2.zero } },
             { InputType.BC, new InputInfo { press = false, dire = TSVector2.zero } },
+            { InputType.BD, new InputInfo { press = false, dire = TSVector2.zero } },
         };
 
         protected override void OnCreate()

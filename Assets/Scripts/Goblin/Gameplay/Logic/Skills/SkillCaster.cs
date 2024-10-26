@@ -54,8 +54,9 @@ namespace Goblin.Gameplay.Logic.Skills
             var ba = gamepad.GetInput(InputType.BA);
             var bb = gamepad.GetInput(InputType.BB);
             var bc = gamepad.GetInput(InputType.BC);
+            var bd = gamepad.GetInput(InputType.BD);
             uint lastskill = 0;
-            if (launcher.launching.playing && ba.press || bb.press || bc.press)
+            if (launcher.launching.playing && ba.press || bb.press || bc.press || bd.press)
             {
                 if (launcher.launching.playing)
                 {
@@ -95,6 +96,16 @@ namespace Goblin.Gameplay.Logic.Skills
             if (bc.press)
             {
                 if (launcher.Launch(10012))
+                {
+                    JoystickForawrd();
+                    return;
+                }
+            }
+
+            // 技能 C
+            if (bd.press)
+            {
+                if (launcher.Launch(10013))
                 {
                     JoystickForawrd();
                 }

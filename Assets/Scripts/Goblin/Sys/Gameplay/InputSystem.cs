@@ -16,7 +16,8 @@ namespace Goblin.Sys.Gameplay
         public bool bapress { get; set; }
         public bool bbpress { get; set; }
         public bool bcpress { get; set; }
-        
+        public bool bdpress { get; set; }
+
         public void Input(uint actorId, Stage stage)
         {
             var player = stage.GetActor(actorId);
@@ -30,6 +31,7 @@ namespace Goblin.Sys.Gameplay
             gamepad.SetInput(InputType.BA, new InputInfo() { press = bapress, dire = TSVector2.zero });
             gamepad.SetInput(InputType.BB, new InputInfo() { press = bbpress, dire = TSVector2.zero });
             gamepad.SetInput(InputType.BC, new InputInfo() { press = bcpress, dire = TSVector2.zero });
+            gamepad.SetInput(InputType.BD, new InputInfo() { press = bdpress, dire = TSVector2.zero });
         }
     }
 }

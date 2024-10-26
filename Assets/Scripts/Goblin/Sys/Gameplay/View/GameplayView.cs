@@ -19,6 +19,7 @@ namespace Goblin.Sys.Gameplay.View
         private bool baFlag = false;
         private bool bbFlag = false;
         private bool bcFlag = false;
+        private bool bdFlag = false;
         
         protected override void OnLoad()
         {
@@ -140,6 +141,18 @@ namespace Goblin.Sys.Gameplay.View
                 bcFlag = false;
                 engine.proxy.gameplay.input.bcpress = false;
             }, UIEventEnum.PointerUp);
+            
+            AddUIEventListener("SkillCBtn", (e) =>
+            {
+                bdFlag = true;
+                engine.proxy.gameplay.input.bdpress = true;
+            }, UIEventEnum.PointerDown);
+
+            AddUIEventListener("SkillCBtn", (e) =>
+            {
+                bdFlag = false;
+                engine.proxy.gameplay.input.bdpress = false;
+            }, UIEventEnum.PointerUp);
         }
 
         private void OnTick(TickEvent e)
@@ -166,6 +179,10 @@ namespace Goblin.Sys.Gameplay.View
             if (false == bcFlag)
             {
                 engine.proxy.gameplay.input.bcpress = Input.GetKey(KeyCode.L);
+            }
+            if (false == bdFlag)
+            {
+                engine.proxy.gameplay.input.bdpress = Input.GetKey(KeyCode.U);
             }
         }
     }

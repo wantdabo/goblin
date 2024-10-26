@@ -53,6 +53,7 @@ namespace Goblin.Gameplay.Logic.Actors
             launcher.Load(10004);
             launcher.Load(10011);
             launcher.Load(10012);
+            launcher.Load(10013);
         }
     }
 }

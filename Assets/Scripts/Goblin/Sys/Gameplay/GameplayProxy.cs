@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Lives;
 using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Logic.Skills;
@@ -125,10 +126,13 @@ namespace Goblin.Sys.Gameplay
             spatial2.eulerAngle = new TSVector(0, 180, 0);
             enemy2.eventor.Tell<LiveBornEvent>();
             var launcher2 = enemy2.GetBehavior<SkillLauncher>();
+            var paramachine = enemy2.GetBehavior<ParallelMachine>();
             engine.ticker.Timing((t) =>
             {
+                var currentstate = paramachine.GetMachine(StateDef.LAYER_ZERO).current;
+                if (null != currentstate && StateDef.PLAYER_HURT == currentstate.id) return;
                 launcher2.Launch(10001);
-            }, 0.2f, -1);
+            }, 2f, -1);
         }
 
         public void Start()
