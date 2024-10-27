@@ -109,6 +109,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
                             break;
                         case SkillActionDef.SOUND:
+                            // TODO 后面需要优化支持音效加减速/配合顿帧、游戏加速等等
                             if ((uint)f != data.sframe) break;
                             var soundData = (SoundData)data;
                             engine.sound.Load(soundData.res).Play();
