@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// </summary>
         public TSVector scale { get; set; }
     }
-    
+
     /// <summary>
     /// 空间
     /// </summary>
@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Logic.Spatials
             }
             set
             {
-                mposition = value;
+                mposition = new TSVector(value.x, value.y, 0);
                 actor.eventor.Tell(new SpatialPositionChangedEvent { position = mposition });
             }
         }
@@ -75,7 +75,7 @@ namespace Goblin.Gameplay.Logic.Spatials
                 actor.eventor.Tell(new SpatialRotationChangedEvent { rotation = mrotation });
             }
         }
-        
+
         private TSVector mscale { get; set; }
         /// <summary>
         /// 缩放
@@ -92,7 +92,7 @@ namespace Goblin.Gameplay.Logic.Spatials
                 actor.eventor.Tell(new SpatialScaleChangedEvent { scale = mscale });
             }
         }
-        
+
         /// <summary>
         /// 欧拉角
         /// </summary>
