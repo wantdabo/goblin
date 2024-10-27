@@ -84,7 +84,7 @@ namespace Goblin.Sys.Gameplay.View
                 var worldPos = engine.gameui.uicamera.ScreenToWorldPoint(e.position);
                 worldPos.z = joystickBgPos.z;
                 joystickBgRTF.position = worldPos;
-                engine.proxy.gameplay.input.joystickDire = Vector2.zero;
+                engine.proxy.gameplay.input.joystickdire = Vector2.zero;
             }, UIEventEnum.PointerDown);
 
             AddUIEventListener("JoystickArea", (e) =>
@@ -92,14 +92,14 @@ namespace Goblin.Sys.Gameplay.View
                 joystickFlag = false;
                 joystickBgRTF.position = joystickBgPos;
                 joystickHandleTrans.position = joystickBgPos;
-                engine.proxy.gameplay.input.joystickDire = Vector2.zero;
+                engine.proxy.gameplay.input.joystickdire = Vector2.zero;
             }, UIEventEnum.PointerUp);
 
             AddUIEventListener("JoystickArea", (e) =>
             {
                 var pos = engine.gameui.uicamera.WorldToScreenPoint(joystickBgRTF.transform.position);
                 var dir = (e.position - new Vector2(pos.x, pos.y)).normalized;
-                engine.proxy.gameplay.input.joystickDire = dir;
+                engine.proxy.gameplay.input.joystickdire = dir;
                 var dis = Mathf.Clamp(Vector2.Distance(e.position, new Vector2(pos.x, pos.y)), 0, joystickBgRadius);
                 var handlePos = engine.gameui.uicamera.ScreenToWorldPoint(dir * dis + new Vector2(pos.x, pos.y));
                 handlePos.z = pos.z;
@@ -165,7 +165,7 @@ namespace Goblin.Sys.Gameplay.View
                 if (Input.GetKey(KeyCode.A)) joystickDir += Vector3.left;
                 if (Input.GetKey(KeyCode.D)) joystickDir += Vector3.right;
                 joystickDir.Normalize();
-                engine.proxy.gameplay.input.joystickDire = joystickDir;
+                engine.proxy.gameplay.input.joystickdire = joystickDir;
             }
             
             if (false == baFlag)

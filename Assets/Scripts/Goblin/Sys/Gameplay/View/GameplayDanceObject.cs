@@ -22,6 +22,9 @@ namespace Goblin.Sys.Gameplay.View
         public void Settings(uint value)
         {
             var x = Random.Range(-50f, 50f);
+            var quick = Random.Range(0, 3) == 2;
+            tweenscale.duration = quick ? 0.25f : 0.5f;
+            tweenscale.to = Vector3.one * (quick ? 1.5f : 0.85f);
             tweenposition.from = go.transform.localPosition + new Vector3(x, Random.Range(25, 50), 0);
             tweenposition.to = go.transform.localPosition + new Vector3(x, Random.Range(50, 150), 0);
             desc.text = value.ToString();

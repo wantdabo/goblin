@@ -13,6 +13,7 @@ using Goblin.Gameplay.Render.Effects;
 using MessagePack;
 using System.Collections.Generic;
 using UnityEngine;
+using Animation = Goblin.Gameplay.Render.Behaviors.Common.Animation;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -25,7 +26,7 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         private Node node { set; get; }
         
-        private AnimancerAnimation animation { get; set; }
+        private Animation animation { get; set; }
         
         /// <summary>
         /// 技能行为数据列表

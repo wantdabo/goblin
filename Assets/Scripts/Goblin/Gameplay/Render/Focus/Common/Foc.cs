@@ -22,9 +22,9 @@ namespace Goblin.Gameplay.Render.Focus.Common
             eyes.foc = this;
             eyes.Create();
             
-            light = AddComp<FocusLight>();
-            light.foc = this;
-            light.Create();
+            // light = AddComp<FocusLight>();
+            // light.foc = this;
+            // light.Create();
         }
 
         public void SetFollow(uint id)

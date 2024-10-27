@@ -18,11 +18,10 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
         public Foc foc { get; set; }
         public Camera camera { get; private set; }
 
-        private readonly Vector3 offset = new(0, 2f, -10f);
-        private readonly float followSpeed = 4.5f;
-        private (float min, float max) zoomRange = (10f, 45f);
-        private readonly float zoomSpeed = 20f;
-
+        private readonly Vector3 offset = new(0, 2.5f, -10f);
+        private readonly float followSpeed = 2.5f;
+        private (float min, float max) zoomRange = (2f, 4f);
+        private readonly float zoomSpeed = 5f;
 
         protected override void OnCreate()
         {
@@ -54,11 +53,11 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
             if (null == camera) return;
             if (Input.GetKey(KeyCode.Z))
             {
-                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView - e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
+                camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
             }
             else if (Input.GetKey(KeyCode.X))
             {
-                camera.fieldOfView = Mathf.Clamp(camera.fieldOfView + e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
+                camera.orthographicSize = Mathf.Clamp(camera.orthographicSize + e.tick * zoomSpeed, zoomRange.min, zoomRange.max);
             }
         }
 
@@ -69,8 +68,8 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
             if (null == actor) return;
             var node = actor.GetBehavior<Node>();
             if (null == node || null == node.go) return;
-
-            camera.transform.position = Vector3.Lerp(camera.transform.position, node.go.transform.position + offset, followSpeed * Time.deltaTime);
+            var o = Vector3.right  * (node.go.transform.eulerAngles.y > 91 ? -1 : 1) + offset;
+            camera.transform.position = Vector3.Lerp(camera.transform.position, node.go.transform.position + o, followSpeed * Time.deltaTime);
         }
     }
 }

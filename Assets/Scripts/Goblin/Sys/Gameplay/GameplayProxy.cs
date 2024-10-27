@@ -96,26 +96,13 @@ namespace Goblin.Sys.Gameplay
 
         private void GenEnemys()
         {
-            for (int i = 12; i < 17; i++)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    var enemy = lstage.AddActor<Player>();
-                    enemy.Create();
-                    var spatial = enemy.GetBehavior<Spatial>();
-                    spatial.position = new TSVector(i, FP.Zero, j);
-                    spatial.eulerAngle = new TSVector(0, 180, 0);
-                    enemy.eventor.Tell<LiveBornEvent>();
-                }
-            }
-
-            for (int i = 1; i < 10; i++)
+            for (int i = 2; i < 7; i++)
             {
                 var enemy = lstage.AddActor<Player>();
                 enemy.Create();
                 var spatial = enemy.GetBehavior<Spatial>();
                 spatial.position = new TSVector(i, FP.Zero, FP.Zero);
-                spatial.eulerAngle = new TSVector(0, 180, 0);
+                spatial.eulerAngle = new TSVector(0, -90, 0);
                 enemy.eventor.Tell<LiveBornEvent>();
             }
             
@@ -123,7 +110,7 @@ namespace Goblin.Sys.Gameplay
             enemy2.Create();
             var spatial2 = enemy2.GetBehavior<Spatial>();
             spatial2.position = new TSVector(19, FP.Zero, 0);
-            spatial2.eulerAngle = new TSVector(0, 180, 0);
+            spatial2.eulerAngle = new TSVector(0, -90, 0);
             enemy2.eventor.Tell<LiveBornEvent>();
             var launcher2 = enemy2.GetBehavior<SkillLauncher>();
             var paramachine = enemy2.GetBehavior<ParallelMachine>();

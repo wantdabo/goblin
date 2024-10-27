@@ -34,6 +34,9 @@ namespace Goblin.Gameplay.Logic.Actors
             attribute.movespeed = 55 * FP.EN1;
             attribute.attack = 1000;
             
+            var spatial = GetBehavior<Spatial>();
+            spatial.eulerAngle = new TSVector(0, 90, 0);
+            
             var physagent = GetBehavior<PhysAgent>();
             physagent.rigidbodyoffset = new TSVector(0, 75 * FP.EN2, 0);
             physagent.boxshape.Size = new TSVector(1, 15 * FP.EN1, 1);
