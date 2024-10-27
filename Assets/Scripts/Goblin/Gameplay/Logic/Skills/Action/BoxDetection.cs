@@ -30,6 +30,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             var result = pipeline.launcher.actor.stage.phys.OverlapBoxs(pipeline.launcher.actor.id, spatial.position + spatial.rotation * data.position.ToVector(), data.size.ToVector(), spatial.rotation);
             if (false == result.hit) return;
 
+            // TODO 存在性能问题，需要优化
             List<uint> actors = new();
             foreach (uint actorId in result.actorIds)
             {
