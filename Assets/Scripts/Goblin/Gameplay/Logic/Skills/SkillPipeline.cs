@@ -2,8 +2,7 @@
 using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas;
-using Goblin.Gameplay.Common.SkillDatas.Action;
-using Goblin.Gameplay.Common.SkillDatas.Action.Common;
+using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.Gameplay.Logic.Skills.Action;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Skills.ActionCache;
@@ -155,6 +154,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         private void Start()
         {
+            Reset();
             state = SkillPipelineStateDef.Start;
             NotifyState();
             state = SkillPipelineStateDef.Casting;
@@ -224,8 +224,14 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             state = SkillPipelineStateDef.End;
             NotifyState();
-            
-            // 重置
+            Reset();
+        }
+
+        /// <summary>
+        /// 重置
+        /// </summary>
+        private void Reset()
+        {
             NoneBreakToken();
             seflbreakframes = 0;
             targetbreakframes = 0;

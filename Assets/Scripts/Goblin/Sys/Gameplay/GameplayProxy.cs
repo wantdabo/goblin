@@ -112,14 +112,6 @@ namespace Goblin.Sys.Gameplay
             spatial2.position = new TSVector(19, FP.Zero, 0);
             spatial2.eulerAngle = new TSVector(0, -90, 0);
             enemy2.eventor.Tell<LiveBornEvent>();
-            var launcher2 = enemy2.GetBehavior<SkillLauncher>();
-            var paramachine = enemy2.GetBehavior<ParallelMachine>();
-            engine.ticker.Timing((t) =>
-            {
-                var currentstate = paramachine.GetMachine(StateDef.LAYER_ZERO).current;
-                if (null != currentstate && StateDef.PLAYER_HURT == currentstate.id) return;
-                launcher2.Launch(10001);
-            }, 2f, -1);
         }
 
         public void Start()

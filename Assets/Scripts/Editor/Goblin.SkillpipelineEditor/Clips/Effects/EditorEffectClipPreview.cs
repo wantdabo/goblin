@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Goblin.SkillPipelineEditor
 {
     /// <summary>
-    /// 音频预览
+    /// 音效预览
     /// </summary>
     [CustomPreview(typeof(EditorEffectClip))]
     public class EditorEffectClipPreview : PreviewBase<EditorEffectClip>

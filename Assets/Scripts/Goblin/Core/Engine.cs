@@ -2,6 +2,7 @@
 using Goblin.Common.FSM;
 using Goblin.Common.GameRes;
 using Goblin.Common.Network;
+using Goblin.Common.Sounds;
 using Goblin.Phases.Common;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
@@ -52,6 +53,10 @@ namespace Goblin.Core
         /// </summary>
         public NetNode net { get; private set; }
         /// <summary>
+        /// 音效
+        /// </summary>
+        public Sound sound { get; private set; }
+        /// <summary>
         /// Proxy
         /// </summary>
         public GameProxy proxy { get; private set; }
@@ -91,6 +96,9 @@ namespace Goblin.Core
 
             net = AddComp<NetNode>();
             net.Create();
+
+            sound = AddComp<Sound>();
+            sound.Create();
 
             proxy = AddComp<GameProxy>();
             proxy.Create();

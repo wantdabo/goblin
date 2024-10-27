@@ -1,7 +1,7 @@
 ﻿namespace Goblin.SkillPipelineEditor
 {
     /// <summary>
-    /// 保护子片段的内容，如动画/音频。
+    /// 保护子片段的内容，如动画/音效。
     /// </summary>
     public interface ISubClipContainable : IData
     {

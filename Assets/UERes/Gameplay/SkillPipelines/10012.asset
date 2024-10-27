@@ -120,6 +120,24 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &-6614796561023065956
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 8395957662615860911}
+  startTime: 0
+  length: 0.96
+  res: Assets/GameRes/Sounds/skill_10012.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &-6333830082253326689
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -918,6 +936,7 @@ MonoBehaviour:
   - {fileID: 6656838102287199398}
   - {fileID: 2912023177970516285}
   - {fileID: -762738597170021357}
+  - {fileID: 958319244970483903}
   length: 2.7
 --- !u!114 &187290932934946478
 MonoBehaviour:
@@ -956,6 +975,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &958319244970483903
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u97F3\u9891"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 8395957662615860911}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &1780651940897278781
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1563,6 +1600,24 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: -0.1, z: 0}
   scale: 0
+--- !u!114 &8395957662615860911
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdeab6318fb147418222a00a9f57e22, type: 3}
+  m_Name: "\u97F3\u9891\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 958319244970483903}
+  actionClips:
+  - {fileID: -6614796561023065956}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &8438191954895332931
 MonoBehaviour:
   m_ObjectHideFlags: 1

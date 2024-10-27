@@ -1,4 +1,4 @@
-﻿using Goblin.Gameplay.Common.SkillDatas.Action.Common;
+﻿using Goblin.Gameplay.Common.SkillDatas.Common;
 using TrueSync;
 using UnityEngine;
 

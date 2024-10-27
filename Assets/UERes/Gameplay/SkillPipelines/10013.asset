@@ -17,6 +17,24 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: -0.1, z: 0}
   scale: 0
+--- !u!114 &-8505745642696566909
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4981361033265846895}
+  startTime: 2.28
+  length: 1
+  res: Assets/GameRes/Sounds/hide_sword.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &-8036624659100327721
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -137,6 +155,24 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &-6527529409896005313
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -4981361033265846895}
+  startTime: 0
+  length: 1
+  res: Assets/GameRes/Sounds/skill_10013.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &-6333830082253326689
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -293,6 +329,25 @@ MonoBehaviour:
   length: 0.060000002
   selfbreakframes: 1
   targetbreakframes: 1
+--- !u!114 &-4981361033265846895
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdeab6318fb147418222a00a9f57e22, type: 3}
+  m_Name: "\u97F3\u9891\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 2248250963800199204}
+  actionClips:
+  - {fileID: -6527529409896005313}
+  - {fileID: -8505745642696566909}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-4685597538528764979
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1037,6 +1092,7 @@ MonoBehaviour:
   - {fileID: 6656838102287199398}
   - {fileID: 2912023177970516285}
   - {fileID: -762738597170021357}
+  - {fileID: 2248250963800199204}
   length: 3.36
 --- !u!114 &187290932934946478
 MonoBehaviour:
@@ -1194,6 +1250,24 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: -0.1, z: 0}
   scale: 0
+--- !u!114 &2248250963800199204
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u97F3\u6548"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: -4981361033265846895}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &2849559834431798964
 MonoBehaviour:
   m_ObjectHideFlags: 1

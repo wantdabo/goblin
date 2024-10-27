@@ -1,6 +1,5 @@
 ﻿using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.SkillDatas.Action;
-using Goblin.Gameplay.Common.SkillDatas.Action.Common;
+using Goblin.Gameplay.Common.SkillDatas;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
 using TrueSync;

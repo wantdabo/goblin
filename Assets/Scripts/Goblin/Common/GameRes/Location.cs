@@ -9,6 +9,7 @@ namespace Goblin.Common.GameRes
     /// </summary>
     public class Location : Comp
     {
+        private const string soundPath = "Assets/GameRes/Sounds/";
         public const string modelPath = "Assets/GameRes/Models/";
         private const string effectPath = "Assets/GameRes/Effects/";
         public const string uieffectPath = "Assets/GameRes/UIEffects/";
@@ -17,6 +18,26 @@ namespace Goblin.Common.GameRes
         public const string configPath = "Assets/GameRes/Raws/Configs/";
         public const string skilldataPath = "Assets/GameRes/Raws/SkillDatas/";
 
+        /// <summary>
+        /// 异步加载音效预制体
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>音效预制体</returns>
+        public async Task<GameObject> LoadSoundAsync(string resName)
+        {
+            return GameObject.Instantiate(await engine.gameres.LoadAssetAsync<GameObject>(soundPath + resName));
+        }
+
+        /// <summary>
+        /// 同步加载音效预制体
+        /// </summary>
+        /// <param name="resName">资源地址</param>
+        /// <returns>音效预制体</returns>
+        public GameObject LoadSoundSync(string resName)
+        {
+            return GameObject.Instantiate(engine.gameres.LoadAssetSync<GameObject>(soundPath + resName));
+        }
+        
         /// <summary>
         /// 异步 Model 加载预制体
         /// </summary>

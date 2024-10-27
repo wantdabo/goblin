@@ -26,8 +26,10 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         protected override void OnResolve(uint frame, RIL_ATTRIBUTE_HP ril)
         {
+            // TODO 后续要改成战斗层传输伤害指令/治疗指令
             if (attribute.hp > ril.hp)
             {
+                engine.sound.Load("onhit_0001").Play();
                 engine.proxy.gameplay.eventor.Tell(new DamageDanceEvent
                 {
                     position = node.go.transform.position,

@@ -1,6 +1,5 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.SkillDatas.Action;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Spatials;

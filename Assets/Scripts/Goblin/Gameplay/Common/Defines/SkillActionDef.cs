@@ -14,28 +14,32 @@
         /// </summary>
         public const ushort EFFECT = 1;
         /// <summary>
+        /// 音效
+        /// </summary>
+        public const ushort SOUND = 2;
+        /// <summary>
         /// 空间变化
         /// </summary>
-        public const ushort SPATIAL = 2;
+        public const ushort SPATIAL = 3;
         /// <summary>
         /// 立方体碰撞检测
         /// </summary>
-        public const ushort BOX_DETECTION = 3;
+        public const ushort BOX_DETECTION = 4;
         /// <summary>
         /// 球体碰撞检测
         /// </summary>
-        public const ushort SPHERE_DETECTION = 4;
+        public const ushort SPHERE_DETECTION = 5;
         /// <summary>
         /// 圆柱体碰撞检测
         /// </summary>
-        public const ushort CYLINDER_DETECTION = 5;
+        public const ushort CYLINDER_DETECTION = 6;
         /// <summary>
         /// 技能打断事件
         /// </summary>
-        public const ushort BREAK_EVENT = 6;
+        public const ushort BREAK_EVENT = 7;
         /// <summary>
         /// 技能跳帧事件
         /// </summary>
-        public const ushort BREAK_FRAMES_EVENT = 7;
+        public const ushort BREAK_FRAMES_EVENT = 8;
     }
 }

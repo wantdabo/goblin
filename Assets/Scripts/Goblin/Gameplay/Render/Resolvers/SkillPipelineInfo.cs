@@ -1,8 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas;
-using Goblin.Gameplay.Common.SkillDatas.Action;
-using Goblin.Gameplay.Common.SkillDatas.Action.Common;
+using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Skills;
@@ -23,16 +22,16 @@ namespace Goblin.Gameplay.Render.Resolvers
     public class SkillPipelineInfo : Resolver<RIL_SKILLPIPELINE_INFO>
     {
         public override ushort id => RILDef.SKILLPIPELINE_INFO;
-        
+
         private Node node { set; get; }
-        
+
         private Animation animation { get; set; }
-        
+
         /// <summary>
         /// 技能行为数据列表
         /// </summary>
         private Dictionary<uint, List<SkillActionData>> skillActionDatas { get; set; } = new();
-        
+
         /// <summary>
         /// 技能特效进行中列表
         /// </summary>
@@ -57,18 +56,18 @@ namespace Goblin.Gameplay.Render.Resolvers
             }
 
             ReadyOrInitialize(ril.skillid);
-            var f = Mathf.Floor(ril.frame * GameDef.SP_DATA_LOGIC_FRAME_SCALE);
-            if (skillActionDatas.TryGetValue(ril.skillid, out var actions))
+            var f = Mathf.Floor((ril.frame - 1) * GameDef.SP_DATA_LOGIC_FRAME_SCALE);
+            if (skillActionDatas.TryGetValue(ril.skillid, out var datas))
             {
-                foreach (var action in actions)
+                foreach (var data in datas)
                 {
-                    var between = (f >= action.sframe && f <= action.eframe);
-                    switch (action.id)
+                    var between = (f >= data.sframe && f <= data.eframe);
+                    switch (data.id)
                     {
                         case SkillActionDef.ANIMATION:
                             if (false == between) break;
-                            var animationData = (AnimationData)action;
-                            animation.Play(animationData.name, f / action.eframe);
+                            var animationData = (AnimationData)data;
+                            animation.Play(animationData.name, f / data.eframe);
                             break;
                         case SkillActionDef.EFFECT:
                             if (false == effdict.TryGetValue(ril.skillid, out var effs))
@@ -77,7 +76,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 effdict.Add(ril.skillid, effs);
                             }
 
-                            EffectData effectData = (EffectData)action;
+                            EffectData effectData = (EffectData)data;
                             if (false == between)
                             {
                                 if (effs.TryGetValue(effectData.res, out var e))
@@ -109,11 +108,16 @@ namespace Goblin.Gameplay.Render.Resolvers
                             eff.Play(GameDef.SP_DATA_LOGIC_FRAME_SCALE * GameDef.SP_DATA_TICK);
 
                             break;
+                        case SkillActionDef.SOUND:
+                            if ((uint)f != data.sframe) break;
+                            var soundData = (SoundData)data;
+                            engine.sound.Load(soundData.res).Play();
+                            break;
                     }
                 }
             }
         }
-        
+
         /// <summary>
         /// 就绪检查或者初始化技能行为数据
         /// </summary>
@@ -133,6 +137,9 @@ namespace Goblin.Gameplay.Render.Resolvers
                         break;
                     case SkillActionDef.EFFECT:
                         skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<EffectData>(spdata.actionBytes[i]));
+                        break;
+                    case SkillActionDef.SOUND:
+                        skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<SoundData>(spdata.actionBytes[i]));
                         break;
                 }
             }

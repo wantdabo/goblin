@@ -2,8 +2,7 @@ using Goblin.Common;
 using Goblin.Common.GameRes;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas;
-using Goblin.Gameplay.Common.SkillDatas.Action;
-using Goblin.Gameplay.Common.SkillDatas.Action.Common;
+using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.SkillPipelineEditor;
 using MessagePack;
 using System;
@@ -111,6 +110,15 @@ namespace Goblin.Custom
                     );
                     val.scale = Convert.ToInt32(effectClip.scale * Config.float2Int);
                     val.binding = effectClip.binding;
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorSoundClip soundClip)
+                {
+                    var val = new SoundData();
+                    val.id = SkillActionDef.SOUND;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.res = Path.GetFileNameWithoutExtension(soundClip.res);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorSpatialClip spatialClip)

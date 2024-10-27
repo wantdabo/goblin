@@ -17,7 +17,6 @@ namespace Goblin.SkillPipelineEditor
     {
         [SerializeField][HideInInspector] private float length = 1f;
 
-        [FormerlySerializedAs("resPath")]
         [MenuName("特效对象")]
         [SelectObjectPath(typeof(GameObject))]
         public string res = "";
@@ -31,7 +30,6 @@ namespace Goblin.SkillPipelineEditor
         [SerializeField]
         [Range(0.0f, 10)]
         public float scale = 1f;
-        [FormerlySerializedAs("positionBinding")]
         [MenuName("平移.目标绑定")]
         [SerializeField]
         public bool binding = false;

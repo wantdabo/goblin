@@ -72,6 +72,7 @@ namespace Goblin.Gameplay.Logic.Spatials
             set
             {
                 mrotation = value;
+                mrotation = TSQuaternion.Euler(0, mrotation.eulerAngles.y, 0);
                 actor.eventor.Tell(new SpatialRotationChangedEvent { rotation = mrotation });
             }
         }

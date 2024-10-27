@@ -65,6 +65,24 @@ MonoBehaviour:
   startTime: 1.06
   length: 1.86
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Normal_03_End.anim
+--- !u!114 &-8719386178834146872
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 2142787369435603972}
+  startTime: 0.53999996
+  length: 0.35999998
+  res: Assets/GameRes/Sounds/skill_10002.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &-8594757634143040321
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -465,6 +483,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-2805441440215387070
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 2142787369435603972}
+  startTime: 0.12
+  length: 0.35999998
+  res: Assets/GameRes/Sounds/skill_10001.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &-2710661498912929238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -641,6 +677,7 @@ MonoBehaviour:
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   - {fileID: 4661281520825555900}
+  - {fileID: 8556431889994075076}
   length: 2.9199998
 --- !u!114 &136614926458480067
 MonoBehaviour:
@@ -713,6 +750,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &2142787369435603972
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdeab6318fb147418222a00a9f57e22, type: 3}
+  m_Name: "\u97F3\u9891\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 8556431889994075076}
+  actionClips:
+  - {fileID: -2805441440215387070}
+  - {fileID: -8719386178834146872}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2644102240244979895
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1149,3 +1205,21 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8556431889994075076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u97F3\u6548"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 2142787369435603972}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0

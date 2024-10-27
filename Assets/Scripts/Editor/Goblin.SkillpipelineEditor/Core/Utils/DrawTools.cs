@@ -116,7 +116,7 @@ namespace Goblin.SkillPipelineEditor
         }
 
         /// <summary>
-        /// 绘制循环音频剪辑纹理
+        /// 绘制循环音效剪辑纹理
         /// </summary>
         /// <param name="rect"></param>
         /// <param name="audioClip"></param>

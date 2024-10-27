@@ -590,6 +590,7 @@ MonoBehaviour:
   - {fileID: 1328038422028717257}
   - {fileID: -2326444229897978151}
   - {fileID: 3126422824303122960}
+  - {fileID: 7136843775915880481}
   length: 2.9199998
 --- !u!114 &136614926458480067
 MonoBehaviour:
@@ -661,6 +662,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &907162379960969731
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdeab6318fb147418222a00a9f57e22, type: 3}
+  m_Name: "\u97F3\u9891\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 7136843775915880481}
+  actionClips:
+  - {fileID: 1379664410013214384}
+  - {fileID: 2210285155473960671}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1328038422028717257
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -680,6 +700,42 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &1379664410013214384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 907162379960969731}
+  startTime: 0
+  length: 0.34
+  res: Assets/GameRes/Sounds/skill_10001.prefab
+  volume: 1
+  clipOffset: 0
+--- !u!114 &2210285155473960671
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f43159946a5f143a7c2fc8268891b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 907162379960969731}
+  startTime: 1.48
+  length: 1
+  res: Assets/GameRes/Sounds/hide_sword.prefab
+  volume: 1
+  clipOffset: 0
 --- !u!114 &2481091222500697643
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1015,6 +1071,24 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &7136843775915880481
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2749d90b133472da797f5201e53720, type: 3}
+  m_Name: "\u97F3\u9891"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 11400000}
+  tracks:
+  - {fileID: 907162379960969731}
+  isCollapsed: 0
+  active: 1
+  isLocked: 0
 --- !u!114 &7272158455136714253
 MonoBehaviour:
   m_ObjectHideFlags: 1
