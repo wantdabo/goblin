@@ -1,6 +1,4 @@
-﻿using Goblin.Common;
-
-namespace Goblin.Gameplay.Logic.Skills.ActionCache.Common
+﻿namespace Goblin.Gameplay.Logic.Skills.Action.Cache.Common
 {
     /// <summary>
     /// 技能行为空缓存

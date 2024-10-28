@@ -1,7 +1,7 @@
-﻿using Goblin.Gameplay.Logic.Skills.ActionCache.Common;
+﻿using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using System.Collections.Generic;
 
-namespace Goblin.Gameplay.Logic.Skills.ActionCache
+namespace Goblin.Gameplay.Logic.Skills.Action.Cache
 {
     /// <summary>
     /// 碰撞检测缓存
