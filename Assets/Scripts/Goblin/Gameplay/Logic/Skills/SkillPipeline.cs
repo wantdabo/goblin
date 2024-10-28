@@ -365,7 +365,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <summary>
         /// 技能命中
         /// </summary>
-        /// <param name="actorIds"></param>
+        /// <param name="actorIds">ActorID 集合</param>
         public void OnHit(uint[] actorIds)
         {
             if (null == actorIds || 0 == actorIds.Length) return;

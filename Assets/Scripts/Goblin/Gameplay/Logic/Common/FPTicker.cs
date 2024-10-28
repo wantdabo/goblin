@@ -100,29 +100,29 @@ namespace Goblin.Gameplay.Logic.Common
             /// <summary>
             /// ID
             /// </summary>
-            public uint id;
+            public uint id { get; set; }
             /// <summary>
             /// Callback/回调
             /// </summary>
-            public Action<FP> action;
+            public Action<FP> action { get; set; }
             /// <summary>
             /// 触发所需的时间
             /// </summary>
-            public FP duration;
+            public FP duration { get; set; }
             /// <summary>
             /// 当前过去了多少时间
             /// </summary>
-            public FP elapsed;
+            public FP elapsed { get; set; }
             /// <summary>
             /// 循环次数（设置负数为将会一直循环，例如 -1）
             /// </summary>
-            public int loop;
+            public int loop { get; set; }
         }
 
         /// <summary>
         /// 自增的 TimerID
         /// </summary>
-        private uint timerIncrementId = 0;
+        private uint timerIncrementId { get; set; } = 0;
         private Dictionary<uint, TimerInfo> timerDict = new();
         private Queue<uint> recyTimers = new();
 
