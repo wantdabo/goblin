@@ -765,7 +765,6 @@ MonoBehaviour:
   _parent: {fileID: 8556431889994075076}
   actionClips:
   - {fileID: -2805441440215387070}
-  - {fileID: -8719386178834146872}
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}

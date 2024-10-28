@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 8395957662615860911}
-  startTime: 0
+  startTime: 0.08
   length: 0.96
   res: Assets/GameRes/Sounds/skill_10012.prefab
   volume: 1

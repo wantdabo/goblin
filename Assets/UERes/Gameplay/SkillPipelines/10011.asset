@@ -484,7 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -5238926991310098821}
-  startTime: 1.68
+  startTime: 1.5999999
   length: 0.91999996
   res: Assets/GameRes/Sounds/hide_sword.prefab
   volume: 1
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: -5238926991310098821}
-  startTime: 0
+  startTime: 0.16
   length: 0.97999996
   res: Assets/GameRes/Sounds/skill_10011.prefab
   volume: 1
