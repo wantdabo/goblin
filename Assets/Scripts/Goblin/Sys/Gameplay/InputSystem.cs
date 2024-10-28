@@ -23,7 +23,10 @@ namespace Goblin.Sys.Gameplay
             var player = stage.GetActor(actorId);
             var gamepad = player.GetBehavior<Gamepad>();
             
-            var dir = joystickdire * Config.float2Int;
+            var dir = joystickdire;
+            if (Vector2.zero != dir) if (dir.x > 0) dir.x = 1 * Config.float2Int; else dir.x = -1 * Config.float2Int;
+            dir.y = 0;
+            
             var tsdir = new TSVector2() { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = FP.Zero };
             var joystick = new InputInfo() { press = tsdir != TSVector2.zero, dire = tsdir };
             
