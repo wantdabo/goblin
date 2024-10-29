@@ -114,6 +114,7 @@ namespace Goblin.Sys.Common
         protected override void OnUnload()
         {
             state = UIState.Free;
+            base.OnUnload();
         }
 
         /// <summary>
@@ -122,6 +123,7 @@ namespace Goblin.Sys.Common
         protected override void OnOpen()
         {
             state = UIState.Open;
+            base.OnOpen();
         }
 
         /// <summary>
@@ -130,6 +132,7 @@ namespace Goblin.Sys.Common
         protected override void OnClose()
         {
             state = UIState.Close;
+            base.OnClose();
             engine.gameui.Close(GetType());
         }
     }
