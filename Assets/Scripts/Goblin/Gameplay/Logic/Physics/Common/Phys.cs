@@ -219,12 +219,11 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 立方体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="size">尺寸</param>
         /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID)</returns>
-        public (bool hit, uint actorId) OverlapBox(uint cullActor, TSVector point, TSVector size, TSQuaternion rotation)
+        public (bool hit, uint actorId) OverlapBox(TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
@@ -234,8 +233,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     return (true, kv.Key);
                 }
             }
@@ -246,12 +243,11 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 群体立方体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="size">尺寸</param>
         /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID[])</returns>
-        public (bool hit, uint[] actorIds) OverlapBoxs(uint cullActor, TSVector point, TSVector size, TSQuaternion rotation)
+        public (bool hit, uint[] actorIds) OverlapBoxs(TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
@@ -261,8 +257,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     actorIdTemps.Add(kv.Key);
                 }
             }
@@ -273,11 +267,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 球体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <returns>(YES/NO, ActorID)</returns>
-        public (bool hit, uint actorId) OverlapSphere(uint cullActor, TSVector point, FP radius)
+        public (bool hit, uint actorId) OverlapSphere(TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
@@ -287,8 +280,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     return (true, kv.Key);
                 }
             }
@@ -299,11 +290,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 群体球体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <returns>(YES/NO, ActorID[])</returns>
-        public (bool hit, uint[] actorIds) OverlapSpheres(uint cullActor, TSVector point, FP radius)
+        public (bool hit, uint[] actorIds) OverlapSpheres(TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
@@ -313,8 +303,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     actorIdTemps.Add(kv.Key);
                 }
             }
@@ -325,13 +313,12 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 圆柱体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <param name="height">高度</param>
         /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID)</returns>
-        public (bool hit, uint actorId) OverlapCylinder(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion rotation)
+        public (bool hit, uint actorId) OverlapCylinder(TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
@@ -341,8 +328,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     return (true, kv.Key);
                 }
             }
@@ -353,13 +338,12 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// 群体圆柱体碰撞检测
         /// </summary>
-        /// <param name="cullActor">剔除的 ActorID</param>
         /// <param name="point">位置</param>
         /// <param name="radius">半径</param>
         /// <param name="height">高度</param>
         /// <param name="rotation">方向</param>
         /// <returns>(YES/NO, ActorID[])</returns>
-        public (bool hit, uint[] actorIds) OverlapCylinders(uint cullActor, TSVector point, FP radius, FP height, TSQuaternion rotation)
+        public (bool hit, uint[] actorIds) OverlapCylinders(TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
             physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
@@ -369,8 +353,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    if (cullActor == kv.Key) continue;
-
                     actorIdTemps.Add(kv.Key);
                 }
             }
