@@ -69,7 +69,7 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// 参数
         /// </summary>
-        protected object[] param;
+        protected object[] args;
 
         /// <summary>
         /// 加载 UI
@@ -96,9 +96,9 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// 打开 UI
         /// </summary>
-        public void Open(params object[] param)
+        public void Open(params object[] args)
         {
-            this.param = param;
+            this.args = args;
             if (UIState.Loading == state) return;
             if (UIState.Open == state) Close();
 
