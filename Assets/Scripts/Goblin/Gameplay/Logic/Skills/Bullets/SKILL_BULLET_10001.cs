@@ -33,10 +33,6 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
             actor.ticker.Timing((t) => actor.eventor.Tell<SkillBulletStopEvent>(), 5, 1);
         }
 
-        protected override void OnStop()
-        {
-        }
-
         protected override void OnFlying(FP tick)
         {
             speed += 2;
@@ -52,10 +48,6 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
                 from = owner
             };
             target.eventor.Tell(hurt);
-        }
-
-        protected override void OnExit(Actor target)
-        {
         }
     }
 }

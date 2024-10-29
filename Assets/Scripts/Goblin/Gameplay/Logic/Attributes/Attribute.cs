@@ -109,6 +109,7 @@ namespace Goblin.Gameplay.Logic.Attributes
 
         private void OnCure(CureEvent e)
         {
+            hp = Math.Clamp(hp + e.cure, 0, maxhp);
             actor.eventor.Tell(new RecvCureEvent()
             {
                 cure = e.cure,

@@ -130,7 +130,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         private void OnCollisionEnter(CollisionEnterEvent e)
         {
             if (e.actorId == owner) return;
-            
+
             var target = actor.stage.GetActor(e.actorId);
             if (null == target) return;
             OnEnter(target);
@@ -144,20 +144,20 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             if (null == target) return;
             OnExit(target);
         }
-        
+
         /// <summary>
         /// 开火
         /// </summary>
-        protected abstract void OnFire();
+        protected virtual void OnFire() { }
         /// <summary>
         /// 停止
         /// </summary>
-        protected abstract void OnStop();
+        protected virtual void OnStop() { }
         /// <summary>
         /// 飞行
         /// </summary>
         /// <param name="tick">tick</param>
-        protected abstract void OnFlying(FP tick);
+        protected virtual void OnFlying(FP tick) { }
         /// <summary>
         /// 拥有者死亡
         /// </summary>
@@ -166,11 +166,11 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         /// 碰撞进入
         /// </summary>
         /// <param name="target">目标/Actor</param>
-        protected abstract void OnEnter(Actor target);
+        protected virtual void OnEnter(Actor target) { }
         /// <summary>
         /// 碰撞退出
         /// </summary>
         /// <param name="target">目标/Actor</param>
-        protected abstract void OnExit(Actor target);
+        protected virtual void OnExit(Actor target) { }
     }
 }
