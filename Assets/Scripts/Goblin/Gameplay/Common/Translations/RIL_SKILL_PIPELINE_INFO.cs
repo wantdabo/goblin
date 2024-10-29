@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// 技能管线信息渲染指令
     /// </summary>
-    public struct RIL_SKILLPIPELINE_INFO : IRIL
+    public struct RIL_SKILL_PIPELINE_INFO : IRIL
     {
-        public ushort id => RILDef.SKILLPIPELINE_INFO;
+        public ushort id => RILDef.SKILL_PIPELINE_INFO;
         /// <summary>
         /// 技能 ID
         /// </summary>
@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Common.Translations
         /// <param name="state"></param>
         /// <param name="frame"></param>
         /// <param name="length"></param>
-        public RIL_SKILLPIPELINE_INFO(uint skillid, byte state, uint frame, uint length)
+        public RIL_SKILL_PIPELINE_INFO(uint skillid, byte state, uint frame, uint length)
         {
             this.skillid = skillid;
             this.state = state;
@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Common.Translations
         
         public bool Equals(IRIL other)
         {
-            if (other is RIL_SKILLPIPELINE_INFO _other)
+            if (other is RIL_SKILL_PIPELINE_INFO _other)
             {
                 return _other.state == state && _other.frame == frame;
             }

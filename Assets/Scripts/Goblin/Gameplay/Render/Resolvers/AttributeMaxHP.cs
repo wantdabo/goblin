@@ -10,8 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class AttributeMaxHP : Resolver<RIL_ATTRIBUTE_MAXHP>
     {
-        public override ushort id => RILDef.ATTRIBUTE_MAXHP;
-        
         private Attribute attribute { get; set; }
 
         protected override void OnAwake(uint frame, RIL_ATTRIBUTE_MAXHP ril)

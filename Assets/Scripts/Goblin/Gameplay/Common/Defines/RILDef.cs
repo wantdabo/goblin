@@ -26,36 +26,40 @@
         /// </summary>
         public const ushort SPATIAL_SCALE = 4;
         /// <summary>
-        /// STATEMACHINE ZERO 层状态机指令
+        /// STATE_MACHINE ZERO 层状态机指令
         /// </summary>
-        public const ushort STATEMACHINE_ZERO = 5;
+        public const ushort STATE_MACHINE_ZERO = 5;
         /// <summary>
-        /// STATEMACHINE ONE 层状态机指令
+        /// STATE_MACHINE ONE 层状态机指令
         /// </summary>
-        public const ushort STATEMACHINE_ONE = 6;
+        public const ushort STATE_MACHINE_ONE = 6;
         /// <summary>
-        /// SKILLPIPELINE_INFO 技能管线信息指令
+        /// SKILL_PIPELINE_INFO 技能管线信息指令
         /// </summary>
-        public const ushort SKILLPIPELINE_INFO = 7;
+        public const ushort SKILL_PIPELINE_INFO = 7;
+        /// <summary>
+        /// SKILL_BULLET_INFO 技能子弹信息指令
+        /// </summary>
+        public const ushort SKILL_BULLET_INFO = 8;
         /// <summary>
         /// ATTRIBUTE 生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_HP = 8;
+        public const ushort ATTRIBUTE_HP = 9;
         /// <summary>
         /// ATTRIBUTE 最大生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_MAXHP = 9;
+        public const ushort ATTRIBUTE_MAXHP = 10;
         /// <summary>
         /// ATTRIBUTE 移动速度指令
         /// </summary>
-        public const ushort ATTRIBUTE_MOVESPEED = 10;
+        public const ushort ATTRIBUTE_MOVESPEED = 11;
         /// <summary>
         /// ATTRIBUTE 攻击力指令
         /// </summary>
-        public const ushort ATTRIBUTE_ATTACK = 11;
+        public const ushort ATTRIBUTE_ATTACK = 12;
         /// <summary>
         /// SURFACE 指令
         /// </summary>
-        public const ushort SURFACE = 12;
+        public const ushort SURFACE = 13;
     }
 }

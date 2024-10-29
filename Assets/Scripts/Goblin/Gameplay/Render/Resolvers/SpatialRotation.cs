@@ -14,8 +14,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class SpatialRotation : Resolver<RIL_SPATIAL_ROTATION>
     {
-        public override ushort id => RILDef.SPATIAL_ROTATION;
-        
         private Node node { get; set; }
         
         private Quaternion lastRotation { get; set; }

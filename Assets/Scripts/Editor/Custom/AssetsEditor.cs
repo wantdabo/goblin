@@ -97,7 +97,7 @@ namespace Goblin.Custom
                     val.id = SkillActionDef.EFFECT;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
-                    val.res =  Path.GetFileNameWithoutExtension(effectClip.res);
+                    val.res = Path.GetFileNameWithoutExtension(effectClip.res);
                     val.position = new Vector3Data(
                         Convert.ToInt32(effectClip.position.x * Config.float2Int),
                         Convert.ToInt32(effectClip.position.y * Config.float2Int),
@@ -185,6 +185,20 @@ namespace Goblin.Custom
                     val.height = Convert.ToInt32(cylinderClip.height * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
+                else if (clip is EditorBulletEventClip bulletEventClip)
+                {
+                    var val = new BulletEventData();
+                    val.id = SkillActionDef.BULLET_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.bulletid = Convert.ToUInt32(bulletEventClip.bulletid);
+                    val.position = new Vector3Data(
+                        Convert.ToInt32(bulletEventClip.position.x * Config.float2Int),
+                        Convert.ToInt32(bulletEventClip.position.y * Config.float2Int),
+                        Convert.ToInt32(bulletEventClip.position.z * Config.float2Int)
+                    );
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
                 else if (clip is EditorBreakEventClip skillBreakeventClip)
                 {
                     var val = new BreakEventData();
@@ -198,7 +212,7 @@ namespace Goblin.Custom
                     if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
-                else if(clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
+                else if (clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
                 {
                     var val = new BreakFramesData();
                     val.id = SkillActionDef.BREAK_FRAMES_EVENT;

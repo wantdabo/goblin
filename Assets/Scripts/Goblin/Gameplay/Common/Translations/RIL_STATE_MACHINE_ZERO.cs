@@ -4,11 +4,11 @@ using Goblin.Gameplay.Common.Translations.Common;
 namespace Goblin.Gameplay.Common.Translations
 {
     /// <summary>
-    /// 状态机一层渲染指令
+    /// 状态机零渲染指令
     /// </summary>
-    public struct RIL_STATEMACHINE_ONE : IRIL 
+    public struct RIL_STATE_MACHINE_ZERO : IRIL
     {
-        public ushort id => RILDef.STATEMACHINE_ONE;
+        public ushort id => RILDef.STATE_MACHINE_ZERO;
         /// <summary>
         /// 状态
         /// </summary>
@@ -23,12 +23,12 @@ namespace Goblin.Gameplay.Common.Translations
         public byte layer { get; private set; }
 
         /// <summary>
-        /// 状态机一层渲染指令
+        /// 状态机零层渲染指令
         /// </summary>
         /// <param name="state">状态</param>
         /// <param name="lastsate">上一个状态</param>
         /// <param name="layer">状态机层</param>
-        public RIL_STATEMACHINE_ONE(uint state, uint lastsate, byte layer)
+        public RIL_STATE_MACHINE_ZERO(uint state, uint lastsate, byte layer)
         {
             this.state = state;
             this.laststate = lastsate;
@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Common.Translations
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_STATEMACHINE_ZERO _other)
+            if (other is RIL_STATE_MACHINE_ZERO _other)
             {
                 return state == _other.state && layer == _other.layer;
             }

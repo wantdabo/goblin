@@ -11,18 +11,16 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// <summary>
     /// 状态机零层解释器
     /// </summary>
-    public class StateMachineZero : Resolver<RIL_STATEMACHINE_ZERO>
+    public class StateMachineZero : Resolver<RIL_STATE_MACHINE_ZERO>
     {
-        public override ushort id => RILDef.STATEMACHINE_ZERO;
-
         private AnimancerAnimation animation { get; set; }
 
-        protected override void OnAwake(uint frame, RIL_STATEMACHINE_ZERO ril)
+        protected override void OnAwake(uint frame, RIL_STATE_MACHINE_ZERO ril)
         {
             animation = actor.EnsureBehavior<AnimancerAnimation>();
         }
         
-        protected override void OnResolve(uint frame, RIL_STATEMACHINE_ZERO ril)
+        protected override void OnResolve(uint frame, RIL_STATE_MACHINE_ZERO ril)
         {
             // TODO 后续要改为配置读取解析
             if (StateDef.PLAYER_HURT == ril.state)

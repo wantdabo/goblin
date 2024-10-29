@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (zerostate != lzerostate)
             {
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ZERO(zerostate, lzerostate, StateDef.LAYER_ZERO));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ZERO(zerostate, lzerostate, StateDef.LAYER_ZERO));
                 lzerostate = zerostate;
             }
 
@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (onestate != lonestate)
             {
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATEMACHINE_ONE(onestate, lonestate, StateDef.LAYER_ONE));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ONE(onestate, lonestate, StateDef.LAYER_ONE));
                 lonestate = onestate;
             }
         }

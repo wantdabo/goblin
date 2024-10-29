@@ -17,6 +17,25 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &-8855166089422211677
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6834d591697d453fbcfdb44e936c1149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -401386002525596680}
+  startTime: 0.34
+  length: 1
+  joystick: 0
+  recvhurt: 0
+  recvcontrol: 0
+  skillcast: 0
 --- !u!114 &-8594757634143040321
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -523,6 +542,7 @@ MonoBehaviour:
   _parent: {fileID: -1436057562513923285}
   actionClips:
   - {fileID: -6804937863173701139}
+  - {fileID: 8179153344240163726}
   - {fileID: -7915345269915906284}
   active: 1
   isLocked: 0
@@ -845,6 +865,23 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &5639521195583234088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7e3c32f6574e4198e07d6443424996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -401386002525596680}
+  startTime: 0.44
+  length: 1.56
+  bulletid: 0
+  position: {x: 0, y: 0, z: 0}
 --- !u!114 &6058086252915330039
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1018,6 +1055,23 @@ MonoBehaviour:
   active: 1
   isLocked: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8179153344240163726
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7e3c32f6574e4198e07d6443424996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -401386002525596680}
+  startTime: 0.26
+  length: 1
+  bulletid: 10001
+  position: {x: 0, y: 0, z: 1}
 --- !u!114 &8285458254674167060
 MonoBehaviour:
   m_ObjectHideFlags: 1

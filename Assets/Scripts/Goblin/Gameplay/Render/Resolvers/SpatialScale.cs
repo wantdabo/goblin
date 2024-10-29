@@ -10,8 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class SpatialScale : Resolver<RIL_SPATIAL_SCALE>
     {
-        public override ushort id => RILDef.SPATIAL_SCALE;
-        
         protected override void OnAwake(uint frame, RIL_SPATIAL_SCALE ril)
         {
         }

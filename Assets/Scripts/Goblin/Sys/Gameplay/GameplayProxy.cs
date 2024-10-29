@@ -109,7 +109,7 @@ namespace Goblin.Sys.Gameplay
             var enemy2 = lstage.AddActor<Player>();
             enemy2.Create();
             var spatial2 = enemy2.GetBehavior<Spatial>();
-            spatial2.position = new TSVector(19, FP.Zero, 0);
+            spatial2.position = new TSVector(19, FP.Zero, FP.Zero);
             spatial2.eulerAngle = new TSVector(0, -90, 0);
             enemy2.eventor.Tell<LiveBornEvent>();
         }

@@ -17,7 +17,7 @@ namespace Goblin.Gameplay.Logic.Core
     /// <summary>
     /// 添加 Actor/实体事件
     /// </summary>
-    public struct AddActorEvent : IEvent
+    public struct ActorDeadEvent : IEvent
     {
         /// <summary>
         /// Actor
@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.Core
     /// <summary>
     /// 移除 Actor/实体事件
     /// </summary>
-    public struct RmvActorEvent : IEvent
+    public struct ActorLiveEvent : IEvent
     {
         /// <summary>
         /// Actor
@@ -73,11 +73,19 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Actor 列表
         /// </summary>
-        public List<Actor> actors { get; private set; } = new();
+        private List<Actor> actors { get; set; } = new();
         /// <summary>
         /// Actor 字典
         /// </summary>
-        private Dictionary<uint, Actor> actorDict = new();
+        private Dictionary<uint, Actor> actordict { get; set; } = new();
+        /// <summary>
+        /// 活着的 ActorID 列表
+        /// </summary>
+        public List<uint> lives { get; private set; } = new();
+        /// <summary>
+        /// 死亡的 ActorID 列表
+        /// </summary>
+        public List<uint> deads { get; private set; } = new();
 
         protected override void OnCreate()
         {
@@ -117,21 +125,44 @@ namespace Goblin.Gameplay.Logic.Core
         public void Tick()
         {
             ticker.Tick();
+            
+            foreach (uint dead in deads)
+            {
+                var deada = RmvActor(dead);
+                deada.Destroy();
+            }
+            deads.Clear();
         }
 
         /// <summary>
-        /// 获得 Actor（根据泛型转型）
+        /// Actor 存活
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <param name="id">id</param>
-        /// <returns>Actor</returns>
-        public T GetActor<T>(uint id) where T : Actor
+        /// <param name="id">ActorID</param>
+        public void Live(uint id)
         {
+            if (deads.Contains(id)) return;
+
             var actor = GetActor(id);
+            if (null == actor) return;
 
-            if (null != actor) return actor as T;
+            eventor.Tell(new ActorLiveEvent { actor = actor });
 
-            return null;
+            lives.Add(id);
+        }
+
+        /// <summary>
+        /// Actor 死亡
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        public void Dead(uint id)
+        {
+            if (false == lives.Contains(id)) return;
+            var actor = GetActor(id);
+            if (null == actor) return;
+
+            eventor.Tell(new ActorDeadEvent { actor = actor });
+
+            deads.Add(id);
         }
 
         /// <summary>
@@ -141,7 +172,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>Actor</returns>
         public Actor GetActor(uint id)
         {
-            return actorDict.GetValueOrDefault(id);
+            return actordict.GetValueOrDefault(id);
         }
 
         /// <summary>
@@ -155,8 +186,7 @@ namespace Goblin.Gameplay.Logic.Core
             actor.id = ++incrementId;
             actor.stage = this;
             actors.Add(actor);
-            actorDict.Add(actor.id, actor);
-            eventor.Tell(new AddActorEvent { actor = actor });
+            actordict.Add(actor.id, actor);
 
             return actor;
         }
@@ -165,25 +195,26 @@ namespace Goblin.Gameplay.Logic.Core
         /// 根据 ID 移除 Actor
         /// </summary>
         /// <param name="id">ID</param>
-        public void RmvActor(uint id)
+        private Actor RmvActor(uint id)
         {
             var actor = GetActor(id);
-            if (null == actor) return;
+            if (null == actor) return null;
 
             RmvActor(actor);
+
+            return actor;
         }
 
         /// <summary>
         /// 根据 Actor 实例移除 Actor
         /// </summary>
         /// <param name="actor">Actor 实例</param>
-        public void RmvActor(Actor actor)
+        private void RmvActor(Actor actor)
         {
             if (false == actors.Contains(actor)) return;
 
             actors.Remove(actor);
-            actorDict.Remove(actor.id);
-            eventor.Tell(new RmvActorEvent { actor = actor });
+            actordict.Remove(actor.id);
         }
     }
 }

@@ -13,8 +13,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class SpatialPosition : Resolver<RIL_SPATIAL_POSITION>
     {
-        public override ushort id => RILDef.SPATIAL_POSITION;
-        
         private Node node { get; set; }
         
         private Vector3 position { get; set; }

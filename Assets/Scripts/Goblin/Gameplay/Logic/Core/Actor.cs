@@ -23,11 +23,15 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 事件订阅派发者
         /// </summary>
-        public Eventor eventor { get; set; }
+        public Eventor eventor { get; private set; }
         /// <summary>
         /// 确定性，Ticker/时间驱动器
         /// </summary>
-        public FPTicker ticker { get; set; }
+        public FPTicker ticker { get; private set; }
+        /// <summary>
+        /// 生命周期
+        /// </summary>
+        public Live live { get; private set; }
         /// <summary>
         /// Behavior 集合
         /// </summary>
@@ -41,10 +45,11 @@ namespace Goblin.Gameplay.Logic.Core
 
             ticker = AddComp<FPTicker>();
             ticker.Create();
+
+            live = AddBehavior<Live>();
+            live.Create();
             
             stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
-            
-            AddBehavior<Live>().Create();
         }
 
         protected override void OnDestroy()
@@ -104,7 +109,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (null == behaviorDict) return;
             behaviorDict.Remove(behavior.GetType());
         }
-        
+
         private void OnFPTick(FPTickEvent e)
         {
             ticker.Tick();

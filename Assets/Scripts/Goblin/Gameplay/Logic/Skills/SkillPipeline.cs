@@ -3,10 +3,14 @@ using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas;
 using Goblin.Gameplay.Common.SkillDatas.Common;
+using Goblin.Gameplay.Logic.Actors;
+using Goblin.Gameplay.Logic.Lives;
 using Goblin.Gameplay.Logic.Skills.Action;
 using Goblin.Gameplay.Logic.Skills.Action.Cache;
 using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
+using Goblin.Gameplay.Logic.Skills.Bullets;
+using Goblin.Gameplay.Logic.Skills.Bullets.Common;
 using MessagePack;
 using System;
 using System.Collections.Generic;
@@ -181,6 +185,10 @@ namespace Goblin.Gameplay.Logic.Skills
                         if (nilaction) action = AddAction<Spatial>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
+                    case SkillActionDef.BULLET_EVENT:
+                        if (nilaction) action = AddAction<BulletEvent>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
                     case SkillActionDef.BREAK_EVENT:
                         if (nilaction) action = AddAction<BreakEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
@@ -279,6 +287,9 @@ namespace Goblin.Gameplay.Logic.Skills
                 {
                     case SkillActionDef.SPATIAL:
                         data = MessagePackSerializer.Deserialize<SpatialData>(spdata.actionBytes[i]);
+                        break;
+                    case SkillActionDef.BULLET_EVENT:
+                        data = MessagePackSerializer.Deserialize<BulletEventData>(spdata.actionBytes[i]);
                         break;
                     case SkillActionDef.BREAK_EVENT:
                         data = MessagePackSerializer.Deserialize<BreakEventData>(spdata.actionBytes[i]);

@@ -19,10 +19,8 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// <summary>
     /// 技能管线解释器
     /// </summary>
-    public class SkillPipelineInfo : Resolver<RIL_SKILLPIPELINE_INFO>
+    public class SkillPipelineInfo : Resolver<RIL_SKILL_PIPELINE_INFO>
     {
-        public override ushort id => RILDef.SKILLPIPELINE_INFO;
-
         private Node node { set; get; }
 
         private Animation animation { get; set; }
@@ -37,13 +35,13 @@ namespace Goblin.Gameplay.Render.Resolvers
         /// </summary>
         private Dictionary<uint, Dictionary<string, VFXController>> effdict = new();
 
-        protected override void OnAwake(uint frame, RIL_SKILLPIPELINE_INFO ril)
+        protected override void OnAwake(uint frame, RIL_SKILL_PIPELINE_INFO ril)
         {
             node = actor.EnsureBehavior<Node>();
             animation = actor.EnsureBehavior<AnimancerAnimation>();
         }
 
-        protected override void OnResolve(uint frame, RIL_SKILLPIPELINE_INFO ril)
+        protected override void OnResolve(uint frame, RIL_SKILL_PIPELINE_INFO ril)
         {
             if (SkillPipelineStateDef.End == ril.state || SkillPipelineStateDef.None == ril.state)
             {

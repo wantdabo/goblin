@@ -34,12 +34,16 @@
         /// </summary>
         public const ushort CYLINDER_DETECTION = 6;
         /// <summary>
+        /// 技能子弹事件
+        /// </summary>
+        public const ushort BULLET_EVENT = 7;
+        /// <summary>
         /// 技能打断事件
         /// </summary>
-        public const ushort BREAK_EVENT = 7;
+        public const ushort BREAK_EVENT = 8;
         /// <summary>
         /// 技能跳帧事件
         /// </summary>
-        public const ushort BREAK_FRAMES_EVENT = 8;
+        public const ushort BREAK_FRAMES_EVENT = 9;
     }
 }

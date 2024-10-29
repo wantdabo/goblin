@@ -29,11 +29,6 @@ namespace Goblin.Phases.Common
             machine.SetState<GamingPhase>();
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
         /// <summary>
         /// 获取阶段
         /// </summary>

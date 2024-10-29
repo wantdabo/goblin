@@ -10,8 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class AttributeMoveSpeed : Resolver<RIL_ATTRIBUTE_MOVESPEED>
     {
-        public override ushort id => RILDef.ATTRIBUTE_MOVESPEED;
-        
         private Attribute attribute { get; set; }
 
         protected override void OnAwake(uint frame, RIL_ATTRIBUTE_MOVESPEED ril)

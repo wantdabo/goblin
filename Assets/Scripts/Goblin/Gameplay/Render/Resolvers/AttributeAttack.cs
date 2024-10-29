@@ -10,8 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class AttributeAttack : Resolver<RIL_ATTRIBUTE_ATTACK>
     {
-        public override ushort id => RILDef.ATTRIBUTE_ATTACK;
-        
         private Attribute attribute { get; set; }
 
         protected override void OnAwake(uint frame, RIL_ATTRIBUTE_ATTACK ril)

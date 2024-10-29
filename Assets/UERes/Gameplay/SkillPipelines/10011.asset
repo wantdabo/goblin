@@ -87,6 +87,23 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &-5872433842715073704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7e3c32f6574e4198e07d6443424996, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 7911654569519271837}
+  startTime: 0.48
+  length: 1
+  bulletid: 10001
+  position: {x: 0, y: 0, z: 1}
 --- !u!114 &-5765500523820016448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -773,6 +790,7 @@ MonoBehaviour:
   _parent: {fileID: -5765500523820016448}
   actionClips:
   - {fileID: 7381103243826887286}
+  - {fileID: -5872433842715073704}
   - {fileID: 5061591297515216149}
   active: 1
   isLocked: 0

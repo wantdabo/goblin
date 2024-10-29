@@ -10,7 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class Surface : Resolver<RIL_SURFACE>
     {
-        public override ushort id => RILDef.SURFACE;
         /// <summary>
         /// 模型
         /// </summary>

@@ -177,14 +177,17 @@ namespace Goblin.Gameplay.Render.Core
                     case RILDef.SPATIAL_SCALE:
                         resolver = AddResolver<SpatialScale>(e.ril.id);
                         break;
-                    case RILDef.STATEMACHINE_ZERO:
+                    case RILDef.STATE_MACHINE_ZERO:
                         resolver = AddResolver<StateMachineZero>(e.ril.id);
                         break;
-                    case RILDef.STATEMACHINE_ONE:
+                    case RILDef.STATE_MACHINE_ONE:
                         resolver = AddResolver<StateMachineOne>(e.ril.id);
                         break;
-                    case RILDef.SKILLPIPELINE_INFO:
+                    case RILDef.SKILL_PIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
+                        break;
+                    case RILDef.SKILL_BULLET_INFO:
+                        resolver = AddResolver<SkillBulletInfo>(e.ril.id);
                         break;
                     case RILDef.ATTRIBUTE_HP:
                         resolver = AddResolver<AttributeHP>(e.ril.id);

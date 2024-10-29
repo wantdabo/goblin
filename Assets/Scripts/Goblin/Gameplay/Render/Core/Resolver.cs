@@ -25,10 +25,6 @@ namespace Goblin.Gameplay.Render.Core
     public abstract class Resolver : Comp
     {
         /// <summary>
-        /// 渲染指令 ID
-        /// </summary>
-        public abstract ushort id { get; }
-        /// <summary>
         /// Actor
         /// </summary>
         public Actor actor { get; set; }

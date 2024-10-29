@@ -190,26 +190,34 @@ namespace Goblin.Gameplay.Logic.Physics
 
         private void OnCollisionEnter(PhysCollisionEnterEvent e)
         {
+            if (actor.id != e.id0 && actor.id != e.id1) return;
+            
             var selfIsId0 = e.id0 == actor.id;
             actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnCollisionExit(PhysCollisionExitEvent e)
         {
+            if (actor.id != e.id0 && actor.id != e.id1) return;
+
             var selfIsId0 = e.id0 == actor.id;
             actor.eventor.Tell(new CollisionExitEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnTriggerEnter(PhysTriggerEnterEvent e)
         {
+            if (actor.id != e.id0 && actor.id != e.id1) return;
+
             var selfIsId0 = e.id0 == actor.id;
             actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
 
         private void OnTriggerExit(PhysTriggerExitEvent e)
         {
+            if (actor.id != e.id0 && actor.id != e.id1) return;
+
             var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionExitEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
     }
 }

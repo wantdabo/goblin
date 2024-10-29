@@ -12,8 +12,6 @@ namespace Goblin.Gameplay.Render.Resolvers
     /// </summary>
     public class AttributeHP : Resolver<RIL_ATTRIBUTE_HP>
     {
-        public override ushort id => RILDef.ATTRIBUTE_HP;
-
         private Node node { get; set; }
         private Attribute attribute { get; set; }
 
