@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace ShapeDrawers.Common
 {
+    /// <summary>
+    /// 图形绘制 API
+    /// TODO 有性能问题，开久了会掉帧，需要修复
+    /// </summary>
     public class ShapeDrawer
     {
         private static Dictionary<DrawerType, Queue<Drawer>> pools = new();

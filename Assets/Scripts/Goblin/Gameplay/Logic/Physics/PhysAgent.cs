@@ -38,12 +38,7 @@ namespace Goblin.Gameplay.Logic.Physics
         /// 默认物理材质
         /// </summary>
         private static BodyMaterial defaultMaterial = new(FP.Zero, FP.Zero, FP.Zero);
-        
-        /// <summary>
-        /// 默认物理几何体
-        /// </summary>
-        private static BoxShape defaultShape = new(TSVector.one);
-        
+
         /// <summary>
         /// 物理单位
         /// </summary>
@@ -82,7 +77,7 @@ namespace Goblin.Gameplay.Logic.Physics
                 rigidbody.IsKinematic = value;
             }
         }
-        
+
         /// <summary>
         /// 是否为触发器
         /// </summary>
@@ -97,7 +92,7 @@ namespace Goblin.Gameplay.Logic.Physics
                 rigidbody.IsColliderOnly = value;
             }
         }
-        
+
         /// <summary>
         /// 立方体
         /// </summary>
@@ -115,7 +110,7 @@ namespace Goblin.Gameplay.Logic.Physics
                 return shape;
             }
         }
-        
+
         /// <summary>
         /// 球体
         /// </summary>
@@ -133,7 +128,7 @@ namespace Goblin.Gameplay.Logic.Physics
                 return shape;
             }
         }
-        
+
         /// <summary>
         /// 圆柱体
         /// </summary>
@@ -147,7 +142,7 @@ namespace Goblin.Gameplay.Logic.Physics
                     shape = new CylinderShape(FP.One, FP.One);
                     rigidbody.Shape = shape;
                 }
-                
+
                 return shape;
             }
         }
@@ -162,7 +157,7 @@ namespace Goblin.Gameplay.Logic.Physics
             actor.stage.eventor.Listen<PhysTriggerEnterEvent>(OnTriggerEnter);
             actor.stage.eventor.Listen<PhysTriggerExitEvent>(OnTriggerExit);
             spatial = actor.GetBehavior<Spatial>();
-            rigidbody = new RigidBody(defaultShape, defaultMaterial);
+            rigidbody = new RigidBody(new BoxShape(TSVector.one), defaultMaterial);
             actor.stage.phys.AddBody(actor.id, rigidbody);
         }
 
@@ -191,7 +186,7 @@ namespace Goblin.Gameplay.Logic.Physics
         private void OnCollisionEnter(PhysCollisionEnterEvent e)
         {
             if (actor.id != e.id0 && actor.id != e.id1) return;
-            
+
             var selfIsId0 = e.id0 == actor.id;
             actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
         }
