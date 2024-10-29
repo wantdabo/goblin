@@ -116,7 +116,7 @@ namespace Goblin.Sys.Gameplay
 
         public void Start()
         {
-            Time.fixedDeltaTime = 1f / GameDef.LOGIC_FRAME;
+            Time.fixedDeltaTime = GameDef.LOGIC_TICK.AsFloat();
             lstage = AddComp<LStage>();
             lstage.Create();
 

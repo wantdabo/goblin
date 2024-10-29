@@ -13,8 +13,8 @@ namespace Goblin.Sys.Common
     /// </summary>
     public abstract class UIBaseCell : UIBase<UIBaseCell>
     {
-        public GameObject container;
-        private bool active = true;
+        public GameObject container { get; set; }
+        private bool active { get; set; } = true;
         protected bool isActive { get { return active; } private set { active = value; } }
 
         /// <summary>
