@@ -34,6 +34,9 @@ namespace Goblin.Gameplay.Logic.Actors
             attribute.movespeed = 55 * FP.EN1;
             attribute.attack = 1000;
             
+            var surface = GetBehavior<Surface>();
+            surface.model = 10000;
+            
             var spatial = GetBehavior<Spatial>();
             spatial.eulerAngle = new TSVector(0, 90, 0);
             
