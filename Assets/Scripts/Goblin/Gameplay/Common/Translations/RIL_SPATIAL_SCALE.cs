@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public struct RIL_SPATIAL_SCALE : IRIL
     {
-        public ushort id => RILDef.SPATIAL_SCALE;
+        public ushort id => RIL_DEFINE.SPATIAL_SCALE;
         /// <summary>
         /// 缩放
         /// </summary>

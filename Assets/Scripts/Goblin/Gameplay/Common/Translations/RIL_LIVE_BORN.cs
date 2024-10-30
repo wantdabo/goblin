@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public struct RIL_LIVE_BORN : IRIL
     {
-        public ushort id => RILDef.LIVE_BORN;
+        public ushort id => RIL_DEFINE.LIVE_BORN;
         
         public byte[] Serialize()
         {

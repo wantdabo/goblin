@@ -3,7 +3,7 @@
     /// <summary>
     /// 技能管线状态定义
     /// </summary>
-    public class SkillPipelineStateDef
+    public class SKILL_PIPELINE_STATE_DEFINE
     {
         /// <summary>
         /// 闲置

@@ -9,7 +9,7 @@ namespace Goblin.SkillPipelineEditor
     [Attachable(typeof(EditorSpatialTrack))]
     public class EditorSpatialClip : ActionClip
     {
-        [SerializeField][HideInInspector] private float length = 1f / GameDef.SP_DATA_FRAME;
+        [SerializeField][HideInInspector] private float length = 1f / GAME_DEFINE.SP_DATA_FRAME;
 
         [MenuName("平移")]
         [SerializeField]

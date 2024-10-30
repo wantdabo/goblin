@@ -3,7 +3,7 @@
     /// <summary>
     /// 打断标记定义
     /// </summary>
-    public class BreakTokenDef
+    public class BREAK_TOKEN_DEFINE
     {
         /// <summary>
         /// 无标记

@@ -13,9 +13,9 @@ namespace Goblin.Gameplay.Logic.States.Player
     /// </summary>
     public class PlayerRun : State
     {
-        public override uint id => StateDef.PLAYER_RUN;
+        public override uint id => STATE_DEFINE.PLAYER_RUN;
         
-        protected override List<uint> passes => new() { StateDef.PLAYER_IDLE, StateDef.PLAYER_HURT, StateDef.PLAYER_ATTACK };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_IDLE, STATE_DEFINE.PLAYER_HURT, STATE_DEFINE.PLAYER_ATTACK };
 
         private Attribute attribute { get; set; }
         private Spatial spatial { get; set; }

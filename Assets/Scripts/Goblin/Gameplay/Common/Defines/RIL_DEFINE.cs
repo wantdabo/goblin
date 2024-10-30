@@ -3,7 +3,7 @@
     /// <summary>
     /// RIL 定义
     /// </summary>
-    public class RILDef
+    public class RIL_DEFINE
     {
         /// <summary>
         /// LIVE 出生指令

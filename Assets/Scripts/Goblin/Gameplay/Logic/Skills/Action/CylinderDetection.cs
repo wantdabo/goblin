@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class CylinderDetection : SkillAction<CylinderDetectionData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.CYLINDER_DETECTION;
+        public override ushort id => SKILL_ACTION_DEFINE.CYLINDER_DETECTION;
 
         private Spatials.Spatial spatial { get; set; }
 

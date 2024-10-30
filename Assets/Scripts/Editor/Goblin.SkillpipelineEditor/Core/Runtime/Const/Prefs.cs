@@ -17,9 +17,9 @@ namespace Goblin.SkillPipelineEditor
         [Serializable]
         class SerializedData
         {
-            public float SnapInterval = GameDef.SP_DATA_FRAME;
+            public float SnapInterval = GAME_DEFINE.SP_DATA_FRAME;
             [NonSerialized]
-            public int FrameRate = GameDef.SP_DATA_FRAME;
+            public int FrameRate = GAME_DEFINE.SP_DATA_FRAME;
             [NonSerialized]
             public float timeScale = 1f;
             public int AutoSaveSeconds;

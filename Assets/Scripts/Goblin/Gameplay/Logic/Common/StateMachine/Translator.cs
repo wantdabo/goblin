@@ -21,14 +21,14 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         protected override void OnCreate()
         {
             base.OnCreate();
-            lzerostate = StateDef.NULL;
-            lonestate = StateDef.NULL;
+            lzerostate = STATE_DEFINE.NULL;
+            lonestate = STATE_DEFINE.NULL;
         }
 
         protected override void OnRIL()
         {
-            var machinez = behavior.GetMachine(StateDef.LAYER_ZERO);
-            var zerostate = StateDef.NULL;
+            var machinez = behavior.GetMachine(STATE_DEFINE.LAYER_ZERO);
+            var zerostate = STATE_DEFINE.NULL;
             if (null != machinez && null != machinez.current)
             {
                 zerostate = machinez.current.id;
@@ -36,12 +36,12 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (zerostate != lzerostate)
             {
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ZERO(zerostate, lzerostate, StateDef.LAYER_ZERO));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ZERO(zerostate, lzerostate, STATE_DEFINE.LAYER_ZERO));
                 lzerostate = zerostate;
             }
 
-            var machineo = behavior.GetMachine(StateDef.LAYER_ONE);
-            var onestate = StateDef.NULL;
+            var machineo = behavior.GetMachine(STATE_DEFINE.LAYER_ONE);
+            var onestate = STATE_DEFINE.NULL;
             if (null != machineo && null != machineo.current)
             {
                 onestate = machineo.current.id;
@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
 
             if (onestate != lonestate)
             {
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ONE(onestate, lonestate, StateDef.LAYER_ONE));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_STATE_MACHINE_ONE(onestate, lonestate, STATE_DEFINE.LAYER_ONE));
                 lonestate = onestate;
             }
         }

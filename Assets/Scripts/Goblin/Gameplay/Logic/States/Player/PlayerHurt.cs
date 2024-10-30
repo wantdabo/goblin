@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     /// </summary>
     public class PlayerHurt : State
     {
-        public override uint id => StateDef.PLAYER_HURT;
+        public override uint id => STATE_DEFINE.PLAYER_HURT;
         protected override List<uint> passes => null;
         
         private Spatial spatial { get; set; }

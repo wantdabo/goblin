@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public class RIL_ATTRIBUTE_MAXHP : IRIL
     {
-        public ushort id => RILDef.ATTRIBUTE_MAXHP;
+        public ushort id => RIL_DEFINE.ATTRIBUTE_MAXHP;
 
         /// <summary>
         /// 最大生命值

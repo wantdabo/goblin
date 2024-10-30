@@ -3,7 +3,7 @@
     /// <summary>
     /// 碰撞几何体定义
     /// </summary>
-    public class PhysShapeDef
+    public class PHYS_SHAPE_DEFINE
     {
         /// <summary>
         /// 玩家

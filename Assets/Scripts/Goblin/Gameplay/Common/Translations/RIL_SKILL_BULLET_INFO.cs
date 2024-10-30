@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public class RIL_SKILL_BULLET_INFO : IRIL
     {
-        public ushort id => RILDef.SKILL_BULLET_INFO;
+        public ushort id => RIL_DEFINE.SKILL_BULLET_INFO;
 
         /// <summary>
         /// 子弹 ID

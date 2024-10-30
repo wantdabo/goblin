@@ -3,7 +3,7 @@
     /// <summary>
     /// SkillAction/技能行为定义
     /// </summary>
-    public class SkillActionDef
+    public class SKILL_ACTION_DEFINE
     {
         /// <summary>
         /// 动画

@@ -3,7 +3,7 @@
     /// <summary>
     /// 子弹状态
     /// </summary>
-    public class SkillBulletStateDef
+    public class SKILL_BULLET_STATE_DEFINE
     {
         /// <summary>
         /// 无

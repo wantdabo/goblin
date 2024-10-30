@@ -226,7 +226,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint actorId) OverlapBox(TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -250,7 +250,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint[] actorIds) OverlapBoxs(TSVector point, TSVector size, TSQuaternion rotation)
         {
             BoxShape shape = new(size);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -273,7 +273,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint actorId) OverlapSphere(TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, TSQuaternion.identity));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -296,7 +296,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint[] actorIds) OverlapSpheres(TSVector point, FP radius)
         {
             SphereShape shape = new(radius);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, TSQuaternion.identity));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, TSQuaternion.identity));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -321,7 +321,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint actorId) OverlapCylinder(TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -346,7 +346,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public (bool hit, uint[] actorIds) OverlapCylinders(TSVector point, FP radius, FP height, TSQuaternion rotation)
         {
             CylinderShape shape = new(radius, height);
-            physinfos.Add((PhysShapeDef.OVERLAP, shape, point, rotation));
+            physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
             actorIdTemps.Clear();
             foreach (var kv in abdict)
@@ -383,7 +383,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
         private void OnFPLateTick(FPLateTickEvent e)
         {
-            foreach (var kv in abdict) physinfos.Add((PhysShapeDef.PLAYER, kv.Value.Shape, kv.Value.Position, TSQuaternion.CreateFromMatrix(kv.Value.Orientation)));
+            foreach (var kv in abdict) physinfos.Add((PHYS_SHAPE_DEFINE.PLAYER, kv.Value.Shape, kv.Value.Position, TSQuaternion.CreateFromMatrix(kv.Value.Orientation)));
             stage.eventor.Tell(new PhysShapesEvent { physinfos = physinfos.ToArray() });
             physinfos.Clear();
         }

@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public class RIL_ATTRIBUTE_HP : IRIL
     {
-        public ushort id => RILDef.ATTRIBUTE_HP;
+        public ushort id => RIL_DEFINE.ATTRIBUTE_HP;
         /// <summary>
         /// 生命值
         /// </summary>

@@ -13,9 +13,9 @@ namespace Goblin.Gameplay.Logic.States.Player
     /// </summary>
     public class PlayerAttack : State
     {
-        public override uint id => StateDef.PLAYER_ATTACK;
+        public override uint id => STATE_DEFINE.PLAYER_ATTACK;
 
-        protected override List<uint> passes => new() { StateDef.PLAYER_HURT };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_HURT };
 
         private SkillLauncher launcher { get; set; }
 

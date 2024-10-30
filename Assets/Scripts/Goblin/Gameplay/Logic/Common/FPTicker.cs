@@ -62,7 +62,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 最新的流逝时间 s/秒
         /// </summary>
-        public FP tick { get; private set; } = GameDef.LOGIC_TICK;
+        public FP tick { get; private set; } = GAME_DEFINE.LOGIC_TICK;
 
         protected override void OnCreate()
         {

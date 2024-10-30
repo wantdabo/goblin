@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class BoxDetection : SkillAction<BoxDetectionData, DetectionCache>
     {
-        public override ushort id => SkillActionDef.BOX_DETECTION;
+        public override ushort id => SKILL_ACTION_DEFINE.BOX_DETECTION;
 
         private Spatials.Spatial spatial { get; set; }
 

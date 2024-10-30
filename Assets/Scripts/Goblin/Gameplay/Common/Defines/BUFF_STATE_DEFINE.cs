@@ -3,7 +3,7 @@
     /// <summary>
     /// Buff 状态定义
     /// </summary>
-    public class BuffStateDef
+    public class BUFF_STATE_DEFINE
     {
         /// <summary>
         /// 失活

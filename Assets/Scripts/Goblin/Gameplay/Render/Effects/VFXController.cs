@@ -127,7 +127,7 @@ namespace Goblin.Gameplay.Render.Effects
                 foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Play();
                 if (duration <= 0) return;
                 autoStopTimingId = vfx.stage.ticker.Timing((t) => Stop(), duration, 1);
-            }, GameDef.SP_DATA_TICK, 1);
+            }, GAME_DEFINE.SP_DATA_TICK, 1);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public class RIL_SURFACE : IRIL
     {
-        public ushort id => RILDef.SURFACE;
+        public ushort id => RIL_DEFINE.SURFACE;
         
         /// <summary>
         /// 模型 ID

@@ -10,9 +10,9 @@ namespace Goblin.Gameplay.Logic.States.Player
     /// </summary>
     public class PlayerIdle : State
     {
-        public override uint id => StateDef.PLAYER_IDLE;
+        public override uint id => STATE_DEFINE.PLAYER_IDLE;
         
-        protected override List<uint> passes => new() { StateDef.PLAYER_RUN, StateDef.PLAYER_HURT, StateDef.PLAYER_ATTACK };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_RUN, STATE_DEFINE.PLAYER_HURT, STATE_DEFINE.PLAYER_ATTACK };
         
         private Gamepad gamepad { get; set; }
 

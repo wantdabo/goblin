@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class BreakEvent : SkillAction<BreakEventData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.BREAK_EVENT;
+        public override ushort id => SKILL_ACTION_DEFINE.BREAK_EVENT;
 
         private Gamepad gamepad { get; set; }
 
@@ -30,9 +30,9 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
         protected override void OnExecute(BreakEventData data, SkillActionCache cache, uint frame, FP tick)
         {
-            if (BreakTokenDef.NONE == data.token) return;
+            if (BREAK_TOKEN_DEFINE.NONE == data.token) return;
 
-            if (BreakTokenDef.JOYSTICK == (BreakTokenDef.JOYSTICK & pipeline.breaktoken) && null != gamepad)
+            if (BREAK_TOKEN_DEFINE.JOYSTICK == (BREAK_TOKEN_DEFINE.JOYSTICK & pipeline.breaktoken) && null != gamepad)
             {
                 var joystick = gamepad.GetInput(InputType.Joystick);
                 if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();

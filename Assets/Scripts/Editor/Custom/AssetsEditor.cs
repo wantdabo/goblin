@@ -68,7 +68,7 @@ namespace Goblin.Custom
             var obj = objs[0];
 
             var asset = obj as Asset;
-            uint length = Convert.ToUInt32(asset.Length * GameDef.SP_DATA_FRAME);
+            uint length = Convert.ToUInt32(asset.Length * GAME_DEFINE.SP_DATA_FRAME);
             List<ActionClip> clips = new();
             foreach (var group in asset.groups)
             {
@@ -85,18 +85,18 @@ namespace Goblin.Custom
                 if (clip is EditorAnimationClip animationClip)
                 {
                     var val = new AnimationData();
-                    val.id = SkillActionDef.ANIMATION;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.ANIMATION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.name = animationClip.animationClip.name;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorEffectClip effectClip)
                 {
                     var val = new EffectData();
-                    val.id = SkillActionDef.EFFECT;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.EFFECT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.res = Path.GetFileNameWithoutExtension(effectClip.res);
                     val.position = new Vector3Data(
                         Convert.ToInt32(effectClip.position.x * Config.float2Int),
@@ -115,18 +115,18 @@ namespace Goblin.Custom
                 else if (clip is EditorSoundClip soundClip)
                 {
                     var val = new SoundData();
-                    val.id = SkillActionDef.SOUND;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.SOUND;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.res = Path.GetFileNameWithoutExtension(soundClip.res);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorSpatialClip spatialClip)
                 {
                     var val = new SpatialData();
-                    val.id = SkillActionDef.SPATIAL;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.SPATIAL;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.position = new Vector3Data(
                         Convert.ToInt32(spatialClip.position.x * Config.float2Int),
                         Convert.ToInt32(spatialClip.position.y * Config.float2Int),
@@ -138,9 +138,9 @@ namespace Goblin.Custom
                 else if (clip is EditorBoxDetectionClip boxDetectionClip)
                 {
                     var val = new BoxDetectionData();
-                    val.id = SkillActionDef.BOX_DETECTION;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.BOX_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.detectedcnt = Convert.ToUInt32(boxDetectionClip.detectedcnt);
                     val.position = new Vector3Data(
                         Convert.ToInt32(boxDetectionClip.position.x * Config.float2Int),
@@ -157,9 +157,9 @@ namespace Goblin.Custom
                 else if (clip is EditorSphereDetectionClip sphereDetectionClip)
                 {
                     var val = new SphereDetectionData();
-                    val.id = SkillActionDef.SPHERE_DETECTION;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.SPHERE_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.detectedcnt = Convert.ToUInt32(sphereDetectionClip.detectedcnt);
                     val.position = new Vector3Data(
                         Convert.ToInt32(sphereDetectionClip.position.x * Config.float2Int),
@@ -172,9 +172,9 @@ namespace Goblin.Custom
                 else if (clip is EditorDetectionCylinderClip cylinderClip)
                 {
                     var val = new CylinderDetectionData();
-                    val.id = SkillActionDef.CYLINDER_DETECTION;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.CYLINDER_DETECTION;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.detectedcnt = Convert.ToUInt32(cylinderClip.detectedcnt);
                     val.position = new Vector3Data(
                         Convert.ToInt32(cylinderClip.position.x * Config.float2Int),
@@ -188,9 +188,9 @@ namespace Goblin.Custom
                 else if (clip is EditorBulletEventClip bulletEventClip)
                 {
                     var val = new BulletEventData();
-                    val.id = SkillActionDef.BULLET_EVENT;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.BULLET_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.bulletid = Convert.ToUInt32(bulletEventClip.bulletid);
                     val.position = new Vector3Data(
                         Convert.ToInt32(bulletEventClip.position.x * Config.float2Int),
@@ -202,22 +202,22 @@ namespace Goblin.Custom
                 else if (clip is EditorBreakEventClip skillBreakeventClip)
                 {
                     var val = new BreakEventData();
-                    val.id = SkillActionDef.BREAK_EVENT;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
-                    val.token = BreakTokenDef.NONE;
-                    if (skillBreakeventClip.joystick) val.token |= BreakTokenDef.JOYSTICK;
-                    if (skillBreakeventClip.recvhurt) val.token |= BreakTokenDef.RECV_HURT;
-                    if (skillBreakeventClip.recvcontrol) val.token |= BreakTokenDef.RECV_CONTROL;
-                    if (skillBreakeventClip.skillcast) val.token |= BreakTokenDef.SKILL_CAST;
+                    val.id = SKILL_ACTION_DEFINE.BREAK_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.token = BREAK_TOKEN_DEFINE.NONE;
+                    if (skillBreakeventClip.joystick) val.token |= BREAK_TOKEN_DEFINE.JOYSTICK;
+                    if (skillBreakeventClip.recvhurt) val.token |= BREAK_TOKEN_DEFINE.RECV_HURT;
+                    if (skillBreakeventClip.recvcontrol) val.token |= BREAK_TOKEN_DEFINE.RECV_CONTROL;
+                    if (skillBreakeventClip.skillcast) val.token |= BREAK_TOKEN_DEFINE.SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
                 {
                     var val = new BreakFramesData();
-                    val.id = SkillActionDef.BREAK_FRAMES_EVENT;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GameDef.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GameDef.SP_DATA_FRAME);
+                    val.id = SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.selfbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.selfbreakframes);
                     val.targetbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.targetbreakframes);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));

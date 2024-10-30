@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class BreakFrames : SkillAction<BreakFramesData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.BREAK_FRAMES_EVENT;
+        public override ushort id => SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT;
 
         protected override void OnEnter(BreakFramesData data, SkillActionCache cache)
         {

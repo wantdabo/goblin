@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Common.Defines
     /// <summary>
     /// Game 设定
     /// </summary>
-    public class GameDef
+    public class GAME_DEFINE
     {
         /// <summary>
         /// 逻辑帧率

@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class BulletEvent : SkillAction<BulletEventData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.BULLET_EVENT;
+        public override ushort id => SKILL_ACTION_DEFINE.BULLET_EVENT;
         
         private Spatials.Spatial spatial { get; set; }
 

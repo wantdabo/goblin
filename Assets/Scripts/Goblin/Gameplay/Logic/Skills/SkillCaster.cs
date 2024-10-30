@@ -60,7 +60,7 @@ namespace Goblin.Gameplay.Logic.Skills
                 if (launcher.launching.playing)
                 {
                     var pipeline = launcher.Get(launcher.launching.skill);
-                    if (BreakTokenDef.SKILL_CAST != (BreakTokenDef.SKILL_CAST & pipeline.breaktoken)) return;
+                    if (BREAK_TOKEN_DEFINE.SKILL_CAST != (BREAK_TOKEN_DEFINE.SKILL_CAST & pipeline.breaktoken)) return;
                     lastskill = pipeline.id;
                     pipeline.Break();
                 }

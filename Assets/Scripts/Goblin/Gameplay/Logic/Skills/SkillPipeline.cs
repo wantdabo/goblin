@@ -60,11 +60,11 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <summary>
         /// 技能状态
         /// </summary>
-        public byte state { get; private set; } = SkillPipelineStateDef.None;
+        public byte state { get; private set; } = SKILL_PIPELINE_STATE_DEFINE.None;
         /// <summary>
         /// 打断标记
         /// </summary>
-        public int breaktoken { get; private set; } = BreakTokenDef.NONE;
+        public int breaktoken { get; private set; } = BREAK_TOKEN_DEFINE.NONE;
         /// <summary>
         /// 自身跳帧
         /// </summary>
@@ -110,7 +110,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <returns></returns>
         public bool Launch()
         {
-            if (SkillPipelineStateDef.None != state) return false;
+            if (SKILL_PIPELINE_STATE_DEFINE.None != state) return false;
             Start();
 
             return true;
@@ -121,7 +121,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public void NoneBreakToken()
         {
-            breaktoken = BreakTokenDef.NONE;
+            breaktoken = BREAK_TOKEN_DEFINE.NONE;
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public void Break()
         {
-            if (SkillPipelineStateDef.None == state) return;
-            state = SkillPipelineStateDef.Break;
+            if (SKILL_PIPELINE_STATE_DEFINE.None == state) return;
+            state = SKILL_PIPELINE_STATE_DEFINE.Break;
             NotifyState();
             End();
         }
@@ -159,11 +159,11 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Start()
         {
             Reset();
-            state = SkillPipelineStateDef.Start;
+            state = SKILL_PIPELINE_STATE_DEFINE.Start;
             NotifyState();
-            state = SkillPipelineStateDef.Casting;
+            state = SKILL_PIPELINE_STATE_DEFINE.Casting;
             NotifyState();
-            Casting(GameDef.LOGIC_TICK);
+            Casting(GAME_DEFINE.LOGIC_TICK);
         }
 
         /// <summary>
@@ -181,31 +181,31 @@ namespace Goblin.Gameplay.Logic.Skills
                 var nilaction = null == action;
                 switch (actionData.id)
                 {
-                    case SkillActionDef.SPATIAL:
+                    case SKILL_ACTION_DEFINE.SPATIAL:
                         if (nilaction) action = AddAction<Spatial>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
-                    case SkillActionDef.BULLET_EVENT:
+                    case SKILL_ACTION_DEFINE.BULLET_EVENT:
                         if (nilaction) action = AddAction<BulletEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
-                    case SkillActionDef.BREAK_EVENT:
+                    case SKILL_ACTION_DEFINE.BREAK_EVENT:
                         if (nilaction) action = AddAction<BreakEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
-                    case SkillActionDef.BREAK_FRAMES_EVENT:
+                    case SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT:
                         if (nilaction) action = AddAction<BreakFrames>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
-                    case SkillActionDef.BOX_DETECTION:
+                    case SKILL_ACTION_DEFINE.BOX_DETECTION:
                         if (nilaction) action = AddAction<BoxDetection>(actionData.id);
                         if (nilcache) cache = GenCache<DetectionCache>(actionData);
                         break;
-                    case SkillActionDef.SPHERE_DETECTION:
+                    case SKILL_ACTION_DEFINE.SPHERE_DETECTION:
                         if (nilaction) action = AddAction<SphereDetection>(actionData.id);
                         if (nilcache) cache = GenCache<DetectionCache>(actionData);
                         break;
-                    case SkillActionDef.CYLINDER_DETECTION:
+                    case SKILL_ACTION_DEFINE.CYLINDER_DETECTION:
                         if (nilaction) action = AddAction<CylinderDetection>(actionData.id);
                         if (nilcache) cache = GenCache<DetectionCache>(actionData);
                         break;
@@ -230,7 +230,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         private void End()
         {
-            state = SkillPipelineStateDef.End;
+            state = SKILL_PIPELINE_STATE_DEFINE.End;
             NotifyState();
             Reset();
         }
@@ -257,13 +257,13 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public void OnFPTick(FP tick)
         {
-            if (SkillPipelineStateDef.End == state)
+            if (SKILL_PIPELINE_STATE_DEFINE.End == state)
             {
                 NotifyState();
-                state = SkillPipelineStateDef.None;
+                state = SKILL_PIPELINE_STATE_DEFINE.None;
             }
 
-            if (SkillPipelineStateDef.Casting != state) return;
+            if (SKILL_PIPELINE_STATE_DEFINE.Casting != state) return;
 
             // Tick
             Casting(tick);
@@ -277,7 +277,7 @@ namespace Goblin.Gameplay.Logic.Skills
             // 加载技能数据
             var spdata = MessagePackSerializer.Deserialize<SkillPipelineData>(engine.gameres.location.LoadSkillDataSync(id.ToString()));
             // 技能帧数
-            length = FP.ToUInt(spdata.length * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+            length = FP.ToUInt(spdata.length * GAME_DEFINE.LOGIC_SP_DATA_FRAME_SCALE);
             // 解析行为数据
             for (int i = 0; i < spdata.actionIds.Length; i++)
             {
@@ -285,32 +285,32 @@ namespace Goblin.Gameplay.Logic.Skills
                 SkillActionData data = default;
                 switch (actionId)
                 {
-                    case SkillActionDef.SPATIAL:
+                    case SKILL_ACTION_DEFINE.SPATIAL:
                         data = MessagePackSerializer.Deserialize<SpatialData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.BULLET_EVENT:
+                    case SKILL_ACTION_DEFINE.BULLET_EVENT:
                         data = MessagePackSerializer.Deserialize<BulletEventData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.BREAK_EVENT:
+                    case SKILL_ACTION_DEFINE.BREAK_EVENT:
                         data = MessagePackSerializer.Deserialize<BreakEventData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.BREAK_FRAMES_EVENT:
+                    case SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT:
                         data = MessagePackSerializer.Deserialize<BreakFramesData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.BOX_DETECTION:
+                    case SKILL_ACTION_DEFINE.BOX_DETECTION:
                         data = MessagePackSerializer.Deserialize<BoxDetectionData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.SPHERE_DETECTION:
+                    case SKILL_ACTION_DEFINE.SPHERE_DETECTION:
                         data = MessagePackSerializer.Deserialize<SphereDetectionData>(spdata.actionBytes[i]);
                         break;
-                    case SkillActionDef.CYLINDER_DETECTION:
+                    case SKILL_ACTION_DEFINE.CYLINDER_DETECTION:
                         data = MessagePackSerializer.Deserialize<CylinderDetectionData>(spdata.actionBytes[i]);
                         break;
                 }
 
                 if (null == data) continue;
-                data.sframe = FP.ToUInt(data.sframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
-                data.eframe = FP.ToUInt(data.eframe * GameDef.LOGIC_SP_DATA_FRAME_SCALE);
+                data.sframe = FP.ToUInt(data.sframe * GAME_DEFINE.LOGIC_SP_DATA_FRAME_SCALE);
+                data.eframe = FP.ToUInt(data.eframe * GAME_DEFINE.LOGIC_SP_DATA_FRAME_SCALE);
                 actiondatas.Add(data);
             }
         }

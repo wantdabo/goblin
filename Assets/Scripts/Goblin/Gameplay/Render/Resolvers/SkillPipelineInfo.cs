@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override void OnResolve(uint frame, RIL_SKILL_PIPELINE_INFO ril)
         {
-            if (SkillPipelineStateDef.End == ril.state || SkillPipelineStateDef.None == ril.state)
+            if (SKILL_PIPELINE_STATE_DEFINE.End == ril.state || SKILL_PIPELINE_STATE_DEFINE.None == ril.state)
             {
                 if (effdict.TryGetValue(ril.skillid, out var effs))
                 {
@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Render.Resolvers
             }
 
             ReadyOrInitialize(ril.skillid);
-            var f = Mathf.Floor((ril.frame - 1) * GameDef.SP_DATA_LOGIC_FRAME_SCALE);
+            var f = Mathf.Floor((ril.frame - 1) * GAME_DEFINE.SP_DATA_LOGIC_FRAME_SCALE);
             if (skillActionDatas.TryGetValue(ril.skillid, out var datas))
             {
                 foreach (var data in datas)
@@ -62,12 +62,12 @@ namespace Goblin.Gameplay.Render.Resolvers
                     var between = (f >= data.sframe && f <= data.eframe);
                     switch (data.id)
                     {
-                        case SkillActionDef.ANIMATION:
+                        case SKILL_ACTION_DEFINE.ANIMATION:
                             if (false == between) break;
                             var animationData = (AnimationData)data;
                             animation.Play(animationData.name, f / data.eframe);
                             break;
-                        case SkillActionDef.EFFECT:
+                        case SKILL_ACTION_DEFINE.EFFECT:
                             if (false == effdict.TryGetValue(ril.skillid, out var effs))
                             {
                                 effs = new();
@@ -103,10 +103,10 @@ namespace Goblin.Gameplay.Render.Resolvers
                                 eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
                             }
 
-                            eff.Play(GameDef.SP_DATA_LOGIC_FRAME_SCALE * GameDef.SP_DATA_TICK);
+                            eff.Play(GAME_DEFINE.SP_DATA_LOGIC_FRAME_SCALE * GAME_DEFINE.SP_DATA_TICK);
 
                             break;
-                        case SkillActionDef.SOUND:
+                        case SKILL_ACTION_DEFINE.SOUND:
                             // TODO 后面需要优化支持音效加减速/配合顿帧、游戏加速等等
                             if ((uint)f != data.sframe) break;
                             var soundData = (SoundData)data;
@@ -131,13 +131,13 @@ namespace Goblin.Gameplay.Render.Resolvers
                 var actionId = spdata.actionIds[i];
                 switch (actionId)
                 {
-                    case SkillActionDef.ANIMATION:
+                    case SKILL_ACTION_DEFINE.ANIMATION:
                         skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<AnimationData>(spdata.actionBytes[i]));
                         break;
-                    case SkillActionDef.EFFECT:
+                    case SKILL_ACTION_DEFINE.EFFECT:
                         skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<EffectData>(spdata.actionBytes[i]));
                         break;
-                    case SkillActionDef.SOUND:
+                    case SKILL_ACTION_DEFINE.SOUND:
                         skillActionDatas[skill].Add(MessagePackSerializer.Deserialize<SoundData>(spdata.actionBytes[i]));
                         break;
                 }

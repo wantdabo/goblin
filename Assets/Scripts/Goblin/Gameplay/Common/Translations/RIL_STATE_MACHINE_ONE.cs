@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public struct RIL_STATE_MACHINE_ONE : IRIL 
     {
-        public ushort id => RILDef.STATE_MACHINE_ONE;
+        public ushort id => RIL_DEFINE.STATE_MACHINE_ONE;
         /// <summary>
         /// 状态
         /// </summary>

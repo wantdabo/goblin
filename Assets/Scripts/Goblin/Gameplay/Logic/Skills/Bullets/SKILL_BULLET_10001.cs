@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
     /// </summary>
     public class SKILL_BULLET_10001 : SkillBullet
     {
-        public override uint id => SkillBulletDef.BULLET_10001;
+        public override uint id => SKILL_BULLET_DEFINE.BULLET_10001;
 
         private Spatial spatial { get; set; }
         private TSVector dire { get; set; }

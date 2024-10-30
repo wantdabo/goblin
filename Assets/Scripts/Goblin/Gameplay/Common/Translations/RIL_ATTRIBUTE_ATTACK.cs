@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public class RIL_ATTRIBUTE_ATTACK : IRIL
     {
-        public ushort id => RILDef.ATTRIBUTE_ATTACK;
+        public ushort id => RIL_DEFINE.ATTRIBUTE_ATTACK;
 
         /// <summary>
         /// 攻击力

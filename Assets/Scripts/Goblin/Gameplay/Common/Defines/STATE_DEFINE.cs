@@ -3,7 +3,7 @@
     /// <summary>
     /// State 定义
     /// </summary>
-    public class StateDef
+    public class STATE_DEFINE
     {
         /// <summary>
         /// 最大层数

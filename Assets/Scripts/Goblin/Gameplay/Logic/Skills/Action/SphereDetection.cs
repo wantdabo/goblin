@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class SphereDetection : SkillAction<SphereDetectionData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.SPHERE_DETECTION;
+        public override ushort id => SKILL_ACTION_DEFINE.SPHERE_DETECTION;
 
         private Spatials.Spatial spatial { get; set; }
 

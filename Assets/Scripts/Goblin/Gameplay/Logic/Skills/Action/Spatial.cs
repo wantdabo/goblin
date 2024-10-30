@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// </summary>
     public class Spatial : SkillAction<SpatialData, SkillActionCache>
     {
-        public override ushort id => SkillActionDef.SPATIAL;
+        public override ushort id => SKILL_ACTION_DEFINE.SPATIAL;
         
         private Spatials.Spatial spatial { get; set; }
 

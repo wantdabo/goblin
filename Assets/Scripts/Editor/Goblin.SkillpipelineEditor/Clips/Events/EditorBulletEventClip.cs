@@ -13,6 +13,6 @@ namespace Goblin.SkillPipelineEditor
         [MenuName("起始位置")]
         public Vector3 position = Vector3.zero;
         
-        public override float Length => GameDef.SP_DATA_TICK;
+        public override float Length => GAME_DEFINE.SP_DATA_TICK;
     }
 }

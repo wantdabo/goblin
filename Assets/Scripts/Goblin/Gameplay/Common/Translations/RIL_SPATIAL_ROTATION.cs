@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public struct RIL_SPATIAL_ROTATION : IRIL
     {
-        public ushort id => RILDef.SPATIAL_ROTATION;
+        public ushort id => RIL_DEFINE.SPATIAL_ROTATION;
         /// <summary>
         /// 旋转
         /// </summary>

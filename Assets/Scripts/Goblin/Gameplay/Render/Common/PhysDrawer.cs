@@ -47,10 +47,10 @@ namespace Goblin.Gameplay.Render.Common
                 Color color = default;
                 switch (physinfo.type)
                 {
-                    case PhysShapeDef.PLAYER:
+                    case PHYS_SHAPE_DEFINE.PLAYER:
                         color = Color.green;
                         break;
-                    case PhysShapeDef.OVERLAP:
+                    case PHYS_SHAPE_DEFINE.OVERLAP:
                         color = Color.yellow;
                         break;
                 }

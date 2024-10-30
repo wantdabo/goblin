@@ -168,40 +168,40 @@ namespace Goblin.Gameplay.Render.Core
             {
                 switch (e.ril.id)
                 {
-                    case RILDef.SPATIAL_POSITION:
+                    case RIL_DEFINE.SPATIAL_POSITION:
                         resolver = AddResolver<SpatialPosition>(e.ril.id);
                         break;
-                    case RILDef.SPATIAL_ROTATION:
+                    case RIL_DEFINE.SPATIAL_ROTATION:
                         resolver = AddResolver<SpatialRotation>(e.ril.id);
                         break;
-                    case RILDef.SPATIAL_SCALE:
+                    case RIL_DEFINE.SPATIAL_SCALE:
                         resolver = AddResolver<SpatialScale>(e.ril.id);
                         break;
-                    case RILDef.STATE_MACHINE_ZERO:
+                    case RIL_DEFINE.STATE_MACHINE_ZERO:
                         resolver = AddResolver<StateMachineZero>(e.ril.id);
                         break;
-                    case RILDef.STATE_MACHINE_ONE:
+                    case RIL_DEFINE.STATE_MACHINE_ONE:
                         resolver = AddResolver<StateMachineOne>(e.ril.id);
                         break;
-                    case RILDef.SKILL_PIPELINE_INFO:
+                    case RIL_DEFINE.SKILL_PIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;
-                    case RILDef.SKILL_BULLET_INFO:
+                    case RIL_DEFINE.SKILL_BULLET_INFO:
                         resolver = AddResolver<SkillBulletInfo>(e.ril.id);
                         break;
-                    case RILDef.ATTRIBUTE_HP:
+                    case RIL_DEFINE.ATTRIBUTE_HP:
                         resolver = AddResolver<AttributeHP>(e.ril.id);
                         break;
-                    case RILDef.ATTRIBUTE_MAXHP:
+                    case RIL_DEFINE.ATTRIBUTE_MAXHP:
                         resolver = AddResolver<AttributeMaxHP>(e.ril.id);
                         break;
-                    case RILDef.ATTRIBUTE_MOVESPEED:
+                    case RIL_DEFINE.ATTRIBUTE_MOVESPEED:
                         resolver = AddResolver<AttributeMoveSpeed>(e.ril.id);
                         break;
-                    case RILDef.ATTRIBUTE_ATTACK:
+                    case RIL_DEFINE.ATTRIBUTE_ATTACK:
                         resolver = AddResolver<AttributeAttack>(e.ril.id);
                         break;
-                    case RILDef.SURFACE:
+                    case RIL_DEFINE.SURFACE:
                         resolver = AddResolver<Surface>(e.ril.id);
                         break;
                 }

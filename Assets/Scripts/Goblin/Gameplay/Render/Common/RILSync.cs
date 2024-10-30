@@ -33,10 +33,10 @@ namespace Goblin.Gameplay.Render.Common
             Actor actor = default;
             switch (e.ril.id)
             {
-                case RILDef.LIVE_BORN:
+                case RIL_DEFINE.LIVE_BORN:
                     stage.AddActor(e.id).Create();
                     break;
-                case RILDef.LIVE_DEAD:
+                case RIL_DEFINE.LIVE_DEAD:
                     stage.GetActor(e.id).Destroy();
                     break;
             }

@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         /// <summary>
         /// 子弹状态
         /// </summary>
-        public byte state { get; private set; } = SkillBulletStateDef.NONE;
+        public byte state { get; private set; } = SKILL_BULLET_STATE_DEFINE.NONE;
         /// <summary>
         /// 拥有者/ActorID
         /// </summary>
@@ -87,7 +87,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
 
         private void OnFPTick(FPTickEvent e)
         {
-            state = SkillBulletStateDef.FLYING;
+            state = SKILL_BULLET_STATE_DEFINE.FLYING;
             OnFlying(e.tick);
             translator.Force();
         }
@@ -104,7 +104,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             actor.eventor.Listen<CollisionExitEvent>(OnCollisionExit);
 
             actor.eventor.Tell<LiveBornEvent>();
-            state = SkillBulletStateDef.FIRE;
+            state = SKILL_BULLET_STATE_DEFINE.FIRE;
             OnFire();
             translator.Force();
         }
@@ -115,7 +115,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             actor.eventor.UnListen<CollisionEnterEvent>(OnCollisionEnter);
             actor.eventor.UnListen<CollisionExitEvent>(OnCollisionExit);
 
-            state = SkillBulletStateDef.STOP;
+            state = SKILL_BULLET_STATE_DEFINE.STOP;
             OnStop();
             translator.Force();
             actor.eventor.Tell<LiveDeadEvent>();

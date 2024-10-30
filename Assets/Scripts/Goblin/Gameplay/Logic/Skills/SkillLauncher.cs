@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.Skills
                 foreach (uint skill in skills)
                 {
                     var pipeline = Get(skill);
-                    if (SkillPipelineStateDef.None != pipeline.state) return (true, skill);
+                    if (SKILL_PIPELINE_STATE_DEFINE.None != pipeline.state) return (true, skill);
                 }
 
                 return (false, default);

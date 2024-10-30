@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// </summary>
     public struct RIL_SPATIAL_POSITION : IRIL
     {
-        public ushort id => RILDef.SPATIAL_POSITION;
+        public ushort id => RIL_DEFINE.SPATIAL_POSITION;
         /// <summary>
         /// 平移
         /// </summary>
