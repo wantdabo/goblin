@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Common.SkillDatas.Common
     /// 碰撞检测行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public abstract class DetectionActionData : SkillActionData
+    public abstract class DetectionData : SkillActionData
     {
         /// <summary>
         /// 检测次数

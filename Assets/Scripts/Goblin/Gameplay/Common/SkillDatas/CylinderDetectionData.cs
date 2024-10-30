@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Common.SkillDatas
     /// 圆柱体碰撞检测行为数据
     /// </summary>
     [MessagePackObject(true)]
-    public class CylinderDetectionData : DetectionActionData
+    public class CylinderDetectionData : DetectionData
     {
         /// <summary>
         /// 圆柱体半径
