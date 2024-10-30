@@ -12,11 +12,11 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// <summary>
         /// 状态
         /// </summary>
-        public State state;
+        public State state { get; set; }
         /// <summary>
         /// 层级
         /// </summary>
-        public byte layer;
+        public byte layer { get; set; }
     }
 
     /// <summary>
@@ -27,11 +27,11 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// <summary>
         /// 状态
         /// </summary>
-        public State state;
+        public State state { get; set; }
         /// <summary>
         /// 层级
         /// </summary>
-        public byte layer;
+        public byte layer { get; set; }
     }
 
     /// <summary>
@@ -42,11 +42,11 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
         /// <summary>
         /// 状态
         /// </summary>
-        public State state;
+        public State state { get; set; }
         /// <summary>
         /// 层级
         /// </summary>
-        public byte layer;
+        public byte layer { get; set; }
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ namespace Goblin.Gameplay.Logic.Common.StateMachine
             base.OnDestroy();
             actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
-        
+
         /// <summary>
         /// 获取状态机
         /// </summary>
