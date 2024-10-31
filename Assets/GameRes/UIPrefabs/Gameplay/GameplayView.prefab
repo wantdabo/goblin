@@ -176,8 +176,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u6309\u952E \"J\" \u653B\u51FB\r\n\u6309\u952E \"K\" \u6280\u80FD A\r\n\u6309\u952E
-    \"L\" \u6280\u80FD B\r\n\u6309\u952E \"U\" \u6280\u80FD B\r\n\r\n\u6309\u952E
-    \"Z\" \u955C\u5934\u62C9\u8FD1\r\n\u6309\u952E \"X\" \u955C\u5934\u62C9\u8FDC\r\n\r\n\u6309\u952E
+    \"L\" \u6280\u80FD B\r\n\u6309\u952E \"U\" \u6280\u80FD C\n\r\n\u6309\u952E \"Z\"
+    \u955C\u5934\u62C9\u8FD1\r\n\u6309\u952E \"X\" \u955C\u5934\u62C9\u8FDC\r\n\r\n\u6309\u952E
     \"A\" \u5411\u5DE6\u8D70\r\n\u6309\u952E \"D\" \u5411\u53F3\u8D70"
 --- !u!114 &8525520755552331923
 MonoBehaviour:
