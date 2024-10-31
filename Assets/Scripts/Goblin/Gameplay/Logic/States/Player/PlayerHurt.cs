@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             machine.paramachine.actor.eventor.UnListen<RecvHurtEvent>(OnRecvHurt);
         }
 
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             return suffer;
         }

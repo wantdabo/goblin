@@ -244,7 +244,7 @@ namespace Goblin.Gameplay.Logic.Skills
             seflbreakframes = 0;
             targetbreakframes = 0;
             frame = 0;
-            foreach (var kv in cachedict) kv.Value.OnReset();
+            foreach (var cache in cachedict.Values) cache.OnReset();
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Goblin.Gameplay.Logic.Skills
             launcher.actor.eventor.Tell(new SkillPipelineStateEvent { id = id, state = state });
         }
 
-        public void OnFPTick(FP tick)
+        public void OnExecute(FP tick)
         {
             if (SKILL_PIPELINE_STATE_DEFINE.End == state)
             {

@@ -53,7 +53,7 @@ namespace Goblin.Common.FSM
         /// 状态进入条件检查
         /// </summary>
         /// <returns>是否触发</returns>
-        public abstract bool OnCheck();
+        public abstract bool OnValid();
 
         /// <summary>
         /// 状态进入

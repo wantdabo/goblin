@@ -11,9 +11,9 @@ namespace Goblin.Gameplay.Logic.Skills
     public class Translator : Translator<SkillLauncher>
     {
         /// <summary>
-        /// 技能管线信息列表
+        /// 技能管线信息字典
         /// </summary>
-        private Dictionary<uint, (byte state, uint frame)> pipelineinfos = new();
+        private Dictionary<uint, (byte state, uint frame)> pipelinedict { get; set; } = new();
 
         protected override void OnRIL()
         {
@@ -22,16 +22,16 @@ namespace Goblin.Gameplay.Logic.Skills
                 var pipeline = behavior.Get(id);
                 if (null == pipeline) continue;
 
-                if (false == pipelineinfos.TryGetValue(id, out var info))
+                if (false == pipelinedict.TryGetValue(id, out var info))
                 {
                     info = (SKILL_PIPELINE_STATE_DEFINE.None, 0);
-                    pipelineinfos.Add(id, info);
+                    pipelinedict.Add(id, info);
                 }
-                
+
                 if (pipeline.state != info.state || pipeline.frame != info.frame)
                 {
-                    pipelineinfos.Remove(id);
-                    pipelineinfos.Add(id, (pipeline.state, pipeline.frame));
+                    pipelinedict.Remove(id);
+                    pipelinedict.Add(id, (pipeline.state, pipeline.frame));
                     if (SKILL_PIPELINE_STATE_DEFINE.None == pipeline.state) return;
                     behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SKILL_PIPELINE_INFO(pipeline.id, pipeline.state, pipeline.frame, pipeline.length));
                 }

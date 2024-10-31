@@ -42,24 +42,28 @@
         /// </summary>
         public const ushort SKILL_BULLET_INFO = 8;
         /// <summary>
+        /// BUFF_INFO BUFF 信息指令
+        /// </summary>
+        public const ushort BUFF_INFO = 9;
+        /// <summary>
         /// ATTRIBUTE 生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_HP = 9;
+        public const ushort ATTRIBUTE_HP = 10;
         /// <summary>
         /// ATTRIBUTE 最大生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_MAXHP = 10;
+        public const ushort ATTRIBUTE_MAXHP = 11;
         /// <summary>
         /// ATTRIBUTE 移动速度指令
         /// </summary>
-        public const ushort ATTRIBUTE_MOVESPEED = 11;
+        public const ushort ATTRIBUTE_MOVESPEED = 12;
         /// <summary>
         /// ATTRIBUTE 攻击力指令
         /// </summary>
-        public const ushort ATTRIBUTE_ATTACK = 12;
+        public const ushort ATTRIBUTE_ATTACK = 13;
         /// <summary>
         /// SURFACE 指令
         /// </summary>
-        public const ushort SURFACE = 13;
+        public const ushort SURFACE = 14;
     }
 }

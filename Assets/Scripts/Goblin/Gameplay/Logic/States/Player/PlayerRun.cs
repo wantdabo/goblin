@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             gamepad = machine.paramachine.actor.GetBehavior<Gamepad>();
             spatial = machine.paramachine.actor.GetBehavior<Spatial>();
         }
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             var joystick = gamepad.GetInput(InputType.Joystick);
 

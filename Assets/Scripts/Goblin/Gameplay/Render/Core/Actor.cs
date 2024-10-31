@@ -189,6 +189,9 @@ namespace Goblin.Gameplay.Render.Core
                     case RIL_DEFINE.SKILL_BULLET_INFO:
                         resolver = AddResolver<SkillBulletInfo>(e.ril.id);
                         break;
+                    case RIL_DEFINE.BUFF_INFO:
+                        resolver = AddResolver<BuffInfo>(e.ril.id);
+                        break;
                     case RIL_DEFINE.ATTRIBUTE_HP:
                         resolver = AddResolver<AttributeHP>(e.ril.id);
                         break;

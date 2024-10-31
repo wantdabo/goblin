@@ -23,7 +23,7 @@ namespace Goblin.Phases
         /// </summary>
         public bool finished { get; private set; }
 
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             return false == finished;
         }

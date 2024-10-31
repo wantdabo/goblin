@@ -15,7 +15,7 @@ namespace Goblin.Phases
     {
         protected override List<Type> passes => new() { typeof(GamingPhase) };
 
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             var hotfixp = engine.phase.GetPhase<HotfixPhase>();
 

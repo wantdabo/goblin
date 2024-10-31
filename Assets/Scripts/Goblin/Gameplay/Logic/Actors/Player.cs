@@ -1,5 +1,6 @@
 ﻿using Goblin.Gameplay.Logic.Attributes;
 using Goblin.Gameplay.Logic.Attributes.Surfaces;
+using Goblin.Gameplay.Logic.Buffs.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Core;
@@ -22,6 +23,7 @@ namespace Goblin.Gameplay.Logic.Actors
             base.OnCreate();
             AddBehavior<Attribute>().Create();
             AddBehavior<Surface>().Create();
+            AddBehavior<BuffBucket>().Create();
             AddBehavior<Spatial>().Create();
             AddBehavior<PhysAgent>().Create();
             AddBehavior<Gamepad>().Create();

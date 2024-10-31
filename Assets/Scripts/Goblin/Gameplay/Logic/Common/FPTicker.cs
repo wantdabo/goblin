@@ -123,7 +123,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// 自增的 TimerID
         /// </summary>
         private uint timerIncrementId { get; set; } = 0;
-        private Dictionary<uint, TimerInfo> timerDict = new();
+        private Dictionary<uint, TimerInfo> timerdict = new();
         private Queue<uint> recyTimers = new();
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Goblin.Gameplay.Logic.Common
                 duration = duration,
                 loop = loop
             };
-            timerDict.Add(info.id, info);
+            timerdict.Add(info.id, info);
 
             return info.id;
         }
@@ -164,12 +164,12 @@ namespace Goblin.Gameplay.Logic.Common
 
         private void TickTimerInfos()
         {
-            while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
+            while (recyTimers.TryDequeue(out var tid)) timerdict.Remove(tid);
 
-            if (0 == timerDict.Count) return;
+            if (0 == timerdict.Count) return;
             infoTemps.Clear();
             timerTemps.Clear();
-            foreach (var kv in timerDict)
+            foreach (var kv in timerdict)
             {
                 var info = kv.Value;
                 info.elapsed += tick;
@@ -185,13 +185,13 @@ namespace Goblin.Gameplay.Logic.Common
 
             foreach (var infoTemp in infoTemps)
             {
-                timerDict.Remove(infoTemp.id);
-                timerDict.Add(infoTemp.id, infoTemp);
+                timerdict.Remove(infoTemp.id);
+                timerdict.Add(infoTemp.id, infoTemp);
             }
 
             foreach (var timer in timerTemps)
             {
-                if (timerDict.TryGetValue(timer, out var action) && false == recyTimers.Contains(action.id))
+                if (timerdict.TryGetValue(timer, out var action) && false == recyTimers.Contains(action.id))
                 {
                     action.action.Invoke(tick);
                     if (0 == action.loop) StopTimer(action.id);

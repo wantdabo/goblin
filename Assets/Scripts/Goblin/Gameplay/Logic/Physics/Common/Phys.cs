@@ -383,7 +383,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
         private void OnFPLateTick(FPLateTickEvent e)
         {
-            foreach (var kv in abdict) physinfos.Add((PHYS_SHAPE_DEFINE.PLAYER, kv.Value.Shape, kv.Value.Position, TSQuaternion.CreateFromMatrix(kv.Value.Orientation)));
+            foreach (var rigidbody in abdict.Values) physinfos.Add((PHYS_SHAPE_DEFINE.PLAYER, rigidbody.Shape,rigidbody.Position, TSQuaternion.CreateFromMatrix(rigidbody.Orientation)));
             stage.eventor.Tell(new PhysShapesEvent { physinfos = physinfos.ToArray() });
             physinfos.Clear();
         }

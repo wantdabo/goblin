@@ -70,7 +70,7 @@ namespace Goblin.Phases
         /// </summary>
         public long currentDownloadBytes { get; private set; }
 
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             var resp = engine.phase.GetPhase<ResPhase>();
 

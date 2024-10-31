@@ -25,7 +25,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             launcher = machine.paramachine.actor.GetBehavior<SkillLauncher>();
         }
 
-        public override bool OnCheck()
+        public override bool OnValid()
         {
             return launcher.launching.playing;
         }

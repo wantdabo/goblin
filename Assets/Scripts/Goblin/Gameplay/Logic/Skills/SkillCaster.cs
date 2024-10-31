@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Logic.Skills
             }
         }
 
-        public void OnFPTick(FP tick)
+        public void OnExecute(FP tick)
         {
             // TODO 后面改为配置
             if (null == gamepad) return;

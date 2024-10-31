@@ -90,7 +90,7 @@ namespace Goblin.Common.FSM
                 if (state == current) continue;
                 if (null != current && null == current.aisles) continue;
                 if (null != current && false == current.aisles.Contains(state.GetType())) continue;
-                if (false == state.OnCheck()) continue;
+                if (false == state.OnValid()) continue;
                 next = state;
             }
 
