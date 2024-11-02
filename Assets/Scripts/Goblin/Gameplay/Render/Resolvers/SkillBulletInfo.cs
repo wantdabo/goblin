@@ -26,11 +26,11 @@ namespace Goblin.Gameplay.Render.Resolvers
             // TODO 后续，改成配置表
             switch (ril.state)
             {
-                case SKILL_BULLET_STATE_DEFINE.FIRE:
+                case SKILL_BULLET_DEFINE.FIRE:
                     eff = actor.stage.vfx.LoadVFX("LightningOrbBlue", node.go);
                     eff.Play();
                     break;
-                case SKILL_BULLET_STATE_DEFINE.STOP:
+                case SKILL_BULLET_DEFINE.STOP:
                     eff?.Stop();
                     break;
             }

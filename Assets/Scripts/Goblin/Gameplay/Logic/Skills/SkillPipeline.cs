@@ -189,12 +189,20 @@ namespace Goblin.Gameplay.Logic.Skills
                         if (nilaction) action = AddAction<BulletEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
-                    case SKILL_ACTION_DEFINE.BREAK_EVENT:
-                        if (nilaction) action = AddAction<BreakEvent>(actionData.id);
+                    case SKILL_ACTION_DEFINE.BREAK_TOKEN_EVENT:
+                        if (nilaction) action = AddAction<BreakTokenEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
                     case SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT:
-                        if (nilaction) action = AddAction<BreakFrames>(actionData.id);
+                        if (nilaction) action = AddAction<BreakFramesEvent>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
+                    case SKILL_ACTION_DEFINE.BUFF_TRIGGER_EVENT:
+                        if (nilaction) action = AddAction<BuffTriggerEvent>(actionData.id);
+                        if (nilcache) cache = GenCache<SkillActionCache>(actionData);
+                        break;
+                    case SKILL_ACTION_DEFINE.BUFF_STAMP_EVENT:
+                        if (nilaction) action = AddAction<BuffStampEvent>(actionData.id);
                         if (nilcache) cache = GenCache<SkillActionCache>(actionData);
                         break;
                     case SKILL_ACTION_DEFINE.BOX_DETECTION:
@@ -291,11 +299,17 @@ namespace Goblin.Gameplay.Logic.Skills
                     case SKILL_ACTION_DEFINE.BULLET_EVENT:
                         data = MessagePackSerializer.Deserialize<BulletEventData>(spdata.actionBytes[i]);
                         break;
-                    case SKILL_ACTION_DEFINE.BREAK_EVENT:
-                        data = MessagePackSerializer.Deserialize<BreakEventData>(spdata.actionBytes[i]);
+                    case SKILL_ACTION_DEFINE.BREAK_TOKEN_EVENT:
+                        data = MessagePackSerializer.Deserialize<BreakTokenEventData>(spdata.actionBytes[i]);
                         break;
                     case SKILL_ACTION_DEFINE.BREAK_FRAMES_EVENT:
-                        data = MessagePackSerializer.Deserialize<BreakFramesData>(spdata.actionBytes[i]);
+                        data = MessagePackSerializer.Deserialize<BreakFramesEventData>(spdata.actionBytes[i]);
+                        break;
+                    case SKILL_ACTION_DEFINE.BUFF_TRIGGER_EVENT:
+                        data = MessagePackSerializer.Deserialize<BuffTriggerEventData>(spdata.actionBytes[i]);
+                        break;
+                    case SKILL_ACTION_DEFINE.BUFF_STAMP_EVENT:
+                        data = MessagePackSerializer.Deserialize<BuffStampEventData>(spdata.actionBytes[i]);
                         break;
                     case SKILL_ACTION_DEFINE.BOX_DETECTION:
                         data = MessagePackSerializer.Deserialize<BoxDetectionData>(spdata.actionBytes[i]);

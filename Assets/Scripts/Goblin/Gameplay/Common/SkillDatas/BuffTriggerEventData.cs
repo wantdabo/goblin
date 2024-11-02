@@ -4,14 +4,14 @@ using MessagePack;
 namespace Goblin.Gameplay.Common.SkillDatas
 {
     /// <summary>
-    /// 打断标记事件数据
+    /// Buff 触发事件数据
     /// </summary>
     [MessagePackObject(true)]
-    public class BreakEventData : SkillActionData
+    public class BuffTriggerEventData : SkillActionData
     {
         /// <summary>
-        /// 打断标记
+        /// BuffID
         /// </summary>
-        public int token { get; set; }
+        public uint buffid { get; set; }
     }
 }

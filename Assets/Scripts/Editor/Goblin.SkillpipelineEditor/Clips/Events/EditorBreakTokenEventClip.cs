@@ -9,7 +9,7 @@ namespace Goblin.SkillPipelineEditor
     [Name("打断事件")]
     [Color(1f, 0f, 0f)]
     [Attachable(typeof(EditorEventTrack))]
-    public class EditorBreakEventClip : EditorEventClip
+    public class EditorBreakTokenEventClip : EditorEventClip
     {
         [MenuName("摇杆操作")]
         public bool joystick = false;

@@ -29,12 +29,12 @@ namespace Goblin.Core
         /// <summary>
         /// 组件列表
         /// </summary>
-        private List<Comp> compList { get; set; }
+        private List<Comp> comps { get; set; }
 
         /// <summary>
         /// 组件字典，根据组件类型分类
         /// </summary>
-        private Dictionary<Type, List<Comp>> compDict { get; set; }
+        private Dictionary<Type, List<Comp>> compdict { get; set; }
 
         /// <summary>
         /// 创建一个 Goblin 对象
@@ -53,16 +53,16 @@ namespace Goblin.Core
             destroyed = true;
 
             parent.RmvComp(this);
-            if (null != compList)
+            if (null != comps)
             {
-                for (int i = compList.Count - 1; i >= 0; i--)
+                for (int i = comps.Count - 1; i >= 0; i--)
                 {
-                    var comp = compList[i];
+                    var comp = comps[i];
                     RmvComp(comp);
                     comp.Destroy();
                 }
-                compList.Clear();
-                compDict.Clear();
+                comps.Clear();
+                compdict.Clear();
             }
             OnDestroy();
         }
@@ -85,7 +85,7 @@ namespace Goblin.Core
         public List<T> GetComps<T>(bool force = false) where T : Comp
         {
             List<T> list = null;
-            if (compDict.TryGetValue(typeof(T), out var comps))
+            if (compdict.TryGetValue(typeof(T), out var comps))
             {
                 list = new List<T>();
 
@@ -97,7 +97,7 @@ namespace Goblin.Core
             if (false == force) return null;
 
             // 高代价查表
-            foreach (var comp in compList)
+            foreach (var comp in this.comps)
             {
                 if (comp is T)
                 {
@@ -116,7 +116,7 @@ namespace Goblin.Core
         /// <returns>组件</returns>
         public T GetComp<T>(bool force = false) where T : Comp
         {
-            if (false == compDict.TryGetValue(typeof(T), out var comps)) return null;
+            if (false == compdict.TryGetValue(typeof(T), out var comps)) return null;
 
             return comps.Last() as T;
         }
@@ -128,19 +128,19 @@ namespace Goblin.Core
         /// <returns>组件</returns>
         public T AddComp<T>() where T : Comp, new()
         {
-            if (null == compList) compList = new();
-            if (null == compDict) compDict = new();
+            if (null == this.comps) this.comps = new();
+            if (null == compdict) compdict = new();
 
             T comp = new();
             comp.engine = engine;
             comp.parent = this;
-            if (false == compDict.TryGetValue(typeof(T), out var comps))
+            if (false == compdict.TryGetValue(typeof(T), out var comps))
             {
                 comps = new();
-                compDict.Add(typeof(T), comps);
+                compdict.Add(typeof(T), comps);
             }
             comps.Add(comp);
-            compList.Add(comp);
+            this.comps.Add(comp);
 
             return comp;
         }
@@ -151,8 +151,8 @@ namespace Goblin.Core
         /// <param name="comp">组件</param>
         public void RmvComp(Comp comp)
         {
-            if (compDict.TryGetValue(comp.GetType(), out var comps)) comps.Remove(comp);
-            compList.Remove(comp);
+            if (compdict.TryGetValue(comp.GetType(), out var comps)) comps.Remove(comp);
+            this.comps.Remove(comp);
         }
     }
 }

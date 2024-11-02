@@ -1,6 +1,7 @@
 ﻿using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Core;
+using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -18,7 +19,8 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         protected override void OnResolve(uint frame, RIL_BUFF_INFO ril)
         {
-            bucket.Set(ril.buffid, (ril.state, ril.layer, ril.maxlayer));
+            Debug.Log(ril);
+            // bucket.Set(ril.buffid, (ril.state, ril.layer, ril.maxlayer));
         }
     }
 }

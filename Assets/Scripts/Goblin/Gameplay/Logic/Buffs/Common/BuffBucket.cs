@@ -15,6 +15,10 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// BuffID
         /// </summary>
         public uint id { get; set; }
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from { get; set; }
     }
 
     /// <summary>
@@ -30,6 +34,10 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// Buff 层数
         /// </summary>
         public uint layer { get; set; }
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from { get; set; }
     }
 
     /// <summary>
@@ -45,6 +53,10 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// Buff 层数
         /// </summary>
         public uint layer { get; set; }
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from { get; set; }
     }
 
     /// <summary>
@@ -55,11 +67,15 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// <summary>
         /// Buff 列表
         /// </summary>
-        public List<uint> buffs { get; private set; } = new();
+        public List<Buff> totalbuffs { get; private set; } = new();
         /// <summary>
-        /// Buff 字典
+        /// Multi Buff 字典
         /// </summary>
-        private Dictionary<uint, Buff> buffdict { get; set; } = new();
+        private Dictionary<uint, Dictionary<uint, Buff>> multibuffs { get; set; } = new();
+        /// <summary>
+        /// Shared Buff 字典
+        /// </summary>
+        private Dictionary<uint, Buff> sharedbuffs { get; set; } = new();
 
         protected override void OnCreate()
         {
@@ -78,80 +94,111 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
             actor.eventor.UnListen<BuffStampEvent>(OnBuffStamp);
             actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
-        
+
         /// <summary>
-        /// 获取 Buff
+        /// 获取 Buff 集合
         /// </summary>
         /// <param name="id">BuffID</param>
         /// <returns>Buff</returns>
         public Buff Get(uint id)
         {
-            if (false == buffdict.TryGetValue(id, out var buff)) return default;
-
-            return buff;
+            return sharedbuffs.GetValueOrDefault(id);
         }
 
         /// <summary>
         /// 获取 Buff
         /// </summary>
         /// <param name="id">BuffID</param>
+        /// <param name="from">来源/ActorID</param>
+        /// <returns>Buff</returns>
+        public Buff Get(uint id, uint from)
+        {
+            var buffs = multibuffs.GetValueOrDefault(id);
+            if (null == buffs) return default;
+
+            return buffs.GetValueOrDefault(from);
+        }
+
+        /// <summary>
+        /// 获取 Buff
+        /// </summary>
+        /// <param name="id">BuffID</param>
+        /// <param name="from">来源/ActorID</param>
         /// <typeparam name="T">Buff 类型</typeparam>
         /// <returns>Buff</returns>
-        public T Get<T>(uint id) where T : Buff
+        public T Get<T>(uint id, uint from) where T : Buff
         {
-            var buff = Get(id);
+            var buff = Get(id, from);
 
             if (null == buff) return default;
 
             return buff as T;
         }
-        
+
         private void OnBuffTrigger(BuffTriggerEvent e)
         {
-            var buff = ReadyOrInitialize(e.id);
+            var buff = ReadyOrInitialize(e.id, e.from);
             buff.Trigger();
         }
 
         private void OnBuffErase(BuffEraseEvent e)
         {
-            var buff = ReadyOrInitialize(e.id);
+            var buff = ReadyOrInitialize(e.id, e.from);
             buff.Erase(e.layer);
         }
 
         private void OnBuffStamp(BuffStampEvent e)
         {
-            var buff = ReadyOrInitialize(e.id);
+            var buff = ReadyOrInitialize(e.id, e.from);
             buff.Stamp(e.layer);
         }
 
         private void OnFPTick(FPTickEvent e)
         {
-            foreach (var buff in buffdict.Values)
+            foreach (var buff in totalbuffs)
             {
-                if (BUFF_STATE_DEFINE.INACTIVE == buff.state) continue;
+                if (BUFF_DEFINE.INACTIVE == buff.state) continue;
                 buff.Execute(e.frame, e.tick);
             }
         }
-        
+
         /// <summary>
         /// 就绪检查或者初始化 Buff
         /// </summary>
         /// <param name="id">BuffID</param>
-        private Buff ReadyOrInitialize(uint id)
+        /// <param name="from">来源/ActorID</param>
+        private Buff ReadyOrInitialize(uint id, uint from)
         {
-            var buff = Get(id);
-            if (null != buff) return buff;
-            
-            switch (id)
+            var buff = Get(id, from);
+            if (null == buff) buff = Get(id);
+            if (null == buff)
             {
-                case BUFF_DEFINE.BUFF_10001:
-                    buff = AddComp<BUFF_10001>();
-                    break;
+                switch (id)
+                {
+                    case BUFF_DEFINE.BUFF_10001:
+                        buff = AddComp<BUFF_10001>();
+                        break;
+                }
+                buff.bucket = this;
+                buff.Create();
+
+                totalbuffs.Add(buff);
+                switch (buff.type)
+                {
+                    case BUFF_DEFINE.SHARED:
+                        sharedbuffs.Add(id, buff);
+                        break;
+                    case BUFF_DEFINE.MULTI:
+                        var buffs = multibuffs.GetValueOrDefault(id);
+                        if (null == buffs)
+                        {
+                            buffs = new();
+                            multibuffs.Add(id, buffs);
+                        }
+                        buffs.Add(id, buff);
+                        break;
+                }
             }
-            buff.bucket = this;
-            buff.Create();
-            buffdict.Add(id, buff);
-            buffs.Add(id);
 
             return buff;
         }

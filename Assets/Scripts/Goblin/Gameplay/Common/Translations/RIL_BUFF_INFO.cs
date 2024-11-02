@@ -26,6 +26,10 @@ namespace Goblin.Gameplay.Common.Translations
         /// Buff 最大层数
         /// </summary>
         public uint maxlayer { get; private set; }
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from { get; private set; }
         
         /// <summary>
         /// Buff 信息渲染指令
@@ -34,12 +38,14 @@ namespace Goblin.Gameplay.Common.Translations
         /// <param name="state">Buff 状态</param>
         /// <param name="layer">Buff 层数</param>
         /// <param name="maxlayer">Buff 最大层数</param>
-        public RIL_BUFF_INFO(uint buffid, byte state, uint layer, uint maxlayer)
+        /// <param name="from">来源/ActorID</param>
+        public RIL_BUFF_INFO(uint buffid, byte state, uint layer, uint maxlayer, uint from)
         {
             this.buffid = buffid;
+            this.state = state;
             this.layer = layer;
             this.maxlayer = maxlayer;
-            this.state = state;
+            this.from = from;
         }
 
         public byte[] Serialize()

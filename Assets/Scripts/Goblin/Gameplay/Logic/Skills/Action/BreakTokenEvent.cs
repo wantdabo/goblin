@@ -10,9 +10,9 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     /// <summary>
     /// 技能打断标记行为
     /// </summary>
-    public class BreakEvent : SkillAction<BreakEventData, SkillActionCache>
+    public class BreakTokenEvent : SkillAction<BreakTokenEventData, SkillActionCache>
     {
-        public override ushort id => SKILL_ACTION_DEFINE.BREAK_EVENT;
+        public override ushort id => SKILL_ACTION_DEFINE.BREAK_TOKEN_EVENT;
 
         private Gamepad gamepad { get; set; }
 
@@ -22,13 +22,13 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             gamepad = pipeline.launcher.actor.GetBehavior<Gamepad>();
         }
 
-        protected override void OnEnter(BreakEventData data, SkillActionCache cache)
+        protected override void OnEnter(BreakTokenEventData data, SkillActionCache cache)
         {
             base.OnEnter(data, cache);
             pipeline.StampBreakToken(data.token);
         }
 
-        protected override void OnExecute(BreakEventData data, SkillActionCache cache, uint frame, FP tick)
+        protected override void OnExecute(BreakTokenEventData data, SkillActionCache cache, uint frame, FP tick)
         {
             if (BREAK_TOKEN_DEFINE.NONE == data.token) return;
 
@@ -39,7 +39,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             }
         }
 
-        protected override void OnExit(BreakEventData data, SkillActionCache cache)
+        protected override void OnExit(BreakTokenEventData data, SkillActionCache cache)
         {
             base.OnExit(data, cache);
             pipeline.EraseBreakToken(data.token);

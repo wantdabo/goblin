@@ -1,6 +1,7 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
 using System;
+using System.Collections.Generic;
 using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Buffs.Common
@@ -11,13 +12,17 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
     public abstract class Buff : Comp
     {
         /// <summary>
+        /// Buff 类型
+        /// </summary>
+        public abstract byte type { get; }
+        /// <summary>
         /// BuffID
         /// </summary>
         public abstract uint id { get; }
         /// <summary>
         /// Buff 状态
         /// </summary>
-        public byte state { get; private set; } = BUFF_STATE_DEFINE.INACTIVE;
+        public byte state { get; private set; } = BUFF_DEFINE.INACTIVE;
         /// <summary>
         /// Buff 层数
         /// </summary>
@@ -26,6 +31,10 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// Buff 最大层数
         /// </summary>
         public abstract uint maxlayer { get; }
+        /// <summary>
+        /// 来源/ActorID
+        /// </summary>
+        public uint from { get; private set; }
         /// <summary>
         /// Buff 桶
         /// </summary>
@@ -36,7 +45,16 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// </summary>
         private void Valid()
         {
-            state = OnValid() ? BUFF_STATE_DEFINE.ACTIVE : BUFF_STATE_DEFINE.INACTIVE;
+            state = OnValid() ? BUFF_DEFINE.ACTIVE : BUFF_DEFINE.INACTIVE;
+        }
+
+        /// <summary>
+        /// 设置来源
+        /// </summary>
+        /// <param name="from">来源/ActorID</param>
+        public void SetFrom(uint from)
+        {
+            this.from = from;
         }
 
         /// <summary>

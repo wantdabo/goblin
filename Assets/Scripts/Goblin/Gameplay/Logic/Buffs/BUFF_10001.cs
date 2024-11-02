@@ -9,8 +9,10 @@ namespace Goblin.Gameplay.Logic.Buffs
     /// </summary>
     public class BUFF_10001 : Buff
     {
+        public override byte type => BUFF_DEFINE.SHARED;
+        
         public override uint id => BUFF_DEFINE.BUFF_10001;
-
+        
         public override uint maxlayer => 1;
 
         protected override bool OnValid()
