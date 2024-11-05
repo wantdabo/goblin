@@ -19,7 +19,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         protected override void OnResolve(uint frame, RIL_BUFF_INFO ril)
         {
-            Debug.Log(ril);
             bucket.Set((ril.id, ril.type, ril.state, ril.layer, ril.maxlayer, ril.from));
         }
     }

@@ -12,12 +12,32 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class InputSystem : Comp
     {
+        /// <summary>
+        /// 摇杆方向
+        /// </summary>
         public Vector2 joystickdire { get; set; }
+        /// <summary>
+        /// 按键 A PRESS
+        /// </summary>
         public bool bapress { get; set; }
+        /// <summary>
+        /// 按键 B PRESS
+        /// </summary>
         public bool bbpress { get; set; }
+        /// <summary>
+        /// 按键 C PRESS
+        /// </summary>
         public bool bcpress { get; set; }
+        /// <summary>
+        /// 按键 D PRESS
+        /// </summary>
         public bool bdpress { get; set; }
-
+        
+        /// <summary>
+        /// 输入
+        /// </summary>
+        /// <param name="actorId">ActorID</param>
+        /// <param name="stage">逻辑场景</param>
         public void Input(uint actorId, Stage stage)
         {
             var player = stage.GetActor(actorId);

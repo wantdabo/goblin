@@ -71,11 +71,29 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
+        /// <summary>
+        /// 游戏中
+        /// </summary>
         public bool gaming { get; private set; }
+        /// <summary>
+        /// 游戏速度
+        /// </summary>
         public sbyte gamespeed { get; set; } = 1;
+        /// <summary>
+        /// 伤害跳字开关
+        /// </summary>
         public bool dancing { get; set; }
+        /// <summary>
+        /// 输入系统
+        /// </summary>
         public InputSystem input { get; private set; }
+        /// <summary>
+        /// 渲染场景
+        /// </summary>
         public Stage stage { get; private set; }
+        /// <summary>
+        /// 逻辑场景
+        /// </summary>
         private LStage lstage { get; set; }
 
         protected override void OnCreate()
@@ -93,7 +111,10 @@ namespace Goblin.Sys.Gameplay
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
         }
-
+        
+        /// <summary>
+        /// 生成木桩
+        /// </summary>
         private void GenEnemys()
         {
             for (int i = 2; i < 7; i++)
@@ -113,7 +134,10 @@ namespace Goblin.Sys.Gameplay
             spatial2.eulerAngle = new TSVector(0, -90, 0);
             enemy2.eventor.Tell<LiveBornEvent>();
         }
-
+        
+        /// <summary>
+        /// 游戏开始
+        /// </summary>
         public void Start()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
@@ -142,17 +166,26 @@ namespace Goblin.Sys.Gameplay
 
             Resume();
         }
-
+        
+        /// <summary>
+        /// 游戏恢复
+        /// </summary>
         public void Resume()
         {
             gaming = true;
         }
 
+        /// <summary>
+        /// 游戏暂停
+        /// </summary>
         public void Pause()
         {
             gaming = false;
         }
-
+        
+        /// <summary>
+        /// 游戏结束
+        /// </summary>
         public void End() { }
 
         private void OnTick(TickEvent e)
