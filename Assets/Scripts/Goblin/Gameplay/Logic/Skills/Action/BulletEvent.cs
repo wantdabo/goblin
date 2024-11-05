@@ -39,9 +39,5 @@ namespace Goblin.Gameplay.Logic.Skills.Action
                 args = default
             });
         }
-
-        protected override void OnExecute(BulletEventData data, SkillActionCache cache, uint frame, FP tick)
-        {
-        }
     }
 }

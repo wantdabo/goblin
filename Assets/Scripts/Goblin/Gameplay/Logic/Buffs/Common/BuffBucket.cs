@@ -81,8 +81,8 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         {
             base.OnCreate();
             actor.eventor.Listen<BuffTriggerEvent>(OnBuffTrigger);
-            actor.eventor.Listen<BuffEraseEvent>(OnBuffErase);
             actor.eventor.Listen<BuffStampEvent>(OnBuffStamp);
+            actor.eventor.Listen<BuffEraseEvent>(OnBuffErase);
             actor.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
         }
 
@@ -90,8 +90,8 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         {
             base.OnDestroy();
             actor.eventor.UnListen<BuffTriggerEvent>(OnBuffTrigger);
-            actor.eventor.UnListen<BuffEraseEvent>(OnBuffErase);
             actor.eventor.UnListen<BuffStampEvent>(OnBuffStamp);
+            actor.eventor.UnListen<BuffEraseEvent>(OnBuffErase);
             actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
         }
 
@@ -140,17 +140,17 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
             var buff = ReadyOrInitialize(e.id, e.from);
             buff.Trigger();
         }
+        
+        private void OnBuffStamp(BuffStampEvent e)
+        {
+            var buff = ReadyOrInitialize(e.id, e.from);
+            buff.Stamp(e.layer);
+        }
 
         private void OnBuffErase(BuffEraseEvent e)
         {
             var buff = ReadyOrInitialize(e.id, e.from);
             buff.Erase(e.layer);
-        }
-
-        private void OnBuffStamp(BuffStampEvent e)
-        {
-            var buff = ReadyOrInitialize(e.id, e.from);
-            buff.Stamp(e.layer);
         }
 
         private void OnFPTick(FPTickEvent e)
@@ -178,8 +178,12 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
                     case BUFF_DEFINE.BUFF_10001:
                         buff = AddComp<BUFF_10001>();
                         break;
+                    case BUFF_DEFINE.BUFF_10002:
+                        buff = AddComp<BUFF_10002>();
+                        break;
                 }
                 buff.bucket = this;
+                buff.SetFrom(from);
                 buff.Create();
 
                 totalbuffs.Add(buff);
@@ -199,7 +203,9 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
                         break;
                 }
             }
-
+            
+            if (BUFF_DEFINE.SHARED == buff.type && from != buff.from) buff.SetFrom(from);
+            
             return buff;
         }
     }

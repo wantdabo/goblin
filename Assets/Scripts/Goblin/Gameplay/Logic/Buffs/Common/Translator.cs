@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
                 {
                     buffdict.Remove(key);
                     buffdict.Add(key, (buff.state, buff.layer, buff.maxlayer, buff.from));
-                    behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_BUFF_INFO(buff.id, buff.state, buff.layer, buff.maxlayer, buff.from));
+                    behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_BUFF_INFO(buff.id, buff.type, buff.state, buff.layer, buff.maxlayer, buff.from));
                 }
             }
         }

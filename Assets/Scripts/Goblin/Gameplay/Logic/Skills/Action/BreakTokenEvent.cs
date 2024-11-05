@@ -27,6 +27,12 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             base.OnEnter(data, cache);
             pipeline.StampBreakToken(data.token);
         }
+        
+        protected override void OnExit(BreakTokenEventData data, SkillActionCache cache)
+        {
+            base.OnExit(data, cache);
+            pipeline.EraseBreakToken(data.token);
+        }
 
         protected override void OnExecute(BreakTokenEventData data, SkillActionCache cache, uint frame, FP tick)
         {
@@ -37,12 +43,6 @@ namespace Goblin.Gameplay.Logic.Skills.Action
                 var joystick = gamepad.GetInput(InputType.Joystick);
                 if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
             }
-        }
-
-        protected override void OnExit(BreakTokenEventData data, SkillActionCache cache)
-        {
-            base.OnExit(data, cache);
-            pipeline.EraseBreakToken(data.token);
         }
     }
 }

@@ -132,7 +132,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             if (e.actorId == owner) return;
 
             var target = actor.stage.GetActor(e.actorId);
-            if (null == target) return;
+            if (null == target || false == target.live.alive) return;
             OnEnter(target);
         }
 
@@ -141,7 +141,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             if (e.actorId == owner) return;
 
             var target = actor.stage.GetActor(e.actorId);
-            if (null == target) return;
+            if (null == target || false == target.live.alive) return;
             OnExit(target);
         }
 

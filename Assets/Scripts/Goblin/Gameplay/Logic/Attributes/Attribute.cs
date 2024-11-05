@@ -144,7 +144,7 @@ namespace Goblin.Gameplay.Logic.Attributes
             foreach (uint actorId in e.actorIds)
             {
                 var target = actor.stage.GetActor(actorId);
-                if (null == target) continue;
+                if (null == target || false == target.live.alive) continue;
 
                 target.eventor.Tell(hurt);
             }

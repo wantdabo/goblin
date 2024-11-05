@@ -60,11 +60,15 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <summary>
         /// 技能状态
         /// </summary>
-        public byte state { get; private set; } = SKILL_PIPELINE_STATE_DEFINE.None;
+        public byte state { get; private set; } = SKILL_PIPELINE_STATE_DEFINE.NONE;
         /// <summary>
         /// 打断标记
         /// </summary>
         public int breaktoken { get; private set; } = BREAK_TOKEN_DEFINE.NONE;
+        /// <summary>
+        /// 受击 Buff 行为数据
+        /// </summary>
+        private List<BuffStampEventData> onhitstampbuffs { get; set; } = new();
         /// <summary>
         /// 自身跳帧
         /// </summary>
@@ -110,7 +114,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// <returns></returns>
         public bool Launch()
         {
-            if (SKILL_PIPELINE_STATE_DEFINE.None != state) return false;
+            if (SKILL_PIPELINE_STATE_DEFINE.NONE != state) return false;
             Start();
 
             return true;
@@ -142,13 +146,30 @@ namespace Goblin.Gameplay.Logic.Skills
             breaktoken |= token;
         }
 
+        public void NoneOnHitBuffInfo()
+        {
+            onhitstampbuffs.Clear();
+        }
+
+        public void EraseOnHitBuffInfo(BuffStampEventData data)
+        {
+            if (false == onhitstampbuffs.Contains(data)) return;
+            onhitstampbuffs.Remove(data);
+        }
+
+        public void StampOnHitBuffInfo(BuffStampEventData data)
+        {
+            if (onhitstampbuffs.Contains(data)) return;
+            onhitstampbuffs.Add(data);
+        }
+
         /// <summary>
         /// 技能打断
         /// </summary>
         public void Break()
         {
-            if (SKILL_PIPELINE_STATE_DEFINE.None == state) return;
-            state = SKILL_PIPELINE_STATE_DEFINE.Break;
+            if (SKILL_PIPELINE_STATE_DEFINE.NONE == state) return;
+            state = SKILL_PIPELINE_STATE_DEFINE.BREAK;
             NotifyState();
             End();
         }
@@ -159,9 +180,9 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Start()
         {
             Reset();
-            state = SKILL_PIPELINE_STATE_DEFINE.Start;
+            state = SKILL_PIPELINE_STATE_DEFINE.START;
             NotifyState();
-            state = SKILL_PIPELINE_STATE_DEFINE.Casting;
+            state = SKILL_PIPELINE_STATE_DEFINE.CASTING;
             NotifyState();
             Casting(GAME_DEFINE.LOGIC_TICK);
         }
@@ -238,7 +259,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         private void End()
         {
-            state = SKILL_PIPELINE_STATE_DEFINE.End;
+            state = SKILL_PIPELINE_STATE_DEFINE.END;
             NotifyState();
             Reset();
         }
@@ -249,6 +270,7 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Reset()
         {
             NoneBreakToken();
+            NoneOnHitBuffInfo();
             seflbreakframes = 0;
             targetbreakframes = 0;
             frame = 0;
@@ -265,13 +287,13 @@ namespace Goblin.Gameplay.Logic.Skills
 
         public void OnExecute(FP tick)
         {
-            if (SKILL_PIPELINE_STATE_DEFINE.End == state)
+            if (SKILL_PIPELINE_STATE_DEFINE.END == state)
             {
                 NotifyState();
-                state = SKILL_PIPELINE_STATE_DEFINE.None;
+                state = SKILL_PIPELINE_STATE_DEFINE.NONE;
             }
 
-            if (SKILL_PIPELINE_STATE_DEFINE.Casting != state) return;
+            if (SKILL_PIPELINE_STATE_DEFINE.CASTING != state) return;
 
             // Tick
             Casting(tick);
@@ -395,16 +417,58 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             if (null == actorIds || 0 == actorIds.Length) return;
 
-            // 顿帧
-            launcher.actor.ticker.breakframes += seflbreakframes;
-            foreach (uint id in actorIds)
-            {
-                var target = launcher.actor.stage.GetActor(id);
-                if (null == target) continue;
-                target.ticker.breakframes += targetbreakframes;
-            }
+            BreakFramesByOnHit(actorIds);
+            StampBuffsByOnHit(actorIds);
 
             launcher.actor.eventor.Tell(new SkillCollisionEvent { id = id, actorIds = actorIds });
+        }
+
+        /// <summary>
+        /// 受击顿帧
+        /// </summary>
+        /// <param name="actorIds">ActorID 集合</param>
+        private void BreakFramesByOnHit(uint[] actorIds)
+        {
+            launcher.actor.ticker.breakframes += seflbreakframes;
+            foreach (uint actorId in actorIds)
+            {
+                var target = launcher.actor.stage.GetActor(actorId);
+                if (null == target || false == target.live.alive) continue;
+                target.ticker.breakframes += targetbreakframes;
+            }
+        }
+
+        /// <summary>
+        /// 受击印下 Buff
+        /// </summary>
+        /// <param name="actorIds">ActorID 集合</param>
+        private void StampBuffsByOnHit(uint[] actorIds)
+        {
+            foreach (var data in onhitstampbuffs)
+            {
+                if (data.self)
+                {
+                    launcher.actor.eventor.Tell(new Buffs.Common.BuffStampEvent
+                    {
+                        id = data.buffid,
+                        layer = data.layer,
+                        from = launcher.actor.id,
+                    });
+                    continue;
+                }
+
+                foreach (uint actorId in actorIds)
+                {
+                    var target = launcher.actor.stage.GetActor(actorId);
+                    if (null == target) continue;
+                    target.eventor.Tell(new Buffs.Common.BuffStampEvent
+                    {
+                        id = data.buffid,
+                        layer = data.layer,
+                        from = launcher.actor.id,
+                    });
+                }
+            }
         }
     }
 }

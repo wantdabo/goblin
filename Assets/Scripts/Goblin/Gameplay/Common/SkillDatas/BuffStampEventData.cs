@@ -12,11 +12,11 @@ namespace Goblin.Gameplay.Common.SkillDatas
         /// <summary>
         /// BuffID
         /// </summary>
-        public int buffid { get; set; }
+        public uint buffid { get; set; }
         /// <summary>
         /// Buff 层数
         /// </summary>
-        public int layer { get; set; }
+        public uint layer { get; set; }
         /// <summary>
         /// 自身生效
         /// </summary>

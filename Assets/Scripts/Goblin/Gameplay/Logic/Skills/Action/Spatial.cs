@@ -25,6 +25,8 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
         protected override void OnExecute(SpatialData data, SkillActionCache cache, uint frame, FP tick)
         {
+            base.OnExecute(data, cache, frame, tick);
+
             if (null == spatial) return;
 
             var position = data.position.ToVector();

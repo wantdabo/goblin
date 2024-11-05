@@ -27,5 +27,9 @@
         /// 感电 BUFF
         /// </summary>
         public const uint BUFF_10001 = 10001;
+        /// <summary>
+        /// 引爆 感电 BUFF
+        /// </summary>
+        public const uint BUFF_10002 = 10002;
     }
 }

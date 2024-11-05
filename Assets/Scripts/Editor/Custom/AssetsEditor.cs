@@ -222,6 +222,27 @@ namespace Goblin.Custom
                     val.targetbreakframes = Convert.ToUInt32(skillBreakFramesEventClip.targetbreakframes);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
+                else if (clip is EditorBuffTriggerEventClip buffTriggerEventClip)
+                {
+                    var val = new BuffTriggerEventData();
+                    val.id = SKILL_ACTION_DEFINE.BUFF_TRIGGER_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.buffid = Convert.ToUInt32(buffTriggerEventClip.buffid);
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
+                else if (clip is EditorBuffStampEventClip buffStampEventClip)
+                {
+                    var val = new BuffStampEventData();
+                    val.id = SKILL_ACTION_DEFINE.BUFF_STAMP_EVENT;
+                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
+                    val.buffid = Convert.ToUInt32(buffStampEventClip.buffid);
+                    val.layer = Convert.ToUInt32(buffStampEventClip.layer);
+                    val.self = buffStampEventClip.self;
+                    val.hitstamp = buffStampEventClip.hitstamp;
+                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
+                }
             }
 
             SkillPipelineData spdata = new();

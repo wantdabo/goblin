@@ -12,13 +12,13 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
     public abstract class Buff : Comp
     {
         /// <summary>
-        /// Buff 类型
-        /// </summary>
-        public abstract byte type { get; }
-        /// <summary>
         /// BuffID
         /// </summary>
         public abstract uint id { get; }
+        /// <summary>
+        /// Buff 类型
+        /// </summary>
+        public abstract byte type { get; }
         /// <summary>
         /// Buff 状态
         /// </summary>
@@ -64,18 +64,7 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         {
             OnTrigger();
         }
-
-        /// <summary>
-        /// 擦除 Buff
-        /// </summary>
-        /// <param name="layer">Buff 层数</param>
-        public void Erase(uint layer = 1)
-        {
-            this.layer = Math.Clamp(this.layer - layer, 0, maxlayer);
-            OnErase();
-            Valid();
-        }
-
+        
         /// <summary>
         /// 印下 Buff
         /// </summary>
@@ -84,6 +73,17 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         {
             this.layer = Math.Clamp(this.layer + layer, 0, maxlayer);
             OnStamp();
+            Valid();
+        }
+
+        /// <summary>
+        /// 擦除 Buff
+        /// </summary>
+        /// <param name="layer">Buff 层数</param>
+        public void Erase(uint layer = 1)
+        {
+            if (layer > this.layer) this.layer = 0; else this.layer -= layer;
+            OnErase();
             Valid();
         }
 
@@ -107,13 +107,13 @@ namespace Goblin.Gameplay.Logic.Buffs.Common
         /// </summary>
         protected virtual void OnTrigger() { }
         /// <summary>
-        /// 擦除 Buff
-        /// </summary>
-        protected virtual void OnErase() { }
-        /// <summary>
         /// 印下 Buff
         /// </summary>
         protected virtual void OnStamp() { }
+        /// <summary>
+        /// 擦除 Buff
+        /// </summary>
+        protected virtual void OnErase() { }
         /// <summary>
         /// 执行 Buff
         /// </summary>

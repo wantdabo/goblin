@@ -69,6 +69,22 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: 0, z: 0.1}
   scale: 0
+--- !u!114 &-7880788525934808336
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57556e1bccb84a7db4edc7907af1259f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -6819704416382359681}
+  startTime: 2.4199998
+  length: 1
+  buffid: 10001
 --- !u!114 &-7311858824324440865
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,6 +103,25 @@ MonoBehaviour:
   position: {x: 0, y: 2, z: 0}
   length: 0.35999995
   size: {x: 2, y: 5, z: 5}
+--- !u!114 &-7273403112937493565
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae475dc4446fd985d49379a0a57a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3157445376952576177}
+  startTime: 0.82
+  length: 1
+  buffid: 0
+  layer: 0
+  self: 0
+  hitstamp: 0
 --- !u!114 &-7144244846984134382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -155,6 +190,24 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &-6819704416382359681
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -762738597170021357}
+  actionClips:
+  - {fileID: 1841274396910653569}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-6527529409896005313
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -207,6 +260,22 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: -0.2, z: 0}
   scale: 0
+--- !u!114 &-6275181218739618133
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57556e1bccb84a7db4edc7907af1259f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -6819704416382359681}
+  startTime: 1.38
+  length: 0.65999997
+  buffid: 0
 --- !u!114 &-6227979663511758473
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -504,6 +573,25 @@ MonoBehaviour:
   length: 0.02
   position: {x: 0, y: 0, z: 1}
   scale: 0
+--- !u!114 &-3527184681775563094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -762738597170021357}
+  actionClips:
+  - {fileID: 3046012155332421199}
+  - {fileID: 4525655263532388492}
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-3239577924843276542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -763,6 +851,25 @@ MonoBehaviour:
   length: 0.01666665
   position: {x: 0, y: -0.1, z: 0}
   scale: 0
+--- !u!114 &-2289496038450613978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae475dc4446fd985d49379a0a57a0, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3527184681775563094}
+  startTime: 0.16
+  length: 0.88
+  buffid: 10001
+  layer: 1
+  self: 0
+  hitstamp: 1
 --- !u!114 &-2122584556883324689
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -916,6 +1023,8 @@ MonoBehaviour:
   tracks:
   - {fileID: -3239577924843276542}
   - {fileID: -3157445376952576177}
+  - {fileID: -6819704416382359681}
+  - {fileID: -3527184681775563094}
   isCollapsed: 0
   active: 1
   isLocked: 0
@@ -1021,6 +1130,23 @@ MonoBehaviour:
   startTime: 0
   length: 3.36
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Rush.anim
+--- !u!114 &-327608154367339126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c06351455b74972842d47de0fc7ace6, type: 3}
+  m_Name: "\u4E8B\u4EF6\u8F68\u9053"
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -762738597170021357}
+  actionClips: []
+  active: 1
+  isLocked: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-278058445022981185
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1164,6 +1290,25 @@ MonoBehaviour:
   length: 0.02
   position: {x: 0, y: 0, z: 1}
   scale: 0
+--- !u!114 &1769466793028008119
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae475dc4446fd985d49379a0a57a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3157445376952576177}
+  startTime: 0.9
+  length: 1
+  buffid: 0
+  layer: 0
+  self: 0
+  hitstamp: 0
 --- !u!114 &1780651940897278781
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1181,6 +1326,25 @@ MonoBehaviour:
   length: 0.01666668
   position: {x: 0, y: -0.1, z: 0}
   scale: 0
+--- !u!114 &1841274396910653569
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae475dc4446fd985d49379a0a57a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -6819704416382359681}
+  startTime: 0
+  length: 1.12
+  buffid: 10001
+  layer: 1
+  self: 0
+  hitstamp: 1
 --- !u!114 &1929136106051309189
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1321,6 +1485,25 @@ MonoBehaviour:
   isCollapsed: 0
   active: 1
   isLocked: 0
+--- !u!114 &3046012155332421199
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae475dc4446fd985d49379a0a57a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3527184681775563094}
+  startTime: 0
+  length: 0
+  buffid: 10002
+  layer: 1
+  self: 1
+  hitstamp: 0
 --- !u!114 &3171794853875554305
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1464,6 +1647,22 @@ MonoBehaviour:
   length: 0.02
   position: {x: 0, y: 0, z: 1}
   scale: 0
+--- !u!114 &4219500645008837389
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57556e1bccb84a7db4edc7907af1259f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -327608154367339126}
+  startTime: 0.16
+  length: 2.2599998
+  buffid: 10001
 --- !u!114 &4261570152704670134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1514,6 +1713,22 @@ MonoBehaviour:
   startTime: 0
   length: 1.6833333
   resPath: Assets/UERes/Art/Animations/Model/Anbi/Anbi_Attack_Branch_04.anim
+--- !u!114 &4525655263532388492
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57556e1bccb84a7db4edc7907af1259f, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3527184681775563094}
+  startTime: 2.4199998
+  length: 1
+  buffid: 10002
 --- !u!114 &4618902348730279960
 MonoBehaviour:
   m_ObjectHideFlags: 1

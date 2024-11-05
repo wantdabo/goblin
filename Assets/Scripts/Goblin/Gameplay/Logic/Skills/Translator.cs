@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.Skills
 
                 if (false == pipelinedict.TryGetValue(id, out var info))
                 {
-                    info = (SKILL_PIPELINE_STATE_DEFINE.None, 0);
+                    info = (SKILL_PIPELINE_STATE_DEFINE.NONE, 0);
                     pipelinedict.Add(id, info);
                 }
 
@@ -32,7 +32,7 @@ namespace Goblin.Gameplay.Logic.Skills
                 {
                     pipelinedict.Remove(id);
                     pipelinedict.Add(id, (pipeline.state, pipeline.frame));
-                    if (SKILL_PIPELINE_STATE_DEFINE.None == pipeline.state) return;
+                    if (SKILL_PIPELINE_STATE_DEFINE.NONE == pipeline.state) return;
                     behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SKILL_PIPELINE_INFO(pipeline.id, pipeline.state, pipeline.frame, pipeline.length));
                 }
             }

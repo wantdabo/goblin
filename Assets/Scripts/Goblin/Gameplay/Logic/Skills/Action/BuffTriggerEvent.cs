@@ -13,8 +13,14 @@ namespace Goblin.Gameplay.Logic.Skills.Action
     {
         public override ushort id => SKILL_ACTION_DEFINE.BUFF_TRIGGER_EVENT;
 
-        protected override void OnExecute(BuffTriggerEventData data, SkillActionCache cache, uint frame, FP tick)
+        protected override void OnEnter(BuffTriggerEventData data, SkillActionCache cache)
         {
+            base.OnEnter(data, cache);
+            pipeline.launcher.actor.eventor.Tell(new Buffs.Common.BuffTriggerEvent()
+            {
+                id = data.buffid,
+                from = pipeline.launcher.actor.id,
+            });
         }
     }
 }

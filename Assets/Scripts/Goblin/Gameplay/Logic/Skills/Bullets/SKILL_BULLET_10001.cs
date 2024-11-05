@@ -41,9 +41,9 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
 
         protected override void OnEnter(Actor target)
         {
+            // TODO 后面修改为读取配置, 使用配置中的技能伤害强度
             var hurt = new HurtEvent()
             {
-                // TODO 后面修改为读取配置, 使用配置中的技能伤害强度
                 damage = actor.stage.calc.ChargeDamage(actor.id, 1),
                 from = owner
             };

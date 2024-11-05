@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override void OnResolve(uint frame, RIL_SKILL_PIPELINE_INFO ril)
         {
-            if (SKILL_PIPELINE_STATE_DEFINE.End == ril.state || SKILL_PIPELINE_STATE_DEFINE.None == ril.state)
+            if (SKILL_PIPELINE_STATE_DEFINE.END == ril.state || SKILL_PIPELINE_STATE_DEFINE.NONE == ril.state)
             {
                 if (effdict.TryGetValue(ril.skillid, out var effs))
                 {

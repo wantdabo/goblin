@@ -67,7 +67,7 @@ namespace Goblin.Gameplay.Logic.States.Player
 
             suffer = true;
             var target = machine.paramachine.actor.stage.GetActor(e.from);
-            if (null == target) return;
+            if (null == target || false == target.live.alive) return;
             var tspatial = target.GetBehavior<Spatial>();
 
             if (tspatial.position == spatial.position) return;

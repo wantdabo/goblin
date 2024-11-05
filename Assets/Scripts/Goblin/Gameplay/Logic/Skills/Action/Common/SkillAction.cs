@@ -28,6 +28,16 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         {
             OnEnter(data, cache);
         }
+        
+        /// <summary>
+        /// 离开
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="cache">缓存</param>
+        public void Exit(SkillActionData data, SkillActionCache cache)
+        {
+            OnExit(data, cache);
+        }
 
         /// <summary>
         /// 执行
@@ -42,21 +52,17 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         }
 
         /// <summary>
-        /// 离开
-        /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="cache">缓存</param>
-        public void Exit(SkillActionData data, SkillActionCache cache)
-        {
-            OnExit(data, cache);
-        }
-
-        /// <summary>
         /// 进入
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="cache">缓存</param>
         protected abstract void OnEnter(SkillActionData data, SkillActionCache cache);
+        /// <summary>
+        /// 离开
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="cache">缓存</param>
+        protected abstract void OnExit(SkillActionData data, SkillActionCache cache);
         /// <summary>
         /// 执行
         /// </summary>
@@ -65,12 +71,6 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         /// <param name="frame">执行帧号</param>
         /// <param name="tick">tick</param>
         protected abstract void OnExecute(SkillActionData data, SkillActionCache cache, uint frame, FP tick);
-        /// <summary>
-        /// 离开
-        /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="cache">缓存</param>
-        protected abstract void OnExit(SkillActionData data, SkillActionCache cache);
     }
 
     /// <summary>
@@ -84,15 +84,15 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         {
             OnEnter((TD)data, (TC)cache);
         }
+        
+        protected override void OnExit(SkillActionData data, SkillActionCache cache)
+        {
+            OnExit((TD)data, (TC)cache);
+        }
 
         protected override void OnExecute(SkillActionData data, SkillActionCache cache, uint frame, FP tick)
         {
             OnExecute((TD)data, (TC)cache, frame, tick);
-        }
-
-        protected override void OnExit(SkillActionData data, SkillActionCache cache)
-        {
-            OnExit((TD)data, (TC)cache);
         }
 
         /// <summary>
@@ -102,18 +102,18 @@ namespace Goblin.Gameplay.Logic.Skills.Action.Common
         /// <param name="cache">缓存</param>
         protected virtual void OnEnter(TD data, TC cache) { }
         /// <summary>
+        /// 离开
+        /// </summary>
+        /// <param name="data">数据</param>
+        /// <param name="cache">缓存</param>
+        protected virtual void OnExit(TD data, TC cache) { }
+        /// <summary>
         /// 执行
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="cache">缓存</param>
         /// <param name="frame">执行帧号</param>
         /// <param name="tick">tick</param>
-        protected abstract void OnExecute(TD data, TC cache, uint frame, FP tick);
-        /// <summary>
-        /// 离开
-        /// </summary>
-        /// <param name="data">数据</param>
-        /// <param name="cache">缓存</param>
-        protected virtual void OnExit(TD data, TC cache) { }
+        protected virtual void OnExecute(TD data, TC cache, uint frame, FP tick) { }
     }
 }

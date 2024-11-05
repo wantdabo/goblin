@@ -19,11 +19,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             pipeline.seflbreakframes += eventData.selfbreakframes;
             pipeline.targetbreakframes = eventData.targetbreakframes;
         }
-
-        protected override void OnExecute(BreakFramesEventData eventData, SkillActionCache cache, uint frame, FP tick)
-        {
-        }
-
+        
         protected override void OnExit(BreakFramesEventData eventData, SkillActionCache cache)
         {
             base.OnExit(eventData, cache);

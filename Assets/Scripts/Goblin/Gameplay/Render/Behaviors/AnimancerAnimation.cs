@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Render.Behaviors
 
         protected override void OnPlay(string name, byte layer = 0)
         {
-            state = namedanimancer.TryPlay(name, 0.05f, FadeMode.NormalizedDuration);
+            state = namedanimancer.TryPlay(name);
             if (null != names[layer] && names[layer].Equals(name)) state.Time = 0f;
             state.Speed = 0f;
         }
