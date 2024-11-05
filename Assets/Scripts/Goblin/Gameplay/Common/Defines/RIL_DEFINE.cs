@@ -46,24 +46,32 @@
         /// </summary>
         public const ushort BUFF_INFO = 9;
         /// <summary>
+        /// RECV_CURE_INFO 受到治疗信息指令
+        /// </summary>
+        public const ushort RECV_CURE_INFO = 10;
+        /// <summary>
+        /// RECV_HURT_INFO 受到伤害信息指令
+        /// </summary>
+        public const ushort RECV_HURT_INFO = 11;
+        /// <summary>
         /// ATTRIBUTE 生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_HP = 10;
+        public const ushort ATTRIBUTE_HP = 12;
         /// <summary>
         /// ATTRIBUTE 最大生命值指令
         /// </summary>
-        public const ushort ATTRIBUTE_MAXHP = 11;
+        public const ushort ATTRIBUTE_MAXHP = 13;
         /// <summary>
         /// ATTRIBUTE 移动速度指令
         /// </summary>
-        public const ushort ATTRIBUTE_MOVESPEED = 12;
+        public const ushort ATTRIBUTE_MOVESPEED = 14;
         /// <summary>
         /// ATTRIBUTE 攻击力指令
         /// </summary>
-        public const ushort ATTRIBUTE_ATTACK = 13;
+        public const ushort ATTRIBUTE_ATTACK = 15;
         /// <summary>
         /// SURFACE 指令
         /// </summary>
-        public const ushort SURFACE = 14;
+        public const ushort SURFACE = 16;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.Attributes.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Skills;
@@ -15,13 +16,13 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// <summary>
         /// 治疗数值
         /// </summary>
-        public uint cure;
+        public uint cure { get; set; }
         /// <summary>
         /// 来源/ActorID
         /// </summary>
-        public uint from;
+        public uint from { get; set; }
     }
-    
+
     /// <summary>
     /// 治疗事件（已经过受方计算）
     /// </summary>
@@ -30,11 +31,11 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// <summary>
         /// 治疗数值
         /// </summary>
-        public uint cure;
+        public uint cure { get; set; }
         /// <summary>
         /// 来源/ActorID
         /// </summary>
-        public uint from;
+        public uint from { get; set; }
     }
 
     /// <summary>
@@ -51,7 +52,7 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// </summary>
         public uint from { get; set; }
     }
-    
+
     /// <summary>
     /// 伤害事件（已经过受方计算）
     /// </summary>
@@ -60,11 +61,11 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// <summary>
         /// 伤害
         /// </summary>
-        public DamageInfo damage;
+        public DamageInfo damage { get; set; }
         /// <summary>
         /// 来源/ActorID
         /// </summary>
-        public uint from;
+        public uint from { get; set; }
     }
 
     /// <summary>
@@ -115,6 +116,8 @@ namespace Goblin.Gameplay.Logic.Attributes
                 cure = e.cure,
                 from = e.from,
             });
+            
+            actor.stage.rilsync.SendRIL(actor.id, new RIL_RECV_CURE_INFO(e.cure, e.from));
         }
 
         private void OnHurt(HurtEvent e)
@@ -128,6 +131,8 @@ namespace Goblin.Gameplay.Logic.Attributes
                 damage = damage,
                 from = e.from,
             });
+            
+            actor.stage.rilsync.SendRIL(actor.id, new RIL_RECV_HURT_INFO(damage.crit, damage.value, e.from));
         }
 
         private void OnSkillCollision(SkillCollisionEvent e)

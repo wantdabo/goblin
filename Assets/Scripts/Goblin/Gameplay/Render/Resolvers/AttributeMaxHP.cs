@@ -1,5 +1,4 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.Translations;
+﻿using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Core;
 

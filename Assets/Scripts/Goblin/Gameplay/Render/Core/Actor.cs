@@ -192,6 +192,12 @@ namespace Goblin.Gameplay.Render.Core
                     case RIL_DEFINE.BUFF_INFO:
                         resolver = AddResolver<BuffInfo>(e.ril.id);
                         break;
+                    case RIL_DEFINE.RECV_CURE_INFO:
+                        resolver = AddResolver<RecvCureInfo>(e.ril.id);
+                        break;
+                    case RIL_DEFINE.RECV_HURT_INFO:
+                        resolver = AddResolver<RecvHurtInfo>(e.ril.id);
+                        break;
                     case RIL_DEFINE.ATTRIBUTE_HP:
                         resolver = AddResolver<AttributeHP>(e.ril.id);
                         break;

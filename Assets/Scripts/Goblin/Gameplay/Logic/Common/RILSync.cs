@@ -36,6 +36,16 @@ namespace Goblin.Gameplay.Logic.Common
             }
             dict.Add(ril.id, ril);
 
+            SendRIL(id, ril);
+        }
+
+        /// <summary>
+        /// 发送渲染指令
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="ril">渲染指令</param>
+        public void SendRIL(uint id, IRIL ril)
+        {
             // 状态变化，通知
             stage.eventor.Tell(new RILSyncEvent { id = id, frame = stage.ticker.frame, ril = ril });
         }
