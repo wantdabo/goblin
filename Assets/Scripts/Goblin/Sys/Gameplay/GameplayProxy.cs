@@ -124,7 +124,7 @@ namespace Goblin.Sys.Gameplay
                 var spatial = enemy.GetBehavior<Spatial>();
                 spatial.position = new TSVector(i, FP.Zero, FP.Zero);
                 spatial.eulerAngle = new TSVector(0, -90, 0);
-                enemy.eventor.Tell<LiveBornEvent>();
+                enemy.live.Born();
             }
             
             var enemy2 = lstage.AddActor<Player>();
@@ -132,7 +132,7 @@ namespace Goblin.Sys.Gameplay
             var spatial2 = enemy2.GetBehavior<Spatial>();
             spatial2.position = new TSVector(19, FP.Zero, FP.Zero);
             spatial2.eulerAngle = new TSVector(0, -90, 0);
-            enemy2.eventor.Tell<LiveBornEvent>();
+            enemy2.live.Born();
         }
         
         /// <summary>
@@ -158,7 +158,7 @@ namespace Goblin.Sys.Gameplay
 
             var player = lstage.AddActor<Player>();
             player.Create();
-            player.eventor.Tell<LiveBornEvent>();
+            player.live.Born();
             
             GenEnemys();
 

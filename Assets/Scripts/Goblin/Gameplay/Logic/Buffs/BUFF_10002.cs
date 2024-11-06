@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Goblin.Gameplay.Logic.Buffs
 {
+    /// <summary>
+    /// 引爆感电 BUFF
+    /// </summary>
     public class BUFF_10002 : Buff
     {
         public override uint id => BUFF_DEFINE.BUFF_10002;

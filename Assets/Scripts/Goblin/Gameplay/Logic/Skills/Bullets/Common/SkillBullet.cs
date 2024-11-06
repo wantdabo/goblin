@@ -103,7 +103,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             actor.eventor.Listen<CollisionEnterEvent>(OnCollisionEnter);
             actor.eventor.Listen<CollisionExitEvent>(OnCollisionExit);
 
-            actor.eventor.Tell<LiveBornEvent>();
+            actor.live.Born();
             state = SKILL_BULLET_DEFINE.FIRE;
             OnFire();
             translator.Force();
@@ -118,7 +118,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             state = SKILL_BULLET_DEFINE.STOP;
             OnStop();
             translator.Force();
-            actor.eventor.Tell<LiveDeadEvent>();
+            actor.live.Dead();
         }
 
         private void OnActorDead(ActorDeadEvent e)
