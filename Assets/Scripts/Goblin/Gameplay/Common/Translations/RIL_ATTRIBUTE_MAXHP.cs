@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 最大生命值
         /// </summary>
-        public uint maxhp { get; set; }
+        public uint maxhp { get; private set; }
         
         public RIL_ATTRIBUTE_MAXHP(uint maxhp)
         {

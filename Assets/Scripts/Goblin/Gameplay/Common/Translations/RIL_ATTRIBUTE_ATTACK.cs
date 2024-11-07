@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 攻击力
         /// </summary>
-        public uint attack { get; set; }
+        public uint attack { get; private set; }
         
         public RIL_ATTRIBUTE_ATTACK(uint attack)
         {

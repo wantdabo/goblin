@@ -13,11 +13,11 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 治疗数值
         /// </summary>
-        public uint cure;
+        public uint cure { get; private set; }
         /// <summary>
         /// 来源/ActorID
         /// </summary>
-        public uint from;
+        public uint from { get; private set; }
 
         /// <summary>
         /// 受到治疗渲染指令
@@ -39,7 +39,7 @@ namespace Goblin.Gameplay.Common.Translations
             {
                 return cure == ril.cure && from == ril.from;
             }
-            
+
             return false;
         }
 

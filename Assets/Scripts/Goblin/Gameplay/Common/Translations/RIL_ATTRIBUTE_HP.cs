@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 生命值
         /// </summary>
-        public uint hp { get; set; }
+        public uint hp { get; private set; }
         
         public RIL_ATTRIBUTE_HP(uint hp)
         {
