@@ -23,9 +23,9 @@ namespace Goblin.Common.GameRes
             location.Create();
         }
 
-        public async Task<T> LoadAssetAsync<T>(string resName) where T : UnityEngine.Object
+        public async Task<T> LoadAssetAsync<T>(string res) where T : UnityEngine.Object
         {
-            var handle = YooAssets.LoadAssetAsync<T>(resName);
+            var handle = YooAssets.LoadAssetAsync<T>(res);
             await handle.Task;
             var result = handle.AssetObject as T;
             handle.Release();
@@ -33,18 +33,18 @@ namespace Goblin.Common.GameRes
             return result;
         }
 
-        public T LoadAssetSync<T>(string resName) where T : UnityEngine.Object
+        public T LoadAssetSync<T>(string res) where T : UnityEngine.Object
         {
-            var handle = YooAssets.LoadAssetSync<T>(resName);
+            var handle = YooAssets.LoadAssetSync<T>(res);
             var result = handle.AssetObject as T;
             handle.Release();
 
             return result;
         }
 
-        public async Task<byte[]> LoadRawFileAsync(string resName)
+        public async Task<byte[]> LoadRawFileAsync(string res)
         {
-            var handle = YooAssets.LoadAssetSync<TextAsset>(resName);
+            var handle = YooAssets.LoadAssetSync<TextAsset>(res);
             await handle.Task;
             var ta = handle.AssetObject as TextAsset;
             handle.Release();
@@ -52,18 +52,18 @@ namespace Goblin.Common.GameRes
             return ta.bytes;
         }
 
-        public byte[] LoadRawFileSync(string resName) 
+        public byte[] LoadRawFileSync(string res) 
         {
-            var handle  = YooAssets.LoadAssetSync<TextAsset>(resName);
+            var handle  = YooAssets.LoadAssetSync<TextAsset>(res);
             var ta = handle.AssetObject as TextAsset;
             handle.Release();
 
             return ta.bytes;
         }
 
-        public async Task<Scene> LoadSceneASync(string resName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        public async Task<Scene> LoadSceneASync(string res, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            var handle = YooAssets.LoadSceneAsync(resName, loadSceneMode);
+            var handle = YooAssets.LoadSceneAsync(res, loadSceneMode);
             await handle.Task;
 
             return handle.SceneObject;

@@ -256,7 +256,7 @@ namespace Goblin.Custom
                 spdata.actionBytes[i] = actionDatas[i].Item2;
             }
             var bytes = MessagePackSerializer.Serialize(spdata);
-            var path = $"{Application.dataPath.Replace("/Assets", "/")}{Location.skilldataPath}{asset.name}.bytes";
+            var path = $"{Application.dataPath.Replace("/Assets", "/")}{Location.skilldatapath}{asset.name}.bytes";
             if (File.Exists(path)) File.Delete(path);
             System.IO.File.WriteAllBytes(path, bytes);
             Debug.Log($"写入文件：{path}");

@@ -20,10 +20,10 @@ namespace Goblin.Sys.Common
         /// 加载特效
         /// </summary>
         /// <param name="node">节点</param>
-        /// <param name="resName">特效名</param>
-        public void Load(GameObject node, string resName)
+        /// <param name="res">特效名</param>
+        public void Load(GameObject node, string res)
         {
-            var effGo = engine.gameres.location.LoadUIEffectSync(resName);
+            var effGo = engine.gameres.location.LoadUIEffectSync(res);
             uiec = effGo.GetComponent<UIEffectController>();
             uiec.transform.SetParent(node.transform, false);
             Stop();

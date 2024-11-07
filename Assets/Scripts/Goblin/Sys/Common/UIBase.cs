@@ -222,7 +222,7 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// 注册 UI 事件
         /// </summary>
-        /// <param name="nodeName">节点</param>
+        /// <param name="node">节点</param>
         /// <param name="action">回调</param>
         /// <param name="eventType">事件类型，默认点击</param>
         protected void AddUIEventListener(GameObject node, Action<PointerEventData> action, UIEventEnum eventType = UIEventEnum.PointerClick)
@@ -236,24 +236,24 @@ namespace Goblin.Sys.Common
         /// <summary>
         /// 添加特效
         /// </summary>
-        /// <param name="nodeName">节点名</param>
-        /// <param name="resName">特效名</param>
+        /// <param name="nodename">节点名</param>
+        /// <param name="res">特效名</param>
         /// <returns>特效</returns>
-        protected UIEffect AddUIEffect(string nodeName, string resName)
+        protected UIEffect AddUIEffect(string nodename, string res)
         {
-            return AddUIEffect(engine.u3dkit.SeekNode<GameObject>(gameObject, nodeName), resName);
+            return AddUIEffect(engine.u3dkit.SeekNode<GameObject>(gameObject, nodename), res);
         }
 
         /// <summary>
         /// 添加特效
         /// </summary>
         /// <param name="node">节点</param>
-        /// <param name="resName">特效名</param>
+        /// <param name="res">特效名</param>
         /// <returns>特效</returns>
-        protected UIEffect AddUIEffect(GameObject node, string resName)
+        protected UIEffect AddUIEffect(GameObject node, string res)
         {
             var eff = AddComp<UIEffect>();
-            eff.Load(node, resName);
+            eff.Load(node, res);
             eff.Sorting(layerName, sorting);
             uieffectList.Add(eff);
 
@@ -264,30 +264,30 @@ namespace Goblin.Sys.Common
         /// 设置 Image 的 Sprite
         /// </summary>
         /// <param name="image">Image 组件</param>
-        /// <param name="resName">资源名</param>
-        /// <param name="nativeSize">尺寸自适应</param>
-        protected async void SetSprite(Image image, string resName, bool nativeSize = true)
+        /// <param name="res">资源名</param>
+        /// <param name="nativesize">尺寸自适应</param>
+        protected async void SetSprite(Image image, string res, bool nativesize = true)
         {
-            var sprite = await engine.gameres.location.LoadSpriteAsync(resName);
+            var sprite = await engine.gameres.location.LoadSpriteAsync(res);
             if (null == sprite) return;
 
             image.sprite = sprite;
-            if (nativeSize) image.SetNativeSize();
+            if (nativesize) image.SetNativeSize();
         }
 
         /// <summary>
         /// 设置 RawImage 的 Texture
         /// </summary>
-        /// <param name="rawImage">RawImage 组件</param>
-        /// <param name="resName">资源名</param>
-        /// <param name="nativeSize">尺寸自适应</param>
-        protected async void SetSprite(RawImage rawImage, string resName, bool nativeSize = true)
+        /// <param name="rawimage">RawImage 组件</param>
+        /// <param name="res">资源名</param>
+        /// <param name="nativesize">尺寸自适应</param>
+        protected async void SetSprite(RawImage rawimage, string res, bool nativesize = true)
         {
-            var sprite = await engine.gameres.location.LoadSpriteAsync(resName);
+            var sprite = await engine.gameres.location.LoadSpriteAsync(res);
             if (null == sprite) return;
 
-            rawImage.texture = sprite.texture;
-            if (nativeSize) rawImage.SetNativeSize();
+            rawimage.texture = sprite.texture;
+            if (nativesize) rawimage.SetNativeSize();
         }
     }
 }

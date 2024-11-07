@@ -77,11 +77,6 @@ namespace Goblin.Sys.Common
             data.proxy = this;
             data.Create();
         }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
     }
 
     /// <summary>
