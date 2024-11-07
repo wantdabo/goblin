@@ -10,9 +10,9 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
     /// <summary>
     /// 子弹 10001
     /// </summary>
-    public class SKILL_BULLET_10001 : SkillBullet
+    public class BULLET_10001 : SkillBullet
     {
-        public override uint id => SKILL_BULLET_DEFINE.BULLET_10001;
+        public override uint id => BULLET_DEFINE.BULLET_10001;
 
         private Spatial spatial { get; set; }
         private TSVector dire { get; set; }
@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
 
             var ospatial = actor.stage.GetActor(owner).GetBehavior<Spatial>();
             dire = ospatial.eulerAngle.normalized;
-            actor.ticker.Timing((t) => actor.eventor.Tell<SkillBulletStopEvent>(), 5, 1);
+            actor.ticker.Timing((t) => actor.eventor.Tell<BulletStopEvent>(), 5, 1);
         }
 
         protected override void OnFlying(FP tick)

@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
                 id = behavior.id;
                 state = behavior.state;
                 owner = behavior.owner;
-                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_SKILL_BULLET_INFO(behavior.id, behavior.state, behavior.owner));
+                behavior.actor.stage.rilsync.PushRIL(behavior.actor.id, new RIL_BULLET_INFO(behavior.id, behavior.state, behavior.owner));
             }
         }
     }

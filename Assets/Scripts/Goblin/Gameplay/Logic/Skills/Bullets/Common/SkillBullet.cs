@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
     /// <summary>
     /// 子弹发射事件
     /// </summary>
-    public struct SkillBulletFireEvent : IEvent
+    public struct BulletFireEvent : IEvent
     {
         /// <summary>
         /// 拥有者/ActorID
@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
     /// <summary>
     /// 子弹停止事件
     /// </summary>
-    public struct SkillBulletStopEvent : IEvent
+    public struct BulletStopEvent : IEvent
     {
     }
 
@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         /// <summary>
         /// 子弹状态
         /// </summary>
-        public byte state { get; private set; } = SKILL_BULLET_DEFINE.NONE;
+        public byte state { get; private set; } = BULLET_DEFINE.NONE;
         /// <summary>
         /// 拥有者/ActorID
         /// </summary>
@@ -72,27 +72,27 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            actor.eventor.Listen<SkillBulletFireEvent>(OnSkillBulletFire);
-            actor.eventor.Listen<SkillBulletStopEvent>(OnSkillBulletStop);
+            actor.eventor.Listen<BulletFireEvent>(OnBulletFire);
+            actor.eventor.Listen<BulletStopEvent>(OnBulletStop);
             actor.eventor.Listen<ActorDeadEvent>(OnActorDead);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            actor.eventor.UnListen<SkillBulletFireEvent>(OnSkillBulletFire);
-            actor.eventor.UnListen<SkillBulletStopEvent>(OnSkillBulletStop);
+            actor.eventor.UnListen<BulletFireEvent>(OnBulletFire);
+            actor.eventor.UnListen<BulletStopEvent>(OnBulletStop);
             actor.eventor.Listen<ActorDeadEvent>(OnActorDead);
         }
 
         private void OnFPTick(FPTickEvent e)
         {
-            state = SKILL_BULLET_DEFINE.FLYING;
+            state = BULLET_DEFINE.FLYING;
             OnFlying(e.tick);
             translator.Force();
         }
 
-        private void OnSkillBulletFire(SkillBulletFireEvent e)
+        private void OnBulletFire(BulletFireEvent e)
         {
             owner = e.owner;
             position = e.position;
@@ -104,18 +104,18 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
             actor.eventor.Listen<CollisionExitEvent>(OnCollisionExit);
 
             actor.live.Born();
-            state = SKILL_BULLET_DEFINE.FIRE;
+            state = BULLET_DEFINE.FIRE;
             OnFire();
             translator.Force();
         }
 
-        private void OnSkillBulletStop(SkillBulletStopEvent e)
+        private void OnBulletStop(BulletStopEvent e)
         {
             actor.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
             actor.eventor.UnListen<CollisionEnterEvent>(OnCollisionEnter);
             actor.eventor.UnListen<CollisionExitEvent>(OnCollisionExit);
 
-            state = SKILL_BULLET_DEFINE.STOP;
+            state = BULLET_DEFINE.STOP;
             OnStop();
             translator.Force();
             actor.live.Dead();

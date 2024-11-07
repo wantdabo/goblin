@@ -71,6 +71,7 @@ namespace Goblin.SkillPipelineEditor
             var showType = field.FieldType;
             var value = field.GetValue(target);
             var newValue = value;
+            (string[], int[]) intpopupArgs = (null, null);
 
             //首字母大写
             var name = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(field.Name);
@@ -100,6 +101,11 @@ namespace Goblin.SkillPipelineEditor
                     showType = t;
                     args = new List<object> { selectObjectPathAttribute.type };
                 }
+                else if (attribute is IntPopupAttribute intPopupAttribute)
+                {
+                    showType = t;
+                    intpopupArgs = (intPopupAttribute.displayOptions, intPopupAttribute.optionValues);
+                }
             }
 
             if (showType == typeof(int))
@@ -125,6 +131,10 @@ namespace Goblin.SkillPipelineEditor
             else if (showType.IsSubclassOf(typeof(Object)))
             {
                 newValue = EditorGUILayout.ObjectField(name, (Object)value, fieldType, false);
+            }
+            else if (showType == typeof(IntPopupAttribute))
+            {
+                newValue = EditorGUILayout.IntPopup(name, (int)value, intpopupArgs.Item1, intpopupArgs.Item2);
             }
             else if (showType.IsEnum)
             {

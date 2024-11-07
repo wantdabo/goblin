@@ -1,4 +1,5 @@
 ﻿using Goblin.Gameplay.Common.Defines;
+using System.Linq;
 
 namespace Goblin.SkillPipelineEditor
 {
@@ -7,7 +8,8 @@ namespace Goblin.SkillPipelineEditor
     [Attachable(typeof(EditorEventTrack))]
     public class EditorBuffTriggerEventClip : EditorEventClip
     {
-        [MenuName("BUFF ID")]
+        [MenuName("BUFF")]
+        [IntPopup(typeof(BuffIntPopupData))]
         public int buffid;
 
         public override float Length { get => GAME_DEFINE.SP_DATA_TICK; }

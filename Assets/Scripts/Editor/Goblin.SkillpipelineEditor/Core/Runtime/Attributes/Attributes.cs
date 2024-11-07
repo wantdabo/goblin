@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Goblin.SkillPipelineEditor
@@ -86,6 +87,32 @@ namespace Goblin.SkillPipelineEditor
         public SelectObjectPathAttribute(Type type)
         {
             this.type = type;
+        }
+    }
+
+    /// <summary>
+    /// Int 下拉框
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
+    public class IntPopupAttribute : Attribute
+    {
+        public string[] displayOptions;
+        public int[] optionValues;
+
+        public IntPopupAttribute(Type type)
+        {
+            if (typeof(BuffIntPopupData).IsAssignableFrom(type))
+            {
+                var popupdata = new BuffIntPopupData();
+                displayOptions = popupdata.data.Values.ToArray();
+                optionValues = popupdata.data.Keys.ToArray();
+            }
+            else if (typeof(BulletIntPopupData).IsAssignableFrom(type))
+            {
+                var popupdata = new BulletIntPopupData();
+                displayOptions = popupdata.data.Values.ToArray();
+                optionValues = popupdata.data.Keys.ToArray();
+            }
         }
     }
 

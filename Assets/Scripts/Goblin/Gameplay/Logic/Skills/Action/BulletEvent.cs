@@ -30,8 +30,8 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             base.OnEnter(data, cache);
             // TODO 子弹测试代码，需要删除
             var bullet = pipeline.launcher.actor.stage.AddActor<Bullet>();
-            bullet.Create<SKILL_BULLET_10001>();
-            bullet.eventor.Tell(new SkillBulletFireEvent
+            bullet.Create<BULLET_10001>();
+            bullet.eventor.Tell(new BulletFireEvent
             {
                 owner = pipeline.launcher.actor.id,
                 position = spatial.position + spatial.rotation * data.position.ToVector(),

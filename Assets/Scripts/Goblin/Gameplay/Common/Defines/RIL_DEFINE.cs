@@ -38,9 +38,9 @@
         /// </summary>
         public const ushort SKILL_PIPELINE_INFO = 7;
         /// <summary>
-        /// SKILL_BULLET_INFO 技能子弹信息指令
+        /// BULLET_INFO 技能子弹信息指令
         /// </summary>
-        public const ushort SKILL_BULLET_INFO = 8;
+        public const ushort BULLET_INFO = 8;
         /// <summary>
         /// BUFF_INFO BUFF 信息指令
         /// </summary>

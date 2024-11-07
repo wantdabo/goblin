@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// 子弹渲染指令
     /// </summary>
-    public class RIL_SKILL_BULLET_INFO : IRIL
+    public class RIL_BULLET_INFO : IRIL
     {
-        public ushort id => RIL_DEFINE.SKILL_BULLET_INFO;
+        public ushort id => RIL_DEFINE.BULLET_INFO;
 
         /// <summary>
         /// 子弹 ID
@@ -29,7 +29,7 @@ namespace Goblin.Gameplay.Common.Translations
         /// <param name="bulletid">子弹 ID</param>
         /// <param name="state">子弹状态</param>
         /// <param name="owner">拥有者/ActorID</param>
-        public RIL_SKILL_BULLET_INFO(uint bulletid, byte state, uint owner)
+        public RIL_BULLET_INFO(uint bulletid, byte state, uint owner)
         {
             this.bulletid = bulletid;
             this.state = state;
@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Common.Translations
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_SKILL_BULLET_INFO _other)
+            if (other is RIL_BULLET_INFO _other)
             {
                 return _other.state == state && _other.owner == owner;
             }

@@ -8,7 +8,8 @@ namespace Goblin.SkillPipelineEditor
     [Attachable(typeof(EditorEventTrack))]
     public class EditorBulletEventClip : EditorEventClip
     {
-        [MenuName("子弹 ID")]
+        [MenuName("子弹")]
+        [IntPopup(typeof(BuffIntPopupData))]
         public int bulletid = 0;
         [MenuName("起始位置")]
         public Vector3 position = Vector3.zero;

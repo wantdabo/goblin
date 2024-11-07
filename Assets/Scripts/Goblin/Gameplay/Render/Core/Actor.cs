@@ -186,7 +186,7 @@ namespace Goblin.Gameplay.Render.Core
                     case RIL_DEFINE.SKILL_PIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;
-                    case RIL_DEFINE.SKILL_BULLET_INFO:
+                    case RIL_DEFINE.BULLET_INFO:
                         resolver = AddResolver<SkillBulletInfo>(e.ril.id);
                         break;
                     case RIL_DEFINE.BUFF_INFO:

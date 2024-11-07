@@ -1,11 +1,14 @@
-﻿namespace Goblin.SkillPipelineEditor
+﻿using Goblin.Gameplay.Common.Defines;
+
+namespace Goblin.SkillPipelineEditor
 {
     [Name("BUFF 印下事件")]
     [Color(136/255f, 233/255f, 145/255f)]
     [Attachable(typeof(EditorEventTrack))]
     public class EditorBuffStampEventClip : EditorEventClip
     {
-        [MenuName("BUFF ID")]
+        [MenuName("BUFF")]
+        [IntPopup(typeof(BuffIntPopupData))]
         public int buffid;
         [MenuName("BUFF 层数")]
         public int layer;

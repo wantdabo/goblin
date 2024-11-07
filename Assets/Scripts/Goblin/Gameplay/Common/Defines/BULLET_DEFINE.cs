@@ -1,9 +1,9 @@
 ﻿namespace Goblin.Gameplay.Common.Defines
 {
     /// <summary>
-    /// 技能子弹定义
+    /// 子弹定义
     /// </summary>
-    public class SKILL_BULLET_DEFINE
+    public class BULLET_DEFINE
     {
         /// <summary>
         /// 无
