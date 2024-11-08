@@ -14,16 +14,16 @@ namespace Goblin.Gameplay.Common.SkillDatas
         /// </summary>
         public uint buffid { get; set; }
         /// <summary>
+        /// 自身生效
+        /// </summary>
+        public int stampself { get; set; }
+        /// <summary>
+        /// 目标生效
+        /// </summary>
+        public int stamptarget { get; set; }
+        /// <summary>
         /// Buff 层数
         /// </summary>
         public uint layer { get; set; }
-        /// <summary>
-        /// 自身生效
-        /// </summary>
-        public bool self { get; set; }
-        /// <summary>
-        /// 命中后生效
-        /// </summary>
-        public bool hitstamp { get; set; }
     }
 }

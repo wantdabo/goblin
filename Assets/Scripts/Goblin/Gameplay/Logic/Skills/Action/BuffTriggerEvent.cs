@@ -16,11 +16,20 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnEnter(BuffTriggerEventData data, SkillActionCache cache)
         {
             base.OnEnter(data, cache);
+            pipeline.AddTriggerBuffData(data);
+            if (BUFF_DEFINE.ACTIVE_SELF_TIMELINE != (data.triggerself & BUFF_DEFINE.ACTIVE_SELF_TIMELINE)) return;
+            
             pipeline.launcher.actor.eventor.Tell(new Buffs.Common.BuffTriggerEvent()
             {
                 id = data.buffid,
                 from = pipeline.launcher.actor.id,
             });
+        }
+
+        protected override void OnExit(BuffTriggerEventData data, SkillActionCache cache)
+        {
+            base.OnExit(data, cache);
+            pipeline.RmvTriggerBuffData(data);
         }
     }
 }

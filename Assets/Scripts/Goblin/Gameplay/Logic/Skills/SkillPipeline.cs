@@ -66,10 +66,6 @@ namespace Goblin.Gameplay.Logic.Skills
         /// </summary>
         public int breaktoken { get; private set; } = BREAK_TOKEN_DEFINE.NONE;
         /// <summary>
-        /// 受击 Buff 行为数据
-        /// </summary>
-        private List<BuffStampEventData> onhitstampbuffs { get; set; } = new();
-        /// <summary>
         /// 自身跳帧
         /// </summary>
         public uint seflbreakframes { get; set; }
@@ -101,6 +97,14 @@ namespace Goblin.Gameplay.Logic.Skills
         /// 技能行为
         /// </summary>
         private Dictionary<ushort, SkillAction> actiondict = new();
+        /// <summary>
+        /// 触发 Buff 数据
+        /// </summary>
+        private List<BuffTriggerEventData> triggerbuffdatas = new();
+        /// <summary>
+        /// 印下 Buff 行为数据
+        /// </summary>
+        private List<BuffStampEventData> stampbuffdatas { get; set; } = new();
 
         protected override void OnCreate()
         {
@@ -145,22 +149,61 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             breaktoken |= token;
         }
-
-        public void NoneOnHitBuffInfo()
+        
+        /// <summary>
+        /// 清空触发 Buff 数据
+        /// </summary>
+        public void EmptyTriggerBuffDatas()
         {
-            onhitstampbuffs.Clear();
+            triggerbuffdatas.Clear();
+        }
+        
+        /// <summary>
+        /// 移除触发 Buff 数据
+        /// </summary>
+        /// <param name="data"></param>
+        public void RmvTriggerBuffData(BuffTriggerEventData data)
+        {
+            if (false == triggerbuffdatas.Contains(data)) return;
+            triggerbuffdatas.Remove(data);
+        }
+        
+        /// <summary>
+        /// 添加触发 Buff 数据
+        /// </summary>
+        /// <param name="data"></param>
+        public void AddTriggerBuffData(BuffTriggerEventData data)
+        {
+            if (triggerbuffdatas.Contains(data)) return;
+            triggerbuffdatas.Add(data);
         }
 
-        public void EraseOnHitBuffInfo(BuffStampEventData data)
+        /// <summary>
+        /// 清空印下 Buff 数据
+        /// </summary>
+        public void EmptyStampBuffDatas()
         {
-            if (false == onhitstampbuffs.Contains(data)) return;
-            onhitstampbuffs.Remove(data);
+            stampbuffdatas.Clear();
         }
-
-        public void StampOnHitBuffInfo(BuffStampEventData data)
+        
+        /// <summary>
+        /// 移除印下 Buff 数据
+        /// </summary>
+        /// <param name="data"></param>
+        public void RmvStampBuffData(BuffStampEventData data)
         {
-            if (onhitstampbuffs.Contains(data)) return;
-            onhitstampbuffs.Add(data);
+            if (false == stampbuffdatas.Contains(data)) return;
+            stampbuffdatas.Remove(data);
+        }
+        
+        /// <summary>
+        /// 添加印下 Buff 数据
+        /// </summary>
+        /// <param name="data"></param>
+        public void AddStampBuffData(BuffStampEventData data)
+        {
+            if (stampbuffdatas.Contains(data)) return;
+            stampbuffdatas.Add(data);
         }
 
         /// <summary>
@@ -270,7 +313,7 @@ namespace Goblin.Gameplay.Logic.Skills
         private void Reset()
         {
             NoneBreakToken();
-            NoneOnHitBuffInfo();
+            EmptyStampBuffDatas();
             seflbreakframes = 0;
             targetbreakframes = 0;
             frame = 0;
@@ -417,8 +460,8 @@ namespace Goblin.Gameplay.Logic.Skills
         {
             if (null == actorIds || 0 == actorIds.Length) return;
 
-            BreakFramesByOnHit(actorIds);
-            StampBuffsByOnHit(actorIds);
+            BreakFramesByHit(actorIds);
+            BuffByHit(actorIds);
 
             launcher.actor.eventor.Tell(new SkillCollisionEvent { id = id, actorIds = actorIds });
         }
@@ -427,7 +470,7 @@ namespace Goblin.Gameplay.Logic.Skills
         /// 受击顿帧
         /// </summary>
         /// <param name="actorIds">ActorID 集合</param>
-        private void BreakFramesByOnHit(uint[] actorIds)
+        private void BreakFramesByHit(uint[] actorIds)
         {
             launcher.actor.ticker.breakframes += seflbreakframes;
             foreach (uint actorId in actorIds)
@@ -439,14 +482,39 @@ namespace Goblin.Gameplay.Logic.Skills
         }
 
         /// <summary>
-        /// 受击印下 Buff
+        /// 处理 Buff
         /// </summary>
         /// <param name="actorIds">ActorID 集合</param>
-        private void StampBuffsByOnHit(uint[] actorIds)
+        private void BuffByHit(uint[] actorIds)
         {
-            foreach (var data in onhitstampbuffs)
+            foreach (var data in triggerbuffdatas)
             {
-                if (data.self)
+                if (BUFF_DEFINE.ACTIVE_SELF_HIT == (data.triggerself & BUFF_DEFINE.ACTIVE_SELF_HIT))
+                {
+                    launcher.actor.eventor.Tell(new Buffs.Common.BuffTriggerEvent
+                    {
+                        id = data.buffid,
+                        from = launcher.actor.id,
+                    });
+                }
+                
+                if (BUFF_DEFINE.ACTIVE_TARGET_HIT != (data.triggertarget & BUFF_DEFINE.ACTIVE_TARGET_HIT)) continue;
+                
+                foreach (uint actorId in actorIds)
+                {
+                    var target = launcher.actor.stage.GetActor(actorId);
+                    if (null == target) continue;
+                    target.eventor.Tell(new Buffs.Common.BuffTriggerEvent
+                    {
+                        id = data.buffid,
+                        from = launcher.actor.id,
+                    });
+                }
+            }            
+            
+            foreach (var data in stampbuffdatas)
+            {
+                if (BUFF_DEFINE.ACTIVE_SELF_HIT == (data.stampself & BUFF_DEFINE.ACTIVE_SELF_HIT))
                 {
                     launcher.actor.eventor.Tell(new Buffs.Common.BuffStampEvent
                     {
@@ -454,9 +522,10 @@ namespace Goblin.Gameplay.Logic.Skills
                         layer = data.layer,
                         from = launcher.actor.id,
                     });
-                    continue;
                 }
 
+                if (BUFF_DEFINE.ACTIVE_TARGET_HIT != (data.stamptarget & BUFF_DEFINE.ACTIVE_TARGET_HIT)) continue;
+                
                 foreach (uint actorId in actorIds)
                 {
                     var target = launcher.actor.stage.GetActor(actorId);

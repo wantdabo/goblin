@@ -1,4 +1,6 @@
 ﻿using Goblin.Gameplay.Common.Defines;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Goblin.SkillPipelineEditor
 {
@@ -10,11 +12,16 @@ namespace Goblin.SkillPipelineEditor
         [MenuName("BUFF")]
         [IntPopup(typeof(BuffIntPopupData))]
         public int buffid;
+
+        [MenuName("自身生效")]
+        [IntPopup(typeof(BuffSelfActivePopupData))]
+        public int stampself;
+        
+        [MenuName("目标生效")]
+        [IntPopup(typeof(BuffTargetActivePopupData))]
+        public int stamptarget;
+        
         [MenuName("BUFF 层数")]
         public int layer;
-        [MenuName("自身生效")]
-        public bool self;
-        [MenuName("击中生效")]
-        public bool hitstamp;
     }
 }

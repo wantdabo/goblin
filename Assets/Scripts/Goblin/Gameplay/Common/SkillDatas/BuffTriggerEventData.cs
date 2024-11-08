@@ -13,5 +13,13 @@ namespace Goblin.Gameplay.Common.SkillDatas
         /// BuffID
         /// </summary>
         public uint buffid { get; set; }
+        /// <summary>
+        /// 自身生效
+        /// </summary>
+        public int triggerself { get; set; }
+        /// <summary>
+        /// 目标生效
+        /// </summary>
+        public int triggertarget { get; set; }
     }
 }

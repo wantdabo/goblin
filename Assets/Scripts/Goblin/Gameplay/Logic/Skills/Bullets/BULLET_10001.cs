@@ -27,7 +27,6 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
         protected override void OnFire()
         {
             spatial.position = position;
-
             var ospatial = actor.stage.GetActor(owner).GetBehavior<Spatial>();
             dire = ospatial.eulerAngle.normalized;
             actor.ticker.Timing((t) => actor.eventor.Tell<BulletStopEvent>(), 5, 1);

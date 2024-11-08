@@ -85,6 +85,8 @@ MonoBehaviour:
   startTime: 2.4199998
   length: 1
   buffid: 10001
+  triggerself: 0
+  triggertarget: 0
 --- !u!114 &-7311858824324440865
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,9 +121,9 @@ MonoBehaviour:
   startTime: 0.82
   length: 1
   buffid: 0
+  stampself: 0
+  stamptarget: 0
   layer: 0
-  self: 0
-  hitstamp: 0
 --- !u!114 &-7144244846984134382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -276,6 +278,8 @@ MonoBehaviour:
   startTime: 1.38
   length: 0.65999997
   buffid: 0
+  triggerself: 0
+  triggertarget: 0
 --- !u!114 &-6227979663511758473
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -867,9 +871,9 @@ MonoBehaviour:
   startTime: 0.16
   length: 0.88
   buffid: 10001
+  stampself: 0
+  stamptarget: 0
   layer: 1
-  self: 0
-  hitstamp: 1
 --- !u!114 &-2122584556883324689
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1306,9 +1310,9 @@ MonoBehaviour:
   startTime: 0.9
   length: 1
   buffid: 0
+  stampself: 0
+  stamptarget: 0
   layer: 0
-  self: 0
-  hitstamp: 0
 --- !u!114 &1780651940897278781
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1342,9 +1346,9 @@ MonoBehaviour:
   startTime: 0
   length: 1.12
   buffid: 10001
+  stampself: 0
+  stamptarget: 1
   layer: 1
-  self: 0
-  hitstamp: 1
 --- !u!114 &1929136106051309189
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1501,9 +1505,9 @@ MonoBehaviour:
   startTime: 0
   length: 0
   buffid: 10002
+  stampself: 1
+  stamptarget: 0
   layer: 1
-  self: 1
-  hitstamp: 0
 --- !u!114 &3171794853875554305
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1663,6 +1667,8 @@ MonoBehaviour:
   startTime: 0.16
   length: 2.2599998
   buffid: 10001
+  triggerself: 0
+  triggertarget: 0
 --- !u!114 &4261570152704670134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1729,6 +1735,8 @@ MonoBehaviour:
   startTime: 2.4199998
   length: 1
   buffid: 10002
+  triggerself: 1
+  triggertarget: 0
 --- !u!114 &4618902348730279960
 MonoBehaviour:
   m_ObjectHideFlags: 1

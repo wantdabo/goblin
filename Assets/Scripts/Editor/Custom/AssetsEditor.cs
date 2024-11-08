@@ -229,6 +229,8 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.buffid = Convert.ToUInt32(buffTriggerEventClip.buffid);
+                    val.triggerself = buffTriggerEventClip.triggerself;
+                    val.triggertarget = buffTriggerEventClip.triggertarget;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorBuffStampEventClip buffStampEventClip)
@@ -238,9 +240,9 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.buffid = Convert.ToUInt32(buffStampEventClip.buffid);
+                    val.stampself = buffStampEventClip.stampself;
+                    val.stamptarget = buffStampEventClip.stamptarget;
                     val.layer = Convert.ToUInt32(buffStampEventClip.layer);
-                    val.self = buffStampEventClip.self;
-                    val.hitstamp = buffStampEventClip.hitstamp;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
             }

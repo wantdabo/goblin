@@ -9,6 +9,7 @@ namespace Goblin.Gameplay.Common.Translations
     public struct RIL_SKILL_PIPELINE_INFO : IRIL
     {
         public ushort id => RIL_DEFINE.SKILL_PIPELINE_INFO;
+        
         /// <summary>
         /// 技能 ID
         /// </summary>

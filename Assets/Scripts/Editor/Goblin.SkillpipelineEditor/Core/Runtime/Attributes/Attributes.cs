@@ -113,6 +113,18 @@ namespace Goblin.SkillPipelineEditor
                 displayOptions = popupdata.data.Values.ToArray();
                 optionValues = popupdata.data.Keys.ToArray();
             }
+            else if (typeof(BuffSelfActivePopupData).IsAssignableFrom(type))
+            {
+                var popupdata = new BuffSelfActivePopupData();
+                displayOptions = popupdata.data.Values.ToArray();
+                optionValues = popupdata.data.Keys.ToArray();
+            }
+            else if (typeof(BuffTargetActivePopupData).IsAssignableFrom(type))
+            {
+                var popupdata = new BuffTargetActivePopupData();
+                displayOptions = popupdata.data.Values.ToArray();
+                optionValues = popupdata.data.Keys.ToArray();
+            }
         }
     }
 

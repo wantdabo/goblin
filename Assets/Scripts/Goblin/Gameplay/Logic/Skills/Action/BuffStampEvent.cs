@@ -18,12 +18,9 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnEnter(BuffStampEventData data, SkillActionCache cache)
         {
             base.OnEnter(data, cache);
-            if (data.hitstamp)
-            {
-                pipeline.StampOnHitBuffInfo(data);
-                return;
-            }
-
+            pipeline.AddStampBuffData(data);
+            
+            if (BUFF_DEFINE.ACTIVE_SELF_TIMELINE != (data.stampself & BUFF_DEFINE.ACTIVE_SELF_TIMELINE)) return;
             pipeline.launcher.actor.eventor.Tell(new Buffs.Common.BuffStampEvent()
             {
                 id = data.buffid,
@@ -35,10 +32,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnExit(BuffStampEventData data, SkillActionCache cache)
         {
             base.OnExit(data, cache);
-            if (data.hitstamp)
-            {
-                pipeline.EraseOnHitBuffInfo(data);
-            }
+            pipeline.RmvStampBuffData(data);
         }
     }
 }
