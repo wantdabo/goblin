@@ -45,8 +45,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c75c0dcb6d50eb64abd727a90406ca2b, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   _Animator: {fileID: 653627496786927874}
   _ActionOnDisable: 0
+  _PlayAutomatically: 0
+  _Animations:
   - {fileID: 7400000, guid: 2400034e25a1bd44f8e958d2525fd462, type: 2}
   - {fileID: 7400000, guid: 773a430f3f7653a469372d5b24d4f2de, type: 2}
   - {fileID: 7400000, guid: ac30a8ff95d246f439302823d42f128d, type: 2}
