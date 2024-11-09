@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Logic.Actors
             var attribute = GetBehavior<Attribute>();
             attribute.hp = uint.MaxValue;
             attribute.maxhp = uint.MaxValue;
-            attribute.movespeed = 20 * FP.EN1;
+            attribute.movespeed = 35 * FP.EN1;
             attribute.attack = 1000;
             
             var surface = GetBehavior<Surface>();

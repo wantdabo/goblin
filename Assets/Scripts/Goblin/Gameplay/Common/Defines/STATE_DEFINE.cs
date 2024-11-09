@@ -31,12 +31,28 @@
         /// </summary>
         public const uint PLAYER_RUN = 100002;
         /// <summary>
-        /// 玩家 ATTACK 状态
+        /// 玩家 JUMP 状态
         /// </summary>
-        public const uint PLAYER_ATTACK = 100003;
+        public const uint PLAYER_JUMP = 100003;
+        /// <summary>
+        /// 玩家 ROLL 状态
+        /// </summary>
+        public const uint PLAYER_ROLL = 100004;
+        /// <summary>
+        /// 玩家 DEFEND 状态
+        /// </summary>
+        public const uint PLAYER_DEFEND = 100005;
         /// <summary>
         /// 玩家 HURT 状态
         /// </summary>
-        public const uint PLAYER_HURT = 100004;
+        public const uint PLAYER_HURT = 100006;
+        /// <summary>
+        /// 玩家 DEATH 状态
+        /// </summary>
+        public const uint PLAYER_DEATH = 100007;
+        /// <summary>
+        /// 玩家 ATTACK 状态
+        /// </summary>
+        public const uint PLAYER_ATTACK = 100008;
     }
 }
