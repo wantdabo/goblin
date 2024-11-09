@@ -30,17 +30,19 @@ namespace Goblin.Gameplay.Logic.Actors
             AddBehavior<ParallelMachine>().Create();
             AddBehavior<SkillLauncher>().Create();
 
+            // TODO 后续要改成配置文件读取
+
             var attribute = GetBehavior<Attribute>();
             attribute.hp = uint.MaxValue;
             attribute.maxhp = uint.MaxValue;
-            attribute.movespeed = 55 * FP.EN1;
+            attribute.movespeed = 20 * FP.EN1;
             attribute.attack = 1000;
             
             var surface = GetBehavior<Surface>();
             surface.model = 10000;
             
             var spatial = GetBehavior<Spatial>();
-            spatial.eulerAngle = new TSVector(0, 90, 0);
+            spatial.eulerAngles = new TSVector(0, 90, 0);
             
             var physagent = GetBehavior<PhysAgent>();
             physagent.rigidbodyoffset = new TSVector(0, 75 * FP.EN2, 0);
@@ -52,16 +54,6 @@ namespace Goblin.Gameplay.Logic.Actors
             paramachine.SetState<PlayerRun>();
             paramachine.SetState<PlayerHurt>();
             paramachine.SetState<PlayerAttack>();
-            
-            // TODO 后续要改成配置文件读取
-            var launcher = GetBehavior<SkillLauncher>();
-            launcher.Load(10001);
-            launcher.Load(10002);
-            launcher.Load(10003);
-            launcher.Load(10004);
-            launcher.Load(10011);
-            launcher.Load(10012);
-            launcher.Load(10013);
         }
     }
 }

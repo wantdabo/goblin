@@ -97,7 +97,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 欧拉角
         /// </summary>
-        public TSVector eulerAngle
+        public TSVector eulerAngles
         {
             get
             {

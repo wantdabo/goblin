@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override void OnResolve(uint frame, RIL_SURFACE ril)
         {
-            if (10000 == ril.model) model.Load("Anbi");
+            if (10000 == ril.model) model.Load("FireKnight");
         }
     }
 }

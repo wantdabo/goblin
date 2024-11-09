@@ -103,10 +103,10 @@ namespace Goblin.Custom
                         Convert.ToInt32(effectClip.position.y * Config.float2Int),
                         Convert.ToInt32(effectClip.position.z * Config.float2Int)
                     );
-                    val.eulerAngle = new Vector3Data(
-                        Convert.ToInt32(effectClip.eulerAngle.x * Config.float2Int),
-                        Convert.ToInt32(effectClip.eulerAngle.y * Config.float2Int),
-                        Convert.ToInt32(effectClip.eulerAngle.z * Config.float2Int)
+                    val.eulerAngles = new Vector3Data(
+                        Convert.ToInt32(effectClip.eulerAngles.x * Config.float2Int),
+                        Convert.ToInt32(effectClip.eulerAngles.y * Config.float2Int),
+                        Convert.ToInt32(effectClip.eulerAngles.z * Config.float2Int)
                     );
                     val.scale = Convert.ToInt32(effectClip.scale * Config.float2Int);
                     val.binding = effectClip.binding;

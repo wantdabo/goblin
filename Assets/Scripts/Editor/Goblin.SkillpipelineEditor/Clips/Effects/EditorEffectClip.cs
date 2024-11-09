@@ -25,7 +25,7 @@ namespace Goblin.SkillPipelineEditor
         public Vector3 position;
         [MenuName("旋转")]
         [SerializeField]
-        public Vector3 eulerAngle;
+        public Vector3 eulerAngles;
         [MenuName("缩放")]
         [SerializeField]
         [Range(0.0f, 10)]

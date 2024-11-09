@@ -22,45 +22,14 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         protected override void OnResolve(uint frame, RIL_STATE_MACHINE_ZERO ril)
         {
-            // TODO 后续要改为配置读取解析
-            if (STATE_DEFINE.PLAYER_HURT == ril.state)
-            {
-                animation.EmptySequeue();
-                animation.Play("Anbi_Hit_H_Back", true);
-            }
-
-            if (STATE_DEFINE.PLAYER_IDLE == ril.state && STATE_DEFINE.PLAYER_RUN == ril.laststate)
-            {
-                animation.EmptySequeue();
-                animation.Play("Anbi_Run_End");
-            }
-            else if (STATE_DEFINE.PLAYER_RUN == ril.state && STATE_DEFINE.PLAYER_IDLE == ril.laststate)
-            {
-                animation.EmptySequeue();
-                animation.Play("Anbi_Run_Start");
-            }
-            else
-            {
-                switch (ril.state)
-                {
-                    case STATE_DEFINE.PLAYER_IDLE:
-                        animation.Play("Anbi_Idle");
-                        break;
-                    case STATE_DEFINE.PLAYER_RUN:
-                        animation.Play("Anbi_Run");
-                        break;
-                }
-                
-                return;
-            }
-
+            animation.EmptySequeue();
             switch (ril.state)
             {
                 case STATE_DEFINE.PLAYER_IDLE:
-                    animation.PlaySequeue("Anbi_Idle");
+                    animation.Play("idle");
                     break;
                 case STATE_DEFINE.PLAYER_RUN:
-                    animation.PlaySequeue("Anbi_Run");
+                    animation.Play("run");
                     break;
             }
         }

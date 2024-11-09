@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Common.SkillDatas
         /// <summary>
         /// 特效欧拉旋转
         /// </summary>
-        public Vector3Data eulerAngle { get; set; }
+        public Vector3Data eulerAngles { get; set; }
         /// <summary>
         /// 特效缩放
         /// </summary>

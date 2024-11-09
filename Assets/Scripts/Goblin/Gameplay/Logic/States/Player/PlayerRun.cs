@@ -45,7 +45,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             if (motion != TSVector2.zero)
             {
                 FP angle = TSMath.Atan2(motion.x, motion.y) * TSMath.Rad2Deg;
-                spatial.eulerAngle = TSVector.up * angle;
+                spatial.eulerAngles = TSVector.up * angle;
             }
         }
     }

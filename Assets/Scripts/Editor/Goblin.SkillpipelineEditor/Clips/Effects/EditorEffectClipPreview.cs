@@ -53,7 +53,7 @@ namespace Goblin.SkillPipelineEditor
             var posoffset = Vector3.zero;
             if (clip.binding) posoffset = App.AssetData.cloneModel.transform.position;
             effect.transform.position = posoffset + clip.position;
-            effect.transform.rotation = Quaternion.Euler(clip.eulerAngle);
+            effect.transform.rotation = Quaternion.Euler(clip.eulerAngles);
             effect.transform.localScale = clip.scale * Vector3.one;
             effect.SetActive(time < clip.GetLength());
 
