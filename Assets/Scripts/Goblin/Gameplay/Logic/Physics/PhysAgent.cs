@@ -64,36 +64,6 @@ namespace Goblin.Gameplay.Logic.Physics
         }
 
         /// <summary>
-        /// 是否为动态
-        /// </summary>
-        public bool kinematic
-        {
-            get
-            {
-                return rigidbody.IsKinematic;
-            }
-            set
-            {
-                rigidbody.IsKinematic = value;
-            }
-        }
-
-        /// <summary>
-        /// 是否为触发器
-        /// </summary>
-        public bool trigger
-        {
-            get
-            {
-                return rigidbody.IsColliderOnly;
-            }
-            set
-            {
-                rigidbody.IsColliderOnly = value;
-            }
-        }
-
-        /// <summary>
         /// 立方体
         /// </summary>
         public BoxShape boxshape

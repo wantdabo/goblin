@@ -107,7 +107,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <summary>
         /// ActorID 临时列表
         /// </summary>
-        private List<uint> actorIdTemps = new();
+        private List<uint> temps = new();
         /// <summary>
         /// 碰撞几何体数据缓存
         /// </summary>
@@ -128,26 +128,26 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         protected override void OnCreate()
         {
             base.OnCreate();
-            stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
-            stage.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
             world.Events.BodiesBeginCollide += CollisionEnter;
             world.Events.BodiesEndCollide += CollisionExit;
             world.Events.TriggerBeginCollide += TriggerEnter;
             world.Events.TriggerEndCollide += TriggerExit;
             world.Events.RemovedRigidBody += OnRemovedRigidBody;
+            stage.ticker.eventor.Listen<FPTickEvent>(OnFPTick);
+            stage.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
-            stage.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
             world.Events.BodiesBeginCollide -= CollisionEnter;
             world.Events.BodiesEndCollide -= CollisionExit;
             world.Events.TriggerBeginCollide -= TriggerEnter;
             world.Events.TriggerEndCollide -= TriggerExit;
             world.Events.RemovedRigidBody -= OnRemovedRigidBody;
             world.Clear();
+            stage.ticker.eventor.UnListen<FPTickEvent>(OnFPTick);
+            stage.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
         }
 
         #region Body/物理单位操作
@@ -228,7 +228,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             BoxShape shape = new(size);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
@@ -252,16 +252,16 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             BoxShape shape = new(size);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    actorIdTemps.Add(kv.Key);
+                    temps.Add(kv.Key);
                 }
             }
 
-            return (actorIdTemps.Count > 0, actorIdTemps.ToArray());
+            return (temps.Count > 0, temps.ToArray());
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             SphereShape shape = new(radius);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, TSQuaternion.identity));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
@@ -298,16 +298,16 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             SphereShape shape = new(radius);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, TSQuaternion.identity));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(TSQuaternion.identity), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    actorIdTemps.Add(kv.Key);
+                    temps.Add(kv.Key);
                 }
             }
 
-            return (actorIdTemps.Count > 0, actorIdTemps.ToArray());
+            return (temps.Count > 0, temps.ToArray());
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             CylinderShape shape = new(radius, height);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
@@ -348,16 +348,16 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             CylinderShape shape = new(radius, height);
             physinfos.Add((PHYS_SHAPE_DEFINE.OVERLAP, shape, point, rotation));
             
-            actorIdTemps.Clear();
+            temps.Clear();
             foreach (var kv in abdict)
             {
                 if (Overlap(shape, kv.Value.Shape, TSMatrix.CreateFromQuaternion(rotation), kv.Value.Orientation, kv.Value.Position, point))
                 {
-                    actorIdTemps.Add(kv.Key);
+                    temps.Add(kv.Key);
                 }
             }
 
-            return (actorIdTemps.Count > 0, actorIdTemps.ToArray());
+            return (temps.Count > 0, temps.ToArray());
         }
 
         /// <summary>
