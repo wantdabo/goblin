@@ -5,7 +5,7 @@ namespace Kowtow
     /// <summary>
     /// 物理材质
     /// </summary>
-    public class Material
+    public struct Material
     {
         /// <summary>
         /// 摩檫力
