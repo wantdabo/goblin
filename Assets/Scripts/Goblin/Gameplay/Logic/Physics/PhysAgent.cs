@@ -166,13 +166,11 @@ namespace Goblin.Gameplay.Logic.Physics
 
         private void OnTriggerEnter(Collider collider)
         {
-            UnityEngine.Debug.Log("OnTriggerEnter");
             actor.eventor.Tell(new CollisionEnterEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
 
         private void OnTriggerExit(Collider collider)
         {
-            UnityEngine.Debug.Log("OnTriggerExit");
             actor.eventor.Tell(new CollisionExitEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
     }

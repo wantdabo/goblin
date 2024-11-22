@@ -4,6 +4,7 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow;
+using Kowtow.Collision;
 using Kowtow.Collision.Shapes;
 using Kowtow.Math;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public uint GetActorId(Rigidbody body)
         {
             if (false == badict.TryGetValue(body, out var actorId)) return default;
-            
+
             return actorId;
         }
 
@@ -141,6 +142,46 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             return body;
         }
         #endregion
+
+        private (bool, (uint actorId, Collider collider)[]) HitResultConv(HitResult result)
+        {
+            if (false == result.hit) return (false, default);
+            
+            (uint actorId, Collider collider)[] colliders = new (uint actorId, Collider collider)[result.colliders.Count];
+            for (int i = 0; i < result.colliders.Count; i++)
+            {
+                var rigidbody = result.colliders[i].rigidbody;
+                var actorId = GetActorId(rigidbody);
+                colliders[i] = (actorId, result.colliders[i]);
+            }
+            
+            return (true, colliders);
+        }
+        
+        public (bool, (uint actorId, Collider collider)[]) Raycast(FPVector3 origin, FPVector3 direction, FP distance, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.Raycast(origin, direction, distance, trigger, layer));
+        }
+        
+        public (bool, (uint actorId, Collider collider)[]) Linecast(FPVector3 start, FPVector3 end, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.Linecast(start, end, trigger, layer));
+        }
+
+        public (bool, (uint actorId, Collider collider)[]) OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.OverlapBox(position, rotation, size, trigger, layer));
+        }
+        
+        public (bool, (uint actorId, Collider collider)[]) OverlapSphere(FPVector3 position, FP radius, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.OverlapSphere(position, radius, trigger, layer));
+        }
+        
+        public (bool, (uint actorId, Collider collider)[]) OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP radius, FP height, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.OverlapCylinder(position, rotation, radius, height, trigger, layer));
+        }
 
         private void OnFPTick(FPTickEvent e)
         {
