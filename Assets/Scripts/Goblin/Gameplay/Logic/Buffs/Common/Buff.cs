@@ -1,8 +1,8 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
+using Kowtow.Math;
 using System;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Buffs.Common
 {

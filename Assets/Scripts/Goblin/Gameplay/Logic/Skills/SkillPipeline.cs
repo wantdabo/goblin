@@ -11,10 +11,10 @@ using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Skills.Bullets;
 using Goblin.Gameplay.Logic.Skills.Bullets.Common;
+using Kowtow.Math;
 using MessagePack;
 using System;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills
 {

@@ -3,8 +3,8 @@ using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.Attributes.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Skills;
+using Kowtow.Math;
 using System;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Attributes
 {

@@ -3,8 +3,8 @@ using Goblin.Gameplay.Logic.Attributes;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Spatials;
+using Kowtow.Math;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
@@ -40,12 +40,12 @@ namespace Goblin.Gameplay.Logic.States.Player
             base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
             var motion = joystick.dire * attribute.movespeed * tick;
-            spatial.position += new TSVector(motion.x, 0, motion.y);
+            spatial.position += new FPVector3(motion.x, 0, motion.y);
 
-            if (motion != TSVector2.zero)
+            if (motion != FPVector2.zero)
             {
-                FP angle = TSMath.Atan2(motion.x, motion.y) * TSMath.Rad2Deg;
-                spatial.eulerAngles = TSVector.up * angle;
+                FP angle = FPMath.Atan2(motion.x, motion.y) * FPMath.Rad2Deg;
+                spatial.eulerAngles = FPVector3.up * angle;
             }
         }
     }

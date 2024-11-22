@@ -1,6 +1,6 @@
 ﻿using Goblin.Core;
+using Kowtow.Math;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Attributes.Common
 {

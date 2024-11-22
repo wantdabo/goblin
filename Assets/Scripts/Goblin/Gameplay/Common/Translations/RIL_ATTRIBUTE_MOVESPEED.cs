@@ -1,6 +1,6 @@
 ﻿using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Translations
 {

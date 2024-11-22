@@ -1,7 +1,7 @@
 ﻿using Goblin.Core;
+using Kowtow.Math;
 using System;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Common.StateMachine
 {

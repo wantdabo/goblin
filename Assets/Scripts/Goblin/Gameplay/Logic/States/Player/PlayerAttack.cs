@@ -3,8 +3,8 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Skills;
+using Kowtow.Math;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {

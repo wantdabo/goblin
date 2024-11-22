@@ -2,8 +2,10 @@
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Logic.Spatials;
-using TrueSync;
-using TrueSync.Physics3D;
+using Kowtow;
+using Kowtow.Collision;
+using Kowtow.Collision.Shapes;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Physics
 {
@@ -37,20 +39,20 @@ namespace Goblin.Gameplay.Logic.Physics
         /// <summary>
         /// 默认物理材质
         /// </summary>
-        private static BodyMaterial defaultMaterial = new(FP.Zero, FP.Zero, FP.Zero);
+        private static Material defaultMaterial = new(FP.Zero, FP.Zero);
 
         /// <summary>
         /// 物理单位
         /// </summary>
-        public RigidBody rigidbody { get; private set; }
+        public Rigidbody rigidbody { get; private set; }
 
         private Spatial spatial { get; set; }
 
-        private TSVector mrigidbodyoffset = TSVector.zero;
+        private FPVector3 mrigidbodyoffset = FPVector3.zero;
         /// <summary>
         /// 物理单位平移偏移
         /// </summary>
-        public TSVector rigidbodyoffset
+        public FPVector3 rigidbodyoffset
         {
             get
             {
@@ -59,7 +61,7 @@ namespace Goblin.Gameplay.Logic.Physics
             set
             {
                 mrigidbodyoffset = value;
-                rigidbody.Position = rigidbodyoffset + spatial.position;
+                rigidbody.position = rigidbodyoffset + spatial.position;
             }
         }
 
@@ -70,11 +72,11 @@ namespace Goblin.Gameplay.Logic.Physics
         {
             get
             {
-                var shape = rigidbody.Shape as BoxShape;
+                var shape = rigidbody.shape as BoxShape;
                 if (null == shape)
                 {
-                    shape = new BoxShape(TSVector.one);
-                    rigidbody.Shape = shape;
+                    shape = new BoxShape(FPVector3.zero, FPVector3.one);
+                    rigidbody.shape = shape;
                 }
 
                 return shape;
@@ -88,11 +90,11 @@ namespace Goblin.Gameplay.Logic.Physics
         {
             get
             {
-                var shape = rigidbody.Shape as SphereShape;
+                var shape = rigidbody.shape as SphereShape;
                 if (null == shape)
                 {
-                    shape = new SphereShape(FP.One);
-                    rigidbody.Shape = shape;
+                    shape = new SphereShape(FPVector3.zero, FP.One);
+                    rigidbody.shape = shape;
                 }
 
                 return shape;
@@ -106,11 +108,11 @@ namespace Goblin.Gameplay.Logic.Physics
         {
             get
             {
-                var shape = rigidbody.Shape as CylinderShape;
+                var shape = rigidbody.shape as CylinderShape;
                 if (null == shape)
                 {
-                    shape = new CylinderShape(FP.One, FP.One);
-                    rigidbody.Shape = shape;
+                    shape = new CylinderShape(FPVector3.zero, FP.One, FP.One);
+                    rigidbody.shape = shape;
                 }
 
                 return shape;
@@ -120,15 +122,14 @@ namespace Goblin.Gameplay.Logic.Physics
         protected override void OnCreate()
         {
             base.OnCreate();
+            spatial = actor.GetBehavior<Spatial>();
+            rigidbody = actor.stage.phys.AddBody(actor.id, new BoxShape(FPVector3.zero, FPVector3.one), FP.One, defaultMaterial);
             actor.eventor.Listen<SpatialPositionChangedEvent>(OnSpatialPositionChanged);
             actor.eventor.Listen<SpatialRotationChangedEvent>(OnSpatialRotationChanged);
-            actor.stage.eventor.Listen<PhysCollisionEnterEvent>(OnCollisionEnter);
-            actor.stage.eventor.Listen<PhysCollisionExitEvent>(OnCollisionExit);
-            actor.stage.eventor.Listen<PhysTriggerEnterEvent>(OnTriggerEnter);
-            actor.stage.eventor.Listen<PhysTriggerExitEvent>(OnTriggerExit);
-            spatial = actor.GetBehavior<Spatial>();
-            rigidbody = new RigidBody(new BoxShape(TSVector.one), defaultMaterial);
-            actor.stage.phys.AddBody(actor.id, rigidbody);
+            rigidbody.CollisionEnter += OnCollisionEnter;
+            rigidbody.CollisionExit += OnCollisionExit;
+            rigidbody.TriggerEnter += OnTriggerEnter;
+            rigidbody.TriggerExit += OnTriggerExit;
         }
 
         protected override void OnDestroy()
@@ -136,53 +137,43 @@ namespace Goblin.Gameplay.Logic.Physics
             base.OnDestroy();
             actor.eventor.UnListen<SpatialPositionChangedEvent>(OnSpatialPositionChanged);
             actor.eventor.UnListen<SpatialRotationChangedEvent>(OnSpatialRotationChanged);
-            actor.stage.eventor.UnListen<PhysCollisionEnterEvent>(OnCollisionEnter);
-            actor.stage.eventor.UnListen<PhysCollisionExitEvent>(OnCollisionExit);
-            actor.stage.eventor.UnListen<PhysTriggerEnterEvent>(OnTriggerEnter);
-            actor.stage.eventor.UnListen<PhysTriggerExitEvent>(OnTriggerExit);
+            rigidbody.CollisionEnter -= OnCollisionEnter;
+            rigidbody.CollisionExit -= OnCollisionExit;
+            rigidbody.TriggerEnter -= OnTriggerEnter;
+            rigidbody.TriggerExit -= OnTriggerExit;
             actor.stage.phys.RmvBody(actor.id);
         }
 
         private void OnSpatialPositionChanged(SpatialPositionChangedEvent e)
         {
-            rigidbody.Position = rigidbodyoffset + e.position;
+            rigidbody.position = rigidbodyoffset + e.position;
         }
-
+        
         private void OnSpatialRotationChanged(SpatialRotationChangedEvent e)
         {
-            rigidbody.Orientation = TSMatrix.CreateFromQuaternion(e.rotation);
+            rigidbody.rotation = e.rotation;
         }
 
-        private void OnCollisionEnter(PhysCollisionEnterEvent e)
+        private void OnCollisionEnter(Collider collider)
         {
-            if (actor.id != e.id0 && actor.id != e.id1) return;
-
-            var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionEnterEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
 
-        private void OnCollisionExit(PhysCollisionExitEvent e)
+        private void OnCollisionExit(Collider collider)
         {
-            if (actor.id != e.id0 && actor.id != e.id1) return;
-
-            var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionExitEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
+            actor.eventor.Tell(new CollisionExitEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
 
-        private void OnTriggerEnter(PhysTriggerEnterEvent e)
+        private void OnTriggerEnter(Collider collider)
         {
-            if (actor.id != e.id0 && actor.id != e.id1) return;
-
-            var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionEnterEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
+            UnityEngine.Debug.Log("OnTriggerEnter");
+            actor.eventor.Tell(new CollisionEnterEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
 
-        private void OnTriggerExit(PhysTriggerExitEvent e)
+        private void OnTriggerExit(Collider collider)
         {
-            if (actor.id != e.id0 && actor.id != e.id1) return;
-
-            var selfIsId0 = e.id0 == actor.id;
-            actor.eventor.Tell(new CollisionExitEvent { actorId = selfIsId0 ? e.id1 : e.id0 });
+            UnityEngine.Debug.Log("OnTriggerExit");
+            actor.eventor.Tell(new CollisionExitEvent { actorId = actor.stage.phys.GetActorId(collider.rigidbody) });
         }
     }
 }

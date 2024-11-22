@@ -6,10 +6,6 @@ using Goblin.Gameplay.Logic.Attributes.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Physics.Common;
 using System.Collections.Generic;
-using TrueSync;
-using TrueSync.Physics2D;
-using TrueSync.Physics3D;
-using World = TrueSync.Physics3D.World;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -109,7 +105,7 @@ namespace Goblin.Gameplay.Logic.Core
 
             phys = AddComp<Phys>();
             phys.stage = this;
-            phys.Initialize<CollisionSystemPersistentSAP>();
+            phys.Initialize();
             phys.Create();
         }
 

@@ -4,7 +4,7 @@ using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Spatials;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
@@ -29,13 +29,13 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
             if (null == spatial) return;
 
-            var position = data.position.ToVector();
+            var position = data.position.ToVector3();
             var scale = data.scale * FP.EN3;
 
             var t = FP.One / (1 + data.eframe - data.sframe);
             spatial.position += spatial.rotation * (position * t);
             // TODO 支持角度变化
-            spatial.scale += TSVector.one * scale * t;
+            spatial.scale += FPVector3.one * scale * t;
         }
     }
 }

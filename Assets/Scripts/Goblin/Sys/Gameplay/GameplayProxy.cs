@@ -10,7 +10,7 @@ using Goblin.Gameplay.Logic.Spatials;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
-using TrueSync;
+using Kowtow.Math;
 using UnityEngine;
 using LStage = Goblin.Gameplay.Logic.Core.Stage;
 
@@ -117,21 +117,21 @@ namespace Goblin.Sys.Gameplay
         /// </summary>
         private void GenEnemys()
         {
-            for (int i = 2; i < 7; i++)
-            {
-                var enemy = lstage.AddActor<Player>();
-                enemy.Create();
-                var spatial = enemy.GetBehavior<Spatial>();
-                spatial.position = new TSVector(i, FP.Zero, FP.Zero);
-                spatial.eulerAngles = new TSVector(0, -90, 0);
-                enemy.live.Born();
-            }
+            // for (int i = 2; i < 7; i++)
+            // {
+            //     var enemy = lstage.AddActor<Player>();
+            //     enemy.Create();
+            //     var spatial = enemy.GetBehavior<Spatial>();
+            //     spatial.position = new FPVector3(i, FP.Zero, FP.Zero);
+            //     spatial.eulerAngles = new FPVector3(0, -90, 0);
+            //     enemy.live.Born();
+            // }
             
             var enemy2 = lstage.AddActor<Player>();
             enemy2.Create();
             var spatial2 = enemy2.GetBehavior<Spatial>();
-            spatial2.position = new TSVector(19, FP.Zero, FP.Zero);
-            spatial2.eulerAngles = new TSVector(0, -90, 0);
+            spatial2.position = new FPVector3(2, FP.Zero, FP.Zero);
+            spatial2.eulerAngles = new FPVector3(0, -90, 0);
             enemy2.live.Born();
         }
         

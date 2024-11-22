@@ -1,9 +1,9 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
+using Kowtow.Math;
 using System;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Common
 {
@@ -176,7 +176,7 @@ namespace Goblin.Gameplay.Logic.Common
                 infoTemps.Add(info);
                 if (info.duration > info.elapsed) continue;
 
-                info.elapsed = TSMath.Max(0, info.elapsed - info.duration);
+                info.elapsed = FPMath.Max(0, info.elapsed - info.duration);
                 info.loop--;
                 infoTemps.Add(info);
 

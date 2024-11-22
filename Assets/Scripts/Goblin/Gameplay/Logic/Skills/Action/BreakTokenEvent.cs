@@ -3,7 +3,7 @@ using Goblin.Gameplay.Common.SkillDatas;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             if (BREAK_TOKEN_DEFINE.JOYSTICK == (BREAK_TOKEN_DEFINE.JOYSTICK & pipeline.breaktoken) && null != gamepad)
             {
                 var joystick = gamepad.GetInput(InputType.Joystick);
-                if (joystick.press && joystick.dire != TSVector2.zero) pipeline.Break();
+                if (joystick.press && joystick.dire != FPVector2.zero) pipeline.Break();
             }
         }
     }

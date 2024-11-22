@@ -3,8 +3,8 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
+using Kowtow.Collision.Shapes;
 using ShapeDrawers.Common;
-using TrueSync.Physics3D;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common
@@ -57,16 +57,16 @@ namespace Goblin.Gameplay.Render.Common
                 
                 if (physinfo.shape is BoxShape boxshape)
                 {
-                    ShapeDrawer.DrawBox(physinfo.position.ToVector3(), boxshape.Size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
+                    ShapeDrawer.DrawBox(physinfo.position.ToVector3(), boxshape.size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
                 }
                 else if (physinfo.shape is SphereShape sphereshape)
                 {
-                    ShapeDrawer.DrawSphere(physinfo.position.ToVector3(), sphereshape.Radius.AsFloat(), color);
+                    ShapeDrawer.DrawSphere(physinfo.position.ToVector3(), sphereshape.radius.AsFloat(), color);
 
                 }
                 else if (physinfo.shape is CylinderShape cylindershape)
                 {
-                    ShapeDrawer.DrawCylinder(physinfo.position.ToVector3(), cylindershape.Radius.AsFloat(), cylindershape.Height.AsFloat(), physinfo.rotation.ToQuaternion(), color);
+                    ShapeDrawer.DrawCylinder(physinfo.position.ToVector3(), cylindershape.radius.AsFloat(), cylindershape.height.AsFloat(), physinfo.rotation.ToQuaternion(), color);
                 }
             }
         }

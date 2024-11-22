@@ -1,9 +1,9 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
+using Kowtow.Math;
 using System;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Inputs
 {
@@ -50,7 +50,7 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// <summary>
         /// 按键的方向
         /// </summary>
-        public TSVector2 dire;
+        public FPVector2 dire;
     }
 
     /// <summary>
@@ -60,11 +60,11 @@ namespace Goblin.Gameplay.Logic.Inputs
     {
         private Dictionary<InputType, InputInfo> inputdict = new()
         {
-            { InputType.Joystick, new InputInfo { press = false, dire = TSVector2.zero } },
-            { InputType.BA, new InputInfo { press = false, dire = TSVector2.zero } },
-            { InputType.BB, new InputInfo { press = false, dire = TSVector2.zero } },
-            { InputType.BC, new InputInfo { press = false, dire = TSVector2.zero } },
-            { InputType.BD, new InputInfo { press = false, dire = TSVector2.zero } },
+            { InputType.Joystick, new InputInfo { press = false, dire = FPVector2.zero } },
+            { InputType.BA, new InputInfo { press = false, dire = FPVector2.zero } },
+            { InputType.BB, new InputInfo { press = false, dire = FPVector2.zero } },
+            { InputType.BC, new InputInfo { press = false, dire = FPVector2.zero } },
+            { InputType.BD, new InputInfo { press = false, dire = FPVector2.zero } },
         };
 
         protected override void OnCreate()

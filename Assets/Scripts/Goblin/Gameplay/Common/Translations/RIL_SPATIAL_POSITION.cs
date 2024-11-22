@@ -1,6 +1,6 @@
 ﻿using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Translations
 {
@@ -13,13 +13,13 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 平移
         /// </summary>
-        public TSVector position { get; private set; }
+        public FPVector3 position { get; private set; }
 
         /// <summary>
         /// 空间平移渲染指令
         /// </summary>
         /// <param name="position">平移</param>
-        public RIL_SPATIAL_POSITION(TSVector position)
+        public RIL_SPATIAL_POSITION(FPVector3 position)
         {
             this.position = position;
         }

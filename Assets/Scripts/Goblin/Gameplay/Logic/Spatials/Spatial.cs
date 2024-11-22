@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Logic.Core;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Spatials
 {
@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 平移
         /// </summary>
-        public TSVector position { get; set; }
+        public FPVector3 position { get; set; }
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 旋转
         /// </summary>
-        public TSQuaternion rotation { get; set; }
+        public FPQuaternion rotation { get; set; }
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 缩放
         /// </summary>
-        public TSVector scale { get; set; }
+        public FPVector3 scale { get; set; }
     }
 
     /// <summary>
@@ -42,11 +42,11 @@ namespace Goblin.Gameplay.Logic.Spatials
     /// </summary>
     public class Spatial : Behavior<Translator>
     {
-        private TSVector mposition { get; set; }
+        private FPVector3 mposition { get; set; }
         /// <summary>
         /// 平移
         /// </summary>
-        public TSVector position
+        public FPVector3 position
         {
             get
             {
@@ -54,16 +54,16 @@ namespace Goblin.Gameplay.Logic.Spatials
             }
             set
             {
-                mposition = new TSVector(value.x, value.y, 0);
+                mposition = new FPVector3(value.x, value.y, 0);
                 actor.eventor.Tell(new SpatialPositionChangedEvent { position = mposition });
             }
         }
 
-        private TSQuaternion mrotation { get; set; }
+        private FPQuaternion mrotation { get; set; }
         /// <summary>
         /// 旋转
         /// </summary>
-        public TSQuaternion rotation
+        public FPQuaternion rotation
         {
             get
             {
@@ -72,16 +72,16 @@ namespace Goblin.Gameplay.Logic.Spatials
             set
             {
                 mrotation = value;
-                mrotation = TSQuaternion.Euler(0, mrotation.eulerAngles.y, 0);
+                mrotation = FPQuaternion.Euler(0, mrotation.eulerAngles.y, 0);
                 actor.eventor.Tell(new SpatialRotationChangedEvent { rotation = mrotation });
             }
         }
 
-        private TSVector mscale { get; set; }
+        private FPVector3 mscale { get; set; }
         /// <summary>
         /// 缩放
         /// </summary>
-        public TSVector scale
+        public FPVector3 scale
         {
             get
             {
@@ -97,7 +97,7 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 欧拉角
         /// </summary>
-        public TSVector eulerAngles
+        public FPVector3 eulerAngles
         {
             get
             {
@@ -105,7 +105,7 @@ namespace Goblin.Gameplay.Logic.Spatials
             }
             set
             {
-                rotation = TSQuaternion.Euler(value.x, value.y, value.z);
+                rotation = FPQuaternion.Euler(value.x, value.y, value.z);
             }
         }
     }

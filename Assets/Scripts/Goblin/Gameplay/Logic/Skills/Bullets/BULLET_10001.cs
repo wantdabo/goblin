@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.Attributes;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Skills.Bullets.Common;
 using Goblin.Gameplay.Logic.Spatials;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Bullets
 {
@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
         public override uint id => BULLET_DEFINE.BULLET_10001;
 
         private Spatial spatial { get; set; }
-        private TSVector dire { get; set; }
+        private FPVector3 dire { get; set; }
         private uint speed { get; set; } = 75;
 
         protected override void OnCreate()
@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets
         protected override void OnFlying(FP tick)
         {
             speed += 2;
-            spatial.position += new TSVector(dire.y, dire.x, FP.Zero) * speed * FP.EN1 * tick;
+            spatial.position += new FPVector3(dire.y, dire.x, FP.Zero) * speed * FP.EN1 * tick;
         }
 
         protected override void OnEnter(Actor target)

@@ -1,7 +1,7 @@
 ﻿using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Common.Translations.Common;
+using Kowtow.Math;
 using System;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Spatials
 {
@@ -13,15 +13,15 @@ namespace Goblin.Gameplay.Logic.Spatials
         /// <summary>
         /// 平移
         /// </summary>
-        private TSVector position { get; set; }
+        private FPVector3 position { get; set; }
         /// <summary>
         /// 旋转
         /// </summary>
-        private TSQuaternion rotation { get; set; }
+        private FPQuaternion rotation { get; set; }
         /// <summary>
         /// 缩放
         /// </summary>
-        private TSVector scale { get; set; }
+        private FPVector3 scale { get; set; }
 
         protected override void OnRIL()
         {

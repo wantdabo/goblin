@@ -1,4 +1,4 @@
-﻿using TrueSync;
+﻿using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Defines
 {

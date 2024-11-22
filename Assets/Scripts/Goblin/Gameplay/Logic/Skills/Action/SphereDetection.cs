@@ -3,8 +3,7 @@ using Goblin.Gameplay.Common.SkillDatas;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
-using Goblin.Gameplay.Logic.Spatials;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
@@ -26,9 +25,9 @@ namespace Goblin.Gameplay.Logic.Skills.Action
         protected override void OnExecute(SphereDetectionData data, SkillActionCache cache, uint frame, FP tick)
         {
             base.OnExecute(data, cache, frame, tick);
-            var result = pipeline.launcher.actor.stage.phys.OverlapSpheres(spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3);
-            if (false == result.hit) return;
-            pipeline.OnHit(result.actorIds);
+            // var result = pipeline.launcher.actor.stage.phys.OverlapSpheres(spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3);
+            // if (false == result.hit) return;
+            // pipeline.OnHit(result.actorIds);
         }
     }
 }

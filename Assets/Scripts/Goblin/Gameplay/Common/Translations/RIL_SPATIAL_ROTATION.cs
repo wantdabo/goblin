@@ -1,6 +1,6 @@
 ﻿using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Translations
 {
@@ -13,13 +13,13 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 旋转
         /// </summary>
-        public TSQuaternion rotation { get; private set; }
+        public FPQuaternion rotation { get; private set; }
 
         /// <summary>
         /// 空间旋转渲染指令
         /// </summary>
         /// <param name="rotation">旋转</param>
-        public RIL_SPATIAL_ROTATION(TSQuaternion rotation)
+        public RIL_SPATIAL_ROTATION(FPQuaternion rotation)
         {
             this.rotation = rotation;
         }

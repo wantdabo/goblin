@@ -5,7 +5,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Lives;
 using Goblin.Gameplay.Logic.Physics;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
 {
@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         /// <summary>
         /// 起始位置
         /// </summary>
-        public TSVector position { get; set; }
+        public FPVector3 position { get; set; }
         /// <summary>
         /// 伤害
         /// </summary>
@@ -59,7 +59,7 @@ namespace Goblin.Gameplay.Logic.Skills.Bullets.Common
         /// <summary>
         /// 起始位置
         /// </summary>
-        public TSVector position { get; private set; }
+        public FPVector3 position { get; private set; }
         /// <summary>
         /// 伤害
         /// </summary>

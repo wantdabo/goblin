@@ -2,8 +2,8 @@
 using Goblin.Gameplay.Logic.Attributes;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Spatials;
+using Kowtow.Math;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.States.Player
 {
@@ -74,7 +74,7 @@ namespace Goblin.Gameplay.Logic.States.Player
             
             var dire = (tspatial.position - spatial.position).normalized;
             spatial.position -= dire * FP.EN2 * 2;
-            spatial.rotation = TSQuaternion.LookRotation(dire);
+            spatial.rotation = FPQuaternion.LookRotation(dire);
         }
     }
 }

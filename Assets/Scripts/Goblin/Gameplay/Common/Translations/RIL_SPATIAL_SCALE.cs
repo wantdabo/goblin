@@ -1,6 +1,6 @@
 ﻿using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Translations
 {
@@ -13,13 +13,13 @@ namespace Goblin.Gameplay.Common.Translations
         /// <summary>
         /// 缩放
         /// </summary>
-        public TSVector scale { get; private set; }        
+        public FPVector3 scale { get; private set; }        
         
         /// <summary>
         /// 空间缩放渲染指令
         /// </summary>
         /// <param name="scale"></param>
-        public RIL_SPATIAL_SCALE(TSVector scale)
+        public RIL_SPATIAL_SCALE(FPVector3 scale)
         {
             this.scale = scale;
         }

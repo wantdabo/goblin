@@ -10,8 +10,8 @@ using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Logic.Skills;
 using Goblin.Gameplay.Logic.States.Player;
 using Goblin.Gameplay.Logic.Spatials;
-using TrueSync;
-using TrueSync.Physics3D;
+using Kowtow;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Actors
 {
@@ -44,11 +44,13 @@ namespace Goblin.Gameplay.Logic.Actors
             surface.model = 10000;
 
             var spatial = GetBehavior<Spatial>();
-            spatial.eulerAngles = new TSVector(0, 90, 0);
+            spatial.eulerAngles = new FPVector3(0, 90, 0);
 
             var physagent = GetBehavior<PhysAgent>();
-            physagent.rigidbody.IsKinematic = true;
-            physagent.boxshape.Size = new TSVector(1, 15 * FP.EN1, 1);
+            physagent.rigidbody.trigger = true;
+            physagent.rigidbody.type = RigidbodyType.Dynamic;
+            physagent.rigidbody.detection = DetectionType.Discrete;
+            physagent.boxshape.size = new FPVector3(1, 15 * FP.EN1, 1);
 
             var paramachine = GetBehavior<ParallelMachine>();
             paramachine.SetState<PlayerIdle>();

@@ -6,7 +6,6 @@ using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Common;
 using Goblin.Gameplay.Logic.Skills.Bullets;
 using Goblin.Gameplay.Logic.Skills.Bullets.Common;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills.Action
 {
@@ -34,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             bullet.eventor.Tell(new BulletFireEvent
             {
                 owner = pipeline.launcher.actor.id,
-                position = spatial.position + spatial.rotation * data.position.ToVector(),
+                position = spatial.position + spatial.rotation * data.position.ToVector3(),
                 damage = default,
                 args = default
             });

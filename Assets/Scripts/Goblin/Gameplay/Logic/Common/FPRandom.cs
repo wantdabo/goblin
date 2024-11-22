@@ -1,5 +1,5 @@
 ﻿using Goblin.Core;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Common
 {
@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Common
     /// </summary>
     public class FPRandom : Comp
     {
-        private TSRandom random { get; set; }
+        private Kowtow.Math.FPRandom random { get; set; }
 
         /// <summary>
         /// 随机种子
@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Logic.Common
         public void Initial(int s)
         {
             seed = s;
-            random = TSRandom.New(seed);
+            random = Kowtow.Math.FPRandom.New(seed);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <param name="min">最小值</param>
         /// <param name="max">最大值</param>
         /// <returns>结果</returns>
-        public int Range(int min, int max) 
+        public int Range(int min, int max)
         {
             return random.Next(min, max);
         }

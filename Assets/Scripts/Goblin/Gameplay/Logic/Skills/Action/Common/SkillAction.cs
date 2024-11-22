@@ -1,7 +1,7 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.Gameplay.Logic.Skills.Action.Cache.Common;
-using TrueSync;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Skills.Action.Common
 {

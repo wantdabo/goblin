@@ -3,8 +3,8 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Inputs;
 using Goblin.Gameplay.Logic.Spatials;
+using Kowtow.Math;
 using System.Collections.Generic;
-using TrueSync;
 
 namespace Goblin.Gameplay.Logic.Skills
 {
@@ -29,10 +29,10 @@ namespace Goblin.Gameplay.Logic.Skills
             var joystick = gamepad.GetInput(InputType.Joystick);
             if (joystick.press)
             {
-                if (TSVector2.zero != joystick.dire)
+                if (FPVector2.zero != joystick.dire)
                 {
-                    FP angle = TSMath.Atan2(joystick.dire.x, joystick.dire.y) * TSMath.Rad2Deg;
-                    spatial.eulerAngles = TSVector.up * angle;
+                    FP angle = FPMath.Atan2(joystick.dire.x, joystick.dire.y) * FPMath.Rad2Deg;
+                    spatial.eulerAngles = FPVector3.up * angle;
                 }
             }
         }
