@@ -158,26 +158,70 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             return (true, colliders);
         }
         
-        public (bool, (uint actorId, Collider collider)[]) Raycast(FPVector3 origin, FPVector3 direction, FP distance, bool trigger = true, int layer = -1)
-        {
-            return HitResultConv(world.phys.Raycast(origin, direction, distance, trigger, layer));
-        }
-        
+        /// <summary>
+        /// 线段检测
+        /// </summary>
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <param name="trigger">检测 Trigger</param>
+        /// <param name="layer">层级 (-1, 默认全检测)</param>
+        /// <returns>结果</returns>
         public (bool, (uint actorId, Collider collider)[]) Linecast(FPVector3 start, FPVector3 end, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.Linecast(start, end, trigger, layer));
         }
+        
+        /// <summary>
+        /// 射线检测
+        /// </summary>
+        /// <param name="origin">原点</param>
+        /// <param name="direction">方向</param>
+        /// <param name="distance">距离</param>
+        /// <param name="trigger">检测 Trigger</param>
+        /// <param name="layer">层级 (-1, 默认全检测)</param>
+        /// <returns>结果</returns>
+        public (bool, (uint actorId, Collider collider)[]) Raycast(FPVector3 origin, FPVector3 direction, FP distance, bool trigger = true, int layer = -1)
+        {
+            return HitResultConv(world.phys.Raycast(origin, direction, distance, trigger, layer));
+        }
 
+        /// <summary>
+        /// 立方体检测
+        /// </summary>
+        /// <param name="position">位置</param>
+        /// <param name="rotation">旋转</param>
+        /// <param name="size">尺寸</param>
+        /// <param name="trigger">检测 Trigger</param>
+        /// <param name="layer">层级 (-1, 默认全检测)</param>
+        /// <returns>结果</returns>
         public (bool, (uint actorId, Collider collider)[]) OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapBox(position, rotation, size, trigger, layer));
         }
         
+        /// <summary>
+        /// 球体检测
+        /// </summary>
+        /// <param name="position">位置</param>
+        /// <param name="radius">半径</param>
+        /// <param name="trigger">检测 Trigger</param>
+        /// <param name="layer">层级 (-1, 默认全检测)</param>
+        /// <returns>结果</returns>
         public (bool, (uint actorId, Collider collider)[]) OverlapSphere(FPVector3 position, FP radius, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapSphere(position, radius, trigger, layer));
         }
         
+        /// <summary>
+        /// 圆柱体检测
+        /// </summary>
+        /// <param name="position">位置</param>
+        /// <param name="rotation">旋转</param>
+        /// <param name="height">高度</param>
+        /// <param name="radius">半径</param>
+        /// <param name="trigger">检测 Trigger</param>
+        /// <param name="layer">层级 (-1, 默认全检测)</param>
+        /// <returns>结果</returns>
         public (bool, (uint actorId, Collider collider)[]) OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP radius, FP height, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapCylinder(position, rotation, radius, height, trigger, layer));
