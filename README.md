@@ -3,7 +3,7 @@
 ### 大致全貌
 - TCP 通信
 - MessagePack 协议
-- Kowtow 物理
+- Kowtow 物理引擎
 - Yooasset 资源管理
 - HybridCLR 代码热更
 - Luban 配置
@@ -22,7 +22,6 @@
 - 支持，Goblin 以内，不重启游戏资源更新
 - Gameplay 战斗模块
   - 支持，帧同步，状态帧同步
-  - BUFF 设计
 ---
 
 #### <span id="qstart">1.快速开始</span>
