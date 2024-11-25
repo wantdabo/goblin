@@ -37,6 +37,14 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// </summary>
         private World world { get; set; }
         /// <summary>
+        /// 默认物理材质
+        /// </summary>
+        public Material defmaterial { get; private set; }
+        /// <summary>
+        /// 刚体列表
+        /// </summary>
+        private List<Rigidbody> rigidbodies = new();
+        /// <summary>
         /// ActorId 对应的 RigidBody
         /// </summary>
         private Dictionary<uint, Rigidbody> abdict = new();
@@ -44,10 +52,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// Rigidbody 对应的 ActorId
         /// </summary>
         private Dictionary<Rigidbody, uint> badict = new();
-        /// <summary>
-        /// ActorID 临时列表
-        /// </summary>
-        private List<uint> temps = new();
         /// <summary>
         /// 碰撞几何体数据缓存
         /// </summary>
@@ -60,6 +64,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         public void Initialize(FPVector3 gravity = default)
         {
             world = new World(gravity);
+            defmaterial = new Material { friction = FP.Zero, bounciness = FP.Zero };
         }
 
         protected override void OnCreate()
@@ -124,6 +129,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             if (0 == actorId) return;
 
             world.RmvRigidbody(body);
+            rigidbodies.Remove(body);
             abdict.Remove(actorId);
             badict.Remove(body);
         }
@@ -132,21 +138,35 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// 添加物理单位
         /// </summary>
         /// <param name="actorId">ActorID</param>
-        /// <param name="body">物理单位</param>
-        public Rigidbody AddBody(uint actorId, IShape shape, FP mass, Material material)
+        /// <param name="shape">几何体</param>
+        /// <param name="mass">质量</param>
+        public Rigidbody AddBody(uint actorId, IShape shape, FP mass)
         {
-            var body = world.AddRigidbody(shape, mass, material);
+            var body = AddBody(shape, mass);
             abdict.Add(actorId, body);
             badict.Add(body, actorId);
 
             return body;
         }
+
+        /// <summary>
+        /// 添加物理单位
+        /// </summary>
+        /// <param name="shape">几何体</param>
+        /// <param name="mass">质量</param>
+        public Rigidbody AddBody(IShape shape, FP mass)
+        {
+            var body = world.AddRigidbody(shape, mass, defmaterial);
+            rigidbodies.Add(body);
+
+            return body;
+        }
         #endregion
 
-        private (bool hit, (uint actorId, Collider collider)[]) HitResultConv(HitResult result)
+        private (bool hit, (uint actorId, Collider collider)[] targets) HitResultConv(HitResult result)
         {
             if (false == result.hit) return (false, default);
-            
+
             (uint actorId, Collider collider)[] colliders = new (uint actorId, Collider collider)[result.colliders.Count];
             for (int i = 0; i < result.colliders.Count; i++)
             {
@@ -154,10 +174,10 @@ namespace Goblin.Gameplay.Logic.Physics.Common
                 var actorId = GetActorId(rigidbody);
                 colliders[i] = (actorId, result.colliders[i]);
             }
-            
+
             return (true, colliders);
         }
-        
+
         /// <summary>
         /// 线段检测
         /// </summary>
@@ -166,11 +186,11 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="trigger">检测 Trigger</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[]) Linecast(FPVector3 start, FPVector3 end, bool trigger = true, int layer = -1)
+        public (bool hit, (uint actorId, Collider collider)[] targets) Linecast(FPVector3 start, FPVector3 end, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.Linecast(start, end, trigger, layer));
         }
-        
+
         /// <summary>
         /// 射线检测
         /// </summary>
@@ -180,7 +200,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="trigger">检测 Trigger</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[]) Raycast(FPVector3 origin, FPVector3 direction, FP distance, bool trigger = true, int layer = -1)
+        public (bool hit, (uint actorId, Collider collider)[] targets) Raycast(FPVector3 origin, FPVector3 direction, FP distance, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.Raycast(origin, direction, distance, trigger, layer));
         }
@@ -194,11 +214,11 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="trigger">检测 Trigger</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[]) OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, bool trigger = true, int layer = -1)
+        public (bool hit, (uint actorId, Collider collider)[] targets) OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapBox(position, rotation, size, trigger, layer));
         }
-        
+
         /// <summary>
         /// 球体检测
         /// </summary>
@@ -207,11 +227,11 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="trigger">检测 Trigger</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[]) OverlapSphere(FPVector3 position, FP radius, bool trigger = true, int layer = -1)
+        public (bool hit, (uint actorId, Collider collider)[] targets) OverlapSphere(FPVector3 position, FP radius, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapSphere(position, radius, trigger, layer));
         }
-        
+
         /// <summary>
         /// 圆柱体检测
         /// </summary>
@@ -222,7 +242,7 @@ namespace Goblin.Gameplay.Logic.Physics.Common
         /// <param name="trigger">检测 Trigger</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[]) OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP radius, FP height, bool trigger = true, int layer = -1)
+        public (bool hit, (uint actorId, Collider collider)[] targets) OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP radius, FP height, bool trigger = true, int layer = -1)
         {
             return HitResultConv(world.phys.OverlapCylinder(position, rotation, radius, height, trigger, layer));
         }
@@ -234,7 +254,21 @@ namespace Goblin.Gameplay.Logic.Physics.Common
 
         private void OnFPLateTick(FPLateTickEvent e)
         {
-            foreach (var rigidbody in abdict.Values) physinfos.Add((PHYS_SHAPE_DEFINE.PLAYER, rigidbody.shape, rigidbody.position, rigidbody.rotation));
+            foreach (var rigidbody in rigidbodies)
+            {
+                switch (rigidbody.layer)
+                {
+                    case Layer.Default:
+                        break;
+                    case Layer.Ground:
+                        physinfos.Add((PHYS_SHAPE_DEFINE.GROUND, rigidbody.shape, rigidbody.position, rigidbody.rotation));
+                        break;
+                    case Layer.Player:
+                        physinfos.Add((PHYS_SHAPE_DEFINE.PLAYER, rigidbody.shape, rigidbody.position, rigidbody.rotation));
+                        break;
+                }
+            }
+
             stage.eventor.Tell(new PhysShapesEvent { physinfos = physinfos.ToArray() });
             physinfos.Clear();
         }

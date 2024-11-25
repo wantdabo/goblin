@@ -47,8 +47,11 @@ namespace Goblin.Gameplay.Render.Common
                 Color color = default;
                 switch (physinfo.type)
                 {
+                    case PHYS_SHAPE_DEFINE.GROUND:
+                        color = Color.gray;
+                        break;
                     case PHYS_SHAPE_DEFINE.PLAYER:
-                        color = Color.green;
+                        color = Color.cyan;
                         break;
                     case PHYS_SHAPE_DEFINE.OVERLAP:
                         color = Color.yellow;
@@ -57,16 +60,16 @@ namespace Goblin.Gameplay.Render.Common
                 
                 if (physinfo.shape is BoxShape boxshape)
                 {
-                    ShapeDrawer.DrawBox(physinfo.position.ToVector3(), boxshape.size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
+                    ShapeDrawer.DrawBox(physinfo.position.ToVector3() + boxshape.center.ToVector3(), boxshape.size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
                 }
                 else if (physinfo.shape is SphereShape sphereshape)
                 {
-                    ShapeDrawer.DrawSphere(physinfo.position.ToVector3(), sphereshape.radius.AsFloat(), color);
+                    ShapeDrawer.DrawSphere(physinfo.position.ToVector3() + sphereshape.center.ToVector3(), sphereshape.radius.AsFloat(), color);
 
                 }
                 else if (physinfo.shape is CylinderShape cylindershape)
                 {
-                    ShapeDrawer.DrawCylinder(physinfo.position.ToVector3(), cylindershape.radius.AsFloat(), cylindershape.height.AsFloat(), physinfo.rotation.ToQuaternion(), color);
+                    ShapeDrawer.DrawCylinder(physinfo.position.ToVector3() + cylindershape.center.ToVector3(), cylindershape.radius.AsFloat(), cylindershape.height.AsFloat(), physinfo.rotation.ToQuaternion(), color);
                 }
             }
         }

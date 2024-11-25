@@ -89,8 +89,8 @@ namespace Goblin.Gameplay.Render.Resolvers
                             {
                                 eff = actor.stage.vfx.LoadVFX(effectData.res);
                                 effs.Add(effectData.res, eff);
-                                eff.transform.position = node.go.transform.position + effectData.position.ToVector3().ToVector3();
-                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngles.ToVector3().ToVector3());
+                                eff.transform.position = node.go.transform.position + effectData.position.ToFPVector3().ToVector3();
+                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngles.ToFPVector3().ToVector3());
                                 eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
 
                                 first = true;
@@ -98,8 +98,8 @@ namespace Goblin.Gameplay.Render.Resolvers
 
                             if (false == first && effectData.binding)
                             {
-                                eff.transform.position = node.go.transform.position + effectData.position.ToVector3().ToVector3();
-                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngles.ToVector3().ToVector3());
+                                eff.transform.position = node.go.transform.position + effectData.position.ToFPVector3().ToVector3();
+                                eff.transform.rotation = Quaternion.Euler(node.go.transform.eulerAngles + effectData.eulerAngles.ToFPVector3().ToVector3());
                                 eff.transform.localScale = Vector3.one * effectData.scale * Config.int2Float;
                             }
 

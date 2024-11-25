@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Common.Extensions
         /// </summary>
         /// <param name="vectordata"></param>
         /// <returns></returns>
-        public static FPVector3 ToVector3(this Vector3Data vectordata)
+        public static FPVector3 ToFPVector3(this Vector3Data vectordata)
         {
             return new FPVector3(vectordata.x * FP.EN3, vectordata.y* FP.EN3, vectordata.z* FP.EN3);
         }

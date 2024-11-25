@@ -21,13 +21,5 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             base.OnCreate();
             spatial = pipeline.launcher.actor.GetBehavior<Spatials.Spatial>();
         }
-
-        protected override void OnExecute(SphereDetectionData data, SkillActionCache cache, uint frame, FP tick)
-        {
-            base.OnExecute(data, cache, frame, tick);
-            // var result = pipeline.launcher.actor.stage.phys.OverlapSpheres(spatial.position + spatial.rotation * data.position.ToVector(), data.radius * FP.EN3);
-            // if (false == result.hit) return;
-            // pipeline.OnHit(result.actorIds);
-        }
     }
 }

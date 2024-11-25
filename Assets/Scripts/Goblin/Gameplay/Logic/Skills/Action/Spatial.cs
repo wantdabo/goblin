@@ -29,7 +29,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
 
             if (null == spatial) return;
 
-            var position = data.position.ToVector3();
+            var position = data.position.ToFPVector3();
             var scale = data.scale * FP.EN3;
 
             var t = FP.One / (1 + data.eframe - data.sframe);

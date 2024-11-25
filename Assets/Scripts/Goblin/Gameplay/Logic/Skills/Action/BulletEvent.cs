@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Skills.Action
             bullet.eventor.Tell(new BulletFireEvent
             {
                 owner = pipeline.launcher.actor.id,
-                position = spatial.position + spatial.rotation * data.position.ToVector3(),
+                position = spatial.position + spatial.rotation * data.position.ToFPVector3(),
                 damage = default,
                 args = default
             });

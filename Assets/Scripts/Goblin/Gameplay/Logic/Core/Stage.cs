@@ -5,7 +5,10 @@ using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Attributes.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Physics.Common;
+using Goblin.Gameplay.Logic.Terrains;
+using Kowtow.Math;
 using System.Collections.Generic;
+using FPRandom = Goblin.Gameplay.Logic.Common.FPRandom;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -67,6 +70,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Phys phys { get; private set; }
         /// <summary>
+        /// 地形
+        /// </summary>
+        public Terrain terrain { get; private set; }
+        /// <summary>
         /// Actor 列表
         /// </summary>
         private List<Actor> actors { get; set; } = new();
@@ -105,8 +112,12 @@ namespace Goblin.Gameplay.Logic.Core
 
             phys = AddComp<Phys>();
             phys.stage = this;
-            phys.Initialize();
+            phys.Initialize(FPVector3.down * 981 * FP.EN2);
             phys.Create();
+
+            terrain = AddComp<Terrain>();
+            terrain.stage = this;
+            terrain.Create();
         }
 
         protected override void OnDestroy()
@@ -121,7 +132,7 @@ namespace Goblin.Gameplay.Logic.Core
         public void Tick()
         {
             ticker.Tick();
-            
+
             foreach (uint dead in deads)
             {
                 var deada = RmvActor(dead);

@@ -37,11 +37,6 @@ namespace Goblin.Gameplay.Logic.Physics
     public class PhysAgent : Behavior
     {
         /// <summary>
-        /// 默认物理材质
-        /// </summary>
-        private static Material defaultMaterial = new(FP.Zero, FP.Zero);
-
-        /// <summary>
         /// 物理单位
         /// </summary>
         public Rigidbody rigidbody { get; private set; }
@@ -49,21 +44,6 @@ namespace Goblin.Gameplay.Logic.Physics
         private Spatial spatial { get; set; }
 
         private FPVector3 mrigidbodyoffset = FPVector3.zero;
-        /// <summary>
-        /// 物理单位平移偏移
-        /// </summary>
-        public FPVector3 rigidbodyoffset
-        {
-            get
-            {
-                return mrigidbodyoffset;
-            }
-            set
-            {
-                mrigidbodyoffset = value;
-                rigidbody.position = rigidbodyoffset + spatial.position;
-            }
-        }
 
         /// <summary>
         /// 立方体
@@ -123,7 +103,7 @@ namespace Goblin.Gameplay.Logic.Physics
         {
             base.OnCreate();
             spatial = actor.GetBehavior<Spatial>();
-            rigidbody = actor.stage.phys.AddBody(actor.id, new BoxShape(FPVector3.zero, FPVector3.one), FP.One, defaultMaterial);
+            rigidbody = actor.stage.phys.AddBody(actor.id, new BoxShape(FPVector3.zero, FPVector3.one), FP.One);
             actor.eventor.Listen<SpatialPositionChangedEvent>(OnSpatialPositionChanged);
             actor.eventor.Listen<SpatialRotationChangedEvent>(OnSpatialRotationChanged);
             rigidbody.CollisionEnter += OnCollisionEnter;
@@ -146,9 +126,9 @@ namespace Goblin.Gameplay.Logic.Physics
 
         private void OnSpatialPositionChanged(SpatialPositionChangedEvent e)
         {
-            rigidbody.position = rigidbodyoffset + e.position;
+            rigidbody.position = e.position;
         }
-        
+
         private void OnSpatialRotationChanged(SpatialRotationChangedEvent e)
         {
             rigidbody.rotation = e.rotation;

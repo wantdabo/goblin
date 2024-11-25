@@ -33,7 +33,6 @@ namespace Goblin.Gameplay.Logic.Actors
             AddBehavior<SkillLauncher>().Create();
 
             // TODO 后续要改成配置文件读取
-
             var attribute = GetBehavior<Attribute>();
             attribute.hp = uint.MaxValue;
             attribute.maxhp = uint.MaxValue;
@@ -47,7 +46,7 @@ namespace Goblin.Gameplay.Logic.Actors
             spatial.eulerAngles = new FPVector3(0, 90, 0);
 
             var physagent = GetBehavior<PhysAgent>();
-            physagent.rigidbody.trigger = true;
+            physagent.rigidbody.layer = Layer.Player;
             physagent.rigidbody.type = RigidbodyType.Dynamic;
             physagent.rigidbody.detection = DetectionType.Discrete;
             physagent.boxshape.size = new FPVector3(1, 15 * FP.EN1, 1);
