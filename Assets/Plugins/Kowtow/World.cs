@@ -36,10 +36,6 @@ namespace Kowtow
         /// </summary>
         private List<Rigidbody> rigidbodies = new();
         /// <summary>
-        /// 上一帧刚体位置和旋转
-        /// </summary>
-        private Dictionary<Rigidbody, (FPVector3 position, FPQuaternion rotation)> preframetrans = new();
-        /// <summary>
         /// 世界构造函数
         /// </summary>
         /// <param name="gravity">重力</param>
@@ -75,8 +71,6 @@ namespace Kowtow
         /// <param name="rigidbody">刚体</param>
         public void RmvRigidbody(Rigidbody rigidbody)
         {
-            if (preframetrans.ContainsKey(rigidbody)) preframetrans.Remove(rigidbody);
-
             if (false == rigidbodies.Contains(rigidbody)) return;
             tree.RmvRigidbody(rigidbody);
             rigidbody.world = null;
@@ -109,10 +103,6 @@ namespace Kowtow
             {
                 // 事件通知
                 rigidbody.NotifyColliderEvents();
-
-                // 变化缓存
-                if (preframetrans.ContainsKey(rigidbody)) preframetrans.Remove(rigidbody);
-                preframetrans.Add(rigidbody, (rigidbody.position, rigidbody.rotation));
 
                 // AABB 更新树
                 if (rigidbody.aabbupdated)
@@ -198,26 +188,15 @@ namespace Kowtow
         /// <param name="target">目标 Rigidbody</param>
         private void ContinuousDetection(Rigidbody self, Rigidbody target)
         {
-            if (false == preframetrans.TryGetValue(self, out var selftrans))
-            {
-                selftrans.position = self.position;
-                selftrans.rotation = self.rotation;
-            }
-            if (false == preframetrans.TryGetValue(target, out var targettrans))
-            {
-                targettrans.position = target.position;
-                targettrans.rotation = target.rotation;
-            }
-
             // 获取刚体的运动起始和结束位置
-            FPVector3 startA = selftrans.position;
+            FPVector3 startA = self.position;
             FPVector3 endA = self.position + self.velocity * timestep;
-            FPQuaternion startRotA = selftrans.rotation;
+            FPQuaternion startRotA = self.rotation;
             FPQuaternion endRotA = self.rotation;
 
-            FPVector3 startB = targettrans.position;
+            FPVector3 startB = target.position;
             FPVector3 endB = target.position + target.velocity * timestep;
-            FPQuaternion startRotB = targettrans.rotation;
+            FPQuaternion startRotB = target.rotation;
             FPQuaternion endRotB = target.rotation;
 
             // 执行时间插值检测
@@ -234,7 +213,8 @@ namespace Kowtow
             {
                 FPVector3 correction = normal * penetration;
                 self.position = collisionPositionA + correction;
-                
+                self.velocity -= self.velocity * timestep;
+
                 // 添加碰撞器信息
                 self.AddCollider(new Collider
                 {
