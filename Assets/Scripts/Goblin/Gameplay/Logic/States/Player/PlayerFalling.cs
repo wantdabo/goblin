@@ -10,18 +10,19 @@ using System.Collections.Generic;
 namespace Goblin.Gameplay.Logic.States.Player
 {
     /// <summary>
-    /// 玩家奔跑状态
+    /// 玩家下落状态
     /// </summary>
-    public class PlayerRun : State
+    public class PlayerFalling : State
     {
-        public override uint id => STATE_DEFINE.PLAYER_RUN;
+        public override uint id => STATE_DEFINE.PLAYER_FALLING;
 
-        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_IDLE, STATE_DEFINE.PLAYER_FALLING, STATE_DEFINE.PLAYER_JUMP_START, STATE_DEFINE.PLAYER_ROLL, STATE_DEFINE.PLAYER_HURT, STATE_DEFINE.PLAYER_ATTACK };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING2GROUND };
 
         private Attribute attribute { get; set; }
         private Spatial spatial { get; set; }
         private PhysAgent physagent { get; set; }
         private Gamepad gamepad { get; set; }
+
 
         protected override void OnCreate()
         {
@@ -31,24 +32,17 @@ namespace Goblin.Gameplay.Logic.States.Player
             spatial = machine.paramachine.actor.GetBehavior<Spatial>();
             physagent = machine.paramachine.actor.GetBehavior<PhysAgent>();
         }
+
         public override bool OnValid()
         {
-            var joystick = gamepad.GetInput(InputType.Joystick);
-
-            return joystick.press && physagent.grounded;
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            physagent.LossForce();
+            return false == physagent.grounded && physagent.rigidbody.velocity.y < 0;
         }
 
         public override void OnTick(uint frame, FP tick)
         {
             base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * attribute.movespeed;
+            var motion = joystick.dire * attribute.movespeed * FP.Half;
             physagent.rigidbody.ApplyForce(new FPVector3(motion.x, 0, FP.Zero));
 
             if (motion != FPVector2.zero)

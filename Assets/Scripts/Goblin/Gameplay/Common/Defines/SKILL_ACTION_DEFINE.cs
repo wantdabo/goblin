@@ -30,28 +30,24 @@
         /// </summary>
         public const ushort SPHERE_DETECTION = 5;
         /// <summary>
-        /// 圆柱体碰撞检测
-        /// </summary>
-        public const ushort CYLINDER_DETECTION = 6;
-        /// <summary>
         /// 技能子弹事件
         /// </summary>
-        public const ushort BULLET_EVENT = 7;
+        public const ushort BULLET_EVENT = 6;
         /// <summary>
         /// 技能打断标记事件
         /// </summary>
-        public const ushort BREAK_TOKEN_EVENT = 8;
+        public const ushort BREAK_TOKEN_EVENT = 7;
         /// <summary>
         /// 技能跳帧事件
         /// </summary>
-        public const ushort BREAK_FRAMES_EVENT = 9;
+        public const ushort BREAK_FRAMES_EVENT = 8;
         /// <summary>
         /// 技能 BUFF 触发事件
         /// </summary>
-        public const ushort BUFF_TRIGGER_EVENT = 10;
+        public const ushort BUFF_TRIGGER_EVENT = 9;
         /// <summary>
         /// 技能 BUFF 印下事件
         /// </summary>
-        public const ushort BUFF_STAMP_EVENT = 11;
+        public const ushort BUFF_STAMP_EVENT = 10;
     }
 }

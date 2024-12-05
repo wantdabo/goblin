@@ -87,38 +87,6 @@ namespace Kowtow.Collision
                     size = new FPVector3(sphere.radius * 2)
                 };
             }
-            else if (shape is CylinderShape cylinder)
-            {
-                // CylinderShape 受旋转影响
-                FPVector3 halfSize = new FPVector3(cylinder.radius, cylinder.height * FP.Half, cylinder.radius);
-                FPVector3[] vertices =
-                {
-                    new(-halfSize.x, -halfSize.y, -halfSize.z),
-                    new(halfSize.x, -halfSize.y, -halfSize.z),
-                    new(-halfSize.x, halfSize.y, -halfSize.z),
-                    new(halfSize.x, halfSize.y, -halfSize.z),
-                    new(-halfSize.x, -halfSize.y, halfSize.z),
-                    new(halfSize.x, -halfSize.y, halfSize.z),
-                    new(-halfSize.x, halfSize.y, halfSize.z),
-                    new(halfSize.x, halfSize.y, halfSize.z),
-                };
-
-                FPVector3 min = FPVector3.MaxValue;
-                FPVector3 max = FPVector3.MinValue;
-
-                foreach (var vertex in vertices)
-                {
-                    FPVector3 transformedVertex = rotation * (vertex + cylinder.center);
-                    min = FPVector3.Min(min, transformedVertex);
-                    max = FPVector3.Max(max, transformedVertex);
-                }
-
-                return new AABB
-                {
-                    position = position + (min + max) * FP.Half,
-                    size = max - min
-                };
-            }
 
             return default;
         }

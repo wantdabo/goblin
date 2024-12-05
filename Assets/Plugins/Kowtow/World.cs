@@ -171,7 +171,6 @@ namespace Kowtow
         private void DiscreteDetection(Rigidbody self, Rigidbody target)
         {
             if (false == Detection.Detect(self, target, out var point, out var normal, out var penetration)) return;
-
             self.AddCollider(new Collider
             {
                 rigidbody = target,
@@ -209,21 +208,20 @@ namespace Kowtow
             FPQuaternion collisionRotationB = FPQuaternion.Slerp(startRotB, endRotB, toi);
 
             // 计算碰撞点、法线、以及穿透深度
-            if (Detection.Detect(self.shape, target.shape, collisionPositionA, collisionPositionB, collisionRotationA, collisionRotationB, out var point, out var normal, out var penetration))
-            {
-                FPVector3 correction = normal * penetration;
-                self.position = collisionPositionA + correction;
-                self.velocity -= self.velocity * timestep;
+            if (false == Detection.Detect(self.shape, target.shape, collisionPositionA, collisionPositionB, collisionRotationA, collisionRotationB, out var point, out var normal, out var penetration)) return;
 
-                // 添加碰撞器信息
-                self.AddCollider(new Collider
-                {
-                    rigidbody = target,
-                    point = point,
-                    normal = normal,
-                    penetration = penetration
-                });
-            }
+            FPVector3 correction = normal * penetration;
+            self.position = collisionPositionA + correction;
+            self.velocity -= self.velocity * timestep;
+
+            // 添加碰撞器信息
+            self.AddCollider(new Collider
+            {
+                rigidbody = target,
+                point = point,
+                normal = normal,
+                penetration = penetration
+            });
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Goblin.Sys.Common
         private ScrollRect FindScrollRect(Transform trans)
         {
             if (null == trans) return null;
-            if (null != trans.GetComponent<Canvas>()) return GetComponent<ScrollRect>();
+            if (null != trans.GetComponent<Canvas>()) return trans.GetComponent<ScrollRect>();
             if (null != trans.GetComponent<ScrollRect>()) return trans.GetComponent<ScrollRect>();
 
             return FindScrollRect(trans.parent);

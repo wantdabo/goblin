@@ -86,6 +86,10 @@ namespace Goblin.Gameplay.Logic.Attributes
         /// </summary>
         public FP movespeed { get; set; }
         /// <summary>
+        /// 跳跃力
+        /// </summary>
+        public FP jumpforce { get; set; }
+        /// <summary>
         /// 攻击力
         /// </summary>
         public uint attack { get; set; }

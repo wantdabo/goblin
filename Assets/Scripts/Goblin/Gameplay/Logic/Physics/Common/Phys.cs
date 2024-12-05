@@ -232,21 +232,6 @@ namespace Goblin.Gameplay.Logic.Physics.Common
             return HitResultConv(world.phys.OverlapSphere(position, radius, trigger, layer));
         }
 
-        /// <summary>
-        /// 圆柱体检测
-        /// </summary>
-        /// <param name="position">位置</param>
-        /// <param name="rotation">旋转</param>
-        /// <param name="height">高度</param>
-        /// <param name="radius">半径</param>
-        /// <param name="trigger">检测 Trigger</param>
-        /// <param name="layer">层级 (-1, 默认全检测)</param>
-        /// <returns>结果</returns>
-        public (bool hit, (uint actorId, Collider collider)[] targets) OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP radius, FP height, bool trigger = true, int layer = -1)
-        {
-            return HitResultConv(world.phys.OverlapCylinder(position, rotation, radius, height, trigger, layer));
-        }
-
         private void OnFPTick(FPTickEvent e)
         {
             world.Update(e.tick);

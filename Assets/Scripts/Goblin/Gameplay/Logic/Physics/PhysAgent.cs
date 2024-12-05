@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Logic.Spatials;
@@ -41,9 +42,37 @@ namespace Goblin.Gameplay.Logic.Physics
         /// </summary>
         public Rigidbody rigidbody { get; private set; }
 
-        private Spatial spatial { get; set; }
+        /// <summary>
+        /// 是否在地面上
+        /// </summary>
+        public bool grounded
+        {
+            get
+            {
+                // 计算盒子底部中心点
+                var bottomCenter = (FPVector3.down * FP.EN3) + rigidbody.aabb.position + new FPVector3(FP.Zero, -rigidbody.aabb.size.y * FP.Half, FP.Zero);
+                // 计算底部的四个角点
+                FPVector3 bottomFrontLeft = bottomCenter + new FPVector3(-rigidbody.aabb.size.x * FP.Half, FP.Zero, -rigidbody.aabb.size.z * FP.Half);
+                FPVector3 bottomFrontRight = bottomCenter + new FPVector3(rigidbody.aabb.size.x * FP.Half, FP.Zero, -rigidbody.aabb.size.z * FP.Half);
+                FPVector3 bottomBackLeft = bottomCenter + new FPVector3(-rigidbody.aabb.size.x * FP.Half, FP.Zero, rigidbody.aabb.size.z * FP.Half);
+                FPVector3 bottomBackRight = bottomCenter + new FPVector3(rigidbody.aabb.size.x * FP.Half, FP.Zero, rigidbody.aabb.size.z * FP.Half);
 
-        private FPVector3 mrigidbodyoffset = FPVector3.zero;
+                var result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomCenter, false, Layer.Ground);
+                if (result.hit) return true;
+                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomFrontLeft, false, Layer.Ground);
+                if (result.hit) return true;
+                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomFrontRight, false, Layer.Ground);
+                if (result.hit) return true;
+                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomBackLeft, false, Layer.Ground);
+                if (result.hit) return true;
+                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomBackRight, false, Layer.Ground);
+                if (result.hit) return true;
+
+                return false;
+            }
+        }
+
+        private Spatial spatial { get; set; }
 
         /// <summary>
         /// 立方体
@@ -81,29 +110,12 @@ namespace Goblin.Gameplay.Logic.Physics
             }
         }
 
-        /// <summary>
-        /// 圆柱体
-        /// </summary>
-        public CylinderShape cylindershape
-        {
-            get
-            {
-                var shape = rigidbody.shape as CylinderShape;
-                if (null == shape)
-                {
-                    shape = new CylinderShape(FPVector3.zero, FP.One, FP.One);
-                    rigidbody.shape = shape;
-                }
-
-                return shape;
-            }
-        }
-
         protected override void OnCreate()
         {
             base.OnCreate();
             spatial = actor.GetBehavior<Spatial>();
             rigidbody = actor.stage.phys.AddBody(actor.id, new BoxShape(FPVector3.zero, FPVector3.one), FP.One);
+            actor.ticker.eventor.Listen<FPLateTickEvent>(OnFPLateTick);
             actor.eventor.Listen<SpatialPositionChangedEvent>(OnSpatialPositionChanged);
             actor.eventor.Listen<SpatialRotationChangedEvent>(OnSpatialRotationChanged);
             rigidbody.CollisionEnter += OnCollisionEnter;
@@ -115,6 +127,7 @@ namespace Goblin.Gameplay.Logic.Physics
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            actor.ticker.eventor.UnListen<FPLateTickEvent>(OnFPLateTick);
             actor.eventor.UnListen<SpatialPositionChangedEvent>(OnSpatialPositionChanged);
             actor.eventor.UnListen<SpatialRotationChangedEvent>(OnSpatialRotationChanged);
             rigidbody.CollisionEnter -= OnCollisionEnter;
@@ -122,6 +135,21 @@ namespace Goblin.Gameplay.Logic.Physics
             rigidbody.TriggerEnter -= OnTriggerEnter;
             rigidbody.TriggerExit -= OnTriggerExit;
             actor.stage.phys.RmvBody(actor.id);
+        }
+
+        /// <summary>
+        /// 失去所有力 & 速度
+        /// </summary>
+        public void LossForce()
+        {
+            rigidbody.force = FPVector3.zero;
+            rigidbody.velocity = FPVector3.zero;
+        }
+
+        private void OnFPLateTick(FPLateTickEvent e)
+        {
+            spatial.position = rigidbody.position;
+            spatial.rotation = rigidbody.rotation;
         }
 
         private void OnSpatialPositionChanged(SpatialPositionChangedEvent e)

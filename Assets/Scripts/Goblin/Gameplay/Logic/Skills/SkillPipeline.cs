@@ -277,10 +277,6 @@ namespace Goblin.Gameplay.Logic.Skills
                         if (nilaction) action = AddAction<SphereDetection>(actionData.id);
                         if (nilcache) cache = GenCache<DetectionCache>(actionData);
                         break;
-                    case SKILL_ACTION_DEFINE.CYLINDER_DETECTION:
-                        if (nilaction) action = AddAction<CylinderDetection>(actionData.id);
-                        if (nilcache) cache = GenCache<DetectionCache>(actionData);
-                        break;
                 }
 
                 // 进入
@@ -381,9 +377,6 @@ namespace Goblin.Gameplay.Logic.Skills
                         break;
                     case SKILL_ACTION_DEFINE.SPHERE_DETECTION:
                         data = MessagePackSerializer.Deserialize<SphereDetectionData>(spdata.actionBytes[i]);
-                        break;
-                    case SKILL_ACTION_DEFINE.CYLINDER_DETECTION:
-                        data = MessagePackSerializer.Deserialize<CylinderDetectionData>(spdata.actionBytes[i]);
                         break;
                 }
 

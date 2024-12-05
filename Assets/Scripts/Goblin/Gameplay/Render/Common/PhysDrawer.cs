@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Render.Common
                 switch (physinfo.type)
                 {
                     case PHYS_SHAPE_DEFINE.GROUND:
-                        color = Color.gray;
+                        color = Color.green;
                         break;
                     case PHYS_SHAPE_DEFINE.PLAYER:
                         color = Color.cyan;
@@ -66,10 +66,6 @@ namespace Goblin.Gameplay.Render.Common
                 {
                     ShapeDrawer.DrawSphere(physinfo.position.ToVector3() + sphereshape.center.ToVector3(), sphereshape.radius.AsFloat(), color);
 
-                }
-                else if (physinfo.shape is CylinderShape cylindershape)
-                {
-                    ShapeDrawer.DrawCylinder(physinfo.position.ToVector3() + cylindershape.center.ToVector3(), cylindershape.radius.AsFloat(), cylindershape.height.AsFloat(), physinfo.rotation.ToQuaternion(), color);
                 }
             }
         }

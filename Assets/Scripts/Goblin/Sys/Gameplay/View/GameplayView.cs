@@ -168,21 +168,24 @@ namespace Goblin.Sys.Gameplay.View
                 engine.proxy.gameplay.input.joystickdire = joystickDir;
             }
             
+            // 跳跃
             if (false == baFlag)
             {
-                engine.proxy.gameplay.input.bapress = Input.GetKey(KeyCode.J);
+                engine.proxy.gameplay.input.bapress = Input.GetKey(KeyCode.Space);
             }
+            // 翻滚
             if (false == bbFlag)
             {
-                engine.proxy.gameplay.input.bbpress = Input.GetKey(KeyCode.K);
+                engine.proxy.gameplay.input.bbpress = Input.GetKey(KeyCode.L);
             }
+            // 攻击
             if (false == bcFlag)
             {
-                engine.proxy.gameplay.input.bcpress = Input.GetKey(KeyCode.L);
+                engine.proxy.gameplay.input.bcpress = Input.GetKey(KeyCode.J);
             }
             if (false == bdFlag)
             {
-                engine.proxy.gameplay.input.bdpress = Input.GetKey(KeyCode.U);
+                engine.proxy.gameplay.input.bdpress = Input.GetKey(KeyCode.K);
             }
         }
     }

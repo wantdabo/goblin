@@ -36,7 +36,8 @@ namespace Goblin.Gameplay.Logic.Actors
             var attribute = GetBehavior<Attribute>();
             attribute.hp = uint.MaxValue;
             attribute.maxhp = uint.MaxValue;
-            attribute.movespeed = 35 * FP.EN1;
+            attribute.movespeed = 20;
+            attribute.jumpforce = 10;
             attribute.attack = 1000;
 
             var surface = GetBehavior<Surface>();
@@ -47,15 +48,22 @@ namespace Goblin.Gameplay.Logic.Actors
 
             var physagent = GetBehavior<PhysAgent>();
             physagent.rigidbody.layer = Layer.Player;
+            physagent.rigidbody.material = new Material { friction = 2, bounciness = FP.Zero };
             physagent.rigidbody.type = RigidbodyType.Dynamic;
-            physagent.rigidbody.detection = DetectionType.Discrete;
-            physagent.boxshape.size = new FPVector3(1, 15 * FP.EN1, 1);
+            physagent.rigidbody.detection = DetectionType.Continuous;
+            physagent.boxshape.size = new FPVector3(FP.Half, 15 * FP.EN1, FP.Half);
+            physagent.rigidbody.gravityScale = 2;
 
             var paramachine = GetBehavior<ParallelMachine>();
-            paramachine.SetState<PlayerIdle>();
-            paramachine.SetState<PlayerRun>();
+            paramachine.SetState<PlayerFalling>();
+            paramachine.SetState<PlayerFalling2Ground>();
+            paramachine.SetState<PlayerJumpStart>();
+            paramachine.SetState<PlayerJumping>();
+            paramachine.SetState<PlayerRoll>();
             paramachine.SetState<PlayerHurt>();
             paramachine.SetState<PlayerAttack>();
+            paramachine.SetState<PlayerIdle>();
+            paramachine.SetState<PlayerRun>();
         }
     }
 }

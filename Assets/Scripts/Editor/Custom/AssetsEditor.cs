@@ -169,22 +169,6 @@ namespace Goblin.Custom
                     val.radius = Convert.ToInt32(sphereDetectionClip.radius * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
-                else if (clip is EditorDetectionCylinderClip cylinderClip)
-                {
-                    var val = new CylinderDetectionData();
-                    val.id = SKILL_ACTION_DEFINE.CYLINDER_DETECTION;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.detectedcnt = Convert.ToUInt32(cylinderClip.detectedcnt);
-                    val.position = new Vector3Data(
-                        Convert.ToInt32(cylinderClip.position.x * Config.float2Int),
-                        Convert.ToInt32(cylinderClip.position.y * Config.float2Int),
-                        Convert.ToInt32(cylinderClip.position.z * Config.float2Int)
-                    );
-                    val.radius = Convert.ToInt32(cylinderClip.radius * Config.float2Int);
-                    val.height = Convert.ToInt32(cylinderClip.height * Config.float2Int);
-                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
-                }
                 else if (clip is EditorBulletEventClip bulletEventClip)
                 {
                     var val = new BulletEventData();

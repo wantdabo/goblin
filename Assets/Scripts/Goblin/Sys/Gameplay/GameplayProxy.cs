@@ -4,12 +4,14 @@ using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Actors;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Lives;
+using Goblin.Gameplay.Logic.Physics;
 using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Logic.Skills;
 using Goblin.Gameplay.Logic.Spatials;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
+using Kowtow;
 using Kowtow.Math;
 using UnityEngine;
 using LStage = Goblin.Gameplay.Logic.Core.Stage;
@@ -122,7 +124,7 @@ namespace Goblin.Sys.Gameplay
                 var enemy = lstage.AddActor<Player>();
                 enemy.Create();
                 var spatial = enemy.GetBehavior<Spatial>();
-                spatial.position = new FPVector3(i, FP.Zero, FP.Zero);
+                spatial.position = new FPVector3(i, FP.One, FP.Zero);
                 spatial.eulerAngles = new FPVector3(0, -90, 0);
                 enemy.live.Born();
             }
@@ -130,7 +132,7 @@ namespace Goblin.Sys.Gameplay
             var enemy2 = lstage.AddActor<Player>();
             enemy2.Create();
             var spatial2 = enemy2.GetBehavior<Spatial>();
-            spatial2.position = new FPVector3(19, FP.Zero, FP.Zero);
+            spatial2.position = new FPVector3(19, FP.One, FP.Zero);
             spatial2.eulerAngles = new FPVector3(0, -90, 0);
             enemy2.live.Born();
         }
@@ -158,9 +160,10 @@ namespace Goblin.Sys.Gameplay
 
             var player = lstage.AddActor<Player>();
             player.Create();
+            player.GetBehavior<Spatial>().position = new FPVector3(FP.Zero, FP.One, FP.Zero);
             player.live.Born();
             
-            GenEnemys();
+            // GenEnemys();
 
             engine.gameui.Open<GameplayView>();
 

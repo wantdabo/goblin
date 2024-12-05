@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
         public Foc foc { get; set; }
         public Camera camera { get; private set; }
 
-        private readonly Vector3 offset = new(0, 1.8f, -10000f);
+        private readonly Vector3 offset = new(0, 2.5f, -10000f);
         private readonly float followSpeed = 2.5f;
         private (float min, float max) zoomRange = (2f, 4f);
         private readonly float zoomSpeed = 5f;
@@ -69,7 +69,9 @@ namespace Goblin.Gameplay.Render.Focus.Cameras
             var node = actor.GetBehavior<Node>();
             if (null == node || null == node.go) return;
             var o = Vector3.right  * (node.go.transform.eulerAngles.y > 91 ? -1f : 1f) + offset;
-            camera.transform.position = Vector3.Lerp(camera.transform.position, node.go.transform.position + o, followSpeed * Time.deltaTime);
+            var p = Vector3.Lerp(camera.transform.position, node.go.transform.position + o, followSpeed * Time.deltaTime);
+            p.y = offset.y;
+            camera.transform.position = p;
         }
     }
 }

@@ -184,47 +184,6 @@ namespace Kowtow.Collision
         }
 
         /// <summary>
-        /// 圆柱体检测
-        /// </summary>
-        /// <param name="position">位置</param>
-        /// <param name="rotation">旋转</param>
-        /// <param name="height">高度</param>
-        /// <param name="radius">半径</param>
-        /// <param name="trigger">检测 Trigger</param>
-        /// <param name="layer">层级 (-1, 默认全检测)</param>
-        /// <returns>结果</returns>
-        public HitResult OverlapCylinder(FPVector3 position, FPQuaternion rotation, FP height, FP radius, bool trigger = true, int layer = -1)
-        {
-            CylinderShape cylinder = new CylinderShape(position, height, radius);
-            var aabb = AABB.CreateFromShape(cylinder, position, rotation);
-            if (false == tree.QueryRigidbodies(aabb, out List<Rigidbody> rigidbodies))
-            {
-                return default;
-            }
-
-            HitResult result = new();
-            foreach (var rigidbody in rigidbodies)
-            {
-                if (RigidbodyFilter(rigidbody, trigger, layer)) continue;
-
-                if (Detection.Detect(cylinder, rigidbody.shape, position, rigidbody.position, rotation, rigidbody.rotation, out var point, out var normal, out var penetration))
-                {
-                    result.hit = true;
-                    if (null == result.colliders) result.colliders = new();
-                    result.colliders.Add(new Collider()
-                    {
-                        rigidbody = rigidbody,
-                        point = point,
-                        normal = normal,
-                        penetration = penetration
-                    });
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// 检测过滤
         /// </summary>
         /// <param name="rigidbody">刚体</param>

@@ -242,10 +242,6 @@ namespace Kowtow.Collision
             {
                 return DetectBoxSphere(shape1 as BoxShape, shape2 as SphereShape, position1, position2, rotation1, out point, out normal, out penetration);
             }
-            else if (shape1 is BoxShape && shape2 is CylinderShape)
-            {
-                return DetectBoxCylinder(shape1 as BoxShape, shape2 as CylinderShape, position1, position2, rotation1, rotation2, out point, out normal, out penetration);
-            }
             else if (shape1 is SphereShape && shape2 is SphereShape)
             {
                 return DetectSphereSphere(shape1 as SphereShape, shape2 as SphereShape, position1, position2, out point, out normal, out penetration);
@@ -253,22 +249,6 @@ namespace Kowtow.Collision
             else if (shape1 is SphereShape && shape2 is BoxShape)
             {
                 return DetectBoxSphere(shape2 as BoxShape, shape1 as SphereShape, position2, position1, rotation2, out point, out normal, out penetration);
-            }
-            else if (shape1 is SphereShape && shape2 is CylinderShape)
-            {
-                return DetectSphereCylinder(shape1 as SphereShape, shape2 as CylinderShape, position1, position2, rotation2, out point, out normal, out penetration);
-            }
-            else if (shape1 is CylinderShape && shape2 is CylinderShape)
-            {
-                return DetectCylinderCylinder(shape1 as CylinderShape, shape2 as CylinderShape, position1, position2, rotation1, rotation2, out point, out normal, out penetration);
-            }
-            else if (shape1 is CylinderShape && shape2 is BoxShape)
-            {
-                return DetectBoxCylinder(shape2 as BoxShape, shape1 as CylinderShape, position2, position1, rotation2, rotation1, out point, out normal, out penetration);
-            }
-            else if (shape1 is CylinderShape && shape2 is SphereShape)
-            {
-                return DetectSphereCylinder(shape2 as SphereShape, shape1 as CylinderShape, position2, position1, rotation1, out point, out normal, out penetration);
             }
 
             return false;
@@ -331,6 +311,11 @@ namespace Kowtow.Collision
                     penetration = overlap;
                     normal = axis;
                 }
+            }
+            
+            if (FPVector3.Dot(normal, position2 - position1) > 0)
+            {
+                normal = -normal;
             }
 
             // 若所有轴都重叠，则发生碰撞
@@ -399,61 +384,6 @@ namespace Kowtow.Collision
             return false;
         }
 
-        private static bool DetectBoxCylinder(BoxShape box1, CylinderShape cylinder2, FPVector3 position1, FPVector3 position2, FPQuaternion rotation1, FPQuaternion rotation2, out FPVector3 point, out FPVector3 normal, out FP penetration)
-        {
-            point = FPVector3.zero;
-            normal = FPVector3.zero;
-            penetration = FP.MaxValue;
-
-            // 获取 BoxShape 的局部坐标轴（右、上、前）并返回它们在世界坐标中的方向
-            FPVector3[] boxAxes = GetAxes(rotation1);
-
-            // 获取 CylinderShape 的轴向向量
-            FPVector3 cylinderAxis = rotation2 * FPVector3.up;
-
-            // 生成所有分离轴（包括 BoxShape 的轴和交叉轴）
-            List<FPVector3> axes = new List<FPVector3>(boxAxes);
-            axes.Add(cylinderAxis);
-            for (int i = 0; i < boxAxes.Length; i++)
-            {
-                FPVector3 crossProduct = FPVector3.Cross(boxAxes[i], cylinderAxis);
-                if (crossProduct.sqrMagnitude > FP.Epsilon)
-                {
-                    axes.Add(crossProduct.normalized);
-                }
-            }
-
-            // 遍历每个轴，检查是否存在分离
-            foreach (var axis in axes)
-            {
-                // 投影 BoxShape 到当前轴上
-                (FP min1, FP max1) = ProjectBoxOntoAxis(box1, position1, rotation1, axis);
-
-                // 投影 CylinderShape 到当前轴上
-                (FP min2, FP max2) = ProjectCylinderOntoAxis(cylinder2, position2, rotation2, axis);
-
-                // 计算投影的重叠量
-                FP overlap = GetOverlap(min1, max1, min2, max2);
-
-                // 检查是否有分离轴
-                if (overlap <= 0)
-                {
-                    // 存在分离轴，表示无碰撞
-                    return false;
-                }
-
-                // 如果有碰撞，找到最小重叠量的轴
-                if (overlap < penetration)
-                {
-                    penetration = overlap;
-                    normal = axis;
-                }
-            }
-
-            // 碰撞发生，返回 true
-            return true;
-        }
-
         private static bool DetectSphereSphere(SphereShape sphere1, SphereShape sphere2, FPVector3 position1, FPVector3 position2, out FPVector3 point, out FPVector3 normal, out FP penetration)
         {
             point = FPVector3.zero;
@@ -479,85 +409,6 @@ namespace Kowtow.Collision
 
             // 计算穿透深度
             penetration = radius1 + radius2 - distance;
-
-            return true;
-        }
-
-        private static bool DetectSphereCylinder(SphereShape sphere1, CylinderShape cylinder2, FPVector3 position1, FPVector3 position2, FPQuaternion rotation2, out FPVector3 point, out FPVector3 normal, out FP penetration)
-        {
-            point = FPVector3.zero;
-            normal = FPVector3.zero;
-            penetration = FP.MaxValue;
-
-            // 获取 CylinderShape 的轴向向量
-            FPVector3 cylinderAxis = rotation2 * FPVector3.up;
-
-            // 计算球体中心到圆柱体轴的最近点
-            FPVector3 closestPointOnAxis = ClosestPointOnLine(position2 - cylinderAxis * (cylinder2.height / 2), position2 + cylinderAxis * (cylinder2.height / 2), position1);
-
-            // 计算球体中心到最近点的距离
-            FP distance = FPVector3.Distance(position1, closestPointOnAxis);
-
-            // 检查是否有碰撞
-            if (distance > sphere1.radius + cylinder2.radius)
-            {
-                return false;
-            }
-
-            // 计算碰撞法线
-            normal = (position1 - closestPointOnAxis).normalized;
-
-            // 计算碰撞点
-            point = closestPointOnAxis + normal * cylinder2.radius;
-
-            // 计算穿透深度
-            penetration = sphere1.radius + cylinder2.radius - distance;
-
-            return true;
-        }
-
-        private static bool DetectCylinderCylinder(CylinderShape shape1, CylinderShape shape2, FPVector3 position1, FPVector3 position2, FPQuaternion rotation1, FPQuaternion rotation2, out FPVector3 point, out FPVector3 normal, out FP penetration)
-        {
-            point = FPVector3.zero;
-            normal = FPVector3.zero;
-            penetration = FP.MaxValue;
-
-            // 获取 CylinderShape 的轴向向量
-            FPVector3 cylinderAxis1 = rotation1 * FPVector3.up;
-
-            FPVector3 cylinderAxis2 = rotation2 * FPVector3.up;
-
-            // 生成所有分离轴（2个轴）
-            List<FPVector3> axes = new List<FPVector3> { cylinderAxis1, cylinderAxis2 };
-
-            // 遍历每个轴，检查是否存在分离
-            foreach (var axis in axes)
-            {
-                // 投影 CylinderShape 到当前轴上
-                (FP min1, FP max1) = ProjectCylinderOntoAxis(shape1, position1, rotation1, axis);
-                (FP min2, FP max2) = ProjectCylinderOntoAxis(shape2, position2, rotation2, axis);
-
-                // 计算投影的重叠量
-                FP overlap = GetOverlap(min1, max1, min2, max2);
-
-                // 检查是否有分离轴
-                if (overlap <= 0)
-                {
-                    // 存在分离轴，表示无碰撞
-                    return false;
-                }
-
-                // 如果有碰撞，找到最小重叠量的轴
-                if (overlap < penetration)
-                {
-                    penetration = overlap;
-                    normal = axis;
-                }
-            }
-
-            // 若所有轴都重叠，则发生碰撞
-            // 计算碰撞点（将使用穿透最小的轴进行计算）
-            point = CalculateCollisionPoint(position1, position2, normal, penetration);
 
             return true;
         }
@@ -591,10 +442,6 @@ namespace Kowtow.Collision
             else if (shape is SphereShape)
             {
                 return DetectSphereRay(shape as SphereShape, position, start, ray, distance, out point, out normal, out penetration);
-            }
-            else if (shape is CylinderShape)
-            {
-                return DetectCylinderRay(shape as CylinderShape, position, rotation, start, ray, distance, out point, out normal, out penetration);
             }
 
             return false;
@@ -699,71 +546,12 @@ namespace Kowtow.Collision
             return true;
         }
 
-        private static bool DetectCylinderRay(CylinderShape cylinder, FPVector3 position, FPQuaternion rotation, FPVector3 start, FPVector3 ray, FP distance, out FPVector3 point, out FPVector3 normal, out FP penetration)
-        {
-            point = FPVector3.zero;
-            normal = FPVector3.zero;
-            penetration = FP.MaxValue;
-
-            // 计算旋转后的圆柱轴方向
-            FPVector3 cylinderAxis = rotation * FPVector3.up;
-
-            // 圆柱的实际位置是 position + center
-            FPVector3 adjustedPosition = position + cylinder.center; // 将中心点纳入位置计算
-            FPVector3 top = adjustedPosition + cylinderAxis * (cylinder.height * FP.Half);
-            FPVector3 bottom = adjustedPosition - cylinderAxis * (cylinder.height * FP.Half);
-
-            FP radius = cylinder.radius;
-
-            // 计算圆柱轴线上距离射线起点最近的点
-            FPVector3 closestPointOnAxis = ClosestPointOnLine(top, bottom, start);
-            FPVector3 directionToAxis = closestPointOnAxis - start;
-            FP projectionOnRay = FPVector3.Dot(directionToAxis, ray);
-
-            // 如果射线与圆柱轴方向的投影不在射线范围内，返回无碰撞
-            if (projectionOnRay < 0 || projectionOnRay > distance)
-            {
-                return false;
-            }
-
-            FPVector3 pointOnRay = start + ray * projectionOnRay;
-            FPVector3 pointOnCylinder = ClosestPointOnLine(top, bottom, pointOnRay);
-
-            // 检查射线与圆柱的距离
-            FP currentDistance = FPVector3.Distance(pointOnRay, pointOnCylinder);
-            if (currentDistance > radius)
-            {
-                return false;
-            }
-
-            // 计算碰撞点、法线和穿透深度
-            point = pointOnRay;
-            normal = (pointOnRay - pointOnCylinder).normalized;
-            penetration = radius - currentDistance;
-
-            return true;
-        }
-
         private static FPVector3 ClosestPointOnLine(FPVector3 start, FPVector3 end, FPVector3 point)
         {
             FPVector3 lineDirection = (end - start).normalized;
             FP projection = FPVector3.Dot(point - start, lineDirection);
             projection = FP.Clamp(projection, 0, FPVector3.Distance(start, end)); // 确保投影点在轴线范围内
             return start + lineDirection * projection;
-        }
-
-        private static (FP min, FP max) ProjectCylinderOntoAxis(CylinderShape cylinder, FPVector3 position, FPQuaternion rotation, FPVector3 axis)
-        {
-            // 投影圆柱体的两个端点和半径到轴上，找到投影的最小值和最大值
-            FPVector3 cylinderAxis = rotation * FPVector3.up;
-            FPVector3 top = position + cylinderAxis * (cylinder.height * FP.Half - FP.Half);
-            FPVector3 bottom = position - cylinderAxis * (cylinder.height * FP.Half - FP.Half);
-
-            FP radius = cylinder.radius;
-            FP min = FP.Min(FPVector3.Dot(top, axis), FPVector3.Dot(bottom, axis)) - radius;
-            FP max = FP.Max(FPVector3.Dot(top, axis), FPVector3.Dot(bottom, axis)) + radius;
-
-            return (min, max);
         }
 
         private static FPVector3[] GetAxes(FPQuaternion rotation)
