@@ -4,20 +4,13 @@ using Queen.Protocols.Common;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Goblin.Common.Network
 {
     /// <summary>
     /// 网络节点
     /// </summary>
-    public class NetNode : Comp
+    public abstract class NetNode : Comp
     {
         /// <summary>
         /// 消息包结构
@@ -27,11 +20,11 @@ namespace Goblin.Common.Network
             /// <summary>
             /// 消息类型
             /// </summary>
-            public Type msgType;
+            public Type msgType { get; set; }
             /// <summary>
             /// 消息
             /// </summary>
-            public INetMessage msg;
+            public INetMessage msg { get; set; }
         }
 
         /// <summary>
@@ -77,23 +70,15 @@ namespace Goblin.Common.Network
         /// 网络消息包缓存
         /// </summary>
         private ConcurrentQueue<NetPackage> netPackages = new();
-
-        /// <summary>
-        /// Socket 线程
-        /// </summary>
-        private Thread thread { get; set; }
-        /// <summary>
-        /// 通信 Socket
-        /// </summary>
-        private TcpClient socket { get; set; }
+        
         /// <summary>
         /// 服务器 IP
         /// </summary>
-        public string ip { get; private set; }
+        public string ip { get; protected set; }
         /// <summary>
         /// 服务器端口
         /// </summary>
-        public ushort port { get; private set; }
+        public ushort port { get; protected set; }
         /// <summary>
         /// 是否在运行中
         /// </summary>
@@ -101,19 +86,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 连接状态
         /// </summary>
-        public bool connected => null != socket && socket.Connected;
-        /// <summary>
-        /// 缓冲区
-        /// </summary>
-        private List<byte> buffer = new();
-        /// <summary>
-        /// bytes 读取区
-        /// </summary>
-        private byte[] readbytes = new byte[1024];
-        /// <summary>
-        /// 包尺寸
-        /// </summary>
-        private byte[] psize = new byte[ProtoPack.INT32_LEN];
+        public abstract bool connected { get; }
 
         protected override void OnCreate()
         {
@@ -140,54 +113,8 @@ namespace Goblin.Common.Network
 
             this.ip = ip;
             this.port = port;
-
-            socket = new TcpClient();
-            try
-            {
-                socket.Connect(ip, port);
-                thread = new Thread(() =>
-                {
-                    try
-                    {
-                        while (true)
-                        {
-                            while (buffer.Count >= ProtoPack.INT32_LEN)
-                            {
-                                psize[0] = buffer[0];
-                                psize[1] = buffer[1];
-                                psize[2] = buffer[2];
-                                psize[3] = buffer[3];
-                                var size = BitConverter.ToInt32(psize.ToArray()) + psize.Length;
-
-                                if (buffer.Count < size) break;
-                                var data = buffer.GetRange(ProtoPack.INT32_LEN, size - ProtoPack.INT32_LEN).ToArray();
-                                buffer.RemoveRange(0, size);
-
-                                if (false == ProtoPack.UnPack(data, out var msgType, out var msg)) break;
-
-                                EnqueuePackage(msgType, msg);
-                            }
-
-                            if (false == connected) continue;
-                            var len = socket.GetStream().Read(readbytes, 0, readbytes.Length);
-                            for (int i = 0; i < len; i++) buffer.Add(readbytes[i]);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        RecycleSocket();
-                        EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
-                    }
-                });
-                thread.IsBackground = true;
-                thread.Start();
-                EnqueuePackage(typeof(NodeConnectMsg), new NodeConnectMsg());
-            }
-            catch (Exception e)
-            {
-                engine.eventor.Tell(new MessageBlowEvent{ type = 2, desc = "服务器未响应，请检查网络."});
-                RecycleSocket();
-            }
+            
+            OnConnect();
         }
 
         /// <summary>
@@ -196,16 +123,25 @@ namespace Goblin.Common.Network
         public void Disconnect()
         {
             if (false == connected) return;
-            if (thread.IsAlive) thread.Abort();
-            RecycleSocket();
-            EnqueuePackage(typeof(NodeDisconnectMsg), new NodeDisconnectMsg());
+            
+            OnDisconnect();
         }
-
-        private void RecycleSocket()
+        
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <typeparam name="T">消息类型</typeparam>
+        /// <param name="msg">消息</param>
+        public void Send<T>(T msg) where T : INetMessage
         {
-            if (null == socket) return;
-            socket.Close();
-            socket = null;
+            if (false == connected)
+            {
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "未连接网络，请检查网络连接后再尝试." });
+
+                return;
+            }
+            
+            OnSend(msg);
         }
 
         /// <summary>
@@ -240,36 +176,11 @@ namespace Goblin.Common.Network
         }
 
         /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <typeparam name="T">消息类型</typeparam>
-        /// <param name="msg">消息</param>
-        public void Send<T>(T msg) where T : INetMessage
-        {
-            if (false == connected)
-            {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "未连接网络，请检查网络连接后再尝试."});
-
-                return;
-            }
-            
-            if (ProtoPack.Pack(msg, out var bytes))
-            {
-                var data = new byte[ProtoPack.INT32_LEN + bytes.Length];
-                var sizebs = BitConverter.GetBytes(bytes.Length);
-                Array.Copy(sizebs, 0, data, 0, sizebs.Length);
-                Array.Copy(bytes, 0, data, sizebs.Length, bytes.Length);
-                socket.GetStream().Write(data);
-            }
-        }
-
-        /// <summary>
         /// 消息包入队
         /// </summary>
-        /// <param name="channel">通信渠道</param>
         /// <param name="msgType">消息类型</param>
         /// <param name="msg">消息</param>
-        private void EnqueuePackage(Type msgType, INetMessage msg)
+        protected void EnqueuePackage(Type msgType, INetMessage msg)
         {
             netPackages.Enqueue(new NetPackage { msgType = msgType, msg = msg });
         }
@@ -290,10 +201,25 @@ namespace Goblin.Common.Network
                 }
             }
         }
-      
+        
         private void OnTick(TickEvent e)
         {
             Notify();
         }
+        
+        /// <summary>
+        /// 连接
+        /// </summary>
+        public abstract void OnConnect();
+        /// <summary>
+        /// 断开连接
+        /// </summary>
+        public abstract void OnDisconnect();
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <typeparam name="T">消息类型</typeparam>
+        /// <param name="msg">消息</param>
+        public abstract void OnSend<T>(T msg) where T : INetMessage;
     }
 }

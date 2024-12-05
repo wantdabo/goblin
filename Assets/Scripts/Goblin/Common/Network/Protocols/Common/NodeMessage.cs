@@ -36,7 +36,7 @@ namespace Queen.Protocols.Common
         /// <summary>
         /// 二进制数据
         /// </summary>
-        public byte[] data;
+        public byte[] data { get; set; }
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ namespace Queen.Protocols.Common
         /// <summary>
         /// 内容
         /// </summary>
-        public string content { get; set; } = null;
+        public string content { get; set; }
     }
 
     /// <summary>

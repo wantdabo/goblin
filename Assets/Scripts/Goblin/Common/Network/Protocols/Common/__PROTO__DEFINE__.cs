@@ -18,11 +18,13 @@ namespace Queen.Protocols.Common
             { 10006, typeof(Queen.Protocols.S2CLoginMsg)},
             { 10007, typeof(Queen.Protocols.S2CRoleJoinedMsg)},
             { 10008, typeof(Queen.Protocols.S2CRegisterMsg)},
-            { 10009, typeof(Queen.Protocols.Common.ACKCrossMessage)},
-            { 10010, typeof(Queen.Protocols.Common.ReqCrossMessage)},
-            { 10011, typeof(Queen.Protocols.Common.ResCrossMessage)},
-            { 10012, typeof(Queen.Protocols.Common.NodeErrorMsg)},
-            { 10013, typeof(Queen.Protocols.Common.NodePingMsg)},
+            { 10009, typeof(Queen.Protocols.C2STestMsg)},
+            { 10010, typeof(Queen.Protocols.S2CTestMsg)},
+            { 10011, typeof(Queen.Protocols.Common.ACKCrossMessage)},
+            { 10012, typeof(Queen.Protocols.Common.ReqCrossMessage)},
+            { 10013, typeof(Queen.Protocols.Common.ResCrossMessage)},
+            { 10014, typeof(Queen.Protocols.Common.NodeErrorMsg)},
+            { 10015, typeof(Queen.Protocols.Common.NodePingMsg)},
         };
     }
 }

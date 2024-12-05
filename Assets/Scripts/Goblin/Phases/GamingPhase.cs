@@ -1,4 +1,5 @@
 ﻿using Goblin.Common.FSM;
+using Goblin.Sys.Lobby.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +25,13 @@ namespace Goblin.Phases
         public override void OnEnter()
         {
             base.OnEnter();
-            engine.gameui.Open<Sys.Gameplay.View.GameplayView>();
+            engine.gameui.Open<LobbyView>();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            engine.gameui.Close<Sys.Gameplay.View.GameplayView>();
+            engine.gameui.Close<LobbyView>();
         }
     }
 }

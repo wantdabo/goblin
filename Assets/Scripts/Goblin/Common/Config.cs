@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Goblin.Core;
+﻿using Goblin.Core;
 using Luban;
-using UnityEngine;
 
 namespace Goblin.Common
 {
@@ -31,11 +27,6 @@ namespace Goblin.Common
         {
             base.OnCreate();
             location = new Tables((cfgName) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgName)));
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
         }
     }
 }

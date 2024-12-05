@@ -94,7 +94,7 @@ namespace Goblin.Core
             cfg = AddComp<Config>();
             cfg.Create();
 
-            net = AddComp<NetNode>();
+            net = AddComp<NetWebSocket>();
             net.Create();
 
             sound = AddComp<Sound>();
@@ -107,11 +107,8 @@ namespace Goblin.Core
             gameui.Create();
             
             gameui.Open<Sys.Other.View.FrameworkView>();
-            gameui.Open<GameplayDanceView>();
-            engine.proxy.gameplay.Start();
-            engine.proxy.gameplay.Resume();
-            // phase = AddComp<Phase>();
-            // phase.Create();
+            phase = AddComp<Phase>();
+            phase.Create();
         }
 
         /// <summary>
