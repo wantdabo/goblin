@@ -47,7 +47,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 连接
         /// </summary>
-        public override void OnConnect()
+        protected override void OnConnect()
         {
             socket = new TcpClient();
             try
@@ -108,7 +108,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 断开连接
         /// </summary>
-        public override void OnDisconnect()
+        protected override void OnDisconnect()
         {
             if (thread.IsAlive) thread.Abort();
             RecycleSocket();
@@ -120,7 +120,7 @@ namespace Goblin.Common.Network
         /// </summary>
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="msg">消息</param>
-        public override void OnSend<T>(T msg)
+        protected override void OnSend<T>(T msg)
         {
             if (ProtoPack.Pack(msg, out var bytes))
             {

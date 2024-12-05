@@ -69,7 +69,7 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 网络消息包缓存
         /// </summary>
-        private ConcurrentQueue<NetPackage> netPackages = new();
+        private ConcurrentQueue<NetPackage> netpackages = new();
         
         /// <summary>
         /// 服务器 IP
@@ -182,7 +182,7 @@ namespace Goblin.Common.Network
         /// <param name="msg">消息</param>
         protected void EnqueuePackage(Type msgType, INetMessage msg)
         {
-            netPackages.Enqueue(new NetPackage { msgType = msgType, msg = msg });
+            netpackages.Enqueue(new NetPackage { msgType = msgType, msg = msg });
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Goblin.Common.Network
         {
             if (false == running) return;
 
-            while (netPackages.TryDequeue(out var package))
+            while (netpackages.TryDequeue(out var package))
             {
                 if (false == messageActionDict.TryGetValue(package.msgType, out var actions)) continue;
                 for (int i = actions.Count - 1; i >= 0; i--)
@@ -210,16 +210,16 @@ namespace Goblin.Common.Network
         /// <summary>
         /// 连接
         /// </summary>
-        public abstract void OnConnect();
+        protected abstract void OnConnect();
         /// <summary>
         /// 断开连接
         /// </summary>
-        public abstract void OnDisconnect();
+        protected abstract void OnDisconnect();
         /// <summary>
         /// 发送消息
         /// </summary>
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="msg">消息</param>
-        public abstract void OnSend<T>(T msg) where T : INetMessage;
+        protected abstract void OnSend<T>(T msg) where T : INetMessage;
     }
 }
