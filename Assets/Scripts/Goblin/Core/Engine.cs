@@ -89,7 +89,7 @@ namespace Goblin.Core
 
             ticker = AddComp<Ticker>();
             ticker.Create();
-            
+
             scheduler = AddComp<CoroutineScheduler>();
             scheduler.Initialize(TickType.Tick, ticker);
 
@@ -101,8 +101,11 @@ namespace Goblin.Core
 
             cfg = AddComp<Config>();
             cfg.Create();
-
+#if UNITY_WEBGL
             net = AddComp<NetWebSocket>();
+#else
+            net = AddComp<NetTCP>();
+#endif
             net.Create();
 
             sound = AddComp<Sound>();
@@ -113,7 +116,7 @@ namespace Goblin.Core
 
             gameui = AddComp<GameUI>();
             gameui.Create();
-            
+
             gameui.Open<Sys.Other.View.FrameworkView>();
             phase = AddComp<Phase>();
             phase.Create();
