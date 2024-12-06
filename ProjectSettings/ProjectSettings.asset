@@ -519,7 +519,9 @@ PlayerSettings:
     Android: 1
     iPhone: 1
     tvOS: 1
-  m_BuildTargetGroupLightmapEncodingQuality: []
+  m_BuildTargetGroupLightmapEncodingQuality:
+  - m_BuildTarget: WebGL
+    m_EncodingQuality: 1
   m_BuildTargetGroupLightmapSettings: []
   m_BuildTargetNormalMapEncoding: []
   m_BuildTargetDefaultTextureCompressionFormat: []
@@ -785,7 +787,7 @@ PlayerSettings:
     Stadia: UNITY_POST_PROCESSING_STACK_V2
     Standalone: GOBLIN;FP;PARALLEL;UNITY_POST_PROCESSING_STACK_V2
     VisionOS: UNITY_POST_PROCESSING_STACK_V2
-    WebGL: GOBLIN;H5;UNITY_POST_PROCESSING_STACK_V2;FP
+    WebGL: GOBLIN;UNITY_POST_PROCESSING_STACK_V2;FP
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2
     XboxOne: UNITY_POST_PROCESSING_STACK_V2
     tvOS: UNITY_POST_PROCESSING_STACK_V2

@@ -24,6 +24,8 @@
         /// <param name="tick">变值步长</param>
         public static void Tick(float tick)
         {
+            if (null == engine) return;
+            
             engine.ticker.Tick(tick);
         }
 
@@ -33,6 +35,8 @@
         /// <param name="tick">固定步长</param>
         public static void FixedTick(float tick)
         {
+            if (null == engine) return;
+
             engine.ticker.FixedTick(tick);
         }
     }

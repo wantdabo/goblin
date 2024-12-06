@@ -70,16 +70,6 @@ namespace Goblin.Sys.Common
         public GameObject gameObject;
 
         /// <summary>
-        /// 获得一些 UI 小组件
-        /// </summary>
-        /// <typeparam name="UC">部件类型</typeparam>
-        /// <returns>UICell</returns>
-        public List<UC> GetUICells<UC>() where UC : UIBaseCell
-        {
-            return GetComps<UC>();
-        }
-
-        /// <summary>
         /// 快速查表，此 UIBase 下的小组件，方便批量快操
         /// </summary>
         private List<UIBaseCell> cellList = new();

@@ -136,7 +136,7 @@ namespace Goblin.Common.Network
         {
             if (false == connected)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "not has connected. plz try again later." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "do not has connected. plz try again later." });
 
                 return;
             }

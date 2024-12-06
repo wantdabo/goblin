@@ -1,0 +1,17 @@
+{
+    "name": "AOTAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:147b08b8027dcd8418999037b5411a53",
+        "GUID:e34a5702dd353724aa315fb8011f08c3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

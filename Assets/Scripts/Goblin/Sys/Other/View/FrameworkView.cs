@@ -72,7 +72,11 @@ namespace Goblin.Sys.Other.View
 
             AddUIEventListener("ConnectBtn", (e) =>
             {
+#if UNITY_WEBGL
                 engine.net.Connect("127.0.0.1", 12802);
+#else
+                engine.net.Connect("127.0.0.1", 12801);
+#endif
             });
 
             AddUIEventListener("DisconnectBtn", (e) =>

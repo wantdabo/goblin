@@ -92,7 +92,7 @@ namespace Goblin.Common.Network
             }
             catch (Exception e)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "server donot resposed.plz check network." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "server do not reposed. plz check network." });
                 RecycleSocket();
             }
         }

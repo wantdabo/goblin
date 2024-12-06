@@ -51,20 +51,19 @@ namespace Goblin.Core
         {
             if (destroyed) return;
             destroyed = true;
-
+            
+            OnDestroy();
             parent.RmvComp(this);
+            
             if (null != comps)
             {
                 for (int i = comps.Count - 1; i >= 0; i--)
                 {
-                    var comp = comps[i];
-                    RmvComp(comp);
-                    comp.Destroy();
+                    comps[i].Destroy();
                 }
                 comps.Clear();
                 compdict.Clear();
             }
-            OnDestroy();
         }
 
         protected virtual void OnCreate()
@@ -74,39 +73,6 @@ namespace Goblin.Core
         protected virtual void OnDestroy()
         {
 
-        }
-
-        /// <summary>
-        /// 获取已挂载的指定类型的组件列表
-        /// </summary>
-        /// <typeparam name="T">组件类型</typeparam>
-        /// <param name="force">强制查询，如果字段快速查询未找到，并且 force 为 true，将以高代价的查询方式获取</typeparam>
-        /// <returns>组件列表</returns>
-        public List<T> GetComps<T>(bool force = false) where T : Comp
-        {
-            List<T> list = null;
-            if (compdict.TryGetValue(typeof(T), out var comps))
-            {
-                list = new List<T>();
-
-                foreach (var item in comps) list.Add(item as T);
-
-                return list;
-            }
-
-            if (false == force) return null;
-
-            // 高代价查表
-            foreach (var comp in this.comps)
-            {
-                if (comp is T)
-                {
-                    if (null == list) list = new();
-                    list.Add(comp as T);
-                }
-            }
-
-            return list;
         }
 
         /// <summary>
@@ -128,19 +94,19 @@ namespace Goblin.Core
         /// <returns>组件</returns>
         public T AddComp<T>() where T : Comp, new()
         {
-            if (null == this.comps) this.comps = new();
+            if (null == comps) comps = new();
             if (null == compdict) compdict = new();
 
             T comp = new();
             comp.engine = engine;
             comp.parent = this;
-            if (false == compdict.TryGetValue(typeof(T), out var comps))
+            if (false == compdict.TryGetValue(typeof(T), out var list))
             {
-                comps = new();
-                compdict.Add(typeof(T), comps);
+                list = new();
+                compdict.Add(typeof(T), list);
             }
+            list.Add(comp);
             comps.Add(comp);
-            this.comps.Add(comp);
 
             return comp;
         }
@@ -151,8 +117,10 @@ namespace Goblin.Core
         /// <param name="comp">组件</param>
         public void RmvComp(Comp comp)
         {
-            if (compdict.TryGetValue(comp.GetType(), out var comps)) comps.Remove(comp);
-            this.comps.Remove(comp);
+            if (false == comps.Contains(comp)) return;
+            
+            if (compdict.TryGetValue(comp.GetType(), out var list)) list.Remove(comp);
+            comps.Remove(comp);
         }
     }
 }
