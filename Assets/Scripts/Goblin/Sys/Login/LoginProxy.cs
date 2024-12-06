@@ -90,17 +90,17 @@ namespace Goblin.Sys.Login
             if (1 == msg.code)
             {
                 eventor.Tell<LoginEvent>();
-                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "login successful." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "登录成功." });
                 data.uuid = msg.uuid;
                 data.signined = true;
             }
             else if (2 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "this user's do not has signup." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未注册." });
             }
             else if (3 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "password worn." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户密码错误." });
             }
         }
 
@@ -109,18 +109,18 @@ namespace Goblin.Sys.Login
             if (1 == msg.code)
             {
                 eventor.Tell<LogoutEvent>();
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "user's logout." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户登出." });
                 data.uuid = null;
                 data.signined = false;
                 engine.gameui.QuickClose();
             }
             else if (2 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "user's still on offline." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户未登录." });
             }
             else if (3 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "this user's has login on other machine." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "此用户已在另一台机器登录." });
                 data.uuid = null;
                 data.signined = false;
                 engine.gameui.QuickClose();
@@ -131,11 +131,11 @@ namespace Goblin.Sys.Login
         {
             if (1 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "signup successful." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "注册成功." });
             }
             else if (2 == msg.code)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "this user's has register." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "用户已存在." });
             }
         }
 
@@ -146,13 +146,13 @@ namespace Goblin.Sys.Login
 
         private void OnNodeConnect(NodeConnectMsg msg)
         {
-            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "connected." });
+            engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "连接成功." });
         }
 
         private void OnNodeDisconnect(NodeDisconnectMsg msg)
         {
             if(data.signined) engine.gameui.QuickClose();
-            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "disconnect by logout." : "disconnect." });
+            engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = data.signined ? "强制登出，连接断开." : "连接断开." });
             data.uuid = null;
             data.signined = false;
         }
