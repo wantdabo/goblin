@@ -1,18 +1,18 @@
 using YooAsset;
 
 /// <summary>
-/// ×ÊÔ´ÎÄ¼ş²éÑ¯·şÎñÀà
+/// èµ„æºæ–‡ä»¶æŸ¥è¯¢æœåŠ¡ç±»
 /// </summary>
 public class GameQueryServices : IBuildinQueryServices
 {
     /// <summary>
-    /// ²éÑ¯ÄÚÖÃÎÄ¼şµÄÊ±ºò£¬ÊÇ·ñ±È¶ÔÎÄ¼ş¹şÏ£Öµ
+    /// æŸ¥è¯¢å†…ç½®æ–‡ä»¶çš„æ—¶å€™ï¼Œæ˜¯å¦æ¯”å¯¹æ–‡ä»¶å“ˆå¸Œå€¼
     /// </summary>
     public static bool CompareFileCRC = false;
 
     public bool Query(string packageName, string fileName, string fileCRC)
     {
-        // ×¢Òâ£ºfileName°üº¬ÎÄ¼ş¸ñÊ½
+        // æ³¨æ„ï¼šfileNameåŒ…å«æ–‡ä»¶æ ¼å¼
         return StreamingAssetsHelper.FileExists(packageName, fileName, fileCRC);
     }
 }

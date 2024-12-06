@@ -96,12 +96,12 @@ namespace Goblin.Sys.Common
         /// <param name="parentNodePath">挂载的节点名字</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public UC AddUICell<UC>(string parentNodePath, bool active = true) where UC : UIBaseCell, new()
+        public async Task<UC> AddUICell<UC>(string parentNodePath, bool active = true) where UC : UIBaseCell, new()
         {
             var parentNode = engine.u3dkit.GetNode<GameObject>(gameObject, parentNodePath);
             if (null == parentNode) parentNode = engine.u3dkit.SeekNode<GameObject>(gameObject, parentNodePath);
 
-            return AddUICell<UC>(parentNode, active);
+            return await AddUICell<UC>(parentNode, active);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Goblin.Sys.Common
         /// <param name="parentNode">挂载的节点</param>
         /// <param name="active">激活状态</param>
         /// <returns>小组件</returns>
-        public UC AddUICell<UC>(GameObject parentNode, bool active = true) where UC : UIBaseCell, new()
+        public async Task<UC> AddUICell<UC>(GameObject parentNode, bool active = true) where UC : UIBaseCell, new()
         {
             var comp = AddComp<UC>();
             cellList.Add(comp);
@@ -119,7 +119,7 @@ namespace Goblin.Sys.Common
 
             comp.parent = this;
             comp.container = parentNode;
-            comp.Load();
+            await comp.Load();
             comp.SetActive(active);
 
             return comp;

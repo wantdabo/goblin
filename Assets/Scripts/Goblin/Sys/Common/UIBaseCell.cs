@@ -39,9 +39,9 @@ namespace Goblin.Sys.Common
             container = parent.gameObject;
         }
 
-        public UIBaseCell Load()
+        public async Task<UIBaseCell> Load()
         {
-            gameObject = engine.gameres.location.LoadUIPrefabSync(res, container.transform);
+            gameObject = await engine.gameres.location.LoadUIPrefabAsync(res, container.transform);
             OnLoad();
             OnBuildUI();
             OnBindEvent();

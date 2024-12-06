@@ -1,4 +1,6 @@
 ﻿using Goblin.Core;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,7 +46,7 @@ namespace Goblin.Common.GameRes
 
         public async Task<byte[]> LoadRawFileAsync(string res)
         {
-            var handle = YooAssets.LoadAssetSync<TextAsset>(res);
+            var handle = YooAssets.LoadAssetAsync<TextAsset>(res);
             await handle.Task;
             var ta = handle.AssetObject as TextAsset;
             handle.Release();
@@ -52,9 +54,9 @@ namespace Goblin.Common.GameRes
             return ta.bytes;
         }
 
-        public byte[] LoadRawFileSync(string res) 
+        public byte[] LoadRawFileSync(string res)
         {
-            var handle  = YooAssets.LoadAssetSync<TextAsset>(res);
+            var handle = YooAssets.LoadAssetSync<TextAsset>(res);
             var ta = handle.AssetObject as TextAsset;
             handle.Release();
 

@@ -26,6 +26,10 @@ public class Shell : MonoBehaviour
         var initParameters = new EditorSimulateModeParameters();
         var simulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, "Package");
         initParameters.SimulateManifestFilePath = simulateManifestFilePath;
+#elif UNITY_WEBGL
+        var initParameters = new WebPlayModeParameters();
+        initParameters.BuildinQueryServices = new GameQueryServices();
+        initParameters.RemoteServices = new RemoteServices();
 #else
         var initParameters = new HostPlayModeParameters();
         initParameters.BuildinQueryServices = new GameQueryServices();
@@ -38,22 +42,22 @@ public class Shell : MonoBehaviour
     #endregion
 
     #region HybridCLR
-    private void LoadMetadata()
+    private async Task LoadMetadata()
     {
-        var ta = LoadScriptTASync("AOT_DLL_LIST");
+        var ta = await LoadScriptTASync("AOT_DLL_LIST");
         string[] aotDllList = ta.text.Split('|');
         foreach (var aotDllName in aotDllList)
         {
-            ta = LoadScriptTASync(aotDllName);
+            ta = await LoadScriptTASync(aotDllName);
             var code = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(ta.bytes, HybridCLR.HomologousImageMode.SuperSet);
         }
     }
 
-    private Task ScriptSettings()
+    private async Task ScriptSettings()
     {
 #if !UNITY_EDITOR
-        LoadMetadata();
-        var ta = LoadScriptTASync("Goblin.dll");
+        await LoadMetadata();
+        var ta = await LoadScriptTASync("Goblin.dll");
         Assembly ass = Assembly.Load(ta.bytes);
 #else
         Assembly ass = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Goblin");
@@ -62,10 +66,8 @@ public class Shell : MonoBehaviour
         export.GetMethod("Init").Invoke(null, null);
         tickFunc = export.GetMethod("Tick");
         fixedTickFunc = export.GetMethod("FixedTick");
-
-        return Task.CompletedTask;
     }
-#endregion
+    #endregion
 
     private async void Start()
     {
@@ -88,9 +90,10 @@ public class Shell : MonoBehaviour
         fixedTickFunc.Invoke(null, new object[] { Time.fixedDeltaTime });
     }
 
-    private TextAsset LoadScriptTASync(string resName)
+    private async Task<TextAsset> LoadScriptTASync(string resName)
     {
-        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRes/Raws/Scripts/" + resName);
+        var handle = YooAssets.LoadAssetAsync<TextAsset>("Assets/GameRes/Raws/Scripts/" + resName);
+        await handle.Task;
         var ta = handle.AssetObject as TextAsset;
         handle.Release();
 

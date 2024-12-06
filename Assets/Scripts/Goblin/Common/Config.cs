@@ -1,12 +1,15 @@
 ﻿using Goblin.Core;
 using Luban;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Goblin.Common
 {
     /// <summary>
     /// 游戏配置
     /// </summary>
-    public class Config: Comp
+    public class Config : Comp
     {
         /// <summary>
         /// 配置表定位器
@@ -23,10 +26,24 @@ namespace Goblin.Common
         /// </summary>
         public const float int2Float = 0.001f;
         
+#if UNITY_WEBGL
+        private Dictionary<string, byte[]> cfgbytes = new();
+        protected override async void OnCreate()
+        {
+            base.OnCreate();
+            foreach (string cfgname in Tables.tables)
+            {
+                var bytes = await engine.gameres.location.LoadConfigAsync(cfgname);
+                cfgbytes.Add(cfgname, bytes);
+            }
+            location = new Tables((cfgName) => new ByteBuf(cfgbytes.GetValueOrDefault(cfgName)));
+        }
+#else
         protected override void OnCreate()
         {
             base.OnCreate();
             location = new Tables((cfgName) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgName)));
         }
+#endif
     }
 }

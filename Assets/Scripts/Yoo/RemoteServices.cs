@@ -1,23 +1,25 @@
+using System.IO;
 using UnityEngine;
 using YooAsset;
 
 /// <summary>
-/// Զ����Դ��ַ��ѯ������
+/// CDN 地址
 /// </summary>
 public class RemoteServices : IRemoteServices
 {
-    private string remoteHost = null;
+    private readonly string iosRemoteHost = "http://192.168.2.146/CDN/IOS";
+    private readonly string androidRemoteHost = "http://192.168.2.146/CDN/Android";
+    private readonly string webglRemoteHost = "http://192.168.2.146/CDN/WebGL";
 
     private string GetHostServer()
     {
-        if (null != remoteHost) return remoteHost;
-
-        var handle = YooAssets.LoadAssetSync<TextAsset>("Assets/GameRes/Raws/YA_REMOTE_INFO");
-        var ta = handle.AssetObject as TextAsset;
-        handle.Release();
-        remoteHost = ta.text;
-
-        return remoteHost;
+#if UNITY_IOS
+        return iosRemoteHost;
+#elif UNITY_ANDROID
+        return androidRemoteHost;
+#elif UNITY_WEBGL
+        return webglRemoteHost;
+#endif
     }
 
     string IRemoteServices.GetRemoteMainURL(string fileName)

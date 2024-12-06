@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -93,7 +92,7 @@ namespace Goblin.Common.Network
             }
             catch (Exception e)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "服务器未响应，请检查网络." });
+                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "server donot resposed.plz check network." });
                 RecycleSocket();
             }
         }

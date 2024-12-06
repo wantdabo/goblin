@@ -754,7 +754,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8FDE\u63A5"
+  m_Text: CONNECT
 --- !u!1 &8173061480546845611
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,7 +914,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u65AD\u5F00\u8FDE\u63A5"
+  m_Text: DISCONNECT
 --- !u!1 &8520294693922410484
 GameObject:
   m_ObjectHideFlags: 0

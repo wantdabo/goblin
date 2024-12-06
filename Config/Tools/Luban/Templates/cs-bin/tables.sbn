@@ -1,8 +1,16 @@
 using Luban;
+using System.Collections.Generic;
 
 {{namespace_with_grace_begin __namespace}}
 public partial class {{__name}}
 {
+    public static List<string> tables { get; private set; } = new()
+    {
+    {{~for table in __tables ~}}
+        "{{table.output_data_file}}",
+    {{~end~}}
+    };
+
     {{~for table in __tables ~}}
 {{~if table.comment != '' ~}}
     /// <summary>

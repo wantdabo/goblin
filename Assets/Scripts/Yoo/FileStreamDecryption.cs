@@ -4,13 +4,13 @@ using UnityEngine;
 using YooAsset;
 
 /// <summary>
-/// 资源文件流加载解密类
+/// 璧勬簮鏂囦欢娴佸姞杞借В瀵嗙被
 /// </summary>
 public class FileStreamDecryption : IDecryptionServices
 {
     /// <summary>
-    /// 同步方式获取解密的资源包对象
-    /// 注意：加载流对象在资源包对象释放的时候会自动释放
+    /// 鍚屾鏂瑰紡鑾峰彇瑙ｅ瘑鐨勮祫婧愬寘瀵硅薄
+    /// 娉ㄦ剰锛氬姞杞芥祦瀵硅薄鍦ㄨ祫婧愬寘瀵硅薄閲婃斁鐨勬椂鍊欎細鑷姩閲婃斁
     /// </summary>
     AssetBundle IDecryptionServices.LoadAssetBundle(DecryptFileInfo fileInfo, out Stream managedStream)
     {
@@ -20,8 +20,8 @@ public class FileStreamDecryption : IDecryptionServices
     }
 
     /// <summary>
-    /// 异步方式获取解密的资源包对象
-    /// 注意：加载流对象在资源包对象释放的时候会自动释放
+    /// 寮傛鏂瑰紡鑾峰彇瑙ｅ瘑鐨勮祫婧愬寘瀵硅薄
+    /// 娉ㄦ剰锛氬姞杞芥祦瀵硅薄鍦ㄨ祫婧愬寘瀵硅薄閲婃斁鐨勬椂鍊欎細鑷姩閲婃斁
     /// </summary>
     AssetBundleCreateRequest IDecryptionServices.LoadAssetBundleAsync(DecryptFileInfo fileInfo, out Stream managedStream)
     {

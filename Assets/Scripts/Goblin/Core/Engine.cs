@@ -2,6 +2,7 @@
 using Goblin.Common.FSM;
 using Goblin.Common.GameRes;
 using Goblin.Common.Network;
+using Goblin.Common.Parallel;
 using Goblin.Common.Sounds;
 using Goblin.Phases.Common;
 using Goblin.Sys.Common;
@@ -36,6 +37,10 @@ namespace Goblin.Core
         /// 引擎 Tick
         /// </summary>
         public Ticker ticker { get; private set; }
+        /// <summary>
+        /// 协程驱动器
+        /// </summary>
+        public CoroutineScheduler scheduler { get; private set; }
         /// <summary>
         /// 游戏资源
         /// </summary>
@@ -84,6 +89,9 @@ namespace Goblin.Core
 
             ticker = AddComp<Ticker>();
             ticker.Create();
+            
+            scheduler = AddComp<CoroutineScheduler>();
+            scheduler.Initialize(TickType.Tick, ticker);
 
             gameres = AddComp<GameRes>();
             gameres.Create();

@@ -167,7 +167,7 @@ namespace Goblin.Sys.Common
         /// </summary>
         /// <typeparam name="T">界面类型</typeparam>
         /// <returns>UI 界面</returns>
-        public T Load<T>() where T : UIBaseView, new()
+        public async Task<T> Load<T>() where T : UIBaseView, new()
         {
             var view = Get<T>();
             if (null != view) return view;
@@ -175,7 +175,7 @@ namespace Goblin.Sys.Common
             view = AddComp<T>();
             view.Create();
             viewDict.Add(typeof(T), view);
-            view.Load();
+            await view.Load();
 
             return view;
         }
@@ -230,10 +230,10 @@ namespace Goblin.Sys.Common
         /// </summary>
         /// <typeparam name="T">界面类型</typeparam>
         /// <param name="param">传参</param>
-        public void Open<T>(params object[] param) where T : UIBaseView, new()
+        public async void Open<T>(params object[] param) where T : UIBaseView, new()
         {
             var view = Get<T>();
-            if (null == view) view = Load<T>();
+            if (null == view) view = await Load<T>();
             view.Open(param);
         }
 

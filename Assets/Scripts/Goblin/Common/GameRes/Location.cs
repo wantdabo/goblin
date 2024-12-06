@@ -99,7 +99,6 @@ namespace Goblin.Common.GameRes
             return GameObject.Instantiate(await engine.gameres.LoadAssetAsync<GameObject>(uiprefabpath + res), parent ?? engine.gameui.uiroot.transform);
         }
 
-
         /// <summary>
         /// 同步 UI 加载预制体
         /// </summary>

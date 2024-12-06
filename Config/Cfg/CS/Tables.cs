@@ -8,10 +8,16 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Collections.Generic;
 
 
 public partial class Tables
 {
+    public static List<string> tables { get; private set; } = new()
+    {
+        "Conf.ItemInfo",
+    };
+
     public Conf.ItemInfos ItemInfos {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
