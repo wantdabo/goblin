@@ -27,7 +27,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/发布/发布 EXE32")]
         public static void BuildEXE32()
         {
-            BuildScripts();
             BuildAssetBundles(BuildTarget.StandaloneWindows);
             Release(BuildTarget.StandaloneWindows, "win/32/game.exe");
         }
@@ -35,7 +34,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/发布/发布 EXE64")]
         public static void BuildEXE64()
         {
-            BuildScripts();
             BuildAssetBundles(BuildTarget.StandaloneWindows64);
             Release(BuildTarget.StandaloneWindows64, "win/64/game.exe");
         }
