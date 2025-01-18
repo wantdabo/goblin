@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
+using Goblin.Sys.Lobby.View;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,6 +46,12 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            
+            AddUIEventListener("ExitBtn", (e) =>
+            {
+                engine.proxy.gameplay.End();
+                engine.gameui.Open<LobbyView>();
+            });
             
             AddUIEventListener("GameSpeedSlider", (e) =>
             {

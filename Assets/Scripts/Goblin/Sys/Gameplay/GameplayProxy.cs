@@ -97,6 +97,10 @@ namespace Goblin.Sys.Gameplay
         /// 逻辑场景
         /// </summary>
         private LStage lstage { get; set; }
+        /// <summary>
+        /// 背景板
+        /// </summary>
+        private GameObject background { get; set; }
 
         protected override void OnCreate()
         {
@@ -143,6 +147,13 @@ namespace Goblin.Sys.Gameplay
         public void Start()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
+            
+            background = engine.gameres.location.LoadModelSync("Background");
+            background.transform.position = Vector3.zero;
+            
+            gaming = false;
+            gamespeed = 1;
+            
             lstage = AddComp<LStage>();
             lstage.Create();
 
@@ -163,7 +174,7 @@ namespace Goblin.Sys.Gameplay
             player.GetBehavior<Spatial>().position = new FPVector3(FP.Zero, FP.One, FP.Zero);
             player.live.Born();
             
-            // GenEnemys();
+            GenEnemys();
 
             engine.gameui.Open<GameplayView>();
 
@@ -185,11 +196,19 @@ namespace Goblin.Sys.Gameplay
         {
             gaming = false;
         }
-        
+
         /// <summary>
         /// 游戏结束
         /// </summary>
-        public void End() { }
+        public void End()
+        {
+            GameObject.Destroy(background);
+            Pause();
+            stage.Destroy();
+            lstage.Destroy();
+            stage = null;
+            lstage = null;
+        }
 
         private void OnTick(TickEvent e)
         {

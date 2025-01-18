@@ -1,5 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
+using Goblin.Sys.Gameplay.View;
 using Goblin.Sys.Other.View;
 using Queen.Protocols;
 using System;
@@ -32,7 +33,8 @@ namespace Goblin.Sys.Lobby.View
 
             AddUIEventListener("LocalGame", (e) =>
             {
-                // TODO 本地游戏
+                engine.proxy.gameplay.Start();
+                engine.gameui.Close(this);
             });
         }
     }
