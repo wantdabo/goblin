@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     {
         public override uint id => STATE_DEFINE.PLAYER_JUMP_START;
 
-        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_JUMPING, STATE_DEFINE.PLAYER_FALLING2GROUND };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_JUMPING, STATE_DEFINE.PLAYER_FALLING2GROUND, STATE_DEFINE.PLAYER_ATTACK };
 
         private Attribute attribute { get; set; }
         private Gamepad gamepad { get; set; }

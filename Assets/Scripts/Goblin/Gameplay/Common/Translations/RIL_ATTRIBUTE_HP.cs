@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// 生命值渲染指令
     /// </summary>
-    public class RIL_ATTRIBUTE_HP : IRIL
+    public struct RIL_ATTRIBUTE_HP : IRIL
     {
         public ushort id => RIL_DEFINE.ATTRIBUTE_HP;
         /// <summary>

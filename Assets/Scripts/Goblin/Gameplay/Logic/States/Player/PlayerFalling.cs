@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     {
         public override uint id => STATE_DEFINE.PLAYER_FALLING;
 
-        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING2GROUND };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING2GROUND, STATE_DEFINE.PLAYER_ATTACK };
 
         private Attribute attribute { get; set; }
         private Spatial spatial { get; set; }
@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Logic.States.Player
         {
             base.OnTick(frame, tick);
             var joystick = gamepad.GetInput(InputType.Joystick);
-            var motion = joystick.dire * attribute.movespeed * FP.Half;
+            var motion = joystick.dire * attribute.movespeed * FP.Half * FP.Half;
             physagent.rigidbody.ApplyForce(new FPVector3(motion.x, 0, FP.Zero));
 
             if (motion != FPVector2.zero)

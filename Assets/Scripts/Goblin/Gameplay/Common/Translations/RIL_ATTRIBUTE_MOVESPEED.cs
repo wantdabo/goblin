@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// 移动速度渲染指令
     /// </summary>
-    public class RIL_ATTRIBUTE_MOVESPEED : IRIL
+    public struct RIL_ATTRIBUTE_MOVESPEED : IRIL
     {
         public ushort id => RIL_DEFINE.ATTRIBUTE_MOVESPEED;
         

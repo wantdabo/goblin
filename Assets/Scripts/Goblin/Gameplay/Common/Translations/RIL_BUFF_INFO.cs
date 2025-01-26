@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// Buff 信息渲染指令
     /// </summary>
-    public class RIL_BUFF_INFO : IRIL
+    public struct RIL_BUFF_INFO : IRIL
     {
         public ushort id => RIL_DEFINE.BUFF_INFO;
         
@@ -47,6 +47,7 @@ namespace Goblin.Gameplay.Common.Translations
         public RIL_BUFF_INFO(uint buffid, byte type, byte state, uint layer, uint maxlayer, uint from)
         {
             this.buffid = buffid;
+            this.type = type;
             this.state = state;
             this.layer = layer;
             this.maxlayer = maxlayer;

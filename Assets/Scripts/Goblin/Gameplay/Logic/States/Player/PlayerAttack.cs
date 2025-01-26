@@ -2,7 +2,9 @@
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common.StateMachine;
 using Goblin.Gameplay.Logic.Inputs;
+using Goblin.Gameplay.Logic.Physics;
 using Goblin.Gameplay.Logic.Skills;
+using Kowtow;
 using Kowtow.Math;
 using System.Collections.Generic;
 
@@ -17,11 +19,13 @@ namespace Goblin.Gameplay.Logic.States.Player
 
         protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_HURT };
 
+        private PhysAgent physagent { get; set; }
         private SkillLauncher launcher { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
+            physagent = machine.paramachine.actor.GetBehavior<PhysAgent>();
             launcher = machine.paramachine.actor.GetBehavior<SkillLauncher>();
         }
 
@@ -30,9 +34,17 @@ namespace Goblin.Gameplay.Logic.States.Player
             return launcher.launching.playing;
         }
 
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            physagent.rigidbody.type = RigidbodyType.Static;
+            physagent.LossForce();
+        }
+
         public override void OnExit()
         {
             base.OnExit();
+            physagent.rigidbody.type = RigidbodyType.Dynamic;
             if (launcher.launching.playing)
             {
                 var pipeline = launcher.Get(launcher.launching.skill);

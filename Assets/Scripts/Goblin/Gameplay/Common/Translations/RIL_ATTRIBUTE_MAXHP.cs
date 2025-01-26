@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Common.Translations
     /// <summary>
     /// 最大生命中渲染指令
     /// </summary>
-    public class RIL_ATTRIBUTE_MAXHP : IRIL
+    public struct RIL_ATTRIBUTE_MAXHP : IRIL
     {
         public ushort id => RIL_DEFINE.ATTRIBUTE_MAXHP;
 

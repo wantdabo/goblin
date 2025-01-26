@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     {
         public override uint id => STATE_DEFINE.PLAYER_JUMPING;
 
-        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING };
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING, STATE_DEFINE.PLAYER_ATTACK };
 
         private Attribute attribute { get; set; }
         private Spatial spatial { get; set; }

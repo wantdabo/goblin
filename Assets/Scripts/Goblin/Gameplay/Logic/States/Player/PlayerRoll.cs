@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.States.Player
     {
         public override uint id => STATE_DEFINE.PLAYER_ROLL;
 
-        protected override List<uint> passes => null;
+        protected override List<uint> passes => new() { STATE_DEFINE.PLAYER_FALLING };
 
         private Attribute attribute { get; set; }
         private Gamepad gamepad { get; set; }
@@ -68,7 +68,7 @@ namespace Goblin.Gameplay.Logic.States.Player
 
             var dire = physagent.rigidbody.rotation * FPVector3.forward;
             var motion = new FPVector3(dire.x, 0, dire.z) * attribute.movespeed;
-            physagent.rigidbody.ApplyForce(motion * 2);
+            physagent.rigidbody.ApplyForce(motion);
         }
     }
 }
