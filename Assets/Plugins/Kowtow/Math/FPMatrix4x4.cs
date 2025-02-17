@@ -740,7 +740,7 @@ namespace Kowtow.Math
                 M31 == other.M31 &&
                 M32 == other.M32 &&
                 M33 == other.M33 &&
-                M34 == other.M44 &&
+                M34 == other.M34 &&
                 M41 == other.M41 &&
                 M42 == other.M42 &&
                 M43 == other.M43 &&
