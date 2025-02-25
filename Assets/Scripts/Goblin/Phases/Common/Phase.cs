@@ -16,7 +16,7 @@ namespace Goblin.Phases.Common
         /// <summary>
         /// 状态机
         /// </summary>
-        private Machine machine;
+        private Machine machine { get; set; }
 
         protected override void OnCreate()
         {
