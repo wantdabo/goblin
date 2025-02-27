@@ -65,7 +65,6 @@ namespace Goblin.Gameplay.Render.Common
                 else if (physinfo.shape is SphereShape sphereshape)
                 {
                     ShapeDrawer.DrawSphere(physinfo.position.ToVector3() + sphereshape.center.ToVector3(), sphereshape.radius.AsFloat(), color);
-
                 }
             }
         }
