@@ -10,7 +10,7 @@
         /// </summary>
         public const byte SHARED = 0;
         /// <summary>
-        /// 多利 BUFF
+        /// 多例 BUFF
         /// </summary>
         public const byte MULTI = 1;
         
