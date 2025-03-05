@@ -42,15 +42,16 @@ namespace Goblin.Gameplay.Logic.Inputs
         /// <summary>
         /// 摁下之后 -> TRUE
         /// </summary>
-        public bool press;
+        public bool press { get; set; }
+
         /// <summary>
         /// 摁下之后，抬起 -> TRUE
         /// </summary>
-        public bool release;
+        public bool release { get; set; }
         /// <summary>
         /// 按键的方向
         /// </summary>
-        public FPVector2 dire;
+        public FPVector2 dire { get; set; }
     }
 
     /// <summary>

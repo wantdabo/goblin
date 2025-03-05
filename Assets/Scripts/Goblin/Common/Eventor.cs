@@ -18,7 +18,7 @@ namespace Goblin.Common
         /// <summary>
         /// 事件的集合
         /// </summary>
-        private Dictionary<Type, List<Delegate>> eventDict;
+        private Dictionary<Type, List<Delegate>> eventdict { get; set; }
 
         protected override void OnCreate()
         {
@@ -28,7 +28,7 @@ namespace Goblin.Common
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (null != eventDict) eventDict.Clear();
+            if (null != eventdict) eventdict.Clear();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Goblin.Common
         /// <param name="func">事件的回调</param>
         public void UnListen<T>(Action<T> func) where T : IEvent
         {
-            if (false == eventDict.TryGetValue(typeof(T), out var funcs)) return;
+            if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
             funcs.Remove(func);
         }
 
@@ -49,12 +49,12 @@ namespace Goblin.Common
         /// <param name="func">事件的回调</param>
         public void Listen<T>(Action<T> func) where T : IEvent
         {
-            if (null == eventDict) eventDict = new Dictionary<Type, List<Delegate>>();
+            if (null == eventdict) eventdict = new Dictionary<Type, List<Delegate>>();
 
-            if (false == eventDict.TryGetValue(typeof(T), out var funcs))
+            if (false == eventdict.TryGetValue(typeof(T), out var funcs))
             {
                 funcs = new List<Delegate>();
-                eventDict.Add(typeof(T), funcs);
+                eventdict.Add(typeof(T), funcs);
             }
             if (funcs.Contains(func)) return;
 
@@ -68,8 +68,8 @@ namespace Goblin.Common
         /// <param name="e">事件的参数</param>
         public void Tell<T>(T e = default) where T : IEvent
         {
-            if (null == eventDict) return;
-            if (false == eventDict.TryGetValue(typeof(T), out var funcs)) return;
+            if (null == eventdict) return;
+            if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
             for (int i = funcs.Count - 1; i >= 0; i--) (funcs[i] as Action<T>).Invoke(e);
         }
     }
