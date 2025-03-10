@@ -311,7 +311,7 @@ namespace Kowtow.Collision
                 node.size = MAX_SIZE;
                 node.aabb = new AABB
                 {
-                    position = FPVector3.zero,
+                    center = FPVector3.zero,
                     size = new FPVector3(MAX_SIZE, MAX_SIZE, MAX_SIZE),
                 };
             }
@@ -326,7 +326,7 @@ namespace Kowtow.Collision
                 FP offsetZ = ((index & 4) == 0) ? -halfhalf : halfhalf;
                 node.aabb = new AABB
                 {
-                    position = parent.aabb.position + new FPVector3(offsetX, offsetY, offsetZ) * parent.size,
+                    center = parent.aabb.center + new FPVector3(offsetX, offsetY, offsetZ) * parent.size,
                     size = new FPVector3(half, half, half) * parent.size,
                 };
             }

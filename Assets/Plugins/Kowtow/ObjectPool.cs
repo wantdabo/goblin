@@ -2,51 +2,53 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Kowtow.Math;
 
 namespace Kowtow
 {
     /// <summary>
     /// 对象池
     /// </summary>
-    public class ObjectPool
+    public static class ObjectPool
     {
-        private readonly ConcurrentDictionary<Type, ConcurrentQueue<object>> pool = new();
-
-        /// <summary>
-        /// 从对象池获得一个实例化对象
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <returns>实例化对象</returns>
-        public T Get<T>() where T : new()
+        private static readonly ConcurrentDictionary<int, ConcurrentQueue<FPVector3[]>> verticesdict = new();
+        private static readonly ConcurrentQueue<List<FPVector3>> verticeslist = new();
+        
+        public static FPVector3[] GetVertices(int count)
         {
-            if (pool.TryGetValue(typeof(T), out var queue) && queue.Count > 0)
+            if (false == verticesdict.TryGetValue(count, out var queue)) 
             {
-                queue.TryDequeue(out var obj);
-
-                return (T)obj;
+                queue = new ConcurrentQueue<FPVector3[]>();
+                verticesdict.TryAdd(count, queue);
             }
-
-            return new T();
+            
+            if (false == queue.TryDequeue(out var vertices)) vertices = new FPVector3[count];
+            
+            return vertices;
         }
-
-        /// <summary>
-        /// 将一个实例化对象存入对象池
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <param name="obj">实例化对象</param>
-        public void Set<T>(T obj)
+        
+        public static void SetVertices(FPVector3[] vertices)
         {
-            if (null == obj) return;
-
-            if (false == pool.TryGetValue(typeof(T), out var queue))
+            if (false == verticesdict.TryGetValue(vertices.Length, out var queue)) 
             {
-                queue = new();
-                pool.TryAdd(typeof(T), queue);
+                queue = new ConcurrentQueue<FPVector3[]>();
+                verticesdict.TryAdd(vertices.Length, queue);
             }
-
-            if (queue.Contains(obj)) return;
-
-            queue.Enqueue(obj);
+            
+            queue.Enqueue(vertices);
+        }
+        
+        public static List<FPVector3> GetVerticesList()
+        {
+            if (false == verticeslist.TryDequeue(out var vertices)) vertices = new List<FPVector3>();
+            
+            return vertices;
+        }
+        
+        public static void SetVerticesList(List<FPVector3> vertices)
+        {
+            vertices.Clear();
+            verticeslist.Enqueue(vertices);
         }
     }
 }

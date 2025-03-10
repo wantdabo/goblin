@@ -265,7 +265,16 @@ namespace Kowtow
         {
             foreach (var collider in colliders)
             {
-                var lastcollider = lastcolliders.Find(last => collider.rigidbody == last.rigidbody);
+                Collider lastcollider = default;
+                foreach (var last in lastcolliders) 
+                {
+                    if (collider.rigidbody == last.rigidbody)
+                    {
+                        lastcollider = last;
+                        break;
+                    }
+                }
+                
                 if (null != lastcollider.rigidbody)
                 {
                     if (trigger)
@@ -292,7 +301,15 @@ namespace Kowtow
 
             foreach (var lastcollider in lastcolliders)
             {
-                var collider = colliders.Find(c => lastcollider.rigidbody == c.rigidbody);
+                Collider collider = default;
+                foreach (var c in colliders) 
+                {
+                    if (lastcollider.rigidbody == c.rigidbody)
+                    {
+                        collider = c;
+                        break;
+                    }
+                }
                 if (null == collider.rigidbody)
                 {
                     if (trigger)

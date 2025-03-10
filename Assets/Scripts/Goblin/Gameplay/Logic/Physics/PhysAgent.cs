@@ -50,22 +50,22 @@ namespace Goblin.Gameplay.Logic.Physics
             get
             {
                 // 计算盒子底部中心点
-                var bottomCenter = (FPVector3.down * FP.EN3) + rigidbody.aabb.position + new FPVector3(FP.Zero, -rigidbody.aabb.size.y * FP.Half, FP.Zero);
+                var bottomCenter = (FPVector3.down * FP.EN3) + rigidbody.aabb.center + new FPVector3(FP.Zero, -rigidbody.aabb.size.y * FP.Half, FP.Zero);
                 // 计算底部的四个角点
                 FPVector3 bottomFrontLeft = bottomCenter + new FPVector3(-rigidbody.aabb.size.x * FP.Half, FP.Zero, -rigidbody.aabb.size.z * FP.Half);
                 FPVector3 bottomFrontRight = bottomCenter + new FPVector3(rigidbody.aabb.size.x * FP.Half, FP.Zero, -rigidbody.aabb.size.z * FP.Half);
                 FPVector3 bottomBackLeft = bottomCenter + new FPVector3(-rigidbody.aabb.size.x * FP.Half, FP.Zero, rigidbody.aabb.size.z * FP.Half);
                 FPVector3 bottomBackRight = bottomCenter + new FPVector3(rigidbody.aabb.size.x * FP.Half, FP.Zero, rigidbody.aabb.size.z * FP.Half);
 
-                var result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomCenter, false, Layer.Ground);
+                var result = actor.stage.phys.Linecast(rigidbody.aabb.center, bottomCenter, false, Layer.Ground);
                 if (result.hit) return true;
-                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomFrontLeft, false, Layer.Ground);
+                result = actor.stage.phys.Linecast(rigidbody.aabb.center, bottomFrontLeft, false, Layer.Ground);
                 if (result.hit) return true;
-                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomFrontRight, false, Layer.Ground);
+                result = actor.stage.phys.Linecast(rigidbody.aabb.center, bottomFrontRight, false, Layer.Ground);
                 if (result.hit) return true;
-                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomBackLeft, false, Layer.Ground);
+                result = actor.stage.phys.Linecast(rigidbody.aabb.center, bottomBackLeft, false, Layer.Ground);
                 if (result.hit) return true;
-                result = actor.stage.phys.Linecast(rigidbody.aabb.position, bottomBackRight, false, Layer.Ground);
+                result = actor.stage.phys.Linecast(rigidbody.aabb.center, bottomBackRight, false, Layer.Ground);
                 if (result.hit) return true;
 
                 return false;

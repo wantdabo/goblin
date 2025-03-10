@@ -1,4 +1,5 @@
-﻿using Kowtow.Collision.Shapes;
+﻿using System.Collections.Concurrent;
+using Kowtow.Collision.Shapes;
 using Kowtow.Math;
 using System.Collections.Generic;
 
@@ -17,10 +18,10 @@ namespace Kowtow.Collision
         /// <returns>YES/NO</returns>
         public static bool InsideAABB(AABB aabb1, AABB aabb2)
         {
-            FPVector3 min1 = aabb2.position - aabb2.size * FP.Half;
-            FPVector3 max1 = aabb2.position + aabb2.size * FP.Half;
-            FPVector3 min2 = aabb1.position - aabb1.size * FP.Half;
-            FPVector3 max2 = aabb1.position + aabb1.size * FP.Half;
+            FPVector3 min1 = aabb2.center - aabb2.size * FP.Half;
+            FPVector3 max1 = aabb2.center + aabb2.size * FP.Half;
+            FPVector3 min2 = aabb1.center - aabb1.size * FP.Half;
+            FPVector3 max2 = aabb1.center + aabb1.size * FP.Half;
 
             return (
                 min1.x <= min2.x && min1.y <= min2.y && min1.z <= min2.z &&
@@ -36,10 +37,10 @@ namespace Kowtow.Collision
         /// <returns>YES/NO</returns>
         public static bool DetectAABB(AABB aabb1, AABB aabb2)
         {
-            FPVector3 min1 = aabb1.position - aabb1.size * FP.Half;
-            FPVector3 max1 = aabb1.position + aabb1.size * FP.Half;
-            FPVector3 min2 = aabb2.position - aabb2.size * FP.Half;
-            FPVector3 max2 = aabb2.position + aabb2.size * FP.Half;
+            FPVector3 min1 = aabb1.center - aabb1.size * FP.Half;
+            FPVector3 max1 = aabb1.center + aabb1.size * FP.Half;
+            FPVector3 min2 = aabb2.center - aabb2.size * FP.Half;
+            FPVector3 max2 = aabb2.center + aabb2.size * FP.Half;
 
             return (
                 min1.x < max2.x && max1.x > min2.x &&
@@ -84,19 +85,19 @@ namespace Kowtow.Collision
         {
             // 计算起始和结束旋转作用后的 AABB
             AABB startAABB = RotateAABB(aabb, startRot);
-            startAABB.position += start; // 将起始 AABB 移动到起始位置
+            startAABB.center += start; // 将起始 AABB 移动到起始位置
 
             AABB endAABB = RotateAABB(aabb, endRot);
-            endAABB.position += end; // 将结束 AABB 移动到结束位置
+            endAABB.center += end; // 将结束 AABB 移动到结束位置
 
             // 计算包围盒的最小点和最大点，综合考虑位置和旋转
-            FPVector3 min = FPVector3.Min(startAABB.position - startAABB.size * FP.Half, endAABB.position - endAABB.size * FP.Half);
-            FPVector3 max = FPVector3.Max(startAABB.position + startAABB.size * FP.Half, endAABB.position + endAABB.size * FP.Half);
+            FPVector3 min = FPVector3.Min(startAABB.center - startAABB.size * FP.Half, endAABB.center - endAABB.size * FP.Half);
+            FPVector3 max = FPVector3.Max(startAABB.center + startAABB.size * FP.Half, endAABB.center + endAABB.size * FP.Half);
 
             // 返回扩展后的 AABB
             return new AABB
             {
-                position = (min + max) * FP.Half,
+                center = (min + max) * FP.Half,
                 size = max - min
             };
         }
@@ -111,17 +112,16 @@ namespace Kowtow.Collision
         {
             // 获取 AABB 的 8 个顶点
             FPVector3 halfSize = aabb.size * FP.Half;
-            FPVector3[] vertices =
-            {
-                new(-halfSize.x, -halfSize.y, -halfSize.z),
-                new(halfSize.x, -halfSize.y, -halfSize.z),
-                new(-halfSize.x, halfSize.y, -halfSize.z),
-                new(halfSize.x, halfSize.y, -halfSize.z),
-                new(-halfSize.x, -halfSize.y, halfSize.z),
-                new(halfSize.x, -halfSize.y, halfSize.z),
-                new(-halfSize.x, halfSize.y, halfSize.z),
-                new(halfSize.x, halfSize.y, halfSize.z),
-            };
+            
+            var vertices = ObjectPool.GetVertices(8);
+            vertices[0] = new(-halfSize.x, -halfSize.y, -halfSize.z);
+            vertices[1] = new(halfSize.x, -halfSize.y, -halfSize.z);
+            vertices[2] = new(-halfSize.x, halfSize.y, -halfSize.z);
+            vertices[3] = new(halfSize.x, halfSize.y, -halfSize.z);
+            vertices[4] = new(-halfSize.x, -halfSize.y, halfSize.z);
+            vertices[5] = new(halfSize.x, -halfSize.y, halfSize.z);
+            vertices[6] = new(-halfSize.x, halfSize.y, halfSize.z);
+            vertices[7] = new(halfSize.x, halfSize.y, halfSize.z);
 
             // 应用旋转，更新顶点的范围
             FPVector3 min = FPVector3.MaxValue;
@@ -133,10 +133,11 @@ namespace Kowtow.Collision
                 min = FPVector3.Min(min, transformedVertex);
                 max = FPVector3.Max(max, transformedVertex);
             }
+            ObjectPool.SetVertices(vertices);
 
             return new AABB
             {
-                position = (min + max) * FP.Half,
+                center = (min + max) * FP.Half,
                 size = max - min
             };
         }
@@ -274,8 +275,10 @@ namespace Kowtow.Collision
             FPVector3[] axes2 = GetAxes(rotation2);
 
             // 生成所有分离轴（15个轴）
-            List<FPVector3> axes = new List<FPVector3>(axes1);
+            var axes = ObjectPool.GetVerticesList();
+            axes.AddRange(axes1);
             axes.AddRange(axes2);
+
             for (int i = 0; i < axes1.Length; i++)
             {
                 for (int j = 0; j < axes2.Length; j++)
@@ -287,6 +290,8 @@ namespace Kowtow.Collision
                     }
                 }
             }
+            ObjectPool.SetVertices(axes1);
+            ObjectPool.SetVertices(axes2);
 
             // 遍历每个轴，检查是否存在分离
             foreach (var axis in axes)
@@ -312,6 +317,7 @@ namespace Kowtow.Collision
                     normal = axis;
                 }
             }
+            ObjectPool.SetVerticesList(axes);
             
             if (FPVector3.Dot(normal, position2 - position1) > 0)
             {
@@ -365,6 +371,7 @@ namespace Kowtow.Collision
                     hasCollision = true;
                 }
             }
+            ObjectPool.SetVertices(axes);
 
             if (hasCollision)
             {
@@ -429,7 +436,7 @@ namespace Kowtow.Collision
                 FPVector3 max = FPVector3.Max(start, end);
                 AABB aabb = new AABB()
                 {
-                    position = (min + max) * FP.Half,
+                    center = (min + max) * FP.Half,
                     size = max - min
                 };
                 if (false == DetectAABB(aabb, AABB.CreateFromShape(shape, position, rotation))) return false;
@@ -502,6 +509,7 @@ namespace Kowtow.Collision
                     }
                 }
             }
+            ObjectPool.SetVertices(axes);
 
             if (hit)
             {
@@ -557,10 +565,12 @@ namespace Kowtow.Collision
         private static FPVector3[] GetAxes(FPQuaternion rotation)
         {
             // 获取 BoxShape 的局部坐标轴（右、上、前）并返回它们在世界坐标中的方向
-            FPVector3 right = rotation * FPVector3.right;
-            FPVector3 up = rotation * FPVector3.up;
-            FPVector3 forward = rotation * FPVector3.forward;
-            return new[] { right, up, forward };
+            var vertices = ObjectPool.GetVertices(3);
+            vertices[0] = rotation * FPVector3.right;
+            vertices[1] = rotation * FPVector3.up;
+            vertices[2] = rotation * FPVector3.forward;
+
+            return vertices;
         }
 
         private static (FP min, FP max) ProjectBoxOntoAxis(BoxShape box, FPVector3 position, FPQuaternion rotation, FPVector3 axis)
@@ -576,14 +586,15 @@ namespace Kowtow.Collision
                 min = FP.Min(min, projection);
                 max = FP.Max(max, projection);
             }
+            ObjectPool.SetVertices(vertices);
 
             return (min, max);
         }
 
         private static FPVector3[] GetBoxVertices(BoxShape box, FPVector3 position, FPQuaternion rotation)
         {
+            var vertices = ObjectPool.GetVertices(8);
             // 计算立方体的 8 个顶点位置
-            FPVector3[] vertices = new FPVector3[8];
             FPVector3 extents = box.size * FP.Half;
 
             // 生成相对于中心的8个顶点
@@ -613,14 +624,14 @@ namespace Kowtow.Collision
             FPVector3 moveDirection = collisionAxis.normalized;
 
             // 根据穿透深度计算每个立方体沿着法线轴的移动量
-            FP halfPenetration = penetration / 2;
+            FP halfPenetration = penetration * FP.Half;
 
             // 计算碰撞后的调整位置
             FPVector3 newPosition1 = position1 - moveDirection * halfPenetration;
             FPVector3 newPosition2 = position2 + moveDirection * halfPenetration;
 
             // 返回调整后的碰撞点，避免过度偏移
-            return (newPosition1 + newPosition2) / 2;
+            return (newPosition1 + newPosition2) * FP.Half;
         }
     }
 }

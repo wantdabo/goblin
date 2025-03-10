@@ -59,7 +59,7 @@ namespace Kowtow.Collision
 
             AABB aabb = new AABB()
             {
-                position = (min + max) * FP.Half,
+                center = (min + max) * FP.Half,
                 size = max - min
             };
 

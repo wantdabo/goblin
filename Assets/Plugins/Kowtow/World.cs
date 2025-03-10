@@ -12,10 +12,6 @@ namespace Kowtow
     public class World
     {
         /// <summary>
-        /// 对象池
-        /// </summary>
-        public ObjectPool pool { get; private set; }
-        /// <summary>
         /// 八叉树
         /// </summary>
         public Octree tree { get; private set; }
@@ -41,7 +37,6 @@ namespace Kowtow
         /// <param name="gravity">重力</param>
         public World(FPVector3 gravity = default)
         {
-            pool = new();
             tree = new(this);
             phys = new(this, tree);
 

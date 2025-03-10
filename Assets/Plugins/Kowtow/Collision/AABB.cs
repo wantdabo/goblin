@@ -11,7 +11,7 @@ namespace Kowtow.Collision
         /// <summary>
         /// 中心点
         /// </summary>
-        public FPVector3 position { get; set; }
+        public FPVector3 center { get; set; }
         /// <summary>
         /// 尺寸
         /// </summary>
@@ -19,7 +19,7 @@ namespace Kowtow.Collision
 
         public override string ToString()
         {
-            return $"AABB (position -> {position}, size -> {size})";
+            return $"AABB (center -> {center}, size -> {size})";
         }
 
         /// <summary>
@@ -47,17 +47,15 @@ namespace Kowtow.Collision
                 FPVector3 halfSize = box.size * FP.Half;
 
                 // 定义 box 的 8 个顶点（以中心为基准）
-                FPVector3[] vertices =
-                {
-                    new(-halfSize.x, -halfSize.y, -halfSize.z),
-                    new(halfSize.x, -halfSize.y, -halfSize.z),
-                    new(-halfSize.x, halfSize.y, -halfSize.z),
-                    new(halfSize.x, halfSize.y, -halfSize.z),
-                    new(-halfSize.x, -halfSize.y, halfSize.z),
-                    new(halfSize.x, -halfSize.y, halfSize.z),
-                    new(-halfSize.x, halfSize.y, halfSize.z),
-                    new(halfSize.x, halfSize.y, halfSize.z),
-                };
+                var vertices = ObjectPool.GetVertices(8);
+                vertices[0] = new FPVector3(-halfSize.x, -halfSize.y, -halfSize.z);
+                vertices[1] = new FPVector3(halfSize.x, -halfSize.y, -halfSize.z);
+                vertices[2] = new FPVector3(-halfSize.x, halfSize.y, -halfSize.z);
+                vertices[3] = new FPVector3(halfSize.x, halfSize.y, -halfSize.z);
+                vertices[4] = new FPVector3(-halfSize.x, -halfSize.y, halfSize.z);
+                vertices[5] = new FPVector3(halfSize.x, -halfSize.y, halfSize.z);
+                vertices[6] = new FPVector3(-halfSize.x, halfSize.y, halfSize.z);
+                vertices[7] = new FPVector3(halfSize.x, halfSize.y, halfSize.z);
 
                 // 初始化 AABB 的最小值和最大值
                 FPVector3 min = FPVector3.MaxValue;
@@ -70,11 +68,12 @@ namespace Kowtow.Collision
                     min = FPVector3.Min(min, transformedVertex);
                     max = FPVector3.Max(max, transformedVertex);
                 }
+                ObjectPool.SetVertices(vertices);
 
                 // 计算最终的 AABB
                 return new AABB
                 {
-                    position = position + (min + max) * FP.Half,
+                    center = position + (min + max) * FP.Half,
                     size = max - min
                 };
             }
@@ -83,7 +82,7 @@ namespace Kowtow.Collision
                 // SphereShape 不受旋转影响
                 return new AABB
                 {
-                    position = position + rotation * sphere.center,
+                    center = position + rotation * sphere.center,
                     size = new FPVector3(sphere.radius * 2)
                 };
             }
