@@ -117,7 +117,7 @@ namespace Goblin.Core
             gameui = AddComp<GameUI>();
             gameui.Create();
 
-            gameui.Open<Sys.Other.View.FrameworkView>();
+            // gameui.Open<Sys.Other.View.FrameworkView>();
             phase = AddComp<Phase>();
             phase.Create();
         }

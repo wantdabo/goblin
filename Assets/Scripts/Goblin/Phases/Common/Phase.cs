@@ -24,8 +24,8 @@ namespace Goblin.Phases.Common
             machine = AddComp<Machine>();
             machine.Create();
             machine.SetState<ResPhase>();
-            machine.SetState<HotfixPhase>();
-            machine.SetState<LoginPhase>();
+            // machine.SetState<HotfixPhase>();
+            // machine.SetState<LoginPhase>();
             machine.SetState<GamingPhase>();
         }
 

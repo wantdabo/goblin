@@ -17,9 +17,9 @@ namespace Goblin.Phases
 
         public override bool OnValid()
         {
-            var hotfixp = engine.phase.GetPhase<HotfixPhase>();
-
-            return engine.proxy.login.data.signined && hotfixp.finished;
+            return true;
+            // var hotfixp = engine.phase.GetPhase<HotfixPhase>();
+            // return engine.proxy.login.data.signined && hotfixp.finished;
         }
 
         public override void OnEnter()
