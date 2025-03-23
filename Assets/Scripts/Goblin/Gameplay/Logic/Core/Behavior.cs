@@ -1,33 +1,41 @@
-﻿using Goblin.Core;
-using Goblin.Gameplay.Common.Translations.Common;
-
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// Behavior/行为
+    /// 行为信息
     /// </summary>
-    public abstract class Behavior : Comp
+    public abstract class BehaviorInfo
     {
-        /// <summary>
-        /// 挂载的 Actor/实体
-        /// </summary>
-        public Actor actor { get; set; }
     }
 
     /// <summary>
-    /// Behavior /行为, 包含 RIL 生成
+    /// 行为
     /// </summary>
-    /// <typeparam name="T">RIL 翻译</typeparam>
-    public abstract class Behavior<T> : Behavior where T : Translator, new()
+    public abstract class Behavior
     {
-        public T translator { get; private set; }
+        /// <summary>
+        /// 实体
+        /// </summary>
+        public Actor actor { get; private set; }
 
-        protected override void OnCreate()
+        public virtual void Assembly(Actor actor)
         {
-            base.OnCreate();
-            translator = AddComp<T>();
-            translator.behavior = this;
-            translator.Create();
+            this.actor = actor;
+        }
+    }
+
+    public abstract class Behavior<T, E> : Behavior where T : Behavior where E : BehaviorInfo, new()
+    {
+        /// <summary>
+        /// 信息
+        /// </summary>
+        public E info { get; private set; }
+
+        public override void Assembly(Actor actor)
+        {
+            base.Assembly(actor);
+            var i = actor.stage.GetBehaviorInfo<T>(actor.id);
+            if (null == i) info = actor.stage.pool.GetBehaviorInfo<E>();
+            actor.stage.AddBehaviorInfo<T>(actor.id, info);
         }
     }
 }
