@@ -17,10 +17,12 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Actor actor { get; private set; }
 
-        public virtual void Assembly(Actor actor)
+        public void Assembly(Actor actor)
         {
             this.actor = actor;
         }
+
+        protected abstract void OnAssembly();
     }
 
     public abstract class Behavior<T, E> : Behavior where T : Behavior where E : BehaviorInfo, new()
@@ -30,7 +32,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public E info { get; private set; }
 
-        public override void Assembly(Actor actor)
+        protected override void OnAssembly()
         {
             base.Assembly(actor);
             var i = actor.stage.GetBehaviorInfo<T>(actor.id);
