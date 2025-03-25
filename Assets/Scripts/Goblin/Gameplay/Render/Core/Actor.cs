@@ -177,12 +177,6 @@ namespace Goblin.Gameplay.Render.Core
                     case RIL_DEFINE.SPATIAL_SCALE:
                         resolver = AddResolver<SpatialScale>(e.ril.id);
                         break;
-                    case RIL_DEFINE.STATE_MACHINE_ZERO:
-                        resolver = AddResolver<StateMachineZero>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.STATE_MACHINE_ONE:
-                        resolver = AddResolver<StateMachineOne>(e.ril.id);
-                        break;
                     case RIL_DEFINE.SKILL_PIPELINE_INFO:
                         resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
                         break;

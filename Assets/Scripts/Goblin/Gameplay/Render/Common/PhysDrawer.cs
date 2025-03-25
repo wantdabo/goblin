@@ -1,6 +1,5 @@
 ﻿using Goblin.Core;
 using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Logic.Physics.Common;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 using Kowtow.Collision.Shapes;
@@ -23,50 +22,50 @@ namespace Goblin.Gameplay.Render.Common
         /// 开启绘制
         /// </summary>
         public bool draw { get; set; } = false;
-
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-            stage.eventor.Listen<PhysShapesEvent>(OnPhysShapes);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            stage.eventor.UnListen<PhysShapesEvent>(OnPhysShapes);
-        }
-
-        private void OnPhysShapes(PhysShapesEvent e)
-        {
-            ShapeDrawer.Clear();
-
-            if (false == draw) return;
-
-            foreach (var physinfo in e.physinfos)
-            {
-                Color color = default;
-                switch (physinfo.type)
-                {
-                    case PHYS_SHAPE_DEFINE.GROUND:
-                        color = Color.green;
-                        break;
-                    case PHYS_SHAPE_DEFINE.PLAYER:
-                        color = Color.cyan;
-                        break;
-                    case PHYS_SHAPE_DEFINE.OVERLAP:
-                        color = Color.yellow;
-                        break;
-                }
-                
-                if (physinfo.shape is BoxShape boxshape)
-                {
-                    ShapeDrawer.DrawBox(physinfo.position.ToVector3() + boxshape.center.ToVector3(), boxshape.size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
-                }
-                else if (physinfo.shape is SphereShape sphereshape)
-                {
-                    ShapeDrawer.DrawSphere(physinfo.position.ToVector3() + sphereshape.center.ToVector3(), sphereshape.radius.AsFloat(), color);
-                }
-            }
-        }
+        //
+        // protected override void OnCreate()
+        // {
+        //     base.OnCreate();
+        //     stage.eventor.Listen<PhysShapesEvent>(OnPhysShapes);
+        // }
+        //
+        // protected override void OnDestroy()
+        // {
+        //     base.OnDestroy();
+        //     stage.eventor.UnListen<PhysShapesEvent>(OnPhysShapes);
+        // }
+        //
+        // private void OnPhysShapes(PhysShapesEvent e)
+        // {
+        //     ShapeDrawer.Clear();
+        //
+        //     if (false == draw) return;
+        //
+        //     foreach (var physinfo in e.physinfos)
+        //     {
+        //         Color color = default;
+        //         switch (physinfo.type)
+        //         {
+        //             case PHYS_SHAPE_DEFINE.GROUND:
+        //                 color = Color.green;
+        //                 break;
+        //             case PHYS_SHAPE_DEFINE.PLAYER:
+        //                 color = Color.cyan;
+        //                 break;
+        //             case PHYS_SHAPE_DEFINE.OVERLAP:
+        //                 color = Color.yellow;
+        //                 break;
+        //         }
+        //         
+        //         if (physinfo.shape is BoxShape boxshape)
+        //         {
+        //             ShapeDrawer.DrawBox(physinfo.position.ToVector3() + boxshape.center.ToVector3(), boxshape.size.ToVector3(), physinfo.rotation.ToQuaternion(), color);
+        //         }
+        //         else if (physinfo.shape is SphereShape sphereshape)
+        //         {
+        //             ShapeDrawer.DrawSphere(physinfo.position.ToVector3() + sphereshape.center.ToVector3(), sphereshape.radius.AsFloat(), color);
+        //         }
+        //     }
+        // }
     }
 }

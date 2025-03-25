@@ -1,7 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Inputs;
 using Kowtow.Math;
 using UnityEngine;
 

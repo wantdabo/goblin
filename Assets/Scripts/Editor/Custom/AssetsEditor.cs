@@ -141,7 +141,6 @@ namespace Goblin.Custom
                     val.id = SKILL_ACTION_DEFINE.BOX_DETECTION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.detectedcnt = Convert.ToUInt32(boxDetectionClip.detectedcnt);
                     val.position = new Vector3Data(
                         Convert.ToInt32(boxDetectionClip.position.x * Config.float2Int),
                         Convert.ToInt32(boxDetectionClip.position.y * Config.float2Int),
@@ -160,7 +159,6 @@ namespace Goblin.Custom
                     val.id = SKILL_ACTION_DEFINE.SPHERE_DETECTION;
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.detectedcnt = Convert.ToUInt32(sphereDetectionClip.detectedcnt);
                     val.position = new Vector3Data(
                         Convert.ToInt32(sphereDetectionClip.position.x * Config.float2Int),
                         Convert.ToInt32(sphereDetectionClip.position.y * Config.float2Int),

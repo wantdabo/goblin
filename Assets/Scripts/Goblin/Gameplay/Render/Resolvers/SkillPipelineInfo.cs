@@ -3,14 +3,13 @@ using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.SkillDatas;
 using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.Gameplay.Common.Translations;
-using Goblin.Gameplay.Logic.Common.Extensions;
-using Goblin.Gameplay.Logic.Skills;
 using Goblin.Gameplay.Render.Behaviors;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Effects;
 using MessagePack;
 using System.Collections.Generic;
+using Goblin.Gameplay.Common.Extensions;
 using UnityEngine;
 using Animation = Goblin.Gameplay.Render.Behaviors.Common.Animation;
 

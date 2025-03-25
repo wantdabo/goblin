@@ -1,20 +1,12 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using Goblin.Gameplay.Logic.Actors;
-using Goblin.Gameplay.Logic.Common.StateMachine;
-using Goblin.Gameplay.Logic.Lives;
-using Goblin.Gameplay.Logic.Physics;
-using Goblin.Gameplay.Logic.Physics.Common;
-using Goblin.Gameplay.Logic.Skills;
-using Goblin.Gameplay.Logic.Spatials;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
 using Kowtow;
 using Kowtow.Math;
 using UnityEngine;
-using LStage = Goblin.Gameplay.Logic.Core.Stage;
 
 namespace Goblin.Sys.Gameplay
 {
@@ -94,10 +86,6 @@ namespace Goblin.Sys.Gameplay
         /// </summary>
         public Stage stage { get; private set; }
         /// <summary>
-        /// 逻辑场景
-        /// </summary>
-        private LStage lstage { get; set; }
-        /// <summary>
         /// 背景板
         /// </summary>
         private GameObject background { get; set; }
@@ -105,8 +93,6 @@ namespace Goblin.Sys.Gameplay
         protected override void OnCreate()
         {
             base.OnCreate();
-            engine.ticker.eventor.Listen<TickEvent>(OnTick);
-            engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
             input = AddComp<InputSystem>();
             input.Create();
         }
@@ -114,114 +100,6 @@ namespace Goblin.Sys.Gameplay
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
-            engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
-        }
-        
-        /// <summary>
-        /// 生成木桩
-        /// </summary>
-        private void GenEnemys()
-        {
-            for (int i = 2; i < 7; i++)
-            {
-                var enemy = lstage.AddActor<Player>();
-                enemy.Create();
-                var spatial = enemy.GetBehavior<Spatial>();
-                spatial.position = new FPVector3(i, FP.One, FP.Zero);
-                spatial.eulerAngles = new FPVector3(0, -90, 0);
-                enemy.live.Born();
-            }
-            
-            var enemy2 = lstage.AddActor<Player>();
-            enemy2.Create();
-            var spatial2 = enemy2.GetBehavior<Spatial>();
-            spatial2.position = new FPVector3(19, FP.One, FP.Zero);
-            spatial2.eulerAngles = new FPVector3(0, -90, 0);
-            enemy2.live.Born();
-        }
-        
-        /// <summary>
-        /// 游戏开始
-        /// </summary>
-        public void Start()
-        {
-            Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
-            
-            background = engine.gameres.location.LoadModelSync("Background");
-            background.transform.position = Vector3.zero;
-            
-            gaming = false;
-            gamespeed = 1;
-            
-            lstage = AddComp<LStage>();
-            lstage.Create();
-
-            stage = AddComp<Stage>();
-            stage.Create();
-            stage.foc.SetFollow(1);
-            lstage.eventor.Listen<RILSyncEvent>((e) =>
-            {
-                stage.eventor.Tell(e);
-            });
-            lstage.eventor.Listen<PhysShapesEvent>((e) =>
-            {
-                stage.eventor.Tell(e);
-            });
-
-            var player = lstage.AddActor<Player>();
-            player.Create();
-            player.GetBehavior<Spatial>().position = new FPVector3(FP.Zero, FP.One, FP.Zero);
-            player.live.Born();
-            
-            GenEnemys();
-
-            engine.gameui.Open<GameplayView>();
-
-            Resume();
-        }
-        
-        /// <summary>
-        /// 游戏恢复
-        /// </summary>
-        public void Resume()
-        {
-            gaming = true;
-        }
-
-        /// <summary>
-        /// 游戏暂停
-        /// </summary>
-        public void Pause()
-        {
-            gaming = false;
-        }
-
-        /// <summary>
-        /// 游戏结束
-        /// </summary>
-        public void End()
-        {
-            GameObject.Destroy(background);
-            Pause();
-            stage.Destroy();
-            lstage.Destroy();
-            stage = null;
-            lstage = null;
-        }
-
-        private void OnTick(TickEvent e)
-        {
-            if (false == gaming) return;
-            for (int i = 0; i < gamespeed; i++) stage.Tick(e.tick);
-        }
-
-        private void OnFixedTick(FixedTickEvent e)
-        {
-            if (false == gaming) return;
-
-            input.Input(1, lstage);
-            for (int i = 0; i < gamespeed; i++) lstage.Tick();
         }
     }
 }

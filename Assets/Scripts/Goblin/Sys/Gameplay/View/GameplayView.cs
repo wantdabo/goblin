@@ -49,7 +49,6 @@ namespace Goblin.Sys.Gameplay.View
             
             AddUIEventListener("ExitBtn", (e) =>
             {
-                engine.proxy.gameplay.End();
                 engine.gameui.Open<LobbyView>();
             });
             
@@ -70,7 +69,6 @@ namespace Goblin.Sys.Gameplay.View
             AddUIEventListener("GamingCB", (e) =>
             {
                 var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
-                if (toggle.isOn) engine.proxy.gameplay.Resume(); else engine.proxy.gameplay.Pause();
             });
             
             AddUIEventListener("DanceCB", (e) =>
@@ -82,7 +80,6 @@ namespace Goblin.Sys.Gameplay.View
             AddUIEventListener("PhysDrawerCB", (e) =>
             {
                 var toggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");
-                engine.proxy.gameplay.stage.physdrawer.draw = toggle.isOn;
             });
 
             AddUIEventListener("JoystickArea", (e) =>
