@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
 
@@ -7,6 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(ulong id, StateMachineInfo info)
         {
+            stage.rilsync.PushRIL(id, new RIL_STATE_MACHINE(info.current, info.frames));
         }
     }
 }

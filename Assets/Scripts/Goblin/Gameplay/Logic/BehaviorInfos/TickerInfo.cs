@@ -11,6 +11,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public uint breakframes { get; set; }
         /// <summary>
+        /// 跳帧
+        /// </summary>
+        public bool breaked { get; set; }
+        /// <summary>
         /// 帧号
         /// </summary>
         public uint frame { get; set; }

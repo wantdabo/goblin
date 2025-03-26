@@ -31,5 +31,9 @@ namespace Goblin.Gameplay.Common.Defines
         /// 技能管线数据帧率对逻辑帧率的比例
         /// </summary>
         public static float SP_DATA_LOGIC_FRAME_SCALE { get; private set; } = 1 / LOGIC_SP_DATA_FRAME_SCALE.AsFloat();
+        /// <summary>
+        /// 重力
+        /// </summary>
+        public static FPVector3 GRAVITY { get; private set; } = FPVector3.down * 981 * FP.EN2;
     }
 }

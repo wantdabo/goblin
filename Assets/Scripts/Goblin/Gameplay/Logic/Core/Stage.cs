@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
@@ -40,6 +42,7 @@ namespace Goblin.Gameplay.Logic.Core
     {
         private ulong increment { get; set; } = 0;
         private ulong sa { get; set; } = 0;
+        private Dictionary<Type, Translator> translators { get; set; } = new();
         private List<ulong> actors { get; set; } = new();
         private List<ulong> rmvactors { get; set; } = new();
         private Dictionary<ulong, List<Type>> behaviors { get; set; } = new();
@@ -54,6 +57,10 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (StageState.None != state) return;
             state = StageState.Initialized;
+            
+            // 添加渲染指令翻译器
+            translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
+            translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
 
             sa = AddActor().id;
             AddBehavior<Random>(sa).Initialze(seed);
@@ -88,11 +95,31 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var id in actors)
             {
                 Actor actor = GetActor(id);
-                actor.ticker.Tick();
+                actor.ticker.Tick(actor.ticker.info.tick);
+            }
+            
+            Translators();
+            
+            foreach (var id in actors)
+            {
+                Actor actor = GetActor(id);
+                actor.ticker.LateTick(actor.ticker.info.tick);
             }
             
             Disassembles();
             RmvActors();
+        }
+
+        private void Translators()
+        {
+            foreach (var kv in behaviorinfos)
+            {
+                foreach (var kv2 in kv.Value)
+                {
+                    if (false == translators.TryGetValue(kv2.Key, out var translator)) continue;
+                    translator.Translate(kv.Key, kv2.Value);
+                }
+            }
         }
         
         private void Disassembles()
@@ -146,7 +173,7 @@ namespace Goblin.Gameplay.Logic.Core
             }
             rmvactors.Clear();
         }
-        
+
         public Actor GetActor(ulong id)
         {
             if (false == actors.Contains(id)) return default;

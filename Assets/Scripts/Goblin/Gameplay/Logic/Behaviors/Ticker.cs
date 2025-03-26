@@ -19,35 +19,40 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Ticker : Behavior<TickerInfo>
     {
-        /// <summary>
-        /// 驱动
-        /// </summary>
-        public void Tick()
+        protected override void OnTick(FP tick)
         {
+            base.OnTick(tick);
             info.frame++;
             info.elapsed += info.tick;
+            info.breaked = info.breakframes > 0;
+            info.breakframes--;
+            FPMath.Clamp(info.breakframes, 0, uint.MaxValue);
             
-            if (info.breakframes > 0)
-            {
-                info.breakframes--;
-                return;
-            }
+            if (info.breaked) return;
 
-            // Collection Ticking Behavior && Tick
+            // Ticking Behavior
             List<Type> types = actor.stage.GetBehaviors(actor.id);
-            var tbehaviors = ObjectCache.Get<List<Behavior>>();
             foreach (var type in types)
             {
                 if (null == type.GetCustomAttribute<Ticking>()) continue;
                 var behavior = actor.GetBehavior(type);
-                tbehaviors.Add(behavior);
                 behavior.Tick(info.tick);
             }
-            // LateTick
-            foreach (var behavior in tbehaviors) behavior.LateTick(info.tick);
+        }
+
+        protected override void OnLateTick(FP tick)
+        {
+            base.OnLateTick(tick);
+            if (info.breaked) return;
             
-            tbehaviors.Clear();
-            ObjectCache.Set(tbehaviors);
+            // LateTicking Behavior
+            List<Type> types = actor.stage.GetBehaviors(actor.id);
+            foreach (var type in types)
+            {
+                if (null == type.GetCustomAttribute<Ticking>()) continue;
+                var behavior = actor.GetBehavior(type);
+                behavior.LateTick(info.tick);
+            }
         }
     }
 }

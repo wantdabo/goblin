@@ -4,12 +4,14 @@ namespace Goblin.Gameplay.Logic.Core
     {
         public Stage stage { get; private set; }
 
-        public void Initialize(Stage stage)
+        public Translator Initialize(Stage stage)
         {
             this.stage = stage;
+
+            return this;
         }
 
-        public void RIL(ulong id, BehaviorInfo info)
+        public void Translate(ulong id, BehaviorInfo info)
         {
             OnRIL(id, info);
         }

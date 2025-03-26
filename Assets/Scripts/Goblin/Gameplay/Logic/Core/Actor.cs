@@ -21,25 +21,20 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 驱动器
         /// </summary>
-        public Ticker ticker { get; private set; }
+        public Ticker ticker => stage.GetBehavior<Ticker>(id);
         
         public void Assemble(ulong id, Stage stage)
         {
             this.id = id;
             this.stage = stage;
-            this.ticker = GetBehavior<Ticker>();
-            if (null == this.ticker)
-            {
-                AddBehavior<Ticker>();
-                this.ticker = GetBehavior<Ticker>();
-            }
+            var types = stage.GetBehaviors(id);
+            if (false == types.Contains(typeof(Ticker))) AddBehavior<Ticker>();
         }
         
         public void Disassemble()
         {
             this.id = 0;
             this.stage = null;
-            this.ticker = null;
         }
 
         /// <summary>

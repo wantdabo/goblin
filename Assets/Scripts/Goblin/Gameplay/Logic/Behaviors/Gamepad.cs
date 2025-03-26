@@ -10,9 +10,25 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// Gamepad/手柄
     /// </summary>
-    [Ticking]
     public class Gamepad : Behavior<GamepadInfo>
     {
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            var joystick = GetInput(InputType.Joystick);
+            if (joystick.press)
+            {
+                var movement = actor.GetBehavior<Movement>();
+                var motion = joystick.dire.normalized * 10 * tick;
+                movement.Move(new FPVector3(motion.x, 0, 0));
+            }
+        }
+
+        protected override void OnLateTick(FP tick)
+        {
+            ClearReleaseTokenAll();
+        }
+        
         /// <summary>
         /// 获取手柄的某个按键状态
         /// </summary>
@@ -65,11 +81,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
             input.release = false;
             info.inputdict.Remove(inputType);
             info.inputdict.Add(inputType, input);
-        }
-        
-        protected override void OnLateTick(FP tick)
-        {
-            ClearReleaseTokenAll();
         }
     }
 }
