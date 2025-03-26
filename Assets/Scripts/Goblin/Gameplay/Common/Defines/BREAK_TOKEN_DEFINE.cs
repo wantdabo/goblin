@@ -21,9 +21,5 @@
         /// 受控打断标记
         /// </summary>
         public const int RECV_CONTROL = 4;
-        /// <summary>
-        /// 技能释放打断标记
-        /// </summary>
-        public const int SKILL_CAST = 8;
     }
 }

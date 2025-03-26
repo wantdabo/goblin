@@ -167,20 +167,6 @@ namespace Goblin.Custom
                     val.radius = Convert.ToInt32(sphereDetectionClip.radius * Config.float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
-                else if (clip is EditorBulletEventClip bulletEventClip)
-                {
-                    var val = new BulletEventData();
-                    val.id = SKILL_ACTION_DEFINE.BULLET_EVENT;
-                    val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
-                    val.bulletid = Convert.ToUInt32(bulletEventClip.bulletid);
-                    val.position = new Vector3Data(
-                        Convert.ToInt32(bulletEventClip.position.x * Config.float2Int),
-                        Convert.ToInt32(bulletEventClip.position.y * Config.float2Int),
-                        Convert.ToInt32(bulletEventClip.position.z * Config.float2Int)
-                    );
-                    actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
-                }
                 else if (clip is EditorBreakTokenEventClip skillBreakeventClip)
                 {
                     var val = new BreakTokenEventData();
@@ -191,7 +177,6 @@ namespace Goblin.Custom
                     if (skillBreakeventClip.joystick) val.token |= BREAK_TOKEN_DEFINE.JOYSTICK;
                     if (skillBreakeventClip.recvhurt) val.token |= BREAK_TOKEN_DEFINE.RECV_HURT;
                     if (skillBreakeventClip.recvcontrol) val.token |= BREAK_TOKEN_DEFINE.RECV_CONTROL;
-                    if (skillBreakeventClip.skillcast) val.token |= BREAK_TOKEN_DEFINE.SKILL_CAST;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorBreakFramesEventClip skillBreakFramesEventClip)
