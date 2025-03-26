@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
-using Random = Goblin.Gameplay.Logic.Behaviors.StageBehavior.Random;
+using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -38,7 +38,6 @@ namespace Goblin.Gameplay.Logic.Core
     /// </summary>
     public sealed class Stage
     {
-        public StageState state { get; private set; } = StageState.None;
         private ulong increment { get; set; } = 0;
         private ulong sa { get; set; } = 0;
         private List<ulong> actors { get; set; } = new();
@@ -47,13 +46,18 @@ namespace Goblin.Gameplay.Logic.Core
         private Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfos { get; set; } = new();
         private Dictionary<ulong, Actor> actorassembleds { get; set; } = new();
         private Dictionary<ulong, Dictionary<Type, Behavior>> behaviorassembleds { get; set; } = new();
+        public StageState state { get; private set; } = StageState.None;
         public Random random => GetBehavior<Random>(sa);
+        public RILSync rilsync => GetBehavior<RILSync>(sa);
 
         public void Initialize(int seed, byte[] data)
         {
+            if (StageState.None != state) return;
+            state = StageState.Initialized;
+
             sa = AddActor().id;
             AddBehavior<Random>(sa).Initialze(seed);
-            state = StageState.Initialized;
+            AddBehavior<RILSync>(sa);
         }
 
         public void Start()

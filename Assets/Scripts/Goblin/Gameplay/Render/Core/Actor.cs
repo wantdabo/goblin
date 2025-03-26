@@ -168,45 +168,9 @@ namespace Goblin.Gameplay.Render.Core
             {
                 switch (e.ril.id)
                 {
-                    case RIL_DEFINE.SPATIAL_POSITION:
-                        resolver = AddResolver<SpatialPosition>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.SPATIAL_ROTATION:
-                        resolver = AddResolver<SpatialRotation>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.SPATIAL_SCALE:
-                        resolver = AddResolver<SpatialScale>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.SKILL_PIPELINE_INFO:
-                        resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.BULLET_INFO:
-                        resolver = AddResolver<SkillBulletInfo>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.BUFF_INFO:
-                        resolver = AddResolver<BuffInfo>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.RECV_CURE_INFO:
-                        resolver = AddResolver<RecvCureInfo>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.RECV_HURT_INFO:
-                        resolver = AddResolver<RecvHurtInfo>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.ATTRIBUTE_HP:
-                        resolver = AddResolver<AttributeHP>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.ATTRIBUTE_MAXHP:
-                        resolver = AddResolver<AttributeMaxHP>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.ATTRIBUTE_MOVESPEED:
-                        resolver = AddResolver<AttributeMoveSpeed>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.ATTRIBUTE_ATTACK:
-                        resolver = AddResolver<AttributeAttack>(e.ril.id);
-                        break;
-                    case RIL_DEFINE.SURFACE:
-                        resolver = AddResolver<Surface>(e.ril.id);
-                        break;
+                    // case RIL_DEFINE.SKILL_PIPELINE_INFO:
+                    //     resolver = AddResolver<SkillPipelineInfo>(e.ril.id);
+                    //     break;
                 }
 
                 if (null == resolver) return;

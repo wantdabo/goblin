@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Render.Behaviors.Common
         /// <summary>
         /// 当前播放的动画名
         /// </summary>
-        public string[] names { get; private set; } = new string[STATE_DEFINE.MAX_LAYER];
+        public string[] names { get; private set; } = new string[2];
         /// <summary>
         /// 动画序列
         /// </summary>

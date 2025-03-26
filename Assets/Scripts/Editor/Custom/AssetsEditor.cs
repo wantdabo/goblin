@@ -1,14 +1,14 @@
 using Goblin.Common;
 using Goblin.Common.GameRes;
 using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.SkillDatas;
-using Goblin.Gameplay.Common.SkillDatas.Common;
 using Goblin.SkillPipelineEditor;
 using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Goblin.Gameplay.Common.SkillData;
+using Goblin.Gameplay.Common.SkillData.Common;
 using UnityEditor;
 using UnityEngine;
 using File = UnityEngine.Windows.File;

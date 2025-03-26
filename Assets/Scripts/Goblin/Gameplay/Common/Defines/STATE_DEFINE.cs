@@ -1,4 +1,6 @@
-﻿namespace Goblin.Gameplay.Common.Defines
+﻿using System.Collections.Generic;
+
+namespace Goblin.Gameplay.Common.Defines
 {
     /// <summary>
     /// State 定义
@@ -6,16 +8,33 @@
     public class STATE_DEFINE
     {
         /// <summary>
-        /// 最大层数
+        /// 待机
         /// </summary>
-        public const byte MAX_LAYER = 2;
+        public const byte IDLE = 0;
         /// <summary>
-        /// 第零层
+        /// 移动
         /// </summary>
-        public const byte LAYER_ZERO = 0;
+        public const byte MOVE = 1;
         /// <summary>
-        /// 第一层
+        /// 跳跃
         /// </summary>
-        public const byte LAYER_ONE = 1;
+        public const byte JUMP = 2;
+        /// <summary>
+        /// 下坠
+        /// </summary>
+        public const byte FALL = 3;
+        /// <summary>
+        /// 技能
+        /// </summary>
+        public const byte CASTING = 4;
+
+        public static Dictionary<byte, List<byte>> PASSES { get; private set; } = new()
+        {
+            { IDLE, new List<byte>() { MOVE, FALL, CASTING } },
+            { MOVE, new List<byte>() { IDLE, FALL, CASTING } },
+            { JUMP, new List<byte>() { FALL, CASTING } },
+            { FALL, new List<byte>() { IDLE, CASTING } },
+            { CASTING, new List<byte>() { } }
+        };
     }
 }

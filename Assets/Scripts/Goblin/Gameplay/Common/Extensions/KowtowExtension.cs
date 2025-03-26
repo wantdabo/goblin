@@ -1,4 +1,4 @@
-using Goblin.Gameplay.Common.SkillDatas.Common;
+using Goblin.Gameplay.Common.SkillData.Common;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Common.Extensions
