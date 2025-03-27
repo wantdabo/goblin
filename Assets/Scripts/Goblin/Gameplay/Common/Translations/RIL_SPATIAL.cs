@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Common.Translations
 
         public override string ToString()
         {
-            return $"ID -> {id}, Position -> ({position.x}, {position.y}, {position.z}), Euler -> ({euler.x}, {euler.y}, {euler.z}), Scale -> ({scale.x}, {scale.y}, {scale.z})";
+            return $"RIL_SPATIAL: position={position}, euler={euler}, scale={scale}";
         }
     }
 }

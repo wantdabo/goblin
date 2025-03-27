@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common.Extensions
 {
-    public static class KowtowExtension
+    public static class FPExtension
     {
         /// <summary>
         /// FPVector2 转 Vector2

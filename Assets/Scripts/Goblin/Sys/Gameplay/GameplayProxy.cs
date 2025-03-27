@@ -1,7 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Common.Translations.Common;
-using Goblin.Gameplay.Render.Core;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
 using Kowtow;
@@ -81,10 +80,6 @@ namespace Goblin.Sys.Gameplay
         /// 输入系统
         /// </summary>
         public InputSystem input { get; private set; }
-        /// <summary>
-        /// 渲染场景
-        /// </summary>
-        public Stage stage { get; private set; }
         /// <summary>
         /// 背景板
         /// </summary>

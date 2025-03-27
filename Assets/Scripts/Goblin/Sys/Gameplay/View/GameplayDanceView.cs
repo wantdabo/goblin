@@ -48,16 +48,16 @@ namespace Goblin.Sys.Gameplay.View
                 var go = GameObject.Instantiate(damageOrgGo, contentGo.transform);
                 obj = new GameplayDanceObject(go);
             }
-            var screenpos = engine.proxy.gameplay.stage.foc.eyes.camera.WorldToScreenPoint(e.position);
-            obj.go.transform.position = engine.gameui.uicamera.ScreenToWorldPoint(new Vector3(screenpos.x, screenpos.y, obj.go.transform.position.z));
-            obj.Settings(e.damage);
-            obj.go.SetActive(true);
-            obj.Play();
-            engine.ticker.Timing((t) =>
-            {
-                obj.go.SetActive(false);
-                engine.pool.Set("BLOOD_DANCE_DAMAGE", obj);
-            }, 0.7f, 1);
+            // var screenpos = engine.proxy.gameplay.stage.foc.eyes.camera.WorldToScreenPoint(e.position);
+            // obj.go.transform.position = engine.gameui.uicamera.ScreenToWorldPoint(new Vector3(screenpos.x, screenpos.y, obj.go.transform.position.z));
+            // obj.Settings(e.damage);
+            // obj.go.SetActive(true);
+            // obj.Play();
+            // engine.ticker.Timing((t) =>
+            // {
+            //     obj.go.SetActive(false);
+            //     engine.pool.Set("BLOOD_DANCE_DAMAGE", obj);
+            // }, 0.7f, 1);
         }
     }
 }

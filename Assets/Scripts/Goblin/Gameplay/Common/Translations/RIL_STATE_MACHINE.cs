@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Common.Translations
 
         public override string ToString()
         {
-            return $"ID -> {id}, Current -> {current}, Frames -> {frames}";
+            return $"RIL_STATE_MACHINE: current={current}, frames={frames}";
         }
     }
 }

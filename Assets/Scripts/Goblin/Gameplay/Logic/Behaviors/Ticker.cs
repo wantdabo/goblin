@@ -10,7 +10,7 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class Ticking : Attribute
+    public class Ticking : System.Attribute
     {
     }
     

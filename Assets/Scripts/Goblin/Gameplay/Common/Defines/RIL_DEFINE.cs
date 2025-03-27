@@ -13,5 +13,9 @@
         /// STATE 状态机指令
         /// </summary>
         public const ushort STATE_MACHINE = 2;
+        /// <summary>
+        /// ATTRIBUTE 属性指令
+        /// </summary>
+        public const ushort ATTRIBUTE = 3;
     }
 }
