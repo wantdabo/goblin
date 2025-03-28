@@ -9,12 +9,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     {
         public Dictionary<ulong, Dictionary<ushort, IRIL>> rildict { get; set; }
 
-        public void OnReady()
+        public void Ready()
         {
             rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
         }
 
-        public void OnReset()
+        public void Reset()
         {
             rildict.Clear();
             ObjectCache.Set(rildict);

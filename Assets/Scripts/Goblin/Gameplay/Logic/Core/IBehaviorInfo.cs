@@ -5,8 +5,8 @@ namespace Goblin.Gameplay.Logic.Core
     /// </summary>
     public interface IBehaviorInfo
     {
-        public void OnReady();
+        public void Ready();
         
-        public void OnReset();
+        public void Reset();
     }
 }

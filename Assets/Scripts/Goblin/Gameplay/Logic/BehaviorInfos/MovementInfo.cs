@@ -5,12 +5,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
     public class MovementInfo : IBehaviorInfo
     {
-        public void OnReady()
+        public void Ready()
         {
-            OnReset();
+            Reset();
         }
 
-        public void OnReset()
+        public void Reset()
         {
         }
     }

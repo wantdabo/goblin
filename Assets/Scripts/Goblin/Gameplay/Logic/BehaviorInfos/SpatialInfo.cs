@@ -18,12 +18,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public FPVector3 scale { get; set; }
 
-        public void OnReady()
+        public void Ready()
         {
-            OnReset();
+            Reset();
         }
 
-        public void OnReset()
+        public void Reset()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;

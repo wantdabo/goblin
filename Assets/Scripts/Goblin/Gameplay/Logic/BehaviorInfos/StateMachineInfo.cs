@@ -11,13 +11,13 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public byte current { get; set; } = STATE_DEFINE.IDLE;
         public uint frames { get; set; } = 0;
         
-        public void OnReady()
+        public void Ready()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;
         }
 
-        public void OnReset()
+        public void Reset()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;

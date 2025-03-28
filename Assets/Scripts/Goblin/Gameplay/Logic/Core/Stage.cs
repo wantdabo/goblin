@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
+using Attribute = Goblin.Gameplay.Logic.Behaviors.Attribute;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -13,17 +14,21 @@ namespace Goblin.Gameplay.Logic.Core
     /// </summary>
     public sealed class Stage
     {
-        private ulong sa { get; set; } = 0;
+        private const ulong sa = 0;
         private StageInfo info { get; set; }
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
 
         public void Initialize(int seed, byte[] data)
         {
-            if (null != info) return;
-
-            sa = AddActor().id;
-            info = AddBehaviorInfo<StageInfo>(sa);
+            if (null != info) throw new Exception("you cannot initialize more than once.");
+            
+            info = new();
+            info.Reset();
+            info.actors.Add(sa);
+            var dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>();
+            dict.Add(typeof(StageInfo), info);
+            info.behaviorinfos.Add(sa, dict);
             
             AddBehavior<Random>(sa).Initialze(seed);
             AddBehavior<RILSync>(sa);
@@ -58,9 +63,9 @@ namespace Goblin.Gameplay.Logic.Core
             info.state = StageState.Stopped;
             
             Disassembles();
-            RmvActors();
+            RecycleActors();
             info.rmvactors.AddRange(info.actors);
-            RmvActors();
+            RecycleActors();
         }
 
         public void Tick()
@@ -73,7 +78,7 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var ticker in tickers) ticker.TickEnd();
             
             Disassembles();
-            RmvActors();
+            RecycleActors();
         }
 
         private void Translators()
@@ -113,23 +118,41 @@ namespace Goblin.Gameplay.Logic.Core
             info.behaviorassembleds.Clear();
         }
         
-        private void RmvActors()
+        private void RecycleActors()
         {
             foreach (var rmvactor in info.rmvactors)
             {
-                if (info.behaviorinfos.TryGetValue(rmvactor, out var infos))
+                if (false == info.behaviorinfos.TryGetValue(rmvactor, out var infos))
                 {
-                    foreach (var info in infos.Values)
-                    {
-                        info.OnReset();
-                        ObjectCache.Set(info);
-                    }
-
-                    infos.Clear();
-                    ObjectCache.Set(infos);
+                    info.actors.Remove(rmvactor);
+                    continue;
+                }
+                
+                foreach (var info in infos.Values)
+                {
+                    info.Reset();
+                    ObjectCache.Set(info);
                 }
 
-                info.actors.Remove(rmvactor);
+                infos.Clear();
+                ObjectCache.Set(infos);
+                info.behaviorinfos.Remove(rmvactor);
+                
+                if (false == info.behaviors.TryGetValue(rmvactor, out var types)) continue;
+                
+                foreach (var type in types)
+                {
+                    info.behaviorowners.TryGetValue(type, out var owners);
+                    owners.Remove(rmvactor);
+                            
+                    if (owners.Count > 0) continue;
+                    ObjectCache.Set(owners);
+                    info.behaviorowners.Remove(type);
+                }
+
+                types.Clear();
+                ObjectCache.Set(types);
+                info.behaviors.Remove(rmvactor);
             }
             info.rmvactors.Clear();
         }
@@ -182,9 +205,14 @@ namespace Goblin.Gameplay.Logic.Core
 
         public Behavior GetBehavior(ulong id, Type type)
         {
-            if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
+            if (typeof(Attribute) == type) return GetBehavior<Attribute>(id);
             else if (typeof(Gamepad) == type) return GetBehavior<Gamepad>(id);
+            else if (typeof(Movement) == type) return GetBehavior<Movement>(id);
+            else if (typeof(Random) == type) return GetBehavior<Random>(id);
+            else if (typeof(RILSync) == type) return GetBehavior<RILSync>(id);
             else if (typeof(Spatial) == type) return GetBehavior<Spatial>(id);
+            else if (typeof(StateMachine) == type) return GetBehavior<StateMachine>(id);
+            else if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
 
             return default;
         }
@@ -220,8 +248,10 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviors.TryGetValue(id, out var list)) info.behaviors.Add(id, ObjectCache.Get<List<Type>>());
             if (list.Contains(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
 
+            if (false == info.behaviorowners.TryGetValue(typeof(T), out var owners)) info.behaviorowners.Add(typeof(T), owners = ObjectCache.Get<List<ulong>>());
+            owners.Add(id);
             list.Add(typeof(T));
-
+            
             return GetBehavior<T>(id);
         }
 
@@ -244,7 +274,7 @@ namespace Goblin.Gameplay.Logic.Core
 
             var behaviorinfo = ObjectCache.Get<T>();
             dict.Add(typeof(T), behaviorinfo);
-            behaviorinfo.OnReady();
+            behaviorinfo.Ready();
             
             return behaviorinfo;
         }

@@ -9,12 +9,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public uint moveseed { get; set; }
         public uint attack { get; set; }
         
-        public void OnReady()
+        public void Ready()
         {
-            OnReset();
+            Reset();
         }
 
-        public void OnReset()
+        public void Reset()
         {
             hp = 0;
             maxhp = 0;

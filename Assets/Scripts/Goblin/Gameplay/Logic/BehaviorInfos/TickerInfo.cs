@@ -24,12 +24,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public FP scale { get; set; } = FP.One;
 
-        public void OnReady()
+        public void Ready()
         {
-            OnReset();
+            Reset();
         }
 
-        public void OnReset()
+        public void Reset()
         {
             frame = 0;
             elapsed = FP.Zero;

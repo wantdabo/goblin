@@ -45,11 +45,11 @@ namespace Goblin.Gameplay.Logic.Core
         public Dictionary<ulong, Actor> actorassembleds { get; set; } = new();
         public Dictionary<ulong, Dictionary<Type, Behavior>> behaviorassembleds { get; set; } = new();
         
-        public void OnReady()
+        public void Ready()
         {
         }
 
-        public void OnReset()
+        public void Reset()
         {
         }
     }

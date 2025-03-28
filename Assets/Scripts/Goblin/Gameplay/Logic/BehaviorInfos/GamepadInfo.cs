@@ -55,7 +55,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     {
         public Dictionary<InputType, InputInfo> inputdict { get; set; }
 
-        public void OnReady()
+        public void Ready()
         {
             inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
             inputdict.Add(InputType.Joystick, new InputInfo { press = false, release = false, dire = FPVector2.zero });
@@ -65,7 +65,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             inputdict.Add(InputType.BD, new InputInfo { press = false, release = false, dire = FPVector2.zero });
         }
 
-        public void OnReset()
+        public void Reset()
         {
             inputdict.Clear();
             ObjectCache.Set(inputdict);
