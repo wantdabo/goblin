@@ -94,5 +94,10 @@ namespace Goblin.Sys.Gameplay
         {
             base.OnDestroy();
         }
+
+        public void CreateGame()
+        {
+            
+        }
     }
 }

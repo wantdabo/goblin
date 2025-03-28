@@ -9,102 +9,68 @@ using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// 场景状态
-    /// </summary>
-    public enum StageState
-    {
-        /// <summary>
-        /// 无
-        /// </summary>
-        None,
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        Initialized,
-        /// <summary>
-        /// 暂停中
-        /// </summary>
-        Paused,
-        /// <summary>
-        /// 驱动中
-        /// </summary>
-        Ticking,
-        /// <summary>
-        /// 停止了
-        /// </summary>
-        Stopped,
-    }
-    
-    /// <summary>
     /// 场景
     /// </summary>
     public sealed class Stage
     {
-        private ulong increment { get; set; } = 0;
         private ulong sa { get; set; } = 0;
-        private Dictionary<Type, Translator> translators { get; set; } = new();
-        private List<ulong> actors { get; set; } = new();
-        private List<ulong> rmvactors { get; set; } = new();
-        private Dictionary<ulong, List<Type>> behaviors { get; set; } = new();
-        private Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfos { get; set; } = new();
-        private Dictionary<ulong, Actor> actorassembleds { get; set; } = new();
-        private Dictionary<ulong, Dictionary<Type, Behavior>> behaviorassembleds { get; set; } = new();
-        public StageState state { get; private set; } = StageState.None;
+        private StageInfo info { get; set; }
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
 
         public void Initialize(int seed, byte[] data)
         {
-            if (StageState.None != state) return;
-            state = StageState.Initialized;
-            
-            // 添加渲染指令翻译器
-            translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
-            translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
+            if (null != info) return;
 
             sa = AddActor().id;
+            info = AddBehaviorInfo<StageInfo>(sa);
+            
             AddBehavior<Random>(sa).Initialze(seed);
             AddBehavior<RILSync>(sa);
+            
+            info.state = StageState.Initialized;
+            // 添加渲染指令翻译器
+            info.translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
+            info.translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
         }
 
         public void Start()
         {
-            if (StageState.Initialized != state) return;
-            state = StageState.Ticking;
+            if (StageState.Initialized != info.state) return;
+            info.state = StageState.Ticking;
         }
 
         public void Pause()
         {
-            if (StageState.Ticking != state) return;
+            if (StageState.Ticking != info.state) return;
+            info.state = StageState.Paused;
         }
         
         public void Resume()
         {
-            if (StageState.Paused != state) return;
+            if (StageState.Paused != info.state) return;
+            info.state = StageState.Ticking;
         }
 
         public void Stop()
         {
-            if (StageState.Stopped == state) return;
+            if (StageState.Stopped == info.state) return;
+            info.state = StageState.Stopped;
+            
+            Disassembles();
+            RmvActors();
+            info.rmvactors.AddRange(info.actors);
+            RmvActors();
         }
 
         public void Tick()
         {
-            if (StageState.Ticking != state) return;
-            
-            foreach (var id in actors)
-            {
-                Actor actor = GetActor(id);
-                actor.ticker.Tick(actor.ticker.info.tick);
-            }
-            
+            if (StageState.Ticking != info.state) return;
+
+            var tickers = GetBehaviors<Ticker>();
+            foreach (var ticker in tickers) ticker.Tick(info.timescale * ticker.info.tick);
             Translators();
-            
-            foreach (var id in actors)
-            {
-                Actor actor = GetActor(id);
-                actor.ticker.LateTick(actor.ticker.info.tick);
-            }
+            foreach (var ticker in tickers) ticker.TickEnd();
             
             Disassembles();
             RmvActors();
@@ -112,11 +78,11 @@ namespace Goblin.Gameplay.Logic.Core
 
         private void Translators()
         {
-            foreach (var kv in behaviorinfos)
+            foreach (var kv in info.behaviorinfos)
             {
                 foreach (var kv2 in kv.Value)
                 {
-                    if (false == translators.TryGetValue(kv2.Key, out var translator)) continue;
+                    if (false == info.translators.TryGetValue(kv2.Key, out var translator)) continue;
                     translator.Translate(kv.Key, kv2.Value);
                 }
             }
@@ -124,9 +90,9 @@ namespace Goblin.Gameplay.Logic.Core
         
         private void Disassembles()
         {
-            foreach (var id in actors)
+            foreach (var id in info.actors)
             {
-                foreach (var type in GetBehaviors(id))
+                foreach (var type in GetBehaviorTypes(id))
                 {
                     Behavior behavior = GetBehavior(id, type);
                     behavior.Disassemble();
@@ -138,30 +104,24 @@ namespace Goblin.Gameplay.Logic.Core
                 ObjectCache.Set(actor);
             }
             
-            actorassembleds.Clear();
-            foreach (var kv in behaviorassembleds)
+            info.actorassembleds.Clear();
+            foreach (var kv in info.behaviorassembleds)
             {
                 kv.Value.Clear();
                 ObjectCache.Set(kv.Value);
             }
-            behaviorassembleds.Clear();
+            info.behaviorassembleds.Clear();
         }
         
         private void RmvActors()
         {
-            foreach (var rmvactor in rmvactors)
+            foreach (var rmvactor in info.rmvactors)
             {
-                if (behaviors.TryGetValue(rmvactor, out var types))
-                {
-                    types.Clear();
-                    ObjectCache.Set(types);
-                }
-
-                if (behaviorinfos.TryGetValue(rmvactor, out var infos))
+                if (info.behaviorinfos.TryGetValue(rmvactor, out var infos))
                 {
                     foreach (var info in infos.Values)
                     {
-                        info.Reset();
+                        info.OnReset();
                         ObjectCache.Set(info);
                     }
 
@@ -169,46 +129,57 @@ namespace Goblin.Gameplay.Logic.Core
                     ObjectCache.Set(infos);
                 }
 
-                actors.Remove(rmvactor);
+                info.actors.Remove(rmvactor);
             }
-            rmvactors.Clear();
+            info.rmvactors.Clear();
         }
 
         public Actor GetActor(ulong id)
         {
-            if (false == actors.Contains(id)) return default;
+            if (false == info.actors.Contains(id)) return default;
             
-            if (actorassembleds.TryGetValue(id, out var a)) return a;
+            if (info.actorassembleds.TryGetValue(id, out var a)) return a;
 
             var actor = ObjectCache.Get<Actor>();
             actor.Assemble(id,this);
-            actorassembleds.Add(id, actor);
+            info.actorassembleds.Add(id, actor);
             
             return actor;
         }
 
         public void RmvActor(ulong id)
         {
-            if (rmvactors.Contains(id)) return;
-            rmvactors.Add(id);
+            if (info.rmvactors.Contains(id)) return;
+            info.rmvactors.Add(id);
         }
 
         public Actor AddActor()
         {
-            increment++;
-            actors.Add(increment);
+            info.increment++;
+            info.actors.Add(info.increment);
 
-            return GetActor(increment);
+            return GetActor(info.increment);
         }
         
-        public List<Type> GetBehaviors(ulong id)
+        public List<Type> GetBehaviorTypes(ulong id)
         {
-            if (false == actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            if (false == behaviors.TryGetValue(id, out var list)) return default;
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == info.behaviors.TryGetValue(id, out var list)) return default;
 
             return list;
         }
-        
+
+        public List<T> GetBehaviors<T>() where T : Behavior
+        {
+            var type = typeof(T);
+            if (false == info.behaviorowners.TryGetValue(type, out var owners) && 0 == owners.Count) return default;
+
+            var list = ObjectCache.Get<List<T>>();
+            foreach (var owner in owners) list.Add(GetBehavior(owner, type) as T);
+
+            return list;
+        }
+
         public Behavior GetBehavior(ulong id, Type type)
         {
             if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
@@ -220,12 +191,12 @@ namespace Goblin.Gameplay.Logic.Core
 
         public T GetBehavior<T>(ulong id) where T : Behavior, new()
         {
-            if (false == actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             
-            if (false == behaviors.TryGetValue(id, out var list)) return default;
+            if (false == info.behaviors.TryGetValue(id, out var list)) return default;
             if (false == list.Contains(typeof(T))) return default;
             
-            if (behaviorassembleds.TryGetValue(id, out var dict) && dict.TryGetValue(typeof(T), out var b))
+            if (info.behaviorassembleds.TryGetValue(id, out var dict) && dict.TryGetValue(typeof(T), out var b))
             {
                 return b as T;
             }
@@ -236,7 +207,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (null == dict)
             {
                 dict = ObjectCache.Get<Dictionary<Type, Behavior>>();
-                behaviorassembleds.Add(id, dict);
+                info.behaviorassembleds.Add(id, dict);
             }
             dict.Add(typeof(T), behavior);
 
@@ -245,8 +216,8 @@ namespace Goblin.Gameplay.Logic.Core
 
         public T AddBehavior<T>(ulong id) where T : Behavior, new()
         {
-            if (false == actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            if (false == behaviors.TryGetValue(id, out var list)) behaviors.Add(id, ObjectCache.Get<List<Type>>());
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == info.behaviors.TryGetValue(id, out var list)) info.behaviors.Add(id, ObjectCache.Get<List<Type>>());
             if (list.Contains(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
 
             list.Add(typeof(T));
@@ -254,28 +225,28 @@ namespace Goblin.Gameplay.Logic.Core
             return GetBehavior<T>(id);
         }
 
-        public T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
+        public T GetBehaviorInfo<T>(ulong id) where T : IBehaviorInfo
         {
-            if (false == behaviorinfos.TryGetValue(id, out var dict)) return default;
-            if (false == dict.TryGetValue(typeof(T), out var info)) return default;
+            if (false == info.behaviorinfos.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
 
-            return info as T;
+            return (T)behaviorinfo;
         }
         
-        public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
+        public T AddBehaviorInfo<T>(ulong id) where T : IBehaviorInfo, new()
         {
-            if (false == actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            if (false == behaviorinfos.TryGetValue(id, out var dict))
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == info.behaviorinfos.TryGetValue(id, out var dict))
             {
-                behaviorinfos.Add(id, ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+                info.behaviorinfos.Add(id, ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>());
             }
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 
-            var info = ObjectCache.Get<T>();
-            dict.Add(typeof(T), info);
-            info.Ready();
+            var behaviorinfo = ObjectCache.Get<T>();
+            dict.Add(typeof(T), behaviorinfo);
+            behaviorinfo.OnReady();
             
-            return info;
+            return behaviorinfo;
         }
     }
 }

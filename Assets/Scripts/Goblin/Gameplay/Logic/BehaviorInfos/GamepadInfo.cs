@@ -51,11 +51,11 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public FPVector2 dire { get; set; }
     }
     
-    public class GamepadInfo : BehaviorInfo
+    public class GamepadInfo : IBehaviorInfo
     {
         public Dictionary<InputType, InputInfo> inputdict { get; set; }
 
-        protected override void OnReady()
+        public void OnReady()
         {
             inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
             inputdict.Add(InputType.Joystick, new InputInfo { press = false, release = false, dire = FPVector2.zero });
@@ -65,7 +65,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             inputdict.Add(InputType.BD, new InputInfo { press = false, release = false, dire = FPVector2.zero });
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
             inputdict.Clear();
             ObjectCache.Set(inputdict);

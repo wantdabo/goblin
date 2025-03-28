@@ -23,14 +23,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             base.OnTick(tick);
             info.frame++;
             info.elapsed += info.tick;
-            info.breaked = info.breakframes > 0;
-            info.breakframes--;
-            FPMath.Clamp(info.breakframes, 0, uint.MaxValue);
-            
-            if (info.breaked) return;
-
             // Ticking Behavior
-            List<Type> types = actor.stage.GetBehaviors(actor.id);
+            List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
                 if (null == type.GetCustomAttribute<Ticking>()) continue;
@@ -39,18 +33,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
         }
 
-        protected override void OnLateTick(FP tick)
+        protected override void OnTickEnd()
         {
-            base.OnLateTick(tick);
-            if (info.breaked) return;
-            
-            // LateTicking Behavior
-            List<Type> types = actor.stage.GetBehaviors(actor.id);
+            base.OnTickEnd();
+            // TickEnd Behavior
+            List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
                 if (null == type.GetCustomAttribute<Ticking>()) continue;
                 var behavior = actor.GetBehavior(type);
-                behavior.LateTick(info.tick);
+                behavior.TickEnd();
             }
         }
     }

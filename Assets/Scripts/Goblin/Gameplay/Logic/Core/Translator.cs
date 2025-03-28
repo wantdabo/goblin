@@ -11,19 +11,19 @@ namespace Goblin.Gameplay.Logic.Core
             return this;
         }
 
-        public void Translate(ulong id, BehaviorInfo info)
+        public void Translate(ulong id, IBehaviorInfo info)
         {
             OnRIL(id, info);
         }
 
-        protected virtual void OnRIL(ulong id, BehaviorInfo info)
+        protected virtual void OnRIL(ulong id, IBehaviorInfo info)
         {
         }
     }
     
-    public abstract class Translator<T> : Translator where T : BehaviorInfo
+    public abstract class Translator<T> : Translator where T : IBehaviorInfo
     {
-        protected override void OnRIL(ulong id, BehaviorInfo info)
+        protected override void OnRIL(ulong id, IBehaviorInfo info)
         {
             base.OnRIL(id, info);
             OnRIL(id, (T)info);

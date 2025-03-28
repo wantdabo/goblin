@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
         }
 
-        protected override void OnLateTick(FP tick)
+        protected override void OnTickEnd()
         {
             ClearReleaseTokenAll();
         }

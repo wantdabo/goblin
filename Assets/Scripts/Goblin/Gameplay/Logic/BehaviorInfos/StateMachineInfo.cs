@@ -6,18 +6,18 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class StateMachineInfo : BehaviorInfo
+    public class StateMachineInfo : IBehaviorInfo
     {
         public byte current { get; set; } = STATE_DEFINE.IDLE;
         public uint frames { get; set; } = 0;
         
-        protected override void OnReady()
+        public void OnReady()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;

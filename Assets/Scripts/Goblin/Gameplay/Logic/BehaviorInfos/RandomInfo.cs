@@ -2,7 +2,7 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class RandomInfo : BehaviorInfo
+    public class RandomInfo : IBehaviorInfo
     {
         public long a { get; private set; } = 1664525;
         public long c { get; private set; } = 1013904223;
@@ -10,12 +10,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public long seed { get; set; }
         public long current { get; set; }
 
-        protected override void OnReady()
+        public void OnReady()
         {
             OnReset();
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
             seed = 0;
             current = 0;

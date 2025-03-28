@@ -5,16 +5,16 @@ using Goblin.Gameplay.Logic.RIL.Common;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class RIlSyncInfo : BehaviorInfo
+    public class RIlSyncInfo : IBehaviorInfo
     {
         public Dictionary<ulong, Dictionary<ushort, IRIL>> rildict { get; set; }
 
-        protected override void OnReady()
+        public void OnReady()
         {
             rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
             rildict.Clear();
             ObjectCache.Set(rildict);

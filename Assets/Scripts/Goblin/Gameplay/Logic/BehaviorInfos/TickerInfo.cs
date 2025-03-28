@@ -1,19 +1,12 @@
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class TickerInfo : BehaviorInfo
+    public class TickerInfo : IBehaviorInfo
     {
-        /// <summary>
-        /// 跳帧
-        /// </summary>
-        public uint breakframes { get; set; }
-        /// <summary>
-        /// 跳帧
-        /// </summary>
-        public bool breaked { get; set; }
         /// <summary>
         /// 帧号
         /// </summary>
@@ -25,19 +18,21 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 时间间隔
         /// </summary>
-        public FP tick { get; private set; } = GAME_DEFINE.LOGIC_TICK;
+        public FP tick => GAME_DEFINE.LOGIC_TICK * scale;
+        /// <summary>
+        /// 时间缩放
+        /// </summary>
+        public FP scale { get; set; } = FP.One;
 
-        protected override void OnReady()
+        public void OnReady()
         {
             OnReset();
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
-            breakframes = 0;
             frame = 0;
             elapsed = FP.Zero;
-            tick = GAME_DEFINE.LOGIC_TICK;
         }
     }
 }

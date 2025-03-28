@@ -3,14 +3,14 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class MovementInfo : BehaviorInfo
+    public class MovementInfo : IBehaviorInfo
     {
-        protected override void OnReady()
+        public void OnReady()
         {
             OnReset();
         }
 
-        protected override void OnReset()
+        public void OnReset()
         {
         }
     }

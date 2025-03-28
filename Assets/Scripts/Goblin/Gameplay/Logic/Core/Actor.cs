@@ -18,17 +18,11 @@ namespace Goblin.Gameplay.Logic.Core
         /// 场景
         /// </summary>
         public Stage stage { get; private set; }
-        /// <summary>
-        /// 驱动器
-        /// </summary>
-        public Ticker ticker => stage.GetBehavior<Ticker>(id);
         
         public void Assemble(ulong id, Stage stage)
         {
             this.id = id;
             this.stage = stage;
-            var types = stage.GetBehaviors(id);
-            if (false == types.Contains(typeof(Ticker))) AddBehavior<Ticker>();
         }
         
         public void Disassemble()

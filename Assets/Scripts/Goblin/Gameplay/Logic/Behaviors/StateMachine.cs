@@ -43,9 +43,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.frames++;
         }
 
-        protected override void OnLateTick(FP tick)
+        protected override void OnTickEnd()
         {
-            base.OnLateTick(tick);
+            base.OnTickEnd();
             ChangeState(STATE_DEFINE.IDLE);
         }
     }

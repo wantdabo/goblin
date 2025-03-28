@@ -30,9 +30,9 @@ namespace Goblin.Gameplay.Logic.Core
             OnTick(tick);
         }
 
-        public void LateTick(FP tick)
+        public void TickEnd()
         {
-            OnLateTick(tick);
+            OnTickEnd();
         }
 
         protected virtual void OnAssemble()
@@ -47,12 +47,12 @@ namespace Goblin.Gameplay.Logic.Core
         {
         }
         
-        protected virtual void OnLateTick(FP tick)
+        protected virtual void OnTickEnd()
         {
         }
     }
 
-    public abstract class Behavior<T> : Behavior where T : BehaviorInfo, new()
+    public abstract class Behavior<T> : Behavior where T : IBehaviorInfo, new()
     {
         private T minfo { get; set; }
         /// <summary>
