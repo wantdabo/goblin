@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Common.Defines;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 

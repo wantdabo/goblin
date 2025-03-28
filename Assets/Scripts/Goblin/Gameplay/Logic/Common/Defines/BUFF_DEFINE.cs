@@ -1,4 +1,4 @@
-﻿namespace Goblin.Gameplay.Common.Defines
+﻿namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
     /// Buff 定义

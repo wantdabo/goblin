@@ -1,7 +1,7 @@
-using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.Translations.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL.Common;
 
-namespace Goblin.Gameplay.Common.Translations
+namespace Goblin.Gameplay.Logic.RIL
 {
     /// <summary>
     /// 状态机渲染指令

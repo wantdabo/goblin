@@ -1,4 +1,4 @@
-﻿namespace Goblin.Gameplay.Common.Defines
+﻿namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
     /// SkillAction/技能行为定义

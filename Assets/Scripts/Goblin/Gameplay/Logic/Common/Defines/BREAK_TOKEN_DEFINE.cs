@@ -1,4 +1,4 @@
-﻿namespace Goblin.Gameplay.Common.Defines
+﻿namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
     /// 打断标记定义

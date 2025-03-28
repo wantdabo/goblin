@@ -1,7 +1,7 @@
 using Goblin.Gameplay.Common.SkillData.Common;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Common.Extensions
+namespace Goblin.Gameplay.Logic.Common.Extensions
 {
     public static class KowtowExtension
     {

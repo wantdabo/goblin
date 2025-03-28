@@ -1,6 +1,5 @@
 using Goblin.Common;
 using Goblin.Common.GameRes;
-using Goblin.Gameplay.Common.Defines;
 using Goblin.SkillPipelineEditor;
 using MessagePack;
 using System;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using Goblin.Gameplay.Common.SkillData;
 using Goblin.Gameplay.Common.SkillData.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using UnityEditor;
 using UnityEngine;
 using File = UnityEngine.Windows.File;

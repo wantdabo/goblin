@@ -1,4 +1,4 @@
-﻿namespace Goblin.Gameplay.Common.Defines
+﻿namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
     /// 技能管线状态定义

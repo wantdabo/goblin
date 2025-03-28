@@ -1,4 +1,4 @@
-﻿using Goblin.Gameplay.Common.Defines;
+﻿using Goblin.Gameplay.Logic.Common.Defines;
 using UnityEngine;
 using UnityEngine.Serialization;
 

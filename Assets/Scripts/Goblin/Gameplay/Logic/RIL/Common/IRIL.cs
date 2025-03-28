@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 
-namespace Goblin.Gameplay.Common.Translations.Common
+namespace Goblin.Gameplay.Logic.RIL.Common
 {
     /// <summary>
     /// 渲染指令事件

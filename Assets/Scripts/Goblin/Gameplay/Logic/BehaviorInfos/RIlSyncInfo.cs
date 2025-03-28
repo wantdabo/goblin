@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.Common;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {

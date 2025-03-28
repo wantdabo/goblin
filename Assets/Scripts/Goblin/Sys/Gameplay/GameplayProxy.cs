@@ -1,6 +1,4 @@
 ﻿using Goblin.Common;
-using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.Translations.Common;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
 using Kowtow;

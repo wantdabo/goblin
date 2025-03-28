@@ -1,6 +1,6 @@
-using Goblin.Gameplay.Common.Translations;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL;
 
 namespace Goblin.Gameplay.Logic.Translators
 {

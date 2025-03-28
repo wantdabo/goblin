@@ -1,8 +1,8 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Common.Translations.Common;
+﻿using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL.Common;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Common.Translations
+namespace Goblin.Gameplay.Logic.RIL
 {
     /// <summary>
     /// 空间渲染指令

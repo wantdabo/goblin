@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Goblin.Gameplay.Common.Defines
+namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
     /// State 定义
