@@ -34,6 +34,8 @@ namespace Goblin.Sys.Lobby.View
             AddUIEventListener("LocalGame", (e) =>
             {
                 engine.gameui.Close(this);
+                engine.proxy.gameplay.CreateGame();
+                engine.proxy.gameplay.StartGame();
             });
         }
     }

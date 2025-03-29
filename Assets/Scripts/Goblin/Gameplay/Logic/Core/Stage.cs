@@ -35,6 +35,7 @@ namespace Goblin.Gameplay.Logic.Core
             
             info.state = StageState.Initialized;
             // 添加渲染指令翻译器
+            info.translators.Add(typeof(AttributeInfo), new Translators.Attribute().Initialize(this));
             info.translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
             info.translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
         }
@@ -73,9 +74,15 @@ namespace Goblin.Gameplay.Logic.Core
             if (StageState.Ticking != info.state) return;
 
             var tickers = GetBehaviors<Ticker>();
-            foreach (var ticker in tickers) ticker.Tick(info.timescale * ticker.info.tick);
-            Translators();
-            foreach (var ticker in tickers) ticker.TickEnd();
+            if (null != tickers)
+            {
+                foreach (var ticker in tickers) ticker.Tick(info.timescale * ticker.info.tick);
+                Translators();
+                foreach (var ticker in tickers) ticker.TickEnd();
+                
+                tickers.Clear();
+                ObjectCache.Set(tickers);
+            }
             
             Disassembles();
             RecycleActors();
@@ -195,7 +202,7 @@ namespace Goblin.Gameplay.Logic.Core
         public List<T> GetBehaviors<T>() where T : Behavior
         {
             var type = typeof(T);
-            if (false == info.behaviorowners.TryGetValue(type, out var owners) && 0 == owners.Count) return default;
+            if (false == info.behaviorowners.TryGetValue(type, out var owners) || 0 == owners.Count) return default;
 
             var list = ObjectCache.Get<List<T>>();
             foreach (var owner in owners) list.Add(GetBehavior(owner, type) as T);
@@ -245,7 +252,7 @@ namespace Goblin.Gameplay.Logic.Core
         public T AddBehavior<T>(ulong id) where T : Behavior, new()
         {
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            if (false == info.behaviors.TryGetValue(id, out var list)) info.behaviors.Add(id, ObjectCache.Get<List<Type>>());
+            if (false == info.behaviors.TryGetValue(id, out var list)) info.behaviors.Add(id, list = ObjectCache.Get<List<Type>>());
             if (list.Contains(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
 
             if (false == info.behaviorowners.TryGetValue(typeof(T), out var owners)) info.behaviorowners.Add(typeof(T), owners = ObjectCache.Get<List<ulong>>());
@@ -268,7 +275,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             if (false == info.behaviorinfos.TryGetValue(id, out var dict))
             {
-                info.behaviorinfos.Add(id, ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>());
+                info.behaviorinfos.Add(id, dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>());
             }
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 
