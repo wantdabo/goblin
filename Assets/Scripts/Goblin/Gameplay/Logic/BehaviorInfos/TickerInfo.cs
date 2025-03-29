@@ -7,10 +7,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     public class TickerInfo : IBehaviorInfo
     {
         /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
-        /// <summary>
         /// 流逝时间
         /// </summary>
         public FP elapsed { get; set; }
@@ -30,7 +26,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         public void Reset()
         {
-            frame = 0;
             elapsed = FP.Zero;
         }
     }

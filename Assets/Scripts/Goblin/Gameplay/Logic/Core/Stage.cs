@@ -71,7 +71,10 @@ namespace Goblin.Gameplay.Logic.Core
         public void Tick()
         {
             if (StageState.Ticking != info.state) return;
-
+            
+            info.frame++;
+            info.elapsed += info.tick;
+            
             var tickers = GetBehaviors<Ticker>();
             if (null != tickers)
             {

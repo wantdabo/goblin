@@ -21,8 +21,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            info.frame++;
-            info.elapsed += info.tick;
+            info.elapsed += info.scale * info.tick;
             // Ticking Behavior
             List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)

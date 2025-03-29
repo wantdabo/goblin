@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -34,6 +35,16 @@ namespace Goblin.Gameplay.Logic.Core
     public class StageInfo : IBehaviorInfo
     {
         public StageState state { get; set; } = StageState.None;
+        /// <summary>
+        /// 帧号
+        /// </summary>
+        public uint frame { get; set; }
+        /// <summary>
+        /// 流逝时间
+        /// </summary>
+        public FP elapsed { get; set; }
+
+        public FP tick => GAME_DEFINE.LOGIC_TICK * timescale;
         public FP timescale { get; set; } = FP.One;
         public ulong increment { get; set; } = 0;
         public Dictionary<Type, Translator> translators { get; set; } = new();
