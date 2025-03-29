@@ -57,7 +57,7 @@ namespace Goblin.Common.Sounds
         {
             if (null == sound) return;
 
-            engine.pool.Set($"SOUND_KEY{sound.res}", sound);
+            engine.pool.Set(sound, $"SOUND_KEY{sound.res}");
         }
     }
 }

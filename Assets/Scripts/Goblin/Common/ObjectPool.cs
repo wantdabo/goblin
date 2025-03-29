@@ -19,14 +19,12 @@ namespace Goblin.Common
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
-        /// <param name="callback">回调（成功获取才会执行）</param>
         /// <returns>实例化对象</returns>
-        public T Get<T>(string key, Action<T> callback = null)
+        public T Get<T>(string key)
         {
             if (pool.TryGetValue(typeof(T), out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {
                 var obj = (T)queue.Dequeue();
-                callback?.Invoke(obj);
 
                 return obj;
             }
@@ -38,10 +36,9 @@ namespace Goblin.Common
         /// 将一个实例化对象存入对象池
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
-        /// <param name="key">KEY/关键字</param>
         /// <param name="obj">实例化对象</param>
-        /// <param name="callback">回调（成功存入才会执行）</param>
-        public void Set<T>(string key, T obj, Action<T> callback = null)
+        /// <param name="key">KEY/关键字</param>
+        public void Set<T>(T obj, string key = "")
         {
             if (null == obj) return;
 
@@ -59,7 +56,6 @@ namespace Goblin.Common
             if (queue.Contains(obj)) return;
             
             queue.Enqueue(obj);
-            callback?.Invoke(obj);
         }
     }
 }
