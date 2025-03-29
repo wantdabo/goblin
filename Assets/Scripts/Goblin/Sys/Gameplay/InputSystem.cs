@@ -45,10 +45,13 @@ namespace Goblin.Sys.Gameplay
             var gamepad = player.GetBehavior<Gamepad>();
             
             var dir = joystickdire;
-            if (Vector2.zero != dir) if (dir.x > 0) dir.x = 1 * Config.float2Int; else dir.x = -1 * Config.float2Int;
-            dir.y = 0;
-            
-            var tsdir = new FPVector2 { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = FP.Zero };
+            if (Vector2.zero != dir)
+            {
+                dir.x  = dir.x * Config.float2Int;
+                dir.y = dir.y * Config.float2Int;
+            }   
+
+            var tsdir = new FPVector2 { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = Mathf.CeilToInt(dir.y) * FP.EN3 };
             var joystick = new InputInfo() { press = tsdir != FPVector2.zero, dire = tsdir };
             
             gamepad.SetInput(InputType.Joystick, joystick);

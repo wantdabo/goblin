@@ -10,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// Gamepad/手柄
     /// </summary>
+    [Ticking]
     public class Gamepad : Behavior<GamepadInfo>
     {
         protected override void OnTick(FP tick)
@@ -18,9 +19,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var joystick = GetInput(InputType.Joystick);
             if (joystick.press)
             {
+                var attribute = actor.GetBehavior<Attribute>();
                 var movement = actor.GetBehavior<Movement>();
-                var motion = joystick.dire.normalized * 10 * tick;
-                movement.Move(new FPVector3(motion.x, 0, 0));
+                var motion = joystick.dire.normalized * attribute.info.moveseed * tick;
+                movement.Move(new FPVector3(motion.x, 0, motion.y));
             }
         }
 

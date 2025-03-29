@@ -16,10 +16,5 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var spatial = actor.GetBehavior<Spatial>();
             spatial.info.position += motion;
         }
-        
-        protected override void OnTick(FP tick)
-        {
-            base.OnTick(tick);
-        }
     }
 }

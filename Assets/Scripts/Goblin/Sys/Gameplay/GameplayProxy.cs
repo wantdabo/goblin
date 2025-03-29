@@ -107,10 +107,15 @@ namespace Goblin.Sys.Gameplay
             stage.Initialize(19491001, null);
 
             var actor = stage.AddActor();
-            actor.AddBehavior<Attribute>();
             actor.AddBehavior<Ticker>();
+            actor.AddBehavior<Attribute>();
+            actor.AddBehavior<Gamepad>();
+            actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Spatial>();
+            actor.AddBehavior<Movement>();
             
+            var attribute = actor.GetBehavior<Attribute>();
+            attribute.info.moveseed = 10;
         }
 
         public void StartGame()
@@ -136,6 +141,27 @@ namespace Goblin.Sys.Gameplay
         private void OnFixedTick(FixedTickEvent e)
         {
             if (null == stage) return;
+            input.joystickdire = Vector2.zero;
+            
+            if (Input.GetKey(KeyCode.W))
+            {
+                input.joystickdire += Vector2.up;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                input.joystickdire += Vector2.down;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                input.joystickdire += Vector2.left;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                input.joystickdire += Vector2.right;
+            }
+
+            input.Input(1, stage);
+
             stage.Tick();
         }
     }
