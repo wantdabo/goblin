@@ -19,9 +19,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var joystick = GetInput(InputType.Joystick);
             if (joystick.press)
             {
-                var attribute = actor.GetBehavior<Attribute>();
+                var attribute = actor.GetBehaviorInfo<AttributeInfo>();
                 var movement = actor.GetBehavior<Movement>();
-                var motion = joystick.dire.normalized * attribute.info.moveseed * tick;
+                var motion = joystick.dire.normalized * attribute.moveseed * tick;
                 movement.Move(new FPVector3(motion.x, 0, motion.y));
             }
         }

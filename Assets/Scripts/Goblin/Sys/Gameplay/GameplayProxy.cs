@@ -1,11 +1,14 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Translators;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
 using Kowtow;
 using Kowtow.Math;
 using UnityEngine;
+using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
 using Ticker = Goblin.Gameplay.Logic.Behaviors.Ticker;
 
 namespace Goblin.Sys.Gameplay
@@ -107,15 +110,15 @@ namespace Goblin.Sys.Gameplay
             stage.Initialize(19491001, null);
 
             var actor = stage.AddActor();
+            actor.AddBehaviorInfo<AttributeInfo>();
+            actor.AddBehaviorInfo<SpatialInfo>();
             actor.AddBehavior<Ticker>();
-            actor.AddBehavior<Attribute>();
             actor.AddBehavior<Gamepad>();
             actor.AddBehavior<StateMachine>();
-            actor.AddBehavior<Spatial>();
             actor.AddBehavior<Movement>();
             
-            var attribute = actor.GetBehavior<Attribute>();
-            attribute.info.moveseed = 10;
+            var attribute = actor.GetBehaviorInfo<AttributeInfo>();
+            attribute.moveseed = 10;
         }
 
         public void StartGame()
@@ -161,6 +164,9 @@ namespace Goblin.Sys.Gameplay
             }
 
             input.Input(1, stage);
+
+            var spatial = stage.GetBehaviorInfo<SpatialInfo>(1);
+            Debug.Log($"Spatial.Position ---------> {spatial.position}");
 
             stage.Tick();
         }

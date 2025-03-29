@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
-using Attribute = Goblin.Gameplay.Logic.Behaviors.Attribute;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -212,12 +211,10 @@ namespace Goblin.Gameplay.Logic.Core
 
         public Behavior GetBehavior(ulong id, Type type)
         {
-            if (typeof(Attribute) == type) return GetBehavior<Attribute>(id);
-            else if (typeof(Gamepad) == type) return GetBehavior<Gamepad>(id);
+            if (typeof(Gamepad) == type) return GetBehavior<Gamepad>(id);
             else if (typeof(Movement) == type) return GetBehavior<Movement>(id);
             else if (typeof(Random) == type) return GetBehavior<Random>(id);
             else if (typeof(RILSync) == type) return GetBehavior<RILSync>(id);
-            else if (typeof(Spatial) == type) return GetBehavior<Spatial>(id);
             else if (typeof(StateMachine) == type) return GetBehavior<StateMachine>(id);
             else if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
 

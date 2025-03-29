@@ -61,5 +61,15 @@ namespace Goblin.Gameplay.Logic.Core
         {
             return stage.AddBehavior<T>(id);
         }
+
+        public T AddBehaviorInfo<T>() where T : IBehaviorInfo, new()
+        {
+            return stage.AddBehaviorInfo<T>(id);
+        }
+
+        public T GetBehaviorInfo<T>() where T : IBehaviorInfo
+        {
+            return stage.GetBehaviorInfo<T>(id);
+        }
     }
 }

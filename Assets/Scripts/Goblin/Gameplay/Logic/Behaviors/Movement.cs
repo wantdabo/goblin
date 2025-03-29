@@ -13,8 +13,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var machine = actor.GetBehavior<StateMachine>();
             if (false == machine.ChangeState(STATE_DEFINE.MOVE)) return;
 
-            var spatial = actor.GetBehavior<Spatial>();
-            spatial.info.position += motion;
+            var spatial = actor.GetBehaviorInfo<SpatialInfo>();
+            spatial.position += motion;
         }
     }
 }
