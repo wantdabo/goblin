@@ -8,23 +8,30 @@ namespace Goblin.Gameplay.Render.Core
     /// <summary>
     /// 代理
     /// </summary>
-    public sealed class Agent : Comp
+    public abstract class Agent
     {
         /// <summary>
-        /// ID
+        /// Actor
         /// </summary>
-        public ulong id { get; private set; }
+        public ulong actor { get; private set; }
         /// <summary>
         /// 世界
         /// </summary>
         public World world { get; private set; }
-        /// <summary>
-        /// 事件订阅派发者
-        /// </summary>
-        public Eventor eventor { get; private set; }
-        /// <summary>
-        /// Behavior 集合
-        /// </summary>
-        private Dictionary<Type, Talent> talentdict { get; set; }
+        
+        public void Ready(ulong id, World world)
+        {
+            this.actor = id;
+            this.world = world;
+        }
+        
+        public void Reset()
+        {
+            this.actor = 0;
+            this.world = null;
+        }
+
+        protected abstract void OnReady();
+        protected abstract void OnReset();
     }
 }

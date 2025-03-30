@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
@@ -14,161 +15,20 @@ using Ticker = Goblin.Gameplay.Logic.Behaviors.Ticker;
 namespace Goblin.Sys.Gameplay
 {
     /// <summary>
-    /// 治疗跳字
-    /// </summary>
-    public struct CureDanceEvent : IEvent
-    {
-        /// <summary>
-        /// 坐标
-        /// </summary>
-        public Vector3 position { get; set; }
-        /// <summary>
-        /// 治疗数值
-        /// </summary>
-        public uint cure { get; set; }
-        /// <summary>
-        /// 来源/ActorID
-        /// </summary>
-        public uint from { get; set; }
-        /// <summary>
-        /// 去向/ActorID
-        /// </summary>
-        public uint to { get; set; }
-    }
-
-    /// <summary>
-    /// 伤害跳字
-    /// </summary>
-    public struct DamageDanceEvent : IEvent
-    {
-        /// <summary>
-        /// 坐标
-        /// </summary>
-        public Vector3 position { get; set; }
-        /// <summary>
-        /// 暴击
-        /// </summary>
-        public bool crit { get; set; }
-        /// <summary>
-        /// 伤害数值
-        /// </summary>
-        public uint damage { get; set; }
-        /// <summary>
-        /// 来源/ActorID
-        /// </summary>
-        public uint from { get; set; }
-        /// <summary>
-        /// 去向/ActorID
-        /// </summary>
-        public uint to { get; set; }
-    }
-
-    /// <summary>
     /// 战斗 Proxy
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
-        /// <summary>
-        /// 游戏中
-        /// </summary>
-        public bool gaming { get; private set; }
-        /// <summary>
-        /// 游戏速度
-        /// </summary>
-        public float gamespeed { get; set; } = 1f;
-        /// <summary>
-        /// 伤害跳字开关
-        /// </summary>
-        public bool dancing { get; set; }
-        /// <summary>
-        /// 输入系统
-        /// </summary>
-        public InputSystem input { get; private set; }
-        /// <summary>
-        /// 逻辑场景
-        /// </summary>
-        private Stage stage { get; set; }
+        public Director director { get; private set; }
 
-        protected override void OnCreate()
+        public void Setup<T>() where T : Director, new()
         {
-            base.OnCreate();
-            input = AddComp<InputSystem>();
-            input.Create();
+            if (null != director) return;
+            director = AddComp<T>();
+            director.Create();
             
-            engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
-        }
-        
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
-        }
-
-        public void CreateGame()
-        {
-            stage = new Stage();
-            stage.Initialize(19491001, null);
-
-            var actor = stage.AddActor();
-            actor.AddBehaviorInfo<AttributeInfo>();
-            actor.AddBehaviorInfo<SpatialInfo>();
-            actor.AddBehavior<Ticker>();
-            actor.AddBehavior<Gamepad>();
-            actor.AddBehavior<StateMachine>();
-            actor.AddBehavior<Movement>();
-            
-            var attribute = actor.GetBehaviorInfo<AttributeInfo>();
-            attribute.moveseed = 10;
-        }
-
-        public void StartGame()
-        {
-            stage.Start();
-        }
-
-        public void PauseGame()
-        {
-            stage.Pause();
-        }
-
-        public void ResumeGame()
-        {
-            stage.Resume();
-        }
-
-        public void StopGame()
-        {
-            stage.Stop();
-        }
-
-        private void OnFixedTick(FixedTickEvent e)
-        {
-            if (null == stage) return;
-            input.joystickdire = Vector2.zero;
-            
-            if (Input.GetKey(KeyCode.W))
-            {
-                input.joystickdire += Vector2.up;
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                input.joystickdire += Vector2.down;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                input.joystickdire += Vector2.left;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                input.joystickdire += Vector2.right;
-            }
-
-            input.Input(1, stage);
-
-            var spatial = stage.GetBehaviorInfo<SpatialInfo>(1);
-            Debug.Log($"Spatial.Position ---------> {spatial.position}");
-
-            stage.Tick();
+            director.CreateGame();
+            director.StartGame();
         }
     }
 }

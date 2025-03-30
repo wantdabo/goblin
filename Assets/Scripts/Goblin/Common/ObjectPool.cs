@@ -20,7 +20,7 @@ namespace Goblin.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public T Get<T>(string key)
+        public T Get<T>(string key = "")
         {
             if (pool.TryGetValue(typeof(T), out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {

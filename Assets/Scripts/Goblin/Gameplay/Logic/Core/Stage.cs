@@ -15,6 +15,7 @@ namespace Goblin.Gameplay.Logic.Core
     {
         private const ulong sa = 0;
         private StageInfo info { get; set; }
+        public StageState state => info.state;
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
 

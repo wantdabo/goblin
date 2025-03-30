@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goblin.Gameplay.Directors.Local.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,8 +35,7 @@ namespace Goblin.Sys.Lobby.View
             AddUIEventListener("LocalGame", (e) =>
             {
                 engine.gameui.Close(this);
-                engine.proxy.gameplay.CreateGame();
-                engine.proxy.gameplay.StartGame();
+                engine.proxy.gameplay.Setup<LocalDirector>();
             });
         }
     }

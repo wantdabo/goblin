@@ -6,7 +6,7 @@ using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 using UnityEngine;
 
-namespace Goblin.Sys.Gameplay
+namespace Goblin.Gameplay.Directors.Common
 {
     /// <summary>
     /// 输入系统
