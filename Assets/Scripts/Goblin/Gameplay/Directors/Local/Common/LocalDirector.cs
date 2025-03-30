@@ -4,6 +4,9 @@ using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Render.Common;
+using Goblin.Gameplay.Render.Core;
 using UnityEngine;
 using Ticker = Goblin.Gameplay.Logic.Behaviors.Ticker;
 
@@ -15,30 +18,43 @@ namespace Goblin.Gameplay.Directors.Local.Common
         /// 输入系统
         /// </summary>
         public InputSystem input { get; private set; }
+
         /// <summary>
         /// 逻辑场景
         /// </summary>
         private Stage stage { get; set; }
-        
+
+        private World world { get; set; }
+
         protected override void OnCreate()
         {
             base.OnCreate();
-            input = AddComp<InputSystem>();
-            input.Create();
-            
             engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
+            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
 
         protected override void OnCreateGame()
         {
             stage = new Stage();
             stage.Initialize(19491001, null);
+
+            world = AddComp<World>();
+            world.Create();
+
+            input = AddComp<InputSystem>();
+            input.Create();
+
+            stage.onril += (id, ril) =>
+            {
+                world.eventor.Tell(new RILEvent(state: new ABStateInfo(actor: id, ril: ril)));
+            };
 
             var actor = stage.AddActor();
             actor.AddBehaviorInfo<AttributeInfo>();
@@ -47,7 +63,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
             actor.AddBehavior<Gamepad>();
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();
-            
+
             var attribute = actor.GetBehaviorInfo<AttributeInfo>();
             attribute.moveseed = 10;
         }
@@ -71,26 +87,29 @@ namespace Goblin.Gameplay.Directors.Local.Common
         {
             stage.Stop();
         }
-        
+
         private void OnFixedTick(FixedTickEvent e)
         {
             if (null == stage) return;
             if (StageState.Ticking != stage.state) return;
-            
+
             input.joystickdire = Vector2.zero;
-            
+
             if (Input.GetKey(KeyCode.W))
             {
                 input.joystickdire += Vector2.up;
             }
+
             if (Input.GetKey(KeyCode.S))
             {
                 input.joystickdire += Vector2.down;
             }
+
             if (Input.GetKey(KeyCode.A))
             {
                 input.joystickdire += Vector2.left;
             }
+
             if (Input.GetKey(KeyCode.D))
             {
                 input.joystickdire += Vector2.right;
@@ -98,10 +117,15 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
             input.Input(1, stage);
 
-            var spatial = stage.GetBehaviorInfo<SpatialInfo>(1);
-            Debug.Log($"Spatial.Position ---------> {spatial.position}");
-
             stage.Tick();
+        }
+
+        private void OnTick(TickEvent e)
+        {
+            if (null == stage) return;
+            if (StageState.Ticking != stage.state) return;
+
+            world.ticker.Tick(e.tick);
         }
     }
 }

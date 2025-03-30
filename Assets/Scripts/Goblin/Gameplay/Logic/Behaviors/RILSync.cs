@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
@@ -9,7 +10,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// RIL/ 渲染指令同步
     /// </summary>
-    [Ticking]
     public class RILSync : Behavior<RIlSyncInfo>
     {
         /// <summary>
@@ -32,6 +32,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 dict.Remove(ril.id);
             }
             dict.Add(ril.id, ril);
+            
+            actor.stage.onril?.Invoke(id, ril);
         }
     }
 }

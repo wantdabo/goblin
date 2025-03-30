@@ -8,7 +8,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// 状态机
     /// </summary>
-    [Ticking]
     public class StateMachine : Behavior<StateMachineInfo>
     {
         public bool ChangeState(byte state)

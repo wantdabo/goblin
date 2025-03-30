@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.RIL.Common;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -16,6 +17,7 @@ namespace Goblin.Gameplay.Logic.Core
         private const ulong sa = 0;
         private StageInfo info { get; set; }
         public StageState state => info.state;
+        public Action<ulong, IRIL> onril { get; set; }
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
 

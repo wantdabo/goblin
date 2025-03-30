@@ -10,7 +10,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// Gamepad/手柄
     /// </summary>
-    [Ticking]
     public class Gamepad : Behavior<GamepadInfo>
     {
         protected override void OnTick(FP tick)

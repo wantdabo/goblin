@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
@@ -7,6 +8,12 @@ namespace Goblin.Gameplay.Render.Common
 {
     public struct ABStateInfo
     {
+        public ABStateInfo(ulong actor, IRIL ril)
+        {
+            this.actor = actor;
+            this.ril = ril;
+        }
+
         public ulong actor { get; set; }
         public IRIL ril { get; set; }
     }
@@ -21,6 +28,8 @@ namespace Goblin.Gameplay.Render.Common
         {
             base.OnCreate();
             world.eventor.Listen<RILEvent>(OnRIL);
+            world.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
+            
             statedict = world.engine.pool.Get<Dictionary<ulong, Dictionary<ushort, ABStateInfo>>>();
             statebundles = world.engine.pool.Get<Dictionary<ushort, List<ABStateInfo>>>();
         }
@@ -29,6 +38,7 @@ namespace Goblin.Gameplay.Render.Common
         {
             base.OnDestroy();
             world.eventor.UnListen<RILEvent>(OnRIL);
+            world.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
             
             foreach (var states in statedict.Values)
             {
@@ -51,6 +61,13 @@ namespace Goblin.Gameplay.Render.Common
         {
             this.world = world;
         }
+        
+        public List<ABStateInfo> GetStateBundles(ushort id)
+        {
+            if (false == statebundles.TryGetValue(id, out var states)) return default;
+            
+            return states;
+        }
 
         private void OnRIL(RILEvent e)
         {
@@ -59,11 +76,34 @@ namespace Goblin.Gameplay.Render.Common
                 statedict.Add(e.state.actor, statemap = world.engine.pool.Get<Dictionary<ushort, ABStateInfo>>());
             }
             
-            if (false == statemap.TryGetValue(e.state.ril.id, out var state))
+            if (statemap.ContainsKey(e.state.ril.id))
             {
                 statemap.Remove(e.state.ril.id);
             }
-            statemap.Add(e.state.ril.id, state);
+            statemap.Add(e.state.ril.id, e.state);
+        }
+
+        private void OnLateTick(LateTickEvent e)
+        {
+            foreach (var kv in statebundles)
+            {
+                kv.Value.Clear();
+                world.engine.pool.Set(kv.Value);
+            }
+            statebundles.Clear();
+
+            foreach (var statemap in statedict.Values)
+            {
+                foreach (var state in statemap.Values)
+                {
+                    if (false == statebundles.TryGetValue(state.ril.id, out var states))
+                    {
+                        statebundles.Add(state.ril.id, states = world.engine.pool.Get<List<ABStateInfo>>());
+                    }
+                    
+                    states.Add(state);
+                }
+            }
         }
     }
 }

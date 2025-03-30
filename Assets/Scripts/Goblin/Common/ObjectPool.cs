@@ -20,16 +20,14 @@ namespace Goblin.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public T Get<T>(string key = "")
+        public T Get<T>(string key = "") where T : new()
         {
             if (pool.TryGetValue(typeof(T), out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {
-                var obj = (T)queue.Dequeue();
-
-                return obj;
+                return (T)queue.Dequeue();
             }
 
-            return default;
+            return new T();
         }
 
         /// <summary>
@@ -47,6 +45,7 @@ namespace Goblin.Common
                 dict = new();
                 pool.Add(typeof(T), dict);
             }
+
             if (false == dict.TryGetValue(key, out var queue))
             {
                 queue = new();
@@ -54,7 +53,7 @@ namespace Goblin.Common
             }
 
             if (queue.Contains(obj)) return;
-            
+
             queue.Enqueue(obj);
         }
     }

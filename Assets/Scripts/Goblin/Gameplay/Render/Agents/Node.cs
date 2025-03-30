@@ -17,7 +17,6 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReady()
         {
             go = world.engine.pool.Get<GameObject>("NODE_GO_KEY");
-            if (null == go) go = new();
             go.SetActive(true);
             go.name = actor.ToString();
             go.transform.SetParent(nodes.transform);
@@ -28,8 +27,8 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReset()
         {
             if (null == go) return;
-            world.engine.pool.Set(go, "NODE_GO_KEY");
             go.SetActive(false);
+            world.engine.pool.Set(go, "NODE_GO_KEY");
         }
     }
 }

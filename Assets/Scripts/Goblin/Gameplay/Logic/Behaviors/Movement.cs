@@ -5,7 +5,6 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
 {
-    [Ticking]
     public class Movement : Behavior<MovementInfo>
     {
         public void Move(FPVector3 motion)

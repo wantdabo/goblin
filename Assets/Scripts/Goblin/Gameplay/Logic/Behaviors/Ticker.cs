@@ -8,11 +8,6 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class Ticking : System.Attribute
-    {
-    }
-    
     /// <summary>
     /// 驱动器
     /// </summary>
@@ -26,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
-                if (null == type.GetCustomAttribute<Ticking>()) continue;
+                if (typeof(Ticker) == type) continue;
                 var behavior = actor.GetBehavior(type);
                 behavior.Tick(info.tick);
             }
@@ -39,7 +34,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
-                if (null == type.GetCustomAttribute<Ticking>()) continue;
+                if (typeof(Ticker) == type) continue;
                 var behavior = actor.GetBehavior(type);
                 behavior.TickEnd();
             }

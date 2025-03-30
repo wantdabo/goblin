@@ -23,10 +23,12 @@ namespace Goblin.Gameplay.Render.Core
         {
             this.actor = id;
             this.world = world;
+            OnReady();
         }
         
         public void Reset()
         {
+            OnReset();
             this.actor = 0;
             this.world = null;
         }
