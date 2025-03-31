@@ -4,7 +4,12 @@ using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Common.GameplayInfos;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Prefabs;
+using Goblin.Gameplay.Prefabs.Common;
+using Kowtow.Math;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -15,31 +20,60 @@ namespace Goblin.Gameplay.Logic.Core
     public sealed class Stage
     {
         private const ulong sa = 0;
+        public GameplayInfo gpinfo { get; set; }
         private StageInfo info { get; set; }
         public StageState state => info.state;
         public Action<ulong, IRIL> onril { get; set; }
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
+        
+        private Dictionary<Type, Translator> translators { get; set; }
+        private Dictionary<Type, Prefab> prefabs { get; set; }
 
-        public void Initialize(int seed, byte[] data)
+        public void Initialize(GameplayInfo gpinfo)
         {
+            if (null == gpinfo) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
             
+            this.gpinfo = gpinfo;
+
             info = ObjectCache.Get<StageInfo>();
             info.Ready();
+            info.state = StageState.Initialized;
+
             info.actors.Add(sa);
             var dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>();
             dict.Add(typeof(StageInfo), info);
             info.behaviorinfos.Add(sa, dict);
             
-            AddBehavior<Random>(sa).Initialze(seed);
+            AddBehavior<Random>(sa).Initialze(gpinfo.seed);
             AddBehavior<RILSync>(sa);
-            
-            info.state = StageState.Initialized;
-            // 添加渲染指令翻译器
-            info.translators.Add(typeof(AttributeInfo), new Translators.Attribute().Initialize(this));
-            info.translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
-            info.translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
+            AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
+
+            Translators();
+            Prefabs();
+
+            foreach (var player in gpinfo.players)
+            {
+                var actor = Generate<Hero>(new HeroInfo
+                {
+                    hero = player.hero,
+                    attribute = new()
+                    {
+                        hp = 100,
+                        maxhp = 100,
+                        moveseed = 10,
+                        attack = 5,
+                    },
+                    spatial = new()
+                    {
+                        position = FPVector3.zero,
+                        euler = FPVector3.zero,
+                        scale = FPVector3.one
+                    }
+                });
+                actor.AddBehavior<Gamepad>();
+            }
         }
         
         public void Dispose()
@@ -54,6 +88,31 @@ namespace Goblin.Gameplay.Logic.Core
             
             info.Reset();
             ObjectCache.Set(info);
+            
+            translators.Clear();
+            ObjectCache.Set(translators);
+            
+            prefabs.Clear();
+            ObjectCache.Set(prefabs);
+        }
+
+        /// <summary>
+        /// 添加渲染指令翻译器
+        /// </summary>
+        private void Translators()
+        {
+            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
+            
+            translators.Add(typeof(AttributeInfo), new Translators.Attribute().Initialize(this));
+            translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
+            translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
+        }
+
+        private void Prefabs()
+        {
+            prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
+            
+            prefabs.Add(typeof(Hero), new Hero());
         }
 
         public void Start()
@@ -91,7 +150,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (null != tickers)
             {
                 foreach (var ticker in tickers) ticker.Tick(info.timescale * ticker.info.tick);
-                Translators();
+                Translate();
                 foreach (var ticker in tickers) ticker.TickEnd();
                 
                 tickers.Clear();
@@ -102,13 +161,13 @@ namespace Goblin.Gameplay.Logic.Core
             RecycleActors();
         }
 
-        private void Translators()
+        private void Translate()
         {
             foreach (var kv in info.behaviorinfos)
             {
                 foreach (var kv2 in kv.Value)
                 {
-                    if (false == info.translators.TryGetValue(kv2.Key, out var translator)) continue;
+                    if (false == translators.TryGetValue(kv2.Key, out var translator)) continue;
                     translator.Translate(kv.Key, kv2.Value);
                 }
             }
@@ -198,10 +257,19 @@ namespace Goblin.Gameplay.Logic.Core
         {
             info.increment++;
             info.actors.Add(info.increment);
-
-            return GetActor(info.increment);
+            var actor = GetActor(info.increment);
+            actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
+            
+            return actor;
         }
-        
+
+        public Actor Generate<T>(IPrefabInfo info) where T : Prefab
+        {
+            if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
+            
+            return prefab.Processing(AddActor(), info);
+        }
+
         public List<Type> GetBehaviorTypes(ulong id)
         {
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
@@ -228,6 +296,7 @@ namespace Goblin.Gameplay.Logic.Core
             else if (typeof(Random) == type) return GetBehavior<Random>(id);
             else if (typeof(RILSync) == type) return GetBehavior<RILSync>(id);
             else if (typeof(StateMachine) == type) return GetBehavior<StateMachine>(id);
+            else if (typeof(Tag) == type) return GetBehavior<Tag>(id);
             else if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
 
             return default;

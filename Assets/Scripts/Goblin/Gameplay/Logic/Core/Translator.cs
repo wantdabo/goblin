@@ -2,7 +2,7 @@ namespace Goblin.Gameplay.Logic.Core
 {
     public abstract class Translator
     {
-        public Stage stage { get; private set; }
+        protected Stage stage { get; private set; }
 
         public Translator Initialize(Stage stage)
         {

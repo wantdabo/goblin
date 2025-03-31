@@ -3,6 +3,7 @@ using Goblin.Common.FSM;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.GameplayInfos;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
@@ -40,24 +41,18 @@ namespace Goblin.Gameplay.Directors.Local.Common
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
 
-        private void TestPlayer()
-        {
-            var actor = stage.AddActor();
-            actor.AddBehaviorInfo<AttributeInfo>();
-            actor.AddBehaviorInfo<SpatialInfo>();
-            actor.AddBehavior<Ticker>();
-            actor.AddBehavior<Gamepad>();
-            actor.AddBehavior<StateMachine>();
-            actor.AddBehavior<Movement>();
-
-            var attribute = actor.GetBehaviorInfo<AttributeInfo>();
-            attribute.moveseed = 10;
-        }
-
         protected override void OnCreateGame()
         {
+            GameplayInfo gpinfo = new GameplayInfo();
+            gpinfo.seed = 19491001;
+            gpinfo.players = new[]
+            {
+                new PlayerInfo { hero = 10010 },
+                new PlayerInfo { hero = 10010 },
+            };
+            
             stage = new Stage();
-            stage.Initialize(19491001, null);
+            stage.Initialize(gpinfo);
 
             world = AddComp<World>();
             world.Create();
@@ -66,8 +61,6 @@ namespace Goblin.Gameplay.Directors.Local.Common
             input.Create();
 
             stage.onril += (id, ril) => world.eventor.Tell(new RILEvent(state: new ABStateInfo(id, ril)));
-
-            TestPlayer();
         }
 
         protected override void OnDestroyGame()

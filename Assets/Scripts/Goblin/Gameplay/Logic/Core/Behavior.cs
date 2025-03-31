@@ -73,5 +73,11 @@ namespace Goblin.Gameplay.Logic.Core
                 return minfo;
             }
         }
+
+        protected override void OnAssemble()
+        {
+            base.OnAssemble();
+            var m = info;
+        }
     }
 }

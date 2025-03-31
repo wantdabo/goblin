@@ -52,7 +52,6 @@ namespace Goblin.Gameplay.Logic.Core
         public FP timescale { get; set; } = FP.One;
         public ulong increment { get; set; } = 0;
         
-        public Dictionary<Type, Translator> translators { get; set; }
         public List<ulong> actors { get; set; }
         public List<ulong> rmvactors { get; set; }
         public Dictionary<ulong, List<Type>> behaviors { get; set; }
@@ -69,7 +68,6 @@ namespace Goblin.Gameplay.Logic.Core
             increment = 0;
             increment = 0;
             
-            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
             actors = ObjectCache.Get<List<ulong>>();
             rmvactors = ObjectCache.Get<List<ulong>>();
             behaviors = ObjectCache.Get<Dictionary<ulong, List<Type>>>();
@@ -86,9 +84,6 @@ namespace Goblin.Gameplay.Logic.Core
             elapsed = 0;
             increment = 0;
             increment = 0;
-            
-            translators.Clear();
-            ObjectCache.Set(translators);
             
             actors.Clear();
             ObjectCache.Set(actors);
