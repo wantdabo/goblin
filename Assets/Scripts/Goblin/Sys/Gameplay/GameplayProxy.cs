@@ -21,7 +21,7 @@ namespace Goblin.Sys.Gameplay
     {
         private Director director { get; set; }
 
-        public void Setup<T>() where T : Director, new()
+        public void Load<T>() where T : Director, new()
         {
             if (null != director)
             {
@@ -33,6 +33,15 @@ namespace Goblin.Sys.Gameplay
             director.Create();
             
             director.CreateGame();
+        }
+        
+        public void UnLoad()
+        {
+            if (null == director) return;
+            
+            director.StopGame();
+            director.Destroy();
+            director = null;
         }
 
         public void Start()
@@ -53,8 +62,6 @@ namespace Goblin.Sys.Gameplay
         public void Stop()
         {
             director.StopGame();
-            director.Destroy();
-            director = null;
         }
     }
 }

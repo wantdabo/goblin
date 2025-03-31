@@ -70,6 +70,12 @@ namespace Goblin.Gameplay.Directors.Local.Common
             TestPlayer();
         }
 
+        protected override void OnDestroyGame()
+        {
+            stage.Dispose();
+            world.Destroy();
+        }
+
         protected override void OnStartGame()
         {
             stage.Start();
@@ -88,7 +94,6 @@ namespace Goblin.Gameplay.Directors.Local.Common
         protected override void OnStopGame()
         {
             stage.Stop();
-            world.Destroy();
         }
 
         private void OnFixedTick(FixedTickEvent e)

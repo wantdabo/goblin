@@ -8,6 +8,10 @@ namespace Goblin.Gameplay.Directors.StateSync.Common
         {
         }
 
+        protected override void OnDestroyGame()
+        {
+        }
+
         protected override void OnStartGame()
         {
         }

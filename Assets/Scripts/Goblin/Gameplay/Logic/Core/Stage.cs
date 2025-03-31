@@ -25,8 +25,8 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (null != info) throw new Exception("you cannot initialize more than once.");
             
-            info = new();
-            info.Reset();
+            info = ObjectCache.Get<StageInfo>();
+            info.Ready();
             info.actors.Add(sa);
             var dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>();
             dict.Add(typeof(StageInfo), info);
@@ -40,6 +40,20 @@ namespace Goblin.Gameplay.Logic.Core
             info.translators.Add(typeof(AttributeInfo), new Translators.Attribute().Initialize(this));
             info.translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
             info.translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
+        }
+        
+        public void Dispose()
+        {
+            if (StageState.Stopped != info.state) return;
+            info.state = StageState.Disposed;
+            
+            Disassembles();
+            RecycleActors();
+            info.rmvactors.AddRange(info.actors);
+            RecycleActors();
+            
+            info.Reset();
+            ObjectCache.Set(info);
         }
 
         public void Start()
@@ -64,11 +78,6 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (StageState.Stopped == info.state) return;
             info.state = StageState.Stopped;
-            
-            Disassembles();
-            RecycleActors();
-            info.rmvactors.AddRange(info.actors);
-            RecycleActors();
         }
 
         public void Tick()
@@ -137,15 +146,12 @@ namespace Goblin.Gameplay.Logic.Core
                 if (false == info.behaviorinfos.TryGetValue(rmvactor, out var infos))
                 {
                     info.actors.Remove(rmvactor);
-                    continue;
+                    foreach (var info in infos.Values)
+                    {
+                        info.Reset();
+                        ObjectCache.Set(info);
+                    }
                 }
-                
-                foreach (var info in infos.Values)
-                {
-                    info.Reset();
-                    ObjectCache.Set(info);
-                }
-
                 infos.Clear();
                 ObjectCache.Set(infos);
                 info.behaviorinfos.Remove(rmvactor);

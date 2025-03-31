@@ -9,6 +9,11 @@ namespace Goblin.Gameplay.Directors.Common
             OnCreateGame();
         }
 
+        public void DestroyGame()
+        {
+            OnDestroyGame();
+        }
+
         public void StartGame()
         {
             OnStartGame();
@@ -30,6 +35,7 @@ namespace Goblin.Gameplay.Directors.Common
         }
 
         protected abstract void OnCreateGame();
+        protected abstract void OnDestroyGame();
         protected abstract void OnStartGame();
         protected abstract void OnPauseGame();
         protected abstract void OnResumeGame();

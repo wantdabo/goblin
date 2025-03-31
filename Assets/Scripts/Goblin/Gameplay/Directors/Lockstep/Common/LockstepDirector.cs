@@ -8,6 +8,10 @@ namespace Goblin.Gameplay.Directors.Lockstep.Common
         {
         }
 
+        protected override void OnDestroyGame()
+        {
+        }
+
         protected override void OnStartGame()
         {
         }

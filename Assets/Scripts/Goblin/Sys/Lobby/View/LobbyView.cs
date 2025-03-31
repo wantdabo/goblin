@@ -36,7 +36,7 @@ namespace Goblin.Sys.Lobby.View
             {
                 engine.gameui.Close(this);
                 engine.gameui.Open<GameplayView>();
-                engine.proxy.gameplay.Setup<LocalDirector>();
+                engine.proxy.gameplay.Load<LocalDirector>();
                 engine.proxy.gameplay.Start();
             });
         }
