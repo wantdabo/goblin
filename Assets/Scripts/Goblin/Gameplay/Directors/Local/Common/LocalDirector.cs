@@ -40,6 +40,20 @@ namespace Goblin.Gameplay.Directors.Local.Common
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
 
+        private void TestPlayer()
+        {
+            var actor = stage.AddActor();
+            actor.AddBehaviorInfo<AttributeInfo>();
+            actor.AddBehaviorInfo<SpatialInfo>();
+            actor.AddBehavior<Ticker>();
+            actor.AddBehavior<Gamepad>();
+            actor.AddBehavior<StateMachine>();
+            actor.AddBehavior<Movement>();
+
+            var attribute = actor.GetBehaviorInfo<AttributeInfo>();
+            attribute.moveseed = 10;
+        }
+
         protected override void OnCreateGame()
         {
             stage = new Stage();
@@ -51,21 +65,9 @@ namespace Goblin.Gameplay.Directors.Local.Common
             input = AddComp<InputSystem>();
             input.Create();
 
-            stage.onril += (id, ril) =>
-            {
-                world.eventor.Tell(new RILEvent(state: new ABStateInfo(actor: id, ril: ril)));
-            };
+            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent(state: new ABStateInfo(id, ril)));
 
-            var actor = stage.AddActor();
-            actor.AddBehaviorInfo<AttributeInfo>();
-            actor.AddBehaviorInfo<SpatialInfo>();
-            actor.AddBehavior<Ticker>();
-            actor.AddBehavior<Gamepad>();
-            actor.AddBehavior<StateMachine>();
-            actor.AddBehavior<Movement>();
-
-            var attribute = actor.GetBehaviorInfo<AttributeInfo>();
-            attribute.moveseed = 10;
+            TestPlayer();
         }
 
         protected override void OnStartGame()
@@ -86,6 +88,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
         protected override void OnStopGame()
         {
             stage.Stop();
+            world.Destroy();
         }
 
         private void OnFixedTick(FixedTickEvent e)

@@ -19,16 +19,42 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
-        public Director director { get; private set; }
+        private Director director { get; set; }
 
         public void Setup<T>() where T : Director, new()
         {
-            if (null != director) return;
+            if (null != director)
+            {
+                director.StopGame();
+                director.Destroy();
+            }
+
             director = AddComp<T>();
             director.Create();
             
             director.CreateGame();
+        }
+
+        public void Start()
+        {
             director.StartGame();
+        }
+
+        public void Pause()
+        {
+            director.PauseGame();
+        }
+        
+        public void Resume()
+        {
+            director.ResumeGame();
+        }
+        
+        public void Stop()
+        {
+            director.StopGame();
+            director.Destroy();
+            director = null;
         }
     }
 }

@@ -35,7 +35,9 @@ namespace Goblin.Sys.Lobby.View
             AddUIEventListener("LocalGame", (e) =>
             {
                 engine.gameui.Close(this);
+                engine.gameui.Open<GameplayView>();
                 engine.proxy.gameplay.Setup<LocalDirector>();
+                engine.proxy.gameplay.Start();
             });
         }
     }
