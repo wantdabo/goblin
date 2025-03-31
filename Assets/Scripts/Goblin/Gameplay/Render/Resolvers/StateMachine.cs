@@ -29,7 +29,6 @@ namespace Goblin.Gameplay.Render.Resolvers
             foreach (var bundle in statebundles)
             {
                 var statemachine = (RIL_STATE_MACHINE)bundle.ril;
-                Debug.Log(statemachine);
             }
         }
     }
