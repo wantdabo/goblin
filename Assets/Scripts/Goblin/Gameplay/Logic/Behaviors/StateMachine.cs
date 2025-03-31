@@ -10,17 +10,17 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class StateMachine : Behavior<StateMachineInfo>
     {
-        public bool ChangeState(byte state)
+        public bool TryChangeState(byte state)
         {
-            if (info.current == state) return false;
+            if (info.current == state) return true;
             if (false == QueryPassState(state)) return false;
 
-            ForceChangeState(state);
+            ChangeState(state);
 
             return true;
         }
         
-        public void ForceChangeState(byte state)
+        public void ChangeState(byte state)
         {
             info.frames = 0;
             info.current = state;
@@ -40,12 +40,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             info.frames++;
-        }
-
-        protected override void OnTickEnd()
-        {
-            base.OnTickEnd();
-            ChangeState(STATE_DEFINE.IDLE);
         }
     }
 }

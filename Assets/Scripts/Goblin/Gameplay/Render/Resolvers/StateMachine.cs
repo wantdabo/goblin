@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class Spatial : Resolver
+    public class StateMachine : Resolver
     {
         protected override void OnCreate()
         {
@@ -21,16 +21,15 @@ namespace Goblin.Gameplay.Render.Resolvers
             base.OnDestroy();
             world.ticker.eventor.UnListen<TickEvent>(OnTick);
         }
-
+        
         private void OnTick(TickEvent e)
         {
-            var spatialbundles = world.summary.GetStateBundles(RIL_DEFINE.SPATIAL);
-            if (null == spatialbundles) return;
-            foreach (var bundle in spatialbundles)
+            var statebundles = world.summary.GetStateBundles(RIL_DEFINE.STATE_MACHINE);
+            if (null == statebundles) return;
+            foreach (var bundle in statebundles)
             {
-                var node = world.EnsureAgent<Node>(bundle.actor);
-                var spatial = (RIL_SPATIAL)bundle.ril;
-                node.go.transform.position = spatial.position.ToVector3();
+                var statemachine = (RIL_STATE_MACHINE)bundle.ril;
+                Debug.Log(statemachine);
             }
         }
     }

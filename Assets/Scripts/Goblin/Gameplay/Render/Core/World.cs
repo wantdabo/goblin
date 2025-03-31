@@ -70,6 +70,7 @@ namespace Goblin.Gameplay.Render.Core
         private void Resolvers()
         {
             AddComp<Spatial>().Initialize(this).Create();
+            AddComp<StateMachine>().Initialize(this).Create();
         }
 
         public void RmvAgents(ulong actor)
