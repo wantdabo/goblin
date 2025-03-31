@@ -3,7 +3,7 @@ using Goblin.Common.FSM;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Common.GameplayInfos;
+using Goblin.Gameplay.Logic.Common.GameplayDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
@@ -43,16 +43,16 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
         protected override void OnCreateGame()
         {
-            GameplayInfo gpinfo = new GameplayInfo();
-            gpinfo.seed = 19491001;
-            gpinfo.players = new[]
+            GameplayData data = new GameplayData();
+            data.seed = 19491001;
+            data.players = new[]
             {
-                new PlayerInfo { hero = 10010 },
-                new PlayerInfo { hero = 10010 },
+                new PlayerData { hero = 10010 },
+                new PlayerData { hero = 10010 },
             };
             
             stage = new Stage();
-            stage.Initialize(gpinfo);
+            stage.Initialize(data);
 
             world = AddComp<World>();
             world.Create();

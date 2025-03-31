@@ -12,19 +12,19 @@ namespace Goblin.Gameplay.Logic.Core
         /// 实体
         /// </summary>
         public Actor actor { get; private set; }
-        
+
         public void Assemble(Actor actor)
         {
             this.actor = actor;
             OnAssemble();
         }
-        
+
         public void Disassemble()
         {
             OnDisassemble();
             this.actor = null;
         }
-        
+
         public void Tick(FP tick)
         {
             OnTick(tick);
@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Logic.Core
         protected virtual void OnTick(FP tick)
         {
         }
-        
+
         protected virtual void OnTickEnd()
         {
         }
@@ -54,30 +54,25 @@ namespace Goblin.Gameplay.Logic.Core
 
     public abstract class Behavior<T> : Behavior where T : IBehaviorInfo, new()
     {
-        private T minfo { get; set; }
         /// <summary>
         /// 信息
         /// </summary>
-        public T info
-        {
-            get
-            {
-                if (null != minfo) return minfo;
-                
-                minfo = actor.stage.GetBehaviorInfo<T>(actor.id);
-                if (null == minfo)
-                {
-                    minfo = actor.stage.AddBehaviorInfo<T>(actor.id);
-                }
-
-                return minfo;
-            }
-        }
+        public T info { get; private set; }
 
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            var m = info;
+            info = actor.stage.GetBehaviorInfo<T>(actor.id);
+            if (null == info)
+            {
+                info = actor.stage.AddBehaviorInfo<T>(actor.id);
+            }
+        }
+
+        protected override void OnDisassemble()
+        {
+            base.OnDisassemble();
+            info = default;
         }
     }
 }

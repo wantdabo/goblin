@@ -1,4 +1,4 @@
-namespace Goblin.Gameplay.Prefabs.Structs
+namespace Goblin.Gameplay.Logic.Prefabs.Datas
 {
     public struct Attribute
     {

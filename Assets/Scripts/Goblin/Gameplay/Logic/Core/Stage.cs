@@ -5,7 +5,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Common.GameplayInfos;
+using Goblin.Gameplay.Logic.Common.GameplayDatas;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Prefabs;
 using Goblin.Gameplay.Prefabs.Common;
@@ -20,22 +20,21 @@ namespace Goblin.Gameplay.Logic.Core
     public sealed class Stage
     {
         private const ulong sa = 0;
-        public GameplayInfo gpinfo { get; set; }
+        public GameplayData gpdata { get; set; }
         private StageInfo info { get; set; }
         public StageState state => info.state;
-        public Action<ulong, IRIL> onril { get; set; }
         public Random random => GetBehavior<Random>(sa);
         public RILSync rilsync => GetBehavior<RILSync>(sa);
-        
         private Dictionary<Type, Translator> translators { get; set; }
         private Dictionary<Type, Prefab> prefabs { get; set; }
+        public Action<ulong, IRIL> onril { get; set; }
 
-        public void Initialize(GameplayInfo gpinfo)
+        public void Initialize(GameplayData data)
         {
-            if (null == gpinfo) throw new Exception("data is null.");
+            if (null == data) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
             
-            this.gpinfo = gpinfo;
+            this.gpdata = data;
 
             info = ObjectCache.Get<StageInfo>();
             info.Ready();
@@ -46,16 +45,16 @@ namespace Goblin.Gameplay.Logic.Core
             dict.Add(typeof(StageInfo), info);
             info.behaviorinfos.Add(sa, dict);
             
-            AddBehavior<Random>(sa).Initialze(gpinfo.seed);
+            AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
             AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
 
             Translators();
             Prefabs();
 
-            foreach (var player in gpinfo.players)
+            foreach (var player in data.players)
             {
-                var actor = Generate<Hero>(new HeroInfo
+                var actor = Spawn<Hero>(new HeroInfo
                 {
                     hero = player.hero,
                     attribute = new()
@@ -263,7 +262,7 @@ namespace Goblin.Gameplay.Logic.Core
             return actor;
         }
 
-        public Actor Generate<T>(IPrefabInfo info) where T : Prefab
+        public Actor Spawn<T>(IPrefabInfo info) where T : Prefab
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
             

@@ -2,8 +2,8 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Prefabs.Datas;
 using Goblin.Gameplay.Prefabs.Common;
-using Goblin.Gameplay.Prefabs.Structs;
 
 namespace Goblin.Gameplay.Prefabs
 {

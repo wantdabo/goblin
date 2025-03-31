@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -21,7 +22,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
             List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
+                if (false == BEHAVIOR_TICKS.TYPES.Contains(type)) continue;
                 if (typeof(Ticker) == type) continue;
+                
                 var behavior = actor.GetBehavior(type);
                 behavior.Tick(info.tick);
             }
@@ -34,6 +37,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
             foreach (var type in types)
             {
+                if (false == BEHAVIOR_TICKS.TYPES.Contains(type)) continue;
                 if (typeof(Ticker) == type) continue;
                 var behavior = actor.GetBehavior(type);
                 behavior.TickEnd();

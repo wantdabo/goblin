@@ -1,6 +1,6 @@
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Prefabs.Structs
+namespace Goblin.Gameplay.Logic.Prefabs.Datas
 {
     public struct Spatial
     {

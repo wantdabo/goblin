@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
+using Luban;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -50,7 +51,21 @@ namespace Goblin.Gameplay.Logic.Core
         {
             return stage.GetBehavior<T>(id);
         }
-        
+
+        public bool SeekBehavior(Type type, out Behavior behavior)
+        {
+            behavior = stage.GetBehavior(id, type);
+
+            return null != behavior;
+        }
+
+        public bool SeekBehavior<T>(out T behavior) where T : Behavior, new()
+        {
+            behavior = stage.GetBehavior<T>(id);
+
+            return null != behavior;
+        }
+
         /// <summary>
         /// 添加 Behavior
         /// </summary>
@@ -70,6 +85,13 @@ namespace Goblin.Gameplay.Logic.Core
         public T GetBehaviorInfo<T>() where T : IBehaviorInfo
         {
             return stage.GetBehaviorInfo<T>(id);
+        }
+        
+        public bool SeekBehaviorInfo<T>(out T info) where T : IBehaviorInfo
+        {
+            info = stage.GetBehaviorInfo<T>(id);
+
+            return null != info;
         }
     }
 }

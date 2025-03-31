@@ -9,11 +9,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
     {
         public void Move(FPVector3 motion)
         {
-            var machine = actor.GetBehavior<StateMachine>();
-            if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
-
-            var spatial = actor.GetBehaviorInfo<SpatialInfo>();
-            spatial.position += motion;
+            if (false == actor.SeekBehavior(out StateMachine machine) || false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
+            if (actor.SeekBehaviorInfo(out SpatialInfo spatial))
+            {
+                spatial.position += motion;
+            }
             MarkMotion();
         }
 
