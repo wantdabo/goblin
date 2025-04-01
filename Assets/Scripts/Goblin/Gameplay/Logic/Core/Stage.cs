@@ -7,10 +7,14 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GameplayDatas;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Logic.Translators;
+using Goblin.Gameplay.Logic.Translators.Common;
 using Goblin.Gameplay.Prefabs;
 using Goblin.Gameplay.Prefabs.Common;
 using Kowtow.Math;
+using Attribute = Goblin.Gameplay.Logic.Translators.Attribute;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
+using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -102,8 +106,8 @@ namespace Goblin.Gameplay.Logic.Core
         {
             translators = ObjectCache.Get<Dictionary<Type, Translator>>();
             
-            translators.Add(typeof(AttributeInfo), new Translators.Attribute().Initialize(this));
-            translators.Add(typeof(SpatialInfo), new Translators.Spatial().Initialize(this));
+            translators.Add(typeof(AttributeInfo), new Attribute().Initialize(this));
+            translators.Add(typeof(SpatialInfo), new Spatial().Initialize(this));
             translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
         }
 
@@ -232,6 +236,13 @@ namespace Goblin.Gameplay.Logic.Core
             }
             info.rmvactors.Clear();
         }
+        
+        public Actor Spawn<T>(IPrefabInfo info) where T : Prefab
+        {
+            if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
+            
+            return prefab.Processing(AddActor(), info);
+        }
 
         public Actor GetActor(ulong id)
         {
@@ -261,15 +272,22 @@ namespace Goblin.Gameplay.Logic.Core
             
             return actor;
         }
-
-        public Actor Spawn<T>(IPrefabInfo info) where T : Prefab
+        
+        public bool SeekBehaviorTypes(ulong id, out List<Type> types)
         {
-            if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
-            
-            return prefab.Processing(AddActor(), info);
-        }
+            types = GetBehaviorTypes(id);
 
-        public List<Type> GetBehaviorTypes(ulong id)
+            return null != types;
+        }
+        
+        public bool SeekBehaviors<T>(out List<T> behaviors) where T : Behavior
+        {
+            behaviors = GetBehaviors<T>();
+
+            return null != behaviors;
+        }
+        
+        private List<Type> GetBehaviorTypes(ulong id)
         {
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             if (false == info.behaviors.TryGetValue(id, out var list)) return default;
@@ -277,7 +295,7 @@ namespace Goblin.Gameplay.Logic.Core
             return list;
         }
 
-        public List<T> GetBehaviors<T>() where T : Behavior
+        private List<T> GetBehaviors<T>() where T : Behavior
         {
             var type = typeof(T);
             if (false == info.behaviorowners.TryGetValue(type, out var owners) || 0 == owners.Count) return default;
@@ -287,8 +305,22 @@ namespace Goblin.Gameplay.Logic.Core
 
             return list;
         }
+        
+        public bool SeekBehavior<T>(ulong id, out T behavior) where T : Behavior, new()
+        {
+            behavior = GetBehavior<T>(id);
 
-        public Behavior GetBehavior(ulong id, Type type)
+            return null != behavior;
+        }
+
+        public bool SeekBehavior(ulong id, Type type, out Behavior behavior)
+        {
+            behavior = GetBehavior(id, type);
+
+            return null != behavior;
+        }
+
+        private Behavior GetBehavior(ulong id, Type type)
         {
             if (typeof(Gamepad) == type) return GetBehavior<Gamepad>(id);
             else if (typeof(Movement) == type) return GetBehavior<Movement>(id);
@@ -301,7 +333,7 @@ namespace Goblin.Gameplay.Logic.Core
             return default;
         }
 
-        public T GetBehavior<T>(ulong id) where T : Behavior, new()
+        private T GetBehavior<T>(ulong id) where T : Behavior, new()
         {
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             
@@ -338,8 +370,15 @@ namespace Goblin.Gameplay.Logic.Core
             
             return GetBehavior<T>(id);
         }
+        
+        public bool SeekBehaviorInfo<T>(ulong id, out T info) where T : IBehaviorInfo
+        {
+            info = GetBehaviorInfo<T>(id);
+            
+            return null != info;
+        }
 
-        public T GetBehaviorInfo<T>(ulong id) where T : IBehaviorInfo
+        private T GetBehaviorInfo<T>(ulong id) where T : IBehaviorInfo
         {
             if (false == info.behaviorinfos.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;

@@ -49,12 +49,9 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_ATTRIBUTE _other)
-            {
-                return hp == _other.hp && maxhp == _other.maxhp && movespeed == _other.movespeed && attack == _other.attack;
-            }
-
-            return false;
+            RIL_ATTRIBUTE ril = (RIL_ATTRIBUTE)other;
+            
+            return hp == ril.hp && maxhp == ril.maxhp && movespeed == ril.movespeed && attack == ril.attack;
         }
         
         public override string ToString()

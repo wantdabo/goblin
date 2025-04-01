@@ -5,14 +5,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
 {
     public class Tag : Behavior<TagInfo>
     {
-        public bool Has(ushort key)
-        {
-            return info.tags.ContainsKey(key);
-        }
-        
         public void Rmv(ushort key)
         {
             if (info.tags.ContainsKey(key)) info.tags.Remove(key);
+        }
+        
+        public bool Has(ushort key)
+        {
+            return info.tags.ContainsKey(key);
         }
         
         public bool Get(ushort key, out int tag)

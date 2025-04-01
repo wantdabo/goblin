@@ -34,8 +34,11 @@ namespace Goblin.Gameplay.Prefabs
             spatial.position = info.spatial.position;
             spatial.euler = info.spatial.euler;
             spatial.scale = info.spatial.scale;
-            
-            actor.GetBehavior<Tag>().Set(TAG_DEFINE.HERO, info.hero);
+
+            if (actor.SeekBehavior(out Tag tag))
+            {
+                tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
+            }
         }
     }
 }

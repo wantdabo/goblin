@@ -10,11 +10,6 @@ namespace Goblin.Gameplay.Render.Core
 {
     public struct RILEvent : IEvent
     {
-        public RILEvent(ABStateInfo state)
-        {
-            this.state = state;
-        }
-
         public ABStateInfo state { get; set; }
     }
 

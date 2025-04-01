@@ -4,6 +4,16 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
+    /// 行为信息
+    /// </summary>
+    public interface IBehaviorInfo
+    {
+        public void Ready();
+        
+        public void Reset();
+    }
+    
+    /// <summary>
     /// 行为
     /// </summary>
     public abstract class Behavior
@@ -62,11 +72,8 @@ namespace Goblin.Gameplay.Logic.Core
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            info = actor.stage.GetBehaviorInfo<T>(actor.id);
-            if (null == info)
-            {
-                info = actor.stage.AddBehaviorInfo<T>(actor.id);
-            }
+            if (false == actor.stage.SeekBehaviorInfo(actor.id, out T temp)) temp = actor.stage.AddBehaviorInfo<T>(actor.id);
+            info = temp;
         }
 
         protected override void OnDisassemble()

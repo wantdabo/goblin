@@ -43,12 +43,9 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_SPATIAL _other)
-            {
-                return _other.position.Equals(position) && _other.euler.Equals(euler) && _other.scale.Equals(scale);
-            }
-
-            return false;
+            RIL_SPATIAL ril = (RIL_SPATIAL)other;
+            
+            return ril.position.Equals(position) && ril.euler.Equals(euler) && ril.scale.Equals(scale);
         }
 
         public override string ToString()

@@ -25,11 +25,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTickEnd()
         {
             base.OnTickEnd();
-            if (false == info.motion)
+            if (false == info.motion && actor.SeekBehavior(out StateMachine machine))
             {
-                var machine = actor.GetBehavior<StateMachine>();
                 machine.TryChangeState(STATE_DEFINE.IDLE);
             }
+
             info.motion = false;
         }
     }

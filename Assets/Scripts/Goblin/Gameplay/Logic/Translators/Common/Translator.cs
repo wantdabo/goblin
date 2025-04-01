@@ -1,4 +1,6 @@
-namespace Goblin.Gameplay.Logic.Core
+using Goblin.Gameplay.Logic.Core;
+
+namespace Goblin.Gameplay.Logic.Translators.Common
 {
     public abstract class Translator
     {

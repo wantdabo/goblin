@@ -14,18 +14,23 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Ticker : Behavior<TickerInfo>
     {
+        private static List<Type> ttypes { get; set; } = new()
+        {
+            typeof(Gamepad),
+            typeof(StateMachine)
+        };
+        
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
             info.elapsed += info.scale * info.tick;
             // Ticking Behavior
-            List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
+            if (false == actor.stage.SeekBehaviorTypes(actor.id, out List<Type> types)) return;
             foreach (var type in types)
             {
-                if (false == BEHAVIOR_TICKS.TYPES.Contains(type)) continue;
+                if (false == ttypes.Contains(type)) continue;
                 if (typeof(Ticker) == type) continue;
-                
-                var behavior = actor.GetBehavior(type);
+                if (false == actor.SeekBehavior(type, out Behavior behavior)) continue;
                 behavior.Tick(info.tick);
             }
         }
@@ -34,12 +39,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTickEnd();
             // TickEnd Behavior
-            List<Type> types = actor.stage.GetBehaviorTypes(actor.id);
+            if (false == actor.stage.SeekBehaviorTypes(actor.id, out List<Type> types)) return;
             foreach (var type in types)
             {
-                if (false == BEHAVIOR_TICKS.TYPES.Contains(type)) continue;
+                if (false == ttypes.Contains(type)) continue;
                 if (typeof(Ticker) == type) continue;
-                var behavior = actor.GetBehavior(type);
+                if (false == actor.SeekBehavior(type, out Behavior behavior)) continue;
                 behavior.TickEnd();
             }
         }

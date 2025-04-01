@@ -38,7 +38,10 @@ namespace Goblin.Gameplay.Prefabs.Common
 
         protected override Actor OnProcessing(Actor actor, IPrefabInfo info)
         {
-            actor.GetBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, type);
+            if (actor.SeekBehavior(out Tag tag))
+            {
+                tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
+            }
             
             OnProcessing(actor, (T)info);
 

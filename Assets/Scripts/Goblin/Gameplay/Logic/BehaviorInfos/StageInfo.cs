@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Core
+namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
     /// <summary>
     /// 场景状态

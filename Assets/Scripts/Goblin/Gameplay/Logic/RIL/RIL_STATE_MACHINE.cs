@@ -36,12 +36,9 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public bool Equals(IRIL other)
         {
-            if (other is RIL_STATE_MACHINE _other)
-            {
-                return current == _other.current && frames == _other.frames;
-            }
+            RIL_STATE_MACHINE ril = (RIL_STATE_MACHINE)other;
             
-            return false;
+            return ril.id == id && ril.current == current && ril.frames == frames;
         }
 
         public override string ToString()

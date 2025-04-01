@@ -31,41 +31,12 @@ namespace Goblin.Gameplay.Logic.Core
             this.id = 0;
             this.stage = null;
         }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="type">Behavior 类型</param>
-        /// <returns>Behavior</returns>
-        public Behavior GetBehavior(Type type)
-        {
-            return stage.GetBehavior(id, type);
-        }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <typeparam name="T">Behavior 类型</typeparam>
-        /// <returns>Behavior</returns>
-        public T GetBehavior<T>() where T : Behavior, new()
-        {
-            return stage.GetBehavior<T>(id);
-        }
-
-        public bool SeekBehavior(Type type, out Behavior behavior)
-        {
-            behavior = stage.GetBehavior(id, type);
-
-            return null != behavior;
-        }
-
+        
         public bool SeekBehavior<T>(out T behavior) where T : Behavior, new()
         {
-            behavior = stage.GetBehavior<T>(id);
-
-            return null != behavior;
+            return stage.SeekBehavior<T>(id, out behavior);
         }
-
+        
         /// <summary>
         /// 添加 Behavior
         /// </summary>
@@ -77,21 +48,19 @@ namespace Goblin.Gameplay.Logic.Core
             return stage.AddBehavior<T>(id);
         }
 
-        public T AddBehaviorInfo<T>() where T : IBehaviorInfo, new()
+        public bool SeekBehavior(Type type, out Behavior behavior)
         {
-            return stage.AddBehaviorInfo<T>(id);
-        }
-
-        public T GetBehaviorInfo<T>() where T : IBehaviorInfo
-        {
-            return stage.GetBehaviorInfo<T>(id);
+            return stage.SeekBehavior(id, type, out behavior);
         }
         
         public bool SeekBehaviorInfo<T>(out T info) where T : IBehaviorInfo
         {
-            info = stage.GetBehaviorInfo<T>(id);
+            return stage.SeekBehaviorInfo<T>(id, out info);
+        }
 
-            return null != info;
+        public T AddBehaviorInfo<T>() where T : IBehaviorInfo, new()
+        {
+            return stage.AddBehaviorInfo<T>(id);
         }
     }
 }

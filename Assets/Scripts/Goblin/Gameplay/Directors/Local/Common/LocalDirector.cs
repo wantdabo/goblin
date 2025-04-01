@@ -60,7 +60,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
             input = AddComp<InputSystem>();
             input.Create();
 
-            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent(state: new ABStateInfo(id, ril)));
+            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent { state = new ABStateInfo(id, ril) });
         }
 
         protected override void OnDestroyGame()

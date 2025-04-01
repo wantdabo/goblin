@@ -42,7 +42,8 @@ namespace Goblin.Gameplay.Directors.Common
         public void Input(uint actorId, Stage stage)
         {
             var player = stage.GetActor(actorId);
-            var gamepad = player.GetBehavior<Gamepad>();
+            
+            if (false == player.SeekBehavior(out Gamepad gamepad)) return;
             
             var dir = joystickdire;
             if (Vector2.zero != dir)
