@@ -19,12 +19,13 @@ using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据.
+    /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据
     /// </summary>
     public sealed class Stage
     {
         /// <summary>
-        /// Stage.ActorID, Stage 的数据走的也是 Actor/Behavior/BehaviorInfo 那一套. 通过包装 Actor 的形式使用
+        /// Stage.ActorID, Stage 的数据走的也是 Actor/Behavior/BehaviorInfo 那一套
+        /// 通过包装 Actor 的形式使用
         /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
         /// </summary>
         private const ulong sa = ulong.MaxValue;

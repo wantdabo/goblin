@@ -4,23 +4,23 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// 行为信息, 类似 ECS 中的 Component.
+    /// 行为信息, 类似 ECS 中的 Component
     /// </summary>
     public interface IBehaviorInfo
     {
         /// <summary>
-        /// 初始化, 当 BehaviorInfo 从对象池中取出, 在这个回调中初始化数据.
+        /// 初始化, 当 BehaviorInfo 从对象池中取出, 在这个回调中初始化数据
         /// </summary>
         public void Ready();
         
         /// <summary>
-        /// 重置, 当 BehaviorInfo 回收, 重新回到对象池, 在这个回调中清理数据.
+        /// 重置, 当 BehaviorInfo 回收, 重新回到对象池, 在这个回调中清理数据
         /// </summary>
         public void Reset();
     }
     
     /// <summary>
-    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 中具体的逻辑.
+    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 中具体的逻辑
     /// </summary>
     public abstract class Behavior
     {
@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.Core
         public Actor actor => stage.GetActor(id);
 
         /// <summary>
-        /// 组装, 当一个 Behavior 被访问到, 会自动组装.
+        /// 组装, 当一个 Behavior 被访问到, 会自动组装
         /// </summary>
         /// <param name="stage">场景</param>
         /// <param name="id">Actor/实体</param>
@@ -50,7 +50,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// 拆解, 在帧末的时机, Actor 会被拆解回到对象池.
+        /// 拆解, 在帧末的时机, Actor 会被拆解回到对象池
         /// </summary>
         public void Disassemble()
         {
@@ -60,7 +60,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// Tick, 在每一帧中, 会被调用.
+        /// Tick, 在每一帧中, 会被调用
         /// </summary>
         /// <param name="tick">步长</param>
         public void Tick(FP tick)
@@ -69,7 +69,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
 
         /// <summary>
-        /// TickEnd, 在全部逻辑帧末, 会被调用.
+        /// TickEnd, 在全部逻辑帧末, 会被调用
         /// </summary>
         public void TickEnd()
         {
@@ -107,7 +107,7 @@ namespace Goblin.Gameplay.Logic.Core
     }
 
     /// <summary>
-    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 中具体的逻辑.
+    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 单一的逻辑
     /// </summary>
     /// <typeparam name="T">BehaviorInfo 类型</typeparam>
     public abstract class Behavior<T> : Behavior where T : IBehaviorInfo, new()
@@ -120,7 +120,7 @@ namespace Goblin.Gameplay.Logic.Core
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo,
+            // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
             // 自动获取 BehaviorInfo
             if (false == actor.stage.SeekBehaviorInfo(actor.id, out T temp)) temp = actor.stage.AddBehaviorInfo<T>(actor.id);
             info = temp;
