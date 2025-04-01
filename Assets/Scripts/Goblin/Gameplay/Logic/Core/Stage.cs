@@ -19,43 +19,77 @@ using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// 场景
+    /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据.
     /// </summary>
     public sealed class Stage
     {
-        private const ulong sa = 0;
-        public GameplayData gpdata { get; set; }
+        /// <summary>
+        /// Stage.ActorID, Stage 的数据走的也是 Actor/Behavior/BehaviorInfo 那一套. 通过包装 Actor 的形式使用
+        /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
+        /// </summary>
+        private const ulong sa = ulong.MaxValue;
+        /// <summary>
+        /// Stage 数据
+        /// </summary>
         private StageInfo info { get; set; }
+        /// <summary>
+        /// Stage 当前的运行状态
+        /// </summary>
         public StageState state => info.state;
+        /// <summary>
+        /// 随机数
+        /// </summary>
         public Random random => GetBehavior<Random>(sa);
+        /// <summary>
+        /// 渲染指令同步
+        /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
+        /// <summary>
+        /// 初始化 Stage 的游戏数据
+        /// </summary>
+        public GameplayData gpdata { get; set; }
+        /// <summary>
+        /// RIL 翻译器集合
+        /// </summary>
         private Dictionary<Type, Translator> translators { get; set; }
+        /// <summary>
+        /// 预制创建器集合
+        /// </summary>
         private Dictionary<Type, Prefab> prefabs { get; set; }
+        /// <summary>
+        /// 对外暴露抛出 RIL 的事件
+        /// </summary>
         public Action<ulong, IRIL> onril { get; set; }
 
+        /// <summary>
+        /// 初始化 Stage
+        /// </summary>
+        /// <param name="data">初始化的游戏数据</param>
+        /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
         public void Initialize(GameplayData data)
         {
             if (null == data) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
             
-            this.gpdata = data;
-
+            // 构建 StageInfo, 因为 Stage 的数据也是走 BehaviorInfo, 无法通过自举的方式走 API 添加
+            // 悖论存在, 此处手动添加
             info = ObjectCache.Get<StageInfo>();
             info.Ready();
             info.state = StageState.Initialized;
-
             info.actors.Add(sa);
-            var dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>();
-            dict.Add(typeof(StageInfo), info);
-            info.behaviorinfos.Add(sa, dict);
             
+            // 添加 Stage 行为
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
-            AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
-
+            AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
+            // 添加渲染指令翻译器
             Translators();
+            // 添加预制创建器
             Prefabs();
 
+            this.gpdata = data;
+            
+            // TODO 临时代码, 后续挪到一个单独的地方, 构建初始化世界
             foreach (var player in data.players)
             {
                 var actor = Spawn<Hero>(new HeroInfo
@@ -79,22 +113,31 @@ namespace Goblin.Gameplay.Logic.Core
             }
         }
         
+        /// <summary>
+        /// 销毁 Stage
+        /// </summary>
         public void Dispose()
         {
             if (StageState.Stopped != info.state) return;
             info.state = StageState.Disposed;
             
+            // 拆解所有
             Disassembles();
-            RecycleActors();
+            
+            // 回收 Actor
+            info.rmvactors.Clear();
             info.rmvactors.AddRange(info.actors);
             RecycleActors();
             
+            // StageInfo 回收
             info.Reset();
             ObjectCache.Set(info);
             
+            // 渲染指令翻译器回收
             translators.Clear();
             ObjectCache.Set(translators);
             
+            // 预制创建器回收
             prefabs.Clear();
             ObjectCache.Set(prefabs);
         }
@@ -102,19 +145,26 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 添加渲染指令翻译器
         /// </summary>
+        /// <exception cref="Exception">不能重复添加</exception>
         private void Translators()
         {
-            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
+            if (null != translators) throw new Exception("you cannot initialize more than once.");
             
+            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
             translators.Add(typeof(AttributeInfo), new Attribute().Initialize(this));
             translators.Add(typeof(SpatialInfo), new Spatial().Initialize(this));
             translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
         }
 
+        /// <summary>
+        /// 添加预制创建器
+        /// </summary>
+        /// <exception cref="Exception">不能重复添加</exception>
         private void Prefabs()
         {
-            prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
+            if (null != prefabs) throw new Exception("you cannot initialize more than once.");
             
+            prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
             prefabs.Add(typeof(Hero), new Hero());
         }
 
@@ -346,7 +396,7 @@ namespace Goblin.Gameplay.Logic.Core
             }
 
             var behavior = ObjectCache.Get<T>();
-            behavior.Assemble(GetActor(id));
+            behavior.Assemble(this, id);
             
             if (null == dict)
             {

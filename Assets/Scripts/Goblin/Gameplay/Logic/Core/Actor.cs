@@ -7,7 +7,10 @@ using Luban;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// 实体
+    /// Actor/实体, 类似 ECS 中的 Entity.
+    /// 但他不是具体存在的, 在调度过程中, 如果发起了访问, 底层会自动组装, 用来代理调度 Behavior.
+    /// 避免直接访问 BehaviorInfo/数据.
+    /// 每个逻辑帧末会拆解回对象池.
     /// </summary>
     public sealed class Actor
     {
@@ -20,21 +23,40 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Stage stage { get; private set; }
         
+        /// <summary>
+        /// 组装, 当一个 Actor 被访问到, 会自动组装.
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="stage">场景</param>
         public void Assemble(ulong id, Stage stage)
         {
             this.id = id;
             this.stage = stage;
         }
         
+        /// <summary>
+        /// 拆解, 在帧末的时机, Actor 会被拆解回到对象池.
+        /// </summary>
         public void Disassemble()
         {
             this.id = 0;
             this.stage = null;
         }
         
+        /// <summary>
+        /// 寻找 Behavior
+        /// </summary>
+        /// <param name="behavior">Behavior</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>YES/NO</returns>
         public bool SeekBehavior<T>(out T behavior) where T : Behavior, new()
         {
             return stage.SeekBehavior<T>(id, out behavior);
+        }
+        
+        public bool SeekBehavior(Type type, out Behavior behavior)
+        {
+            return stage.SeekBehavior(id, type, out behavior);
         }
         
         /// <summary>
@@ -47,17 +69,23 @@ namespace Goblin.Gameplay.Logic.Core
         {
             return stage.AddBehavior<T>(id);
         }
-
-        public bool SeekBehavior(Type type, out Behavior behavior)
-        {
-            return stage.SeekBehavior(id, type, out behavior);
-        }
         
+        /// <summary>
+        /// 寻找 BehaviorInfo
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>YES/NO</returns>
         public bool SeekBehaviorInfo<T>(out T info) where T : IBehaviorInfo
         {
             return stage.SeekBehaviorInfo<T>(id, out info);
         }
 
+        /// <summary>
+        /// 添加 BehaviorInfo
+        /// </summary>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
         public T AddBehaviorInfo<T>() where T : IBehaviorInfo, new()
         {
             return stage.AddBehaviorInfo<T>(id);
