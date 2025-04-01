@@ -23,6 +23,17 @@
 - 初始化界面（资源预热，热更新资源）
 - 支持，Goblin 以内，不重启游戏资源更新
 - Gameplay 战斗模块
+- 增加 GameplayData 解析
+  - 增加 Trigger 概念 （Actor 增强，松 Behavior 耦合）
+  - 增加 Batch （批处理 + 多线程）
+  - CodeReview 优化代码
+  - 注释补全
+  
+  - BeheaviorInfo 备份接入
+  
+  - 技能管线
+  - 子弹
+  - BUFF
 ---
 
 #### <span id="qstart">1.快速开始</span>
