@@ -3,25 +3,6 @@
 namespace Goblin.Gameplay.Logic.RIL.Common
 {
     /// <summary>
-    /// 渲染指令事件
-    /// </summary>
-    public struct RILSyncEvent : IEvent
-    {
-        /// <summary>
-        /// ActorID
-        /// </summary>
-        public uint id { get; set; }
-        /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
-        /// <summary>
-        /// 渲染指令
-        /// </summary>
-        public IRIL ril { get; set; }
-    }
-    
-    /// <summary>
     /// 渲染指令接口
     /// </summary>
     public interface IRIL

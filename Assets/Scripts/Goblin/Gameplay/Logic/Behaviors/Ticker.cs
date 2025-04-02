@@ -10,11 +10,14 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors
 {
     /// <summary>
-    /// 驱动器
+    /// 时间驱动器
     /// </summary>
     public class Ticker : Behavior<TickerInfo>
     {
-        private static List<Type> ticktypes { get; set; } = new()
+        /// <summary>
+        /// 需要被 Tick 的行为类型列表
+        /// </summary>
+        private List<Type> ticktypes { get; set; } = new()
         {
             typeof(Gamepad),
             typeof(StateMachine)
@@ -23,7 +26,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            // Ticking Behavior
             if (false == actor.stage.SeekBehaviorTypes(actor.id, out List<Type> types)) return;
             foreach (var type in types)
             {
@@ -37,7 +39,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTickEnd()
         {
             base.OnTickEnd();
-            // TickEnd Behavior
             if (false == actor.stage.SeekBehaviorTypes(actor.id, out List<Type> types)) return;
             foreach (var type in types)
             {

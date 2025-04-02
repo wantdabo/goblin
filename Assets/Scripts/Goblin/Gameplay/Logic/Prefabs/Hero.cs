@@ -7,18 +7,33 @@ using Goblin.Gameplay.Prefabs.Common;
 
 namespace Goblin.Gameplay.Prefabs
 {
+    /// <summary>
+    /// 英雄预设信息结构体
+    /// </summary>
     public struct HeroInfo : IPrefabInfo
     {
+        /// <summary>
+        /// 英雄 ID
+        /// </summary>
         public int hero { get; set; }
+        /// <summary>
+        /// 空间信息
+        /// </summary>
         public Spatial spatial { get; set; }
+        /// <summary>
+        /// 属性信息
+        /// </summary>
         public Attribute attribute { get; set; }
     }
 
+    /// <summary>
+    /// 英雄预制创建器
+    /// </summary>
     public class Hero : Prefab<HeroInfo>
     {
         public override byte type => ACTOR_DEFINE.HERO;
 
-        public override void OnProcessing(Actor actor, HeroInfo info)
+        protected override void OnProcessing(Actor actor, HeroInfo info)
         {
             actor.AddBehavior<Ticker>();
             actor.AddBehavior<StateMachine>();
@@ -37,7 +52,7 @@ namespace Goblin.Gameplay.Prefabs
 
             if (actor.SeekBehavior(out Tag tag))
             {
-                tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
+                tag.Set(TAG_DEFINE.HERO_ID, info.hero);
             }
         }
     }

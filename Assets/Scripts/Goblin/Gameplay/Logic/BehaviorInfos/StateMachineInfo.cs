@@ -6,18 +6,27 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class StateMachineInfo : IBehaviorInfo
+    /// <summary>
+    /// 状态机信息
+    /// </summary>
+    public class StateMachineInfo : BehaviorInfo
     {
-        public byte current { get; set; } = STATE_DEFINE.IDLE;
-        public uint frames { get; set; } = 0;
+        /// <summary>
+        /// 当前状态
+        /// </summary>
+        public byte current { get; set; }
+        /// <summary>
+        /// 持续帧数
+        /// </summary>
+        public uint frames { get; set; }
         
-        public void Ready()
+        protected override void OnReady()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;

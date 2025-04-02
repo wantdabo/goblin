@@ -3,18 +3,24 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class MovementInfo : IBehaviorInfo
+    /// <summary>
+    /// 运动信息
+    /// </summary>
+    public class MovementInfo : BehaviorInfo
     {
-        public bool motion { get; set; }
+        /// <summary>
+        /// 当前帧在运动
+        /// </summary>
+        public bool moving { get; set; }
         
-        public void Ready()
+        protected override void OnReady()
         {
-            Reset();
+            OnReset();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
-            motion = false;
+            moving = false;
         }
     }
 }

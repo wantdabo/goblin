@@ -4,19 +4,22 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class TickerInfo : IBehaviorInfo
+    /// <summary>
+    /// 驱动信息
+    /// </summary>
+    public class TickerInfo : BehaviorInfo
     {
         /// <summary>
         /// 时间缩放
         /// </summary>
-        public FP timescale { get; set; } = FP.One;
+        public FP timescale { get; set; }
 
-        public void Ready()
+        protected override void OnReady()
         {
-            Reset();
+            OnReset();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             timescale = FP.One;
         }

@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.RIL
     {
         public ushort id => RIL_DEFINE.SPATIAL;
         /// <summary>
-        /// 平移
+        /// 位置
         /// </summary>
         public FPVector3 position { get; private set; }
         /// <summary>
@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 空间渲染指令
         /// </summary>
-        /// <param name="position">平移</param>
+        /// <param name="position">位置</param>
         /// <param name="euler">旋转</param>
         /// <param name="scale">缩放</param>
         public RIL_SPATIAL(FPVector3 position, FPVector3 euler, FPVector3 scale)

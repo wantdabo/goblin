@@ -5,16 +5,22 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class TagInfo : IBehaviorInfo
+    /// <summary>
+    /// 标签信息, Actor 上的标签信息，用于标记 Actor 各种颗粒度细的信息
+    /// </summary>
+    public class TagInfo : BehaviorInfo
     {
+        /// <summary>
+        /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
+        /// </summary>
         public Dictionary<ushort, int> tags { get; set; }
 
-        public void Ready()
+        protected override void OnReady()
         {
             tags = ObjectCache.Get<Dictionary<ushort, int>>();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             tags.Clear();
             ObjectCache.Set(tags);

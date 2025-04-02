@@ -4,11 +4,14 @@ using Goblin.Gameplay.Logic.Translators.Common;
 
 namespace Goblin.Gameplay.Logic.Translators
 {
+    /// <summary>
+    /// 空间信息翻译器
+    /// </summary>
     public class Spatial : Translator<SpatialInfo>
     {
-        protected override void OnRIL(ulong id, SpatialInfo info)
+        protected override void OnRIL(SpatialInfo info)
         {
-            stage.rilsync.PushRIL(id, new RIL_SPATIAL(info.position, info.euler, info.scale));
+            stage.rilsync.PushRIL(info.id, new RIL_SPATIAL(info.position, info.euler, info.scale));
         }
     }
 }

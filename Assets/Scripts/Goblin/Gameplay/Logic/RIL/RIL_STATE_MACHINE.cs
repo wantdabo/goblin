@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public byte current { get; private set; }
         /// <summary>
-        /// 持续帧
+        /// 持续帧数
         /// </summary>
         public uint frames { get; private set; }
         

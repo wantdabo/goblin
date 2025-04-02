@@ -76,7 +76,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="info">BehaviorInfo</param>
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>YES/NO</returns>
-        public bool SeekBehaviorInfo<T>(out T info) where T : IBehaviorInfo
+        public bool SeekBehaviorInfo<T>(out T info) where T : BehaviorInfo
         {
             return stage.SeekBehaviorInfo<T>(id, out info);
         }
@@ -86,7 +86,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>BehaviorInfo</returns>
-        public T AddBehaviorInfo<T>() where T : IBehaviorInfo, new()
+        public T AddBehaviorInfo<T>() where T : BehaviorInfo, new()
         {
             return stage.AddBehaviorInfo<T>(id);
         }

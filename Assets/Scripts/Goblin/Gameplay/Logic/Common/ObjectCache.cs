@@ -4,8 +4,14 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Common
 {
+    /// <summary>
+    /// 对象池
+    /// </summary>
     public static class ObjectCache
     {
+        /// <summary>
+        /// 对象池字典，键为类型，值为该类型的对象池（字典，键为关键字，值为对象队列）
+        /// </summary>
         private static readonly Dictionary<Type, Dictionary<string, Queue<object>>> pool = new();
 
         /// <summary>

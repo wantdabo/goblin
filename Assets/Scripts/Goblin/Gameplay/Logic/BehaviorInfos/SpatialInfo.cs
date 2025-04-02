@@ -3,10 +3,13 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class SpatialInfo : IBehaviorInfo
+    /// <summary>
+    /// 空间信息
+    /// </summary>
+    public class SpatialInfo : BehaviorInfo
     {
         /// <summary>
-        /// 平移
+        /// 位置
         /// </summary>
         public FPVector3 position { get; set; }
         /// <summary>
@@ -18,12 +21,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public FPVector3 scale { get; set; }
 
-        public void Ready()
+        protected override void OnReady()
         {
-            Reset();
+            OnReset();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;

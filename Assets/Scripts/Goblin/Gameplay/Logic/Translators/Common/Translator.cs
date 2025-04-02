@@ -2,10 +2,21 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Translators.Common
 {
+    /// <summary>
+    /// 渲染指令翻译器
+    /// </summary>
     public abstract class Translator
     {
+        /// <summary>
+        /// 场景
+        /// </summary>
         protected Stage stage { get; private set; }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="stage">场景</param>
+        /// <returns>翻译器</returns>
         public Translator Initialize(Stage stage)
         {
             this.stage = stage;
@@ -13,24 +24,40 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             return this;
         }
 
-        public void Translate(ulong id, IBehaviorInfo info)
+        /// <summary>
+        /// 翻译
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
+        public void Translate(BehaviorInfo info)
         {
-            OnRIL(id, info);
+            OnRIL(info);
         }
 
-        protected virtual void OnRIL(ulong id, IBehaviorInfo info)
+        /// <summary>
+        /// 渲染指令处理
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
+        protected virtual void OnRIL(BehaviorInfo info)
         {
         }
     }
     
-    public abstract class Translator<T> : Translator where T : IBehaviorInfo
+    /// <summary>
+    /// 渲染指令翻译器
+    /// </summary>
+    /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+    public abstract class Translator<T> : Translator where T : BehaviorInfo
     {
-        protected override void OnRIL(ulong id, IBehaviorInfo info)
+        protected override void OnRIL(BehaviorInfo info)
         {
-            base.OnRIL(id, info);
-            OnRIL(id, (T)info);
+            base.OnRIL(info);
+            OnRIL((T)info);
         }
         
-        protected abstract void OnRIL(ulong id, T info);
+        /// <summary>
+        /// 渲染指令处理
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
+        protected abstract void OnRIL(T info);
     }
 }

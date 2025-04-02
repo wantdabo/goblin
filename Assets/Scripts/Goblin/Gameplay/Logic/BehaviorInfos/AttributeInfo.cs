@@ -2,19 +2,34 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class AttributeInfo : IBehaviorInfo
+    /// <summary>
+    /// 属性信息
+    /// </summary>
+    public class AttributeInfo : BehaviorInfo
     {
+        /// <summary>
+        /// 当前生命值
+        /// </summary>
         public uint hp { get; set; }
+        /// <summary>
+        /// 最大生命值
+        /// </summary>
         public uint maxhp { get; set; }
+        /// <summary>
+        /// 移动速度
+        /// </summary>
         public uint moveseed { get; set; }
+        /// <summary>
+        /// 攻击力
+        /// </summary>
         public uint attack { get; set; }
         
-        public void Ready()
+        protected override void OnReady()
         {
-            Reset();
+            OnReset();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             hp = 0;
             maxhp = 0;

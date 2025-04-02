@@ -5,16 +5,22 @@ using Goblin.Gameplay.Logic.RIL.Common;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    public class RIlSyncInfo : IBehaviorInfo
+    /// <summary>
+    /// RIL/渲染指令信息
+    /// </summary>
+    public class RIlSyncInfo : BehaviorInfo
     {
+        /// <summary>
+        /// Stage 中所有的 RIL 字典, 键为实体 ID, 值为该实体的 RIL 列表
+        /// </summary>
         public Dictionary<ulong, Dictionary<ushort, IRIL>> rildict { get; set; }
 
-        public void Ready()
+        protected override void OnReady()
         {
             rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             rildict.Clear();
             ObjectCache.Set(rildict);

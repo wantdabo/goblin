@@ -5,8 +5,15 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
 {
+    /// <summary>
+    /// 运动行为
+    /// </summary>
     public class Movement : Behavior<MovementInfo>
     {
+        /// <summary>
+        /// 移动
+        /// </summary>
+        /// <param name="motion">运动数据</param>
         public void Move(FPVector3 motion)
         {
             if (false == actor.SeekBehavior(out StateMachine machine) || false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
@@ -14,23 +21,28 @@ namespace Goblin.Gameplay.Logic.Behaviors
             {
                 spatial.position += motion;
             }
-            MarkMotion();
+            
+            SetMoving();
         }
 
-        public void MarkMotion()
+        /// <summary>
+        /// 标记为运动状态
+        /// </summary>
+        private void SetMoving()
         {
-            info.motion = true;
+            info.moving = true;
         }
 
         protected override void OnTickEnd()
         {
             base.OnTickEnd();
-            if (false == info.motion && actor.SeekBehavior(out StateMachine machine))
+            // 如果没有在移动状态, 则尝试切换到 Idle 状态
+            if (false == info.moving && actor.SeekBehavior(out StateMachine machine))
             {
                 machine.TryChangeState(STATE_DEFINE.IDLE);
             }
 
-            info.motion = false;
+            info.moving = false;
         }
     }
 }

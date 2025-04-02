@@ -6,17 +6,41 @@ namespace Goblin.Gameplay.Logic.Core
     /// <summary>
     /// 行为信息, 类似 ECS 中的 Component
     /// </summary>
-    public interface IBehaviorInfo
+    public abstract class BehaviorInfo
     {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong id { get; private set; }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        public void Ready(ulong id)
+        {
+            this.id = id;
+            OnReady();
+        }
+
+        /// <summary>
+        /// 重置
+        /// </summary>
+        public void Reset()
+        {
+            OnReset();
+            this.id = 0;
+        }
+
         /// <summary>
         /// 初始化, 当 BehaviorInfo 从对象池中取出, 在这个回调中初始化数据
         /// </summary>
-        public void Ready();
+        protected abstract void OnReady();
         
         /// <summary>
         /// 重置, 当 BehaviorInfo 回收, 重新回到对象池, 在这个回调中清理数据
         /// </summary>
-        public void Reset();
+        protected abstract void OnReset();
     }
     
     /// <summary>
@@ -110,7 +134,7 @@ namespace Goblin.Gameplay.Logic.Core
     /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 单一的逻辑
     /// </summary>
     /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-    public abstract class Behavior<T> : Behavior where T : IBehaviorInfo, new()
+    public abstract class Behavior<T> : Behavior where T : BehaviorInfo, new()
     {
         /// <summary>
         /// BehaviorInfo 快捷访问

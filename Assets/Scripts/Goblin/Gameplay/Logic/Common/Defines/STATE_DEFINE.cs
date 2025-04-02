@@ -28,6 +28,9 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// </summary>
         public const byte CASTING = 4;
 
+        /// <summary>
+        /// 状态切换规则
+        /// </summary>
         public static Dictionary<byte, List<byte>> PASSES { get; private set; } = new()
         {
             { IDLE, new List<byte>() { MOVE, FALL, CASTING } },

@@ -75,7 +75,7 @@ namespace Goblin.Gameplay.Logic.Core
             // 构建 StageInfo, 因为 Stage 的数据也是走 BehaviorInfo, 无法通过自举的方式走 API 添加
             // 悖论存在, 此处手动添加
             info = ObjectCache.Get<StageInfo>();
-            info.Ready();
+            info.Ready(sa);
             info.state = StageState.Initialized;
             info.actors.Add(sa);
             
@@ -241,12 +241,12 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private void Translate()
         {
-            foreach (var kv in info.behaviorinfos)
+            foreach (var kv in info.behaviordict)
             {
                 foreach (var kv2 in kv.Value)
                 {
                     if (false == translators.TryGetValue(kv2.Key, out var translator)) continue;
-                    translator.Translate(kv.Key, kv2.Value);
+                    translator.Translate(kv2.Value);
                 }
             }
         }
@@ -292,7 +292,7 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var rmvactor in info.rmvactors)
             {
                 // 回收 Actor 的 BehaviorInfos
-                if (info.behaviorinfos.TryGetValue(rmvactor, out var infos))
+                if (info.behaviordict.TryGetValue(rmvactor, out var infos))
                 {
                     foreach (var behaviorinfo in infos.Values)
                     {
@@ -301,7 +301,7 @@ namespace Goblin.Gameplay.Logic.Core
                     }
                     infos.Clear();
                     ObjectCache.Set(infos);
-                    info.behaviorinfos.Remove(rmvactor);
+                    info.behaviordict.Remove(rmvactor);
                 }
 
                 // 回收 Actor 的 Behaviors 容器
@@ -565,7 +565,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="info">BehaviorInfo</param>
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>YES/NO</returns>
-        public bool SeekBehaviorInfo<T>(ulong id, out T info) where T : IBehaviorInfo
+        public bool SeekBehaviorInfo<T>(ulong id, out T info) where T : BehaviorInfo
         {
             info = GetBehaviorInfo<T>(id);
             
@@ -578,9 +578,9 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="id">ActorID</param>
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>BehaviorInfo</returns>
-        private T GetBehaviorInfo<T>(ulong id) where T : IBehaviorInfo
+        private T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
         {
-            if (false == info.behaviorinfos.TryGetValue(id, out var dict)) return default;
+            if (false == info.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
 
             return (T)behaviorinfo;
@@ -593,18 +593,18 @@ namespace Goblin.Gameplay.Logic.Core
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>BehaviorInfo</returns>
         /// <exception cref="Exception">Actor 不存在 | BehaviorInfo 已存在</exception>
-        public T AddBehaviorInfo<T>(ulong id) where T : IBehaviorInfo, new()
+        public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
         {
             // 检查 Actor 是否存在
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             // 检查 BehaviorInfo 容器是否存在
-            if (false == info.behaviorinfos.TryGetValue(id, out var dict)) info.behaviorinfos.Add(id, dict = ObjectCache.Get<Dictionary<Type, IBehaviorInfo>>());
+            if (false == info.behaviordict.TryGetValue(id, out var dict)) info.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
             // 检查 BehaviorInfo 是否已经存在容器中
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 
             var behaviorinfo = ObjectCache.Get<T>();
             dict.Add(typeof(T), behaviorinfo);
-            behaviorinfo.Ready();
+            behaviorinfo.Ready(id);
             
             return behaviorinfo;
         }

@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Common.Extensions
         /// <summary>
         /// Vector3Data 转 FPVector3
         /// </summary>
-        /// <param name="vectordata"></param>
+        /// <param name="vectordata">三维向量数据</param>
         /// <returns>FPVector3</returns>
         public static FPVector3 ToFPVector3(this Vector3Data vectordata)
         {

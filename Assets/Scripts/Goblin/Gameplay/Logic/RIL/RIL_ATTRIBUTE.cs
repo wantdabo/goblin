@@ -11,11 +11,11 @@ namespace Goblin.Gameplay.Logic.RIL
         public ushort id => RIL_DEFINE.ATTRIBUTE;
         
         /// <summary>
-        /// 当前血量
+        /// 当前生命值
         /// </summary>
         public uint hp { get; private set; }
         /// <summary>
-        /// 最大血量
+        /// 最大生命值
         /// </summary>
         public uint maxhp { get; private set; }
         /// <summary>
@@ -30,8 +30,8 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 属性渲染指令
         /// </summary>
-        /// <param name="hp">当前血量</param>
-        /// <param name="maxhp">最大血量</param>
+        /// <param name="hp">当前生命值</param>
+        /// <param name="maxhp">最大生命值</param>
         /// <param name="movespeed">移动速度</param>
         /// <param name="attack">攻击力</param>
         public RIL_ATTRIBUTE(uint hp, uint maxhp, uint movespeed, uint attack)

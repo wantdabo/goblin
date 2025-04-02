@@ -6,7 +6,7 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
     /// <summary>
-    /// 按键输入的枚举
+    /// 按键输入枚举
     /// </summary>
     public enum InputType
     {
@@ -51,11 +51,17 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public FPVector2 dire { get; set; }
     }
     
-    public class GamepadInfo : IBehaviorInfo
+    /// <summary>
+    /// 手柄信息
+    /// </summary>
+    public class GamepadInfo : BehaviorInfo
     {
+        /// <summary>
+        /// 输入数据集合
+        /// </summary>
         public Dictionary<InputType, InputInfo> inputdict { get; set; }
 
-        public void Ready()
+        protected override void OnReady()
         {
             inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
             inputdict.Add(InputType.Joystick, new InputInfo { press = false, release = false, dire = FPVector2.zero });
@@ -65,7 +71,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             inputdict.Add(InputType.BD, new InputInfo { press = false, release = false, dire = FPVector2.zero });
         }
 
-        public void Reset()
+        protected override void OnReset()
         {
             inputdict.Clear();
             ObjectCache.Set(inputdict);
