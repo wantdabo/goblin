@@ -38,6 +38,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public StageState state => info.state;
         /// <summary>
+        /// 初始化 Stage 的游戏数据
+        /// </summary>
+        public GameplayData gpdata { get; set; }
+        /// <summary>
         /// 随机数
         /// </summary>
         public Random random => GetBehavior<Random>(sa);
@@ -45,10 +49,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// 渲染指令同步
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
-        /// <summary>
-        /// 初始化 Stage 的游戏数据
-        /// </summary>
-        public GameplayData gpdata { get; set; }
         /// <summary>
         /// 行为集合
         /// </summary>
