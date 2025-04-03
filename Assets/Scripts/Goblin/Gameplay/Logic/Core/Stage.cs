@@ -50,6 +50,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public GameplayData gpdata { get; set; }
         /// <summary>
+        /// 行为集合
+        /// </summary>
+        private Dictionary<uint, List<Behavior>> behaviors { get; set; }
+        /// <summary>
         /// RIL 翻译器集合
         /// </summary>
         private Dictionary<Type, Translator> translators { get; set; }
@@ -241,7 +245,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private void Translate()
         {
-            foreach (var kv in info.behaviordict)
+            foreach (var kv in info.behaviorinfodict)
             {
                 foreach (var kv2 in kv.Value)
                 {
@@ -292,7 +296,7 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var rmvactor in info.rmvactors)
             {
                 // 回收 Actor 的 BehaviorInfos
-                if (info.behaviordict.TryGetValue(rmvactor, out var infos))
+                if (info.behaviorinfodict.TryGetValue(rmvactor, out var infos))
                 {
                     foreach (var behaviorinfo in infos.Values)
                     {
@@ -301,7 +305,7 @@ namespace Goblin.Gameplay.Logic.Core
                     }
                     infos.Clear();
                     ObjectCache.Set(infos);
-                    info.behaviordict.Remove(rmvactor);
+                    info.behaviorinfodict.Remove(rmvactor);
                 }
 
                 // 回收 Actor 的 Behaviors 容器
@@ -580,7 +584,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>BehaviorInfo</returns>
         private T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
         {
-            if (false == info.behaviordict.TryGetValue(id, out var dict)) return default;
+            if (false == info.behaviorinfodict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
 
             return (T)behaviorinfo;
@@ -598,7 +602,7 @@ namespace Goblin.Gameplay.Logic.Core
             // 检查 Actor 是否存在
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             // 检查 BehaviorInfo 容器是否存在
-            if (false == info.behaviordict.TryGetValue(id, out var dict)) info.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+            if (false == info.behaviorinfodict.TryGetValue(id, out var dict)) info.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
             // 检查 BehaviorInfo 是否已经存在容器中
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 

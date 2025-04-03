@@ -83,7 +83,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 行为信息列表, 键为 ActorID, 值为该 Actor 上的所有行为信息
         /// </summary>
-        public Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviordict { get; set; }
+        public Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfodict { get; set; }
         /// <summary>
         /// 行为信息列表, 键为行为类型, 值为该行为类型的所有 BehaviorInfo 列表
         /// </summary>
@@ -109,7 +109,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             rmvactors = ObjectCache.Get<List<ulong>>();
             behaviors = ObjectCache.Get<Dictionary<ulong, List<Type>>>();
             behaviorowners = ObjectCache.Get<Dictionary<Type, List<ulong>>>();
-            behaviordict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
+            behaviorinfodict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
             behaviorinfos = ObjectCache.Get<Dictionary<Type, List<BehaviorInfo>>>();
             actorassembleds = ObjectCache.Get<Dictionary<ulong, Actor>>();
             behaviorassembleds = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Behavior>>>();
@@ -150,7 +150,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             ObjectCache.Set(behaviorowners);
             
             // 回收行为信息集合
-            foreach (var kv in behaviordict)
+            foreach (var kv in behaviorinfodict)
             {
                 foreach (var kv2 in kv.Value)
                 {
@@ -160,8 +160,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
                 kv.Value.Clear();
                 ObjectCache.Set(kv.Value);
             }
-            behaviordict.Clear();
-            ObjectCache.Set(behaviordict);
+            behaviorinfodict.Clear();
+            ObjectCache.Set(behaviorinfodict);
             
             // 回收行为信息列表
             foreach (var kv in behaviorinfos)
