@@ -205,7 +205,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// Tick 驱动
+        /// 驱动
         /// </summary>
         public void Step()
         {
