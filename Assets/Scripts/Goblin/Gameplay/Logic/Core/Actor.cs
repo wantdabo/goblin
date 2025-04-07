@@ -8,9 +8,6 @@ namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
     /// Actor/实体, 类似 ECS 中的 Entity.
-    /// 但他不是具体存在的, 在调度过程中, 如果发起了访问, 底层会自动组装, 用来代理调度 Behavior.
-    /// 避免直接访问 BehaviorInfo/数据.
-    /// 每个逻辑帧末会拆解回对象池.
     /// </summary>
     public sealed class Actor
     {
