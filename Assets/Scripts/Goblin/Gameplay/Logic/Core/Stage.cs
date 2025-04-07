@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Batches;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
@@ -161,7 +162,7 @@ namespace Goblin.Gameplay.Logic.Core
         private void Batches()
         {
             batches = ObjectCache.Get<Dictionary<Type, Batch>>();
-            batches.Add(typeof(Batchs.Translator), ObjectCache.Get<Batchs.Translator>().Load(this));
+            batches.Add(typeof(Translator), ObjectCache.Get<Translator>().Load(this));
         }
 
         /// <summary>

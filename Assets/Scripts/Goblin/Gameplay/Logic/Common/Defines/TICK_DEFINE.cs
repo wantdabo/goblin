@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.Batchs;
+using Goblin.Gameplay.Logic.Batches;
 using Goblin.Gameplay.Logic.Behaviors;
 
 namespace Goblin.Gameplay.Logic.Common.Defines
