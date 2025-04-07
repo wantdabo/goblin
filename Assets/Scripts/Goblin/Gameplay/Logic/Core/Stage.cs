@@ -274,6 +274,8 @@ namespace Goblin.Gameplay.Logic.Core
                         break;
                 }
             }
+            
+            RecycleActors();
         }
 
         /// <summary>
