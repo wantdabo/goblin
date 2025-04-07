@@ -19,6 +19,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// 场景
         /// </summary>
         public Stage stage { get; private set; }
+        /// <summary>
+        /// 事件订阅器
+        /// </summary>
+        public Eventor eventor => GetBehavior<Eventor>();
         
         /// <summary>
         /// 组装, 当一个 Actor 被访问到, 会自动组装.

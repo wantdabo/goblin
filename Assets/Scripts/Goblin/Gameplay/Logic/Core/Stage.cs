@@ -82,9 +82,10 @@ namespace Goblin.Gameplay.Logic.Core
             GetActor(sa).Assemble(sa, this);
             
             // 添加 Stage 行为
+            AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
+            AddBehavior<Eventor>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
-            AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
             // 添加预制创建器
             Prefabs();
             // 添加批处理
@@ -366,6 +367,7 @@ namespace Goblin.Gameplay.Logic.Core
             actor.Assemble(info.increment, this);
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
             actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
+            actor.AddBehavior<Eventor>();
             
             return actor;
         }
