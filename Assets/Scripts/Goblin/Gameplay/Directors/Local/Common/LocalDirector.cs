@@ -9,7 +9,6 @@ using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
-using Ticker = Goblin.Gameplay.Logic.Behaviors.Ticker;
 
 namespace Goblin.Gameplay.Directors.Local.Common
 {
@@ -118,7 +117,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
             input.Input(1, stage);
 
-            stage.Tick();
+            stage.Step();
         }
 
         private void OnTick(TickEvent e)

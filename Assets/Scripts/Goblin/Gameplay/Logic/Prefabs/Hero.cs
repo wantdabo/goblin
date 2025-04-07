@@ -2,10 +2,10 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.Prefabs.Datas;
-using Goblin.Gameplay.Prefabs.Common;
 
-namespace Goblin.Gameplay.Prefabs
+namespace Goblin.Gameplay.Logic.Prefabs
 {
     /// <summary>
     /// 英雄预设信息结构体
@@ -35,9 +35,10 @@ namespace Goblin.Gameplay.Prefabs
 
         protected override void OnProcessing(Actor actor, HeroInfo info)
         {
-            actor.AddBehavior<Ticker>();
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();
+
+            var ticker = actor.AddBehaviorInfo<TickerInfo>();
             
             var attribute = actor.AddBehaviorInfo<AttributeInfo>();
             attribute.hp = info.attribute.hp;

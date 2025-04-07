@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GameplayDatas;
+using Goblin.Gameplay.Logic.Prefabs;
+using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Gameplay.Logic.Translators.Common;
-using Goblin.Gameplay.Prefabs;
-using Goblin.Gameplay.Prefabs.Common;
 using Kowtow.Math;
 using Attribute = Goblin.Gameplay.Logic.Translators.Attribute;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
@@ -50,10 +51,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
         /// <summary>
-        /// 行为集合
-        /// </summary>
-        private Dictionary<uint, List<Behavior>> behaviors { get; set; }
-        /// <summary>
         /// RIL 翻译器集合
         /// </summary>
         private Dictionary<Type, Translator> translators { get; set; }
@@ -82,6 +79,8 @@ namespace Goblin.Gameplay.Logic.Core
             info.Ready(sa);
             info.state = StageState.Initialized;
             info.actors.Add(sa);
+            info.actordict.Add(sa, ObjectCache.Get<Actor>());
+            GetActor(sa).Assemble(sa, this);
             
             // 添加 Stage 行为
             AddBehavior<Random>(sa).Initialze(data.seed);
@@ -96,7 +95,7 @@ namespace Goblin.Gameplay.Logic.Core
             // TODO 临时代码, 后续挪到一个单独的地方, 构建初始化世界
             foreach (var player in data.players)
             {
-                var actor = Spawn<Hero>(new HeroInfo
+                var hero = Spawn<Hero>(new HeroInfo
                 {
                     hero = player.hero,
                     attribute = new()
@@ -113,7 +112,7 @@ namespace Goblin.Gameplay.Logic.Core
                         scale = FPVector3.one
                     }
                 });
-                actor.AddBehavior<Gamepad>();
+                hero.AddBehavior<Gamepad>();
             }
         }
         
@@ -124,9 +123,6 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (StageState.Stopped != info.state) return;
             info.state = StageState.Disposed;
-            
-            // 拆解所有
-            Disassembles();
             
             // 回收 Actor
             info.rmvactors.Clear();
@@ -211,33 +207,73 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Tick 驱动
         /// </summary>
-        public void Tick()
+        public void Step()
         {
             if (StageState.Ticking != info.state) return;
             
             // 帧号递增 & 时间流逝
             info.frame++;
             info.elapsed += info.tick;
-            
-            // 获取所有 Ticker, 进行 Tick 驱动
-            // 翻译 BehaviorInfo 成为 RIL 渲染指令
-            var tickers = GetBehaviors<Ticker>();
-            if (null != tickers)
+
+            // Tick 驱动
+            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
             {
-                // Tick 驱动
-                foreach (var ticker in tickers) ticker.Tick(info.tick);
-                // 翻译 RIL 渲染指令
-                Translate();
-                // 帧末调度
-                foreach (var ticker in tickers) ticker.TickEnd();
-                
-                tickers.Clear();
-                ObjectCache.Set(tickers);
+                switch (tt.ticktype)
+                {
+                    case TICK_DEFINE.BEHAVIOR:
+                        var behaviors = GetBehaviors(tt.type);
+                        if (null == behaviors) continue;
+                        foreach (var behavior in behaviors)
+                        {
+                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
+                            behavior.Tick(ticker.timescale * info.tick);
+                        }
+                        break;
+                    case TICK_DEFINE.BATCH:
+                        break;
+                }
+            }
+
+            // LateTick 驱动
+            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
+            {
+                switch (tt.ticktype)
+                {
+                    case TICK_DEFINE.BEHAVIOR:
+                        var behaviors = GetBehaviors(tt.type);
+                        if (null == behaviors) continue;
+                        foreach (var behavior in behaviors)
+                        {
+                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
+                            behavior.LateTick(ticker.timescale * info.tick);
+                        }
+                        break;
+                    case TICK_DEFINE.BATCH:
+                        break;
+                }
             }
             
-            // 拆解回收 Behavior & Actor
-            Disassembles();
-            RecycleActors();
+            // 翻译 BehaviorInfo 成为 RIL 渲染指令
+            Translate();
+
+            // 帧末调度
+            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
+            {
+                switch (tt.ticktype)
+                {
+                    case TICK_DEFINE.BEHAVIOR:
+                        var behaviors = GetBehaviors(tt.type);
+                        if (null == behaviors) continue;
+                        foreach (var behavior in behaviors)
+                        {
+                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
+                            behavior.TickEnd();
+                        }
+                        break;
+                    case TICK_DEFINE.BATCH:
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -254,40 +290,7 @@ namespace Goblin.Gameplay.Logic.Core
                 }
             }
         }
-        
-        /// <summary>
-        /// 拆解 Behavior & Actor
-        /// </summary>
-        private void Disassembles()
-        {
-            foreach (var id in info.actors)
-            {
-                // 拆解 Behavior 返回对象池
-                foreach (var type in GetBehaviorTypes(id))
-                {
-                    Behavior behavior = GetBehavior(id, type);
-                    behavior.Disassemble();
-                    ObjectCache.Set(behavior);
-                }
-                
-                // 拆解 Actor 返回对象池
-                Actor actor = GetActor(id);
-                actor.Disassemble();
-                ObjectCache.Set(actor);
-            }
-            
-            // 回收 Behavior & Actor 容器
-            foreach (var kv in info.behaviorassembleds)
-            {
-                kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
-            }
-            
-            // 不回收到对象池, 下一帧还要用
-            info.behaviorassembleds.Clear();
-            info.actorassembleds.Clear();
-        }
-        
+
         /// <summary>
         /// 回收/销毁 RmvActors
         /// </summary>
@@ -295,50 +298,55 @@ namespace Goblin.Gameplay.Logic.Core
         {
             foreach (var rmvactor in info.rmvactors)
             {
-                // 回收 Actor 的 BehaviorInfos
-                if (info.behaviorinfodict.TryGetValue(rmvactor, out var infos))
+                if (info.behaviorinfodict.TryGetValue(rmvactor, out var infodict))
                 {
-                    foreach (var behaviorinfo in infos.Values)
+                    foreach (var behaviorinfo in infodict.Values)
                     {
+                        if (info.behaviorinfos.TryGetValue(behaviorinfo.GetType(), out var infos))
+                        {
+                            infos.Remove(behaviorinfo);
+                            if (0 == infos.Count)
+                            {
+                                ObjectCache.Set(infos);
+                                info.behaviorinfos.Remove(behaviorinfo.GetType());
+                            }
+                        }
                         behaviorinfo.Reset();
                         ObjectCache.Set(behaviorinfo);
                     }
-                    infos.Clear();
-                    ObjectCache.Set(infos);
+                    infodict.Clear();
+                    ObjectCache.Set(infodict);
                     info.behaviorinfodict.Remove(rmvactor);
                 }
 
-                // 回收 Actor 的 Behaviors 容器
-                if (info.behaviors.TryGetValue(rmvactor, out var types))
+                if (info.behaviordict.TryGetValue(rmvactor, out var behaviordict))
                 {
-                    foreach (var type in types)
+                    foreach (var behavior in behaviordict.Values)
                     {
-                        // 移除 Behavior Owner
-                        if (false == info.behaviorowners.TryGetValue(type, out var owners)) continue;
-                        owners.Remove(rmvactor);
-
-                        // 如果容器为空, 回收到对象池
-                        if (0 == owners.Count)
+                        if (info.behaviors.TryGetValue(behavior.GetType(), out var behaviors))
                         {
-                            ObjectCache.Set(owners);
-                            info.behaviorowners.Remove(type);
+                            behaviors.Remove(behavior);
+                            if (0 == behaviors.Count)
+                            {
+                                ObjectCache.Set(behaviors);
+                                info.behaviors.Remove(behavior.GetType());
+                            }
                         }
+                        behavior.Disassemble();
+                        ObjectCache.Set(behavior);
                     }
-                    
-                    // 回收 Actor 的 BehaviorType 容器
-                    types.Clear();
-                    ObjectCache.Set(types);
-                    info.behaviors.Remove(rmvactor);
                 }
 
-                // 从 Actors 中移除 Actor
-                info.actors.Remove(rmvactor);
+                if (info.actordict.TryGetValue(rmvactor, out var actor))
+                {
+                    info.actors.Remove(rmvactor);
+                    info.actordict.Remove(rmvactor);
+                    actor.Disassemble();
+                }
             }
-            
-            // 清空 RmvActors
             info.rmvactors.Clear();
         }
-        
+
         /// <summary>
         /// 根据预制创建器构建一个 Actor
         /// </summary>
@@ -350,7 +358,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
             
-            return prefab.Processing(GenActor(), info);
+            return prefab.Processing(AddActor(), info);
         }
 
         /// <summary>
@@ -362,18 +370,11 @@ namespace Goblin.Gameplay.Logic.Core
         {
             // Actor 不存在
             if (false == info.actors.Contains(id)) return default;
-            
-            // 返回当前帧已经组装好的 Actor
-            if (info.actorassembleds.TryGetValue(id, out var actor)) return actor;
-
-            // 组装 Actor, 并存入组装列表
-            actor = ObjectCache.Get<Actor>();
-            actor.Assemble(id,this);
-            info.actorassembleds.Add(id, actor);
+            if (false == info.actordict.TryGetValue(id, out var actor)) return default;
             
             return actor;
         }
-
+        
         /// <summary>
         /// 移除 Actor
         /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Stage.RmvActors)
@@ -384,36 +385,26 @@ namespace Goblin.Gameplay.Logic.Core
             if (info.rmvactors.Contains(id)) return;
             info.rmvactors.Add(id);
         }
-        
+
         /// <summary>
         /// 添加 Actor
         /// </summary>
         /// <returns>Actor</returns>
-        public Actor GenActor()
+        public Actor AddActor()
         {
             // 生成一个 Actor
             info.increment++;
+            var actor = ObjectCache.Get<Actor>();
             info.actors.Add(info.increment);
-            var actor = GetActor(info.increment);
+            info.actordict.Add(info.increment, actor);
+            
+            actor.Assemble(info.increment, this);
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
             actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
             
             return actor;
         }
-        
-        /// <summary>
-        /// 根据 ActorID 获取 Behavior 类型列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="types">Behavior 类型列表</param>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviorTypes(ulong id, out List<Type> types)
-        {
-            types = GetBehaviorTypes(id);
 
-            return null != types;
-        }
-        
         /// <summary>
         /// 获取指定类型的所有 Behavior 列表
         /// </summary>
@@ -423,41 +414,69 @@ namespace Goblin.Gameplay.Logic.Core
         public bool SeekBehaviors<T>(out List<T> behaviors) where T : Behavior
         {
             behaviors = GetBehaviors<T>();
-
+        
             return null != behaviors;
         }
         
-        /// <summary>
-        /// 根据 ActorID 获取 Behavior 类型列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <returns>Behavior 类型列表</returns>
-        /// <exception cref="Exception">Actor 不存在</exception>
-        private List<Type> GetBehaviorTypes(ulong id)
-        {
-            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            if (false == info.behaviors.TryGetValue(id, out var list)) return default;
-
-            return list;
-        }
-
         /// <summary>
         /// 获取指定类型的所有 Behavior 列表
         /// </summary>
         /// <typeparam name="T">Behavior 类型</typeparam>
         /// <returns>所有 Behavior 列表</returns>
-        private List<T> GetBehaviors<T>() where T : Behavior
+        public List<T> GetBehaviors<T>() where T : Behavior
         {
             var type = typeof(T);
-            if (false == info.behaviorowners.TryGetValue(type, out var owners) || 0 == owners.Count) return default;
+            if (false == info.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
 
-            // 根据类型去获取 ActorID 获取
-            var list = ObjectCache.Get<List<T>>();
-            foreach (var owner in owners) list.Add(GetBehavior(owner, type) as T);
+            // 根据类型去获取所有 Behavior
+            var result = ObjectCache.Get<List<T>>();
+            foreach (var behavior in list) result.Add(behavior as T);
 
+            return result;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// <param name="type">类型</param>
+        /// </summary>
+        /// <returns>所有 Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(Type type)
+        {
+            if (false == info.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
+
+            // 根据类型去获取所有 Behavior
             return list;
         }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="behaviors">Behavior 列表</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(ulong id, out List<Behavior> behaviors)
+        {
+            behaviors = GetBehaviors(id);
         
+            return null != behaviors;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <returns>Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(ulong id)
+        {
+            if (false == info.behaviordict.TryGetValue(id, out var dict) || dict.Count == 0) return default;
+
+            // 根据 ActorID 获取所有 Behavior
+            var result = ObjectCache.Get<List<Behavior>>();
+            foreach (var behavior in dict.Values) result.Add(behavior);
+
+            return result;
+        }
+
         /// <summary>
         /// 获取 Behavior
         /// </summary>
@@ -468,7 +487,7 @@ namespace Goblin.Gameplay.Logic.Core
         public bool SeekBehavior<T>(ulong id, out T behavior) where T : Behavior, new()
         {
             behavior = GetBehavior<T>(id);
-
+        
             return null != behavior;
         }
 
@@ -482,27 +501,8 @@ namespace Goblin.Gameplay.Logic.Core
         public bool SeekBehavior(ulong id, Type type, out Behavior behavior)
         {
             behavior = GetBehavior(id, type);
-
+        
             return null != behavior;
-        }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="type">Behavior 类型</param>
-        /// <returns>Behavior</returns>
-        private Behavior GetBehavior(ulong id, Type type)
-        {
-            if (typeof(Gamepad) == type) return GetBehavior<Gamepad>(id);
-            else if (typeof(Movement) == type) return GetBehavior<Movement>(id);
-            else if (typeof(Random) == type) return GetBehavior<Random>(id);
-            else if (typeof(RILSync) == type) return GetBehavior<RILSync>(id);
-            else if (typeof(StateMachine) == type) return GetBehavior<StateMachine>(id);
-            else if (typeof(Tag) == type) return GetBehavior<Tag>(id);
-            else if (typeof(Ticker) == type) return GetBehavior<Ticker>(id);
-
-            return default;
         }
 
         /// <summary>
@@ -512,30 +512,26 @@ namespace Goblin.Gameplay.Logic.Core
         /// <typeparam name="T">Behavior 类型</typeparam>
         /// <returns>Behavior</returns>
         /// <exception cref="Exception">Actor 不存在</exception>
-        private T GetBehavior<T>(ulong id) where T : Behavior, new()
+        public T GetBehavior<T>(ulong id) where T : Behavior
+        {
+            var behavior = GetBehavior(id, typeof(T));
+            if (null == behavior) return default;
+
+            return behavior as T;
+        }
+        
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <returns>Behavior</returns>
+        public Behavior GetBehavior(ulong id, Type type)
         {
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == info.behaviordict.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(type, out var behavior)) return default;
             
-            // 没在 Behavior 列表中找到
-            if (false == info.behaviors.TryGetValue(id, out var list) || false == list.Contains(typeof(T))) return default;
-
-            // 返回当前帧已经组装好的 Behavior
-            if (info.behaviorassembleds.TryGetValue(id, out var dict) && dict.TryGetValue(typeof(T), out var b)) return b as T;
-
-            var behavior = ObjectCache.Get<T>();
-            behavior.Assemble(this, id);
-            
-            // 当前帧组装集合 Behavior 集合不存在
-            // 构建集合
-            if (null == dict)
-            {
-                dict = ObjectCache.Get<Dictionary<Type, Behavior>>();
-                info.behaviorassembleds.Add(id, dict);
-            }
-            
-            // 存入当前帧组装集合
-            dict.Add(typeof(T), behavior);
-
             return behavior;
         }
 
@@ -548,20 +544,21 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">Actor 不存在 | Behavior 已存在</exception>
         public T AddBehavior<T>(ulong id) where T : Behavior, new()
         {
-            // 检查 Actor 是否存在
             if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             // 检查 Behavior 容器是否存在
-            if (false == info.behaviors.TryGetValue(id, out var list)) info.behaviors.Add(id, list = ObjectCache.Get<List<Type>>());
+            if (false == info.behaviors.TryGetValue(typeof(T), out var list)) info.behaviors.Add(typeof(T), list = ObjectCache.Get<List<Behavior>>());
+            if (false == info.behaviordict.TryGetValue(id, out var dict)) info.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, Behavior>>());
             // 检查 Behavior 是否已经存在容器中
-            if (list.Contains(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
-
-            if (false == info.behaviorowners.TryGetValue(typeof(T), out var owners)) info.behaviorowners.Add(typeof(T), owners = ObjectCache.Get<List<ulong>>());
-            owners.Add(id);
-            list.Add(typeof(T));
+            if (dict.ContainsKey(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
             
-            return GetBehavior<T>(id);
+            var behavior = ObjectCache.Get<T>();
+            list.Add(behavior);
+            dict.Add(typeof(T), behavior);
+            behavior.Assemble(this, GetActor(id));
+
+            return behavior;
         }
-        
+
         /// <summary>
         /// 获取 BehaviorInfo
         /// </summary>
@@ -582,7 +579,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="id">ActorID</param>
         /// <typeparam name="T">BehaviorInfo 类型</typeparam>
         /// <returns>BehaviorInfo</returns>
-        private T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
+        public T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
         {
             if (false == info.behaviorinfodict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;

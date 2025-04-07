@@ -17,7 +17,8 @@ namespace Goblin.Sys.Gameplay.View
 
             AddUIEventListener("ExitBtn", (e) =>
             {
-                engine.proxy.gameplay.Stop();
+                engine.proxy.gameplay.StopGame();
+                engine.proxy.gameplay.DestroyGame();
                 engine.gameui.Open<LobbyView>();
             });
         }

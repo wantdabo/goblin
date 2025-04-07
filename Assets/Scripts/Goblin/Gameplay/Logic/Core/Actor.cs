@@ -42,7 +42,27 @@ namespace Goblin.Gameplay.Logic.Core
             this.id = 0;
             this.stage = null;
         }
-        
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="type">Behavior 类型</param>
+        /// <returns>Behavior</returns>
+        public Behavior GetBehavior(Type type)
+        {
+            return stage.GetBehavior(id, type);
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>Behavior</returns>
+        public T GetBehavior<T>() where T : Behavior
+        {
+            return stage.GetBehavior<T>(id);
+        }
+
         /// <summary>
         /// 寻找 Behavior
         /// </summary>
@@ -68,6 +88,16 @@ namespace Goblin.Gameplay.Logic.Core
         public T AddBehavior<T>() where T : Behavior, new()
         {
             return stage.AddBehavior<T>(id);
+        }
+        
+        /// <summary>
+        /// 获取 BehaviorInfo
+        /// </summary>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
+        public T GetBehaviorInfo<T>() where T : BehaviorInfo
+        {
+            return stage.GetBehaviorInfo<T>(id);
         }
         
         /// <summary>

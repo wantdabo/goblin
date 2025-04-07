@@ -16,10 +16,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <param name="id">ActorID</param>
-        public void Ready(ulong id)
+        /// <param name="actor">ActorID</param>
+        public void Ready(ulong actor)
         {
-            this.id = id;
+            this.id = actor;
             OnReady();
         }
 
@@ -49,27 +49,23 @@ namespace Goblin.Gameplay.Logic.Core
     public abstract class Behavior
     {
         /// <summary>
-        /// ActorID
+        /// 实体
         /// </summary>
-        protected ulong id { get; private set; }
+        public Actor actor { get; private set; }
         /// <summary>
         /// 场景
         /// </summary>
         protected Stage stage { get; private set; }
-        /// <summary>
-        /// 实体
-        /// </summary>
-        public Actor actor => stage.GetActor(id);
 
         /// <summary>
         /// 组装, 当一个 Behavior 被访问到, 会自动组装
         /// </summary>
         /// <param name="stage">场景</param>
-        /// <param name="id">Actor/实体</param>
-        public void Assemble(Stage stage, ulong id)
+        /// <param name="actor">Actor/实体</param>
+        public void Assemble(Stage stage, Actor actor)
         {
+            this.actor = actor;
             this.stage = stage;
-            this.id = id;
             OnAssemble();
         }
         
@@ -79,8 +75,8 @@ namespace Goblin.Gameplay.Logic.Core
         public void Disassemble()
         {
             OnDisassemble();
+            this.actor = null;
             this.stage = null;
-            this.id = 0;
         }
         
         /// <summary>
@@ -90,6 +86,15 @@ namespace Goblin.Gameplay.Logic.Core
         public void Tick(FP tick)
         {
             OnTick(tick);
+        }
+        
+        /// <summary>
+        /// LateTick, 在每一帧的逻辑处理后, 会被调用
+        /// </summary>
+        /// <param name="tick">步长</param>
+        public void LateTick(FP tick)
+        {
+            OnLateTick(tick);
         }
 
         /// <summary>
@@ -121,6 +126,14 @@ namespace Goblin.Gameplay.Logic.Core
         protected virtual void OnTick(FP tick)
         {
         }
+        
+        /// <summary>
+        /// LateTick, 子类重写
+        /// </summary>
+        /// <param name="tick">步长</param>
+        protected virtual void OnLateTick(FP tick)
+        {
+        }
 
         /// <summary>
         /// TickEnd, 子类重写
@@ -146,8 +159,8 @@ namespace Goblin.Gameplay.Logic.Core
             base.OnAssemble();
             // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
             // 自动获取 BehaviorInfo
-            if (false == actor.stage.SeekBehaviorInfo(actor.id, out T temp)) temp = actor.stage.AddBehaviorInfo<T>(actor.id);
-            info = temp;
+            info = actor.stage.GetBehaviorInfo<T>(actor.id);
+            if (null == info) info = stage.AddBehaviorInfo<T>(actor.id);
         }
 
         protected override void OnDisassemble()

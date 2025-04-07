@@ -9,8 +9,6 @@ using Goblin.Sys.Gameplay.View;
 using Kowtow;
 using Kowtow.Math;
 using UnityEngine;
-using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
-using Ticker = Goblin.Gameplay.Logic.Behaviors.Ticker;
 
 namespace Goblin.Sys.Gameplay
 {
@@ -44,24 +42,29 @@ namespace Goblin.Sys.Gameplay
             director = null;
         }
 
-        public void Start()
+        public void StartGame()
         {
             director.StartGame();
         }
 
-        public void Pause()
+        public void PauseGame()
         {
             director.PauseGame();
         }
         
-        public void Resume()
+        public void ResumeGame()
         {
             director.ResumeGame();
         }
         
-        public void Stop()
+        public void StopGame()
         {
             director.StopGame();
+        }
+
+        public void DestroyGame()
+        {
+            director.DestroyGame();
         }
     }
 }

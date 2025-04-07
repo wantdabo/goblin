@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Prefabs.Common
+namespace Goblin.Gameplay.Logic.Prefabs.Common
 {
     /// <summary>
     /// 预制创建器信息
