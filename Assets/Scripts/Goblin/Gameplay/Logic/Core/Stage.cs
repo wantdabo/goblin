@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
@@ -10,12 +8,8 @@ using Goblin.Gameplay.Logic.Common.GameplayDatas;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
-using Goblin.Gameplay.Logic.Translators;
-using Goblin.Gameplay.Logic.Translators.Common;
 using Kowtow.Math;
-using Attribute = Goblin.Gameplay.Logic.Translators.Attribute;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
-using StateMachine = Goblin.Gameplay.Logic.Behaviors.StateMachine;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -29,15 +23,19 @@ namespace Goblin.Gameplay.Logic.Core
         /// 通过包装 Actor 的形式使用
         /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
         /// </summary>
-        private const ulong sa = ulong.MaxValue;
-        /// <summary>
-        /// Stage 数据
-        /// </summary>
-        private StageInfo info { get; set; }
+        public ulong sa { get; private set; } = ulong.MaxValue;
         /// <summary>
         /// Stage 当前的运行状态
         /// </summary>
         public StageState state => info.state;
+        /// <summary>
+        /// Stage 当前的帧号
+        /// </summary>
+        public uint frame => info.frame;
+        /// <summary>
+        /// Stage 数据
+        /// </summary>
+        public StageInfo info { get; private set; }
         /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
@@ -51,13 +49,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
         /// <summary>
-        /// RIL 翻译器集合
-        /// </summary>
-        private Dictionary<Type, Translator> translators { get; set; }
-        /// <summary>
         /// 预制创建器集合
         /// </summary>
-        private Dictionary<Type, Prefab> prefabs { get; set; }
+        public Dictionary<Type, Prefab> prefabs { get; set; }
+        /// <summary>
+        /// 批处理集合
+        /// </summary>
+        public Dictionary<Type, Batch> batches { get; set; }
         /// <summary>
         /// 对外暴露抛出 RIL 的事件
         /// </summary>
@@ -86,10 +84,10 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
             AddBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
-            // 添加渲染指令翻译器
-            Translators();
             // 添加预制创建器
             Prefabs();
+            // 添加批处理
+            Batches();
 
             this.gpdata = data;
             // TODO 临时代码, 后续挪到一个单独的地方, 构建初始化世界
@@ -129,43 +127,41 @@ namespace Goblin.Gameplay.Logic.Core
             info.rmvactors.AddRange(info.actors);
             RecycleActors();
             
+            // 卸载 Prefabs
+            foreach (var prefab in prefabs.Values) prefab.Unload();
+            prefabs.Clear();
+            ObjectCache.Set(prefabs);
+
+            // 卸载批处理
+            foreach (var batch in batches.Values)
+            {
+                batch.Unload();
+            }
+            batches.Clear();
+            ObjectCache.Set(batches);
+            
             // StageInfo 回收
             info.Reset();
             ObjectCache.Set(info);
-            
-            // 渲染指令翻译器回收
-            translators.Clear();
-            ObjectCache.Set(translators);
-            
-            // 预制创建器回收
-            prefabs.Clear();
-            ObjectCache.Set(prefabs);
         }
-
-        /// <summary>
-        /// 添加渲染指令翻译器
-        /// </summary>
-        /// <exception cref="Exception">不能重复添加</exception>
-        private void Translators()
-        {
-            if (null != translators) throw new Exception("you cannot initialize more than once.");
-            
-            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
-            translators.Add(typeof(AttributeInfo), new Attribute().Initialize(this));
-            translators.Add(typeof(SpatialInfo), new Spatial().Initialize(this));
-            translators.Add(typeof(StateMachineInfo), new Translators.StateMachine().Initialize(this));
-        }
-
+        
         /// <summary>
         /// 添加预制创建器
         /// </summary>
         /// <exception cref="Exception">不能重复添加</exception>
         private void Prefabs()
         {
-            if (null != prefabs) throw new Exception("you cannot initialize more than once.");
-            
             prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
-            prefabs.Add(typeof(Hero), new Hero());
+            prefabs.Add(typeof(Hero), ObjectCache.Get<Hero>().Load(this));
+        }
+        
+        /// <summary>
+        /// 添加批处理
+        /// </summary>
+        private void Batches()
+        {
+            batches = ObjectCache.Get<Dictionary<Type, Batch>>();
+            batches.Add(typeof(Batchs.Translator), ObjectCache.Get<Batchs.Translator>().Load(this));
         }
 
         /// <summary>
@@ -230,31 +226,11 @@ namespace Goblin.Gameplay.Logic.Core
                         }
                         break;
                     case TICK_DEFINE.BATCH:
+                        if (false == batches.TryGetValue(tt.type, out var batch)) continue;
+                        batch.Tick(info.tick);
                         break;
                 }
             }
-
-            // LateTick 驱动
-            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
-            {
-                switch (tt.ticktype)
-                {
-                    case TICK_DEFINE.BEHAVIOR:
-                        var behaviors = GetBehaviors(tt.type);
-                        if (null == behaviors) continue;
-                        foreach (var behavior in behaviors)
-                        {
-                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
-                            behavior.LateTick(ticker.timescale * info.tick);
-                        }
-                        break;
-                    case TICK_DEFINE.BATCH:
-                        break;
-                }
-            }
-            
-            // 翻译 BehaviorInfo 成为 RIL 渲染指令
-            Translate();
 
             // 帧末调度
             foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
@@ -266,31 +242,17 @@ namespace Goblin.Gameplay.Logic.Core
                         if (null == behaviors) continue;
                         foreach (var behavior in behaviors)
                         {
-                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
-                            behavior.TickEnd();
+                            behavior.EndTick();
                         }
                         break;
                     case TICK_DEFINE.BATCH:
+                        if (false == batches.TryGetValue(tt.type, out var batch)) continue;
+                        batch.EndTick();
                         break;
                 }
             }
             
             RecycleActors();
-        }
-
-        /// <summary>
-        /// 翻译 RIL 渲染指令, 遍历整个 Stage BehaviorInfo 来生成渲染指令
-        /// </summary>
-        private void Translate()
-        {
-            foreach (var kv in info.behaviorinfodict)
-            {
-                foreach (var kv2 in kv.Value)
-                {
-                    if (false == translators.TryGetValue(kv2.Key, out var translator)) continue;
-                    translator.Translate(kv2.Value);
-                }
-            }
         }
 
         /// <summary>
@@ -352,15 +314,15 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 根据预制创建器构建一个 Actor
         /// </summary>
-        /// <param name="info">预制构建器数据</param>
+        /// <param name="prefabinfo">预制构建器数据</param>
         /// <typeparam name="T">预制构建器类型</typeparam>
         /// <returns>Actor</returns>
         /// <exception cref="Exception">预制构建器类型不存在</exception>
-        public Actor Spawn<T>(IPrefabInfo info) where T : Prefab
+        public Actor Spawn<T>(IPrefabInfo prefabinfo) where T : Prefab
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
             
-            return prefab.Processing(AddActor(), info);
+            return prefab.Processing(AddActor(), prefabinfo);
         }
 
         /// <summary>

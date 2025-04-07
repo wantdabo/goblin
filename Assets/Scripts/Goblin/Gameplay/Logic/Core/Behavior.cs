@@ -89,20 +89,11 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// LateTick, 在每一帧的逻辑处理后, 会被调用
+        /// EndTick, 在全部逻辑帧末, 会被调用
         /// </summary>
-        /// <param name="tick">步长</param>
-        public void LateTick(FP tick)
+        public void EndTick()
         {
-            OnLateTick(tick);
-        }
-
-        /// <summary>
-        /// TickEnd, 在全部逻辑帧末, 会被调用
-        /// </summary>
-        public void TickEnd()
-        {
-            OnTickEnd();
+            OnEndTick();
         }
 
         /// <summary>
@@ -126,19 +117,11 @@ namespace Goblin.Gameplay.Logic.Core
         protected virtual void OnTick(FP tick)
         {
         }
-        
-        /// <summary>
-        /// LateTick, 子类重写
-        /// </summary>
-        /// <param name="tick">步长</param>
-        protected virtual void OnLateTick(FP tick)
-        {
-        }
 
         /// <summary>
-        /// TickEnd, 子类重写
+        /// EndTick, 子类重写
         /// </summary>
-        protected virtual void OnTickEnd()
+        protected virtual void OnEndTick()
         {
         }
     }

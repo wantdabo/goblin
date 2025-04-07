@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
         }
 
-        protected override void OnTickEnd()
+        protected override void OnEndTick()
         {
             ClearReleaseTokenAll();
         }

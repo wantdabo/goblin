@@ -24,15 +24,23 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         protected Stage stage { get; private set; }
 
         /// <summary>
-        /// 初始化
+        /// 加载
         /// </summary>
         /// <param name="stage">场景</param>
         /// <returns>预制创建器</returns>
-        public Prefab Initialize(Stage stage)
+        public Prefab Load(Stage stage)
         {
             this.stage = this.stage;
 
             return this;
+        }
+
+        /// <summary>
+        /// 卸载
+        /// </summary>
+        public void Unload()
+        {
+            this.stage = null;
         }
 
         /// <summary>

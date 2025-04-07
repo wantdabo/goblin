@@ -13,15 +13,23 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         protected Stage stage { get; private set; }
 
         /// <summary>
-        /// 初始化
+        /// 加载
         /// </summary>
         /// <param name="stage">场景</param>
         /// <returns>翻译器</returns>
-        public Translator Initialize(Stage stage)
+        public Translator Load(Stage stage)
         {
             this.stage = stage;
 
             return this;
+        }
+
+        /// <summary>
+        /// 卸载
+        /// </summary>
+        public void Unload()
+        {
+            this.stage = null;
         }
 
         /// <summary>

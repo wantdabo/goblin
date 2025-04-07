@@ -33,9 +33,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.moving = true;
         }
 
-        protected override void OnTickEnd()
+        protected override void OnEndTick()
         {
-            base.OnTickEnd();
+            base.OnEndTick();
             // 如果没有在移动状态, 则尝试切换到 Idle 状态
             if (false == info.moving && actor.SeekBehavior(out StateMachine machine))
             {
