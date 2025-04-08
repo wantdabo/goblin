@@ -278,6 +278,14 @@ namespace Goblin.Gameplay.Logic.Core
                     }
                 }
 
+                if (info.behaviortypes.TryGetValue(rmvactor, out var types))
+                {
+                    types.Clear();
+                    ObjectCache.Set(types);
+                    
+                    info.behaviortypes.Remove(rmvactor);
+                }
+
                 if (info.actordict.TryGetValue(rmvactor, out var actor))
                 {
                     info.actors.Remove(rmvactor);
@@ -506,11 +514,13 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviordict.TryGetValue(id, out var dict)) info.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, Behavior>>());
             // 检查 Behavior 是否已经存在容器中
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behavior {typeof(T)} is exist.");
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Get<List<Type>>());
             
             var behavior = ObjectCache.Get<T>();
+            types.Add(typeof(T));
             list.Add(behavior);
             dict.Add(typeof(T), behavior);
-            behavior.Assemble(this, GetActor(id));
+            behavior.Assemble(this, id);
 
             return behavior;
         }

@@ -29,6 +29,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<TagInfo>();
+            clone.Ready(id);
             foreach (var kv in tags)
             {
                 clone.tags.Add(kv.Key, kv.Value);

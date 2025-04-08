@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<RandomInfo>();
-            clone.Reset();
+            clone.Ready(id);
             clone.seed = seed;
             clone.current = current;
             

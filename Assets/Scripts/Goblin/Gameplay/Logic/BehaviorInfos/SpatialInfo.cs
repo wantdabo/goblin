@@ -37,6 +37,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<SpatialInfo>();
+            clone.Ready(id);
             clone.position = position;
             clone.euler = euler;
             clone.scale = scale;

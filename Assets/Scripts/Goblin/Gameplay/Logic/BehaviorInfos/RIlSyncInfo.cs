@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<RIlSyncInfo>();
-            clone.rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
+            clone.Ready(id);
             foreach (var kv in rildict)
             {
                 var clonekv = ObjectCache.Get<Dictionary<ushort, IRIL>>();

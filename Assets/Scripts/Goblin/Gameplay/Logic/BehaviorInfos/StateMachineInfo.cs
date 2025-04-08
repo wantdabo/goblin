@@ -39,6 +39,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<StateMachineInfo>();
+            clone.Ready(id);
             clone.current = current;
             clone.frames = frames;
             

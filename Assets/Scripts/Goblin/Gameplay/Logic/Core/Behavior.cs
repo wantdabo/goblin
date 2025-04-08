@@ -64,23 +64,28 @@ namespace Goblin.Gameplay.Logic.Core
     public abstract class Behavior
     {
         /// <summary>
-        /// 实体
-        /// </summary>
-        public Actor actor { get; private set; }
-        /// <summary>
         /// 场景
         /// </summary>
         protected Stage stage { get; private set; }
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong id { get; private set; }
+
+        /// <summary>
+        /// 实体
+        /// </summary>
+        public Actor actor => stage.GetActor(id);
 
         /// <summary>
         /// 组装, 当一个 Behavior 被访问到, 会自动组装
         /// </summary>
         /// <param name="stage">场景</param>
-        /// <param name="actor">Actor/实体</param>
-        public void Assemble(Stage stage, Actor actor)
+        /// <param name="id">ActorID</param>
+        public void Assemble(Stage stage, ulong id)
         {
-            this.actor = actor;
             this.stage = stage;
+            this.id = id;
             OnAssemble();
         }
         
@@ -140,7 +145,7 @@ namespace Goblin.Gameplay.Logic.Core
     }
 
     /// <summary>
-    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 单一的逻辑
+    /// Behavior/行为, 类似 ECS 中的 System
     /// </summary>
     /// <typeparam name="T">BehaviorInfo 类型</typeparam>
     public abstract class Behavior<T> : Behavior where T : BehaviorInfo, new()

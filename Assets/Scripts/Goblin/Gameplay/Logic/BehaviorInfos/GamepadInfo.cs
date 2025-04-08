@@ -80,9 +80,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<GamepadInfo>();
-            clone.inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
+            clone.Ready(id);
             foreach (var kv in inputdict)
             {
+                clone.inputdict.Remove(kv.Key);
                 clone.inputdict.Add(kv.Key, kv.Value);
             }
 
