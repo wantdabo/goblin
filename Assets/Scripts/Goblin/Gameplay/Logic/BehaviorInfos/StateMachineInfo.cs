@@ -16,6 +16,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public byte current { get; set; }
         /// <summary>
+        /// 上一个状态
+        /// </summary>
+        public byte last { get; set; }
+        /// <summary>
         /// 持续帧数
         /// </summary>
         public uint frames { get; set; }

@@ -10,6 +10,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Movement : Behavior<MovementInfo>
     {
+        protected override void OnAssemble()
+        {
+            base.OnAssemble();
+            actor.eventor.Listen<StateChangedEvent>(actor.eventor, OnStateChanged);
+        }
+
+        protected override void OnDisassemble()
+        {
+            actor.eventor.UnListen<StateChangedEvent>(actor.eventor, OnStateChanged);
+            base.OnDisassemble();
+        }
+
         /// <summary>
         /// 移动
         /// </summary>
@@ -43,6 +55,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
 
             info.moving = false;
+        }
+        
+        private void OnStateChanged(StateChangedEvent e)
+        {
+            UnityEngine.Debug.Log($"OnStateChanged ==================> {e.current}, {e.last}");
         }
     }
 }

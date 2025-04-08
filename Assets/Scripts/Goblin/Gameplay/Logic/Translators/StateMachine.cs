@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(StateMachineInfo info)
         {
-            stage.rilsync.PushRIL(info.id, new RIL_STATE_MACHINE(info.current, info.frames));
+            stage.rilsync.PushRIL(info.id, new RIL_STATE_MACHINE(info.current, info.last, info.frames));
         }
     }
 }

@@ -6,6 +6,21 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors
 {
     /// <summary>
+    /// 状态切换事件
+    /// </summary>
+    public struct StateChangedEvent : IEvent
+    {
+        /// <summary>
+        /// 当前状态
+        /// </summary>
+        public byte current { get; set; }
+        /// <summary>
+        /// 上一个状态
+        /// </summary>
+        public byte last { get; set; }
+    }
+
+    /// <summary>
     /// 状态机, 用于管理实体的状态切换
     /// </summary>
     public class StateMachine : Behavior<StateMachineInfo>
@@ -32,7 +47,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void ChangeState(byte state)
         {
             info.frames = 0;
+            info.last = info.current;
             info.current = state;
+            actor.eventor.Tell(new StateChangedEvent{ current = info.current, last = info.last});
         }
         
         /// <summary>

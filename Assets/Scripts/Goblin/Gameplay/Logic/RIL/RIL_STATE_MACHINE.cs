@@ -14,6 +14,10 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public byte current { get; private set; }
         /// <summary>
+        /// 上一个状态
+        /// </summary>
+        public byte last { get; private set; }
+        /// <summary>
         /// 持续帧数
         /// </summary>
         public uint frames { get; private set; }
@@ -22,10 +26,12 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 状态机渲染指令
         /// </summary>
         /// <param name="current">当前状态</param>
+        /// <param name="last">上一个状态</param>
         /// <param name="frames">持续帧</param>
-        public RIL_STATE_MACHINE(byte current, uint frames)
+        public RIL_STATE_MACHINE(byte current, byte last, uint frames)
         {
             this.current = current;
+            this.last = last;
             this.frames = frames;
         }
         

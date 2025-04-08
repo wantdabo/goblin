@@ -22,9 +22,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <typeparam name="T">事件的结构体</typeparam>
         /// <param name="target">Actor</param>
         /// <param name="func">事件的回调</param>
-        public void UnListen<T>(Actor target, Action<T> func) where T : IEvent
+        public void UnListen<T>(Eventor target, Action<T> func) where T : IEvent
         {
-            if (false == info.eventdict.TryGetValue(actor.id, out var dict)) return;
+            if (null == target.info || null == target.info.eventdict) return;
+            if (false == info.eventdict.TryGetValue(target.actor.id, out var dict)) return;
             if (false == dict.TryGetValue(typeof(T), out var funcs)) return;
             funcs.Remove(func);
         }
@@ -35,9 +36,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <typeparam name="T">事件的结构体</typeparam>
         /// <param name="target">Behavior</param>
         /// <param name="func">事件的回调</param>
-        public void Listen<T>(Actor target, Action<T> func) where T : IEvent
+        public void Listen<T>(Eventor target, Action<T> func) where T : IEvent
         {
-            if (false == info.eventdict.TryGetValue(actor.id, out var dict)) info.eventdict.Add(actor.id, dict = ObjectCache.Get<Dictionary<Type, List<Delegate>>>());
+            if (false == info.eventdict.TryGetValue(target.actor.id, out var dict)) info.eventdict.Add(target.actor.id, dict = ObjectCache.Get<Dictionary<Type, List<Delegate>>>());
             if (false == dict.TryGetValue(typeof(T), out var funcs)) dict.Add(typeof(T), funcs = ObjectCache.Get<List<Delegate>>());
             if (funcs.Contains(func)) return;
             funcs.Add(func);
