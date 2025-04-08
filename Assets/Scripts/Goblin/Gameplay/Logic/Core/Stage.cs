@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.Batches;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Behaviors.Batchs;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GameplayDatas;
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Stage 数据
         /// </summary>
-        public StageInfo info { get; private set; }
+        private StageInfo info { get; set; }
         /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
@@ -50,13 +50,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
         /// <summary>
+        /// 事件订阅器
+        /// </summary>
+        public Eventor eventor => GetBehavior<Eventor>(sa);
+        /// <summary>
         /// 预制创建器集合
         /// </summary>
         public Dictionary<Type, Prefab> prefabs { get; set; }
-        /// <summary>
-        /// 批处理集合
-        /// </summary>
-        public Dictionary<Type, Batch> batches { get; set; }
         /// <summary>
         /// 对外暴露抛出 RIL 的事件
         /// </summary>
@@ -86,10 +86,10 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Eventor>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
-            // 添加预制创建器
-            Prefabs();
             // 添加批处理
             Batches();
+            // 添加预制创建器
+            Prefabs();
 
             this.gpdata = data;
             // TODO 临时代码, 后续挪到一个单独的地方, 构建初始化世界
@@ -133,14 +133,6 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var prefab in prefabs.Values) prefab.Unload();
             prefabs.Clear();
             ObjectCache.Set(prefabs);
-
-            // 卸载批处理
-            foreach (var batch in batches.Values)
-            {
-                batch.Unload();
-            }
-            batches.Clear();
-            ObjectCache.Set(batches);
             
             // StageInfo 回收
             info.Reset();
@@ -162,8 +154,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private void Batches()
         {
-            batches = ObjectCache.Get<Dictionary<Type, Batch>>();
-            batches.Add(typeof(Translator), ObjectCache.Get<Translator>().Load(this));
+            AddBehavior<Translate>(sa);
         }
 
         /// <summary>
@@ -214,43 +205,25 @@ namespace Goblin.Gameplay.Logic.Core
             info.elapsed += info.tick;
 
             // Tick 驱动
-            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
+            foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
             {
-                switch (tt.ticktype)
+                var behaviors = GetBehaviors(type);
+                if (null == behaviors) continue;
+                foreach (var behavior in behaviors)
                 {
-                    case TICK_DEFINE.BEHAVIOR:
-                        var behaviors = GetBehaviors(tt.type);
-                        if (null == behaviors) continue;
-                        foreach (var behavior in behaviors)
-                        {
-                            var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
-                            behavior.Tick(ticker.timescale * info.tick);
-                        }
-                        break;
-                    case TICK_DEFINE.BATCH:
-                        if (false == batches.TryGetValue(tt.type, out var batch)) continue;
-                        batch.Tick(info.tick);
-                        break;
+                    var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
+                    behavior.Tick(null == ticker ? FP.One : ticker.timescale * info.tick);
                 }
             }
 
             // 帧末调度
-            foreach (var tt in TICK_DEFINE.TICK_TYPE_LIST)
+            foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
             {
-                switch (tt.ticktype)
+                var behaviors = GetBehaviors(type);
+                if (null == behaviors) continue;
+                foreach (var behavior in behaviors)
                 {
-                    case TICK_DEFINE.BEHAVIOR:
-                        var behaviors = GetBehaviors(tt.type);
-                        if (null == behaviors) continue;
-                        foreach (var behavior in behaviors)
-                        {
-                            behavior.EndTick();
-                        }
-                        break;
-                    case TICK_DEFINE.BATCH:
-                        if (false == batches.TryGetValue(tt.type, out var batch)) continue;
-                        batch.EndTick();
-                        break;
+                    behavior.EndTick();
                 }
             }
             
@@ -548,6 +521,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>BehaviorInfo</returns>
         public T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
         {
+            if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
             if (false == info.behaviorinfodict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
 

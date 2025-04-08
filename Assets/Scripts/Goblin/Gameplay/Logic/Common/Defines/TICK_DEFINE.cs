@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.Batches;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Behaviors.Batchs;
 
 namespace Goblin.Gameplay.Logic.Common.Defines
 {
@@ -11,23 +11,14 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     public class TICK_DEFINE
     {
         /// <summary>
-        /// 行为 Tick
-        /// </summary>
-        public const byte BEHAVIOR = 0;
-        /// <summary>
-        /// 批量 Tick
-        /// </summary>
-        public const byte BATCH = 1;
-        
-        /// <summary>
         /// Tick 时序
         /// </summary>
-        public static List<(byte ticktype, Type type)> TICK_TYPE_LIST { get; set; } = new()
+        public static List<Type> TICK_TYPE_LIST { get; set; } = new()
         {
-            (BEHAVIOR, typeof(Gamepad)),
-            (BEHAVIOR, typeof(Movement)),
-            (BEHAVIOR, typeof(StateMachine)),
-            (BATCH, typeof(Translator))
+            typeof(Gamepad),
+            typeof(Movement),
+            typeof(StateMachine),
+            typeof(Translate)
         };
     }
 }

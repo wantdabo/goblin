@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Logic.Core
     }
     
     /// <summary>
-    /// Behavior/行为, 类似 ECS 中的 System, 可是非批处理, 它是对应 Actor 中具体的逻辑
+    /// Behavior/行为, 类似 ECS 中的 System
     /// </summary>
     public abstract class Behavior
     {
