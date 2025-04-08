@@ -33,6 +33,15 @@ namespace Goblin.Gameplay.Logic.Core
         }
 
         /// <summary>
+        /// 克隆
+        /// </summary>
+        /// <returns></returns>
+        public BehaviorInfo Clone()
+        {
+            return OnClone();
+        }
+
+        /// <summary>
         /// 初始化, 当 BehaviorInfo 从对象池中取出, 在这个回调中初始化数据
         /// </summary>
         protected abstract void OnReady();
@@ -41,6 +50,12 @@ namespace Goblin.Gameplay.Logic.Core
         /// 重置, 当 BehaviorInfo 回收, 重新回到对象池, 在这个回调中清理数据
         /// </summary>
         protected abstract void OnReset();
+
+        /// <summary>
+        /// 克隆, 克隆一个新的 BehaviorInfo
+        /// </summary>
+        /// <returns></returns>
+        protected abstract BehaviorInfo OnClone();
     }
     
     /// <summary>
@@ -75,8 +90,6 @@ namespace Goblin.Gameplay.Logic.Core
         public void Disassemble()
         {
             OnDisassemble();
-            this.actor = null;
-            this.stage = null;
         }
         
         /// <summary>
@@ -144,12 +157,6 @@ namespace Goblin.Gameplay.Logic.Core
             // 自动获取 BehaviorInfo
             info = stage.GetBehaviorInfo<T>(actor.id);
             if (null == info) info = stage.AddBehaviorInfo<T>(actor.id);
-        }
-
-        protected override void OnDisassemble()
-        {
-            base.OnDisassemble();
-            info = default;
         }
     }
 }

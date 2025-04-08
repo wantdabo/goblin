@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
@@ -22,6 +23,14 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReset()
         {
             timescale = FP.One;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<TickerInfo>();
+            clone.timescale = timescale;
+            
+            return clone;
         }
     }
 }

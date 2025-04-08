@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
@@ -35,6 +36,17 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             maxhp = 0;
             moveseed = 0;
             attack = 0;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<AttributeInfo>();
+            clone.hp = hp;
+            clone.maxhp = maxhp;
+            clone.moveseed = moveseed;
+            clone.attack = attack;
+            
+            return clone;
         }
     }
 }

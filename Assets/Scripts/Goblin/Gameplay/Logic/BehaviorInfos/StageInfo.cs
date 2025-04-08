@@ -141,5 +141,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             behaviorinfodict.Clear();
             ObjectCache.Set(behaviorinfodict);
         }
+
+        protected override BehaviorInfo OnClone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

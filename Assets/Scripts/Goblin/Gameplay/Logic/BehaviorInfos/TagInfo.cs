@@ -25,5 +25,16 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             tags.Clear();
             ObjectCache.Set(tags);
         }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<TagInfo>();
+            foreach (var kv in tags)
+            {
+                clone.tags.Add(kv.Key, kv.Value);
+            }
+            
+            return clone;
+        }
     }
 }

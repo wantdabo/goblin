@@ -18,8 +18,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
         protected override void OnDisassemble()
         {
-            actor.eventor.UnListen<StateChangedEvent>(actor.eventor, OnStateChanged);
             base.OnDisassemble();
+            actor.eventor.UnListen<StateChangedEvent>(actor.eventor, OnStateChanged);
         }
 
         /// <summary>

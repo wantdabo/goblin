@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -21,6 +22,14 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReset()
         {
             moving = false;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<MovementInfo>();
+            clone.moving = moving;
+            
+            return clone;
         }
     }
 }

@@ -35,5 +35,14 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             current = STATE_DEFINE.IDLE;
             frames = 0;
         }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<StateMachineInfo>();
+            clone.current = current;
+            clone.frames = frames;
+            
+            return clone;
+        }
     }
 }

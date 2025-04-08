@@ -22,9 +22,30 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReset()
         {
-            rildict.Clear();
+            foreach (var kv in rildict)
+            {
+                kv.Value.Clear();
+                ObjectCache.Set(kv.Value);
+            }
             ObjectCache.Set(rildict);
-            rildict = null;
+            rildict.Clear();
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<RIlSyncInfo>();
+            clone.rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
+            foreach (var kv in rildict)
+            {
+                var clonekv = ObjectCache.Get<Dictionary<ushort, IRIL>>();
+                clone.rildict.Add(kv.Key, clonekv);
+                foreach (var kv2 in kv.Value)
+                {
+                    clonekv.Add(kv2.Key, kv2.Value);
+                }
+            }
+            
+            return clone;
         }
     }
 }

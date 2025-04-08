@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -31,6 +32,16 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             position = FPVector3.zero;
             euler = FPVector3.zero;
             scale = FPVector3.one;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<SpatialInfo>();
+            clone.position = position;
+            clone.euler = euler;
+            clone.scale = scale;
+            
+            return clone;
         }
     }
 }

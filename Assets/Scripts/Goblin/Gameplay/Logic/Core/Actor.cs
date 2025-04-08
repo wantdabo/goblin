@@ -40,8 +40,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public void Disassemble()
         {
-            this.id = 0;
-            this.stage = null;
+
         }
 
         /// <summary>

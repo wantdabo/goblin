@@ -75,7 +75,19 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             inputdict.Clear();
             ObjectCache.Set(inputdict);
-            inputdict = null;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<GamepadInfo>();
+            clone.inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
+            foreach (var kv in inputdict)
+            {
+                clone.inputdict.Add(kv.Key, kv.Value);
+            }
+
+            
+            return clone;
         }
     }
 }

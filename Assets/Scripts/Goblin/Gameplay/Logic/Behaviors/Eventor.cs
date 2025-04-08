@@ -24,7 +24,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="func">事件的回调</param>
         public void UnListen<T>(Eventor target, Action<T> func) where T : IEvent
         {
-            if (null == target.info || null == target.info.eventdict) return;
             if (false == info.eventdict.TryGetValue(target.actor.id, out var dict)) return;
             if (false == dict.TryGetValue(typeof(T), out var funcs)) return;
             funcs.Remove(func);

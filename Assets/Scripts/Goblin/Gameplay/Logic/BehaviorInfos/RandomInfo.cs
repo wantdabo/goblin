@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
@@ -40,6 +41,16 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             m = int.MaxValue;
             seed = 0;
             current = 0;
+        }
+
+        protected override BehaviorInfo OnClone()
+        {
+            var clone = ObjectCache.Get<RandomInfo>();
+            clone.Reset();
+            clone.seed = seed;
+            clone.current = current;
+            
+            return clone;
         }
     }
 }
