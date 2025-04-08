@@ -10,17 +10,22 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     /// </summary>
     public class EventorInfo : BehaviorInfo
     {
-        public Dictionary<Type, List<(long sort, Delegate func)>> eventdict { get; set; }
-        
+        public Dictionary<ulong, Dictionary<Type, List<Delegate>>> eventdict { get; set; }
+
         protected override void OnReady()
         {
-            eventdict = ObjectCache.Get<Dictionary<Type, List<(long sort, Delegate func)>>>();
+            eventdict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, List<Delegate>>>>();
         }
 
         protected override void OnReset()
         {
             foreach (var kv in eventdict)
             {
+                foreach (var kv2 in kv.Value)
+                {
+                    kv2.Value.Clear();
+                    ObjectCache.Set(kv2.Value);
+                }
                 kv.Value.Clear();
                 ObjectCache.Set(kv.Value);
             }

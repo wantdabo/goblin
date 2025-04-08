@@ -142,7 +142,7 @@ namespace Goblin.Gameplay.Logic.Core
             base.OnAssemble();
             // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
             // 自动获取 BehaviorInfo
-            info = actor.stage.GetBehaviorInfo<T>(actor.id);
+            info = stage.GetBehaviorInfo<T>(actor.id);
             if (null == info) info = stage.AddBehaviorInfo<T>(actor.id);
         }
 

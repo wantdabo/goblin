@@ -207,24 +207,26 @@ namespace Goblin.Gameplay.Logic.Core
             // Tick 驱动
             foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
             {
-                var behaviors = GetBehaviors(type);
-                if (null == behaviors) continue;
+                if (false == SeekBehaviors(type, out var behaviors)) continue;
                 foreach (var behavior in behaviors)
                 {
                     var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
                     behavior.Tick(null == ticker ? FP.One : ticker.timescale * info.tick);
                 }
+                behaviors.Clear();
+                ObjectCache.Set(behaviors);
             }
 
             // 帧末调度
             foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
             {
-                var behaviors = GetBehaviors(type);
-                if (null == behaviors) continue;
+                if (false == SeekBehaviors(type, out var behaviors)) continue;
                 foreach (var behavior in behaviors)
                 {
                     behavior.EndTick();
                 }
+                behaviors.Clear();
+                ObjectCache.Set(behaviors);
             }
             
             RecycleActors();
@@ -374,18 +376,32 @@ namespace Goblin.Gameplay.Logic.Core
 
             return result;
         }
+        
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behaviors">所有 Behavior 列表</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(Type type, out List<Behavior> behaviors)
+        {
+            behaviors = GetBehaviors(type);
+        
+            return null != behaviors;
+        }
 
         /// <summary>
         /// 获取指定类型的所有 Behavior 列表
-        /// <param name="type">类型</param>
+        /// <param name="type">Behavior 类型</param>
         /// </summary>
         /// <returns>所有 Behavior 列表</returns>
         public List<Behavior> GetBehaviors(Type type)
         {
             if (false == info.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
+            var result = ObjectCache.Get<List<Behavior>>();
+            foreach (var behavior in list) result.Add(behavior);
 
-            // 根据类型去获取所有 Behavior
-            return list;
+            return result;
         }
 
         /// <summary>

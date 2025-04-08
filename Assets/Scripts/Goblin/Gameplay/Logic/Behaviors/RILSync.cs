@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
             dict.Add(ril.id, ril);
             
-            actor.stage.onril?.Invoke(id, ril);
+            stage.onril?.Invoke(id, ril);
         }
     }
 }
