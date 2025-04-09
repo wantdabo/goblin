@@ -38,6 +38,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private StageInfo info { get; set; }
         /// <summary>
+        /// 快照
+        /// </summary>
+        private StageInfo snapshot { get; set; }
+        /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
         public GameplayData gpdata { get; set; }
@@ -138,7 +142,34 @@ namespace Goblin.Gameplay.Logic.Core
             info.Reset();
             ObjectCache.Set(info);
         }
+
+        /// <summary>
+        /// 快照
+        /// </summary>
+        public void Snapshot()
+        {
+            if (null != snapshot)
+            {
+                if (snapshot.frame == info.frame) return;
+                snapshot.Reset();
+            }
+            snapshot = info.Clone() as StageInfo;
+        }
         
+        /// <summary>
+        /// 恢复
+        /// </summary>
+        public void Restore()
+        {
+            if (null == snapshot) return;
+            if (snapshot.frame == info.frame) return;
+            info = snapshot;
+            info.Reset();
+            
+            // TODO DisAssemble/Assemble, Actor/Behavior, Rebuild (重组行为)
+            // TODO 渲染指令和解
+        }
+
         /// <summary>
         /// 添加预制创建器
         /// </summary>
@@ -239,6 +270,32 @@ namespace Goblin.Gameplay.Logic.Core
         {
             foreach (var rmvactor in info.rmvactors)
             {
+                if (info.behaviordict.TryGetValue(rmvactor, out var behaviordict))
+                {
+                    foreach (var behavior in behaviordict.Values)
+                    {
+                        if (info.behaviors.TryGetValue(behavior.GetType(), out var behaviors))
+                        {
+                            behaviors.Remove(behavior);
+                            if (0 == behaviors.Count)
+                            {
+                                ObjectCache.Set(behaviors);
+                                info.behaviors.Remove(behavior.GetType());
+                            }
+                        }
+                        behavior.Disassemble();
+                        ObjectCache.Set(behavior);  
+                    }
+                }
+
+                if (info.behaviortypes.TryGetValue(rmvactor, out var types))
+                {
+                    types.Clear();
+                    ObjectCache.Set(types);
+                    
+                    info.behaviortypes.Remove(rmvactor);
+                }
+                
                 if (info.behaviorinfodict.TryGetValue(rmvactor, out var infodict))
                 {
                     foreach (var behaviorinfo in infodict.Values)
@@ -258,32 +315,6 @@ namespace Goblin.Gameplay.Logic.Core
                     infodict.Clear();
                     ObjectCache.Set(infodict);
                     info.behaviorinfodict.Remove(rmvactor);
-                }
-
-                if (info.behaviordict.TryGetValue(rmvactor, out var behaviordict))
-                {
-                    foreach (var behavior in behaviordict.Values)
-                    {
-                        if (info.behaviors.TryGetValue(behavior.GetType(), out var behaviors))
-                        {
-                            behaviors.Remove(behavior);
-                            if (0 == behaviors.Count)
-                            {
-                                ObjectCache.Set(behaviors);
-                                info.behaviors.Remove(behavior.GetType());
-                            }
-                        }
-                        behavior.Disassemble();
-                        ObjectCache.Set(behavior);
-                    }
-                }
-
-                if (info.behaviortypes.TryGetValue(rmvactor, out var types))
-                {
-                    types.Clear();
-                    ObjectCache.Set(types);
-                    
-                    info.behaviortypes.Remove(rmvactor);
                 }
 
                 if (info.actordict.TryGetValue(rmvactor, out var actor))
@@ -432,11 +463,15 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>Behavior 列表</returns>
         public List<Behavior> GetBehaviors(ulong id)
         {
-            if (false == info.behaviordict.TryGetValue(id, out var dict) || dict.Count == 0) return default;
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
 
             // 根据 ActorID 获取所有 Behavior
             var result = ObjectCache.Get<List<Behavior>>();
-            foreach (var behavior in dict.Values) result.Add(behavior);
+            foreach (var type in types)
+            {
+                if (false == SeekBehavior(id, type, out var behavior)) continue;
+                result.Add(behavior);
+            }
 
             return result;
         }
@@ -518,8 +553,19 @@ namespace Goblin.Gameplay.Logic.Core
             
             var behavior = ObjectCache.Get<T>();
             types.Add(typeof(T));
-            list.Add(behavior);
             dict.Add(typeof(T), behavior);
+            list.Add(behavior);
+            // 排序
+            list.Sort((a, b) =>
+            {
+                if (a.id == b.id)
+                {
+                    return a.GetType().GetHashCode().CompareTo(b.GetType().GetHashCode());
+                }
+                
+                return a.id.CompareTo(b.id);
+            });
+            
             behavior.Assemble(this, id);
 
             return behavior;

@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();
 
-            var ticker = actor.AddBehaviorInfo<TickerInfo>();
+            actor.AddBehaviorInfo<TickerInfo>();
             
             var attribute = actor.AddBehaviorInfo<AttributeInfo>();
             attribute.hp = info.attribute.hp;

@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// <returns>预制创建器</returns>
         public Prefab Load(Stage stage)
         {
-            this.stage = this.stage;
+            this.stage = stage;
 
             return this;
         }

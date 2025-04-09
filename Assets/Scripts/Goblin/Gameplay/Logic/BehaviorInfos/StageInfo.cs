@@ -78,19 +78,18 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 行为信息列表, 键为行为类型, 值为该行为类型的所有 BehaviorInfo 列表
         /// </summary>
         public Dictionary<Type, List<BehaviorInfo>> behaviorinfos { get; set; }
-        
         /// <summary>
         /// Actor 列表, 键为 ActorID, 值为 Actor 实例
         /// </summary>
         public Dictionary<ulong, Actor> actordict { get; set; }
         /// <summary>
-        /// 行为列表, 键为行为类型, 值为该行为类型的所有 Behavior 列表
-        /// </summary>
-        public Dictionary<Type, List<Behavior>> behaviors { get; set; }
-        /// <summary>
         /// 行为列表, 键为 ActorID, 值为该 Actor 上的所有行为
         /// </summary>
         public Dictionary<ulong, Dictionary<Type, Behavior>> behaviordict { get; set; }
+        /// <summary>
+        /// 行为列表, 键为行为类型, 值为该行为类型的所有 Behavior 列表
+        /// </summary>
+        public Dictionary<Type, List<Behavior>> behaviors { get; set; }
         /// <summary>
         /// 行为信息列表, 键为 ActorID, 值为该 Actor 上的所有行为信息
         /// </summary>
@@ -112,8 +111,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             behaviortypes = ObjectCache.Get<Dictionary<ulong, List<Type>>>();
             behaviorinfos = ObjectCache.Get<Dictionary<Type, List<BehaviorInfo>>>();
             actordict = ObjectCache.Get<Dictionary<ulong, Actor>>();
-            behaviors = ObjectCache.Get<Dictionary<Type, List<Behavior>>>();
             behaviordict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Behavior>>>();
+            behaviors = ObjectCache.Get<Dictionary<Type, List<Behavior>>>();
             behaviorinfodict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
             rmvactors = ObjectCache.Get<List<ulong>>();
 
@@ -139,11 +138,11 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             actordict.Clear();
             ObjectCache.Set(actordict);
             
-            behaviors.Clear();
-            ObjectCache.Set(behaviors);
-            
             behaviordict.Clear();
             ObjectCache.Set(behaviordict);
+            
+            behaviors.Clear();
+            ObjectCache.Set(behaviors);
             
             behaviorinfodict.Clear();
             ObjectCache.Set(behaviorinfodict);

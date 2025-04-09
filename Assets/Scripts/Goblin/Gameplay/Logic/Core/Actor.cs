@@ -25,7 +25,7 @@ namespace Goblin.Gameplay.Logic.Core
         public Eventor eventor => GetBehavior<Eventor>();
         
         /// <summary>
-        /// 组装, 当一个 Actor 被访问到, 会自动组装.
+        /// 组装
         /// </summary>
         /// <param name="id">ActorID</param>
         /// <param name="stage">场景</param>
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// 拆解, 在帧末的时机, Actor 会被拆解回到对象池.
+        /// 拆解
         /// </summary>
         public void Disassemble()
         {

@@ -78,7 +78,7 @@ namespace Goblin.Gameplay.Logic.Core
         public Actor actor => stage.GetActor(id);
 
         /// <summary>
-        /// 组装, 当一个 Behavior 被访问到, 会自动组装
+        /// 组装
         /// </summary>
         /// <param name="stage">场景</param>
         /// <param name="id">ActorID</param>
@@ -90,7 +90,7 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
-        /// 拆解, 在帧末的时机, Actor 会被拆解回到对象池
+        /// 拆解
         /// </summary>
         public void Disassemble()
         {
@@ -153,15 +153,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// BehaviorInfo 快捷访问
         /// </summary>
-        public T info { get; private set; }
+        public T info => stage.GetBehaviorInfo<T>(id);
 
         protected override void OnAssemble()
         {
             base.OnAssemble();
             // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
-            // 自动获取 BehaviorInfo
-            info = stage.GetBehaviorInfo<T>(actor.id);
-            if (null == info) info = stage.AddBehaviorInfo<T>(actor.id);
+            if (false == stage.SeekBehaviorInfo(id, out T info)) info = stage.AddBehaviorInfo<T>(id);
         }
     }
 }
