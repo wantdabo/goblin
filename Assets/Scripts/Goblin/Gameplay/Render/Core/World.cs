@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers;
@@ -41,7 +42,7 @@ namespace Goblin.Gameplay.Render.Core
 
             Resolvers();
 
-            agentdict = engine.pool.Get<Dictionary<ulong, Dictionary<Type, Agent>>>();
+            agentdict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Agent>>>();
         }
 
         protected override void OnDestroy()
@@ -52,14 +53,14 @@ namespace Goblin.Gameplay.Render.Core
                 foreach (var agent in kv.Value)
                 {
                     agent.Value.Reset();
-                    engine.pool.Set(agent.Value);
+                    ObjectCache.Set(agent.Value);
                 }
                 
                 kv.Value.Clear();
-                engine.pool.Set(kv.Value);
+                ObjectCache.Set(kv.Value);
             }
             agentdict.Clear();
-            engine.pool.Set(agentdict);
+            ObjectCache.Set(agentdict);
         }
 
         private void Resolvers()
@@ -74,12 +75,12 @@ namespace Goblin.Gameplay.Render.Core
             foreach (var kv in agents)
             {
                 kv.Value.Reset();
-                engine.pool.Set(kv.Value);                
+                ObjectCache.Set(kv.Value);                
             }
 
             agentdict.Remove(actor);
             agents.Clear();
-            engine.pool.Set(agents);
+            ObjectCache.Set(agents);
         }
 
         public T EnsureAgent<T>(ulong actor) where T : Agent, new()
@@ -109,19 +110,19 @@ namespace Goblin.Gameplay.Render.Core
 
             agents.Remove(agent.GetType());
             agent.Reset();
-            engine.pool.Set(agent);
+            ObjectCache.Set(agent);
         }
 
         public T AddAgent<T>(ulong actor) where T : Agent, new()
         {
             if (false == agentdict.TryGetValue(actor, out var agents))
             {
-                agentdict.Add(actor, agents = engine.pool.Get<Dictionary<Type, Agent>>());
+                agentdict.Add(actor, agents = ObjectCache.Get<Dictionary<Type, Agent>>());
             }
 
             if (agents.TryGetValue(typeof(T), out var agent)) throw new Exception($"agent {typeof(T)} already exists");
             
-            agent = engine.pool.Get<T>();
+            agent = ObjectCache.Get<T>();
             agent.Ready(actor, this);
             agents.Add(typeof(T), agent);
 

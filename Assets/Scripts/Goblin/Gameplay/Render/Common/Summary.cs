@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 
@@ -30,8 +31,8 @@ namespace Goblin.Gameplay.Render.Common
             world.eventor.Listen<RILEvent>(OnRIL);
             world.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
             
-            statedict = world.engine.pool.Get<Dictionary<ulong, Dictionary<ushort, ABStateInfo>>>();
-            statebundles = world.engine.pool.Get<Dictionary<ushort, List<ABStateInfo>>>();
+            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, ABStateInfo>>>();
+            statebundles = ObjectCache.Get<Dictionary<ushort, List<ABStateInfo>>>();
         }
 
         protected override void OnDestroy()
@@ -43,18 +44,18 @@ namespace Goblin.Gameplay.Render.Common
             foreach (var states in statedict.Values)
             {
                 states.Clear();
-                world.engine.pool.Set(states);
+                ObjectCache.Set(states);
             }
             statedict.Clear();
-            world.engine.pool.Set(statedict);
+            ObjectCache.Set(statedict);
             
             foreach (var states in statebundles.Values)
             {
                 states.Clear();
-                world.engine.pool.Set(states);
+                ObjectCache.Set(states);
             }
             statebundles.Clear();
-            world.engine.pool.Set(statebundles);
+            ObjectCache.Set(statebundles);
         }
 
         public void Initialize(World world)
@@ -73,7 +74,7 @@ namespace Goblin.Gameplay.Render.Common
         {
             if (false == statedict.TryGetValue(e.state.actor, out var statemap))
             {
-                statedict.Add(e.state.actor, statemap = world.engine.pool.Get<Dictionary<ushort, ABStateInfo>>());
+                statedict.Add(e.state.actor, statemap = ObjectCache.Get<Dictionary<ushort, ABStateInfo>>());
             }
             
             if (statemap.ContainsKey(e.state.ril.id))
@@ -88,7 +89,7 @@ namespace Goblin.Gameplay.Render.Common
             foreach (var kv in statebundles)
             {
                 kv.Value.Clear();
-                world.engine.pool.Set(kv.Value);
+                ObjectCache.Set(kv.Value);
             }
             statebundles.Clear();
 
@@ -98,7 +99,7 @@ namespace Goblin.Gameplay.Render.Common
                 {
                     if (false == statebundles.TryGetValue(state.ril.id, out var states))
                     {
-                        statebundles.Add(state.ril.id, states = world.engine.pool.Get<List<ABStateInfo>>());
+                        statebundles.Add(state.ril.id, states = ObjectCache.Get<List<ABStateInfo>>());
                     }
                     
                     states.Add(state);

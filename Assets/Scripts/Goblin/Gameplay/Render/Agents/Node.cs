@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
 
@@ -16,12 +17,17 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
-            go = world.engine.pool.Get<GameObject>("NODE_GO_KEY");
+            go = ObjectCache.Get<GameObject>("NODE_GO_KEY");
             go.SetActive(true);
             go.name = actor.ToString();
             go.transform.SetParent(nodes.transform);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
+            
+            // TODO Test
+            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.localScale *= 0.5f;
+            cube.transform.SetParent(go.transform);
         }
 
         protected override void OnReset()

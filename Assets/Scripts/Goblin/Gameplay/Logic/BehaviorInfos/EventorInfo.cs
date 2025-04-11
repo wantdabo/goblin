@@ -40,6 +40,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<EventorInfo>();
+            clone.Ready(id);
             foreach (var kv in eventdict)
             {
                 var dict = ObjectCache.Get<Dictionary<Type, List<MethodInfo>>>();

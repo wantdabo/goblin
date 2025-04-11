@@ -27,5 +27,13 @@ namespace Goblin.Gameplay.Directors.StateSync.Common
         protected override void OnStopGame()
         {
         }
+
+        protected override void OnSnapshot()
+        {
+        }
+
+        protected override void OnRestore()
+        {
+        }
     }
 }

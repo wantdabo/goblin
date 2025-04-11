@@ -27,7 +27,7 @@ namespace Goblin.Common
                 return (T)queue.Dequeue();
             }
 
-            return new T();
+            return default;
         }
 
         /// <summary>

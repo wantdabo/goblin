@@ -78,14 +78,21 @@ namespace Goblin.Gameplay.Logic.Core
         public Actor actor => stage.GetActor(id);
 
         /// <summary>
-        /// 组装
+        /// 初始化
         /// </summary>
         /// <param name="stage">场景</param>
         /// <param name="id">ActorID</param>
-        public void Assemble(Stage stage, ulong id)
+        public void Initialize(Stage stage, ulong id)
         {
             this.stage = stage;
             this.id = id;
+        }
+
+        /// <summary>
+        /// 组装
+        /// </summary>
+        public void Assemble()
+        {
             OnAssemble();
         }
         

@@ -33,6 +33,16 @@ namespace Goblin.Gameplay.Directors.Common
         {
             OnStopGame();
         }
+        
+        public void Snapshot()
+        {
+            OnSnapshot();
+        }
+        
+        public void Restore()
+        {
+            OnRestore();
+        }
 
         protected abstract void OnCreateGame();
         protected abstract void OnDestroyGame();
@@ -40,5 +50,7 @@ namespace Goblin.Gameplay.Directors.Common
         protected abstract void OnPauseGame();
         protected abstract void OnResumeGame();
         protected abstract void OnStopGame();
+        protected abstract void OnSnapshot();
+        protected abstract void OnRestore();
     }
 }

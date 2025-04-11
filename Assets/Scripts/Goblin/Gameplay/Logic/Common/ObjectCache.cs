@@ -20,30 +20,41 @@ namespace Goblin.Gameplay.Logic.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public static T Get<T>(string key = "") where T : new()
+        public static T Get<T>(string key = "") where T : class, new()
         {
-            if (pool.TryGetValue(typeof(T), out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
+            return Get(typeof(T), key) as T;
+        }
+        
+        /// <summary>
+        /// 从对象池获得一个实例化对象
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <param name="key">KEY/关键字</param>
+        /// <returns>实例化对象</returns>
+        public static object Get(Type type, string key = "")
+        {
+            if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {
-                return (T)queue.Dequeue();
+                return queue.Dequeue();
             }
 
-            return new T();
+            return Activator.CreateInstance(type);
         }
 
         /// <summary>
         /// 将一个实例化对象存入对象池
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
         /// <param name="obj">实例化对象</param>
         /// <param name="key">KEY/关键字</param>
-        public static void Set<T>(T obj, string key = "")
+        public static void Set(object obj, string key = "")
         {
             if (null == obj) return;
 
-            if (false == pool.TryGetValue(typeof(T), out var dict))
+            var type = obj.GetType();
+            if (false == pool.TryGetValue(type, out var dict))
             {
                 dict = new();
-                pool.Add(typeof(T), dict);
+                pool.Add(type, dict);
             }
 
             if (false == dict.TryGetValue(key, out var queue))

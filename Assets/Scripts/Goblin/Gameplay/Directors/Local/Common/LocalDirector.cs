@@ -47,7 +47,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
             data.players = new[]
             {
                 new PlayerData { hero = 10010 },
-                new PlayerData { hero = 10010 },
+                // new PlayerData { hero = 10010 },
             };
             
             stage = new Stage();
@@ -86,6 +86,16 @@ namespace Goblin.Gameplay.Directors.Local.Common
         protected override void OnStopGame()
         {
             stage.Stop();
+        }
+
+        protected override void OnSnapshot()
+        {
+            stage.Snapshot();
+        }
+
+        protected override void OnRestore()
+        {
+            stage.Restore();
         }
 
         private void OnFixedTick(FixedTickEvent e)

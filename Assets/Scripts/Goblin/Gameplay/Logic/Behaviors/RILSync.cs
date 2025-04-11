@@ -35,5 +35,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
             
             stage.onril?.Invoke(id, ril);
         }
+        
+        /// <summary>
+        /// 清除渲染指令 (会导致重新全推到渲染层)
+        /// </summary>
+        public void ClearRIL()
+        {
+            info.Reset();
+            info.Ready(id);
+        }
     }
 }

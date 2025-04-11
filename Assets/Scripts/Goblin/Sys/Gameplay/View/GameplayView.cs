@@ -1,6 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
+using Goblin.Sys.Other.View;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +15,24 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            
+            AddUIEventListener("SnapshotBtn", (e) =>
+            {
+                engine.proxy.gameplay.director.Snapshot();
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "快照拍摄成功." });
+            });
+            
+            AddUIEventListener("RestoreBtn", (e) =>
+            {
+                engine.proxy.gameplay.director.Restore();
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "快照恢复成功." });
+            });
 
             AddUIEventListener("ExitBtn", (e) =>
             {
-                engine.proxy.gameplay.StopGame();
-                engine.proxy.gameplay.DestroyGame();
                 engine.gameui.Open<LobbyView>();
+                engine.proxy.gameplay.director.StopGame();
+                engine.proxy.gameplay.director.DestroyGame();
             });
         }
     }

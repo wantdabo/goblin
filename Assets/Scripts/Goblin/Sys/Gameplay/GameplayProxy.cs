@@ -17,7 +17,7 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
-        private Director director { get; set; }
+        public Director director { get; private set; }
 
         public void Load<T>() where T : Director, new()
         {
@@ -40,31 +40,6 @@ namespace Goblin.Sys.Gameplay
             director.StopGame();
             director.Destroy();
             director = null;
-        }
-
-        public void StartGame()
-        {
-            director.StartGame();
-        }
-
-        public void PauseGame()
-        {
-            director.PauseGame();
-        }
-        
-        public void ResumeGame()
-        {
-            director.ResumeGame();
-        }
-        
-        public void StopGame()
-        {
-            director.StopGame();
-        }
-
-        public void DestroyGame()
-        {
-            director.DestroyGame();
         }
     }
 }
