@@ -40,6 +40,9 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         Stopped,
     }
     
+    /// <summary>
+    /// 场景信息
+    /// </summary>
     public class StageInfo : BehaviorInfo
     {
         /// <summary>

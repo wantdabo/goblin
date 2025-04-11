@@ -22,6 +22,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         {
             base.OnAssemble();
             translators = ObjectCache.Get<Dictionary<Type, Logic.Translators.Common.Translator>>();
+            translators.Add(typeof(StageInfo), ObjectCache.Get<Synopsis>().Load(stage));
             translators.Add(typeof(AttributeInfo), ObjectCache.Get<Attribute>().Load(stage));
             translators.Add(typeof(SpatialInfo), ObjectCache.Get<Spatial>().Load(stage));
             translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Logic.Translators.StateMachine>().Load(stage));
@@ -42,6 +43,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         protected override void OnEndTick()
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
+            
+            if (translators.TryGetValue(typeof(StageInfo), out var t)) t.Translate(info);
             foreach (var kv in info.behaviorinfos)
             {
                 foreach (var behaviorinfo in kv.Value)

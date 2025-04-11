@@ -6,6 +6,10 @@
     public class RIL_DEFINE
     {
         /// <summary>
+        /// SYNOPSIS 梗概指令
+        /// </summary>
+        public const ushort SYNOPSIS = 0;
+        /// <summary>
         /// SPATIAL 指令
         /// </summary>
         public const ushort SPATIAL = 1;
