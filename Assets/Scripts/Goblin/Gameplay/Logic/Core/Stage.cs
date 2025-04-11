@@ -46,6 +46,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private StageInfo snapshot { get; set; }
         /// <summary>
+        /// 是否有快照
+        /// </summary>
+        public bool hassnapshot => null != snapshot;
+        /// <summary>
+        /// 快照帧号
+        /// </summary>
+        public uint snapshotframe => null != snapshot ? snapshot.frame : 0;
+        /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
         public GameplayData gpdata { get; set; }
@@ -198,7 +206,7 @@ namespace Goblin.Gameplay.Logic.Core
             
             // TODO 后续要改为，差异推送
             // 清除渲染指令 (会导致重新全推到渲染层)
-            rilsync.ClearRIL();
+            rilsync.Clear();
         }
 
         /// <summary>

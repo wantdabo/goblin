@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(AttributeInfo info)
         {
-            stage.rilsync.PushRIL(info.id, new RIL_ATTRIBUTE(info.hp, info.maxhp, info.moveseed, info.attack));
+            stage.rilsync.Push(info.id, new RIL_ATTRIBUTE(info.hp, info.maxhp, info.moveseed, info.attack));
         }
     }
 }

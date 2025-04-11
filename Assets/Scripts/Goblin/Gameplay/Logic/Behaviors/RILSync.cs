@@ -17,7 +17,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         /// <param name="id">ActorID</param>
         /// <param name="ril">渲染指令</param>
-        public void PushRIL(ulong id, IRIL ril)
+        public void Push(ulong id, IRIL ril)
         {
             if (false == info.rildict.TryGetValue(id, out var dict))
             {
@@ -39,7 +39,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 清除渲染指令 (会导致重新全推到渲染层)
         /// </summary>
-        public void ClearRIL()
+        public void Clear()
         {
             info.Reset();
             info.Ready(id);

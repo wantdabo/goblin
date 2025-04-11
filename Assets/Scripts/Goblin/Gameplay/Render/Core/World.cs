@@ -65,6 +65,7 @@ namespace Goblin.Gameplay.Render.Core
 
         private void Resolvers()
         {
+            AddComp<Synopsis>().Initialize(this).Create();
             AddComp<Spatial>().Initialize(this).Create();
             AddComp<StateMachine>().Initialize(this).Create();
         }

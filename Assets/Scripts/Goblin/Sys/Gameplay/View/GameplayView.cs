@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Render.Resolvers;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
@@ -11,6 +12,18 @@ namespace Goblin.Sys.Gameplay.View
     {
         public override UILayer layer => UILayer.UIMain;
         protected override string res => "Gameplay/GameplayView";
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            engine.proxy.gameplay.eventor.Listen<SynopsisEvent>(OnSynopsis);
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+            engine.proxy.gameplay.eventor.UnListen<SynopsisEvent>(OnSynopsis);
+        }
 
         protected override void OnBindEvent()
         {
@@ -34,6 +47,19 @@ namespace Goblin.Sys.Gameplay.View
                 engine.proxy.gameplay.director.StopGame();
                 engine.proxy.gameplay.director.DestroyGame();
             });
+        }
+
+        private void OnSynopsis(SynopsisEvent e)
+        {
+            var text = engine.u3dkit.SeekNode<Text>(gameObject, "Synopsis");
+            var content = 
+                          $"Frame : {e.synopsis.frame}\n" +
+                          $"ActorCount : {e.synopsis.actorcnt}\n" +
+                          $"BehaviorCount : {e.synopsis.behaviorcnt}\n" +
+                          $"BehaviorInfoCount : {e.synopsis.behaviorinfocnt}\n" +
+                          $"HasSnapshot : {e.synopsis.hassnapshot}\n" +
+                          $"SnapshotFrame : {e.synopsis.snapshotframe}";
+            text.text = content;
         }
     }
 }
