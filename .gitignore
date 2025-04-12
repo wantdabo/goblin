@@ -32,3 +32,4 @@ Assets/WX-WASM-SDK-V2.meta
 /wxgame
 /TextToolDatas
 *.user
+*.DS_Store

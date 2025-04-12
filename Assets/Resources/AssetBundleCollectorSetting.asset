@@ -24,12 +24,12 @@ MonoBehaviour:
     AutoCollectShaders: 0
     IgnoreRuleName: NormalIgnoreRule
     Groups:
-    - GroupName: Effects
+    - GroupName: Effect
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/Effects
+      - CollectPath: Assets/GameRes/Effect
         CollectorGUID: 5d8a6b3b7ed020846b2f4a1bc8da8d80
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -37,12 +37,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Models
+    - GroupName: Model
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/Models
+      - CollectPath: Assets/GameRes/Model
         CollectorGUID: c29bc8acf5495054683a5bad2db5ea48
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -50,12 +50,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: UIPrefabs
+    - GroupName: UIPrefab
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/UIPrefabs
+      - CollectPath: Assets/GameRes/UIPrefab
         CollectorGUID: 2391824d3dd3e7f46bb30b1eba185912
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -63,12 +63,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Raws
+    - GroupName: Raw
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/Raws
+      - CollectPath: Assets/GameRes/Raw
         CollectorGUID: 3a11628382a872649bb0bafc42cc240d
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -76,12 +76,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Sounds
+    - GroupName: Sound
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/Sounds
+      - CollectPath: Assets/GameRes/Sound
         CollectorGUID: d5974d79e23b3214fa9eb41cbd4f8488
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -89,12 +89,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Fonts
+    - GroupName: Font
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/Fonts
+      - CollectPath: Assets/GameRes/Font
         CollectorGUID: d3267eb826e4c5e41a8b4a2bc299c649
         CollectorType: 0
         AddressRuleName: AddressByFileName

@@ -9,14 +9,14 @@ namespace Goblin.Common.GameRes
     /// </summary>
     public class Location : Comp
     {
-        private const string soundpath = "Assets/GameRes/Sounds/";
-        public const string modelpath = "Assets/GameRes/Models/";
-        private const string effectpath = "Assets/GameRes/Effects/";
-        public const string uieffectpath = "Assets/GameRes/UIEffects/";
-        public const string uiprefabpath = "Assets/GameRes/UIPrefabs/";
-        public const string spritespath = "Assets/GameRes/UISprites/";
-        public const string configpath = "Assets/GameRes/Raws/Configs/";
-        public const string skilldatapath = "Assets/GameRes/Raws/SkillDatas/";
+        private const string soundpath = "Assets/GameRes/Sound/";
+        public const string modelpath = "Assets/GameRes/Model/";
+        private const string effectpath = "Assets/GameRes/Effect/";
+        public const string uieffectpath = "Assets/GameRes/UIEffect/";
+        public const string uiprefabpath = "Assets/GameRes/UIPrefab/";
+        public const string spritespath = "Assets/GameRes/UISprite/";
+        public const string configpath = "Assets/GameRes/Raw/Configs/";
+        public const string skilldatapath = "Assets/GameRes/Raw/SkillDatas/";
 
         /// <summary>
         /// 异步加载音效预制体
