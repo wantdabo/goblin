@@ -18,6 +18,10 @@ namespace Goblin.Gameplay.Logic.Prefabs
         /// </summary>
         public int hero { get; set; }
         /// <summary>
+        /// 模型 ID
+        /// </summary>
+        public int model { get; set; }
+        /// <summary>
         /// 空间信息
         /// </summary>
         public Spatial spatial { get; set; }
@@ -55,6 +59,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
             if (actor.SeekBehavior(out Tag tag))
             {
                 tag.Set(TAG_DEFINE.HERO_ID, info.hero);
+                tag.Set(TAG_DEFINE.MODEL_ID, info.model);
             }
         }
     }

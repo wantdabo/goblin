@@ -13,5 +13,9 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 英雄 ID
         /// </summary>
         public const ushort HERO_ID = 2;
+        /// <summary>
+        /// 模型 ID
+        /// </summary>
+        public const ushort MODEL_ID = 3;
     }
 }

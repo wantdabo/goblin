@@ -17,6 +17,7 @@ namespace Goblin.Gameplay.Logic.Translators
             ril.actortype = info.tags.GetValueOrDefault(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
             ril.hashero = info.tags.ContainsKey(TAG_DEFINE.HERO_ID);
             ril.hero = info.tags.GetValueOrDefault(TAG_DEFINE.HERO_ID, 0);
+            ril.model = info.tags.GetValueOrDefault(TAG_DEFINE.MODEL_ID, 0);
             
             stage.rilsync.Push(info.id, ril);
         }

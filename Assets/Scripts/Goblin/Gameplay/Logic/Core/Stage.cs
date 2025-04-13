@@ -655,6 +655,7 @@ namespace Goblin.Gameplay.Logic.Core
                 var hero = Spawn<Hero>(new HeroInfo
                 {
                     hero = player.hero,
+                    model = heroinfo.Model,
                     attribute = new()
                     {
                         hp = (uint)attributeinfo.HP,

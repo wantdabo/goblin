@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
 {
+    /// <summary>
+    /// 节点代理
+    /// </summary>
     public class Node : Agent
     {
         /// <summary>

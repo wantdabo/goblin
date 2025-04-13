@@ -22,6 +22,10 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 英雄 ID
         /// </summary>
         public int hero { get; set; }
+        /// <summary>
+        /// 模型 ID
+        /// </summary>
+        public int model { get; set; }
 
         /// <summary>
         /// 标签渲染指令
@@ -29,11 +33,13 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <param name="actortype">Actor 类型</param>
         /// <param name="hashero">是否拥有英雄 ID</param>
         /// <param name="hero">英雄 ID</param>
-        public RIL_TAG(int actortype, bool hashero, int hero)
+        /// <param name="model">模型 ID</param>
+        public RIL_TAG(int actortype, bool hashero, int hero, int model)
         {
             this.actortype = actortype;
             this.hashero = hashero;
             this.hero = hero;
+            this.model = model;
         }
 
         public byte[] Serialize()
@@ -45,12 +51,15 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             RIL_TAG ril = (RIL_TAG)other;
             
-            return ril.id == id && ril.actortype == actortype && ril.hashero == hashero && ril.hero == hero;
+            return ril.actortype == actortype &&
+                   ril.hashero == hashero &&
+                   ril.hero == hero &&
+                   ril.model == model;
         }
 
         public override string ToString()
         {
-            return $"RIL_TAG: actortype={actortype}, hashero={hashero}, hero={hero}";
+            return $"RIL_TAG: actortype={actortype}, hashero={hashero}, hero={hero}, model={model}";
         }
     }
 }
