@@ -16,19 +16,31 @@ public partial class Tables
     public static List<string> tables { get; private set; } = new()
     {
         "Conf.ItemInfo",
+        "Conf.AttributeInfo",
+        "Conf.ModelInfo",
+        "Conf.HeroInfo",
     };
 
     public Conf.ItemInfos ItemInfos {get; }
+    public Conf.AttributeInfos AttributeInfos {get; }
+    public Conf.ModelInfos ModelInfos {get; }
+    public Conf.HeroInfos HeroInfos {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
         ItemInfos = new Conf.ItemInfos(loader("Conf.ItemInfo"));
+        AttributeInfos = new Conf.AttributeInfos(loader("Conf.AttributeInfo"));
+        ModelInfos = new Conf.ModelInfos(loader("Conf.ModelInfo"));
+        HeroInfos = new Conf.HeroInfos(loader("Conf.HeroInfo"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         ItemInfos.ResolveRef(this);
+        AttributeInfos.ResolveRef(this);
+        ModelInfos.ResolveRef(this);
+        HeroInfos.ResolveRef(this);
     }
 }
 

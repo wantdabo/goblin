@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Read Me v7.4.2
   m_EditorClassIdentifier: 
   _ExamplesFolder: {fileID: 102900000, guid: 833bcac93994ed2459b0b7f61940e220, type: 3}
-  _DontShowOnStartup: 0
+  _DontShowOnStartup: 1
