@@ -12,6 +12,6 @@ namespace Goblin.Gameplay.Logic.Common.GameplayDatas
         /// <summary>
         /// 玩家数据数组，包含了所有参与游戏的玩家信息
         /// </summary>
-        public PlayerData[] players { get; set; }
+        public GPPlayerData[] players { get; set; }
     }
 }

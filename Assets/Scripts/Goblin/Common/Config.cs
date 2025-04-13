@@ -14,7 +14,7 @@ namespace Goblin.Common
         /// <summary>
         /// 配置表定位器
         /// </summary>
-        public Tables location { get; set; }
+        public Tables location { get; private set; }
 
         /// <summary>
         /// 浮点数转整型的乘法系数（1000 表示 1）

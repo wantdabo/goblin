@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
@@ -21,11 +22,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            translators = ObjectCache.Get<Dictionary<Type, Logic.Translators.Common.Translator>>();
-            translators.Add(typeof(StageInfo), ObjectCache.Get<Synopsis>().Load(stage));
-            translators.Add(typeof(AttributeInfo), ObjectCache.Get<Attribute>().Load(stage));
-            translators.Add(typeof(SpatialInfo), ObjectCache.Get<Spatial>().Load(stage));
-            translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Logic.Translators.StateMachine>().Load(stage));
+            translators = ObjectCache.Get<Dictionary<Type, Translators.Common.Translator>>();
+            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.Synopsis>().Load(stage));
+            translators.Add(typeof(TagInfo), ObjectCache.Get<Translators.Tag>().Load(stage));
+            translators.Add(typeof(AttributeInfo), ObjectCache.Get<Translators.Attribute>().Load(stage));
+            translators.Add(typeof(SpatialInfo), ObjectCache.Get<Translators.Spatial>().Load(stage));
+            translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Translators.StateMachine>().Load(stage));
         }
 
         protected override void OnDisassemble()

@@ -42,12 +42,18 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
         protected override void OnCreateGame()
         {
+            // TODO 硬构建
             GameplayData data = new GameplayData();
             data.seed = 19491001;
             data.players = new[]
             {
-                new PlayerData { hero = 10010 },
-                // new PlayerData { hero = 10010 },
+                new GPPlayerData
+                {
+                    hero = 100001,
+                    position = new GPVector3(0, 0, 0),
+                    euler = new GPVector3(0, 0, 0),
+                    scale = new GPVector3(1, 1, 1),
+                },
             };
             
             stage = new Stage();

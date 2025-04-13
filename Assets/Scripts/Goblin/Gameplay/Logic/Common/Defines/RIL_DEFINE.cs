@@ -10,16 +10,20 @@
         /// </summary>
         public const ushort SYNOPSIS = 0;
         /// <summary>
+        /// TAG 标签指令
+        /// </summary>
+        public const ushort TAG = 1;
+        /// <summary>
         /// SPATIAL 指令
         /// </summary>
-        public const ushort SPATIAL = 1;
+        public const ushort SPATIAL = 2;
         /// <summary>
         /// STATE 状态机指令
         /// </summary>
-        public const ushort STATE_MACHINE = 2;
+        public const ushort STATE_MACHINE = 3;
         /// <summary>
         /// ATTRIBUTE 属性指令
         /// </summary>
-        public const ushort ATTRIBUTE = 3;
+        public const ushort ATTRIBUTE = 4;
     }
 }

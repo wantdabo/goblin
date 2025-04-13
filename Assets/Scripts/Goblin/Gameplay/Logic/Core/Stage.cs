@@ -5,6 +5,7 @@ using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors.Batchs;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Common.GameplayDatas;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
@@ -103,30 +104,8 @@ namespace Goblin.Gameplay.Logic.Core
             Batches();
             // 添加预制创建器
             Prefabs();
-            
-            this.gpdata = data;
-            // TODO 临时代码, 后续挪到一个单独的地方, 构建初始化世界
-            foreach (var player in data.players)
-            {
-                var hero = Spawn<Hero>(new HeroInfo
-                {
-                    hero = player.hero,
-                    attribute = new()
-                    {
-                        hp = 100,
-                        maxhp = 100,
-                        moveseed = 10,
-                        attack = 5,
-                    },
-                    spatial = new()
-                    {
-                        position = FPVector3.zero,
-                        euler = FPVector3.zero,
-                        scale = FPVector3.one
-                    }
-                });
-                hero.AddBehavior<Gamepad>();
-            }
+            // 构建初始化 Stage
+            Building(data);
         }
         
         /// <summary>
@@ -661,7 +640,39 @@ namespace Goblin.Gameplay.Logic.Core
 
             return (T)behaviorinfo;
         }
-        
+
+        /// <summary>
+        /// 构建初始化 Stage
+        /// </summary>
+        /// <param name="data">初始化的游戏数据</param>
+        public void Building(GameplayData data)
+        {
+            this.gpdata = data;
+            foreach (var player in data.players)
+            {
+                var heroinfo = Config.location.HeroInfos.Get(player.hero);
+                var attributeinfo = Config.location.AttributeInfos.Get(heroinfo.Attribute);
+                var hero = Spawn<Hero>(new HeroInfo
+                {
+                    hero = player.hero,
+                    attribute = new()
+                    {
+                        hp = (uint)attributeinfo.HP,
+                        maxhp = (uint)attributeinfo.MaxHP,
+                        moveseed = (uint)attributeinfo.MoveSpeed,
+                        attack = (uint)attributeinfo.Attack,
+                    },
+                    spatial = new()
+                    {
+                        position = player.position.ToFPVector3(),
+                        euler = player.euler.ToFPVector3(),
+                        scale = player.scale.ToFPVector3(),
+                    }
+                });
+                hero.AddBehavior<Gamepad>();
+            }
+        }
+
         /// <summary>
         /// 添加 BehaviorInfo
         /// </summary>
