@@ -9,7 +9,14 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// Node 根
         /// </summary>
-        private static GameObject nodes = new("NODES");
+        private static GameObject root = new("Node");
+        static Node()
+        {
+            root.transform.SetParent(GameObject.Find("Gameplay").transform, false);
+            root.transform.localPosition = Vector3.zero;
+            root.transform.localScale = Vector3.one;
+        }
+        
         /// <summary>
         /// GameObject
         /// </summary>
@@ -20,14 +27,9 @@ namespace Goblin.Gameplay.Render.Agents
             go = ObjectCache.Get<GameObject>("NODE_GO_KEY");
             go.SetActive(true);
             go.name = actor.ToString();
-            go.transform.SetParent(nodes.transform);
+            go.transform.SetParent(root.transform);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
-            
-            // TODO Test
-            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.localScale *= 0.5f;
-            cube.transform.SetParent(go.transform);
         }
 
         protected override void OnReset()
