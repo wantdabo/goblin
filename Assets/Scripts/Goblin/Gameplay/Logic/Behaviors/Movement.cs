@@ -59,7 +59,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         
         private void OnStateChanged(StateChangedEvent e)
         {
-            UnityEngine.Debug.Log($"OnStateChanged ==================> {e.current}, {e.last}");
         }
     }
 }

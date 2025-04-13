@@ -70,6 +70,14 @@ namespace Goblin.Gameplay.Render.Common
             return states;
         }
 
+        public ABStateInfo GetState(ulong actor, ushort id)
+        {
+            if (false == statedict.TryGetValue(actor, out var statemap)) return default;
+            if (false == statemap.TryGetValue(id, out var state)) return default;
+
+            return state;
+        }
+
         private void OnRIL(RILEvent e)
         {
             if (false == statedict.TryGetValue(e.state.actor, out var statemap))

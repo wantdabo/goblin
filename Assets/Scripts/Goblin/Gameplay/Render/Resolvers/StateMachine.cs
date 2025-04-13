@@ -5,6 +5,7 @@ using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
+using Animation = Goblin.Gameplay.Render.Agents.Animation;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -28,7 +29,7 @@ namespace Goblin.Gameplay.Render.Resolvers
             if (null == statebundles) return;
             foreach (var bundle in statebundles)
             {
-                var statemachine = (RIL_STATE_MACHINE)bundle.ril;
+                world.EnsureAgent<Animation>(bundle.actor);
             }
         }
     }

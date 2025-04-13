@@ -5,13 +5,6 @@ using UnityEngine;
 namespace Goblin.Gameplay.Render.Agents
 {
     /// <summary>
-    /// 模型变化事件
-    /// </summary>
-    public struct ModelChangedEvent : IEvent
-    {
-    }
-    
-    /// <summary>
     /// 模型代理
     /// </summary>
     public class Model : Agent

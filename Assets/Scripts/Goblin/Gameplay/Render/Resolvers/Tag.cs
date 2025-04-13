@@ -28,8 +28,11 @@ namespace Goblin.Gameplay.Render.Resolvers
             foreach (var bundle in tagbundles)
             {
                 var tag = (RIL_TAG) bundle.ril;
-                var model = world.EnsureAgent<Model>(bundle.actor);
-                model.Load(tag.model);
+                if (0 != tag.model)
+                {
+                    var model = world.EnsureAgent<Model>(bundle.actor);
+                    model.Load(tag.model);
+                }
             }
         }
     }

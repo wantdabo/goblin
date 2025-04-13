@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public override string ToString()
         {
-            return $"RIL_STATE_MACHINE: current={current}, frames={frames}";
+            return $"RIL_STATE_MACHINE: current={current}, last={last}, frames={frames}";
         }
     }
 }
