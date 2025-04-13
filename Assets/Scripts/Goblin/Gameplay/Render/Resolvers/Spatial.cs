@@ -31,6 +31,8 @@ namespace Goblin.Gameplay.Render.Resolvers
                 var node = world.EnsureAgent<Node>(bundle.actor);
                 var spatial = (RIL_SPATIAL)bundle.ril;
                 node.go.transform.position = spatial.position.ToVector3();
+                node.go.transform.rotation = Quaternion.Euler(spatial.euler.ToVector3());
+                node.go.transform.localScale = spatial.scale.ToVector3();
             }
         }
     }

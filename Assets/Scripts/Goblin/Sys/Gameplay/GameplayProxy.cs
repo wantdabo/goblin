@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Sys.Common;
@@ -21,6 +22,7 @@ namespace Goblin.Sys.Gameplay
 
         public void Load<T>() where T : Director, new()
         {
+            Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
             if (null != director)
             {
                 director.StopGame();
