@@ -3,6 +3,7 @@ using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
+using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
 {
@@ -48,7 +49,8 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             animancerState.Speed = 0;
-            UnityEngine.Debug.Log(statemachine);
+            animancerState.Time += e.tick;
+            animancerState.Time = Mathf.Clamp(animancerState.Time, 0, statemachine.frames * GAME_DEFINE.LOGIC_TICK.AsFloat());
         }
     }
 }

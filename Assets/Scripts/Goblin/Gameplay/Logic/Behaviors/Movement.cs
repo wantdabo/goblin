@@ -32,6 +32,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             if (actor.SeekBehaviorInfo(out SpatialInfo spatial))
             {
                 spatial.position += motion;
+                
+                var dire = motion.normalized;
+                FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
+                spatial.euler = FPVector3.up * angle;
             }
             
             SetMoving();
