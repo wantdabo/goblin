@@ -8,15 +8,47 @@ namespace Goblin.Gameplay.Render.Common.ScriptableObjects
     public class AnimationConfig : ScriptableObject
     {
         public List<AnimationInfo> animations;
+        
+        public AnimationInfo GetAnimationInfo(byte state)
+        {
+            foreach (var animation in animations)
+            {
+                if (animation.state == state)
+                {
+                    return animation;
+                }
+            }
+            return null;
+        }
     }
-
+    
     [Serializable]
     public class AnimationInfo
     {
         public byte state;
         public string name;
-        public float tarduration;
         public float mixduration;
-        public List<(byte state, string name, float tarduration, float mixduration)> mixanimations;
+        public List<AnimationBeforeInfo> mixanimations;
+        
+        public AnimationBeforeInfo GetMixAnimationInfo(byte state)
+        {
+            foreach (var animation in mixanimations)
+            {
+                if (animation.state == state)
+                {
+                    return animation;
+                }
+            }
+            return null;
+        }
+    }
+
+    [Serializable]
+    public class AnimationBeforeInfo
+    {
+        public byte state;
+        public string name;
+        public float duration;
+        public float mixduration;
     }
 }

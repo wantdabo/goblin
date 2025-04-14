@@ -1,5 +1,6 @@
 ﻿using Goblin.Core;
 using System.Threading.Tasks;
+using Goblin.Gameplay.Render.Common.ScriptableObjects;
 using UnityEngine;
 
 namespace Goblin.Common.GameRes
@@ -56,6 +57,26 @@ namespace Goblin.Common.GameRes
         public GameObject LoadModelSync(string res)
         {
             return GameObject.Instantiate(engine.gameres.LoadAssetSync<GameObject>(modelpath + res));
+        }
+        
+        /// <summary>
+        /// 异步加载模型动画配置
+        /// </summary>
+        /// <param name="res">资源地址</param>
+        /// <returns>AnimationConfig</returns>
+        public async Task<AnimationConfig> LoadModelAnimationConfigAsync(string res)
+        {
+            return await engine.gameres.LoadAssetAsync<AnimationConfig>(modelpath + res);
+        }
+        
+        /// <summary>
+        /// 同步加载模型动画配置
+        /// </summary>
+        /// <param name="res">资源地址</param>
+        /// <returns>AnimationConfig</returns>
+        public AnimationConfig LoadModelAnimationConfigSync(string res)
+        {
+            return engine.gameres.LoadAssetSync<AnimationConfig>(modelpath + res);
         }
         
         /// <summary>

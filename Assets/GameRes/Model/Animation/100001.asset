@@ -12,4 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ae39b8fd07449d996d8b402f73df007, type: 3}
   m_Name: 100001
   m_EditorClassIdentifier: 
-  animations: []
+  animations:
+  - state: 0
+    name: Ani_Idle
+    mixduration: 0.05
+    mixanimations:
+    - state: 1
+      name: Ani_Run_End
+      duration: 3
+      mixduration: 0.05
+  - state: 1
+    name: Ani_Run
+    mixduration: 0.05
+    mixanimations:
+    - state: 0
+      name: Ani_Run_Start
+      duration: 1.2
+      mixduration: 0.05

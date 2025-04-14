@@ -48,6 +48,8 @@ namespace Goblin.Gameplay.Render.Agents
                 animancer = model.go.GetComponent<AnimancerComponent>();
             }
 
+            if (null == animancer) return;
+
             animstate = animancer.TryPlay(animname, mixduration);
             if (null == animstate) return;
             animstate.Speed = 0;

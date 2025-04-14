@@ -29,21 +29,31 @@ namespace Goblin.Gameplay.Render.Resolvers
             if (null == statebundles) return;
             foreach (var bundle in statebundles)
             {
+                var tagstate = world.summary.GetState(bundle.actor, RIL_DEFINE.TAG);
+                var tag = (RIL_TAG)tagstate.ril;
+                
+                var modelinfo = engine.cfg.location.ModelInfos.Get(tag.model);
+                var animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);
+                if (null == animcfg) continue;
+                
                 var statemachine = (RIL_STATE_MACHINE)bundle.ril;
-                switch (statemachine.current)
+                var animinfo = animcfg.GetAnimationInfo(statemachine.current);
+                if (null == animinfo) continue;
+                
+                string animname = animinfo.name;
+                var tarduration = statemachine.frames * GAME_DEFINE.LOGIC_TICK.AsFloat();
+                var mixduration = animinfo.mixduration;
+                
+                var beforeAnimInfo = animinfo.GetMixAnimationInfo(statemachine.last);
+                if (null != beforeAnimInfo && tarduration < beforeAnimInfo.duration)
                 {
-                    case STATE_DEFINE.IDLE:
-                        break;
-                    case STATE_DEFINE.MOVE:
-                        break;
-                    case STATE_DEFINE.JUMP:
-                        break;
-                    case STATE_DEFINE.FALL:
-                        break;
-                    case STATE_DEFINE.CASTING:
-                        break;
+                    animname = beforeAnimInfo.name;
+                    mixduration = beforeAnimInfo.mixduration;
                 }
+                
+                if (null == animname) continue;
                 var animation = world.EnsureAgent<Animation>(bundle.actor);
+                animation.Play(animname, tarduration, mixduration);
             }
         }
     }
