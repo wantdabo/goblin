@@ -13,18 +13,30 @@ namespace Goblin.Gameplay.Render.Agents
     public class Animation : Agent
     {
         private AnimancerComponent animancer { get; set; }
-        private AnimancerState animancerState { get; set; }
+        private AnimancerState animstate { get; set; }
+        private string animname { get; set; }
+        private float tarduration { get; set; }
+        private float mixduration { get; set; }
         
         protected override void OnReady()
         {
-            animancer = null;
             world.ticker.eventor.Listen<TickEvent>(OnTick);
+            animancer = null;
+            animstate = null;
         }
 
         protected override void OnReset()
         {
-            animancer = null;
             world.ticker.eventor.UnListen<TickEvent>(OnTick);
+            animancer = null;
+            animstate = null;
+        }
+
+        public void Play(string animname, float tarduration, float mixduration)
+        {
+            this.animname = animname;
+            this.tarduration = tarduration;
+            this.mixduration = mixduration;
         }
 
         private void OnTick(TickEvent e)
@@ -36,21 +48,10 @@ namespace Goblin.Gameplay.Render.Agents
                 animancer = model.go.GetComponent<AnimancerComponent>();
             }
 
-            var state = world.summary.GetState(actor, RIL_DEFINE.STATE_MACHINE);
-            var statemachine = (RIL_STATE_MACHINE)state.ril;
-            switch (statemachine.current)
-            {
-                case STATE_DEFINE.IDLE:
-                    animancerState = animancer.TryPlay("Avatar_Female_Size02_Unagi_Ani_Idle");
-                    break;
-                case STATE_DEFINE.MOVE:
-                    animancerState = animancer.TryPlay("Avatar_Female_Size02_Unagi_Ani_Run");
-                    break;
-            }
-
-            animancerState.Speed = 0;
-            animancerState.Time += e.tick;
-            animancerState.Time = Mathf.Clamp(animancerState.Time, 0, statemachine.frames * GAME_DEFINE.LOGIC_TICK.AsFloat());
+            animstate = animancer.TryPlay(animname, mixduration);
+            if (null == animstate) return;
+            animstate.Speed = 0;
+            animstate.Time = Mathf.Clamp(animstate.Time + e.tick, 0, tarduration);
         }
     }
 }

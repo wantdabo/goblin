@@ -29,7 +29,21 @@ namespace Goblin.Gameplay.Render.Resolvers
             if (null == statebundles) return;
             foreach (var bundle in statebundles)
             {
-                world.EnsureAgent<Animation>(bundle.actor);
+                var statemachine = (RIL_STATE_MACHINE)bundle.ril;
+                switch (statemachine.current)
+                {
+                    case STATE_DEFINE.IDLE:
+                        break;
+                    case STATE_DEFINE.MOVE:
+                        break;
+                    case STATE_DEFINE.JUMP:
+                        break;
+                    case STATE_DEFINE.FALL:
+                        break;
+                    case STATE_DEFINE.CASTING:
+                        break;
+                }
+                var animation = world.EnsureAgent<Animation>(bundle.actor);
             }
         }
     }
