@@ -109,28 +109,51 @@ namespace Goblin.Gameplay.Directors.Local.Common
             if (null == stage) return;
             if (StageState.Ticking != stage.state) return;
 
-            input.joystickdire = Vector2.zero;
+            var joystickdire = Vector2.zero;
 
             if (Input.GetKey(KeyCode.W))
             {
-                input.joystickdire += Vector2.up;
+                joystickdire += Vector2.up;
             }
 
             if (Input.GetKey(KeyCode.S))
             {
-                input.joystickdire += Vector2.down;
+                joystickdire += Vector2.down;
             }
 
             if (Input.GetKey(KeyCode.A))
             {
-                input.joystickdire += Vector2.left;
+                joystickdire += Vector2.left;
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                input.joystickdire += Vector2.right;
+                joystickdire += Vector2.right;
             }
+            
+            // 根据摄像机方向计算世界坐标系中的方向
+            if (Vector2.zero != joystickdire && null != world.eyes.camera)
+            {
+                var cameraTransform = world.eyes.camera.transform;
 
+                // 获取摄像机的前向和右向向量
+                Vector3 forward = cameraTransform.forward;
+                Vector3 right = cameraTransform.right;
+
+                // 忽略 Y 轴分量，保持平面运动
+                forward.y = 0;
+                right.y = 0;
+
+                forward.Normalize();
+                right.Normalize();
+
+                // 将 joystickdire 转换为世界方向
+                Vector3 worldDirection = joystickdire.x * right + joystickdire.y * forward;
+                joystickdire = new Vector2(worldDirection.x, worldDirection.z);
+            }
+            
+
+            input.joystickdire = joystickdire;
             input.Input(1, stage);
 
             stage.Step();

@@ -58,9 +58,11 @@ namespace Goblin.Gameplay.Render.Common
             ObjectCache.Set(statebundles);
         }
 
-        public void Initialize(World world)
+        public Summary Initialize(World world)
         {
             this.world = world;
+
+            return this;
         }
         
         public List<ABStateInfo> GetStateBundles(ushort id)

@@ -16,18 +16,25 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
             engine.proxy.gameplay.eventor.Listen<SynopsisEvent>(OnSynopsis);
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
             engine.proxy.gameplay.eventor.UnListen<SynopsisEvent>(OnSynopsis);
         }
 
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
+            
+            AddUIEventListener("EnterLockCursorBtn", (e) =>
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            });
             
             AddUIEventListener("SnapshotBtn", (e) =>
             {
@@ -47,6 +54,14 @@ namespace Goblin.Sys.Gameplay.View
                 engine.proxy.gameplay.director.StopGame();
                 engine.proxy.gameplay.director.DestroyGame();
             });
+        }
+
+        private void OnTick(TickEvent e)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
 
         private void OnSynopsis(SynopsisEvent e)

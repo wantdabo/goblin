@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers;
 
@@ -17,6 +19,10 @@ namespace Goblin.Gameplay.Render.Core
     public sealed class World : Comp
     {
         /// <summary>
+        /// 自我
+        /// </summary>
+        public ulong self { get; private set; } = 1;
+        /// <summary>
         /// 事件订阅派发者
         /// </summary>
         public Eventor eventor { get; private set; }
@@ -25,6 +31,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public Ticker ticker { get; private set; }
         public Summary summary { get; private set; }
+        public Eyes eyes { get; private set; }
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
 
         protected override void OnCreate()
@@ -37,8 +44,10 @@ namespace Goblin.Gameplay.Render.Core
             ticker.Create();
             
             summary = AddComp<Summary>();
-            summary.Initialize(this);
-            summary.Create();
+            summary.Initialize(this).Create();
+            
+            eyes = AddComp<Eyes>();
+            eyes.Initialize(this).Create();
 
             Resolvers();
 
