@@ -28,11 +28,12 @@ namespace Goblin.Gameplay.Render.Resolvers
             if (null == spatialbundles) return;
             foreach (var bundle in spatialbundles)
             {
-                var node = world.EnsureAgent<Node>(bundle.actor);
                 var spatial = (RIL_SPATIAL)bundle.ril;
-                node.go.transform.position = spatial.position.ToVector3();
-                node.go.transform.rotation = Quaternion.Euler(spatial.euler.ToVector3());
-                node.go.transform.localScale = spatial.scale.ToVector3();
+                var node = world.EnsureAgent<Node>(bundle.actor);
+                node.targetPosition = spatial.position.ToVector3();
+                node.targetEuler = spatial.euler.ToVector3();
+                node.targetScale = spatial.scale.ToVector3();
+                node.Chase();
             }
         }
     }
