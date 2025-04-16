@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReset()
         {
-            a =  1664525;
+            a = 1664525;
             c = 1013904223;
             m = int.MaxValue;
             seed = 0;
