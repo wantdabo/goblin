@@ -3,7 +3,7 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
     /// <summary>
     /// Stage 数据
     /// </summary>
-    public class GPStageData
+    public struct GPStageData
     {
         /// <summary>
         /// 游戏的种子，用于随机数生成等目的

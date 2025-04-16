@@ -1,9 +1,9 @@
 namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
-    /// 三维向量数据结构
+    /// 二维向量数据结构
     /// </summary>
-    public struct GPVector3
+    public struct GPVector2
     {
         /// <summary>
         /// X 轴
@@ -13,22 +13,16 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// Y 轴
         /// </summary>
         public int y { get; set; }
-        /// <summary>
-        /// Z 轴
-        /// </summary>
-        public int z { get; set; }
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="x">X 轴</param>
         /// <param name="y">Y 轴</param>
-        /// <param name="z">Z 轴</param>
-        public GPVector3(int x, int y, int z)
+        public GPVector2(int x, int y)
         {
             this.x = x;
             this.y = y;
-            this.z = z;
         }
     }
 }

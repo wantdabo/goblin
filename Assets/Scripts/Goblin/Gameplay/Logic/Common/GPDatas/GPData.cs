@@ -3,7 +3,7 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
     /// <summary>
     /// 游戏数据
     /// </summary>
-    public class GPData
+    public struct GPData
     {
         /// <summary>
         /// GameID

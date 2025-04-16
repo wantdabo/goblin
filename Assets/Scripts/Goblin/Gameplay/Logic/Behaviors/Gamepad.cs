@@ -48,9 +48,17 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// 设置按键数据
         /// </summary>
         /// <param name="inputType">按键类型</param>
-        /// <param name="input">按键数据</param>
-        public void SetInput(InputType inputType, InputInfo input)
+        /// <param name="press">摁下之后 -> TRUE</param>
+        /// <param name="dire">按键的方向</param>
+        public void SetInput(InputType inputType, bool press, FPVector2 dire)
         {
+            var input = new InputInfo
+            {
+                press = press,
+                release = false,
+                dire = dire
+            };
+            
             if (info.inputdict.TryGetValue(inputType, out var oldInput))
             {
                 // 上一次是 press，新的是 unpress 表示技能释放出去了。

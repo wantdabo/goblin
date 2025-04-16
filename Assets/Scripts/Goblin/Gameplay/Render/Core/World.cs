@@ -50,6 +50,10 @@ namespace Goblin.Gameplay.Render.Core
         /// Ticker/时间驱动器
         /// </summary>
         public Ticker ticker { get; private set; }
+        /// <summary>
+        /// 输入系统
+        /// </summary>
+        public InputSystem input { get; private set; }
         public Summary summary { get; private set; }
         public Eyes eyes { get; private set; }
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
@@ -62,6 +66,9 @@ namespace Goblin.Gameplay.Render.Core
             
             ticker = AddComp<Ticker>();
             ticker.Create();
+            
+            input = AddComp<InputSystem>();
+            input.Initialize(this).Create();
             
             summary = AddComp<Summary>();
             summary.Initialize(this).Create();

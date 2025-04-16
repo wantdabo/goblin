@@ -4,6 +4,8 @@ namespace Goblin.Gameplay.Directors
 {
     public class StateSyncDirector : Director
     {
+        public override bool rendering { get; }
+
         protected override void OnCreateGame()
         {
         }

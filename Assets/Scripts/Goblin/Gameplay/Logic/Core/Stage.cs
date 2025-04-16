@@ -118,7 +118,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
         public Stage Initialize(GPStageData data)
         {
-            if (null == data) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
 
             // StageCache 初始化
@@ -277,7 +276,25 @@ namespace Goblin.Gameplay.Logic.Core
             if (StageState.Stopped == info.state) return;
             info.state = StageState.Stopped;
         }
-        
+
+        /// <summary>
+        /// 输入
+        /// </summary>
+        /// <param name="id">座位 ID</param>
+        /// <param name="inputType">按键类型</param>
+        /// <param name="press">摁下之后 -> TRUE</param>
+        /// <param name="dire">按键的方向</param>
+        public void SetInput(ulong id, InputType inputType, bool press, GPVector2 dire)
+        {
+            var actor = seat.GetActor(id);
+            if (false == info.actors.Contains(actor)) return;
+            
+            var gamepad = GetBehavior<Gamepad>(actor);
+            if (null == gamepad) return;
+            
+            gamepad.SetInput(inputType, press, dire.ToFPVector2());
+        }
+
         /// <summary>
         /// 驱动
         /// </summary>
