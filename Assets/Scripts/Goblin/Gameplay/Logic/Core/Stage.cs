@@ -11,6 +11,7 @@ using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Kowtow.Math;
+using Config = Goblin.Gameplay.Logic.Behaviors.Config;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
@@ -59,6 +60,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public GameplayData gpdata { get; set; }
         /// <summary>
+        /// 配置
+        /// </summary>
+        public Config cfg => GetBehavior<Config>(sa);
+        /// <summary>
         /// 随机数
         /// </summary>
         public Random random => GetBehavior<Random>(sa);
@@ -98,6 +103,7 @@ namespace Goblin.Gameplay.Logic.Core
             info.Ready(sa);
             info.state = StageState.Initialized;
             AddActor(sa);
+            AddBehavior<Config>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
             // 添加批处理
@@ -650,8 +656,8 @@ namespace Goblin.Gameplay.Logic.Core
             this.gpdata = data;
             foreach (var player in data.players)
             {
-                var heroinfo = Config.location.HeroInfos.Get(player.hero);
-                var attributeinfo = Config.location.AttributeInfos.Get(heroinfo.Attribute);
+                var heroinfo = cfg.location.HeroInfos.Get(player.hero);
+                var attributeinfo = cfg.location.AttributeInfos.Get(heroinfo.Attribute);
                 var hero = Spawn<Hero>(new HeroInfo
                 {
                     hero = player.hero,

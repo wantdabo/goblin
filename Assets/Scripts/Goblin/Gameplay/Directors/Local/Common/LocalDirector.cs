@@ -42,7 +42,6 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
         protected override void OnCreateGame()
         {
-            // TODO 硬构建
             GameplayData data = new GameplayData();
             data.seed = 19491001;
             data.players = new[]

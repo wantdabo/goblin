@@ -48,8 +48,8 @@ namespace Goblin.Gameplay.Directors.Common
             var dir = joystickdire;
             if (Vector2.zero != dir)
             {
-                dir.x  = dir.x * Config.float2Int;
-                dir.y = dir.y * Config.float2Int;
+                dir.x  = dir.x * Goblin.Common.Config.float2Int;
+                dir.y = dir.y * Goblin.Common.Config.float2Int;
             }   
 
             var tsdir = new FPVector2 { x = Mathf.CeilToInt(dir.x) * FP.EN3, y = Mathf.CeilToInt(dir.y) * FP.EN3 };
