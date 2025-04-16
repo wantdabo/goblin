@@ -15,17 +15,17 @@ MonoBehaviour:
   animations:
   - state: 0
     name: Ani_Idle
-    mixduration: 0.05
+    mixduration: 0.1
     mixanimations:
     - state: 1
       name: Ani_Run_End
       duration: 3
-      mixduration: 0.05
+      mixduration: 0.1
   - state: 1
     name: Ani_Run
-    mixduration: 0.05
+    mixduration: 0.1
     mixanimations:
     - state: 0
       name: Ani_Run_Start
       duration: 1.2
-      mixduration: 0.05
+      mixduration: 0.1
