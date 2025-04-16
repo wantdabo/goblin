@@ -38,13 +38,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 spatial.euler = FPVector3.up * angle;
             }
             
-            SetMoving();
+            MarkMoving();
         }
 
         /// <summary>
         /// 标记为运动状态
         /// </summary>
-        private void SetMoving()
+        private void MarkMoving()
         {
             info.moving = true;
         }
