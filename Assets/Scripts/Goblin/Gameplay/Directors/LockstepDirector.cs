@@ -1,6 +1,6 @@
 using Goblin.Gameplay.Directors.Common;
 
-namespace Goblin.Gameplay.Directors.Lockstep.Common
+namespace Goblin.Gameplay.Directors
 {
     public class LockstepDirector : Director
     {

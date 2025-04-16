@@ -1,16 +1,12 @@
 using Goblin.Common;
-using Goblin.Common.FSM;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
 
-namespace Goblin.Gameplay.Directors.Local.Common
+namespace Goblin.Gameplay.Directors
 {
     public class LocalDirector : Director
     {

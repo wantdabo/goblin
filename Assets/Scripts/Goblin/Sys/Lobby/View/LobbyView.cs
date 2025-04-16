@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Goblin.Gameplay.Directors.Local.Common;
+using Goblin.Gameplay.Directors;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,6 +1,6 @@
 using Goblin.Gameplay.Directors.Common;
 
-namespace Goblin.Gameplay.Directors.StateSync.Common
+namespace Goblin.Gameplay.Directors
 {
     public class StateSyncDirector : Director
     {
