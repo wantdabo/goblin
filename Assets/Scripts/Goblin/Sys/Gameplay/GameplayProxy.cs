@@ -3,6 +3,7 @@ using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Sys.Common;
@@ -20,7 +21,7 @@ namespace Goblin.Sys.Gameplay
     {
         public Director director { get; private set; }
 
-        public void Load<T>() where T : Director, new()
+        public void Load<T>(GPData data) where T : Director, new()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
             if (null != director)
@@ -32,7 +33,7 @@ namespace Goblin.Sys.Gameplay
             director = AddComp<T>();
             director.Create();
             
-            director.CreateGame();
+            director.CreateGame(data);
         }
         
         public void UnLoad()

@@ -1,9 +1,9 @@
-namespace Goblin.Gameplay.Logic.Common.GameplayDatas
+namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
-    /// 游戏玩法数据
+    /// Stage 数据
     /// </summary>
-    public class GameplayData
+    public class GPStageData
     {
         /// <summary>
         /// 游戏的种子，用于随机数生成等目的

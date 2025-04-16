@@ -1,12 +1,18 @@
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common.GPDatas;
+using Goblin.Gameplay.Render.Core;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Directors.Common
 {
     public abstract class Director : Comp
     {
-        public void CreateGame()
+        protected GPData data { get; private set; }
+        public World world { get; protected set; }
+        
+        public void CreateGame(GPData data)
         {
+            this.data = data;
             OnCreateGame();
         }
 

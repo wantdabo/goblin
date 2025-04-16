@@ -1,5 +1,5 @@
 using Goblin.Gameplay.Common.SkillData.Common;
-using Goblin.Gameplay.Logic.Common.GameplayDatas;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Common.Extensions

@@ -1,4 +1,4 @@
-namespace Goblin.Gameplay.Logic.Common.GameplayDatas
+namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
     /// 玩家数据

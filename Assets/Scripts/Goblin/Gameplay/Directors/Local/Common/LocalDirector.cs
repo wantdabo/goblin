@@ -3,7 +3,7 @@ using Goblin.Common.FSM;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Common.GameplayDatas;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
@@ -24,8 +24,6 @@ namespace Goblin.Gameplay.Directors.Local.Common
         /// </summary>
         private Stage stage { get; set; }
 
-        private World world { get; set; }
-
         protected override void OnCreate()
         {
             base.OnCreate();
@@ -42,29 +40,13 @@ namespace Goblin.Gameplay.Directors.Local.Common
 
         protected override void OnCreateGame()
         {
-            GameplayData data = new GameplayData();
-            data.seed = 19491001;
-            data.players = new[]
-            {
-                new GPPlayerData
-                {
-                    seat = 1,
-                    hero = 100001,
-                    position = new GPVector3(0, 0, 0),
-                    euler = new GPVector3(0, 0, 0),
-                    scale = new GPVector3(1000, 1000, 1000),
-                },
-            };
-            
-            stage = new Stage().Initialize(data);
-
-            world = AddComp<World>().Initialize(1);
+            stage = new Stage().Initialize(data.sdata);
+            world = AddComp<World>().Initialize(data.seat);
             world.Create();
+            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent { state = new ABStateInfo(id, ril) });
 
             input = AddComp<InputSystem>();
             input.Create();
-
-            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent { state = new ABStateInfo(id, ril) });
         }
 
         protected override void OnDestroyGame()

@@ -6,7 +6,7 @@ using Goblin.Gameplay.Logic.Behaviors.Batchs;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
-using Goblin.Gameplay.Logic.Common.GameplayDatas;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -80,7 +80,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
-        public GameplayData gpdata { get; set; }
+        public GPStageData sdata { get; set; }
         /// <summary>
         /// 配置
         /// </summary>
@@ -113,10 +113,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 初始化 Stage
         /// </summary>
-        /// <param name="data">初始化的游戏数据</param>
+        /// <param name="data">Stage 初始化的游戏数据</param>
         /// <returns>Stage</returns>
         /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
-        public Stage Initialize(GameplayData data)
+        public Stage Initialize(GPStageData data)
         {
             if (null == data) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
@@ -684,10 +684,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 构建初始化 Stage
         /// </summary>
-        /// <param name="data">初始化的游戏数据</param>
-        public void Building(GameplayData data)
+        /// <param name="data">Stage 初始化的游戏数据</param>
+        public void Building(GPStageData data)
         {
-            this.gpdata = data;
+            this.sdata = data;
             foreach (var player in data.players)
             {
                 var heroinfo = cfg.location.HeroInfos.Get(player.hero);

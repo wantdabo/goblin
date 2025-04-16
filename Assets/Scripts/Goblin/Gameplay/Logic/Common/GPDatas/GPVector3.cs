@@ -1,9 +1,9 @@
-namespace Goblin.Gameplay.Logic.Common.GameplayDatas
+namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
     /// 三维向量数据结构
     /// </summary>
-    public struct GPVector3
+    public class GPVector3
     {
         /// <summary>
         /// X 轴
