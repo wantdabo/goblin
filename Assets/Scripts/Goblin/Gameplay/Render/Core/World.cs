@@ -4,6 +4,8 @@ using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
@@ -19,9 +21,27 @@ namespace Goblin.Gameplay.Render.Core
     public sealed class World : Comp
     {
         /// <summary>
+        /// 座位 ID
+        /// </summary>
+        public ulong seat { get; private set; } = 0;
+        /// <summary>
         /// 自我
         /// </summary>
-        public ulong self { get; private set; } = 1;
+        public ulong self {
+            get
+            {
+                var bundles = summary.GetStateBundles(RIL_DEFINE.SEAT);
+                if (null == bundles) return 0;
+                
+                foreach (var bundle in bundles)
+                {
+                    var ril = (RIL_SEAT)bundle.ril;
+                    if (ril.seat == seat) return bundle.actor;
+                }
+                
+                return 0;
+            }
+        }
         /// <summary>
         /// 事件订阅派发者
         /// </summary>
@@ -70,6 +90,13 @@ namespace Goblin.Gameplay.Render.Core
             }
             agentdict.Clear();
             ObjectCache.Set(agentdict);
+        }
+        
+        public World Initialize(ulong seat)
+        {
+            this.seat = seat;
+            
+            return this;
         }
 
         private void Resolvers()

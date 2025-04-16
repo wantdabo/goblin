@@ -37,14 +37,6 @@ namespace Goblin.Gameplay.Render.Resolvers
                     synopsis = synopsis,
                 });
             }
-            
-            var seatbundles = world.summary.GetStateBundles(RIL_DEFINE.SEAT);
-            if (null == seatbundles) return;
-            foreach (var bundle in seatbundles)
-            {
-                var seat = (RIL_SEAT)bundle.ril;
-                UnityEngine.Debug.Log(seat.ToString());
-            }
         }
     }
 }

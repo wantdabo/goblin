@@ -114,8 +114,9 @@ namespace Goblin.Gameplay.Logic.Core
         /// 初始化 Stage
         /// </summary>
         /// <param name="data">初始化的游戏数据</param>
+        /// <returns>Stage</returns>
         /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
-        public void Initialize(GameplayData data)
+        public Stage Initialize(GameplayData data)
         {
             if (null == data) throw new Exception("data is null.");
             if (null != info) throw new Exception("you cannot initialize more than once.");
@@ -139,6 +140,8 @@ namespace Goblin.Gameplay.Logic.Core
             Prefabs();
             // 构建初始化 Stage
             Building(data);
+
+            return this;
         }
         
         /// <summary>

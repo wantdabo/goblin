@@ -56,10 +56,9 @@ namespace Goblin.Gameplay.Directors.Local.Common
                 },
             };
             
-            stage = new Stage();
-            stage.Initialize(data);
+            stage = new Stage().Initialize(data);
 
-            world = AddComp<World>();
+            world = AddComp<World>().Initialize(1);
             world.Create();
 
             input = AddComp<InputSystem>();
