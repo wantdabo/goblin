@@ -17,6 +17,28 @@ using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
+    /// Actor 诞生事件
+    /// </summary>
+    public struct ActorBronEvent : IEvent
+    {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong id { get; set; }
+    }
+
+    /// <summary>
+    /// Actor 死亡事件
+    /// </summary>
+    public struct ActorDeadEvent : IEvent
+    {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong id { get; set; }
+    }
+
+    /// <summary>
     /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据
     /// </summary>
     public sealed class Stage
@@ -64,6 +86,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Config cfg => GetBehavior<Config>(sa);
         /// <summary>
+        /// 座位
+        /// </summary>
+        public Seat seat => GetBehavior<Seat>(sa);
+        /// <summary>
         /// 随机数
         /// </summary>
         public Random random => GetBehavior<Random>(sa);
@@ -104,6 +130,7 @@ namespace Goblin.Gameplay.Logic.Core
             info.state = StageState.Initialized;
             AddActor(sa);
             AddBehavior<Config>(sa);
+            AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<RILSync>(sa);
             // 添加批处理
@@ -391,6 +418,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
+            eventor.Tell(new ActorDeadEvent { id = id });
         }
 
         /// <summary>
@@ -400,7 +428,10 @@ namespace Goblin.Gameplay.Logic.Core
         public Actor GenActor()
         {
             // 生成一个 Actor
-            return AddActor(++info.increment);
+            var actor = AddActor(++info.increment);
+            eventor.Tell(new ActorBronEvent { id = actor.id });
+            
+            return actor;
         }
         
         /// <summary>
@@ -408,7 +439,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         /// <param name="id">ActorID</param>
         /// <returns>Actor</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">Actor 已存在</exception>
         private Actor AddActor(ulong id)
         {
             var actor = ObjectCache.Get<Actor>();
@@ -677,6 +708,8 @@ namespace Goblin.Gameplay.Logic.Core
                     }
                 });
                 hero.AddBehavior<Gamepad>();
+                // 入座
+                seat.Enter(player.seat, hero.id);
             }
         }
 

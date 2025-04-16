@@ -48,6 +48,7 @@ namespace Goblin.Gameplay.Directors.Local.Common
             {
                 new GPPlayerData
                 {
+                    seat = 1,
                     hero = 100001,
                     position = new GPVector3(0, 0, 0),
                     euler = new GPVector3(0, 0, 0),
