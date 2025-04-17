@@ -15,6 +15,24 @@ namespace Goblin.Common
     public class U3DKit : Comp
     {
         /// <summary>
+        /// 输入绑定
+        /// </summary>
+        public Gamepad gamepad { get; private set; }
+        
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            gamepad = new Gamepad();
+            gamepad.Enable();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            gamepad.Dispose();
+        }
+
+        /// <summary>
         /// 获取 Unity3D 节点/组件
         /// </summary>
         /// <typeparam name="T">Unity 的类型，GameObject 或 Component</typeparam>

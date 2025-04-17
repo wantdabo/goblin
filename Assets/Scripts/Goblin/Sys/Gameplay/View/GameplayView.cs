@@ -4,6 +4,7 @@ using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Goblin.Sys.Gameplay.View
@@ -16,21 +17,20 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
-            engine.ticker.eventor.Listen<TickEvent>(OnTick);
+            engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
             engine.proxy.gameplay.eventor.Listen<SynopsisEvent>(OnSynopsis);
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
-            engine.ticker.eventor.Listen<TickEvent>(OnTick);
+            engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
             engine.proxy.gameplay.eventor.UnListen<SynopsisEvent>(OnSynopsis);
         }
 
         protected override void OnBindEvent()
         {
             base.OnBindEvent();
-            
             AddUIEventListener("EnterLockCursorBtn", (e) =>
             {
                 Cursor.lockState = CursorLockMode.Locked;
@@ -56,12 +56,9 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
-        private void OnTick(TickEvent e)
+        private void OnEscape(InputAction.CallbackContext context)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
+            Cursor.lockState = CursorLockMode.None;
         }
 
         private void OnSynopsis(SynopsisEvent e)

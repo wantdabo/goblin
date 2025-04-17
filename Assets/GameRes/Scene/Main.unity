@@ -202,7 +202,7 @@ Transform:
   m_GameObject: {fileID: 317108118}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.256516, y: 1.9276795, z: 43.97217}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -516,7 +516,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1330336746}
   - component: {fileID: 1330336745}
-  - component: {fileID: 1330336744}
+  - component: {fileID: 1330336747}
   m_Layer: 5
   m_Name: EventSystem
   m_TagString: Untagged
@@ -524,26 +524,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1330336744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1330336743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &1330336745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -574,6 +554,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1739784002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1330336747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330336743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_PointAction: {fileID: 5934043048772888480, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_MoveAction: {fileID: -5033948023604884247, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_SubmitAction: {fileID: 1568318618465065671, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_CancelAction: {fileID: 5527221604194685726, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_LeftClickAction: {fileID: 4953278690212050874, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_MiddleClickAction: {fileID: -945516640455035762, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_RightClickAction: {fileID: -6724219214936143792, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_ScrollWheelAction: {fileID: 4402426888590848576, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_TrackedDevicePositionAction: {fileID: -3461873739918131606, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7619713185300573039, guid: 8227797136b4246bfaa815cbbe623d46, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &1394824798
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,7 +675,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1334, y: 750}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
