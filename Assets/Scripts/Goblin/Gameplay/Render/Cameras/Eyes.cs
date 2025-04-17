@@ -68,7 +68,7 @@ namespace Goblin.Gameplay.Render.Cameras
             // 遍历 CinemachineFreeLook 的每个 Rig
             for (int i = 0; i < freeLookCamera.m_Orbits.Length; i++)
             {
-                var rig = freeLookCamera.GetRig(i); // 获取每个 Rig
+                var rig = freeLookCamera.GetRig(i);
                 if (null == rig) continue;
                 
                 var composer = rig.GetCinemachineComponent<CinemachineComposer>();
