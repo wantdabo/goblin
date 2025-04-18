@@ -13,9 +13,9 @@ using YooAsset;
 namespace AOT
 {
     /// <summary>
-    /// Shell/游戏入口
+    /// Entrance/游戏入口
     /// </summary>
-    public class Shell : MonoBehaviour
+    public class Entrance : MonoBehaviour
     {
         private Task GameResSettings()
         {
