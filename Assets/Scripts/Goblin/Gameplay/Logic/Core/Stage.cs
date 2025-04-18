@@ -108,7 +108,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 对外暴露抛出 RIL 的事件
         /// </summary>
-        public Action<ulong, IRIL> onril { get; set; }
+        public Action<RILState> onril { get; set; }
 
         /// <summary>
         /// 初始化 Stage

@@ -14,10 +14,15 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// Stage 中所有的 RIL 字典, 键为实体 ID, 值为该实体的 RIL 列表
         /// </summary>
         public Dictionary<ulong, Dictionary<ushort, IRIL>> rildict { get; set; }
+        /// <summary>
+        /// RIL 序号, 键为 (ActorID, RIL ID), 值为 RIL 在 Stage 中的 序号
+        /// </summary>
+        public Dictionary<(ulong actor, ushort ril), uint> rilindexs { get; set; }
 
         protected override void OnReady()
         {
             rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
+            rilindexs = ObjectCache.Get<Dictionary<(ulong actor, ushort ril), uint>>();
         }
 
         protected override void OnReset()
@@ -29,6 +34,9 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             }
             ObjectCache.Set(rildict);
             rildict.Clear();
+            
+            rilindexs.Clear();
+            ObjectCache.Set(rilindexs);
         }
 
         protected override BehaviorInfo OnClone()

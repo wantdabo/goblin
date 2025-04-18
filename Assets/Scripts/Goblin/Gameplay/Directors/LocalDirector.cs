@@ -2,6 +2,7 @@ using Goblin.Common;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
 using UnityEngine;
@@ -38,12 +39,13 @@ namespace Goblin.Gameplay.Directors
         protected override void OnCreateGame()
         {
             stage = new Stage().Initialize(data.sdata);
-            stage.onril += (id, ril) => world.eventor.Tell(new RILEvent { state = new ABStateInfo(id, ril) });
+            stage.onril += OnRIL;
         }
 
         protected override void OnDestroyGame()
         {
             stage.Dispose();
+            stage.onril -= OnRIL;
         }
 
         protected override void OnStartGame()
@@ -74,6 +76,14 @@ namespace Goblin.Gameplay.Directors
         protected override void OnRestore()
         {
             stage.Restore();
+        }
+
+        private void OnRIL(RILState rilstate)
+        {
+            world.eventor.Tell(new RILEvent
+            {
+                state = new ABStateInfo(rilstate.actor, rilstate.ril) 
+            });
         }
 
         private void OnFixedTick(FixedTickEvent e)

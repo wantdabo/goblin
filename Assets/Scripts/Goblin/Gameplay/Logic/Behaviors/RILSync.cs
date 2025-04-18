@@ -15,16 +15,17 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 推送渲染指令
         /// </summary>
-        /// <param name="id">ActorID</param>
+        /// <param name="actor">ActorID</param>
         /// <param name="ril">渲染指令</param>
-        public void Push(ulong id, IRIL ril)
+        public void Push(ulong actor, IRIL ril)
         {
-            if (false == info.rildict.TryGetValue(id, out var dict))
+            if (false == info.rildict.TryGetValue(actor, out var dict))
             {
                 dict = ObjectCache.Get<Dictionary<ushort, IRIL>>();
-                info.rildict.Add(id, dict);
+                info.rildict.Add(actor, dict);
             }
             
+            // 如果已经存在, 则不推送
             if (dict.TryGetValue(ril.id, out var oldril))
             {
                 if (oldril.Equals(ril)) return;
@@ -33,7 +34,29 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
             dict.Add(ril.id, ril);
             
-            stage.onril?.Invoke(id, ril);
+            // 产生渲染状态
+            stage.onril?.Invoke(new()
+            {
+                index = GenRILIndex(actor, ril.id),
+                frame = stage.frame,
+                actor = actor,
+                ril = ril
+            });
+        }
+        
+        /// <summary>
+        /// 生成渲染指令序号
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <param name="ril">RIL ID</param>
+        /// <returns>渲染指令序号</returns>
+        private uint GenRILIndex(ulong actor, ushort ril)
+        {
+            if (info.rilindexs.TryGetValue((actor, ril), out var index)) info.rilindexs.Remove((actor, ril));
+            index++;
+            info.rilindexs.Add((actor, ril), index);
+
+            return index;
         }
         
         /// <summary>
