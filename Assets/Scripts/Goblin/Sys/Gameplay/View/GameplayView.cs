@@ -18,14 +18,14 @@ namespace Goblin.Sys.Gameplay.View
         {
             base.OnLoad();
             engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
-            engine.proxy.gameplay.eventor.Listen<SynopsisEvent>(OnSynopsis);
+            engine.proxy.gameplay.eventor.Listen<StageEvent>(OnStage);
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
             engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
-            engine.proxy.gameplay.eventor.UnListen<SynopsisEvent>(OnSynopsis);
+            engine.proxy.gameplay.eventor.UnListen<StageEvent>(OnStage);
         }
 
         protected override void OnBindEvent()
@@ -61,16 +61,16 @@ namespace Goblin.Sys.Gameplay.View
             Cursor.lockState = CursorLockMode.None;
         }
 
-        private void OnSynopsis(SynopsisEvent e)
+        private void OnStage(StageEvent e)
         {
             var text = engine.u3dkit.SeekNode<Text>(gameObject, "Synopsis");
             var content = 
-                          $"Frame : {e.synopsis.frame}\n" +
-                          $"ActorCount : {e.synopsis.actorcnt}\n" +
-                          $"BehaviorCount : {e.synopsis.behaviorcnt}\n" +
-                          $"BehaviorInfoCount : {e.synopsis.behaviorinfocnt}\n" +
-                          $"HasSnapshot : {e.synopsis.hassnapshot}\n" +
-                          $"SnapshotFrame : {e.synopsis.snapshotframe}";
+                          $"Frame : {e.stage.frame}\n" +
+                          $"ActorCount : {e.stage.actorcnt}\n" +
+                          $"BehaviorCount : {e.stage.behaviorcnt}\n" +
+                          $"BehaviorInfoCount : {e.stage.behaviorinfocnt}\n" +
+                          $"HasSnapshot : {e.stage.hassnapshot}\n" +
+                          $"SnapshotFrame : {e.stage.snapshotframe}";
             text.text = content;
         }
     }

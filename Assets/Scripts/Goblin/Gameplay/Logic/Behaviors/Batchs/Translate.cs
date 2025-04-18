@@ -23,7 +23,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         {
             base.OnAssemble();
             translators = ObjectCache.Get<Dictionary<Type, Translators.Common.Translator>>();
-            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.Synopsis>().Load(stage));
+            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.Stage>().Load(stage));
+            translators.Add(typeof(TickerInfo), ObjectCache.Get<Translators.Ticker>().Load(stage));
             translators.Add(typeof(SeatInfo), ObjectCache.Get<Translators.Seat>().Load(stage));
             translators.Add(typeof(TagInfo), ObjectCache.Get<Translators.Tag>().Load(stage));
             translators.Add(typeof(AttributeInfo), ObjectCache.Get<Translators.Attribute>().Load(stage));

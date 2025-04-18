@@ -6,12 +6,12 @@ using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public struct SynopsisEvent : IEvent
+    public struct StageEvent : IEvent
     {
-        public RIL_SYNOPSIS synopsis { get; set; }
+        public RIL_STAGE stage { get; set; }
     }
 
-    public class Synopsis : Resolver
+    public class Stage : Resolver
     {
         protected override void OnCreate()
         {
@@ -27,14 +27,14 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         private void OnTick(TickEvent e)
         {
-            var synopsisbundles = world.summary.GetStateBundles(RIL_DEFINE.SYNOPSIS);
+            var synopsisbundles = world.summary.GetStateBundles(RIL_DEFINE.STAGE);
             if (null == synopsisbundles) return;
             foreach (var bundle in synopsisbundles)
             {
-                var synopsis = (RIL_SYNOPSIS)bundle.ril;
-                world.engine.proxy.gameplay.eventor.Tell(new SynopsisEvent
+                var synopsis = (RIL_STAGE)bundle.ril;
+                world.engine.proxy.gameplay.eventor.Tell(new StageEvent
                 {
-                    synopsis = synopsis,
+                    stage = synopsis,
                 });
             }
         }

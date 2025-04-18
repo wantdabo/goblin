@@ -312,8 +312,13 @@ namespace Goblin.Gameplay.Logic.Core
                 if (false == SeekBehaviors(type, out var behaviors)) continue;
                 foreach (var behavior in behaviors)
                 {
-                    var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
-                    behavior.Tick(null == ticker ? info.tick : ticker.timescale * info.tick);
+                    if (SeekBehaviorInfo(behavior.actor.id, out TickerInfo ticker))
+                    {
+                        behavior.Tick(ticker.timescale * info.tick);
+                        continue;
+                    }
+
+                    behavior.Tick(info.tick);
                 }
                 behaviors.Clear();
                 ObjectCache.Set(behaviors);

@@ -13,34 +13,19 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 当前生命值
         /// </summary>
-        public uint hp { get; private set; }
+        public uint hp { get; set; }
         /// <summary>
         /// 最大生命值
         /// </summary>
-        public uint maxhp { get; private set; }
+        public uint maxhp { get; set; }
         /// <summary>
         /// 移动速度
         /// </summary>
-        public uint movespeed { get; private set; }
+        public uint movespeed { get; set; }
         /// <summary>
         /// 攻击力
         /// </summary>
-        public uint attack { get; private set; }
-        
-        /// <summary>
-        /// 属性渲染指令
-        /// </summary>
-        /// <param name="hp">当前生命值</param>
-        /// <param name="maxhp">最大生命值</param>
-        /// <param name="movespeed">移动速度</param>
-        /// <param name="attack">攻击力</param>
-        public RIL_ATTRIBUTE(uint hp, uint maxhp, uint movespeed, uint attack)
-        {
-            this.hp = hp;
-            this.maxhp = maxhp;
-            this.movespeed = movespeed;
-            this.attack = attack;
-        }
+        public uint attack { get; set; }
         
         public byte[] Serialize()
         {

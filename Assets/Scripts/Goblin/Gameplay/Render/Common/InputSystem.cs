@@ -96,7 +96,7 @@ namespace Goblin.Gameplay.Render.Common
             SetInput
             (
                 Vector2.zero != joystickdire,
-                new GPVector2((int)(joystickdire.x * Config.float2Int), (int)(joystickdire.y * Config.float2Int))
+                new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int))
             );
         }
     }

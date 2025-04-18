@@ -58,13 +58,13 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public FP elapsed { get; set; }
         /// <summary>
-        /// 帧步长, 结果包含 timescale 影响
-        /// </summary>
-        public FP tick => GAME_DEFINE.LOGIC_TICK * timescale;
-        /// <summary>
         /// 时间缩放
         /// </summary>
         public FP timescale { get; set; }
+        /// <summary>
+        /// 帧步长, 结果包含 timescale 影响
+        /// </summary>
+        public FP tick => GAME_DEFINE.LOGIC_TICK * timescale;
         /// <summary>
         /// Actor 自增 ID
         /// </summary>

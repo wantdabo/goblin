@@ -27,21 +27,6 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public int model { get; set; }
 
-        /// <summary>
-        /// 标签渲染指令
-        /// </summary>
-        /// <param name="actortype">Actor 类型</param>
-        /// <param name="hashero">是否拥有英雄 ID</param>
-        /// <param name="hero">英雄 ID</param>
-        /// <param name="model">模型 ID</param>
-        public RIL_TAG(int actortype, bool hashero, int hero, int model)
-        {
-            this.actortype = actortype;
-            this.hashero = hashero;
-            this.hero = hero;
-            this.model = model;
-        }
-
         public byte[] Serialize()
         {
             throw new System.NotImplementedException();

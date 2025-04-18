@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(StateMachineInfo info)
         {
-            stage.rilsync.Push(info.id, new RIL_STATE_MACHINE(info.current, info.last, info.frames, (info.elapsed * stage.cfg.FP2Int).AsUInt()));
+            stage.rilsync.Push(info.id, new RIL_STATE_MACHINE { current = info.current, last = info.last, frames = info.frames, elapsed = (info.elapsed * stage.cfg.FP2Int).AsUInt() });
         }
     }
 }

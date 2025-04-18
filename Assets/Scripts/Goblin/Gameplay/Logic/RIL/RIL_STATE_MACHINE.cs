@@ -12,34 +12,19 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 当前状态
         /// </summary>
-        public byte current { get; private set; }
+        public byte current { get; set; }
         /// <summary>
         /// 上一个状态
         /// </summary>
-        public byte last { get; private set; }
+        public byte last { get; set; }
         /// <summary>
         /// 持续帧数
         /// </summary>
-        public uint frames { get; private set; }
+        public uint frames { get; set; }
         /// <summary>
         /// 流逝时间
         /// </summary>
-        public uint elapsed { get; private set; }
-        
-        /// <summary>
-        /// 状态机渲染指令
-        /// </summary>
-        /// <param name="current">当前状态</param>
-        /// <param name="last">上一个状态</param>
-        /// <param name="frames">持续帧</param>
-        /// <param name="elapsed">持续帧</param>
-        public RIL_STATE_MACHINE(byte current, byte last, uint frames, uint elapsed)
-        {
-            this.current = current;
-            this.last = last;
-            this.frames = frames;
-            this.elapsed = elapsed;
-        }
+        public uint elapsed { get; set; }
         
         public byte[] Serialize()
         {

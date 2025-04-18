@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(SpatialInfo info)
         {
-            stage.rilsync.Push(info.id, new RIL_SPATIAL(info.position, info.euler, info.scale));
+            stage.rilsync.Push(info.id, new RIL_SPATIAL { position = info.position, euler = info.euler, scale = info.scale });
         }
     }
 }

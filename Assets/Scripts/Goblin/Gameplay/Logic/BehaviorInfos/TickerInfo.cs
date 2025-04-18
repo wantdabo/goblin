@@ -11,6 +11,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     public class TickerInfo : BehaviorInfo
     {
         /// <summary>
+        /// 帧号
+        /// </summary>
+        public uint frame { get; set; }
+        /// <summary>
         /// 时间缩放
         /// </summary>
         public FP timescale { get; set; }
@@ -22,6 +26,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReset()
         {
+            frame = 0;
             timescale = FP.One;
         }
 
@@ -29,6 +34,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             var clone = ObjectCache.Get<TickerInfo>();
             clone.Ready(id);
+            clone.frame = frame;
             clone.timescale = timescale;
             
             return clone;

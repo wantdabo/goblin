@@ -4,11 +4,11 @@ using Goblin.Gameplay.Logic.RIL.Common;
 namespace Goblin.Gameplay.Logic.RIL
 {
     /// <summary>
-    /// 梗概渲染指令
+    /// 场景渲染指令
     /// </summary>
-    public struct RIL_SYNOPSIS : IRIL
+    public struct RIL_STAGE : IRIL
     {
-        public ushort id => RIL_DEFINE.SYNOPSIS;
+        public ushort id => RIL_DEFINE.STAGE;
         
         /// <summary>
         /// Stage 当前的帧号
@@ -35,25 +35,6 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public uint snapshotframe { get; set; }
         
-        /// <summary>
-        /// 梗概渲染指令
-        /// </summary>
-        /// <param name="frame">Stage 当前的帧号</param>
-        /// <param name="actorcnt">Actor 数量</param>
-        /// <param name="behaviorcnt">Behavior 数量</param>
-        /// <param name="behaviorinfocnt">BehaviorInfo 数量</param>
-        /// <param name="hassnapshot">是否有快照</param>
-        /// <param name="snapshotframe">快照帧号</param>
-        public RIL_SYNOPSIS(uint frame, uint actorcnt, uint behaviorcnt, uint behaviorinfocnt, bool hassnapshot, uint snapshotframe)
-        {
-            this.actorcnt = actorcnt;
-            this.behaviorcnt = behaviorcnt;
-            this.behaviorinfocnt = behaviorinfocnt;
-            this.frame = frame;
-            this.hassnapshot = hassnapshot;
-            this.snapshotframe = snapshotframe;
-        }
-        
         public byte[] Serialize()
         {
             throw new System.NotImplementedException();
@@ -61,7 +42,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public bool Equals(IRIL other)
         {
-            RIL_SYNOPSIS ril = (RIL_SYNOPSIS) other;
+            RIL_STAGE ril = (RIL_STAGE) other;
             
             return ril.id == id &&
                    ril.actorcnt == actorcnt &&

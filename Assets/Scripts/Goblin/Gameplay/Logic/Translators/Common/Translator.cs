@@ -10,14 +10,14 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <summary>
         /// 场景
         /// </summary>
-        protected Stage stage { get; private set; }
+        protected Core.Stage stage { get; private set; }
 
         /// <summary>
         /// 加载
         /// </summary>
         /// <param name="stage">场景</param>
         /// <returns>翻译器</returns>
-        public Translator Load(Stage stage)
+        public Translator Load(Core.Stage stage)
         {
             this.stage = stage;
 

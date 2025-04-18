@@ -15,15 +15,6 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public ulong seat { get; set; }
         
-        /// <summary>
-        /// 座位渲染指令
-        /// </summary>
-        /// <param name="seat">座位 ID</param>
-        public RIL_SEAT(ulong seat)
-        {
-            this.seat = seat;
-        }
-        
         public byte[] Serialize()
         {
             throw new System.NotImplementedException();

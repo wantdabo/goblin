@@ -13,28 +13,15 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 位置
         /// </summary>
-        public FPVector3 position { get; private set; }
+        public FPVector3 position { get; set; }
         /// <summary>
         /// 旋转
         /// </summary>
-        public FPVector3 euler { get; private set; }
+        public FPVector3 euler { get; set; }
         /// <summary>
         /// 缩放
         /// </summary>
-        public FPVector3 scale { get; private set; }
-
-        /// <summary>
-        /// 空间渲染指令
-        /// </summary>
-        /// <param name="position">位置</param>
-        /// <param name="euler">旋转</param>
-        /// <param name="scale">缩放</param>
-        public RIL_SPATIAL(FPVector3 position, FPVector3 euler, FPVector3 scale)
-        {
-            this.position = position;
-            this.euler = euler;
-            this.scale = scale;
-        }
+        public FPVector3 scale { get; set; }
 
         public byte[] Serialize()
         {

@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Translators
         {
             foreach (var kv in info.asdict)
             {
-                stage.rilsync.Push(kv.Key, new RIL_SEAT(kv.Value));
+                stage.rilsync.Push(kv.Key, new RIL_SEAT { seat = kv.Value });
             }
         }
     }

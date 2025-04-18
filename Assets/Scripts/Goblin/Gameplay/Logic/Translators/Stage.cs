@@ -5,9 +5,9 @@ using Goblin.Gameplay.Logic.Translators.Common;
 namespace Goblin.Gameplay.Logic.Translators
 {
     /// <summary>
-    /// 梗概翻译器
+    /// 场景翻译器
     /// </summary>
-    public class Synopsis : Translator<StageInfo>
+    public class Stage : Translator<StageInfo>
     {
         protected override void OnRIL(StageInfo info)
         {
@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Translators
             foreach (var types in info.behaviortypes.Values) behaviorcnt += (uint)types.Count;
             uint behaviorinfocnt = 0;
             foreach (var behaviors in info.behaviorinfos.Values) behaviorinfocnt += (uint)behaviors.Count;
-            RIL_SYNOPSIS ril = new RIL_SYNOPSIS
+            RIL_STAGE ril = new RIL_STAGE
             {
                 frame = info.frame,
                 actorcnt = (uint)info.actors.Count,

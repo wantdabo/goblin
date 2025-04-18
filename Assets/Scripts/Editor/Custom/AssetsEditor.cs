@@ -99,16 +99,16 @@ namespace Goblin.Custom
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.res = Path.GetFileNameWithoutExtension(effectClip.res);
                     val.position = new Vector3Data(
-                        Convert.ToInt32(effectClip.position.x * Config.float2Int),
-                        Convert.ToInt32(effectClip.position.y * Config.float2Int),
-                        Convert.ToInt32(effectClip.position.z * Config.float2Int)
+                        Convert.ToInt32(effectClip.position.x * Config.Float2Int),
+                        Convert.ToInt32(effectClip.position.y * Config.Float2Int),
+                        Convert.ToInt32(effectClip.position.z * Config.Float2Int)
                     );
                     val.eulerAngles = new Vector3Data(
-                        Convert.ToInt32(effectClip.eulerAngles.x * Config.float2Int),
-                        Convert.ToInt32(effectClip.eulerAngles.y * Config.float2Int),
-                        Convert.ToInt32(effectClip.eulerAngles.z * Config.float2Int)
+                        Convert.ToInt32(effectClip.eulerAngles.x * Config.Float2Int),
+                        Convert.ToInt32(effectClip.eulerAngles.y * Config.Float2Int),
+                        Convert.ToInt32(effectClip.eulerAngles.z * Config.Float2Int)
                     );
-                    val.scale = Convert.ToInt32(effectClip.scale * Config.float2Int);
+                    val.scale = Convert.ToInt32(effectClip.scale * Config.Float2Int);
                     val.binding = effectClip.binding;
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
@@ -128,11 +128,11 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.position = new Vector3Data(
-                        Convert.ToInt32(spatialClip.position.x * Config.float2Int),
-                        Convert.ToInt32(spatialClip.position.y * Config.float2Int),
-                        Convert.ToInt32(spatialClip.position.z * Config.float2Int)
+                        Convert.ToInt32(spatialClip.position.x * Config.Float2Int),
+                        Convert.ToInt32(spatialClip.position.y * Config.Float2Int),
+                        Convert.ToInt32(spatialClip.position.z * Config.Float2Int)
                     );
-                    val.scale = Convert.ToInt32(spatialClip.scale * Config.float2Int);
+                    val.scale = Convert.ToInt32(spatialClip.scale * Config.Float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorBoxDetectionClip boxDetectionClip)
@@ -142,14 +142,14 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.position = new Vector3Data(
-                        Convert.ToInt32(boxDetectionClip.position.x * Config.float2Int),
-                        Convert.ToInt32(boxDetectionClip.position.y * Config.float2Int),
-                        Convert.ToInt32(boxDetectionClip.position.z * Config.float2Int)
+                        Convert.ToInt32(boxDetectionClip.position.x * Config.Float2Int),
+                        Convert.ToInt32(boxDetectionClip.position.y * Config.Float2Int),
+                        Convert.ToInt32(boxDetectionClip.position.z * Config.Float2Int)
                     );
                     val.size = new Vector3Data(
-                        Convert.ToInt32(boxDetectionClip.size.x * Config.float2Int),
-                        Convert.ToInt32(boxDetectionClip.size.y * Config.float2Int),
-                        Convert.ToInt32(boxDetectionClip.size.z * Config.float2Int)
+                        Convert.ToInt32(boxDetectionClip.size.x * Config.Float2Int),
+                        Convert.ToInt32(boxDetectionClip.size.y * Config.Float2Int),
+                        Convert.ToInt32(boxDetectionClip.size.z * Config.Float2Int)
                     );
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
@@ -160,11 +160,11 @@ namespace Goblin.Custom
                     val.sframe = Convert.ToUInt32(clip.StartTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.eframe = Convert.ToUInt32(clip.EndTime * GAME_DEFINE.SP_DATA_FRAME);
                     val.position = new Vector3Data(
-                        Convert.ToInt32(sphereDetectionClip.position.x * Config.float2Int),
-                        Convert.ToInt32(sphereDetectionClip.position.y * Config.float2Int),
-                        Convert.ToInt32(sphereDetectionClip.position.z * Config.float2Int)
+                        Convert.ToInt32(sphereDetectionClip.position.x * Config.Float2Int),
+                        Convert.ToInt32(sphereDetectionClip.position.y * Config.Float2Int),
+                        Convert.ToInt32(sphereDetectionClip.position.z * Config.Float2Int)
                     );
-                    val.radius = Convert.ToInt32(sphereDetectionClip.radius * Config.float2Int);
+                    val.radius = Convert.ToInt32(sphereDetectionClip.radius * Config.Float2Int);
                     actionDatas.Add((val.id, MessagePackSerializer.Serialize(val)));
                 }
                 else if (clip is EditorBreakTokenEventClip skillBreakeventClip)

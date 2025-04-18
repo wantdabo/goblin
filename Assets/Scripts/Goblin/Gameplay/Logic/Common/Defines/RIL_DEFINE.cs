@@ -6,28 +6,32 @@
     public class RIL_DEFINE
     {
         /// <summary>
-        /// SYNOPSIS 梗概指令
+        /// STAGE 场景指令
         /// </summary>
-        public const ushort SYNOPSIS = 0;
+        public const ushort STAGE = 0;
+        /// <summary>
+        /// TICKER 驱动指令
+        /// </summary>
+        public const ushort TICKER = 1;
         /// <summary>
         /// SEAT 座位指令
         /// </summary>
-        public const ushort SEAT = 1;
+        public const ushort SEAT = 2;
         /// <summary>
         /// TAG 标签指令
         /// </summary>
-        public const ushort TAG = 2;
+        public const ushort TAG = 3;
         /// <summary>
         /// SPATIAL 指令
         /// </summary>
-        public const ushort SPATIAL = 3;
+        public const ushort SPATIAL = 4;
         /// <summary>
         /// STATE 状态机指令
         /// </summary>
-        public const ushort STATE_MACHINE = 4;
+        public const ushort STATE_MACHINE = 5;
         /// <summary>
         /// ATTRIBUTE 属性指令
         /// </summary>
-        public const ushort ATTRIBUTE = 5;
+        public const ushort ATTRIBUTE = 6;
     }
 }
