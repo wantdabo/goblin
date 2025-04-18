@@ -49,11 +49,13 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             if (null == animancer) return;
-
-            animstate = animancer.TryPlay(animname, mixduration);
+            var tickstate = world.statebucket.GetState(actor, RIL_DEFINE.TICKER);
+            var ticker = (RIL_TICKER)tickstate.ril;
+            var timescale = ticker.timescale * Config.Int2Float;
+            animstate = animancer.TryPlay(animname, mixduration * (1 / timescale));
             if (null == animstate) return;
             animstate.Speed = 0;
-            animstate.Time = Mathf.Clamp(animstate.Time + e.tick, 0, tarduration);
+            animstate.Time = Mathf.Clamp(animstate.Time + (e.tick * timescale), 0, tarduration);
         }
     }
 }

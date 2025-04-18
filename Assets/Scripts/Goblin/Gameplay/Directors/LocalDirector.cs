@@ -5,6 +5,7 @@ using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
+using Kowtow.Math;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Directors
@@ -16,6 +17,17 @@ namespace Goblin.Gameplay.Directors
             get
             {
                 return null != stage && StageState.Ticking == stage.state;
+            }
+        }
+        
+        public float timescale {
+            get
+            {
+                return stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale.AsFloat();
+            }
+            set
+            {
+                stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.Int2FP;
             }
         }
         
@@ -82,7 +94,7 @@ namespace Goblin.Gameplay.Directors
         {
             world.eventor.Tell(new RILEvent
             {
-                state = new ABStateInfo(rilstate.actor, rilstate.ril) 
+                state = rilstate 
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Directors;
 using Goblin.Gameplay.Render.Resolvers;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
@@ -12,20 +13,35 @@ namespace Goblin.Sys.Gameplay.View
     public class GameplayView : UIBaseView
     {
         public override UILayer layer => UILayer.UIMain;
+        
         protected override string res => "Gameplay/GameplayView";
-
+        
+        private Text synopsisText { get; set; }
+        private Slider gameSpeedSlider { get; set; }
+        private Text gameSpeedDescText { get; set; }
+        private Toggle gamingCBToggle { get; set; }
+        
         protected override void OnLoad()
         {
             base.OnLoad();
-            engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
             engine.proxy.gameplay.eventor.Listen<StageEvent>(OnStage);
+            engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
-            engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
             engine.proxy.gameplay.eventor.UnListen<StageEvent>(OnStage);
+            engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
+        }
+
+        protected override void OnBuildUI()
+        {
+            base.OnBuildUI();
+            synopsisText = engine.u3dkit.SeekNode<Text>(gameObject, "Synopsis");
+            gameSpeedSlider = engine.u3dkit.SeekNode<Slider>(gameObject, "GameSpeedSlider");
+            gameSpeedDescText = engine.u3dkit.SeekNode<Text>(gameObject, "GameSpeedDesc");
+            gamingCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
         }
 
         protected override void OnBindEvent()
@@ -34,6 +50,23 @@ namespace Goblin.Sys.Gameplay.View
             AddUIEventListener("EnterLockCursorBtn", (e) =>
             {
                 Cursor.lockState = CursorLockMode.Locked;
+            });
+            
+            gameSpeedSlider.onValueChanged.AddListener((e) =>
+            {
+                var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+                if (null == localdirector) return;
+                var timescale = Mathf.Round(gameSpeedSlider.value / 0.25f) * 0.25f;
+                localdirector.timescale = timescale;
+                gameSpeedDescText.text = timescale.ToString();
+            });
+            
+            AddUIEventListener("GamingCB", (e) =>
+            {
+                if (gamingCBToggle.isOn)
+                    engine.proxy.gameplay.director.ResumeGame(); 
+                else 
+                    engine.proxy.gameplay.director.PauseGame();
             });
             
             AddUIEventListener("SnapshotBtn", (e) =>
@@ -50,28 +83,38 @@ namespace Goblin.Sys.Gameplay.View
 
             AddUIEventListener("ExitBtn", (e) =>
             {
+                engine.gameui.Close(this);
                 engine.gameui.Open<LobbyView>();
                 engine.proxy.gameplay.director.StopGame();
                 engine.proxy.gameplay.director.DestroyGame();
             });
         }
 
+        private void OnStage(StageEvent e)
+        {
+            if (null == synopsisText) return;
+
+            var content =
+                $"帧号 : {e.stage.frame}\n" +
+                $"Actor : {e.stage.actorcnt}\n" +
+                $"Behavior : {e.stage.behaviorcnt}\n" +
+                $"BehaviorInfo : {e.stage.behaviorinfocnt}\n";
+            content += "存在快照 : " + (e.stage.hassnapshot ? "是\n" : "否\n");
+            if (e.stage.hassnapshot) content += $"快照帧号 : {e.stage.snapshotframe}";
+            
+            synopsisText.text = content;
+
+            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+            if (null == localdirector) return;
+            if (false == e.stage.hassnapshot) return;
+            if (e.stage.frame - e.stage.snapshotframe > 1) return;
+            gameSpeedSlider.value = localdirector.timescale;
+            gameSpeedDescText.text = localdirector.timescale.ToString();
+        }
+        
         private void OnEscape(InputAction.CallbackContext context)
         {
             Cursor.lockState = CursorLockMode.None;
-        }
-
-        private void OnStage(StageEvent e)
-        {
-            var text = engine.u3dkit.SeekNode<Text>(gameObject, "Synopsis");
-            var content = 
-                          $"Frame : {e.stage.frame}\n" +
-                          $"ActorCount : {e.stage.actorcnt}\n" +
-                          $"BehaviorCount : {e.stage.behaviorcnt}\n" +
-                          $"BehaviorInfoCount : {e.stage.behaviorinfocnt}\n" +
-                          $"HasSnapshot : {e.stage.hassnapshot}\n" +
-                          $"SnapshotFrame : {e.stage.snapshotframe}";
-            text.text = content;
         }
     }
 }

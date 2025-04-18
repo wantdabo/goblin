@@ -58,6 +58,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public uint frame => info.frame;
         /// <summary>
+        /// 时间流逝
+        /// </summary>
+        public FP elapsed => info.elapsed;
+        /// <summary>
+        /// 时间缩放
+        /// </summary>
+        public FP timescale => info.timescale;
+        /// <summary>
         /// Stage 缓存
         /// </summary>
         private StageCache cache { get; set; }

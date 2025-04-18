@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Render.Core
 {
     public struct RILEvent : IEvent
     {
-        public ABStateInfo state { get; set; }
+        public RILState state { get; set; }
     }
 
     public sealed class World : Comp
@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                var bundles = summary.GetStateBundles(RIL_DEFINE.SEAT);
+                var bundles = statebucket.GetStateBundles(RIL_DEFINE.SEAT);
                 if (null == bundles) return 0;
                 
                 foreach (var bundle in bundles)
@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Render.Core
         /// 输入系统
         /// </summary>
         public InputSystem input { get; private set; }
-        public Summary summary { get; private set; }
+        public RILBucket statebucket { get; private set; }
         public Eyes eyes { get; private set; }
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
 
@@ -70,8 +70,8 @@ namespace Goblin.Gameplay.Render.Core
             input = AddComp<InputSystem>();
             input.Initialize(this).Create();
             
-            summary = AddComp<Summary>();
-            summary.Initialize(this).Create();
+            statebucket = AddComp<RILBucket>();
+            statebucket.Initialize(this).Create();
             
             eyes = AddComp<Eyes>();
             eyes.Initialize(this).Create();

@@ -26,8 +26,11 @@ namespace Goblin.Gameplay.Render.Cameras
             world.ticker.eventor.Listen<TickEvent>(OnTick);
             camera = Camera.main;
             cmgo = new GameObject("CMFreeLock");
+            
             cminput = cmgo.AddComponent<CinemachineInputProvider>();
             cminput.XYAxis = InputActionReference.Create(engine.u3dkit.gamepad.Player.Look);
+            cminput.enabled = false;
+            
             cm = cmgo.AddComponent<CinemachineFreeLook>();
             cmoff = cmgo.AddComponent<CinemachineCameraOffset>();
             
@@ -42,7 +45,7 @@ namespace Goblin.Gameplay.Render.Cameras
             cm.m_Orbits[2].m_Radius = 4f;
             ModifyDeadZone(cm, 2, 2);
             
-            cmoff.m_Offset = new Vector3(0, 1.7f, 0);
+            cmoff.m_Offset = new Vector3(0, 1.7f, -2);
         }
 
         protected override void OnDestroy()
@@ -64,6 +67,8 @@ namespace Goblin.Gameplay.Render.Cameras
 
         private void OnTick(TickEvent e)
         {
+            cminput.enabled = CursorLockMode.Locked == Cursor.lockState;
+            
             var node = world.GetAgent<Node>(world.self);
             if (null == node) return;
             cm.Follow = node.go.transform;

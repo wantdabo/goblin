@@ -11,7 +11,11 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(TickerInfo info)
         {
-            stage.rilsync.Push(info.id, new RIL_TICKER { frame = info.frame, timescale = (info.timescale * stage.cfg.FP2Int).AsUInt() });
+            stage.rilsync.Push(info.id, new RIL_TICKER
+            {
+                frame = info.frame,
+                timescale = (stage.timescale * info.timescale * stage.cfg.FP2Int).AsUInt()
+            });
         }
     }
 }

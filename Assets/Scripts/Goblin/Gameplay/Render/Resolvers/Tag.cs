@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         private void OnTick(TickEvent e)
         {
-            var tagbundles = world.summary.GetStateBundles(RIL_DEFINE.TAG);
+            var tagbundles = world.statebucket.GetStateBundles(RIL_DEFINE.TAG);
             if (null == tagbundles) return;
             foreach (var bundle in tagbundles)
             {

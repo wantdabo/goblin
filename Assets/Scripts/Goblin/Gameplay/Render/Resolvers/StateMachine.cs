@@ -25,11 +25,11 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         private void OnTick(TickEvent e)
         {
-            var statebundles = world.summary.GetStateBundles(RIL_DEFINE.STATE_MACHINE);
+            var statebundles = world.statebucket.GetStateBundles(RIL_DEFINE.STATE_MACHINE);
             if (null == statebundles) return;
             foreach (var bundle in statebundles)
             {
-                var tagstate = world.summary.GetState(bundle.actor, RIL_DEFINE.TAG);
+                var tagstate = world.statebucket.GetState(bundle.actor, RIL_DEFINE.TAG);
                 var tag = (RIL_TAG)tagstate.ril;
                 
                 var modelinfo = engine.cfg.location.ModelInfos.Get(tag.model);

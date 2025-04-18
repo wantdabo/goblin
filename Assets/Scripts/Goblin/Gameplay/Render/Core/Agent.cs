@@ -58,13 +58,7 @@ namespace Goblin.Gameplay.Render.Core
 
         protected abstract void OnReady();
         protected abstract void OnReset();
-
-        protected virtual void OnArrive()
-        {
-        }
-
-        protected virtual void OnChase()
-        {
-        }
+        protected virtual void OnArrive() { }
+        protected virtual void OnChase() { }
     }
 }
