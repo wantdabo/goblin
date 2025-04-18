@@ -1,7 +1,9 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Translators
 {
@@ -12,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(StateMachineInfo info)
         {
-            stage.rilsync.Push(info.id, new RIL_STATE_MACHINE(info.current, info.last, info.frames));
+            stage.rilsync.Push(info.id, new RIL_STATE_MACHINE(info.current, info.last, info.frames, (info.elapsed * stage.cfg.FP2Int).AsUInt()));
         }
     }
 }

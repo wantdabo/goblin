@@ -313,7 +313,7 @@ namespace Goblin.Gameplay.Logic.Core
                 foreach (var behavior in behaviors)
                 {
                     var ticker = GetBehaviorInfo<TickerInfo>(behavior.actor.id);
-                    behavior.Tick(null == ticker ? FP.One : ticker.timescale * info.tick);
+                    behavior.Tick(null == ticker ? info.tick : ticker.timescale * info.tick);
                 }
                 behaviors.Clear();
                 ObjectCache.Set(behaviors);

@@ -46,9 +46,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="state">状态</param>
         public void ChangeState(byte state)
         {
-            info.frames = 0;
             info.last = info.current;
             info.current = state;
+            info.frames = 0;
+            info.elapsed = 0;
             actor.eventor.Tell(new StateChangedEvent{ current = info.current, last = info.last});
         }
         
@@ -71,6 +72,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             info.frames++;
+            info.elapsed += tick;
         }
     }
 }

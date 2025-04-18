@@ -21,6 +21,10 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 持续帧数
         /// </summary>
         public uint frames { get; private set; }
+        /// <summary>
+        /// 流逝时间
+        /// </summary>
+        public uint elapsed { get; private set; }
         
         /// <summary>
         /// 状态机渲染指令
@@ -28,11 +32,13 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <param name="current">当前状态</param>
         /// <param name="last">上一个状态</param>
         /// <param name="frames">持续帧</param>
-        public RIL_STATE_MACHINE(byte current, byte last, uint frames)
+        /// <param name="elapsed">持续帧</param>
+        public RIL_STATE_MACHINE(byte current, byte last, uint frames, uint elapsed)
         {
             this.current = current;
             this.last = last;
             this.frames = frames;
+            this.elapsed = elapsed;
         }
         
         public byte[] Serialize()
@@ -44,12 +50,12 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             RIL_STATE_MACHINE ril = (RIL_STATE_MACHINE)other;
             
-            return ril.id == id && ril.current == current && ril.frames == frames;
+            return ril.id == id && ril.current == current && ril.frames == frames && ril.elapsed == elapsed;
         }
 
         public override string ToString()
         {
-            return $"RIL_STATE_MACHINE: current={current}, last={last}, frames={frames}";
+            return $"RIL_STATE_MACHINE: current={current}, last={last}, frames={frames}, elapsed={elapsed}";
         }
     }
 }

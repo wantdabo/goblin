@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                 if (null == animinfo) continue;
                 
                 string animname = animinfo.name;
-                var tarduration = statemachine.frames * GAME_DEFINE.LOGIC_TICK.AsFloat();
+                var tarduration = statemachine.elapsed * Config.int2Float;
                 var mixduration = animinfo.mixduration;
                 
                 var beforeAnimInfo = animinfo.GetMixAnimationInfo(statemachine.last);

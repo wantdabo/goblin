@@ -23,17 +23,23 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 持续帧数
         /// </summary>
         public uint frames { get; set; }
+        /// <summary>
+        /// 流逝时间
+        /// </summary>
+        public FP elapsed { get; set; }
         
         protected override void OnReady()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;
+            elapsed = FP.Zero;
         }
 
         protected override void OnReset()
         {
             current = STATE_DEFINE.IDLE;
             frames = 0;
+            elapsed = FP.Zero;
         }
 
         protected override BehaviorInfo OnClone()

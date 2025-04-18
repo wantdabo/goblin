@@ -13,11 +13,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// FP 转整型的乘法系数（1000 表示 1）
         /// </summary>
-        public static int FP2Int { get; private set; } = 1000;
+        public int FP2Int { get; private set; } = 1000;
         /// <summary>
         /// 整型转 FP 的乘法系数（1000 表示 1）
         /// </summary>
-        public static FP Int2FP { get; private set; } = FP.EN3;
+        public FP Int2FP { get; private set; } = FP.EN3;
         
         protected override void OnAssemble()
         {
