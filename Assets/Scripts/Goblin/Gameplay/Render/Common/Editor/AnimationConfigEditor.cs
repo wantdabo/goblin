@@ -1,10 +1,9 @@
 #if UNITY_EDITOR
-using System;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Goblin.Gameplay.Render.Common.ScriptableObjects.Editor
+namespace Goblin.Gameplay.Render.Common.Editor
 {
     [CustomEditor(typeof(AnimationConfig))]
     public class AnimationConfigEditor : UnityEditor.Editor

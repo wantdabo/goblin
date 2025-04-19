@@ -1,6 +1,6 @@
 ﻿using Goblin.Core;
 using System.Threading.Tasks;
-using Goblin.Gameplay.Render.Common.ScriptableObjects;
+using Goblin.Gameplay.Render.Common;
 using UnityEngine;
 
 namespace Goblin.Common.GameRes

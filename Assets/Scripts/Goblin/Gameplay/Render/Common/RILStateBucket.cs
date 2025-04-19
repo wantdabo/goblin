@@ -7,7 +7,7 @@ using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Render.Common
 {
-    public class RILBucket : Comp
+    public class RILStateBucket : Comp
     {
         private World world { get; set; }
         private Dictionary<ulong, Dictionary<ushort, RILState>> statedict { get; set; }
@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Render.Common
             ObjectCache.Set(statebundles);
         }
 
-        public RILBucket Initialize(World world)
+        public RILStateBucket Initialize(World world)
         {
             this.world = world;
 

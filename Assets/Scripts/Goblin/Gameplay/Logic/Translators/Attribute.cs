@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
 
@@ -11,7 +12,13 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(AttributeInfo info)
         {
-            stage.rilsync.Push(info.id, new RIL_ATTRIBUTE { hp = info.hp, maxhp = info.maxhp, movespeed = info.moveseed, attack = info.attack });
+            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, new RIL_ATTRIBUTE
+            {
+                hp = info.hp,
+                maxhp = info.maxhp,
+                movespeed = info.moveseed,
+                attack = info.attack
+            });
         }
     }
 }

@@ -52,10 +52,7 @@ namespace Goblin.Gameplay.Render.Cameras
         {
             base.OnDestroy();
             world.ticker.eventor.UnListen<TickEvent>(OnTick);
-            camera = null;
             GameObject.Destroy(cmgo);
-            cmgo = null;
-            cm = null;
         }
 
         public Eyes Initialize(World world)

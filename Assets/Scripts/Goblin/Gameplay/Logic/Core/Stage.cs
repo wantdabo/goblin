@@ -225,10 +225,6 @@ namespace Goblin.Gameplay.Logic.Core
                     AddBehavior(id, type);
                 }
             }
-            
-            // TODO 后续要改为，差异推送
-            // 清除渲染指令 (会导致重新全推到渲染层)
-            rilsync.Clear();
         }
 
         /// <summary>

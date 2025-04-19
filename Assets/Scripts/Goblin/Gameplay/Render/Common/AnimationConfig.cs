@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Goblin.Gameplay.Render.Common.ScriptableObjects
+namespace Goblin.Gameplay.Render.Common
 {
     [CreateAssetMenu(fileName = "AnimationSettings", menuName = "创建动画配置文件")]
     public class AnimationConfig : ScriptableObject

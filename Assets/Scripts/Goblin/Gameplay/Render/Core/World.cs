@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Render.Core
         /// 输入系统
         /// </summary>
         public InputSystem input { get; private set; }
-        public RILBucket statebucket { get; private set; }
+        public RILStateBucket statebucket { get; private set; }
         public Eyes eyes { get; private set; }
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
 
@@ -70,7 +70,7 @@ namespace Goblin.Gameplay.Render.Core
             input = AddComp<InputSystem>();
             input.Initialize(this).Create();
             
-            statebucket = AddComp<RILBucket>();
+            statebucket = AddComp<RILStateBucket>();
             statebucket.Initialize(this).Create();
             
             eyes = AddComp<Eyes>();

@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
 
@@ -24,7 +25,7 @@ namespace Goblin.Gameplay.Logic.Translators
                 hassnapshot = stage.hassnapshot,
                 snapshotframe = stage.snapshotframe,
             };
-            stage.rilsync.Push(info.id, ril);
+            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, ril);
         }
     }
 }

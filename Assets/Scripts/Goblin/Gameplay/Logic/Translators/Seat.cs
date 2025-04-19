@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
 
@@ -13,7 +14,10 @@ namespace Goblin.Gameplay.Logic.Translators
         {
             foreach (var kv in info.asdict)
             {
-                stage.rilsync.Push(kv.Key, new RIL_SEAT { seat = kv.Value });
+                stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, kv.Key, new RIL_SEAT
+                {
+                    seat = kv.Value 
+                });
             }
         }
     }

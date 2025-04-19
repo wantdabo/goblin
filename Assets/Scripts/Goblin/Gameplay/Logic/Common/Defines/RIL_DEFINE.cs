@@ -6,6 +6,15 @@
     public class RIL_DEFINE
     {
         /// <summary>
+        /// RIL 渲染指令类型
+        /// </summary>
+        public const byte TYPE_RENDER = 1;
+        /// <summary>
+        /// RIL 事件指令类型
+        /// </summary>
+        public const byte TYPE_EVENT = 2;
+        
+        /// <summary>
         /// STAGE 场景指令
         /// </summary>
         public const ushort STAGE = 0;

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Goblin.Gameplay.Render.Common.ScriptableObjects.Editor
+namespace Goblin.Gameplay.Render.Common.Editor
 {
     [CustomPropertyDrawer(typeof(AnimationInfo))]
     public class AnimationInfoEditor : PropertyDrawer

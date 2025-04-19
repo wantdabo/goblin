@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Logic.RIL.Common
     public struct RILState
     {
         /// <summary>
-        /// 序号
+        /// RIL 类型
         /// </summary>
-        public uint index { get; set; }
+        public byte type { get; set; }
         /// <summary>
         /// 帧号
         /// </summary>
