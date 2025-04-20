@@ -39,6 +39,7 @@ namespace Goblin.Gameplay.Render.Agents
             world.ticker.eventor.Listen<TickEvent>(OnTick);
 
             go = ObjectCache.Get<GameObject>("NODE_GO_KEY");
+            if (null == go) go = new GameObject();
             go.SetActive(true);
             go.name = actor.ToString();
             go.transform.SetParent(root.transform);
@@ -52,7 +53,7 @@ namespace Goblin.Gameplay.Render.Agents
             world.ticker.eventor.UnListen<TickEvent>(OnTick);
 
             go.SetActive(false);
-            world.engine.pool.Set(go, "NODE_GO_KEY");
+            ObjectCache.Set(go, "NODE_GO_KEY");
             
             targetPosition = Vector3.zero;
             targetEuler = Vector3.zero;

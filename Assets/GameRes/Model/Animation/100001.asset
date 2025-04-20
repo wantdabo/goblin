@@ -19,7 +19,7 @@ MonoBehaviour:
     mixanimations:
     - state: 1
       name: Ani_Run_End
-      duration: 3
+      duration: 3.683
       mixduration: 0.1
   - state: 1
     name: Ani_Run
@@ -27,5 +27,5 @@ MonoBehaviour:
     mixanimations:
     - state: 0
       name: Ani_Run_Start
-      duration: 1.2
+      duration: 1.483
       mixduration: 0.1

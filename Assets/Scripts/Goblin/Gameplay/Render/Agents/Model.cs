@@ -56,7 +56,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// 加载模型
         /// </summary>
         /// <param name="id">模型 ID</param>
-        public async void Load(int id)
+        public void Load(int id)
         {
             if (this.id == id) return;
             this.id = id;
@@ -64,7 +64,7 @@ namespace Goblin.Gameplay.Render.Agents
             this.res = modelinfo.Res;
             
             go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{this.res}");
-            if (null == go) go = await world.engine.gameres.location.LoadModelAsync(this.res);
+            if (null == go) go = world.engine.gameres.location.LoadModelSync(this.res);
             
             var node = world.EnsureAgent<Node>(actor);
             go.transform.SetParent(node.go.transform, false);

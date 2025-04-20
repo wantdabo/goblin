@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Directors.Common;
@@ -13,11 +14,17 @@ using Goblin.Gameplay.Render.Resolvers;
 
 namespace Goblin.Gameplay.Render.Core
 {
+    /// <summary>
+    /// RIL 指令事件
+    /// </summary>
     public struct RILEvent : IEvent
     {
         public RILState state { get; set; }
     }
 
+    /// <summary>
+    /// 世界/渲染层, 负责容纳所有的渲染层的单位
+    /// </summary>
     public sealed class World : Comp
     {
         /// <summary>
@@ -54,8 +61,17 @@ namespace Goblin.Gameplay.Render.Core
         /// 输入系统
         /// </summary>
         public InputSystem input { get; private set; }
+        /// <summary>
+        /// RIL 状态桶
+        /// </summary>
         public RILStateBucket statebucket { get; private set; }
+        /// <summary>
+        /// 眼睛/摄像机
+        /// </summary>
         public Eyes eyes { get; private set; }
+        /// <summary>
+        /// Agent 集合
+        /// </summary>
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
 
         protected override void OnCreate()
@@ -105,7 +121,7 @@ namespace Goblin.Gameplay.Render.Core
             
             return this;
         }
-
+        
         private void Resolvers()
         {
             AddComp<Stage>().Initialize(this).Create();
@@ -113,21 +129,7 @@ namespace Goblin.Gameplay.Render.Core
             AddComp<Spatial>().Initialize(this).Create();
             AddComp<StateMachine>().Initialize(this).Create();
         }
-
-        public void RmvAgents(ulong actor)
-        {
-            if (false == agentdict.TryGetValue(actor, out var agents)) return;
-            foreach (var kv in agents)
-            {
-                kv.Value.Reset();
-                ObjectCache.Set(kv.Value);                
-            }
-
-            agentdict.Remove(actor);
-            agents.Clear();
-            ObjectCache.Set(agents);
-        }
-
+        
         public T EnsureAgent<T>(ulong actor) where T : Agent, new()
         {
             var agent = GetAgent<T>(actor);
@@ -144,9 +146,25 @@ namespace Goblin.Gameplay.Render.Core
             return agent as T;
         }
 
-        public void RmvAgent<T>(ulong actor) where T : Agent
+        public void RmvAgents(ulong actor)
         {
-            RmvAgent(GetAgent<T>(actor));
+            if (false == agentdict.TryGetValue(actor, out var agents)) return;
+            
+            var list = ObjectCache.Get<List<Agent>>();
+            foreach (var kv in agents)
+            {
+                list.Add(kv.Value);
+            }
+            foreach (var agent in list)
+            {
+                RmvAgent(agent);
+            }
+            list.Clear();
+            ObjectCache.Set(list);
+            
+            agentdict.Remove(actor);
+            agents.Clear();
+            ObjectCache.Set(agents);
         }
 
         public void RmvAgent(Agent agent)
