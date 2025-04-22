@@ -1,17 +1,16 @@
 using Goblin.Common;
-using Goblin.Core;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
 
-namespace Goblin.Gameplay.Render.Resolvers
+namespace Goblin.Gameplay.Render.Batches
 {
     public struct StageEvent : IEvent
     {
         public RIL_STAGE stage { get; set; }
     }
 
-    public class Stage : Resolver
+    public class StageBatch : Batch
     {
         protected override void OnCreate()
         {

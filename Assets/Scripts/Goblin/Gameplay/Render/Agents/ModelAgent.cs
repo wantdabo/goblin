@@ -7,13 +7,13 @@ namespace Goblin.Gameplay.Render.Agents
     /// <summary>
     /// 模型代理
     /// </summary>
-    public class Model : Agent
+    public class ModelAgent : Agent
     {
         /// <summary>
         /// 模型节池
         /// </summary>
         private static GameObject modelpool = new("ModelPool");
-        static Model()
+        static ModelAgent()
         {
             modelpool.transform.SetParent(GameObject.Find("Gameplay").transform, false);
             modelpool.transform.localPosition = Vector3.zero;
@@ -66,7 +66,7 @@ namespace Goblin.Gameplay.Render.Agents
             go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{this.res}");
             if (null == go) go = world.engine.gameres.location.LoadModelSync(this.res);
             
-            var node = world.EnsureAgent<Node>(actor);
+            var node = world.EnsureAgent<NodeAgent>(actor);
             go.transform.SetParent(node.go.transform, false);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;

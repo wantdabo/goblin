@@ -5,9 +5,9 @@ using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 
-namespace Goblin.Gameplay.Render.Resolvers
+namespace Goblin.Gameplay.Render.Batches
 {
-    public class Tag : Resolver
+    public class SpatialBatch : Batch
     {
         protected override void OnCreate()
         {
@@ -23,16 +23,16 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         private void OnTick(TickEvent e)
         {
-            var tagbundles = world.statebucket.GetStateBundles(RIL_DEFINE.TAG);
-            if (null == tagbundles) return;
-            foreach (var bundle in tagbundles)
+            var spatialbundles = world.statebucket.GetStateBundles(RIL_DEFINE.SPATIAL);
+            if (null == spatialbundles) return;
+            foreach (var bundle in spatialbundles)
             {
-                var tag = (RIL_TAG) bundle.ril;
-                if (0 != tag.model)
-                {
-                    var model = world.EnsureAgent<Model>(bundle.actor);
-                    model.Load(tag.model);
-                }
+                var spatial = (RIL_SPATIAL)bundle.ril;
+                var node = world.EnsureAgent<NodeAgent>(bundle.actor);
+                node.targetPosition = spatial.position.ToVector3();
+                node.targetEuler = spatial.euler.ToVector3();
+                node.targetScale = spatial.scale.ToVector3();
+                node.Chase();
             }
         }
     }

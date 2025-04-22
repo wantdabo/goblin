@@ -8,9 +8,10 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Render.Batches;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
-using Goblin.Gameplay.Render.Resolvers;
+using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Core
 {
@@ -19,6 +20,9 @@ namespace Goblin.Gameplay.Render.Core
     /// </summary>
     public struct RILEvent : IEvent
     {
+        /// <summary>
+        /// 渲染状态
+        /// </summary>
         public RILState state { get; set; }
     }
 
@@ -64,7 +68,7 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// RIL 状态桶
         /// </summary>
-        public RILStateBucket statebucket { get; private set; }
+        public StateBucket statebucket { get; private set; }
         /// <summary>
         /// 眼睛/摄像机
         /// </summary>
@@ -86,13 +90,13 @@ namespace Goblin.Gameplay.Render.Core
             input = AddComp<InputSystem>();
             input.Initialize(this).Create();
             
-            statebucket = AddComp<RILStateBucket>();
+            statebucket = AddComp<StateBucket>();
             statebucket.Initialize(this).Create();
             
             eyes = AddComp<Eyes>();
             eyes.Initialize(this).Create();
 
-            Resolvers();
+            Batches();
 
             agentdict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Agent>>>();
         }
@@ -122,12 +126,12 @@ namespace Goblin.Gameplay.Render.Core
             return this;
         }
         
-        private void Resolvers()
+        private void Batches()
         {
-            AddComp<Stage>().Initialize(this).Create();
-            AddComp<Tag>().Initialize(this).Create();
-            AddComp<Spatial>().Initialize(this).Create();
-            AddComp<StateMachine>().Initialize(this).Create();
+            AddComp<StageBatch>().Initialize(this).Create();
+            AddComp<TagBatch>().Initialize(this).Create();
+            AddComp<SpatialBatch>().Initialize(this).Create();
+            AddComp<StateMachineBatch>().Initialize(this).Create();
         }
         
         public T EnsureAgent<T>(ulong actor) where T : Agent, new()

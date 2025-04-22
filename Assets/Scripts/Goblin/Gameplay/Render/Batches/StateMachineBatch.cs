@@ -2,14 +2,11 @@ using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
-using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
-using UnityEngine;
-using Animation = Goblin.Gameplay.Render.Agents.Animation;
 
-namespace Goblin.Gameplay.Render.Resolvers
+namespace Goblin.Gameplay.Render.Batches
 {
-    public class StateMachine : Resolver
+    public class StateMachineBatch : Batch
     {
         protected override void OnCreate()
         {
@@ -52,7 +49,7 @@ namespace Goblin.Gameplay.Render.Resolvers
                 }
                 
                 if (null == animname) continue;
-                var animation = world.EnsureAgent<Animation>(bundle.actor);
+                var animation = world.EnsureAgent<AnimationAgent>(bundle.actor);
                 animation.Play(animname, tarduration, mixduration);
             }
         }

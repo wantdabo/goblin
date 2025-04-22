@@ -66,7 +66,7 @@ namespace Goblin.Gameplay.Render.Cameras
         {
             cminput.enabled = CursorLockMode.Locked == Cursor.lockState;
             
-            var node = world.GetAgent<Node>(world.self);
+            var node = world.GetAgent<NodeAgent>(world.self);
             if (null == node) return;
             cm.Follow = node.go.transform;
             cm.LookAt = node.go.transform;

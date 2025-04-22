@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Directors;
-using Goblin.Gameplay.Render.Resolvers;
+using Goblin.Gameplay.Render.Batches;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;

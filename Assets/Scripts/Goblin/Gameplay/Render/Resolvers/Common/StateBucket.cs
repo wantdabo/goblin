@@ -5,11 +5,11 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 
-namespace Goblin.Gameplay.Render.Common
+namespace Goblin.Gameplay.Render.Resolvers.Common
 {
-    public class RILStateBucket : Comp
+    public class StateBucket : Comp
     {
-        private World world { get; set; }
+        public World world { get; private set; }
         private Dictionary<ulong, Dictionary<ushort, RILState>> statedict { get; set; }
         private Dictionary<ushort, List<RILState>> statebundles { get; set; }
 
@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Render.Common
             ObjectCache.Set(statebundles);
         }
 
-        public RILStateBucket Initialize(World world)
+        public StateBucket Initialize(World world)
         {
             this.world = world;
 

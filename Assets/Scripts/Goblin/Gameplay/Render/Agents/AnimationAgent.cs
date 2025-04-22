@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Render.Agents
     /// <summary>
     /// 动画代理
     /// </summary>
-    public class Animation : Agent
+    public class AnimationAgent : Agent
     {
         private AnimancerComponent animancer { get; set; }
         private AnimancerState animstate { get; set; }
@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Render.Agents
         {
             if (null == animancer)
             {
-                var model = world.GetAgent<Model>(actor);
+                var model = world.GetAgent<ModelAgent>(actor);
                 if (null == model || null == model.go) return;
                 animancer = model.go.GetComponent<AnimancerComponent>();
             }

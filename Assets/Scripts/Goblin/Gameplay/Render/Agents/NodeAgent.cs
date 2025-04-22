@@ -9,13 +9,13 @@ namespace Goblin.Gameplay.Render.Agents
     /// <summary>
     /// 节点代理
     /// </summary>
-    public class Node : Agent
+    public class NodeAgent : Agent
     {
         /// <summary>
         /// Node 根
         /// </summary>
         private static GameObject root = new("Node");
-        static Node()
+        static NodeAgent()
         {
             root.transform.SetParent(GameObject.Find("Gameplay").transform, false);
             root.transform.localPosition = Vector3.zero;
