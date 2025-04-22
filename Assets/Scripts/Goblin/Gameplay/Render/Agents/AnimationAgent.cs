@@ -3,6 +3,8 @@ using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -49,13 +51,11 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             if (null == animancer) return;
-            var tickstate = world.statebucket.GetState(actor, RIL_DEFINE.TICKER);
-            var ticker = (RIL_TICKER)tickstate.ril;
-            var timescale = ticker.timescale * Config.Int2Float;
-            animstate = animancer.TryPlay(animname, mixduration * (1 / timescale));
+            var state = world.statebucket.GetState<TickerState>(actor, StateType.Ticker);
+            animstate = animancer.TryPlay(animname, mixduration * (1 / state.timescale));
             if (null == animstate) return;
             animstate.Speed = 0;
-            animstate.Time = Mathf.Clamp(animstate.Time + (e.tick * timescale), 0, tarduration);
+            animstate.Time = Mathf.Clamp(animstate.Time + (e.tick * state.timescale), 0, tarduration);
         }
     }
 }

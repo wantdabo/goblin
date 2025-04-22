@@ -4,6 +4,8 @@ using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Batches
 {
@@ -23,15 +25,14 @@ namespace Goblin.Gameplay.Render.Batches
 
         private void OnTick(TickEvent e)
         {
-            var spatialbundles = world.statebucket.GetStates(RIL_DEFINE.SPATIAL);
-            if (null == spatialbundles) return;
-            foreach (var bundle in spatialbundles)
+            var states = world.statebucket.GetStates<SpatialState>(StateType.Spatial);
+            if (null == states) return;
+            foreach (var state in states)
             {
-                var spatial = (RIL_SPATIAL)bundle.ril;
-                var node = world.EnsureAgent<NodeAgent>(bundle.actor);
-                node.targetPosition = spatial.position.ToVector3();
-                node.targetEuler = spatial.euler.ToVector3();
-                node.targetScale = spatial.scale.ToVector3();
+                var node = world.EnsureAgent<NodeAgent>(state.actor);
+                node.targetPosition = state.position;
+                node.targetEuler = state.euler;
+                node.targetScale = state.scale;
                 node.Chase();
             }
         }

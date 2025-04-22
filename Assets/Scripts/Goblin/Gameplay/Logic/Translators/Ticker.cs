@@ -14,7 +14,6 @@ namespace Goblin.Gameplay.Logic.Translators
         {
             stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, new RIL_TICKER
             {
-                frame = info.frame,
                 timescale = (stage.timescale * info.timescale * stage.cfg.FP2Int).AsUInt()
             });
         }

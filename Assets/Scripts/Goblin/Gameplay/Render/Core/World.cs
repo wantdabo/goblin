@@ -12,6 +12,7 @@ using Goblin.Gameplay.Render.Batches;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Core
 {
@@ -41,13 +42,12 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                var bundles = statebucket.GetStates(RIL_DEFINE.SEAT);
-                if (null == bundles) return 0;
+                var states = statebucket.GetStates<SeatState>(StateType.Seat);
+                if (null == states) return 0;
                 
-                foreach (var bundle in bundles)
+                foreach (var state in states)
                 {
-                    var ril = (RIL_SEAT)bundle.ril;
-                    if (ril.seat == seat) return bundle.actor;
+                    if (state.seat == seat) return state.actor;
                 }
                 
                 return 0;

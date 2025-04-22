@@ -8,7 +8,11 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     public struct TickerState : IState
     {
         public StateType type => StateType.Ticker;
-        public uint frame { get; set; }
         public ulong actor { get; set; }
+        public uint frame { get; set; }
+        /// <summary>
+        /// 时间缩放
+        /// </summary>
+        public float timescale { get; set; }
     }
 }

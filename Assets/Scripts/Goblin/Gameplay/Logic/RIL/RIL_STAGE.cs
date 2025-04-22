@@ -11,10 +11,6 @@ namespace Goblin.Gameplay.Logic.RIL
         public ushort id => RIL_DEFINE.STAGE;
         
         /// <summary>
-        /// Stage 当前的帧号
-        /// </summary>
-        public uint frame { get; set; }
-        /// <summary>
         /// Actor 数量
         /// </summary>
         public uint actorcnt { get; set; }
@@ -48,14 +44,13 @@ namespace Goblin.Gameplay.Logic.RIL
                    ril.actorcnt == actorcnt &&
                    ril.behaviorcnt == behaviorcnt &&
                    ril.behaviorinfocnt == behaviorinfocnt &&
-                   ril.frame == frame &&
                    ril.hassnapshot == hassnapshot &&
                    ril.snapshotframe == snapshotframe;
         }
 
         public override string ToString()
         {
-            return $"RIL_SYNOPSIS: actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, frame={frame}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
+            return $"RIL_SYNOPSIS: actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
         }
     }
 }

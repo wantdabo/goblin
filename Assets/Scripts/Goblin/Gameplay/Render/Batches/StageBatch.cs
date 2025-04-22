@@ -2,12 +2,14 @@ using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Batches
 {
     public struct StageEvent : IEvent
     {
-        public RIL_STAGE stage { get; set; }
+        public StageState state { get; set; }
     }
 
     public class StageBatch : Batch
@@ -26,14 +28,13 @@ namespace Goblin.Gameplay.Render.Batches
         
         private void OnTick(TickEvent e)
         {
-            var synopsisbundles = world.statebucket.GetStates(RIL_DEFINE.STAGE);
-            if (null == synopsisbundles) return;
-            foreach (var bundle in synopsisbundles)
+            var states = world.statebucket.GetStates<StageState>(StateType.Stage);
+            if (null == states) return;
+            foreach (var state in states)
             {
-                var synopsis = (RIL_STAGE)bundle.ril;
                 world.engine.proxy.gameplay.eventor.Tell(new StageEvent
                 {
-                    stage = synopsis,
+                    state = state,
                 });
             }
         }

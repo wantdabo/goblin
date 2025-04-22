@@ -8,7 +8,8 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     public struct SeatState : IState
     {
         public StateType type => StateType.Seat;
-        public uint frame { get; set; }
         public ulong actor { get; set; }
+        public uint frame { get; set; }
+        public ulong seat { get; set; }
     }
 }

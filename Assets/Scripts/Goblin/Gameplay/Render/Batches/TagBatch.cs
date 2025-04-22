@@ -3,6 +3,8 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Batches
 {
@@ -22,15 +24,14 @@ namespace Goblin.Gameplay.Render.Batches
 
         private void OnTick(TickEvent e)
         {
-            var tagbundles = world.statebucket.GetStates(RIL_DEFINE.TAG);
-            if (null == tagbundles) return;
-            foreach (var bundle in tagbundles)
+            var states = world.statebucket.GetStates<TagState>(StateType.Tag);
+            if (null == states) return;
+            foreach (var state in states)
             {
-                var tag = (RIL_TAG) bundle.ril;
-                if (0 != tag.model)
+                if (0 != state.model)
                 {
-                    var model = world.EnsureAgent<ModelAgent>(bundle.actor);
-                    model.Load(tag.model);
+                    var model = world.EnsureAgent<ModelAgent>(state.actor);
+                    model.Load(state.model);
                 }
             }
         }

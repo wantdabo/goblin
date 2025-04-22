@@ -3,28 +3,28 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 标签状态
+    /// 状态机状态
     /// </summary>
-    public struct TagState : IState
+    public struct StateMachineState : IState
     {
-        public StateType type => StateType.Tag;
+        public StateType type => StateType.StateMachine;
         public ulong actor { get; set; }
         public uint frame { get; set; }
         /// <summary>
-        /// Actor 类型
+        /// 当前状态
         /// </summary>
-        public int actortype { get; set; }
+        public byte current { get; set; }
         /// <summary>
-        /// 是否拥有英雄 ID
+        /// 上一个状态
         /// </summary>
-        public bool hashero { get; set; }
+        public byte last { get; set; }
         /// <summary>
-        /// 英雄 ID
+        /// 持续帧数
         /// </summary>
-        public int hero { get; set; }
+        public uint frames { get; set; }
         /// <summary>
-        /// 模型 ID
+        /// 流逝时间
         /// </summary>
-        public int model { get; set; }
+        public uint elapsed { get; set; }
     }
 }

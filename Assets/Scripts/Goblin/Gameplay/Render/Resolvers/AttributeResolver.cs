@@ -2,6 +2,7 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -9,8 +10,17 @@ namespace Goblin.Gameplay.Render.Resolvers
     {
         public override ushort id => RIL_DEFINE.ATTRIBUTE;
         
-        protected override void OnRIL(RILState rilstate, RIL_ATTRIBUTE ril)
+        protected override IState OnRIL(RILState rilstate, RIL_ATTRIBUTE ril)
         {
+            return new AttributeState
+            {
+                actor = rilstate.actor,
+                frame = rilstate.frame,
+                hp = ril.hp,
+                maxhp = ril.maxhp,
+                movespeed = ril.movespeed,
+                attack = ril.attack,
+            };
         }
     }
 }

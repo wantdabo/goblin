@@ -11,17 +11,16 @@ namespace Goblin.Gameplay.Render.Resolvers
     {
         public override ushort id => RIL_DEFINE.SPATIAL;
 
-        protected override void OnRIL(RILState rilstate, RIL_SPATIAL ril)
+        protected override IState OnRIL(RILState rilstate, RIL_SPATIAL ril)
         {
-            SpatialState state = new()
+            return new SpatialState
             {
-                frame = rilstate.frame,
                 actor = rilstate.actor,
+                frame = rilstate.frame,
                 position = ril.position.ToVector3(),
                 euler = ril.euler.ToVector3(),
                 scale = ril.scale.ToVector3(),
             };
-            // statebucket.SetState();
         }
     }
 }

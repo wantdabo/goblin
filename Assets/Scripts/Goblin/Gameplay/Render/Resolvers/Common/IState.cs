@@ -12,12 +12,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         public StateType type { get; }
         /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
-        /// <summary>
         /// ActorID
         /// </summary>
         public ulong actor { get; set; }
+        /// <summary>
+        /// 帧号
+        /// </summary>
+        public uint frame { get; set; }
     }
 }

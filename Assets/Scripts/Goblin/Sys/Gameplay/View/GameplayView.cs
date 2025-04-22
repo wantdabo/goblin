@@ -95,19 +95,19 @@ namespace Goblin.Sys.Gameplay.View
             if (null == synopsisText) return;
 
             var content =
-                $"帧号 : {e.stage.frame}\n" +
-                $"Actor : {e.stage.actorcnt}\n" +
-                $"Behavior : {e.stage.behaviorcnt}\n" +
-                $"BehaviorInfo : {e.stage.behaviorinfocnt}\n";
-            content += "存在快照 : " + (e.stage.hassnapshot ? "是\n" : "否\n");
-            if (e.stage.hassnapshot) content += $"快照帧号 : {e.stage.snapshotframe}";
+                $"帧号 : {e.state.frame}\n" +
+                $"Actor : {e.state.actorcnt}\n" +
+                $"Behavior : {e.state.behaviorcnt}\n" +
+                $"BehaviorInfo : {e.state.behaviorinfocnt}\n";
+            content += "存在快照 : " + (e.state.hassnapshot ? "是\n" : "否\n");
+            if (e.state.hassnapshot) content += $"快照帧号 : {e.state.snapshotframe}";
             
             synopsisText.text = content;
 
             var localdirector = (engine.proxy.gameplay.director as LocalDirector);
             if (null == localdirector) return;
-            if (false == e.stage.hassnapshot) return;
-            if (e.stage.frame - e.stage.snapshotframe > 1) return;
+            if (false == e.state.hassnapshot) return;
+            if (e.state.frame - e.state.snapshotframe > 1) return;
             gameSpeedSlider.value = localdirector.timescale;
             gameSpeedDescText.text = localdirector.timescale.ToString();
         }

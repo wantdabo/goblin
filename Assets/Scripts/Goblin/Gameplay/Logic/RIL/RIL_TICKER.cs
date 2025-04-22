@@ -10,10 +10,6 @@ namespace Goblin.Gameplay.Logic.RIL
     {
         public ushort id => RIL_DEFINE.TICKER;
         /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
-        /// <summary>
         /// 时间缩放
         /// </summary>
         public uint timescale { get; set; }
@@ -27,12 +23,12 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             var ril = (RIL_TICKER)other;
 
-            return frame == ril.frame && timescale == ril.timescale;
+            return timescale == ril.timescale;
         }
         
         public override string ToString()
         {
-            return $"RIL_TICKER: frame={frame}, timescale={timescale}";
+            return $"RIL_TICKER: timescale={timescale}";
         }
     }
 }

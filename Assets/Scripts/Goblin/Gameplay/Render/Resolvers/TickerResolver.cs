@@ -1,7 +1,9 @@
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
+using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
@@ -9,8 +11,14 @@ namespace Goblin.Gameplay.Render.Resolvers
     {
         public override ushort id => RIL_DEFINE.TICKER;
 
-        protected override void OnRIL(RILState rilstate, RIL_TICKER ril)
+        protected override IState OnRIL(RILState rilstate, RIL_TICKER ril)
         {
+            return new TickerState
+            {
+                actor = rilstate.actor,
+                frame = rilstate.frame,
+                timescale = ril.timescale * Config.Int2Float,
+            };
         }
     }
 }

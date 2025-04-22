@@ -91,21 +91,11 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return (T)result;
         }
 
-        public void SetState(ulong actor, IState state)
+        public void SetState(IState state)
         {
-            if (false == statedict.TryGetValue(actor, out var dict)) statedict.Add(actor, dict = ObjectCache.Get<Dictionary<StateType, IState>>());
+            if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<StateType, IState>>());
             if (dict.ContainsKey(state.type)) dict.Remove(state.type);
             dict.Add(state.type, state);
-        }
-
-        public List<RILState> GetStates(ushort id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public RILState GetState(ulong actor, ushort id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
