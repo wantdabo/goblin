@@ -14,8 +14,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             return new StageState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 actorcnt = ril.actorcnt,
                 behaviorcnt = ril.behaviorcnt,
                 behaviorinfocnt = ril.behaviorcnt,

@@ -15,8 +15,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             return new TickerState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 timescale = ril.timescale * Config.Int2Float,
             };
         }

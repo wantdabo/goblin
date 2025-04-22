@@ -14,8 +14,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             return new StateMachineState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 current = ril.current,
                 last = ril.last,
                 frames = ril.frames,

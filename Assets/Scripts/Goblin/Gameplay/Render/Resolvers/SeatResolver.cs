@@ -21,8 +21,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 
             return new SeatState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 seatdict = ril.seatdict,
             };
         }

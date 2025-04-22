@@ -15,8 +15,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             return new SpatialState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 position = ril.position.ToVector3(),
                 euler = ril.euler.ToVector3(),
                 scale = ril.scale.ToVector3(),

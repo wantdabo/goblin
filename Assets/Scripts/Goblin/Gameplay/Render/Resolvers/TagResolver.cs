@@ -22,8 +22,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 
             return new TagState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 tags = ril.tags,
             };
         }

@@ -14,8 +14,6 @@ namespace Goblin.Gameplay.Render.Resolvers
         {
             return new AttributeState
             {
-                actor = rilstate.actor,
-                frame = rilstate.frame,
                 hp = ril.hp,
                 maxhp = ril.maxhp,
                 movespeed = ril.movespeed,
