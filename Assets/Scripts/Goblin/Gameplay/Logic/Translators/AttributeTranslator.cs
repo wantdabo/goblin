@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 属性信息翻译器
     /// </summary>
-    public class Attribute : Translator<AttributeInfo>
+    public class AttributeTranslator : Translator<AttributeInfo>
     {
         protected override void OnRIL(AttributeInfo info)
         {

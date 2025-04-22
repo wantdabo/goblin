@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Logic.Prefabs.Datas
     /// <summary>
     /// 空间数据结构
     /// </summary>
-    public struct Spatial
+    public struct SpatialData
     {
         /// <summary>
         /// 位置

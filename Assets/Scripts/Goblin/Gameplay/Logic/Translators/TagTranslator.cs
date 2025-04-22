@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 标签翻译器
     /// </summary>
-    public class Tag : Translator<TagInfo>
+    public class TagTranslator : Translator<TagInfo>
     {
         protected override void OnRIL(TagInfo info)
         {

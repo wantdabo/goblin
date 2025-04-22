@@ -234,7 +234,7 @@ namespace Goblin.Gameplay.Logic.Core
         private void Prefabs()
         {
             prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
-            prefabs.Add(typeof(Hero), ObjectCache.Get<Hero>().Load(this));
+            prefabs.Add(typeof(HeroPrefab), ObjectCache.Get<HeroPrefab>().Load(this));
         }
         
         /// <summary>
@@ -718,7 +718,7 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 var heroinfo = cfg.location.HeroInfos.Get(player.hero);
                 var attributeinfo = cfg.location.AttributeInfos.Get(heroinfo.Attribute);
-                var hero = Spawn<Hero>(new HeroInfo
+                var hero = Spawn<HeroPrefab>(new HeroPrefabInfo
                 {
                     hero = player.hero,
                     model = heroinfo.Model,

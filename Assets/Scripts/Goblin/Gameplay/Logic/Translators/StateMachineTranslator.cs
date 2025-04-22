@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 状态机信息翻译器
     /// </summary>
-    public class StateMachine : Translator<StateMachineInfo>
+    public class StateMachineTranslator : Translator<StateMachineInfo>
     {
         protected override void OnRIL(StateMachineInfo info)
         {

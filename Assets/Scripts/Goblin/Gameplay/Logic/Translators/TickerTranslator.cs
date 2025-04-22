@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 驱动翻译器
     /// </summary>
-    public class Ticker : Translator<TickerInfo>
+    public class TickerTranslator : Translator<TickerInfo>
     {
         protected override void OnRIL(TickerInfo info)
         {

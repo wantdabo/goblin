@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
     /// <summary>
     /// 英雄预设信息结构体
     /// </summary>
-    public struct HeroInfo : IPrefabInfo
+    public struct HeroPrefabInfo : IPrefabInfo
     {
         /// <summary>
         /// 英雄 ID
@@ -24,21 +24,21 @@ namespace Goblin.Gameplay.Logic.Prefabs
         /// <summary>
         /// 空间信息
         /// </summary>
-        public Spatial spatial { get; set; }
+        public SpatialData spatial { get; set; }
         /// <summary>
         /// 属性信息
         /// </summary>
-        public Attribute attribute { get; set; }
+        public AttributeData attribute { get; set; }
     }
 
     /// <summary>
     /// 英雄预制创建器
     /// </summary>
-    public class Hero : Prefab<HeroInfo>
+    public class HeroPrefab : Prefab<HeroPrefabInfo>
     {
         public override byte type => ACTOR_DEFINE.HERO;
 
-        protected override void OnProcessing(Actor actor, HeroInfo info)
+        protected override void OnProcessing(Actor actor, HeroPrefabInfo info)
         {
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();

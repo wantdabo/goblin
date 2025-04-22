@@ -3,7 +3,7 @@ namespace Goblin.Gameplay.Logic.Prefabs.Datas
     /// <summary>
     /// 属性数据结构
     /// </summary>
-    public struct Attribute
+    public struct AttributeData
     {
         /// <summary>
         /// 当前生命值

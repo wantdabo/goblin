@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 座位信息翻译器
     /// </summary>
-    public class Seat : Translator<SeatInfo>
+    public class SeatTranslator : Translator<SeatInfo>
     {
         protected override void OnRIL(SeatInfo info)
         {

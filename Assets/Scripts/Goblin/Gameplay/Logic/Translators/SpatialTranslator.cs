@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 空间信息翻译器
     /// </summary>
-    public class Spatial : Translator<SpatialInfo>
+    public class SpatialTranslator : Translator<SpatialInfo>
     {
         protected override void OnRIL(SpatialInfo info)
         {

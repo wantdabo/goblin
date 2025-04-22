@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 场景翻译器
     /// </summary>
-    public class Stage : Translator<StageInfo>
+    public class StageTranslator : Translator<StageInfo>
     {
         protected override void OnRIL(StageInfo info)
         {

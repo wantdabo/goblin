@@ -5,7 +5,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Translators;
-using Attribute = Goblin.Gameplay.Logic.Translators.Attribute;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Batchs
 {
@@ -23,13 +22,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         {
             base.OnAssemble();
             translators = ObjectCache.Get<Dictionary<Type, Translators.Common.Translator>>();
-            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.Stage>().Load(stage));
-            translators.Add(typeof(TickerInfo), ObjectCache.Get<Translators.Ticker>().Load(stage));
-            translators.Add(typeof(SeatInfo), ObjectCache.Get<Translators.Seat>().Load(stage));
-            translators.Add(typeof(TagInfo), ObjectCache.Get<Translators.Tag>().Load(stage));
-            translators.Add(typeof(AttributeInfo), ObjectCache.Get<Translators.Attribute>().Load(stage));
-            translators.Add(typeof(SpatialInfo), ObjectCache.Get<Translators.Spatial>().Load(stage));
-            translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Translators.StateMachine>().Load(stage));
+            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.StageTranslator>().Load(stage));
+            translators.Add(typeof(TickerInfo), ObjectCache.Get<Translators.TickerTranslator>().Load(stage));
+            translators.Add(typeof(SeatInfo), ObjectCache.Get<Translators.SeatTranslator>().Load(stage));
+            translators.Add(typeof(TagInfo), ObjectCache.Get<Translators.TagTranslator>().Load(stage));
+            translators.Add(typeof(AttributeInfo), ObjectCache.Get<Translators.AttributeTranslator>().Load(stage));
+            translators.Add(typeof(SpatialInfo), ObjectCache.Get<Translators.SpatialTranslator>().Load(stage));
+            translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Translators.StateMachineTranslator>().Load(stage));
         }
 
         protected override void OnDisassemble()
