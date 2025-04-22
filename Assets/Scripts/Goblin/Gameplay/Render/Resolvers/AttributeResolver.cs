@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
+using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Resolvers
@@ -8,7 +9,7 @@ namespace Goblin.Gameplay.Render.Resolvers
     {
         public override ushort id => RIL_DEFINE.ATTRIBUTE;
         
-        protected override void OnRIL(RIL_ATTRIBUTE ril)
+        protected override void OnRIL(RILState rilstate, RIL_ATTRIBUTE ril)
         {
         }
     }

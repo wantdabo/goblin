@@ -36,9 +36,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             if (id != e.state.ril.id) return;
             
-            OnRIL((T)e.state.ril);
+            OnRIL(e.state, (T)e.state.ril);
         }
 
-        protected abstract void OnRIL(T ril);
+        protected abstract void OnRIL(RILState rilstate, T ril);
     }
 }
