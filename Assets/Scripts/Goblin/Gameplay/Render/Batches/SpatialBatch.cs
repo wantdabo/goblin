@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
@@ -11,22 +12,9 @@ namespace Goblin.Gameplay.Render.Batches
 {
     public class SpatialBatch : Batch
     {
-        protected override void OnCreate()
+        protected override void OnTick(TickEvent e)
         {
-            base.OnCreate();
-            world.ticker.eventor.Listen<TickEvent>(OnTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            world.ticker.eventor.UnListen<TickEvent>(OnTick);
-        }
-
-        private void OnTick(TickEvent e)
-        {
-            var states = world.statebucket.GetStates<SpatialState>(StateType.Spatial);
-            if (null == states) return;
+            if (false == world.statebucket.GetStates<SpatialState>(StateType.Spatial, out var states)) return;
             foreach (var state in states)
             {
                 var node = world.EnsureAgent<NodeAgent>(state.actor);
@@ -35,6 +23,9 @@ namespace Goblin.Gameplay.Render.Batches
                 node.targetScale = state.scale;
                 node.Chase();
             }
+            
+            states.Clear();
+            ObjectCache.Set(states);
         }
     }
 }

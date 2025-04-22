@@ -62,33 +62,35 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             foreach (var resolver in resolvers) resolver.Create();
         }
 
-        public List<T> GetStates<T>(StateType st) where T : IState, new()
+        public bool GetStates<T>(StateType st, out List<T> states) where T : IState, new()
         {
-            List<T> results = ObjectCache.Get<List<T>>();
+            states= ObjectCache.Get<List<T>>();
             foreach (var kv in statedict)
             {
                 if (false == kv.Value.ContainsKey(st)) continue;
                 if (false == kv.Value.TryGetValue(st, out var state)) continue;
-                results.Add((T)state);
+                states.Add((T)state);
             }
 
             // 没有找到
-            if (0 == results.Count)
+            if (0 == states.Count)
             {
-                ObjectCache.Set(results);
+                ObjectCache.Set(states);
 
-                return default;
+                return false;
             }
 
-            return results;
+            return true;
         }
 
-        public T GetState<T>(ulong actor, StateType st) where T : IState
+        public bool GetState<T>(ulong actor, StateType st, out T state) where T : IState
         {
-            if (false == statedict.TryGetValue(actor, out var dict)) return default;
-            if (false == dict.TryGetValue(st, out var result)) return default;
-
-            return (T)result;
+            state = default;
+            if (false == statedict.TryGetValue(actor, out var dict)) return false;
+            if (false == dict.TryGetValue(st, out var result)) return false;
+            state = (T)result;
+            
+            return true;
         }
 
         public void SetState(IState state)

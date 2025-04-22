@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -12,14 +14,17 @@ namespace Goblin.Gameplay.Render.Resolvers
         
         protected override IState OnRIL(RILState rilstate, RIL_TAG ril)
         {
+            if (statebucket.GetState<TagState>(rilstate.actor, StateType.Tag, out var state))
+            {
+                state.tags.Clear();
+                ObjectCache.Set(state.tags);
+            }
+
             return new TagState
             {
                 actor = rilstate.actor,
                 frame = rilstate.frame,
-                actortype = ril.actortype,
-                hashero = ril.hashero,
-                hero = ril.hero,
-                model = ril.model
+                tags = ril.tags,
             };
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Resolvers.States
@@ -11,20 +12,8 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         public ulong actor { get; set; }
         public uint frame { get; set; }
         /// <summary>
-        /// Actor 类型
+        /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
         /// </summary>
-        public int actortype { get; set; }
-        /// <summary>
-        /// 是否拥有英雄 ID
-        /// </summary>
-        public bool hashero { get; set; }
-        /// <summary>
-        /// 英雄 ID
-        /// </summary>
-        public int hero { get; set; }
-        /// <summary>
-        /// 模型 ID
-        /// </summary>
-        public int model { get; set; }
+        public Dictionary<ushort, int> tags { get; set; }
     }
 }

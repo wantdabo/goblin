@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
@@ -10,30 +11,20 @@ namespace Goblin.Gameplay.Render.Batches
 {
     public class TagBatch : Batch
     {
-        protected override void OnCreate()
+        protected override void OnTick(TickEvent e)
         {
-            base.OnCreate();
-            world.ticker.eventor.Listen<TickEvent>(OnTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            world.ticker.eventor.UnListen<TickEvent>(OnTick);
-        }
-
-        private void OnTick(TickEvent e)
-        {
-            var states = world.statebucket.GetStates<TagState>(StateType.Tag);
-            if (null == states) return;
+            if (false == world.statebucket.GetStates<TagState>(StateType.Tag, out var states)) return;
             foreach (var state in states)
             {
-                if (0 != state.model)
+                if (false == state.tags.TryGetValue(TAG_DEFINE.MODEL_ID, out var m))continue;
+                if (0 != m)
                 {
                     var model = world.EnsureAgent<ModelAgent>(state.actor);
-                    model.Load(state.model);
+                    model.Load(m);
                 }
             }
+            states.Clear();
+            ObjectCache.Set(states);
         }
     }
 }

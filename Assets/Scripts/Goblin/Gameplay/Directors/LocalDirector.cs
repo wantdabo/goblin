@@ -94,7 +94,7 @@ namespace Goblin.Gameplay.Directors
         {
             world.eventor.Tell(new RILEvent
             {
-                state = rilstate 
+                rilstate = rilstate 
             });
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
@@ -14,11 +15,8 @@ namespace Goblin.Gameplay.Logic.Translators
         protected override void OnRIL(TagInfo info)
         {
             RIL_TAG ril = new RIL_TAG();
-            ril.actortype = info.tags.GetValueOrDefault(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
-            ril.hashero = info.tags.ContainsKey(TAG_DEFINE.HERO_ID);
-            ril.hero = info.tags.GetValueOrDefault(TAG_DEFINE.HERO_ID, 0);
-            ril.model = info.tags.GetValueOrDefault(TAG_DEFINE.MODEL_ID, 0);
-            
+            ril.tags = ObjectCache.Get<Dictionary<ushort, int>>();
+            foreach (var tag in info.tags) ril.tags.Add(tag.Key, tag.Value);
             stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, ril);
         }
     }

@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             if (null == animancer) return;
-            var state = world.statebucket.GetState<TickerState>(actor, StateType.Ticker);
+            world.statebucket.GetState<TickerState>(actor, StateType.Ticker, out var state);
             animstate = animancer.TryPlay(animname, mixduration * (1 / state.timescale));
             if (null == animstate) return;
             animstate.Speed = 0;

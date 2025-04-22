@@ -1,4 +1,5 @@
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 
@@ -34,9 +35,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         
         private void OnRIL(RILEvent e)
         {
-            if (id != e.state.ril.id) return;
-            
-            statebucket.SetState(OnRIL(e.state, (T)e.state.ril));
+            if (id != e.rilstate.ril.id) return;
+            var state = OnRIL(e.rilstate, (T)e.rilstate.ril);
+            if (RIL_DEFINE.TYPE_EVENT == e.rilstate.type) return;
+            statebucket.SetState(state);
         }
 
         protected abstract IState OnRIL(RILState rilstate, T ril);

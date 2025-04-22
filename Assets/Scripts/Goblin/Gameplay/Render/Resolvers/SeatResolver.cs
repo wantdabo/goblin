@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -12,11 +13,17 @@ namespace Goblin.Gameplay.Render.Resolvers
 
         protected override IState OnRIL(RILState rilstate, RIL_SEAT ril)
         {
+            if (statebucket.GetState<SeatState>(rilstate.actor, StateType.Seat, out var state))
+            {
+                state.seatdict.Clear();
+                ObjectCache.Set(state.seatdict);
+            }
+
             return new SeatState
             {
                 actor = rilstate.actor,
                 frame = rilstate.frame,
-                seat = ril.seat,
+                seatdict = ril.seatdict,
             };
         }
     }

@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
@@ -10,27 +11,14 @@ namespace Goblin.Gameplay.Render.Batches
 {
     public class StateMachineBatch : Batch
     {
-        protected override void OnCreate()
+        protected override void OnTick(TickEvent e)
         {
-            base.OnCreate();
-            world.ticker.eventor.Listen<TickEvent>(OnTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            world.ticker.eventor.UnListen<TickEvent>(OnTick);
-        }
-        
-        private void OnTick(TickEvent e)
-        {
-            var states = world.statebucket.GetStates<StateMachineState>(StateType.StateMachine);
-            if (null == states) return;
+            if (false == world.statebucket.GetStates<StateMachineState>(StateType.StateMachine, out var states)) return;
             foreach (var state in states)
             {
-                var tagstate = world.statebucket.GetState<TagState>(state.actor, StateType.Tag);
+                world.statebucket.GetState<TagState>(state.actor, StateType.Tag, out var tagstate);
                 
-                var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.model);
+                var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.tags[TAG_DEFINE.MODEL_ID]);
                 var animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);
                 if (null == animcfg) continue;
                 
@@ -52,6 +40,8 @@ namespace Goblin.Gameplay.Render.Batches
                 var animation = world.EnsureAgent<AnimationAgent>(state.actor);
                 animation.Play(animname, tarduration, mixduration);
             }
+            states.Clear();
+            ObjectCache.Set(states);
         }
     }
 }

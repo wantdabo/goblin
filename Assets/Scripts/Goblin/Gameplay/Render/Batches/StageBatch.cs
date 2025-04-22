@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
@@ -14,22 +15,9 @@ namespace Goblin.Gameplay.Render.Batches
 
     public class StageBatch : Batch
     {
-        protected override void OnCreate()
+        protected override void OnTick(TickEvent e)
         {
-            base.OnCreate();
-            world.ticker.eventor.Listen<TickEvent>(OnTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            world.ticker.eventor.UnListen<TickEvent>(OnTick);
-        }
-        
-        private void OnTick(TickEvent e)
-        {
-            var states = world.statebucket.GetStates<StageState>(StateType.Stage);
-            if (null == states) return;
+            if (false == world.statebucket.GetStates<StageState>(StateType.Stage, out var states)) return;
             foreach (var state in states)
             {
                 world.engine.proxy.gameplay.eventor.Tell(new StageEvent
@@ -37,6 +25,9 @@ namespace Goblin.Gameplay.Render.Batches
                     state = state,
                 });
             }
+            
+            states.Clear();
+            ObjectCache.Set(states);
         }
     }
 }

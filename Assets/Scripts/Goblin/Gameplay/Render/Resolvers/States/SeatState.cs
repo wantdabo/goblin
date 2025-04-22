@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Resolvers.States
@@ -10,6 +11,9 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         public StateType type => StateType.Seat;
         public ulong actor { get; set; }
         public uint frame { get; set; }
-        public ulong seat { get; set; }
+        /// <summary>
+        /// 座位字典, 键为座位 ID, 值为 ActorID
+        /// </summary>
+        public Dictionary<ulong, ulong> seatdict { get; set; }
     }
 }

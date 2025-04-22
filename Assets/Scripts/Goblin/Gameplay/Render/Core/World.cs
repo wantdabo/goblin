@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// 渲染状态
         /// </summary>
-        public RILState state { get; set; }
+        public RILState rilstate { get; set; }
     }
 
     /// <summary>
@@ -32,6 +32,12 @@ namespace Goblin.Gameplay.Render.Core
     /// </summary>
     public sealed class World : Comp
     {
+        /// <summary>
+        /// Stage.ActorID, Stage 的数据走的也是 Actor/Behavior/BehaviorInfo 那一套
+        /// 通过包装 Actor 的形式使用
+        /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
+        /// </summary>
+        public ulong sa => ulong.MaxValue;
         /// <summary>
         /// 座位 ID
         /// </summary>
@@ -42,15 +48,10 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                var states = statebucket.GetStates<SeatState>(StateType.Seat);
-                if (null == states) return 0;
+                if (false == statebucket.GetState<SeatState>(sa, StateType.Seat, out var state)) return 0;
+                if (false == state.seatdict.TryGetValue(seat, out var actor)) return 0;
                 
-                foreach (var state in states)
-                {
-                    if (state.seat == seat) return state.actor;
-                }
-                
-                return 0;
+                return actor;
             }
         }
         /// <summary>
