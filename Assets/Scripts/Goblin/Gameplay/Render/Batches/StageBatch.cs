@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Render.Batches
         
         private void OnTick(TickEvent e)
         {
-            var synopsisbundles = world.statebucket.GetStateBundles(RIL_DEFINE.STAGE);
+            var synopsisbundles = world.statebucket.GetStates(RIL_DEFINE.STAGE);
             if (null == synopsisbundles) return;
             foreach (var bundle in synopsisbundles)
             {

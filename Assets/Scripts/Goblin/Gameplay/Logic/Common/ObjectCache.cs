@@ -20,9 +20,9 @@ namespace Goblin.Gameplay.Logic.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public static T Get<T>(string key = "") where T : class, new()
+        public static T Get<T>(string key = "") where T : new()
         {
-            return Get(typeof(T), key) as T;
+            return (T)Get(typeof(T), key);
         }
         
         /// <summary>

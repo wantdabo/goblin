@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Render.Batches
         
         private void OnTick(TickEvent e)
         {
-            var statebundles = world.statebucket.GetStateBundles(RIL_DEFINE.STATE_MACHINE);
+            var statebundles = world.statebucket.GetStates(RIL_DEFINE.STATE_MACHINE);
             if (null == statebundles) return;
             foreach (var bundle in statebundles)
             {

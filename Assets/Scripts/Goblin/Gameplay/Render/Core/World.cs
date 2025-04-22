@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                var bundles = statebucket.GetStateBundles(RIL_DEFINE.SEAT);
+                var bundles = statebucket.GetStates(RIL_DEFINE.SEAT);
                 if (null == bundles) return 0;
                 
                 foreach (var bundle in bundles)

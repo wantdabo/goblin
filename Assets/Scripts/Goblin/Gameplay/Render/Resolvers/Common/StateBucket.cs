@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Core;
@@ -10,25 +11,20 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     public class StateBucket : Comp
     {
         public World world { get; private set; }
-        private Dictionary<ulong, Dictionary<ushort, RILState>> statedict { get; set; }
-        private Dictionary<ushort, List<RILState>> statebundles { get; set; }
+        private Dictionary<ulong, Dictionary<StateType, IState>> statedict { get; set; }
+        private List<Resolver> resolvers { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            world.eventor.Listen<RILEvent>(OnRIL);
-            world.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
-            
-            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<ushort, RILState>>>();
-            statebundles = ObjectCache.Get<Dictionary<ushort, List<RILState>>>();
+            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<StateType, IState>>>();
+            resolvers = ObjectCache.Get<List<Resolver>>();
+            Resolvers();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            world.eventor.UnListen<RILEvent>(OnRIL);
-            world.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
-            
             foreach (var states in statedict.Values)
             {
                 states.Clear();
@@ -37,13 +33,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             statedict.Clear();
             ObjectCache.Set(statedict);
             
-            foreach (var states in statebundles.Values)
-            {
-                states.Clear();
-                ObjectCache.Set(states);
-            }
-            statebundles.Clear();
-            ObjectCache.Set(statebundles);
+            resolvers.Clear();
+            ObjectCache.Set(resolvers);
         }
 
         public StateBucket Initialize(World world)
@@ -52,57 +43,69 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
 
             return this;
         }
-        
-        public List<RILState> GetStateBundles(ushort id)
+
+        private void Resolvers()
         {
-            if (false == statebundles.TryGetValue(id, out var states)) return default;
+            void AddResolver<T>() where T : Resolver, new()
+            {
+                var resolver = AddComp<T>().Initialize(this);
+                resolvers.Add(resolver);
+            }
             
-            return states;
+            AddResolver<AttributeResolver>();
+            AddResolver<SeatResolver>();
+            AddResolver<SpatialResolver>();
+            AddResolver<StageResolver>();
+            AddResolver<StateMachineResolver>();
+            AddResolver<TagResolver>();
+            AddResolver<TickerResolver>();
+            foreach (var resolver in resolvers) resolver.Create();
+        }
+
+        public List<T> GetStates<T>(StateType st) where T : IState, new()
+        {
+            List<T> results = ObjectCache.Get<List<T>>();
+            foreach (var kv in statedict)
+            {
+                if (false == kv.Value.ContainsKey(st)) continue;
+                if (false == kv.Value.TryGetValue(st, out var state)) continue;
+                results.Add((T)state);
+            }
+
+            // 没有找到
+            if (0 == results.Count)
+            {
+                ObjectCache.Set(results);
+
+                return default;
+            }
+
+            return results;
+        }
+
+        public T GetState<T>(ulong actor, StateType st) where T : IState
+        {
+            if (false == statedict.TryGetValue(actor, out var dict)) return default;
+            if (false == dict.TryGetValue(st, out var result)) return default;
+
+            return (T)result;
+        }
+
+        public void SetState(ulong actor, IState state)
+        {
+            if (false == statedict.TryGetValue(actor, out var dict)) statedict.Add(actor, dict = ObjectCache.Get<Dictionary<StateType, IState>>());
+            if (dict.ContainsKey(state.type)) dict.Remove(state.type);
+            dict.Add(state.type, state);
+        }
+
+        public List<RILState> GetStates(ushort id)
+        {
+            throw new NotImplementedException();
         }
 
         public RILState GetState(ulong actor, ushort id)
         {
-            if (false == statedict.TryGetValue(actor, out var statemap)) return default;
-            if (false == statemap.TryGetValue(id, out var state)) return default;
-
-            return state;
-        }
-
-        private void OnRIL(RILEvent e)
-        {
-            if (false == statedict.TryGetValue(e.state.actor, out var statemap))
-            {
-                statedict.Add(e.state.actor, statemap = ObjectCache.Get<Dictionary<ushort, RILState>>());
-            }
-            
-            if (statemap.ContainsKey(e.state.ril.id))
-            {
-                statemap.Remove(e.state.ril.id);
-            }
-            statemap.Add(e.state.ril.id, e.state);
-        }
-
-        private void OnLateTick(LateTickEvent e)
-        {
-            foreach (var kv in statebundles)
-            {
-                kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
-            }
-            statebundles.Clear();
-
-            foreach (var statemap in statedict.Values)
-            {
-                foreach (var state in statemap.Values)
-                {
-                    if (false == statebundles.TryGetValue(state.ril.id, out var states))
-                    {
-                        statebundles.Add(state.ril.id, states = ObjectCache.Get<List<RILState>>());
-                    }
-                    
-                    states.Add(state);
-                }
-            }
+            throw new NotImplementedException();
         }
     }
 }

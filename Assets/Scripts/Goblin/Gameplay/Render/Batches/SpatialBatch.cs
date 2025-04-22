@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Render.Batches
 
         private void OnTick(TickEvent e)
         {
-            var spatialbundles = world.statebucket.GetStateBundles(RIL_DEFINE.SPATIAL);
+            var spatialbundles = world.statebucket.GetStates(RIL_DEFINE.SPATIAL);
             if (null == spatialbundles) return;
             foreach (var bundle in spatialbundles)
             {
