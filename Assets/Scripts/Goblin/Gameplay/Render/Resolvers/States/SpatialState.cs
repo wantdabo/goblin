@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Render.Resolvers.Common;
+using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
@@ -10,5 +11,8 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         public StateType type => StateType.Spatial;
         public uint frame { get; set; }
         public ulong actor { get; set; }
+        public Vector3 position { get; set; }
+        public Vector3 euler { get; set; }
+        public Vector3 scale { get; set; }
     }
 }
