@@ -5,11 +5,9 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     /// <summary>
     /// 状态机状态
     /// </summary>
-    public struct StateMachineState : IState
+    public class StateMachineState : State
     {
-        public StateType type => StateType.StateMachine;
-        public ulong actor { get; set; }
-        public uint frame { get; set; }
+        public override StateType type => StateType.StateMachine;
         /// <summary>
         /// 当前状态
         /// </summary>
@@ -26,5 +24,13 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         /// 流逝时间
         /// </summary>
         public uint elapsed { get; set; }
+        
+        protected override void OnReset()
+        {
+            current = 0;
+            last = 0;
+            frames = 0;
+            elapsed = 0;
+        }
     }
 }

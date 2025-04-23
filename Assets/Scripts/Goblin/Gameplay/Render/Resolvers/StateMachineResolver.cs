@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -8,15 +9,15 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class StateMachineResolver : Resolver<RIL_STATE_MACHINE>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_STATE_MACHINE ril)
+        protected override State OnRIL(RILState<RIL_STATE_MACHINE> rilstate)
         {
-            return new StateMachineState
-            {
-                current = ril.current,
-                last = ril.last,
-                frames = ril.frames,
-                elapsed = ril.elapsed,
-            };
+            var state = ObjectCache.Get<StateMachineState>();
+            state.current = rilstate.ril.current;
+            state.last = rilstate.ril.last;
+            state.frames = rilstate.ril.frames;
+            state.elapsed = rilstate.ril.elapsed;
+
+            return state;
         }
     }
 }

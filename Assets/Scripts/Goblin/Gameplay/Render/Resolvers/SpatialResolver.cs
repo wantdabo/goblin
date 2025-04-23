@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -9,14 +10,14 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class SpatialResolver : Resolver<RIL_SPATIAL>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_SPATIAL ril)
+        protected override State OnRIL(RILState<RIL_SPATIAL> rilstate)
         {
-            return new SpatialState
-            {
-                position = ril.position.ToVector3(),
-                euler = ril.euler.ToVector3(),
-                scale = ril.scale.ToVector3(),
-            };
+            var state = ObjectCache.Get<SpatialState>();
+            state.position = rilstate.ril.position.ToVector3();
+            state.euler = rilstate.ril.euler.ToVector3();
+            state.scale = rilstate.ril.scale.ToVector3();
+
+            return state;
         }
     }
 }

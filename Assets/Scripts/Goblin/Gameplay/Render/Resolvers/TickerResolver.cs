@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -9,12 +10,12 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class TickerResolver : Resolver<RIL_TICKER>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_TICKER ril)
+        protected override State OnRIL(RILState<RIL_TICKER> rilstate)
         {
-            return new TickerState
-            {
-                timescale = ril.timescale * Config.Int2Float,
-            };
+            var state = ObjectCache.Get<TickerState>();
+            state.timescale = rilstate.ril.timescale * Config.Int2Float;
+
+            return state;
         }
     }
 }

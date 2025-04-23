@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -8,16 +9,16 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class StageResolver : Resolver<RIL_STAGE>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_STAGE ril)
+        protected override State OnRIL(RILState<RIL_STAGE> rilstate)
         {
-            return new StageState
-            {
-                actorcnt = ril.actorcnt,
-                behaviorcnt = ril.behaviorcnt,
-                behaviorinfocnt = ril.behaviorcnt,
-                hassnapshot = ril.hassnapshot,
-                snapshotframe = ril.snapshotframe,
-            };
+            var state = ObjectCache.Get<StageState>();
+            state.actorcnt = rilstate.ril.actorcnt;
+            state.behaviorcnt = rilstate.ril.behaviorcnt;
+            state.behaviorinfocnt = rilstate.ril.behaviorinfocnt;
+            state.hassnapshot = rilstate.ril.hassnapshot;
+            state.snapshotframe = rilstate.ril.snapshotframe;
+
+            return state;
         }
     }
 }

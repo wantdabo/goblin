@@ -5,14 +5,17 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     /// <summary>
     /// 驱动状态
     /// </summary>
-    public struct TickerState : IState
+    public class TickerState : State
     {
-        public StateType type => StateType.Ticker;
-        public ulong actor { get; set; }
-        public uint frame { get; set; }
+        public override StateType type => StateType.Ticker;
         /// <summary>
         /// 时间缩放
         /// </summary>
         public float timescale { get; set; }
+        
+        protected override void OnReset()
+        {
+            timescale = 1.0f;
+        }
     }
 }

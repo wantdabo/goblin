@@ -36,18 +36,16 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             if (e.rilstate is not RILState<T> rilstate) return;
             
-            var state = OnRIL(e.rilstate, rilstate.ril);
-            if (RIL_DEFINE.TYPE_RENDER == e.rilstate.type)
-            {
-                state.actor = e.rilstate.actor;
-                state.frame = e.rilstate.frame;
-                statebucket.SetState(state);
-            }
+            var state = OnRIL(rilstate);
+            state.rstype = e.rilstate.type;
+            state.actor = e.rilstate.actor;
+            state.frame = e.rilstate.frame;
+            statebucket.SetState(state);
             
             rilstate.Reset();
             ObjectCache.Set(rilstate);
         }
 
-        protected abstract IState OnRIL(RILState rilstate, T ril);
+        protected abstract State OnRIL(RILState<T> rilstate);
     }
 }

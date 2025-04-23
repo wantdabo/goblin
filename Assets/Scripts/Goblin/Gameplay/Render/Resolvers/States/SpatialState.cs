@@ -6,19 +6,18 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     /// <summary>
     /// 空间状态
     /// </summary>
-    public struct SpatialState : IState
+    public class SpatialState : State
     {
-        public StateType type => StateType.Spatial;
-        /// <summary>
-        /// ActorID
-        /// </summary>
-        public ulong actor { get; set; }
-        /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
+        public override StateType type => StateType.Spatial;
         public Vector3 position { get; set; }
         public Vector3 euler { get; set; }
         public Vector3 scale { get; set; }
+        
+        protected override void OnReset()
+        {
+            position = Vector3.zero;
+            euler = Vector3.zero;
+            scale = Vector3.one;
+        }
     }
 }

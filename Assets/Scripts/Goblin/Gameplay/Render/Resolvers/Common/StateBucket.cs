@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 
@@ -11,13 +12,13 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     public class StateBucket : Comp
     {
         public World world { get; private set; }
-        private Dictionary<ulong, Dictionary<StateType, IState>> statedict { get; set; }
+        private Dictionary<ulong, Dictionary<StateType, State>> statedict { get; set; }
         private List<Resolver> resolvers { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<StateType, IState>>>();
+            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<StateType, State>>>();
             resolvers = ObjectCache.Get<List<Resolver>>();
             Resolvers();
         }
@@ -61,8 +62,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             AddResolver<TickerResolver>();
             foreach (var resolver in resolvers) resolver.Create();
         }
-
-        public bool GetStates<T>(StateType st, out List<T> states) where T : IState, new()
+        
+        public bool GetStates<T>(StateType st, out List<T> states) where T : State, new()
         {
             states= ObjectCache.Get<List<T>>();
             foreach (var kv in statedict)
@@ -83,7 +84,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return true;
         }
 
-        public bool GetState<T>(ulong actor, StateType st, out T state) where T : IState
+        public bool GetState<T>(ulong actor, StateType st, out T state) where T : State
         {
             state = default;
             if (false == statedict.TryGetValue(actor, out var dict)) return false;
@@ -93,10 +94,25 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return true;
         }
 
-        public void SetState(IState state)
+        public void SetState(State state)
         {
-            if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<StateType, IState>>());
-            if (dict.ContainsKey(state.type)) dict.Remove(state.type);
+            if (RIL_DEFINE.TYPE_EVENT == state.rstype)
+            {
+                // TODO 抛事件
+                state.Reset();
+                ObjectCache.Set(state);
+                
+                return;
+            }
+
+            if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<StateType, State>>());
+            if (dict.TryGetValue(state.type, out var oldstate))
+            {
+                oldstate.Reset();
+                ObjectCache.Set(oldstate);
+                dict.Remove(state.type);
+            }
+
             dict.Add(state.type, state);
         }
     }

@@ -5,11 +5,9 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     /// <summary>
     /// 场景状态
     /// </summary>
-    public struct StageState : IState
+    public class StageState : State
     {
-        public StateType type => StateType.Stage;
-        public ulong actor { get; set; }
-        public uint frame { get; set; }
+        public override StateType type => StateType.Stage;
         /// <summary>
         /// Actor 数量
         /// </summary>
@@ -30,5 +28,14 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         /// 快照帧号
         /// </summary>
         public uint snapshotframe { get; set; }
+        
+        protected override void OnReset()
+        {
+            actorcnt = 0;
+            behaviorcnt = 0;
+            behaviorinfocnt = 0;
+            hassnapshot = false;
+            snapshotframe = 0;
+        }
     }
 }

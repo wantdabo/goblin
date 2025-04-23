@@ -10,18 +10,12 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class TagResolver : Resolver<RIL_TAG>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_TAG ril)
+        protected override State OnRIL(RILState<RIL_TAG> rilstate)
         {
-            if (statebucket.GetState<TagState>(rilstate.actor, StateType.Tag, out var state))
-            {
-                state.tags.Clear();
-                ObjectCache.Set(state.tags);
-            }
+            var state = ObjectCache.Get<TagState>();
+            state.tags = rilstate.ril.tags;
 
-            return new TagState
-            {
-                tags = ril.tags,
-            };
+            return state;
         }
     }
 }

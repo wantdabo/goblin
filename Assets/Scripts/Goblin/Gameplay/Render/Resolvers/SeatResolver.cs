@@ -9,18 +9,12 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class SeatResolver : Resolver<RIL_SEAT>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_SEAT ril)
+        protected override State OnRIL(RILState<RIL_SEAT> rilstate)
         {
-            if (statebucket.GetState<SeatState>(rilstate.actor, StateType.Seat, out var state))
-            {
-                state.seatdict.Clear();
-                ObjectCache.Set(state.seatdict);
-            }
-
-            return new SeatState
-            {
-                seatdict = ril.seatdict,
-            };
+            var state = ObjectCache.Get<SeatState>();
+            state.seatdict = rilstate.ril.seatdict;
+            
+            return state;
         }
     }
 }

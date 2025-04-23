@@ -3,6 +3,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
+using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Resolvers.Common;
 using Goblin.Gameplay.Render.Resolvers.States;
@@ -11,6 +12,8 @@ namespace Goblin.Gameplay.Render.Batches
 {
     public class StateMachineBatch : Batch
     {
+        private AnimationConfig animcfg { get; set; } = default;
+        
         protected override void OnTick(TickEvent e)
         {
             if (false == world.statebucket.GetStates<StateMachineState>(StateType.StateMachine, out var states)) return;
@@ -19,7 +22,7 @@ namespace Goblin.Gameplay.Render.Batches
                 world.statebucket.GetState<TagState>(state.actor, StateType.Tag, out var tagstate);
                 
                 var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.tags[TAG_DEFINE.MODEL_ID]);
-                var animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);
+                if (null == animcfg) animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);
                 if (null == animcfg) continue;
                 
                 var animinfo = animcfg.GetAnimationInfo(state.current);

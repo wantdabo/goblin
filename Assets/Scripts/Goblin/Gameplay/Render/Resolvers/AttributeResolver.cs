@@ -1,3 +1,4 @@
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -8,15 +9,15 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class AttributeResolver : Resolver<RIL_ATTRIBUTE>
     {
-        protected override IState OnRIL(RILState rilstate, RIL_ATTRIBUTE ril)
+        protected override State OnRIL(RILState<RIL_ATTRIBUTE> rilstate)
         {
-            return new AttributeState
-            {
-                hp = ril.hp,
-                maxhp = ril.maxhp,
-                movespeed = ril.movespeed,
-                attack = ril.attack,
-            };
+            var state = ObjectCache.Get<AttributeState>();
+            state.hp = rilstate.ril.hp;
+            state.maxhp = rilstate.ril.maxhp;
+            state.movespeed = rilstate.ril.movespeed;
+            state.attack = rilstate.ril.attack;
+
+            return state;
         }
     }
 }

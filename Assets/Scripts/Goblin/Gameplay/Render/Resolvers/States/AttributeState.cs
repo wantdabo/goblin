@@ -5,17 +5,10 @@ namespace Goblin.Gameplay.Render.Resolvers.States
     /// <summary>
     /// 属性状态
     /// </summary>
-    public struct AttributeState : IState
+    public class AttributeState : State
     {
-        public StateType type => StateType.Attribute;
-        /// <summary>
-        /// ActorID
-        /// </summary>
-        public ulong actor { get; set; }
-        /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
+        public override StateType type => StateType.Attribute;
+
         /// <summary>
         /// 当前生命值
         /// </summary>
@@ -32,5 +25,13 @@ namespace Goblin.Gameplay.Render.Resolvers.States
         /// 攻击力
         /// </summary>
         public uint attack { get; set; }
+        
+        protected override void OnReset()
+        {
+            hp = 0;
+            maxhp = 0;
+            movespeed = 0;
+            attack = 0;
+        }
     }
 }
