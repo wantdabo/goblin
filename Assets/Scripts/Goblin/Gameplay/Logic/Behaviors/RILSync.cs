@@ -19,16 +19,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="type">RIL 类型</param>
         /// <param name="actor">ActorID</param>
         /// <param name="ril">渲染指令</param>
-        public void Send(byte type, ulong actor, IRIL ril)
+        public void Send<T>(byte type, ulong actor, T ril) where T : IRIL
         {
+            var rilstate = ObjectCache.Get<RILState<T>>();
+            rilstate.type = type;
+            rilstate.actor = actor;
+            rilstate.frame = stage.frame;
+            rilstate.ril = ril;
+            
             // 产生渲染状态
-            stage.onril?.Invoke(new()
-            {
-                type = type,
-                frame = stage.frame,
-                actor = actor,
-                ril = ril
-            });
+            stage.onril?.Invoke(rilstate);
         }
     }
 }

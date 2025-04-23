@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 属性渲染指令
     /// </summary>
-    public class RIL_ATTRIBUTE : IRIL
+    public struct RIL_ATTRIBUTE : IRIL
     {
         public ushort id => RIL_DEFINE.ATTRIBUTE;
         
