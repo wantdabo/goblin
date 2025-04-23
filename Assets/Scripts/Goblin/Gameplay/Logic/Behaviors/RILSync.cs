@@ -24,7 +24,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var rilstate = ObjectCache.Get<RILState<T>>();
             rilstate.type = type;
             rilstate.actor = actor;
-            rilstate.frame = stage.frame;
             rilstate.ril = ril;
             
             // 产生渲染状态

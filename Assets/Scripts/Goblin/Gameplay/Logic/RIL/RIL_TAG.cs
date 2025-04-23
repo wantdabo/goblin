@@ -26,8 +26,17 @@ namespace Goblin.Gameplay.Logic.RIL
             RIL_TAG ril = (RIL_TAG)other;
             if (null == tags) return false;
             if (null == ril.tags) return false;
-
-            return tags.GetHashCode() == ril.tags.GetHashCode();
+            
+            if (tags.Count != ril.tags.Count) return false;
+            foreach (var kv in tags)
+            {
+                if (false == ril.tags.TryGetValue(kv.Key, out var value) || value != kv.Value)
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         public override string ToString()

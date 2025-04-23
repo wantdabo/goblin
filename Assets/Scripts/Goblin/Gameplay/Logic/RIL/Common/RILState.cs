@@ -13,10 +13,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// ActorID
         /// </summary>
         public ulong actor { get; set; }
-        /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
 
         /// <summary>
         /// 重置 RIL 状态
@@ -25,7 +21,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         {
             type = 0;
             actor = 0;
-            frame = 0;
         }
         
         /// <summary>

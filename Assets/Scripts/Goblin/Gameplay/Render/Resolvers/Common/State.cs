@@ -12,26 +12,16 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         public abstract StateType type { get; }
         /// <summary>
-        /// RIL 指令类型
-        /// </summary>
-        public byte rstype { get; set; }
-        /// <summary>
         /// ActorID
         /// </summary>
         public ulong actor { get; set; }
-        /// <summary>
-        /// 帧号
-        /// </summary>
-        public uint frame { get; set; }
 
         /// <summary>
         /// 重置状态
         /// </summary>
         public void Reset()
         {
-            rstype = 0;
             actor = 0;
-            frame = 0;
             OnReset();
         }
 

@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
@@ -12,6 +13,7 @@ namespace Goblin.Gameplay.Render.Resolvers
         protected override StageState OnRIL(RILState<RIL_STAGE> rilstate)
         {
             var state = ObjectCache.Get<StageState>();
+            state.frame = rilstate.ril.frame;
             state.actorcnt = rilstate.ril.actorcnt;
             state.behaviorcnt = rilstate.ril.behaviorcnt;
             state.behaviorinfocnt = rilstate.ril.behaviorinfocnt;

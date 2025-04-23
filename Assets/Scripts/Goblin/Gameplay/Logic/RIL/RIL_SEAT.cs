@@ -27,7 +27,17 @@ namespace Goblin.Gameplay.Logic.RIL
             if (null == seatdict) return false;
             if (null == ril.seatdict) return false;
             
-            return seatdict.GetHashCode() == ril.seatdict.GetHashCode();
+            if (seatdict.Count != ril.seatdict.Count) return false;
+            
+            foreach (var kv in seatdict)
+            {
+                if (false == ril.seatdict.TryGetValue(kv.Key, out var actorId) || actorId != kv.Value)
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         public override string ToString()

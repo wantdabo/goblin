@@ -9,7 +9,10 @@ namespace Goblin.Gameplay.Logic.RIL
     public struct RIL_STAGE : IRIL
     {
         public ushort id => RIL_DEFINE.STAGE;
-        
+        /// <summary>
+        /// 帧号
+        /// </summary>
+        public uint frame { get; set; }
         /// <summary>
         /// Actor 数量
         /// </summary>
@@ -41,6 +44,7 @@ namespace Goblin.Gameplay.Logic.RIL
             RIL_STAGE ril = (RIL_STAGE) other;
             
             return ril.id == id &&
+                   ril.frame == frame &&
                    ril.actorcnt == actorcnt &&
                    ril.behaviorcnt == behaviorcnt &&
                    ril.behaviorinfocnt == behaviorinfocnt &&
@@ -50,7 +54,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public override string ToString()
         {
-            return $"RIL_SYNOPSIS: actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
+            return $"RIL_SYNOPSIS: frame={frame}, actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
         }
     }
 }

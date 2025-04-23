@@ -167,10 +167,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return result as T;
         }
 
-        public void SetState<T>(T state) where T : State
+        public void SetState<T>(byte riltype, T state) where T : State
         {
             // 事件状态
-            if (RIL_DEFINE.TYPE_EVENT == state.rstype)
+            if (RIL_DEFINE.TYPE_EVENT == riltype)
             {
                 eventor.Tell(new EStateEvent { state = state });
                 eventor.Tell(new EStateEvent<T> { state = state });
@@ -186,12 +186,20 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<Type, State>>());
             if (dict.TryGetValue(type, out var oldstate))
             {
+                if (state.Equals(oldstate))
+                {
+                    state.Reset();
+                    ObjectCache.Set(state);
+                    
+                    return;
+                }
+                
                 oldstate.Reset();
                 ObjectCache.Set(oldstate);
                 dict.Remove(type);
             }
-            dict.Add(type, state);
             
+            dict.Add(type, state);
             eventor.Tell(new RStateEvent { state = state });
             eventor.Tell(new RStateEvent<T> { state = state });
         }

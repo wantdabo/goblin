@@ -18,6 +18,7 @@ namespace Goblin.Gameplay.Logic.Translators
             foreach (var behaviors in info.behaviorinfos.Values) behaviorinfocnt += (uint)behaviors.Count;
             RIL_STAGE ril = new RIL_STAGE
             {
+                frame = stage.frame,
                 actorcnt = (uint)info.actors.Count,
                 behaviorcnt = behaviorcnt,
                 behaviorinfocnt = behaviorinfocnt,
