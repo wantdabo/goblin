@@ -9,8 +9,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class SeatResolver : Resolver<RIL_SEAT>
     {
-        public override ushort id => RIL_DEFINE.SEAT;
-
         protected override IState OnRIL(RILState rilstate, RIL_SEAT ril)
         {
             if (statebucket.GetState<SeatState>(rilstate.actor, StateType.Seat, out var state))

@@ -8,8 +8,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class AttributeResolver : Resolver<RIL_ATTRIBUTE>
     {
-        public override ushort id => RIL_DEFINE.ATTRIBUTE;
-        
         protected override IState OnRIL(RILState rilstate, RIL_ATTRIBUTE ril)
         {
             return new AttributeState

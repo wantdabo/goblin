@@ -20,8 +20,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
 
     public abstract class Resolver<T> : Resolver where T : IRIL
     {
-        public abstract ushort id { get; }
-
         protected override void OnCreate()
         {
             base.OnCreate();

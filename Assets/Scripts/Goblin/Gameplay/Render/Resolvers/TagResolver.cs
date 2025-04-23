@@ -10,8 +10,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class TagResolver : Resolver<RIL_TAG>
     {
-        public override ushort id => RIL_DEFINE.TAG;
-        
         protected override IState OnRIL(RILState rilstate, RIL_TAG ril)
         {
             if (statebucket.GetState<TagState>(rilstate.actor, StateType.Tag, out var state))

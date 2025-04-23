@@ -8,8 +8,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class StageResolver : Resolver<RIL_STAGE>
     {
-        public override ushort id => RIL_DEFINE.STAGE;
-        
         protected override IState OnRIL(RILState rilstate, RIL_STAGE ril)
         {
             return new StageState

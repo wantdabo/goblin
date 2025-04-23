@@ -9,8 +9,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class TickerResolver : Resolver<RIL_TICKER>
     {
-        public override ushort id => RIL_DEFINE.TICKER;
-
         protected override IState OnRIL(RILState rilstate, RIL_TICKER ril)
         {
             return new TickerState

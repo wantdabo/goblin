@@ -8,8 +8,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class StateMachineResolver : Resolver<RIL_STATE_MACHINE>
     {
-        public override ushort id => RIL_DEFINE.STATE_MACHINE;
-        
         protected override IState OnRIL(RILState rilstate, RIL_STATE_MACHINE ril)
         {
             return new StateMachineState

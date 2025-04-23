@@ -9,8 +9,6 @@ namespace Goblin.Gameplay.Render.Resolvers
 {
     public class SpatialResolver : Resolver<RIL_SPATIAL>
     {
-        public override ushort id => RIL_DEFINE.SPATIAL;
-
         protected override IState OnRIL(RILState rilstate, RIL_SPATIAL ril)
         {
             return new SpatialState
