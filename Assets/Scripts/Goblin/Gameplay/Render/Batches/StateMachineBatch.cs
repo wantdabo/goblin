@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Render.Batches
             {
                 world.statebucket.SeekState<TagState>(state.actor, out var tagstate);
                 
-                var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.tags[TAG_DEFINE.MODEL_ID]);
+                var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.tags[TAG_DEFINE.MODEL]);
                 if (null == animcfg) animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);
                 if (null == animcfg) continue;
                 

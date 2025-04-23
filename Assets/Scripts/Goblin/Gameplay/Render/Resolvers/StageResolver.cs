@@ -7,9 +7,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class StageResolver : Resolver<RIL_STAGE>
+    public class StageResolver : Resolver<RIL_STAGE, StageState>
     {
-        protected override State OnRIL(RILState<RIL_STAGE> rilstate)
+        protected override StageState OnRIL(RILState<RIL_STAGE> rilstate)
         {
             var state = ObjectCache.Get<StageState>();
             state.actorcnt = rilstate.ril.actorcnt;

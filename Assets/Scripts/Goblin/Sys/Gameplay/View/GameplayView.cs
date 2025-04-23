@@ -25,14 +25,14 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
-            engine.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
+            engine.ticker.eventor.Listen<FixedLateTickEvent>(OnFixedLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
-            engine.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
+            engine.ticker.eventor.UnListen<FixedLateTickEvent>(OnFixedLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
         }
 
@@ -91,7 +91,7 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
-        private void OnLateTick(LateTickEvent e)
+        private void OnFixedLateTick(FixedLateTickEvent e)
         {
             if (null == synopsisText) return;
             if (null == engine.proxy.gameplay.director) return;
@@ -107,7 +107,7 @@ namespace Goblin.Sys.Gameplay.View
             if (state.hassnapshot) content += $"快照帧号 : {state.snapshotframe}";
             
             synopsisText.text = content;
-
+            
             var localdirector = (engine.proxy.gameplay.director as LocalDirector);
             if (null == localdirector) return;
             if (false == state.hassnapshot) return;

@@ -6,21 +6,74 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Enchants;
 
 namespace Goblin.Gameplay.Render.Resolvers.Common
 {
+    /// <summary>
+    /// Render-State/渲染状态的事件
+    /// </summary>
+    public struct RStateEvent : IEvent
+    {
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public State state { get; set; }
+    }
+    
+    /// <summary>
+    /// Event-State/事件状态的事件
+    /// </summary>
+    public struct EStateEvent : IEvent
+    {
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public State state { get; set; }
+    }
+
+    /// <summary>
+    /// Render-State/渲染状态的事件
+    /// </summary>
+    /// <typeparam name="T">State 类型</typeparam>
+    public struct RStateEvent<T> : IEvent where T : State
+    {
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public T state { get; set; }
+    }
+    
+    /// <summary>
+    /// Event-State/事件状态的事件
+    /// </summary>
+    /// <typeparam name="T">State 类型</typeparam>
+    public struct EStateEvent<T> : IEvent where T : State
+    {
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public T state { get; set; }
+    }
+
+    /// <summary>
+    /// RIL 状态桶, 存储着渲染层的所有状态
+    /// </summary>
     public class StateBucket : Comp
     {
         public World world { get; private set; }
+        public Eventor eventor { get; private set; }
         private Dictionary<ulong, Dictionary<Type, State>> statedict { get; set; }
-        private List<Resolver> resolvers { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
+            eventor = AddComp<Eventor>();
+            eventor.Create();
+            
             statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, State>>>();
-            resolvers = ObjectCache.Get<List<Resolver>>();
             Resolvers();
+            Enchants();
         }
 
         protected override void OnDestroy()
@@ -33,9 +86,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             }
             statedict.Clear();
             ObjectCache.Set(statedict);
-            
-            resolvers.Clear();
-            ObjectCache.Set(resolvers);
         }
 
         public StateBucket Initialize(World world)
@@ -50,7 +100,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             void AddResolver<T>() where T : Resolver, new()
             {
                 var resolver = AddComp<T>().Initialize(this);
-                resolvers.Add(resolver);
+                resolver.Create();
             }
             
             AddResolver<AttributeResolver>();
@@ -60,9 +110,20 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             AddResolver<StateMachineResolver>();
             AddResolver<TagResolver>();
             AddResolver<TickerResolver>();
-            foreach (var resolver in resolvers) resolver.Create();
         }
-        
+
+        private void Enchants()
+        {
+            void AddEnchant<T>() where T : AgentEnchant, new()
+            {
+                var enchant = AddComp<T>().Initialize(this);
+                enchant.Create();
+            }
+            
+            AddEnchant<NodeEnchant>();
+            AddEnchant<ModelEnchant>();
+        }
+
         public bool SeekStates<T>(out List<T> states) where T : State, new()
         {
             states = GetStates<T>();
@@ -106,17 +167,21 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return result as T;
         }
 
-        public void SetState(State state)
+        public void SetState<T>(T state) where T : State
         {
+            // 事件状态
             if (RIL_DEFINE.TYPE_EVENT == state.rstype)
             {
-                // TODO 抛事件
+                eventor.Tell(new EStateEvent { state = state });
+                eventor.Tell(new EStateEvent<T> { state = state });
+                
                 state.Reset();
                 ObjectCache.Set(state);
                 
                 return;
             }
 
+            // 渲染状态
             var type = state.GetType();
             if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<Type, State>>());
             if (dict.TryGetValue(type, out var oldstate))
@@ -125,8 +190,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 ObjectCache.Set(oldstate);
                 dict.Remove(type);
             }
-
             dict.Add(type, state);
+            
+            eventor.Tell(new RStateEvent { state = state });
+            eventor.Tell(new RStateEvent<T> { state = state });
         }
     }
 }

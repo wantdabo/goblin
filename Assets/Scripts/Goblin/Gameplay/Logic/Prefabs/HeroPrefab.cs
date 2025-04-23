@@ -58,8 +58,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
 
             if (actor.SeekBehavior(out Tag tag))
             {
-                tag.Set(TAG_DEFINE.HERO_ID, info.hero);
-                tag.Set(TAG_DEFINE.MODEL_ID, info.model);
+                tag.Set(TAG_DEFINE.HERO, info.hero);
+                tag.Set(TAG_DEFINE.MODEL, info.model);
             }
         }
     }

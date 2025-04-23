@@ -8,9 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class TickerResolver : Resolver<RIL_TICKER>
+    public class TickerResolver : Resolver<RIL_TICKER, TickerState>
     {
-        protected override State OnRIL(RILState<RIL_TICKER> rilstate)
+        protected override TickerState OnRIL(RILState<RIL_TICKER> rilstate)
         {
             var state = ObjectCache.Get<TickerState>();
             state.timescale = rilstate.ril.timescale * Config.Int2Float;

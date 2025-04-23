@@ -142,8 +142,6 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         private void Batches()
         {
-            AddComp<TagBatch>().Initialize(this).Create();
-            AddComp<SpatialBatch>().Initialize(this).Create();
             AddComp<StateMachineBatch>().Initialize(this).Create();
         }
         

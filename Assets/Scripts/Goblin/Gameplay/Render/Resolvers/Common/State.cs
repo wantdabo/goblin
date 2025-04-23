@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.RIL.Common;
 namespace Goblin.Gameplay.Render.Resolvers.Common
 {
     /// <summary>
-    /// 状态接口
+    /// 状态
     /// </summary>
     public abstract class State
     {

@@ -8,9 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class SpatialResolver : Resolver<RIL_SPATIAL>
+    public class SpatialResolver : Resolver<RIL_SPATIAL, SpatialState>
     {
-        protected override State OnRIL(RILState<RIL_SPATIAL> rilstate)
+        protected override SpatialState OnRIL(RILState<RIL_SPATIAL> rilstate)
         {
             var state = ObjectCache.Get<SpatialState>();
             state.position = rilstate.ril.position.ToVector3();

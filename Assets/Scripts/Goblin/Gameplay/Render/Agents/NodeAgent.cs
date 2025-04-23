@@ -2,6 +2,7 @@ using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -26,9 +27,6 @@ namespace Goblin.Gameplay.Render.Agents
         /// GameObject
         /// </summary>
         public GameObject go { get; private set; }
-        public Vector3 targetPosition { get; set; }
-        public Vector3 targetEuler { get; set; }
-        public Vector3 targetScale { get; set; }
         
         protected override void OnReady()
         {
@@ -47,29 +45,29 @@ namespace Goblin.Gameplay.Render.Agents
 
             go.SetActive(false);
             ObjectCache.Set(go, "NODE_GO_KEY");
-            
-            targetPosition = Vector3.zero;
-            targetEuler = Vector3.zero;
-            targetScale = Vector3.one;
         }
 
         protected override void OnArrive()
         {
             base.OnArrive();
-            go.transform.position = targetPosition;
-            go.transform.rotation = Quaternion.Euler(targetEuler);
-            go.transform.localScale = targetScale;
+            if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return;
+            go.transform.position = state.position;
+            go.transform.rotation = Quaternion.Euler(state.euler);
+            go.transform.localScale = state.scale;
         }
 
         protected override void OnChase(float tick, float timescale)
         {
             base.OnChase(tick, timescale);
+            if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return;
+            
             var t = tick / GAME_DEFINE.LOGIC_TICK.AsFloat();
-            go.transform.position = Vector3.Lerp(go.transform.position, targetPosition, t);
+            go.transform.position = Vector3.Lerp(go.transform.position, state.position, t);
             
             var lastrot = Quaternion.Euler(go.transform.eulerAngles);
-            var targetrot = Quaternion.Euler(targetEuler);
+            var targetrot = Quaternion.Euler(state.euler);
             go.transform.rotation = Quaternion.Slerp(lastrot, targetrot, t);
+            go.transform.localScale = state.scale;
         }
     }
 }

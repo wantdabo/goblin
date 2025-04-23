@@ -10,12 +10,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// </summary>
         public const ushort ACTOR_TYPE = 1;
         /// <summary>
-        /// 英雄 ID
+        /// 英雄
         /// </summary>
-        public const ushort HERO_ID = 2;
+        public const ushort HERO = 2;
         /// <summary>
-        /// 模型 ID
+        /// 模型
         /// </summary>
-        public const ushort MODEL_ID = 3;
+        public const ushort MODEL = 3;
     }
 }

@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         }
     }
 
-    public abstract class Resolver<T> : Resolver where T : IRIL
+    public abstract class Resolver<T, E> : Resolver where T : IRIL where E : State
     {
         protected override void OnCreate()
         {
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             if (e.rilstate is not RILState<T> rilstate) return;
             
-            var state = OnRIL(rilstate);
+            E state = OnRIL(rilstate);
             state.rstype = e.rilstate.type;
             state.actor = e.rilstate.actor;
             state.frame = e.rilstate.frame;
@@ -46,6 +46,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             ObjectCache.Set(rilstate);
         }
 
-        protected abstract State OnRIL(RILState<T> rilstate);
+        protected abstract E OnRIL(RILState<T> rilstate);
     }
 }

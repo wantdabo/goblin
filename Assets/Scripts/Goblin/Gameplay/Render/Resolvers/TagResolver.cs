@@ -8,9 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
-    public class TagResolver : Resolver<RIL_TAG>
+    public class TagResolver : Resolver<RIL_TAG, TagState>
     {
-        protected override State OnRIL(RILState<RIL_TAG> rilstate)
+        protected override TagState OnRIL(RILState<RIL_TAG> rilstate)
         {
             var state = ObjectCache.Get<TagState>();
             state.tags = rilstate.ril.tags;

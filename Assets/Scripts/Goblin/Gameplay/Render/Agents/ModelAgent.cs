@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -36,12 +39,15 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
-            this.id = 0;
-            this.res = null;
-            this.go = null;
+            RecycleModel();
         }
 
         protected override void OnReset()
+        {
+            RecycleModel();
+        }
+        
+        private void RecycleModel()
         {
             if (null != go)
             {
@@ -51,21 +57,33 @@ namespace Goblin.Gameplay.Render.Agents
             this.id = 0;
             this.res = null;
         }
-    
+
+        protected override void OnChase(float tick, float timescale)
+        {
+            base.OnChase(tick, timescale);
+            Load();
+        }
+
         /// <summary>
         /// 加载模型
         /// </summary>
-        /// <param name="id">模型 ID</param>
-        public void Load(int id)
+        public void Load()
         {
+            if (false == world.statebucket.SeekState<TagState>(actor, out var state)) return;
+            if (false == state.tags.TryGetValue(TAG_DEFINE.MODEL, out var id))
+            {
+                RecycleModel();
+                return;
+            }
             if (this.id == id) return;
+            
+            RecycleModel();
             this.id = id;
             var modelinfo = world.engine.cfg.location.ModelInfos.Get(this.id);
             this.res = modelinfo.Res;
             
             go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{this.res}");
             if (null == go) go = world.engine.gameres.location.LoadModelSync(this.res);
-            
             var node = world.EnsureAgent<NodeAgent>(actor);
             go.transform.SetParent(node.go.transform, false);
             go.transform.localPosition = Vector3.zero;
