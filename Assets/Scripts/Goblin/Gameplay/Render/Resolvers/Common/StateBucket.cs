@@ -12,13 +12,13 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     public class StateBucket : Comp
     {
         public World world { get; private set; }
-        private Dictionary<ulong, Dictionary<StateType, State>> statedict { get; set; }
+        private Dictionary<ulong, Dictionary<Type, State>> statedict { get; set; }
         private List<Resolver> resolvers { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<StateType, State>>>();
+            statedict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, State>>>();
             resolvers = ObjectCache.Get<List<Resolver>>();
             Resolvers();
         }
@@ -63,13 +63,14 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             foreach (var resolver in resolvers) resolver.Create();
         }
         
-        public bool GetStates<T>(StateType st, out List<T> states) where T : State, new()
+        public bool GetStates<T>(out List<T> states) where T : State, new()
         {
+            var type = typeof(T);
             states= ObjectCache.Get<List<T>>();
             foreach (var kv in statedict)
             {
-                if (false == kv.Value.ContainsKey(st)) continue;
-                if (false == kv.Value.TryGetValue(st, out var state)) continue;
+                if (false == kv.Value.ContainsKey(type)) continue;
+                if (false == kv.Value.TryGetValue(type, out var state)) continue;
                 states.Add((T)state);
             }
 
@@ -84,11 +85,11 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return true;
         }
 
-        public bool GetState<T>(ulong actor, StateType st, out T state) where T : State
+        public bool GetState<T>(ulong actor, out T state) where T : State
         {
             state = default;
             if (false == statedict.TryGetValue(actor, out var dict)) return false;
-            if (false == dict.TryGetValue(st, out var result)) return false;
+            if (false == dict.TryGetValue(typeof(T), out var result)) return false;
             state = (T)result;
             
             return true;
@@ -105,15 +106,16 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 return;
             }
 
-            if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<StateType, State>>());
-            if (dict.TryGetValue(state.type, out var oldstate))
+            var type = state.GetType();
+            if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<Type, State>>());
+            if (dict.TryGetValue(type, out var oldstate))
             {
                 oldstate.Reset();
                 ObjectCache.Set(oldstate);
-                dict.Remove(state.type);
+                dict.Remove(type);
             }
 
-            dict.Add(state.type, state);
+            dict.Add(type, state);
         }
     }
 }

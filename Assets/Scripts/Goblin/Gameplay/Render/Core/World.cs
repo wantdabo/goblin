@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Render.Core
     }
 
     /// <summary>
-    /// 世界/渲染层, 负责容纳所有的渲染层的单位
+    /// 世界/渲染, 负责容纳所有的渲染层的单位
     /// </summary>
     public sealed class World : Comp
     {
@@ -41,15 +41,15 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// 座位 ID
         /// </summary>
-        public ulong seat { get; private set; } = 0;
+        public ulong selfseat { get; private set; } = 0;
         /// <summary>
         /// 自我
         /// </summary>
         public ulong self {
             get
             {
-                if (false == statebucket.GetState<SeatState>(sa, StateType.Seat, out var state)) return 0;
-                if (false == state.seatdict.TryGetValue(seat, out var actor)) return 0;
+                if (false == statebucket.GetState<SeatState>(sa, out var state)) return 0;
+                if (false == state.seatdict.TryGetValue(selfseat, out var actor)) return 0;
                 
                 return actor;
             }
@@ -98,13 +98,16 @@ namespace Goblin.Gameplay.Render.Core
             eyes.Initialize(this).Create();
 
             Batches();
-
+            
             agentdict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Agent>>>();
+            
+            ticker.eventor.Listen<TickEvent>(OnTick);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            // 回收所有 Agents
             foreach (var kv in agentdict)
             {
                 foreach (var agent in kv.Value)
@@ -118,15 +121,25 @@ namespace Goblin.Gameplay.Render.Core
             }
             agentdict.Clear();
             ObjectCache.Set(agentdict);
+            
+            ticker.eventor.UnListen<TickEvent>(OnTick);
         }
         
-        public World Initialize(ulong seat)
+        /// <summary>
+        /// 初始化世界
+        /// </summary>
+        /// <param name="selfseat">我的座位号</param>
+        /// <returns>世界</returns>
+        public World Initialize(ulong selfseat)
         {
-            this.seat = seat;
+            this.selfseat = selfseat;
             
             return this;
         }
         
+        /// <summary>
+        /// 创建批处理
+        /// </summary>
         private void Batches()
         {
             AddComp<StageBatch>().Initialize(this).Create();
@@ -135,6 +148,12 @@ namespace Goblin.Gameplay.Render.Core
             AddComp<StateMachineBatch>().Initialize(this).Create();
         }
         
+        /// <summary>
+        /// 获取 Agent, 如果不存在则创建
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <typeparam name="T">Agent 类型</typeparam>
+        /// <returns>Agent</returns>
         public T EnsureAgent<T>(ulong actor) where T : Agent, new()
         {
             var agent = GetAgent<T>(actor);
@@ -143,6 +162,12 @@ namespace Goblin.Gameplay.Render.Core
             return agent;
         }
 
+        /// <summary>
+        /// 获取 Agent, 如果不存在则返回默认值
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <typeparam name="T">Agent 类型</typeparam>
+        /// <returns>Agent</returns>
         public T GetAgent<T>(ulong actor) where T : Agent
         {
             if (false == agentdict.TryGetValue(actor, out var agents)) return default;
@@ -151,28 +176,11 @@ namespace Goblin.Gameplay.Render.Core
             return agent as T;
         }
 
-        public void RmvAgents(ulong actor)
-        {
-            if (false == agentdict.TryGetValue(actor, out var agents)) return;
-            
-            var list = ObjectCache.Get<List<Agent>>();
-            foreach (var kv in agents)
-            {
-                list.Add(kv.Value);
-            }
-            foreach (var agent in list)
-            {
-                RmvAgent(agent);
-            }
-            list.Clear();
-            ObjectCache.Set(list);
-            
-            agentdict.Remove(actor);
-            agents.Clear();
-            ObjectCache.Set(agents);
-        }
-
-        public void RmvAgent(Agent agent)
+        /// <summary>
+        /// 移除 Agent
+        /// </summary>
+        /// <param name="agent">Agent</param>
+        private void RmvAgent(Agent agent)
         {
             if (false == agentdict.TryGetValue(agent.actor, out var agents)) return;
 
@@ -181,7 +189,14 @@ namespace Goblin.Gameplay.Render.Core
             ObjectCache.Set(agent);
         }
 
-        public T AddAgent<T>(ulong actor) where T : Agent, new()
+        /// <summary>
+        /// 添加 Agent
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <typeparam name="T">Agent 类型</typeparam>
+        /// <returns>Agent</returns>
+        /// <exception cref="Exception">Agent 已存在</exception>
+        private T AddAgent<T>(ulong actor) where T : Agent, new()
         {
             if (false == agentdict.TryGetValue(actor, out var agents))
             {
@@ -195,6 +210,20 @@ namespace Goblin.Gameplay.Render.Core
             agents.Add(typeof(T), agent);
 
             return agent as T;
+        }
+
+        private void OnTick(TickEvent e)
+        {
+            foreach (var kv in agentdict)
+            {
+                float timescale = 1f;
+                if (statebucket.GetState<TickerState>(kv.Key, out var state)) timescale = state.timescale;
+
+                foreach (var agent in kv.Value.Values)
+                {
+                    agent.Chase(e.tick, timescale);
+                }
+            }
         }
     }
 }

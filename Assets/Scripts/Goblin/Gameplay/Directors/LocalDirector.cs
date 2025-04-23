@@ -104,7 +104,7 @@ namespace Goblin.Gameplay.Directors
             if (StageState.Ticking != stage.state) return;
             
             var joystick = world.input.GetInput(InputType.Joystick);
-            stage.SetInput(world.seat, InputType.Joystick, joystick.press, joystick.dire);
+            stage.SetInput(world.selfseat, InputType.Joystick, joystick.press, joystick.dire);
             
             stage.Step();
         }

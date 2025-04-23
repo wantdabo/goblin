@@ -3,8 +3,14 @@ using Goblin.Core;
 
 namespace Goblin.Gameplay.Render.Core
 {
+    /// <summary>
+    /// 批处理
+    /// </summary>
     public abstract class Batch : Comp
     {
+        /// <summary>
+        /// 世界
+        /// </summary>
         public World world { get; private set; }
 
         protected override void OnCreate()
@@ -21,6 +27,11 @@ namespace Goblin.Gameplay.Render.Core
             world.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
         }
 
+        /// <summary>
+        /// 初始化批处理
+        /// </summary>
+        /// <param name="world">世界</param>
+        /// <returns>批处理</returns>
         public Batch Initialize(World world)
         {
             this.world = world;

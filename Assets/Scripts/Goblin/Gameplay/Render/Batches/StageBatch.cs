@@ -17,7 +17,7 @@ namespace Goblin.Gameplay.Render.Batches
     {
         protected override void OnTick(TickEvent e)
         {
-            if (false == world.statebucket.GetStates<StageState>(StateType.Stage, out var states)) return;
+            if (false == world.statebucket.GetStates<StageState>(out var states)) return;
             foreach (var state in states)
             {
                 world.engine.proxy.gameplay.eventor.Tell(new StageEvent

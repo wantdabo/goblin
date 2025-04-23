@@ -14,14 +14,13 @@ namespace Goblin.Gameplay.Render.Batches
     {
         protected override void OnTick(TickEvent e)
         {
-            if (false == world.statebucket.GetStates<SpatialState>(StateType.Spatial, out var states)) return;
+            if (false == world.statebucket.GetStates<SpatialState>(out var states)) return;
             foreach (var state in states)
             {
                 var node = world.EnsureAgent<NodeAgent>(state.actor);
                 node.targetPosition = state.position;
                 node.targetEuler = state.euler;
                 node.targetScale = state.scale;
-                node.Chase();
             }
             
             states.Clear();

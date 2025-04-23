@@ -16,10 +16,10 @@ namespace Goblin.Gameplay.Render.Batches
         
         protected override void OnTick(TickEvent e)
         {
-            if (false == world.statebucket.GetStates<StateMachineState>(StateType.StateMachine, out var states)) return;
+            if (false == world.statebucket.GetStates<StateMachineState>(out var states)) return;
             foreach (var state in states)
             {
-                world.statebucket.GetState<TagState>(state.actor, StateType.Tag, out var tagstate);
+                world.statebucket.GetState<TagState>(state.actor, out var tagstate);
                 
                 var modelinfo = engine.cfg.location.ModelInfos.Get(tagstate.tags[TAG_DEFINE.MODEL_ID]);
                 if (null == animcfg) animcfg = engine.gameres.location.LoadModelAnimationConfigSync(modelinfo.Animation);

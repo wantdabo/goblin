@@ -22,14 +22,12 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
-            world.ticker.eventor.Listen<TickEvent>(OnTick);
             animancer = null;
             animstate = null;
         }
 
         protected override void OnReset()
         {
-            world.ticker.eventor.UnListen<TickEvent>(OnTick);
             animancer = null;
             animstate = null;
         }
@@ -41,8 +39,16 @@ namespace Goblin.Gameplay.Render.Agents
             this.mixduration = mixduration;
         }
 
-        private void OnTick(TickEvent e)
+        protected override void OnArrive()
         {
+            base.OnArrive();
+            if (null == animstate) return;
+            animstate.Time = tarduration;
+        }
+
+        protected override void OnChase(float tick, float timescale)
+        {
+            base.OnChase(tick, timescale);
             if (null == animancer)
             {
                 var model = world.GetAgent<ModelAgent>(actor);
@@ -51,11 +57,10 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             if (null == animancer) return;
-            world.statebucket.GetState<TickerState>(actor, StateType.Ticker, out var state);
-            animstate = animancer.TryPlay(animname, mixduration * (1 / state.timescale));
+            animstate = animancer.TryPlay(animname, mixduration * (1 / timescale));
             if (null == animstate) return;
             animstate.Speed = 0;
-            animstate.Time = Mathf.Clamp(animstate.Time + (e.tick * state.timescale), 0, tarduration);
+            animstate.Time = Mathf.Clamp(animstate.Time + tick * timescale, 0, tarduration);
         }
     }
 }
