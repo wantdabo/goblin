@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Render.Batches
     {
         protected override void OnTick(TickEvent e)
         {
-            if (false == world.statebucket.GetStates<SpatialState>(out var states)) return;
+            if (false == world.statebucket.SeekStates<SpatialState>(out var states)) return;
             foreach (var state in states)
             {
                 var node = world.EnsureAgent<NodeAgent>(state.actor);

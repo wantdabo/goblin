@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Render.Batches
     {
         protected override void OnTick(TickEvent e)
         {
-            if (false == world.statebucket.GetStates<TagState>(out var states)) return;
+            if (false == world.statebucket.SeekStates<TagState>(out var states)) return;
             foreach (var state in states)
             {
                 if (false == state.tags.TryGetValue(TAG_DEFINE.MODEL_ID, out var m))continue;

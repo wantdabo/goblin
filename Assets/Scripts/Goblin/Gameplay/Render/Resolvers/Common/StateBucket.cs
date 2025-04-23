@@ -63,10 +63,24 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             foreach (var resolver in resolvers) resolver.Create();
         }
         
-        public bool GetStates<T>(out List<T> states) where T : State, new()
+        public bool SeekStates<T>(out List<T> states) where T : State, new()
+        {
+            states = GetStates<T>();
+            
+            return null != states && 0 != states.Count;
+        }
+
+        public bool SeekState<T>(ulong actor, out T state) where T : State
+        {
+            state = GetState<T>(actor);
+            
+            return null != state;
+        }
+
+        public List<T> GetStates<T>() where T : State
         {
             var type = typeof(T);
-            states= ObjectCache.Get<List<T>>();
+            var states = ObjectCache.Get<List<T>>();
             foreach (var kv in statedict)
             {
                 if (false == kv.Value.ContainsKey(type)) continue;
@@ -79,20 +93,17 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             {
                 ObjectCache.Set(states);
 
-                return false;
+                return default;
             }
 
-            return true;
+            return states;
         }
 
-        public bool GetState<T>(ulong actor, out T state) where T : State
+        public T GetState<T>(ulong actor) where T : State
         {
-            state = default;
-            if (false == statedict.TryGetValue(actor, out var dict)) return false;
-            if (false == dict.TryGetValue(typeof(T), out var result)) return false;
-            state = (T)result;
-            
-            return true;
+            if (false == statedict.TryGetValue(actor, out var dict)) return default;
+            if (false == dict.TryGetValue(typeof(T), out var result)) return default;
+            return result as T;
         }
 
         public void SetState(State state)

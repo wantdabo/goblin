@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                if (false == statebucket.GetState<SeatState>(sa, out var state)) return 0;
+                if (false == statebucket.SeekState<SeatState>(sa, out var state)) return 0;
                 if (false == state.seatdict.TryGetValue(selfseat, out var actor)) return 0;
                 
                 return actor;
@@ -142,7 +142,6 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         private void Batches()
         {
-            AddComp<StageBatch>().Initialize(this).Create();
             AddComp<TagBatch>().Initialize(this).Create();
             AddComp<SpatialBatch>().Initialize(this).Create();
             AddComp<StateMachineBatch>().Initialize(this).Create();
@@ -217,7 +216,7 @@ namespace Goblin.Gameplay.Render.Core
             foreach (var kv in agentdict)
             {
                 float timescale = 1f;
-                if (statebucket.GetState<TickerState>(kv.Key, out var state)) timescale = state.timescale;
+                if (statebucket.SeekState<TickerState>(kv.Key, out var state)) timescale = state.timescale;
 
                 foreach (var agent in kv.Value.Values)
                 {

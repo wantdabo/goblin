@@ -1,6 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Directors;
 using Goblin.Gameplay.Render.Batches;
+using Goblin.Gameplay.Render.Resolvers.States;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
@@ -24,14 +25,14 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
-            engine.proxy.gameplay.eventor.Listen<StageEvent>(OnStage);
+            engine.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
-            engine.proxy.gameplay.eventor.UnListen<StageEvent>(OnStage);
+            engine.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
         }
 
@@ -90,24 +91,27 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
-        private void OnStage(StageEvent e)
+        private void OnLateTick(LateTickEvent e)
         {
             if (null == synopsisText) return;
-
+            if (null == engine.proxy.gameplay.director) return;
+            var state = engine.proxy.gameplay.director.world.statebucket.GetState<StageState>(engine.proxy.gameplay.director.world.sa);
+            if (null == state) return;
+            
             var content =
-                $"帧号 : {e.state.frame}\n" +
-                $"Actor : {e.state.actorcnt}\n" +
-                $"Behavior : {e.state.behaviorcnt}\n" +
-                $"BehaviorInfo : {e.state.behaviorinfocnt}\n";
-            content += "存在快照 : " + (e.state.hassnapshot ? "是\n" : "否\n");
-            if (e.state.hassnapshot) content += $"快照帧号 : {e.state.snapshotframe}";
+                $"帧号 : {state.frame}\n" +
+                $"Actor : {state.actorcnt}\n" +
+                $"Behavior : {state.behaviorcnt}\n" +
+                $"BehaviorInfo : {state.behaviorinfocnt}\n";
+            content += "存在快照 : " + (state.hassnapshot ? "是\n" : "否\n");
+            if (state.hassnapshot) content += $"快照帧号 : {state.snapshotframe}";
             
             synopsisText.text = content;
 
             var localdirector = (engine.proxy.gameplay.director as LocalDirector);
             if (null == localdirector) return;
-            if (false == e.state.hassnapshot) return;
-            if (e.state.frame - e.state.snapshotframe > 1) return;
+            if (false == state.hassnapshot) return;
+            if (state.frame - state.snapshotframe > 1) return;
             gameSpeedSlider.value = localdirector.timescale;
             gameSpeedDescText.text = localdirector.timescale.ToString();
         }
