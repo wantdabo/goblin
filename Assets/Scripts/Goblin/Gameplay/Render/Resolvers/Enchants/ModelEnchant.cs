@@ -13,6 +13,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             {
                 statebucket.world.EnsureAgent<ModelAgent>(state.actor);
             }
+            else
+            {
+                var agent = statebucket.world.EnsureAgent<ModelAgent>(state.actor);
+                if (null == agent) return;
+                statebucket.world.RmvAgent(agent);
+            }
         }
     }
 }

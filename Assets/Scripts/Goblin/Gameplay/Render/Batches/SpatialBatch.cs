@@ -51,20 +51,24 @@ namespace Goblin.Gameplay.Render.Batches
             base.OnTick(e);
             if (false == world.statebucket.SeekStates<SpatialState>(out var states)) return;
             int index = 0;
+            int statecnt = states.Count;
             foreach (var state in states)
             {
                 var node = world.GetAgent<NodeAgent>(state.actor);
-                if (null == node || ChaseStatus.Arrived == node.status) continue;
                 
-                transforms[index] = node.go.transform;
-                positions[index] = node.go.transform.position;
-                tarpositions[index] = state.position;
-                rotations[index] = Quaternion.Euler(node.go.transform.eulerAngles);
-                tarrotations[index] = Quaternion.Euler(state.euler);
-                tarscales[index] = state.scale;
-                index++;
-
-                if (transforms.Length == index || states.Count == index)
+                if (null == node || ChaseStatus.Arrived == node.status) statecnt--;
+                else
+                {
+                    transforms[index] = node.go.transform;
+                    positions[index] = node.go.transform.position;
+                    tarpositions[index] = state.position;
+                    rotations[index] = Quaternion.Euler(node.go.transform.eulerAngles);
+                    tarrotations[index] = Quaternion.Euler(state.euler);
+                    tarscales[index] = state.scale;
+                    index++;
+                }
+                
+                if (transforms.Length == index || statecnt == index)
                 {
                     var job = new SpatialJob
                     {
@@ -85,6 +89,11 @@ namespace Goblin.Gameplay.Render.Batches
             }
             states.Clear();
             ObjectCache.Set(states);
+        }
+
+        private void Fire()
+        {
+            
         }
 
         [BurstCompile]

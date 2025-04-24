@@ -23,16 +23,19 @@ namespace Goblin.Gameplay.Render.Core
 
     public class Invoker
     {
+        protected ulong actor { get; set; }
         protected Delegate func { get; set; }
         
-        public void Ready(Delegate func)
+        public void Ready(ulong actor, Delegate func)
         {
+            this.actor = actor;
             this.func = func;
         }
         
         public void Reset()
         {
-            func = null;
+            this.actor = 0;
+            this.func = null;
         }
 
         public void Invoke(State state)
@@ -48,6 +51,8 @@ namespace Goblin.Gameplay.Render.Core
         protected override void OnInvoke(State state)
         {
             base.OnInvoke(state);
+            if (state.actor != actor) return;
+            
             (func as Action<T>).Invoke(state as T);
         }
     }
@@ -122,7 +127,7 @@ namespace Goblin.Gameplay.Render.Core
         {
             if (false == stateActions.TryGetValue(typeof(T), out var list)) stateActions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
             var invoker = ObjectCache.Get<Invoker<T>>();
-            invoker.Ready(func);
+            invoker.Ready(actor, func);
             list.Add(invoker);
         }
         
