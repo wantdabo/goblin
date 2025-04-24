@@ -40,13 +40,22 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReady()
         {
             RecycleModel();
+            this.id = 0;
+            this.res = null;
+            this.go = null;
         }
 
         protected override void OnReset()
         {
             RecycleModel();
+            this.id = 0;
+            this.res = null;
+            this.go = null;
         }
         
+        /// <summary>
+        /// 回收模型 Go
+        /// </summary>
         private void RecycleModel()
         {
             if (null != go)
@@ -54,8 +63,6 @@ namespace Goblin.Gameplay.Render.Agents
                 world.engine.pool.Set(go, $"MODEL_GO_KEY_{this.res}");
                 go.transform.SetParent(modelpool.transform, false);
             }
-            this.id = 0;
-            this.res = null;
         }
 
         protected override void OnChase(float tick, float timescale)
