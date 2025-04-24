@@ -7,6 +7,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 状态机数据解析器
+    /// </summary>
     public class StateMachineResolver : Resolver<RIL_STATE_MACHINE, StateMachineState>
     {
         protected override StateMachineState OnRIL(RILState<RIL_STATE_MACHINE> rilstate)

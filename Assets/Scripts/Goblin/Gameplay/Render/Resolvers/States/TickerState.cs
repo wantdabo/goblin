@@ -3,7 +3,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 驱动状态
+    /// 驱动数据状态
     /// </summary>
     public class TickerState : State
     {

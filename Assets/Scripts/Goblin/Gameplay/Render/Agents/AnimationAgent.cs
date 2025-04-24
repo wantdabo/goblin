@@ -15,12 +15,33 @@ namespace Goblin.Gameplay.Render.Agents
     /// </summary>
     public class AnimationAgent : Agent
     {
+        /// <summary>
+        /// 动画配置名称
+        /// </summary>
+        private string cfgname { get; set; } = default;
+        /// <summary>
+        /// 动画配置
+        /// </summary>
         private AnimationConfig animcfg { get; set; } = default;
-        private string animcfgName { get; set; } = default;
+        /// <summary>
+        /// Animancer 组件
+        /// </summary>
         private AnimancerComponent animancer { get; set; }
+        /// <summary>
+        /// Animancer 播放状态
+        /// </summary>
         private AnimancerState animstate { get; set; }
+        /// <summary>
+        /// 动画名称
+        /// </summary>
         private string animname { get; set; }
+        /// <summary>
+        /// 动画持续时间
+        /// </summary>
         private float tarduration { get; set; }
+        /// <summary>
+        /// 混合持续时间
+        /// </summary>
         private float mixduration { get; set; }
         
         protected override void OnReady()
@@ -31,8 +52,6 @@ namespace Goblin.Gameplay.Render.Agents
             CareState<StateMachineState>((state) =>
             {
                 StateConv2AnimData(state);
-                if (null == animname) return;
-                Play(animname, tarduration, mixduration);
             });
         }
 
@@ -42,19 +61,21 @@ namespace Goblin.Gameplay.Render.Agents
             animstate = null;
         }
 
+        /// <summary>
+        /// 状态机状态转换为动画数据
+        /// </summary>
+        /// <param name="state">状态机状态</param>
         private void StateConv2AnimData(StateMachineState state)
         {
-            
             if (false == world.statebucket.SeekState<TagState>(state.actor, out var tagstate) || false == tagstate.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) return;
             var modelinfo = world.engine.cfg.location.ModelInfos.Get(model);
             
-            if (null == animcfgName || false == modelinfo.Animation.Equals(animcfgName))
+            if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
             {
-                animcfgName = modelinfo.Animation;
+                cfgname = modelinfo.Animation;
                 if (null != animcfg) GameObject.Destroy(animcfg);
-                animcfg = world.engine.gameres.location.LoadModelAnimationConfigSync(animcfgName);
+                animcfg = world.engine.gameres.location.LoadModelAnimationConfigSync(cfgname);
             }
-
                 
             var animinfo = animcfg.GetAnimationInfo(state.current);
             if (null == animinfo) return;
@@ -69,13 +90,6 @@ namespace Goblin.Gameplay.Render.Agents
                 animname = beforeAnimInfo.name;
                 mixduration = beforeAnimInfo.mixduration;
             }
-        }
-
-        public void Play(string animname, float tarduration, float mixduration)
-        {
-            this.animname = animname;
-            this.tarduration = tarduration;
-            this.mixduration = mixduration;
         }
 
         protected override void OnFlash()

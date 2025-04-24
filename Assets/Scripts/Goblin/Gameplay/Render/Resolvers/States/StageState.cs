@@ -3,7 +3,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 场景状态
+    /// 场景数据状态
     /// </summary>
     public class StageState : State
     {
@@ -41,20 +41,6 @@ namespace Goblin.Gameplay.Render.Resolvers.States
             behaviorinfocnt = 0;
             hassnapshot = false;
             snapshotframe = 0;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is StageState state)
-            {
-                return frame == state.frame &&
-                       actorcnt == state.actorcnt && 
-                       behaviorcnt == state.behaviorcnt &&
-                       behaviorinfocnt == state.behaviorinfocnt && hassnapshot == state.hassnapshot &&
-                       snapshotframe == state.snapshotframe;
-            }
-            
-            return false;
         }
     }
 }

@@ -7,6 +7,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 属性数据解析器
+    /// </summary>
     public class AttributeResolver : Resolver<RIL_ATTRIBUTE, AttributeState>
     {
         protected override AttributeState OnRIL(RILState<RIL_ATTRIBUTE> rilstate)

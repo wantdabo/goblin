@@ -13,11 +13,29 @@ namespace Goblin.Gameplay.Render.Cameras
     /// </summary>
     public class Eyes : Comp
     {
+        /// <summary>
+        /// 世界
+        /// </summary>
         private World world { get; set; }
+        /// <summary>
+        /// 相机
+        /// </summary>
         public Camera camera { get; private set; }
+        /// <summary>
+        /// CM 的 GameObject
+        /// </summary>
         private GameObject cmgo { get; set; }
+        /// <summary>
+        /// CM 输入组件
+        /// </summary>
         private CinemachineInputProvider cminput { get; set; }
+        /// <summary>
+        /// CM 组件
+        /// </summary>
         private CinemachineFreeLook cm { get; set; }
+        /// <summary>
+        /// CM 偏移组件
+        /// </summary>
         private CinemachineCameraOffset cmoff { get; set; }
 
         protected override void OnCreate()
@@ -34,6 +52,7 @@ namespace Goblin.Gameplay.Render.Cameras
             cm = cmgo.AddComponent<CinemachineFreeLook>();
             cmoff = cmgo.AddComponent<CinemachineCameraOffset>();
             
+            // 设置 CM 相机参数
             cm.m_Lens.FieldOfView = 45f;
             cm.m_YAxis.m_InvertInput = true;
             cm.m_XAxis.m_InvertInput = false;
@@ -43,8 +62,10 @@ namespace Goblin.Gameplay.Render.Cameras
             cm.m_Orbits[0].m_Radius = 4f;
             cm.m_Orbits[1].m_Radius = 4.5f;
             cm.m_Orbits[2].m_Radius = 4f;
+            // 设置 CM 相机的 DeadZone (避免屏幕抖动)
             ModifyDeadZone(cm, 2, 2);
             
+            // 设置 CM 相机偏移
             cmoff.m_Offset = new Vector3(0, 1.7f, -2);
         }
 
@@ -64,13 +85,16 @@ namespace Goblin.Gameplay.Render.Cameras
 
         private void OnTick(TickEvent e)
         {
+            // 根据鼠标锁定状态来锁定 CM 输入组件
             cminput.enabled = CursorLockMode.Locked == Cursor.lockState;
             
+            // LookAt 自己
             var node = world.GetAgent<NodeAgent>(world.self);
             if (null == node) return;
             cm.Follow = node.go.transform;
             cm.LookAt = node.go.transform;
             
+            // 镜头推远推近
             var scroll = engine.u3dkit.gamepad.UI.ScrollWheel.ReadValue<Vector2>();
             if (0 != scroll.y)
             {
@@ -82,7 +106,7 @@ namespace Goblin.Gameplay.Render.Cameras
         
         private void ModifyDeadZone(CinemachineFreeLook freeLookCamera, float deadZoneWidth, float deadZoneHeight)
         {
-            // 遍历 CinemachineFreeLook 的每个 Rig
+            // 遍历 CM FreeLook 的每个 Rig
             for (int i = 0; i < freeLookCamera.m_Orbits.Length; i++)
             {
                 var rig = freeLookCamera.GetRig(i);

@@ -8,6 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 场景数据解析器
+    /// </summary>
     public class StageResolver : Resolver<RIL_STAGE, StageState>
     {
         protected override StageState OnRIL(RILState<RIL_STAGE> rilstate)

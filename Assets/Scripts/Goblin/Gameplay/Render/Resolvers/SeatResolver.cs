@@ -7,6 +7,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 座位数据解析器
+    /// </summary>
     public class SeatResolver : Resolver<RIL_SEAT, SeatState>
     {
         protected override SeatState OnRIL(RILState<RIL_SEAT> rilstate)

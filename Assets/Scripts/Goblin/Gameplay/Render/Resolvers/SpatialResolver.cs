@@ -8,6 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 空间数据解析器
+    /// </summary>
     public class SpatialResolver : Resolver<RIL_SPATIAL, SpatialState>
     {
         protected override SpatialState OnRIL(RILState<RIL_SPATIAL> rilstate)

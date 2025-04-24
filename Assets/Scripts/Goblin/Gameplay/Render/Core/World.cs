@@ -67,7 +67,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public InputSystem input { get; private set; }
         /// <summary>
-        /// RIL 状态桶
+        /// 桶
         /// </summary>
         public StateBucket statebucket { get; private set; }
         /// <summary>

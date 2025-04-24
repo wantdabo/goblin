@@ -3,7 +3,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 状态机状态
+    /// 状态机数据状态
     /// </summary>
     public class StateMachineState : State
     {

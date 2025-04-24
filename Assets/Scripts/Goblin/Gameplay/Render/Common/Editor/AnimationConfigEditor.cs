@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common.Editor
 {
+    /// <summary>
+    /// 动画配置编辑
+    /// </summary>
     [CustomEditor(typeof(AnimationConfig))]
     public class AnimationConfigEditor : UnityEditor.Editor
     {

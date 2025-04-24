@@ -5,7 +5,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 标签状态
+    /// 标签数据状态
     /// </summary>
     public class TagState : State
     {

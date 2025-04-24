@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.RIL.Common;
 namespace Goblin.Gameplay.Render.Resolvers.Common
 {
     /// <summary>
-    /// 状态
+    /// 数据状态
     /// </summary>
     public abstract class State
     {
@@ -26,6 +26,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         public void Reset()
         {
             actor = 0;
+            hashcode = 0;
             OnReset();
         }
 

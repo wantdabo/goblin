@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common.Editor
 {
+    /// <summary>
+    /// 前置混合动画信息编辑
+    /// </summary>
     [CustomPropertyDrawer(typeof(AnimationInfo))]
     public class AnimationInfoEditor : PropertyDrawer
     {

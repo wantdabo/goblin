@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     /// <summary>
     /// Render-State/渲染状态的事件
     /// </summary>
-    /// <typeparam name="T">State 类型</typeparam>
+    /// <typeparam name="T">数据状态类型</typeparam>
     public struct RStateEvent<T> : IEvent where T : State
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     /// <summary>
     /// Event-State/事件状态的事件
     /// </summary>
-    /// <typeparam name="T">State 类型</typeparam>
+    /// <typeparam name="T">数据状态类型</typeparam>
     public struct EStateEvent<T> : IEvent where T : State
     {
         /// <summary>
@@ -57,12 +57,21 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     }
 
     /// <summary>
-    /// RIL 状态桶, 存储着渲染层的所有状态
+    /// 数据状态桶, 存储着渲染层的所有数据状态
     /// </summary>
     public class StateBucket : Comp
     {
+        /// <summary>
+        /// 世界
+        /// </summary>
         public World world { get; private set; }
+        /// <summary>
+        /// 事件订阅派发者
+        /// </summary>
         public Eventor eventor { get; private set; }
+        /// <summary>
+        /// 渲染状态集合
+        /// </summary>
         private Dictionary<ulong, Dictionary<Type, State>> statedict { get; set; }
 
         protected override void OnCreate()
@@ -88,6 +97,11 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             ObjectCache.Set(statedict);
         }
 
+        /// <summary>
+        /// 初始化数据状态桶
+        /// </summary>
+        /// <param name="world">世界</param>
+        /// <returns>初始化数据状态桶</returns>
         public StateBucket Initialize(World world)
         {
             this.world = world;
@@ -95,6 +109,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return this;
         }
 
+        /// <summary>
+        /// 初始化渲染状态解析器
+        /// </summary>
         private void Resolvers()
         {
             void AddResolver<T>() where T : Resolver, new()
@@ -112,6 +129,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             AddResolver<TickerResolver>();
         }
 
+        /// <summary>
+        /// 初始化代理赋能
+        /// </summary>
         private void Enchants()
         {
             void AddEnchant<T>() where T : AgentEnchant, new()
@@ -125,6 +145,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             AddEnchant<AnimationEnchant>();
         }
 
+        /// <summary>
+        /// 获取所有的状态
+        /// </summary>
+        /// <param name="states">数据状态列表</param>
+        /// <typeparam name="T">数据状态类型</typeparam>
+        /// <returns>YES/NO</returns>
         public bool SeekStates<T>(out List<T> states) where T : State, new()
         {
             states = GetStates<T>();
@@ -132,6 +158,13 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return null != states && 0 != states.Count;
         }
 
+        /// <summary>
+        /// 获取状态
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <param name="state">数据状态</param>
+        /// <typeparam name="T">数据状态类型</typeparam>
+        /// <returns>YES/NO</returns>
         public bool SeekState<T>(ulong actor, out T state) where T : State
         {
             state = GetState<T>(actor);
@@ -139,6 +172,11 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return null != state;
         }
 
+        /// <summary>
+        /// 获取所有的状态
+        /// </summary>
+        /// <typeparam name="T">数据状态类型</typeparam>
+        /// <returns>数据状态列表</returns>
         public List<T> GetStates<T>() where T : State
         {
             var type = typeof(T);
@@ -161,6 +199,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return states;
         }
 
+        /// <summary>
+        /// 获取状态
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <typeparam name="T">数据状态类型</typeparam>
+        /// <returns>数据状态</returns>
         public T GetState<T>(ulong actor) where T : State
         {
             if (false == statedict.TryGetValue(actor, out var dict)) return default;
@@ -168,6 +212,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             return result as T;
         }
 
+        /// <summary>
+        /// 设置状态
+        /// </summary>
+        /// <param name="riltype">渲染指令类型 (1, Render, 2 Event)</param>
+        /// <param name="state"></param>
+        /// <typeparam name="T">数据状态</typeparam>
         public void SetState<T>(byte riltype, T state) where T : State
         {
             // 事件状态

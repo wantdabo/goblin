@@ -8,6 +8,9 @@ using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers
 {
+    /// <summary>
+    /// 标签数据解析器
+    /// </summary>
     public class TagResolver : Resolver<RIL_TAG, TagState>
     {
         protected override TagState OnRIL(RILState<RIL_TAG> rilstate)

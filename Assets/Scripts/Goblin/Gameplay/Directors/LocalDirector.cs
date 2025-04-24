@@ -1,6 +1,7 @@
 using Goblin.Common;
 using Goblin.Gameplay.Directors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common;
@@ -105,6 +106,9 @@ namespace Goblin.Gameplay.Directors
             
             var joystick = world.input.GetInput(InputType.Joystick);
             stage.SetInput(world.selfseat, InputType.Joystick, joystick.press, joystick.dire);
+            
+            // 第二个单位, 镜像输入
+            stage.SetInput(2, InputType.Joystick, joystick.press, new GPVector2(-joystick.dire.x, -joystick.dire.y));
             
             stage.Step();
         }

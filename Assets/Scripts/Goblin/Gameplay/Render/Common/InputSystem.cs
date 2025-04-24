@@ -47,6 +47,11 @@ namespace Goblin.Gameplay.Render.Common
             ObjectCache.Set(inputdict);
         }
 
+        /// <summary>
+        /// 初始化输入系统
+        /// </summary>
+        /// <param name="world">世界</param>
+        /// <returns>输入系统</returns>
         public InputSystem Initialize(World world)
         {
             this.world = world;
@@ -54,6 +59,11 @@ namespace Goblin.Gameplay.Render.Common
             return this;
         }
         
+        /// <summary>
+        /// 获取输入
+        /// </summary>
+        /// <param name="type">输入类型</param>
+        /// <returns>输入信息</returns>
         public (bool press, GPVector2 dire) GetInput(InputType type)
         {
             if (inputdict.TryGetValue(type, out var input))
@@ -64,6 +74,11 @@ namespace Goblin.Gameplay.Render.Common
             return default;
         }
 
+        /// <summary>
+        /// 设置输入
+        /// </summary>
+        /// <param name="press">长按</param>
+        /// <param name="dire">方向</param>
         public void SetInput(bool press, GPVector2 dire)
         {
             inputdict.Remove(InputType.Joystick);
@@ -93,11 +108,7 @@ namespace Goblin.Gameplay.Render.Common
                 joystickdire = new Vector2(worldDirection.x, worldDirection.z);
             }
 
-            SetInput
-            (
-                Vector2.zero != joystickdire,
-                new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int))
-            );
+            SetInput(Vector2.zero != joystickdire, new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int)));
         }
     }
 }

@@ -3,7 +3,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 属性状态
+    /// 属性数据状态
     /// </summary>
     public class AttributeState : State
     {

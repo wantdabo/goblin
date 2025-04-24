@@ -5,7 +5,7 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 namespace Goblin.Gameplay.Render.Resolvers.States
 {
     /// <summary>
-    /// 座位状态
+    /// 座位数据状态
     /// </summary>
     public class SeatState : State
     {
