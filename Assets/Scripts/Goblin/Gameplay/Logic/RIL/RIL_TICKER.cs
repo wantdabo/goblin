@@ -19,13 +19,11 @@ namespace Goblin.Gameplay.Logic.RIL
             throw new System.NotImplementedException();
         }
 
-        public bool Equals(IRIL other)
+        public override int GetHashCode()
         {
-            var ril = (RIL_TICKER)other;
-
-            return timescale == ril.timescale;
+            return id.GetHashCode() ^ timescale.GetHashCode();
         }
-        
+
         public override string ToString()
         {
             return $"RIL_TICKER: timescale={timescale}";

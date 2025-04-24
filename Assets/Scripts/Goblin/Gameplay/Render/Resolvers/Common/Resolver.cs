@@ -35,10 +35,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         private void OnRIL(RILEvent e)
         {
             if (e.rilstate is not RILState<T> rilstate) return;
-            
             E state = OnRIL(rilstate);
-            state.actor = e.rilstate.actor;
-            statebucket.SetState(e.rilstate.type, state);
+            state.actor = rilstate.actor;
+            state.hashcode = rilstate.ril.GetHashCode();
+            statebucket.SetState(rilstate.type, state);
             
             rilstate.Reset();
             ObjectCache.Set(rilstate);

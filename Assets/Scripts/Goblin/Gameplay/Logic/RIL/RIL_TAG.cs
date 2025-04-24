@@ -20,23 +20,18 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Equals(IRIL other)
+        
+        public override int GetHashCode()
         {
-            RIL_TAG ril = (RIL_TAG)other;
-            if (null == tags) return false;
-            if (null == ril.tags) return false;
-            
-            if (tags.Count != ril.tags.Count) return false;
+            if (null == tags) return 0;
+            int hash = 17;
             foreach (var kv in tags)
             {
-                if (false == ril.tags.TryGetValue(kv.Key, out var value) || value != kv.Value)
-                {
-                    return false;
-                }
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
             }
             
-            return true;
+            return hash;
         }
 
         public override string ToString()

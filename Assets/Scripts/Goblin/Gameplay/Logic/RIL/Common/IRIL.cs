@@ -16,11 +16,5 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// </summary>
         /// <returns>二进制</returns>
         public byte[] Serialize();
-        /// <summary>
-        /// 对比指令
-        /// </summary>
-        /// <param name="other">目标指令</param>
-        /// <returns>YES/NO</returns>
-        public bool Equals(IRIL other);
     }
 }

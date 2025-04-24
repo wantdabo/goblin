@@ -32,13 +32,18 @@ namespace Goblin.Gameplay.Logic.RIL
             throw new System.NotImplementedException();
         }
 
-        public bool Equals(IRIL other)
+        public override int GetHashCode()
         {
-            RIL_ATTRIBUTE ril = (RIL_ATTRIBUTE)other;
+            int hash = 17;
+            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + hp.GetHashCode();
+            hash = hash * 31 + maxhp.GetHashCode();
+            hash = hash * 31 + movespeed.GetHashCode();
+            hash = hash * 31 + attack.GetHashCode();
             
-            return hp == ril.hp && maxhp == ril.maxhp && movespeed == ril.movespeed && attack == ril.attack;
+            return hash;
         }
-        
+
         public override string ToString()
         {
             return $"RIL_ATTRIBUTE: hp={hp}, maxhp={maxhp}, movespeed={movespeed}, attack={attack}";

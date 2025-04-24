@@ -37,6 +37,8 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.SetParent(root.transform);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
+
+            CareState<SpatialState>((state) => ChangeStatus(ChaseStatus.Chasing));
         }
 
         protected override void OnReset()
@@ -47,9 +49,15 @@ namespace Goblin.Gameplay.Render.Agents
             ObjectCache.Set(go, "NODE_GO_KEY");
         }
 
-        protected override void OnArrive()
+        protected override bool OnArrived()
         {
-            base.OnArrive();
+            if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return true;
+            return go.transform.position == state.position && go.transform.rotation.eulerAngles == state.euler && go.transform.localScale == state.scale;
+        }
+
+        protected override void OnFlash()
+        {
+            base.OnFlash();
             if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return;
             go.transform.position = state.position;
             go.transform.rotation = Quaternion.Euler(state.euler);
@@ -67,6 +75,7 @@ namespace Goblin.Gameplay.Render.Agents
             var lastrot = Quaternion.Euler(go.transform.eulerAngles);
             var targetrot = Quaternion.Euler(state.euler);
             go.transform.rotation = Quaternion.Slerp(lastrot, targetrot, t);
+            
             go.transform.localScale = state.scale;
         }
     }

@@ -20,24 +20,19 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Equals(IRIL other)
+        
+        public override int GetHashCode()
         {
-            var ril = (RIL_SEAT)other;
-            if (null == seatdict) return false;
-            if (null == ril.seatdict) return false;
-            
-            if (seatdict.Count != ril.seatdict.Count) return false;
-            
+            if (null == seatdict) return 0;
+
+            int hash = 17;
             foreach (var kv in seatdict)
             {
-                if (false == ril.seatdict.TryGetValue(kv.Key, out var actorId) || actorId != kv.Value)
-                {
-                    return false;
-                }
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
             }
             
-            return true;
+            return hash;
         }
 
         public override string ToString()

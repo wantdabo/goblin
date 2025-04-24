@@ -30,12 +30,17 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Equals(IRIL other)
+        
+        public override int GetHashCode()
         {
-            RIL_STATE_MACHINE ril = (RIL_STATE_MACHINE)other;
+            int hash = 17;
+            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + current.GetHashCode();
+            hash = hash * 31 + last.GetHashCode();
+            hash = hash * 31 + frames.GetHashCode();
+            hash = hash * 31 + elapsed.GetHashCode();
             
-            return ril.id == id && ril.current == current && ril.frames == frames && ril.elapsed == elapsed;
+            return hash;
         }
 
         public override string ToString()

@@ -8,7 +8,6 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
-using Goblin.Gameplay.Render.Batches;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
@@ -142,7 +141,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         private void Batches()
         {
-            AddComp<StateMachineBatch>().Initialize(this).Create();
+            // AddComp<StateMachineBatch>().Initialize(this).Create();
         }
         
         /// <summary>
@@ -177,7 +176,7 @@ namespace Goblin.Gameplay.Render.Core
         /// 移除 Agent
         /// </summary>
         /// <param name="agent">Agent</param>
-        private void RmvAgent(Agent agent)
+        public void RmvAgent(Agent agent)
         {
             if (false == agentdict.TryGetValue(agent.actor, out var agents)) return;
 

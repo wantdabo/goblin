@@ -27,12 +27,15 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Equals(IRIL other)
+        
+        public override int GetHashCode()
         {
-            RIL_SPATIAL ril = (RIL_SPATIAL)other;
+            int hash = 17;
+            hash = hash * 31 + position.GetHashCode();
+            hash = hash * 31 + euler.GetHashCode();
+            hash = hash * 31 + scale.GetHashCode();
             
-            return ril.position.Equals(position) && ril.euler.Equals(euler) && ril.scale.Equals(scale);
+            return hash;
         }
 
         public override string ToString()

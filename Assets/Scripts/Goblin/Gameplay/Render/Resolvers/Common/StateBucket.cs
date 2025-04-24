@@ -122,6 +122,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             
             AddEnchant<NodeEnchant>();
             AddEnchant<ModelEnchant>();
+            AddEnchant<AnimationEnchant>();
         }
 
         public bool SeekStates<T>(out List<T> states) where T : State, new()
@@ -182,7 +183,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             }
 
             // 渲染状态
-            var type = state.GetType();
+            var type = typeof(T);
             if (false == statedict.TryGetValue(state.actor, out var dict)) statedict.Add(state.actor, dict = ObjectCache.Get<Dictionary<Type, State>>());
             if (dict.TryGetValue(type, out var oldstate))
             {

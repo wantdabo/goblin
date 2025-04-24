@@ -38,18 +38,10 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public bool Equals(IRIL other)
+        
+        public override int GetHashCode()
         {
-            RIL_STAGE ril = (RIL_STAGE) other;
-            
-            return ril.id == id &&
-                   ril.frame == frame &&
-                   ril.actorcnt == actorcnt &&
-                   ril.behaviorcnt == behaviorcnt &&
-                   ril.behaviorinfocnt == behaviorinfocnt &&
-                   ril.hassnapshot == hassnapshot &&
-                   ril.snapshotframe == snapshotframe;
+            return frame.GetHashCode() ^ actorcnt.GetHashCode() ^ behaviorcnt.GetHashCode() ^ behaviorinfocnt.GetHashCode() ^ hassnapshot.GetHashCode() ^ snapshotframe.GetHashCode();
         }
 
         public override string ToString()

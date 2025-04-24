@@ -15,6 +15,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// ActorID
         /// </summary>
         public ulong actor { get; set; }
+        /// <summary>
+        /// 哈希值
+        /// </summary>
+        public int hashcode { get; set; }
 
         /// <summary>
         /// 重置状态
@@ -23,6 +27,18 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             actor = 0;
             OnReset();
+        }
+
+        /// <summary>
+        /// 比较状态是否相等
+        /// </summary>
+        /// <param name="other">其他状态</param>
+        /// <returns>YES/NO</returns>
+        public bool Equals(State other)
+        {
+            if (null == other) return false;
+            
+            return hashcode == other.hashcode;
         }
 
         /// <summary>
