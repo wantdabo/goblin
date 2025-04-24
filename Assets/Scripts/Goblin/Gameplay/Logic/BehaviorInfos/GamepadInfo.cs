@@ -86,7 +86,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
                 clone.inputdict.Remove(kv.Key);
                 clone.inputdict.Add(kv.Key, kv.Value);
             }
-
             
             return clone;
         }
