@@ -2,8 +2,14 @@ using Goblin.Gameplay.Directors.Common;
 
 namespace Goblin.Gameplay.Directors
 {
+    /// <summary>
+    /// 状态同步导演
+    /// </summary>
     public class StateSyncDirector : Director
     {
+        /// <summary>
+        /// 是否渲染 (驱动 World)
+        /// </summary>
         public override bool rendering { get; }
 
         protected override void OnCreateGame()
@@ -35,6 +41,10 @@ namespace Goblin.Gameplay.Directors
         }
 
         protected override void OnRestore()
+        {
+        }
+
+        protected override void OnStep()
         {
         }
     }

@@ -11,8 +11,14 @@ using UnityEngine;
 
 namespace Goblin.Gameplay.Directors
 {
+    /// <summary>
+    /// 本地单机, 本地导演
+    /// </summary>
     public class LocalDirector : Director
     {
+        /// <summary>
+        /// 是否渲染 (驱动 World)
+        /// </summary>
         public override bool rendering 
         {
             get
@@ -21,6 +27,9 @@ namespace Goblin.Gameplay.Directors
             }
         }
         
+        /// <summary>
+        /// 时间缩放 (本地游戏独有)
+        /// </summary>
         public float timescale {
             get
             {
@@ -37,27 +46,19 @@ namespace Goblin.Gameplay.Directors
         /// </summary>
         private Stage stage { get; set; }
 
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-            engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
-        }
-
         protected override void OnCreateGame()
         {
+            // 初始化逻辑层
             stage = new Stage().Initialize(data.sdata);
+            // 监听 RIL 渲染状态
             stage.onril += OnRIL;
         }
 
         protected override void OnDestroyGame()
         {
+            // 销毁逻辑层
             stage.Dispose();
+            // 取消监听 RIL 渲染状态
             stage.onril -= OnRIL;
         }
 
@@ -91,22 +92,26 @@ namespace Goblin.Gameplay.Directors
             stage.Restore();
         }
 
+        /// <summary>
+        /// 处理 RIL 渲染状态
+        /// </summary>
+        /// <param name="rilstate">RIL 渲染状态</param>
         private void OnRIL(RILState rilstate)
         {
+            // 发送 RIL 渲染状态
             world.eventor.Tell(new RILEvent
             {
                 rilstate = rilstate 
             });
         }
 
-        private void OnFixedTick(FixedTickEvent e)
+        protected override void OnStep()
         {
             if (null == stage) return;
             if (StageState.Ticking != stage.state) return;
             
             var joystick = world.input.GetInput(InputType.Joystick);
             stage.SetInput(world.selfseat, InputType.Joystick, joystick.press, joystick.dire);
-            
             // 第二个单位, 镜像输入
             stage.SetInput(2, InputType.Joystick, joystick.press, new GPVector2(-joystick.dire.x, -joystick.dire.y));
             
