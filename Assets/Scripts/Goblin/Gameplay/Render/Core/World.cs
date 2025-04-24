@@ -142,7 +142,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         private void Batches()
         {
-            // AddComp<SpatialBatch>().Initialize(this).Create();
+            AddComp<SpatialBatch>().Initialize(this).Create();
         }
         
         /// <summary>

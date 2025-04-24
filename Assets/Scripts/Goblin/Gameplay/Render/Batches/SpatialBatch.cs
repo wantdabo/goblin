@@ -1,4 +1,5 @@
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Core;
@@ -15,23 +16,33 @@ namespace Goblin.Gameplay.Render.Batches
     {
         private Transform[] transforms;
         private TransformAccessArray transformaccess;
-
-        private NativeArray<Vector3> positions;
-        private NativeArray<Vector3> tarpositions;
-        private NativeArray<Vector3> eulers;
-        private NativeArray<Vector3> tareulers;
-        private NativeArray<Vector3> tarscales;
+        private NativeArray<float3> positions;
+        private NativeArray<float3> tarpositions;
+        private NativeArray<quaternion> rotations;
+        private NativeArray<quaternion> tarrotations;
+        private NativeArray<float3> tarscales;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             transforms = new Transform[1000];
             transformaccess = new TransformAccessArray(transforms);
+            positions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
+            tarpositions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
+            rotations = new NativeArray<quaternion>(transforms.Length, Allocator.TempJob);
+            tarrotations = new NativeArray<quaternion>(transforms.Length, Allocator.TempJob);
+            tarscales = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            transforms = null;
+            if (positions.IsCreated) positions.Dispose();
+            if (tarpositions.IsCreated) tarpositions.Dispose();
+            if (rotations.IsCreated) rotations.Dispose();
+            if (tarrotations.IsCreated) tarrotations.Dispose();
+            if (tarscales.IsCreated) tarscales.Dispose();
             if (transformaccess.isCreated) transformaccess.Dispose();
         }
 
@@ -39,47 +50,41 @@ namespace Goblin.Gameplay.Render.Batches
         {
             base.OnTick(e);
             if (false == world.statebucket.SeekStates<SpatialState>(out var states)) return;
-            var count = states.Count;
-            if (positions.IsCreated) positions.Dispose();
-            if (tarpositions.IsCreated) tarpositions.Dispose();
-            if (eulers.IsCreated) eulers.Dispose();
-            if (tareulers.IsCreated) tareulers.Dispose();
-            if (tarscales.IsCreated) tarscales.Dispose();
-            
-            positions = new NativeArray<Vector3>(count, Allocator.TempJob);
-            tarpositions = new NativeArray<Vector3>(count, Allocator.TempJob);
-            eulers = new NativeArray<Vector3>(count, Allocator.TempJob);
-            tareulers = new NativeArray<Vector3>(count, Allocator.TempJob);
-            tarscales = new NativeArray<Vector3>(count, Allocator.TempJob);
-
             int index = 0;
             foreach (var state in states)
             {
-                var ticker = world.statebucket.GetState<TickerState>(state.actor);
                 var node = world.GetAgent<NodeAgent>(state.actor);
+                if (null == node || ChaseStatus.Arrived == node.status) continue;
+                
                 transforms[index] = node.go.transform;
                 positions[index] = node.go.transform.position;
                 tarpositions[index] = state.position;
-                eulers[index] = node.go.transform.eulerAngles;
-                tareulers[index] = state.euler;
+                rotations[index] = Quaternion.Euler(node.go.transform.eulerAngles);
+                tarrotations[index] = Quaternion.Euler(state.euler);
                 tarscales[index] = state.scale;
-                
                 index++;
+
+                if (transforms.Length == index || states.Count == index)
+                {
+                    var job = new SpatialJob
+                    {
+                        count = index,
+                        t = Mathf.Clamp01(e.tick / GAME_DEFINE.LOGIC_TICK.AsFloat()),
+                        positions = positions,
+                        tarpositions = tarpositions,
+                        rotations = rotations,
+                        tarrotations = tarrotations,
+                        tarscales = tarscales,
+                    };
+                    index = 0;
+                    
+                    transformaccess.SetTransforms(transforms);
+                    var handle = job.Schedule(transformaccess);
+                    handle.Complete();
+                }
             }
-            
-            var job = new SpatialJob
-            {
-                count = index,
-                t = e.tick / GAME_DEFINE.LOGIC_TICK.AsFloat(),
-                positions = positions,
-                tarpositions = tarpositions,
-                eulers = eulers,
-                tareulers = tareulers,
-                tarscales = tarscales,
-            };
-            
-            var handle = job.Schedule(transformaccess);
-            handle.Complete();
+            states.Clear();
+            ObjectCache.Set(states);
         }
 
         [BurstCompile]
@@ -87,23 +92,23 @@ namespace Goblin.Gameplay.Render.Batches
         {
             public int count;
             public float t;
-            [ReadOnly] public NativeArray<Vector3> positions;
-            [ReadOnly] public NativeArray<Vector3> tarpositions;
-            [ReadOnly] public NativeArray<Vector3> eulers;
-            [ReadOnly] public NativeArray<Vector3> tareulers;
-            [ReadOnly] public NativeArray<Vector3> tarscales;
+            [ReadOnly] public NativeArray<float3> positions;
+            [ReadOnly] public NativeArray<float3> tarpositions;
+            [ReadOnly] public NativeArray<quaternion> rotations;
+            [ReadOnly] public NativeArray<quaternion> tarrotations;
+            [ReadOnly] public NativeArray<float3> tarscales;
 
             public void Execute(int index, TransformAccess transform)
             {
                 if (index >= count) return;
                 var position = positions[index];
                 var tarposition = tarpositions[index];
-                var euler = eulers[index];
-                var tareuler = tareulers[index];
+                var rotation = rotations[index];
+                var tarrotation = tarrotations[index];
                 var tarscale = tarscales[index];
                 
                 transform.position = math.lerp(position, tarposition, t);
-                transform.rotation = math.slerp(quaternion.Euler(euler), quaternion.Euler(tareuler), t);
+                transform.rotation = math.slerp(rotation, tarrotation, t);
                 transform.localScale = tarscale;
             }
         }
