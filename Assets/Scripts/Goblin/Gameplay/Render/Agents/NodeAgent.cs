@@ -71,11 +71,7 @@ namespace Goblin.Gameplay.Render.Agents
             
             var t = tick / GAME_DEFINE.LOGIC_TICK.AsFloat();
             go.transform.position = Vector3.Lerp(go.transform.position, state.position, t);
-            
-            var lastrot = Quaternion.Euler(go.transform.eulerAngles);
-            var targetrot = Quaternion.Euler(state.euler);
-            go.transform.rotation = Quaternion.Slerp(lastrot, targetrot, t);
-            
+            go.transform.rotation = Quaternion.Slerp(Quaternion.Euler(go.transform.eulerAngles), Quaternion.Euler(state.euler), t);
             go.transform.localScale = state.scale;
         }
     }

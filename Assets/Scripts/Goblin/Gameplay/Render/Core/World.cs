@@ -8,6 +8,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Render.Batches;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
@@ -141,7 +142,7 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         private void Batches()
         {
-            // AddComp<StateMachineBatch>().Initialize(this).Create();
+            // AddComp<SpatialBatch>().Initialize(this).Create();
         }
         
         /// <summary>
