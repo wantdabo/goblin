@@ -1,17 +1,15 @@
 using Goblin.Common;
 using Goblin.Core;
-using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Render.Core;
-using UnityEngine;
 
-namespace Goblin.Gameplay.Directors.Common
+namespace Goblin.Gameplay.Director.Common
 {
     /// <summary>
     /// 导演, 负责指挥游戏的运行, 包括创建游戏, 销毁游戏, 开始游戏, 暂停游戏, 恢复游戏, 停止游戏等操作
     /// 驱动渲染层 World, 渲染状态的接收以及传入 World
     /// </summary>
-    public abstract class Director : Comp
+    public abstract class GameDirector : Comp
     {
         /// <summary>
         /// 是否渲染 (驱动 World)

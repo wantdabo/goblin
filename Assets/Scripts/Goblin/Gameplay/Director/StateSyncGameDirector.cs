@@ -1,11 +1,11 @@
-using Goblin.Gameplay.Directors.Common;
+using Goblin.Gameplay.Director.Common;
 
-namespace Goblin.Gameplay.Directors
+namespace Goblin.Gameplay.Director
 {
     /// <summary>
     /// 状态同步导演
     /// </summary>
-    public class StateSyncDirector : Director
+    public class StateSyncGameDirector : GameDirector
     {
         /// <summary>
         /// 是否渲染 (驱动 World)

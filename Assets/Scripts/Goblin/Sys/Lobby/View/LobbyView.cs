@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Goblin.Gameplay.Directors;
+using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,7 +65,7 @@ namespace Goblin.Sys.Lobby.View
                 
                 engine.gameui.Close(this);
                 engine.gameui.Open<GameplayView>();
-                engine.proxy.gameplay.Load<LocalDirector>(data);
+                engine.proxy.gameplay.Load<LocalGameDirector>(data);
                 engine.proxy.gameplay.director.StartGame();
             });
         }

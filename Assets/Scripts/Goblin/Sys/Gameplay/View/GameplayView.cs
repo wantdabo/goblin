@@ -1,5 +1,5 @@
 ﻿using Goblin.Common;
-using Goblin.Gameplay.Directors;
+using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Render.Resolvers.States;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
@@ -54,7 +54,7 @@ namespace Goblin.Sys.Gameplay.View
             
             gameSpeedSlider.onValueChanged.AddListener((e) =>
             {
-                var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+                var localdirector = (engine.proxy.gameplay.director as LocalGameDirector);
                 if (null == localdirector) return;
                 var timescale = Mathf.Round(gameSpeedSlider.value / 0.25f) * 0.25f;
                 localdirector.timescale = timescale;
@@ -107,7 +107,7 @@ namespace Goblin.Sys.Gameplay.View
             
             synopsisText.text = content;
             
-            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+            var localdirector = (engine.proxy.gameplay.director as LocalGameDirector);
             if (null == localdirector) return;
             if (false == state.hassnapshot) return;
             if (state.frame - state.snapshotframe > 1) return;

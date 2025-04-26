@@ -1,5 +1,5 @@
 ﻿using Goblin.Common;
-using Goblin.Gameplay.Directors.Common;
+using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -19,9 +19,9 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
-        public Director director { get; private set; }
+        public GameDirector director { get; private set; }
 
-        public void Load<T>(GPData data) where T : Director, new()
+        public void Load<T>(GPData data) where T : GameDirector, new()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
             if (null != director)
