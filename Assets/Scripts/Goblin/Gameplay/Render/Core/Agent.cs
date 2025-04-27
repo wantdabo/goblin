@@ -150,8 +150,7 @@ namespace Goblin.Gameplay.Render.Core
             
             OnChase(tick, timescale);
             
-            if (false == OnArrived()) return;
-            ChangeStatus(ChaseStatus.Arrived);
+            if (OnArrived()) ChangeStatus(ChaseStatus.Arrived);
         }
         
         /// <summary>
