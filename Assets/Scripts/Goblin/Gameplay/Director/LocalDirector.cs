@@ -1,5 +1,7 @@
+using Goblin.Common;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
@@ -7,9 +9,9 @@ using Goblin.Gameplay.Render.Core;
 namespace Goblin.Gameplay.Director
 {
     /// <summary>
-    /// 锁步/帧同步导演
+    /// 本地单机, 本地导演
     /// </summary>
-    public class LockstepGameDirector : GameDirector
+    public class LocalDirector : GameDirector
     {
         /// <summary>
         /// 是否渲染 (驱动 World)
@@ -19,6 +21,20 @@ namespace Goblin.Gameplay.Director
             get
             {
                 return null != stage && StageState.Ticking == stage.state;
+            }
+        }
+        
+        /// <summary>
+        /// 时间缩放 (本地游戏独有)
+        /// </summary>
+        public float timescale {
+            get
+            {
+                return stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale.AsFloat();
+            }
+            set
+            {
+                stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.Int2FP;
             }
         }
         
@@ -90,7 +106,12 @@ namespace Goblin.Gameplay.Director
         {
             if (null == stage) return;
             if (StageState.Ticking != stage.state) return;
-
+            
+            var joystick = world.input.GetInput(InputType.Joystick);
+            stage.SetInput(world.selfseat, InputType.Joystick, joystick.press, joystick.dire);
+            // 第二个单位, 镜像输入
+            stage.SetInput(2, InputType.Joystick, joystick.press, new GPVector2(-joystick.dire.x, -joystick.dire.y));
+            
             stage.Step();
         }
     }

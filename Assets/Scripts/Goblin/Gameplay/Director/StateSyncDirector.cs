@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Director
     /// <summary>
     /// 状态同步导演
     /// </summary>
-    public class StateSyncGameDirector : GameDirector
+    public class StateSyncDirector : GameDirector
     {
         /// <summary>
         /// 是否渲染 (驱动 World)
