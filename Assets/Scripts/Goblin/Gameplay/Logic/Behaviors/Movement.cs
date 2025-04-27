@@ -13,13 +13,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            actor.eventor.Listen<StateChangedEvent>(actor.eventor, OnStateChanged);
         }
 
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
-            actor.eventor.UnListen<StateChangedEvent>(actor.eventor, OnStateChanged);
         }
 
         /// <summary>
@@ -59,10 +57,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
 
             info.moving = false;
-        }
-        
-        private void OnStateChanged(StateChangedEvent e)
-        {
         }
     }
 }
