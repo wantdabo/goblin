@@ -60,12 +60,18 @@ public class Gaming : Comp
 
         return data;
     }
+
+    public void Reconnect(string username)
+    {
+        if (false == usergames.TryGetValue(username, out var id) || false == games.TryGetValue(id, out var game)) return;
+    }
 }
 
 public class Game : Comp
 {
     public bool disposed { get;  private set; }
     public uint frame { get; private set; }
+    public Dictionary<uint, List<PlayerInputData>> frames { get; set; } = new();
     
     protected override void OnCreate()
     {

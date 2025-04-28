@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Sys.Common;
+using Goblin.Sys.Other.View;
 using UnityEngine.UI;
 
 namespace Goblin.Sys.Lobby
@@ -23,6 +24,17 @@ namespace Goblin.Sys.Lobby
             selectHeroDropdown.onValueChanged.AddListener((int index) =>
             {
                 UnityEngine.Debug.Log(index);
+            });
+            
+            AddUIEventListener("MatchingBtn", (e) =>
+            {
+
+            });
+            
+            AddUIEventListener("ExitBtn", (e) =>
+            {
+                engine.net.Disconnect();
+                engine.gameui.Close(this);
             });
         }
 

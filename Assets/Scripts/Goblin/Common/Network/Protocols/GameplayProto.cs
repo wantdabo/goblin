@@ -18,17 +18,32 @@ namespace Queen.Protocols
         /// </summary>
         public ulong seat { get; set; }
         /// <summary>
-        /// 座位 KEY
+        /// 玩家输入数据列表
         /// </summary>
-        public ulong skey { get; set; }
         public PlayerInputData[] inputs { get; set; }
     }
-
+    
     /// <summary>
     /// 响应游戏帧消息
     /// </summary>
     [MessagePackObject(true)]
     public class S2CGameFrameMsg : INetMessage
+    {
+        /// <summary>
+        /// 帧数据
+        /// </summary>
+        public FrameData frame { get; set; }
+        /// <summary>
+        /// 帧数据列表 (重连/补发帧数据)
+        /// </summary>
+        public FrameData[] frames { get; set; }
+    }
+
+    /// <summary>
+    /// 帧数据
+    /// </summary>
+    [MessagePackObject(true)]
+    public class FrameData
     {
         /// <summary>
         /// 帧号
