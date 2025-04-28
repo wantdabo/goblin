@@ -34,14 +34,6 @@ public class Settings : Comp
     /// </summary>
     public int maxpps { get; private set; }
     /// <summary>
-    /// 游戏主机
-    /// </summary>
-    public string gamehost { get; private set; }
-    /// <summary>
-    /// 游戏端口
-    /// </summary>
-    public ushort gameport { get; private set; }
-    /// <summary>
     /// 游戏帧率
     /// </summary>
     public byte gamefps { get; private set; }
@@ -57,8 +49,6 @@ public class Settings : Comp
         maxconn = jobj.Value<int>("maxconn");
         sthread = jobj.Value<int>("sthread");
         maxpps = jobj.Value<int>("maxpps");
-        gamehost = jobj.Value<string>("gamehost");
-        gameport = jobj.Value<ushort>("gameport");
         gamefps = jobj.Value<byte>("gamefps");
     }
 }

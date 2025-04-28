@@ -10,10 +10,6 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// </summary>
         public ulong id { get; set; }
         /// <summary>
-        /// 座位 KEY
-        /// </summary>
-        public ulong skey { get; set; }
-        /// <summary>
         /// 我的座位
         /// </summary>
         public ulong seat { get; set; }

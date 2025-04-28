@@ -19,9 +19,9 @@ public class Gameplay : Engine<Gameplay>
     /// </summary>
     public Slave slave { get; private set; }
     /// <summary>
-    /// 战斗网络
+    /// 认证器
     /// </summary>
-    public UDPServer gameserv { get; private set; }
+    public Authenticator auth { get; private set; }
     /// <summary>
     /// 匹配
     /// </summary>
@@ -41,9 +41,8 @@ public class Gameplay : Engine<Gameplay>
         slave.Initialize(settings.host, settings.port, settings.wsport, settings.maxconn, settings.sthread, settings.maxpps);
         slave.Create();
 
-        gameserv = AddComp<UDPServer>();
-        gameserv.Initialize(settings.gamehost, settings.gameport, true, 1024, "", 1024 * 1024);
-        gameserv.Create();
+        auth = AddComp<Authenticator>();
+        auth.Create();
 
         matching = AddComp<Matching>();
         matching.Create();
@@ -52,8 +51,7 @@ public class Gameplay : Engine<Gameplay>
         gaming.Create();
 
         engine.logger.Info(
-            $"\n\tname: {settings.name}\n\tipaddress: {settings.host}\n\tport: {settings.port}\n\twsport: {settings.wsport}\n\tmaxconn: {settings.maxconn}" +
-            $"\n\tgamehost: {settings.gamehost}\n\tgameport: {settings.gameport}\n\tgamefps: {settings.gamefps}"
+            $"\n\tname: {settings.name}\n\tipaddress: {settings.host}\n\tport: {settings.port}\n\twsport: {settings.wsport}\n\tmaxconn: {settings.maxconn}\n\tgamefps: {settings.gamefps}" 
         , ConsoleColor.Yellow);
         
         engine.logger.Info($"{settings.name} is running...");

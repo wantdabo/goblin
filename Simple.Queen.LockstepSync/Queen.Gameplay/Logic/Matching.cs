@@ -11,7 +11,7 @@ namespace Queen.Gameplay.Logic;
 /// </summary>
 public class Matching : Comp
 {
-    private ConcurrentDictionary<NetChannel, int> matchings { get; set; } = new();
+    private ConcurrentDictionary<string, int> matchings { get; set; } = new();
 
     protected override void OnCreate()
     {
@@ -33,64 +33,29 @@ public class Matching : Comp
     {
         if (matchings.Count < 2) return;
 
-        var channels = matchings.Keys.ToList();
-        foreach (var channel in channels)
-        {
-            if (false == channel.alive) matchings.TryRemove(channel, out _);
-        }
-
-        var matcheds = matchings.Take(2).ToList();
-
-        Dictionary<PlayerData, NetChannel> pnc = new();
-        List<PlayerData> players = new();
-        ulong index = 1;
-        foreach (var match in matcheds)
-        {
-            if (false == match.Key.alive) continue;
-            matchings.TryRemove(match.Key, out _);
-            PlayerData player = new PlayerData();
-            player.seat = index;
-            player.hero = match.Value;
-            player.position = new Vector3() { x = Random.Shared.Next(0, 10) * 1000, y = 0, z = Random.Shared.Next(0, 10) * 1000 };
-            player.euler = new Vector3();
-            player.scale = new Vector3() { x = 1000, y = 1000, z = 1000 };
-            players.Add(player);
-            index++;
-        }
-
-        GameData data = new GameData();
-        data.id = (ulong)Random.Shared.Next(1010, 100000000);
-        data.skey = 10000;
-        data.sdata = new StageData();
-        data.sdata.seed = 19481001;
-        data.sdata.players = players.ToArray();
+        var usermatchings = matchings.Take(2).ToList();
+        List<(string username, int hero)> users = new();
+        foreach (var usermatching in usermatchings) users.Add((usermatching.Key, usermatching.Value));
+        var gamedata = engine.gaming.CreateGame(users);
         
-        foreach (var player in players)
+        foreach (var player in gamedata.sdata.players)
         {
-            if (false == pnc.TryGetValue(player, out var channel)) continue;
-            if (false == channel.alive) continue;
-            data.seat = player.seat;
+            if (false == engine.auth.users.TryGetValue(player.username, out var channel)) continue;
             channel.Send(new S2CStartGameMsg
             {
-                gamehost = engine.settings.gamehost,
-                gameport = engine.settings.gameport,
-                data = data,
+                seat = player.seat,
+                data = gamedata,
             });
-        }
-        
-        // 清理匹配列表
-        foreach (var channel in matcheds)
-        {
-            if (false == channel.Key.alive) continue;
-            matchings.TryRemove(channel.Key, out _);
         }
     }
 
     private void OnC2SStartMatching(NetChannel channel, C2SStartMatchingMsg msg)
     {
-        if (matchings.ContainsKey(channel)) return;
-        matchings.TryAdd(channel, msg.hero);
-        
+        if (false == engine.auth.channels.TryGetValue(channel, out var username)) return;
+        if (engine.gaming.usergames.ContainsKey(username)) return;
+        if (matchings.ContainsKey(username)) return;
+        matchings.TryAdd(username, msg.hero);
+
         channel.Send(new S2CStartMatchingMsg
         {
         });
@@ -98,9 +63,11 @@ public class Matching : Comp
 
     private void OnC2SEndMatching(NetChannel channel, C2SEndMatchingMsg msg)
     {
-        if (false == matchings.ContainsKey(channel)) return;
-        matchings.TryRemove(channel, out _);
-        
+        if (false == engine.auth.channels.TryGetValue(channel, out var username)) return;
+        if (engine.gaming.usergames.ContainsKey(username)) return;
+        if (false == matchings.ContainsKey(username)) return;
+        matchings.TryRemove(username, out _);
+
         channel.Send(new S2CEndMatchingMsg
         {
         });

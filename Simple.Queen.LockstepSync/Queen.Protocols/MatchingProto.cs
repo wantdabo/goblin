@@ -45,14 +45,9 @@ namespace Queen.Protocols
     public class S2CStartGameMsg : INetMessage
     {
         /// <summary>
-        /// 游戏主机
+        /// 我的座位
         /// </summary>
-        public string gamehost { get; set; }
-
-        /// <summary>
-        /// 游戏端口
-        /// </summary>
-        public ushort gameport { get; set; }
+        public ulong seat { get; set; }
 
         /// <summary>
         /// 游戏数据
@@ -70,16 +65,6 @@ namespace Queen.Protocols
         /// GameID
         /// </summary>
         public ulong id { get; set; }
-
-        /// <summary>
-        /// 座位 KEY
-        /// </summary>
-        public ulong skey { get; set; }
-
-        /// <summary>
-        /// 我的座位
-        /// </summary>
-        public ulong seat { get; set; }
 
         /// <summary>
         /// Stage 数据
@@ -114,6 +99,11 @@ namespace Queen.Protocols
         /// 座位 ID
         /// </summary>
         public ulong seat { get; set; }
+        
+        /// <summary>
+        /// 玩家用户名
+        /// </summary>
+        public string username { get; set; }
 
         /// <summary>
         /// 英雄 ID

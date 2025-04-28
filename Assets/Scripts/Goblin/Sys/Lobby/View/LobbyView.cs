@@ -37,7 +37,6 @@ namespace Goblin.Sys.Lobby.View
             {
                 GPData data = new GPData();
                 data.id = 10086;
-                data.skey = 123456;
                 data.seat = 1;
                 data.sdata = new GPStageData
                 {
