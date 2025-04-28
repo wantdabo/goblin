@@ -33,7 +33,7 @@ namespace Goblin.Sys.Lobby.View
                 engine.proxy.login.C2SLogout();
             });
 
-            AddUIEventListener("LocalGame", (e) =>
+            AddUIEventListener("LocalGameBtn", (e) =>
             {
                 GPData data = new GPData();
                 data.id = 10086;
@@ -66,6 +66,13 @@ namespace Goblin.Sys.Lobby.View
                 engine.gameui.Open<GameplayView>();
                 engine.proxy.gameplay.Load<LocalDirector>(data);
                 engine.proxy.gameplay.director.StartGame();
+            });
+            
+            AddUIEventListener("LockstepGameBtn", (e) =>
+            {
+                engine.net.Connect("127.0.0.1", 12801);
+                UnityEngine.Debug.Log(engine.net.connected);
+                engine.gameui.Open<LockstepMatchingView>();
             });
         }
     }

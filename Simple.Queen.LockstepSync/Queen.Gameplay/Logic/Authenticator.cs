@@ -27,7 +27,14 @@ public class Authenticator : Comp
             channels.Remove(channel);
         }
         
+        channel.Send(new S2CLoginMsg
+        {
+            code = 1,
+            uuid = msg.username,
+        });
+        
         users.Add(msg.username, channel);
         channels.Add(channel, msg.username);
+
     }
 }
