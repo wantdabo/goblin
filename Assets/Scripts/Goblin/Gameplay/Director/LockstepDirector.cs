@@ -3,6 +3,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
+using Queen.Protocols;
 
 namespace Goblin.Gameplay.Director
 {
@@ -26,6 +27,18 @@ namespace Goblin.Gameplay.Director
         /// 逻辑场景
         /// </summary>
         private Stage stage { get; set; }
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            engine.net.Recv<S2CGameFrameMsg>(OnS2CGameFrame);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            engine.net.UnRecv<S2CGameFrameMsg>(OnS2CGameFrame);
+        }
 
         protected override void OnCreateGame()
         {
@@ -73,6 +86,10 @@ namespace Goblin.Gameplay.Director
             stage.Restore();
         }
 
+        protected override void OnStep()
+        {
+        }
+
         /// <summary>
         /// 处理 RIL 渲染状态
         /// </summary>
@@ -86,12 +103,8 @@ namespace Goblin.Gameplay.Director
             });
         }
 
-        protected override void OnStep()
+        private void OnS2CGameFrame(S2CGameFrameMsg msg)
         {
-            if (null == stage) return;
-            if (StageState.Ticking != stage.state) return;
-
-            stage.Step();
         }
     }
 }

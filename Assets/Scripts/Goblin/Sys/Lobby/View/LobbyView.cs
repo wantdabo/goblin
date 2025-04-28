@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Common.GPDatas;
+using Goblin.Sys.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,7 +80,7 @@ namespace Goblin.Sys.Lobby.View
                 }
                 engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "服务器连接成功." });
                 
-                engine.gameui.Open<LockstepMatchingView>();
+                engine.gameui.Open<GameplayMatchingView>();
             });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Goblin.Common;
+using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
@@ -10,6 +11,7 @@ using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
 using Kowtow;
 using Kowtow.Math;
+using Queen.Protocols;
 using UnityEngine;
 
 namespace Goblin.Sys.Gameplay

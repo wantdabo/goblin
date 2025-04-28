@@ -64,16 +64,7 @@ public class Logger : Comp
     protected override void OnCreate()
     {
         base.OnCreate();
-
-        Task.Run(() =>
-        {
-            while (true)
-            {
-                Thread.Sleep(100);
-                SaveDisk();
-            }
-        });
-
+        
         if (false == Directory.Exists(logdir)) Directory.CreateDirectory(logdir);
 
         var logFilePath = $"{logdir}Log_{DateTime.Now.ToString("yyyy-MM-dd")}{DateTime.Now.ToLongTimeString().Replace(':', '.')}.txt";
@@ -166,15 +157,5 @@ public class Logger : Comp
         Console.Write($"{log.message}");
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    /// <summary>
-    /// 存盘
-    /// </summary>
-    private void SaveDisk()
-    {
-        while (logInfos.TryDequeue(out var log))
-            writer.WriteLine(log);
-        writer.Flush();
     }
 }

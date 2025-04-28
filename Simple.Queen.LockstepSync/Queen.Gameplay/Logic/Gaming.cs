@@ -1,4 +1,5 @@
 using Queen.Gameplay.Core;
+using Queen.Network.Common;
 using Queen.Protocols;
 
 namespace Queen.Gameplay.Logic;
@@ -12,6 +13,18 @@ public class Gaming : Comp
     public Dictionary<ulong, GameData> gamedatas { get; private set; } = new();
     public Dictionary<ulong, Game> games { get; private set; } = new();
     public Dictionary<ulong, Dictionary<ulong, ulong>> gameseats { get; private set; } = new();
+
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+        engine.slave.Recv<C2SPlayerInputMsg>(OnC2SPlayerInput);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        engine.slave.UnRecv<C2SPlayerInputMsg>(OnC2SPlayerInput);
+    }
 
     private GameData CreateGameData(List<(string username, int hero)> users)
     {
@@ -64,6 +77,10 @@ public class Gaming : Comp
     public void Reconnect(string username)
     {
         if (false == usergames.TryGetValue(username, out var id) || false == games.TryGetValue(id, out var game)) return;
+    }
+
+    private void OnC2SPlayerInput(NetChannel channel, C2SPlayerInputMsg msg)
+    {
     }
 }
 

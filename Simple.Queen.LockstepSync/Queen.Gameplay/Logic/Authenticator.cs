@@ -21,9 +21,9 @@ public class Authenticator : Comp
 
     private void OnC2SLogin(NetChannel channel, C2SLoginMsg msg)
     {
-        if (users.ContainsKey(msg.username))
+        if (channels.TryGetValue(channel, out var username))
         {
-            users.Remove(msg.username);
+            users.Remove(username);
             channels.Remove(channel);
         }
         

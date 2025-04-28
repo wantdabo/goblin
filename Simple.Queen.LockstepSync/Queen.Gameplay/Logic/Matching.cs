@@ -31,7 +31,7 @@ public class Matching : Comp
 
     private void OnExecute(ExecuteEvent e)
     {
-        if (matchings.Count < 2) return;
+        if (matchings.Count < 1) return;
 
         var usermatchings = matchings.Take(2).ToList();
         List<(string username, int hero)> users = new();
@@ -40,7 +40,10 @@ public class Matching : Comp
         
         foreach (var player in gamedata.sdata.players)
         {
+            matchings.TryRemove(player.username, out _);
+
             if (false == engine.auth.users.TryGetValue(player.username, out var channel)) continue;
+            if (false == channel.alive) continue;
             channel.Send(new S2CStartGameMsg
             {
                 seat = player.seat,
