@@ -24,13 +24,14 @@ namespace Queen.Protocols.Common
             { 10012, typeof(Queen.Protocols.S2CStartMatchingMsg)},
             { 10013, typeof(Queen.Protocols.C2SEndMatchingMsg)},
             { 10014, typeof(Queen.Protocols.S2CEndMatchingMsg)},
-            { 10015, typeof(Queen.Protocols.C2STestMsg)},
-            { 10016, typeof(Queen.Protocols.S2CTestMsg)},
-            { 10017, typeof(Queen.Protocols.Common.ACKCrossMessage)},
-            { 10018, typeof(Queen.Protocols.Common.ReqCrossMessage)},
-            { 10019, typeof(Queen.Protocols.Common.ResCrossMessage)},
-            { 10020, typeof(Queen.Protocols.Common.NodeErrorMsg)},
-            { 10021, typeof(Queen.Protocols.Common.NodePingMsg)},
+            { 10015, typeof(Queen.Protocols.S2CStartGameMsg)},
+            { 10016, typeof(Queen.Protocols.C2STestMsg)},
+            { 10017, typeof(Queen.Protocols.S2CTestMsg)},
+            { 10018, typeof(Queen.Protocols.Common.ACKCrossMessage)},
+            { 10019, typeof(Queen.Protocols.Common.ReqCrossMessage)},
+            { 10020, typeof(Queen.Protocols.Common.ResCrossMessage)},
+            { 10021, typeof(Queen.Protocols.Common.NodeErrorMsg)},
+            { 10022, typeof(Queen.Protocols.Common.NodePingMsg)},
         };
     }
 }

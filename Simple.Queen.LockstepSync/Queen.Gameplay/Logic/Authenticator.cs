@@ -37,6 +37,6 @@ public class Authenticator : Comp
         channels.Add(channel, msg.username);
         
         // 尝试重连
-        engine.gaming.Reconnect(msg.username);
+        engine.matching.Reconnect(msg.username);
     }
 }

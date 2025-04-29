@@ -42,6 +42,7 @@ namespace Queen.Protocols
     /// <summary>
     /// 响应开始游戏消息
     /// </summary>
+    [MessagePackObject(true)]
     public class S2CStartGameMsg : INetMessage
     {
         /// <summary>

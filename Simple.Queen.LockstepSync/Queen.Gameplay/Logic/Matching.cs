@@ -31,7 +31,7 @@ public class Matching : Comp
 
     private void OnExecute(ExecuteEvent e)
     {
-        if (matchings.Count < 1) return;
+        if (matchings.Count < 2) return;
 
         var usermatchings = matchings.Take(2).ToList();
         List<(string username, int hero)> users = new();
@@ -50,6 +50,12 @@ public class Matching : Comp
                 data = gamedata,
             });
         }
+    }
+    
+    public void Reconnect(string username)
+    {
+        if (false == engine.gaming.usergames.TryGetValue(username, out var id) || false == engine.gaming.games.TryGetValue(id, out var game)) return;
+        
     }
 
     private void OnC2SStartMatching(NetChannel channel, C2SStartMatchingMsg msg)

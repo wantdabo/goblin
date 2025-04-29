@@ -50,13 +50,9 @@ namespace Queen.Protocols
         /// </summary>
         public uint frame { get; set; }
         /// <summary>
-        /// 座位列表
-        /// </summary>
-        public ulong seats { get; set; }
-        /// <summary>
         /// 输入列表
         /// </summary>
-        public PlayerInputData[][] inputs { get; set; }
+        public PlayerInputData[] inputs { get; set; }
     }
 
     /// <summary>
@@ -65,6 +61,10 @@ namespace Queen.Protocols
     [MessagePackObject(true)]
     public class PlayerInputData
     {
+        /// <summary>
+        /// 座位 ID
+        /// </summary>
+        public ulong seat { get; set; }
         /// <summary>
         /// 输入类型
         /// </summary>

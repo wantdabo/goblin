@@ -74,13 +74,9 @@ public class Gaming : Comp
         return data;
     }
 
-    public void Reconnect(string username)
-    {
-        if (false == usergames.TryGetValue(username, out var id) || false == games.TryGetValue(id, out var game)) return;
-    }
-
     private void OnC2SPlayerInput(NetChannel channel, C2SPlayerInputMsg msg)
     {
+        if (false == games.TryGetValue(msg.id, out var game)) return;
     }
 }
 
@@ -108,5 +104,9 @@ public class Game : Comp
     {
         base.OnDestroy();
         disposed = true;
+    }
+
+    public void SetInput(PlayerInputData input)
+    {
     }
 }
