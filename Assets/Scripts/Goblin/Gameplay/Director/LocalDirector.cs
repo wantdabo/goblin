@@ -102,8 +102,9 @@ namespace Goblin.Gameplay.Director
             });
         }
 
-        protected override void OnStep()
+        protected override void OnFixedTick(FixedTickEvent e)
         {
+            base.OnFixedTick(e);
             if (null == stage) return;
             if (StageState.Ticking != stage.state) return;
             

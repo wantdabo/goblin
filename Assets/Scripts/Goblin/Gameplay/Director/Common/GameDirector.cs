@@ -107,16 +107,15 @@ namespace Goblin.Gameplay.Director.Common
             OnRestore();
         }
         
-        private void OnTick(TickEvent e)
+        protected virtual void OnTick(TickEvent e)
         {
             if (false == rendering) return;
 
             world.ticker.Tick(e.tick);
         }
         
-        private void OnFixedTick(FixedTickEvent e)
+        protected virtual void OnFixedTick(FixedTickEvent e)
         {
-            OnStep();
         }
 
         /// <summary>
@@ -151,9 +150,5 @@ namespace Goblin.Gameplay.Director.Common
         /// 恢复
         /// </summary>
         protected abstract void OnRestore();
-        /// <summary>
-        /// 驱动
-        /// </summary>
-        protected abstract void OnStep();
     }
 }

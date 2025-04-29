@@ -86,10 +86,6 @@ namespace Goblin.Gameplay.Director
             stage.Restore();
         }
 
-        protected override void OnStep()
-        {
-        }
-
         /// <summary>
         /// 处理 RIL 渲染状态
         /// </summary>

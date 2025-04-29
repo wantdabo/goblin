@@ -43,9 +43,5 @@ namespace Goblin.Gameplay.Director
         protected override void OnRestore()
         {
         }
-
-        protected override void OnStep()
-        {
-        }
     }
 }
