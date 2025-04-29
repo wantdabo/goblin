@@ -90,6 +90,14 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
+        protected override void OnOpen()
+        {
+            base.OnOpen();
+            engine.u3dkit.SeekNode<GameObject>(gameObject, "SnapshotBtn").SetActive(false);
+            engine.u3dkit.SeekNode<GameObject>(gameObject, "RestoreBtn").SetActive(false);
+            engine.u3dkit.SeekNode<GameObject>(gameObject, "Settings").SetActive(false);
+        }
+
         private void OnFixedLateTick(FixedLateTickEvent e)
         {
             if (null == synopsisText) return;

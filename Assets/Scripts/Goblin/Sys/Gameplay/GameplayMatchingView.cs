@@ -4,6 +4,7 @@ using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay.View;
+using Goblin.Sys.Lobby.View;
 using Queen.Protocols;
 using UnityEngine;
 using UnityEngine.UI;
@@ -150,6 +151,7 @@ namespace Goblin.Sys.Gameplay
             }
             data.sdata = sdata;
             engine.proxy.gameplay.Load<LockstepDirector>(data);
+            engine.gameui.Close<LobbyView>();
             engine.gameui.Open<GameplayView>();
             engine.gameui.Close(this);
             engine.proxy.gameplay.director.StartGame();

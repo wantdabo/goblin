@@ -85,6 +85,7 @@ public class Game : Comp
     public bool disposed { get;  private set; }
     public uint frame { get; private set; }
     public Dictionary<uint, List<PlayerInputData>> frames { get; set; } = new();
+    private List<PlayerInputData> curinputs { get; set; } = new();
     
     protected override void OnCreate()
     {
@@ -108,5 +109,12 @@ public class Game : Comp
 
     public void SetInput(PlayerInputData input)
     {
+        var oldinput = curinputs.Find((i) =>
+        {
+            return i.seat == input.seat && i.type == input.type;
+        });
+        if (null != oldinput) curinputs.Remove(oldinput);
+        
+        curinputs.Add(input);
     }
 }

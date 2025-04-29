@@ -31,7 +31,7 @@ public class Matching : Comp
 
     private void OnExecute(ExecuteEvent e)
     {
-        if (matchings.Count < 2) return;
+        if (matchings.Count < 1) return;
 
         var usermatchings = matchings.Take(2).ToList();
         List<(string username, int hero)> users = new();
