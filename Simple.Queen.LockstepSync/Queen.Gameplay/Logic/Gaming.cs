@@ -12,7 +12,6 @@ public class Gaming : Comp
     public Dictionary<string, ulong> usergames { get; private set; } = new();
     public Dictionary<ulong, GameData> gamedatas { get; private set; } = new();
     public Dictionary<ulong, Game> games { get; private set; } = new();
-    public Dictionary<ulong, Dictionary<ulong, ulong>> gameseats { get; private set; } = new();
 
     protected override void OnCreate()
     {
@@ -76,7 +75,11 @@ public class Gaming : Comp
 
     private void OnC2SPlayerInput(NetChannel channel, C2SPlayerInputMsg msg)
     {
+        if (false == engine.auth.channels.TryGetValue(channel, out var username)) return;
+        if (false == usergames.TryGetValue(username, out var id)) return;
+        if (msg.id != id) return;
         if (false == games.TryGetValue(msg.id, out var game)) return;
+        foreach (var input in msg.inputs) game.SetInput(input);
     }
 }
 
@@ -97,6 +100,21 @@ public class Game : Comp
                 if (disposed) break;
                 Thread.Sleep((int)(1f / engine.settings.gamefps * 1000));
                 frame++;
+                foreach (var input in curinputs)
+                {
+                    List<PlayerInputData> inputs = new();
+                    inputs.Add(new PlayerInputData
+                    {
+                        seat = input.seat,
+                        type = input.type,
+                        press = input.press,
+                        dire = new Vector2
+                        {
+                            x = input.dire.x,
+                            y = input.dire.y,
+                        },
+                    });
+                }
             }
         });
     }
