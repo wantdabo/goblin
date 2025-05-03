@@ -151,10 +151,10 @@ namespace Goblin.Sys.Gameplay
             }
             data.sdata = sdata;
             engine.proxy.gameplay.Load<LockstepDirector>(data);
+            engine.proxy.gameplay.director.StartGame();
             engine.gameui.Close<LobbyView>();
             engine.gameui.Open<GameplayView>();
             engine.gameui.Close(this);
-            engine.proxy.gameplay.director.StartGame();
         }
     }
 }
