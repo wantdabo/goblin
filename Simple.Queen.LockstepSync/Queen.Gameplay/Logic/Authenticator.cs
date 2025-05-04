@@ -21,10 +21,10 @@ public class Authenticator : Comp
 
     private void OnC2SLogin(NetChannel channel, C2SLoginMsg msg)
     {
-        if (channels.TryGetValue(channel, out var username))
+        if (users.TryGetValue(msg.username, out var c))
         {
-            users.Remove(username);
-            channels.Remove(channel);
+            users.Remove(msg.username);
+            channels.Remove(c);
         }
         
         channel.Send(new S2CLoginMsg
