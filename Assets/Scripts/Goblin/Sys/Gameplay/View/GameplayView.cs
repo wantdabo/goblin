@@ -90,15 +90,6 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
-        protected override void OnOpen()
-        {
-            base.OnOpen();
-            bool islocal = engine.proxy.gameplay.director is LocalDirector;
-            engine.u3dkit.SeekNode<GameObject>(gameObject, "SnapshotBtn").SetActive(islocal);
-            engine.u3dkit.SeekNode<GameObject>(gameObject, "RestoreBtn").SetActive(islocal);
-            engine.u3dkit.SeekNode<GameObject>(gameObject, "Settings").SetActive(islocal);
-        }
-
         private void OnFixedLateTick(FixedLateTickEvent e)
         {
             if (null == synopsisText) return;

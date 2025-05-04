@@ -68,20 +68,6 @@ namespace Goblin.Sys.Lobby.View
                 engine.proxy.gameplay.Load<LocalDirector>(data);
                 engine.proxy.gameplay.director.StartGame();
             });
-            
-            AddUIEventListener("LockstepGameBtn", (e) =>
-            {
-                engine.net.Connect("127.0.0.1", 12801);
-                if (false == engine.net.connected)
-                {
-                    engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "服务器未响应，请检查网络." });
-
-                    return;
-                }
-                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "服务器连接成功." });
-                
-                engine.gameui.Open<GameplayMatchingView>();
-            });
         }
     }
 }
