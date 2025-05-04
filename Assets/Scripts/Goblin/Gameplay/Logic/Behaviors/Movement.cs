@@ -10,16 +10,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Movement : Behavior<MovementInfo>
     {
-        protected override void OnAssemble()
-        {
-            base.OnAssemble();
-        }
-
-        protected override void OnDisassemble()
-        {
-            base.OnDisassemble();
-        }
-
         /// <summary>
         /// 移动
         /// </summary>
