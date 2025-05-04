@@ -1,227 +1,829 @@
-﻿using Goblin.Common;
-using Goblin.Core;
-using Goblin.Gameplay.Common.Defines;
-using Goblin.Gameplay.Logic.Actors;
-using Goblin.Gameplay.Logic.Attributes.Common;
-using Goblin.Gameplay.Logic.Common;
-using Goblin.Gameplay.Logic.Physics.Common;
-using Goblin.Gameplay.Logic.Terrains;
-using Kowtow.Math;
+using System;
 using System.Collections.Generic;
-using FPRandom = Goblin.Gameplay.Logic.Common.FPRandom;
+using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Behaviors.Batchs;
+using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Common.Extensions;
+using Goblin.Gameplay.Logic.Common.GPDatas;
+using Goblin.Gameplay.Logic.Prefabs;
+using Goblin.Gameplay.Logic.Prefabs.Common;
+using Goblin.Gameplay.Logic.RIL.Common;
+using Kowtow.Math;
+using Config = Goblin.Gameplay.Logic.Behaviors.Config;
+using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core
 {
-    #region Events
     /// <summary>
-    /// 添加 Actor/实体事件
+    /// Actor 诞生事件
+    /// </summary>
+    public struct ActorBronEvent : IEvent
+    {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong id { get; set; }
+    }
+
+    /// <summary>
+    /// Actor 死亡事件
     /// </summary>
     public struct ActorDeadEvent : IEvent
     {
         /// <summary>
-        /// Actor
+        /// ActorID
         /// </summary>
-        public Actor actor { get; set; }
+        public ulong id { get; set; }
     }
 
     /// <summary>
-    /// 移除 Actor/实体事件
+    /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据
     /// </summary>
-    public struct ActorLiveEvent : IEvent
+    public sealed class Stage
     {
         /// <summary>
-        /// Actor
+        /// Stage.ActorID, Stage 的数据走的也是 Actor/Behavior/BehaviorInfo 那一套
+        /// 通过包装 Actor 的形式使用
+        /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
         /// </summary>
-        public Actor actor { get; set; }
-    }
-    #endregion
+        public ulong sa { get; private set; } = ulong.MaxValue;
+        /// <summary>
+        /// Stage 当前的运行状态
+        /// </summary>
+        public StageState state => info.state;
+        /// <summary>
+        /// Stage 当前的帧号
+        /// </summary>
+        public uint frame => info.frame;
+        /// <summary>
+        /// 时间流逝
+        /// </summary>
+        public FP elapsed => info.elapsed;
+        /// <summary>
+        /// 时间缩放
+        /// </summary>
+        public FP timescale => info.timescale;
+        /// <summary>
+        /// Stage 缓存
+        /// </summary>
+        private StageCache cache { get; set; }
+        /// <summary>
+        /// Stage 数据
+        /// </summary>
+        private StageInfo info { get; set; }
+        /// <summary>
+        /// 快照
+        /// </summary>
+        private StageInfo snapshot { get; set; }
+        /// <summary>
+        /// 是否有快照
+        /// </summary>
+        public bool hassnapshot => null != snapshot;
+        /// <summary>
+        /// 快照帧号
+        /// </summary>
+        public uint snapshotframe => null != snapshot ? snapshot.frame : 0;
+        /// <summary>
+        /// 初始化 Stage 的游戏数据
+        /// </summary>
+        public GPStageData sdata { get; set; }
+        /// <summary>
+        /// 配置
+        /// </summary>
+        public Config cfg => GetBehavior<Config>(sa);
+        /// <summary>
+        /// 座位
+        /// </summary>
+        public Seat seat => GetBehavior<Seat>(sa);
+        /// <summary>
+        /// 随机数
+        /// </summary>
+        public Random random => GetBehavior<Random>(sa);
+        /// <summary>
+        /// 渲染指令同步
+        /// </summary>
+        public RILSync rilsync => GetBehavior<RILSync>(sa);
+        /// <summary>
+        /// 事件订阅器
+        /// </summary>
+        public Eventor eventor => GetBehavior<Eventor>(sa);
+        /// <summary>
+        /// 预制创建器集合
+        /// </summary>
+        public Dictionary<Type, Prefab> prefabs { get; set; }
+        /// <summary>
+        /// 对外暴露抛出 RIL 的事件
+        /// </summary>
+        public Action<RILState> onril { get; set; }
 
-    /// <summary>
-    /// Stage/关卡
-    /// </summary>
-    public class Stage : Comp
-    {
         /// <summary>
-        /// Actor 自增 ID
+        /// 初始化 Stage
         /// </summary>
-        private uint incrementId = 0;
-        /// <summary>
-        /// 事件订阅派发者
-        /// </summary>
-        public Eventor eventor { get; private set; }
-        /// <summary>
-        /// 确定性，Ticker/时间驱动器
-        /// </summary>
-        public FPTicker ticker { get; private set; }
-        /// <summary>
-        /// 确定性，随机器
-        /// </summary>
-        public FPRandom random { get; private set; }
-        /// <summary>
-        /// 数值计算器
-        /// </summary>
-        public Calculator calc { get; private set; }
-        /// <summary>
-        /// RIL/ 渲染指令同步
-        /// </summary>
-        public RILSync rilsync { get; private set; }
-        /// <summary>
-        /// 物理
-        /// </summary>
-        public Phys phys { get; private set; }
-        /// <summary>
-        /// 地形
-        /// </summary>
-        public Terrain terrain { get; private set; }
-        /// <summary>
-        /// Actor 列表
-        /// </summary>
-        private List<Actor> actors { get; set; } = new();
-        /// <summary>
-        /// Actor 字典
-        /// </summary>
-        private Dictionary<uint, Actor> actordict { get; set; } = new();
-        /// <summary>
-        /// 活着的 ActorID 列表
-        /// </summary>
-        public List<uint> lives { get; private set; } = new();
-        /// <summary>
-        /// 死亡的 ActorID 列表
-        /// </summary>
-        public List<uint> deads { get; private set; } = new();
-
-        protected override void OnCreate()
+        /// <param name="data">Stage 初始化的游戏数据</param>
+        /// <returns>Stage</returns>
+        /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
+        public Stage Initialize(GPStageData data)
         {
-            base.OnCreate();
-            eventor = AddComp<Eventor>();
-            eventor.Create();
+            if (null != info) throw new Exception("you cannot initialize more than once.");
 
-            ticker = AddComp<FPTicker>();
-            ticker.Create();
+            // StageCache 初始化
+            cache = new StageCache().Initialize();
+            
+            // 构建 StageInfo, 因为 Stage 的数据也是走 BehaviorInfo, 无法通过自举的方式走 API 添加
+            // 悖论存在, 此处手动添加
+            info = ObjectCache.Get<StageInfo>();
+            info.Ready(sa);
+            info.state = StageState.Initialized;
+            AddActor(sa);
+            AddBehavior<Config>(sa);
+            AddBehavior<Seat>(sa);
+            AddBehavior<Random>(sa).Initialze(data.seed);
+            AddBehavior<RILSync>(sa);
+            // 添加批处理
+            Batches();
+            // 添加预制创建器
+            Prefabs();
+            // 构建初始化 Stage
+            Building(data);
 
-            random = AddComp<FPRandom>();
-            random.Initial(19491001);
-            random.Create();
+            return this;
+        }
+        
+        /// <summary>
+        /// 销毁 Stage
+        /// </summary>
+        public void Dispose()
+        {
+            if (StageState.Stopped != info.state) return;
+            info.state = StageState.Disposed;
+            
+            // 回收 Actor
+            cache.rmvactors.Clear();
+            cache.rmvactors.AddRange(info.actors);
+            RecycleActors();
+            
+            // 卸载 Prefabs
+            foreach (var prefab in prefabs.Values) prefab.Unload();
+            prefabs.Clear();
+            ObjectCache.Set(prefabs);
+            
+            // StageInfo 回收
+            info.Reset();
+            ObjectCache.Set(info);
 
-            calc = AddComp<Calculator>();
-            calc.Create();
-
-            rilsync = AddComp<RILSync>();
-            rilsync.stage = this;
-            rilsync.Create();
-
-            phys = AddComp<Phys>();
-            phys.stage = this;
-            phys.Initialize(FPVector3.down * 981 * FP.EN2);
-            phys.Create();
-
-            terrain = AddComp<Terrain>();
-            terrain.stage = this;
-            terrain.Create();
+            // StageCache 回收
+            cache.Dispose();
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            for (int i = actors.Count - 1; i >= 0; i--) actors[i].Destroy();
-        }
-
         /// <summary>
-        /// 游戏中/Gameplay 循环
+        /// 快照
         /// </summary>
-        public void Tick()
+        public void Snapshot()
         {
-            ticker.Tick();
-
-            foreach (uint dead in deads)
+            if (null != snapshot)
             {
-                var deada = RmvActor(dead);
-                deada.Destroy();
+                snapshot.Reset();
+                ObjectCache.Set(snapshot);
             }
-            deads.Clear();
+            
+            snapshot = info.Clone() as StageInfo;
         }
-
+        
         /// <summary>
-        /// Actor 存活
+        /// 恢复
         /// </summary>
-        /// <param name="id">ActorID</param>
-        public void Live(uint id)
+        public void Restore()
         {
-            if (deads.Contains(id)) return;
-
-            var actor = GetActor(id);
-            if (null == actor) return;
-
-            eventor.Tell(new ActorLiveEvent { actor = actor });
-
-            lives.Add(id);
+            if (null == snapshot) return;
+            if (snapshot.frame == info.frame) return;
+            cache.rmvactors.Clear();
+            cache.rmvactors.AddRange(info.actors);
+            RecycleActors();
+            
+            info.Reset();
+            ObjectCache.Set(info);
+            info = snapshot.Clone() as StageInfo;
+            
+            foreach (var behaviorinfos in info.behaviorinfos.Values)
+            {
+                foreach (var behaviorinfo in behaviorinfos)
+                {
+                    if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.id, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+                    dict.Add(behaviorinfo.GetType(), behaviorinfo);
+                }
+            }
+            
+            foreach (var id in info.actors)
+            {
+                AddActor(id);
+                if (false == info.behaviortypes.TryGetValue(id, out var types)) continue;
+                foreach (var type in types)
+                {
+                    if (SeekBehavior(id, type, out _)) continue;
+                    AddBehavior(id, type);
+                }
+            }
         }
 
         /// <summary>
-        /// Actor 死亡
+        /// 添加预制创建器
         /// </summary>
-        /// <param name="id">ActorID</param>
-        public void Dead(uint id)
+        /// <exception cref="Exception">不能重复添加</exception>
+        private void Prefabs()
         {
-            if (false == lives.Contains(id)) return;
-            var actor = GetActor(id);
-            if (null == actor) return;
-
-            eventor.Tell(new ActorDeadEvent { actor = actor });
-
-            deads.Add(id);
+            prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
+            prefabs.Add(typeof(HeroPrefab), ObjectCache.Get<HeroPrefab>().Load(this));
+        }
+        
+        /// <summary>
+        /// 添加批处理
+        /// </summary>
+        private void Batches()
+        {
+            AddBehavior<Translate>(sa);
         }
 
         /// <summary>
-        /// 获得 Actor
+        /// 开始
         /// </summary>
-        /// <param name="id">id</param>
+        public void Start()
+        {
+            if (StageState.Initialized != info.state) return;
+            info.state = StageState.Ticking;
+        }
+
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        public void Pause()
+        {
+            if (StageState.Ticking != info.state) return;
+            info.state = StageState.Paused;
+        }
+        
+        /// <summary>
+        /// 恢复
+        /// </summary>
+        public void Resume()
+        {
+            if (StageState.Paused != info.state) return;
+            info.state = StageState.Ticking;
+        }
+
+        /// <summary>
+        /// 停止
+        /// </summary>
+        public void Stop()
+        {
+            if (StageState.Stopped == info.state) return;
+            info.state = StageState.Stopped;
+        }
+
+        /// <summary>
+        /// 输入
+        /// </summary>
+        /// <param name="id">座位 ID</param>
+        /// <param name="inputType">按键类型</param>
+        /// <param name="press">摁下之后 -> TRUE</param>
+        /// <param name="dire">按键的方向</param>
+        public void SetInput(ulong id, InputType inputType, bool press, GPVector2 dire)
+        {
+            var actor = seat.GetActor(id);
+            if (false == info.actors.Contains(actor)) return;
+            
+            var gamepad = GetBehavior<Gamepad>(actor);
+            if (null == gamepad) return;
+            
+            gamepad.SetInput(inputType, press, dire.ToFPVector2());
+        }
+
+        /// <summary>
+        /// 驱动
+        /// </summary>
+        public void Step()
+        {
+            if (StageState.Ticking != info.state) return;
+            
+            // 帧号递增 & 时间流逝
+            info.frame++;
+            info.elapsed += info.tick;
+
+            // Tick 驱动
+            foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
+            {
+                if (false == SeekBehaviors(type, out var behaviors)) continue;
+                foreach (var behavior in behaviors)
+                {
+                    if (SeekBehaviorInfo(behavior.actor.id, out TickerInfo ticker))
+                    {
+                        behavior.Tick(ticker.timescale * info.tick);
+                        continue;
+                    }
+
+                    behavior.Tick(info.tick);
+                }
+                behaviors.Clear();
+                ObjectCache.Set(behaviors);
+            }
+
+            // 帧末调度
+            foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
+            {
+                if (false == SeekBehaviors(type, out var behaviors)) continue;
+                foreach (var behavior in behaviors)
+                {
+                    behavior.EndTick();
+                }
+                behaviors.Clear();
+                ObjectCache.Set(behaviors);
+            }
+            
+            RecycleActors();
+        }
+
+        /// <summary>
+        /// 回收/销毁 RmvActors
+        /// </summary>
+        private void RecycleActors()
+        {
+            foreach (var rmvactor in cache.rmvactors)
+            {
+                if (cache.behaviordict.TryGetValue(rmvactor, out var dict))
+                {
+                    foreach (var behavior in dict.Values)
+                    {
+                        if (cache.behaviors.TryGetValue(behavior.GetType(), out var list))
+                        {
+                            list.Remove(behavior);
+                            if (0 == list.Count)
+                            {
+                                ObjectCache.Set(list);
+                                cache.behaviors.Remove(behavior.GetType());
+                            }
+                        }
+                        behavior.Disassemble();
+                        ObjectCache.Set(behavior);  
+                    }
+                    dict.Clear();
+                    ObjectCache.Set(dict);
+                    cache.behaviordict.Remove(rmvactor);
+                }
+
+                if (info.behaviortypes.TryGetValue(rmvactor, out var types))
+                {
+                    types.Clear();
+                    ObjectCache.Set(types);
+                    
+                    info.behaviortypes.Remove(rmvactor);
+                }
+                
+                if (cache.behaviorinfodict.TryGetValue(rmvactor, out var infodict))
+                {
+                    foreach (var behaviorinfo in infodict.Values)
+                    {
+                        if (info.behaviorinfos.TryGetValue(behaviorinfo.GetType(), out var infos))
+                        {
+                            infos.Remove(behaviorinfo);
+                            if (0 == infos.Count)
+                            {
+                                ObjectCache.Set(infos);
+                                info.behaviorinfos.Remove(behaviorinfo.GetType());
+                            }
+                        }
+                        behaviorinfo.Reset();
+                        ObjectCache.Set(behaviorinfo);
+                    }
+                    infodict.Clear();
+                    ObjectCache.Set(infodict);
+                    cache.behaviorinfodict.Remove(rmvactor);
+                }
+
+                if (cache.actordict.TryGetValue(rmvactor, out var actor))
+                {
+                    info.actors.Remove(rmvactor);
+                    cache.actordict.Remove(rmvactor);
+                    actor.Disassemble();
+                }
+            }
+            cache.rmvactors.Clear();
+        }
+
+        /// <summary>
+        /// 根据预制创建器构建一个 Actor
+        /// </summary>
+        /// <param name="prefabinfo">预制构建器数据</param>
+        /// <typeparam name="T">预制构建器类型</typeparam>
         /// <returns>Actor</returns>
-        public Actor GetActor(uint id)
+        /// <exception cref="Exception">预制构建器类型不存在</exception>
+        public Actor Spawn<T>(IPrefabInfo prefabinfo) where T : Prefab
         {
-            return actordict.GetValueOrDefault(id);
+            if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
+            
+            return prefab.Processing(GenActor(), prefabinfo);
         }
 
+        /// <summary>
+        /// 获取 Actor
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <returns>Actor</returns>
+        public Actor GetActor(ulong id)
+        {
+            // Actor 不存在
+            if (false == info.actors.Contains(id)) return default;
+            if (false == cache.actordict.TryGetValue(id, out var actor)) return default;
+            
+            return actor;
+        }
+        
+        /// <summary>
+        /// 移除 Actor
+        /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Stage.RmvActors)
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        public void RmvActor(ulong id)
+        {
+            if (cache.rmvactors.Contains(id)) return;
+            cache.rmvactors.Add(id);
+            eventor.Tell(new ActorDeadEvent { id = id });
+        }
+
+        /// <summary>
+        /// 生成 Actor
+        /// </summary>
+        /// <returns>Actor</returns>
+        public Actor GenActor()
+        {
+            // 生成一个 Actor
+            var actor = AddActor(++info.increment);
+            eventor.Tell(new ActorBronEvent { id = actor.id });
+            
+            return actor;
+        }
+        
         /// <summary>
         /// 添加 Actor
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
+        /// <param name="id">ActorID</param>
         /// <returns>Actor</returns>
-        public T AddActor<T>() where T : Actor, new()
+        /// <exception cref="Exception">Actor 已存在</exception>
+        private Actor AddActor(ulong id)
         {
-            var actor = AddComp<T>();
-            actor.id = ++incrementId;
-            actor.stage = this;
-            actors.Add(actor);
-            actordict.Add(actor.id, actor);
-
+            var actor = ObjectCache.Get<Actor>();
+            if (false == info.actors.Contains(id)) info.actors.Add(id);
+            if (cache.actordict.ContainsKey(id)) throw new Exception($"actor {id} already exists.");
+            
+            cache.actordict.Add(id, actor);
+            
+            actor.Assemble(id, this);
+            // 默认携带 Tag 行为. 写入 ActorType 为 NONE
+            actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
+            actor.AddBehavior<Eventor>();
+            
             return actor;
         }
 
         /// <summary>
-        /// 根据 ID 移除 Actor
+        /// 获取指定类型的所有 Behavior 列表
         /// </summary>
-        /// <param name="id">ID</param>
-        private Actor RmvActor(uint id)
+        /// <param name="behaviors">所有 Behavior 列表</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors<T>(out List<T> behaviors) where T : Behavior
         {
-            var actor = GetActor(id);
-            if (null == actor) return null;
+            behaviors = GetBehaviors<T>();
+        
+            return null != behaviors;
+        }
+        
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>所有 Behavior 列表</returns>
+        public List<T> GetBehaviors<T>() where T : Behavior
+        {
+            var type = typeof(T);
+            if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
 
-            RmvActor(actor);
+            // 根据类型去获取所有 Behavior
+            var result = ObjectCache.Get<List<T>>();
+            foreach (var behavior in list) result.Add(behavior as T);
 
-            return actor;
+            return result;
+        }
+        
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behaviors">所有 Behavior 列表</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(Type type, out List<Behavior> behaviors)
+        {
+            behaviors = GetBehaviors(type);
+        
+            return null != behaviors;
         }
 
         /// <summary>
-        /// 根据 Actor 实例移除 Actor
+        /// 获取指定类型的所有 Behavior 列表
+        /// <param name="type">Behavior 类型</param>
         /// </summary>
-        /// <param name="actor">Actor 实例</param>
-        private void RmvActor(Actor actor)
+        /// <returns>所有 Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(Type type)
         {
-            if (false == actors.Contains(actor)) return;
+            if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
+            var result = ObjectCache.Get<List<Behavior>>();
+            foreach (var behavior in list) result.Add(behavior);
 
-            actors.Remove(actor);
-            actordict.Remove(actor.id);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="behaviors">Behavior 列表</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(ulong id, out List<Behavior> behaviors)
+        {
+            behaviors = GetBehaviors(id);
+        
+            return null != behaviors;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <returns>Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(ulong id)
+        {
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
+
+            // 根据 ActorID 获取所有 Behavior
+            var result = ObjectCache.Get<List<Behavior>>();
+            foreach (var type in types)
+            {
+                if (false == SeekBehavior(id, type, out var behavior)) continue;
+                result.Add(behavior);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="behavior">Behavior</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehavior<T>(ulong id, out T behavior) where T : Behavior, new()
+        {
+            behavior = GetBehavior<T>(id);
+        
+            return null != behavior;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behavior">Behavior</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehavior(ulong id, Type type, out Behavior behavior)
+        {
+            behavior = GetBehavior(id, type);
+        
+            return null != behavior;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>Behavior</returns>
+        /// <exception cref="Exception">Actor 不存在</exception>
+        public T GetBehavior<T>(ulong id) where T : Behavior
+        {
+            var behavior = GetBehavior(id, typeof(T));
+            if (null == behavior) return default;
+
+            return behavior as T;
+        }
+        
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <returns>Behavior</returns>
+        public Behavior GetBehavior(ulong id, Type type)
+        {
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(type, out var behavior)) return default;
+            
+            return behavior;
+        }
+
+        /// <summary>
+        /// 添加 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>Behavior</returns>
+        /// <exception cref="Exception">Actor 不存在 | Behavior 已存在</exception>
+        public T AddBehavior<T>(ulong id) where T : Behavior, new()
+        {
+            return AddBehavior(id, typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// 添加 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <returns>Behavior</returns>
+        /// <exception cref="Exception">Actor 不存在 | Behavior 已存在</exception>
+        private Behavior AddBehavior(ulong id, Type type)
+        {
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            // 检查 Behavior 容器是否存在
+            if (false == cache.behaviors.TryGetValue(type, out var list)) cache.behaviors.Add(type, list = ObjectCache.Get<List<Behavior>>());
+            if (false == cache.behaviordict.TryGetValue(id, out var dict)) cache.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, Behavior>>());
+            // 检查 Behavior 是否已经存在容器中
+            if (dict.ContainsKey(type)) throw new Exception($"behavior {type} is exist.");
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Get<List<Type>>());
+            
+            var behavior = ObjectCache.Get(type) as Behavior;
+            if (false == types.Contains(type)) types.Add(type);
+            dict.Add(type, behavior);
+            list.Add(behavior);
+            
+            behavior.Initialize(this, id);
+            // 排序
+            list.Sort((a, b) =>
+            {
+                return a.id.CompareTo(b.id);
+            });
+            behavior.Assemble();
+
+            return behavior;
+        }
+
+        /// <summary>
+        /// 获取 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="info">BehaviorInfo</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfo<T>(ulong id, out T info) where T : BehaviorInfo
+        {
+            info = GetBehaviorInfo<T>(id);
+            
+            return null != info;
+        }
+
+        /// <summary>
+        /// 获取 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
+        public T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
+        {
+            if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
+
+            return (T)behaviorinfo;
+        }
+
+        /// <summary>
+        /// 构建初始化 Stage
+        /// </summary>
+        /// <param name="data">Stage 初始化的游戏数据</param>
+        public void Building(GPStageData data)
+        {
+            this.sdata = data;
+            foreach (var player in data.players)
+            {
+                var heroinfo = cfg.location.HeroInfos.Get(player.hero);
+                var attributeinfo = cfg.location.AttributeInfos.Get(heroinfo.Attribute);
+                var hero = Spawn<HeroPrefab>(new HeroPrefabInfo
+                {
+                    hero = player.hero,
+                    model = heroinfo.Model,
+                    attribute = new()
+                    {
+                        hp = (uint)attributeinfo.HP,
+                        maxhp = (uint)attributeinfo.MaxHP,
+                        moveseed = (uint)attributeinfo.MoveSpeed,
+                        attack = (uint)attributeinfo.Attack,
+                    },
+                    spatial = new()
+                    {
+                        position = player.position.ToFPVector3(),
+                        euler = player.euler.ToFPVector3(),
+                        scale = player.scale.ToFPVector3(),
+                    }
+                });
+                hero.AddBehavior<Gamepad>();
+                // 入座
+                seat.Enter(player.seat, hero.id);
+            }
+        }
+
+        /// <summary>
+        /// 添加 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
+        /// <exception cref="Exception">Actor 不存在 | BehaviorInfo 已存在</exception>
+        public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
+        {
+            // 检查 Actor 是否存在
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            // 检查 BehaviorInfo 容器是否存在
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+            // 检查 BehaviorInfo 是否已经存在容器中
+            if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
+            // 初始化 BehaviorInfos
+            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Get<List<BehaviorInfo>>());
+
+            var behaviorinfo = ObjectCache.Get<T>();
+            dict.Add(typeof(T), behaviorinfo);
+            list.Add(behaviorinfo);
+            behaviorinfo.Ready(id);
+            
+            return behaviorinfo;
+        }
+        
+        /// <summary>
+        /// Stage 缓存
+        /// </summary>
+        private sealed class StageCache
+        {
+            /// <summary>
+            /// Actor 列表, 键为 ActorID, 值为 Actor 实例
+            /// </summary>
+            public Dictionary<ulong, Actor> actordict { get; set; }
+            /// <summary>
+            /// 行为列表, 键为 ActorID, 值为该 Actor 上的所有行为
+            /// </summary>
+            public Dictionary<ulong, Dictionary<Type, Behavior>> behaviordict { get; set; }
+            /// <summary>
+            /// 行为列表, 键为行为类型, 值为该行为类型的所有 Behavior 列表
+            /// </summary>
+            public Dictionary<Type, List<Behavior>> behaviors { get; set; }
+            /// <summary>
+            /// 行为信息列表, 键为 ActorID, 值为该 Actor 上的所有行为信息
+            /// </summary>
+            public Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfodict { get; set; }
+            /// <summary>
+            /// RmvActor 列表
+            /// </summary>
+            public List<ulong> rmvactors { get; set; }
+        
+            public StageCache Initialize()
+            {
+                actordict = ObjectCache.Get<Dictionary<ulong, Actor>>();
+                behaviordict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Behavior>>>();
+                behaviors = ObjectCache.Get<Dictionary<Type, List<Behavior>>>();
+                behaviorinfodict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
+                rmvactors = ObjectCache.Get<List<ulong>>();
+
+                return this;
+            }
+        
+            public StageCache Dispose()
+            {
+                actordict.Clear();
+                ObjectCache.Set(actordict);
+            
+                behaviordict.Clear();
+                ObjectCache.Set(behaviordict);
+            
+                behaviors.Clear();
+                ObjectCache.Set(behaviors);
+            
+                behaviorinfodict.Clear();
+                ObjectCache.Set(behaviorinfodict);
+            
+                rmvactors.Clear();
+                ObjectCache.Set(rmvactors);
+
+                return this;
+            }
         }
     }
 }

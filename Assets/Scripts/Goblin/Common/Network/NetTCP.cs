@@ -92,7 +92,6 @@ namespace Goblin.Common.Network
             }
             catch (Exception e)
             {
-                engine.eventor.Tell(new MessageBlowEvent { type = 2, desc = "服务器未响应，请检查网络." });
                 RecycleSocket();
             }
         }

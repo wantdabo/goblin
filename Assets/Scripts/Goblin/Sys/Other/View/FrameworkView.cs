@@ -101,7 +101,7 @@ namespace Goblin.Sys.Other.View
             msgGo.SetActive(true);
             engine.ticker.Timing((t) =>
             {
-                engine.pool.Set("MESSAGE_BLOW_GO_KEY", msgGo);
+                engine.pool.Set(msgGo, "MESSAGE_BLOW_GO_KEY");
                 msgGo.SetActive(false);
             }, 3.5f, 1);
         }

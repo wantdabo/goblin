@@ -8,8 +8,14 @@ namespace Goblin.Common.Sounds
     /// </summary>
     public class Sound : Comp
     {
-        public static GameObject soundpool = new("SOUNDS");
-        
+        public static GameObject root = new("Sound");
+        static Sound()
+        {
+            root.transform.SetParent(GameObject.Find("Gameplay").transform, false);
+            root.transform.localPosition = Vector3.zero;
+            root.transform.localScale = Vector3.one;
+        }
+
         /// <summary>
         /// 卸载音效
         /// </summary>
@@ -33,7 +39,7 @@ namespace Goblin.Common.Sounds
             {
                 sound = AddComp<SoundInfo>();
                 var go = engine.gameres.location.LoadSoundSync(res);
-                go.transform.SetParent(soundpool.transform, false);
+                go.transform.SetParent(root.transform, false);
                 sound.Initialize(res, go);
                 sound.Create();
             }
@@ -57,7 +63,7 @@ namespace Goblin.Common.Sounds
         {
             if (null == sound) return;
 
-            engine.pool.Set($"SOUND_KEY{sound.res}", sound);
+            engine.pool.Set(sound, $"SOUND_KEY{sound.res}");
         }
     }
 }

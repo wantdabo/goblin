@@ -31,7 +31,6 @@ namespace Goblin.Phases
         public override void OnEnter()
         {
             base.OnEnter();
-            engine.gameui.Open<Sys.Other.View.FrameworkView>();
             finished = true;
         }
     }

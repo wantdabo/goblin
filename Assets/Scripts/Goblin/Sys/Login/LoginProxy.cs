@@ -38,23 +38,23 @@ namespace Goblin.Sys.Login
         protected override void OnCreate()
         {
             base.OnCreate();
-            engine.net.Recv<NodeConnectMsg>(OnNodeConnect);
-            engine.net.Recv<NodeDisconnectMsg>(OnNodeDisconnect);
-            engine.net.Recv<S2CLoginMsg>(OnS2CLogin);
-            engine.net.Recv<S2CLogoutMsg>(OnS2CLogout);
-            engine.net.Recv<S2CRegisterMsg>(OnS2CRegister);
-            engine.net.Recv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
+            // engine.net.Recv<NodeConnectMsg>(OnNodeConnect);
+            // engine.net.Recv<NodeDisconnectMsg>(OnNodeDisconnect);
+            // engine.net.Recv<S2CLoginMsg>(OnS2CLogin);
+            // engine.net.Recv<S2CLogoutMsg>(OnS2CLogout);
+            // engine.net.Recv<S2CRegisterMsg>(OnS2CRegister);
+            // engine.net.Recv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            engine.net.UnRecv<NodeConnectMsg>(OnNodeConnect);
-            engine.net.UnRecv<NodeDisconnectMsg>(OnNodeDisconnect);
-            engine.net.UnRecv<S2CLoginMsg>(OnS2CLogin);
-            engine.net.UnRecv<S2CLogoutMsg>(OnS2CLogout);
-            engine.net.UnRecv<S2CRegisterMsg>(OnS2CRegister);
-            engine.net.UnRecv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
+            // engine.net.UnRecv<NodeConnectMsg>(OnNodeConnect);
+            // engine.net.UnRecv<NodeDisconnectMsg>(OnNodeDisconnect);
+            // engine.net.UnRecv<S2CLoginMsg>(OnS2CLogin);
+            // engine.net.UnRecv<S2CLogoutMsg>(OnS2CLogout);
+            // engine.net.UnRecv<S2CRegisterMsg>(OnS2CRegister);
+            // engine.net.UnRecv<S2CRoleJoinedMsg>(OnS2CRoleJoined);
         }
 
         /// <summary>

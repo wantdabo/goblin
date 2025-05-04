@@ -15,7 +15,7 @@ namespace Goblin.Custom
         [MenuItem("工具/GOBLIN 运行时", false, 0)]
         public static void OpenMainScene()
         {
-            EditorSceneManager.OpenScene("Assets/GameRes/Scenes/Main.unity");
+            EditorSceneManager.OpenScene("Assets/GameRes/Scene/Main.unity");
         }
     }
 }

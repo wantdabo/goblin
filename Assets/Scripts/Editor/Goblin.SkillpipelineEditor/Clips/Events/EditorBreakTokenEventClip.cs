@@ -1,5 +1,4 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;

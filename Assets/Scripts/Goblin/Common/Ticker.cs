@@ -159,7 +159,7 @@ namespace Goblin.Common
             tick = t * timeScale;
             frame++;
             // 驱动计时器
-            TickTimerInfos(TickType.Tick, tick);
+            TickTimerInfos(tick);
             // 派发事件，时间流逝
             eventor.Tell(new TickEvent { frame = frame, tick = tick });
             eventor.Tell(new LateTickEvent { frame = frame, tick = tick });
@@ -181,8 +181,6 @@ namespace Goblin.Common
                 elapsed -= ft;
 
                 fixedFrame++;
-                // 驱动 Fixed 计时器
-                TickTimerInfos(TickType.FixedTick, fixedTick);
                 // 派发事件，时间流逝
                 eventor.Tell(new FixedTickEvent { frame = fixedFrame, tick = fixedTick });
                 eventor.Tell(new FixedLateTickEvent { frame = fixedFrame, tick = fixedTick });
@@ -223,8 +221,6 @@ namespace Goblin.Common
         private uint timerIncrementId = 0;
         private Dictionary<uint, TimerInfo> timerDict = new();
         private Queue<uint> recyTimers = new();
-        private Dictionary<uint, TimerInfo> fixedTimerDict = new();
-        private Queue<uint> recyFixedTimers = new();
 
         /// <summary>
         /// 停止计时器
@@ -235,17 +231,6 @@ namespace Goblin.Common
         {
             if (recyTimers.Contains(id)) return;
             recyTimers.Enqueue(id);
-        }
-
-        /// <summary>
-        /// 停止 Fixed 计时器
-        /// </summary>
-        /// <param name="id">计时器 ID</param>
-        /// <param name="tickDef">计时器类型</param>
-        public void StopFixedTimer(uint id)
-        {
-            if (recyFixedTimers.Contains(id)) return;
-            recyFixedTimers.Enqueue(id);
         }
 
         /// <summary>
@@ -271,42 +256,14 @@ namespace Goblin.Common
             return info.id;
         }
 
-        /// <summary>
-        /// 开始 Fixed 计时
-        /// </summary>
-        /// <param name="action">回调</param>
-        /// <param name="duration">触发所需的时间</param>
-        /// <param name="loop">循环次数（设置负数为将会一直循环，例如 -1）</param>
-        /// <returns>计时器 ID</returns>
-        public uint FixedTiming(Action<float> action, float duration, int loop)
-        {
-            timerIncrementId++;
-
-            TimerInfo info = new()
-            {
-                id = timerIncrementId,
-                action = action,
-                duration = duration,
-                loop = loop
-            };
-            fixedTimerDict.Add(info.id, info);
-
-            return info.id;
-        }
-
         private List<TimerInfo> infoTemps = new();
         private List<uint> timerTemps = new();
-        private void TickTimerInfos(TickType tt, float tick)
+        private void TickTimerInfos(float tick)
         {
-            var infos = TickType.Tick == tt ? timerDict : fixedTimerDict;
-            var recyList = TickType.Tick == tt ? recyTimers : recyFixedTimers;
-            Action<uint> stopTimerAction = TickType.Tick == tt ? StopTimer : StopFixedTimer;
-            while (recyList.TryDequeue(out var tid)) infos.Remove(tid);
-
-            if (0 == infos.Count) return;
-            infoTemps.Clear();
-            timerTemps.Clear();
-            foreach (var kv in infos)
+            while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
+            if (0 == timerDict.Count) return;
+            
+            foreach (var kv in timerDict)
             {
                 var info = kv.Value;
                 info.elapsed += tick;
@@ -322,18 +279,21 @@ namespace Goblin.Common
 
             foreach (var infoTemp in infoTemps)
             {
-                infos.Remove(infoTemp.id);
-                infos.Add(infoTemp.id, infoTemp);
+                timerDict.Remove(infoTemp.id);
+                timerDict.Add(infoTemp.id, infoTemp);
             }
 
             foreach (var timer in timerTemps)
             {
-                if (infos.TryGetValue(timer, out var action) && false == recyList.Contains(action.id))
+                if (timerDict.TryGetValue(timer, out var action) && false == recyTimers.Contains(action.id))
                 {
                     action.action.Invoke(tick);
-                    if (0 == action.loop) stopTimerAction(action.id);
+                    if (0 == action.loop) StopTimer(action.id);
                 }
             }
+            
+            infoTemps.Clear();
+            timerTemps.Clear();
         }
         #endregion
     }

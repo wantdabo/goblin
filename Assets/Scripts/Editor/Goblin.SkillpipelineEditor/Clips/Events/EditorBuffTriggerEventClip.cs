@@ -1,5 +1,5 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using System.Linq;
+﻿using System.Linq;
+using Goblin.Gameplay.Logic.Common.Defines;
 using UnityEngine.Serialization;
 
 namespace Goblin.SkillPipelineEditor

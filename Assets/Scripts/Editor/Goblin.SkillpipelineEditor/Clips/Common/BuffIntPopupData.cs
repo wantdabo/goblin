@@ -1,5 +1,4 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Goblin.SkillPipelineEditor
 {
@@ -7,8 +6,8 @@ namespace Goblin.SkillPipelineEditor
     {
         public override Dictionary<int, string> data => new()
         {
-            { (int)BUFF_DEFINE.BUFF_10001, $"[BUFF_{BUFF_DEFINE.BUFF_10001}] 赋予感电" },
-            { (int)BUFF_DEFINE.BUFF_10002, $"[BUFF_{BUFF_DEFINE.BUFF_10002}] 引爆感电" },
+            // { (int)BUFF_DEFINE.BUFF_10001, $"[BUFF_{BUFF_DEFINE.BUFF_10001}] 赋予感电" },
+            // { (int)BUFF_DEFINE.BUFF_10002, $"[BUFF_{BUFF_DEFINE.BUFF_10002}] 引爆感电" },
         };
     }
 }

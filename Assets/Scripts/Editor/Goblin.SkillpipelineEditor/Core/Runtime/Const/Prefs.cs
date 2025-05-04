@@ -1,10 +1,10 @@
 ﻿#if UNITY_EDITOR
-using Goblin.Gameplay.Common.Defines;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using Goblin.Gameplay.Logic.Common.Defines;
 
 
 namespace Goblin.SkillPipelineEditor

@@ -14,17 +14,17 @@ namespace Goblin.Common
         /// <summary>
         /// 配置表定位器
         /// </summary>
-        public Tables location { get; set; }
+        public Tables location { get; private set; }
 
         /// <summary>
         /// 浮点数转整型的乘法系数（1000 表示 1）
         /// </summary>
-        public const int float2Int = 1000;
+        public const int Float2Int = 1000;
 
         /// <summary>
         /// 整型转浮点的乘法系数（1000 表示 1）
         /// </summary>
-        public const float int2Float = 0.001f;
+        public const float Int2Float = 0.001f;
         
 #if UNITY_WEBGL
         private Dictionary<string, byte[]> cfgbytes = new();

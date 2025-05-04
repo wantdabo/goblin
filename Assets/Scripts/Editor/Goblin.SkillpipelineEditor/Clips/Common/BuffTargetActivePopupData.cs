@@ -1,5 +1,5 @@
-﻿using Goblin.Gameplay.Common.Defines;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common.Defines;
 
 namespace Goblin.SkillPipelineEditor
 {

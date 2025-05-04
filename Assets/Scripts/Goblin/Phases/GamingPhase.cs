@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goblin.Sys.Other.View;
 
 namespace Goblin.Phases
 {
@@ -17,9 +18,9 @@ namespace Goblin.Phases
 
         public override bool OnValid()
         {
-            var hotfixp = engine.phase.GetPhase<HotfixPhase>();
-
-            return engine.proxy.login.data.signined && hotfixp.finished;
+            return true;
+            // var hotfixp = engine.phase.GetPhase<HotfixPhase>();
+            // return engine.proxy.login.data.signined && hotfixp.finished;
         }
 
         public override void OnEnter()

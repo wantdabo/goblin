@@ -1,5 +1,6 @@
 ﻿using Goblin.Core;
 using System.Threading.Tasks;
+using Goblin.Gameplay.Render.Common;
 using UnityEngine;
 
 namespace Goblin.Common.GameRes
@@ -9,14 +10,14 @@ namespace Goblin.Common.GameRes
     /// </summary>
     public class Location : Comp
     {
-        private const string soundpath = "Assets/GameRes/Sounds/";
-        public const string modelpath = "Assets/GameRes/Models/";
-        private const string effectpath = "Assets/GameRes/Effects/";
-        public const string uieffectpath = "Assets/GameRes/UIEffects/";
-        public const string uiprefabpath = "Assets/GameRes/UIPrefabs/";
-        public const string spritespath = "Assets/GameRes/UISprites/";
-        public const string configpath = "Assets/GameRes/Raws/Configs/";
-        public const string skilldatapath = "Assets/GameRes/Raws/SkillDatas/";
+        private const string soundpath = "Assets/GameRes/Sound/";
+        public const string modelpath = "Assets/GameRes/Model/";
+        private const string effectpath = "Assets/GameRes/Effect/";
+        public const string uieffectpath = "Assets/GameRes/UIEffect/";
+        public const string uiprefabpath = "Assets/GameRes/UIPrefab/";
+        public const string spritespath = "Assets/GameRes/UISprite/";
+        public const string configpath = "Assets/GameRes/Raw/Configs/";
+        public const string skilldatapath = "Assets/GameRes/Raw/SkillDatas/";
 
         /// <summary>
         /// 异步加载音效预制体
@@ -56,6 +57,26 @@ namespace Goblin.Common.GameRes
         public GameObject LoadModelSync(string res)
         {
             return GameObject.Instantiate(engine.gameres.LoadAssetSync<GameObject>(modelpath + res));
+        }
+        
+        /// <summary>
+        /// 异步加载模型动画配置
+        /// </summary>
+        /// <param name="res">资源地址</param>
+        /// <returns>AnimationConfig</returns>
+        public async Task<AnimationConfig> LoadModelAnimationConfigAsync(string res)
+        {
+            return await engine.gameres.LoadAssetAsync<AnimationConfig>(modelpath + res);
+        }
+        
+        /// <summary>
+        /// 同步加载模型动画配置
+        /// </summary>
+        /// <param name="res">资源地址</param>
+        /// <returns>AnimationConfig</returns>
+        public AnimationConfig LoadModelAnimationConfigSync(string res)
+        {
+            return engine.gameres.LoadAssetSync<AnimationConfig>(modelpath + res);
         }
         
         /// <summary>
