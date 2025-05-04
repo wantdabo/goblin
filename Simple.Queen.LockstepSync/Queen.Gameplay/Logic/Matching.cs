@@ -54,8 +54,37 @@ public class Matching : Comp
     
     public void Reconnect(string username)
     {
-        if (false == engine.gaming.usergames.TryGetValue(username, out var id) || false == engine.gaming.games.TryGetValue(id, out var game)) return;
+        if (false == engine.gaming.usergames.TryGetValue(username, out var id)) return;
+        if (false == engine.gaming.userseats.TryGetValue(username, out var seat)) return;
+        if (false == engine.gaming.games.TryGetValue(id, out var game)) return;
+        if (false == engine.gaming.gamedatas.TryGetValue(id, out var gamedata)) return;
         
+        if (false == engine.auth.users.TryGetValue(username, out var channel)) return;
+        if (false == channel.alive) return;
+        channel.Send(new S2CStartGameMsg
+        {
+            seat = seat,
+            data = gamedata,
+        });
+        
+        List<FrameData> framedatas = new();
+        foreach (var kv in game.frames)
+        {
+            framedatas.Add(new FrameData
+            {
+                frame = kv.Key,
+                inputs = kv.Value.ToArray(),
+            });
+        }
+        framedatas.Sort((a, b) =>
+        {
+            return a.frame.CompareTo(b.frame);
+        });
+        
+        channel.Send(new S2CGameFrameMsg
+        {
+            frames = framedatas.ToArray(),
+        });
     }
 
     private void OnC2SStartMatching(NetChannel channel, C2SStartMatchingMsg msg)

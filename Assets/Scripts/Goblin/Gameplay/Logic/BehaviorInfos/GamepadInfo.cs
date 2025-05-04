@@ -13,23 +13,23 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 摇杆
         /// </summary>
-        Joystick,
+        Joystick = 1,
         /// <summary>
         /// 按钮 A
         /// </summary>
-        BA,
+        BA = 2,
         /// <summary>
         /// 按钮 B
         /// </summary>
-        BB,
+        BB = 3,
         /// <summary>
         /// 按钮 C
         /// </summary>
-        BC,
+        BC = 4,
         /// <summary>
         /// 按钮 D
         /// </summary>
-        BD,
+        BD = 5,
     }
 
     /// <summary>

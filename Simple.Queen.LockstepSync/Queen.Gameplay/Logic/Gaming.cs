@@ -1,6 +1,8 @@
+using System.Collections.Concurrent;
 using Queen.Gameplay.Core;
 using Queen.Network.Common;
 using Queen.Protocols;
+using TouchSocket.Core;
 
 namespace Queen.Gameplay.Logic;
 
@@ -9,9 +11,22 @@ namespace Queen.Gameplay.Logic;
 /// </summary>
 public class Gaming : Comp
 {
-    public Dictionary<string, ulong> usergames { get; private set; } = new();
-    public Dictionary<ulong, GameData> gamedatas { get; private set; } = new();
-    public Dictionary<ulong, Game> games { get; private set; } = new();
+    /// <summary>
+    /// Username, GameID
+    /// </summary>
+    public ConcurrentDictionary<string, ulong> usergames { get; private set; } = new();
+    /// <summary>
+    /// Username, Seat
+    /// </summary>
+    public ConcurrentDictionary<string, ulong> userseats { get; private set; } = new();
+    /// <summary>
+    /// GameID, GameData
+    /// </summary>
+    public ConcurrentDictionary<ulong, GameData> gamedatas { get; private set; } = new();
+    /// <summary>
+    /// GameID, Game
+    /// </summary>
+    public ConcurrentDictionary<ulong, Game> games { get; private set; } = new();
 
     protected override void OnCreate()
     {
@@ -60,16 +75,17 @@ public class Gaming : Comp
     public GameData CreateGame(List<(string username, int hero)> users)
     {
         var data = CreateGameData(users);
-        gamedatas.Add(data.id, data);
+        gamedatas.TryAdd(data.id, data);
         foreach (var player in data.sdata.players)
         {
-            usergames.Add(player.username, data.id);
+            usergames.TryAdd(player.username, data.id);
+            userseats.TryAdd(player.username, player.seat);
         }
         
         var game = AddComp<Game>();
-        games.Add(data.id, game);
-        game.Create();
-
+        game.Initialize(data.id).Create();
+        games.TryAdd(data.id, game);
+        
         return data;
     }
 
@@ -85,10 +101,26 @@ public class Gaming : Comp
 
 public class Game : Comp
 {
+    /// <summary>
+    /// is destroyed
+    /// </summary>
     public bool disposed { get;  private set; }
+    /// <summary>
+    /// GameID
+    /// </summary>
+    public ulong id { get; private set; }
+    /// <summary>
+    /// Game Current Frame
+    /// </summary>
     public uint frame { get; private set; }
-    public Dictionary<uint, List<PlayerInputData>> frames { get; set; } = new();
-    private List<PlayerInputData> curinputs { get; set; } = new();
+    /// <summary>
+    /// Game Frame, FrameData
+    /// </summary>
+    public ConcurrentDictionary<uint, List<PlayerInputData>> frames { get; set; } = new();
+    /// <summary>
+    /// CurrentFrame PlayerInputDatas
+    /// </summary>
+    private ConcurrentList<PlayerInputData> curinputs { get; set; } = new();
     
     protected override void OnCreate()
     {
@@ -100,9 +132,9 @@ public class Game : Comp
                 if (disposed) break;
                 Thread.Sleep((int)(1f / engine.settings.gamefps * 1000));
                 frame++;
+                List<PlayerInputData> inputs = new();
                 foreach (var input in curinputs)
                 {
-                    List<PlayerInputData> inputs = new();
                     inputs.Add(new PlayerInputData
                     {
                         seat = input.seat,
@@ -115,6 +147,25 @@ public class Game : Comp
                         },
                     });
                 }
+                frames.TryAdd(frame, inputs);
+                curinputs.Clear();
+
+                if (false == engine.gaming.gamedatas.TryGetValue(id, out var data)) continue;
+                S2CGameFrameMsg msg = new S2CGameFrameMsg
+                {
+                    frame = new FrameData
+                    {
+                        frame = frame,
+                        inputs = inputs.ToArray(),
+                    },
+                };
+                
+                foreach (var player in data.sdata.players)
+                {
+                    if (false == engine.auth.users.TryGetValue(player.username, out var channel)) continue;
+                    if (false == channel.alive) continue;
+                    channel.Send(msg);
+                }
             }
         });
     }
@@ -125,12 +176,24 @@ public class Game : Comp
         disposed = true;
     }
 
+    public Game Initialize(ulong id)
+    {
+        this.id = id;
+
+        return this;
+    }
+
     public void SetInput(PlayerInputData input)
     {
-        var oldinput = curinputs.Find((i) =>
+        PlayerInputData oldinput = default;
+        foreach (var i in curinputs)
         {
-            return i.seat == input.seat && i.type == input.type;
-        });
+            if (i.seat == input.seat && i.type == input.type)
+            {
+                oldinput = i;
+                break;
+            }
+        }
         if (null != oldinput) curinputs.Remove(oldinput);
         
         curinputs.Add(input);
