@@ -1,5 +1,7 @@
+#if HYBRID_CLR
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -143,11 +145,14 @@ namespace Goblin.Custom
 
         private static void GenScripts()
         {
+#if HYBRID_CLR
             PrebuildCommand.GenerateAll();
+#endif
         }
 
         private static void ScriptsCopy()
         {
+#if HYBRID_CLR
             var rootPath = Application.dataPath.Replace("/Assets", "/");
             var scriptResPath = Application.dataPath + "/GameRes/Raws/Scripts/";
 #if UNITY_STANDALONE_WIN
@@ -187,6 +192,7 @@ namespace Goblin.Custom
 
             Debug.Log("ScriptPackage Finished.");
             AssetDatabase.Refresh();
+#endif
         }
     }
 }
