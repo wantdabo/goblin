@@ -34,6 +34,8 @@ public class Authenticator : Comp
         });
         
         users.Add(msg.username, channel);
+        
+        if (channels.ContainsKey(channel)) channels.Remove(channel);
         channels.Add(channel, msg.username);
         
         // 尝试重连

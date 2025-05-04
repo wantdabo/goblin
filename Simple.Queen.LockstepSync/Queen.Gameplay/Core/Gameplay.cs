@@ -51,7 +51,7 @@ public class Gameplay : Engine<Gameplay>
         gaming.Create();
 
         engine.logger.Info(
-            $"\n\tname: {settings.name}\n\tipaddress: {settings.host}\n\tport: {settings.port}\n\twsport: {settings.wsport}\n\tmaxconn: {settings.maxconn}\n\tgamefps: {settings.gamefps}" 
+            $"\n\tname: {settings.name}\n\tipaddress: {settings.host}\n\tport: {settings.port}\n\twsport: {settings.wsport}\n\tmaxconn: {settings.maxconn}\n\tgamefps: {settings.gamefps}\n\tgameplayercnt: {settings.gameplayercnt}" 
         , ConsoleColor.Yellow);
         
         engine.logger.Info($"{settings.name} is running...");
