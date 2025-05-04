@@ -37,6 +37,10 @@ public class Settings : Comp
     /// 游戏帧率
     /// </summary>
     public byte gamefps { get; private set; }
+    /// <summary>
+    /// 游戏玩家数量 (影响匹配)
+    /// </summary>
+    public byte gameplayercnt { get; private set; }
     
     protected override void OnCreate()
     {
@@ -50,5 +54,6 @@ public class Settings : Comp
         sthread = jobj.Value<int>("sthread");
         maxpps = jobj.Value<int>("maxpps");
         gamefps = jobj.Value<byte>("gamefps");
+        gameplayercnt = jobj.Value<byte>("gameplayercnt");
     }
 }

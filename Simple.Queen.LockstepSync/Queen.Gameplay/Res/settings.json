@@ -14,5 +14,7 @@
   // 最大网络收发包每秒
   "maxpps": 10000,
   // 游戏帧率
-  "gamefps" : 25
+  "gamefps" : 25,
+  // 游戏玩家数量 (影响匹配)
+  "gameplayercnt": 1
 }
