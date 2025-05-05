@@ -21,6 +21,7 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         {
             type = 0;
             actor = 0;
+            OnReset();
         }
         
         /// <summary>
@@ -33,7 +34,7 @@ namespace Goblin.Gameplay.Logic.RIL.Common
     /// RIL 渲染状态
     /// </summary>
     /// <typeparam name="T">RIL</typeparam>
-    public class RILState<T> : RILState where T : IRIL
+    public sealed class RILState<T> : RILState where T : IRIL
     {
         /// <summary>
         /// RIL 渲染指令
