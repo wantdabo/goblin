@@ -10,14 +10,14 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <summary>
         /// 场景
         /// </summary>
-        protected Core.Stage stage { get; private set; }
+        protected Stage stage { get; private set; }
 
         /// <summary>
         /// 加载
         /// </summary>
         /// <param name="stage">场景</param>
         /// <returns>翻译器</returns>
-        public Translator Load(Core.Stage stage)
+        public Translator Load(Stage stage)
         {
             this.stage = stage;
 
@@ -45,9 +45,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// 渲染指令处理
         /// </summary>
         /// <param name="info">BehaviorInfo</param>
-        protected virtual void OnRIL(BehaviorInfo info)
-        {
-        }
+        protected abstract void OnRIL(BehaviorInfo info);
     }
     
     /// <summary>
@@ -56,9 +54,12 @@ namespace Goblin.Gameplay.Logic.Translators.Common
     /// <typeparam name="T">BehaviorInfo 类型</typeparam>
     public abstract class Translator<T> : Translator where T : BehaviorInfo
     {
+        /// <summary>
+        /// 渲染指令处理
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
         protected override void OnRIL(BehaviorInfo info)
         {
-            base.OnRIL(info);
             OnRIL((T)info);
         }
         

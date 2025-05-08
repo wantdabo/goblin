@@ -10,40 +10,25 @@ namespace Goblin.Gameplay.Logic.Flows.Common
     public static class PipelineDataReader
     {
         /// <summary>
-        /// 插入指令
-        /// </summary>
-        /// <param name="data">管道数据</param>
-        /// <param name="instruct">指令</param>
-        public static void Insert(this PipelineData data, Instruct instruct)
-        {
-            data.instructs.Add(instruct);
-            data.length = Math.Max(data.length, instruct.end);
-        }
-
-        /// <summary>
         /// 查询指令
         /// </summary>
         /// <param name="data">管道数据</param>
         /// <param name="timeline">时间线</param>
-        /// <param name="instructs">处于时间线的指令列表, (index : 指令索引, instruct : 指令)</param>
+        /// <param name="instrinfos">处于时间线的指令信息列表, (index : 指令索引, instruct : 指令)</param>
         /// <returns>YES/NO</returns>
-        public static bool Query(PipelineData data, ulong timeline, out List<(uint index, Instruct instruct)> instructs)
+        public static bool Query(this PipelineData data, ulong timeline, out List<(bool inside, uint index, Instruct instruct)> instrinfos)
         {
-            instructs = default;
+            instrinfos = default;
             uint index = 0;
             foreach (var instruct in data.instructs)
             {
                 index++;
                 if (instruct.begin > timeline) break;
-                if (instruct.end < timeline) continue;
-                if (instruct.begin >= timeline && instruct.end >= timeline)
-                {
-                    if (null == instructs) instructs = ObjectCache.Get<List<(uint index, Instruct instruct)>>();
-                    instructs.Add((index, instruct));
-                }
+                if (null == instrinfos) instrinfos = ObjectCache.Get<List<(bool inside, uint index, Instruct instruct)>>();
+                instrinfos.Add((instruct.begin >= timeline && instruct.end >= timeline, index, instruct));
             }
             
-            return null != instructs && instructs.Count > 0;
+            return null != instrinfos && instrinfos.Count > 0;
         }
         
         /// <summary>

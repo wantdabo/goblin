@@ -5,6 +5,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Translators;
+using Goblin.Gameplay.Logic.Translators.Common;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Batchs
 {
@@ -16,19 +17,26 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         /// <summary>
         /// RIL 翻译器集合
         /// </summary>
-        public Dictionary<Type, Logic.Translators.Common.Translator> translators { get; set; }
+        private Dictionary<Type, Translator> translators { get; set; }
 
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            translators = ObjectCache.Get<Dictionary<Type, Translators.Common.Translator>>();
-            translators.Add(typeof(StageInfo), ObjectCache.Get<Translators.StageTranslator>().Load(stage));
-            translators.Add(typeof(TickerInfo), ObjectCache.Get<Translators.TickerTranslator>().Load(stage));
-            translators.Add(typeof(SeatInfo), ObjectCache.Get<Translators.SeatTranslator>().Load(stage));
-            translators.Add(typeof(TagInfo), ObjectCache.Get<Translators.TagTranslator>().Load(stage));
-            translators.Add(typeof(AttributeInfo), ObjectCache.Get<Translators.AttributeTranslator>().Load(stage));
-            translators.Add(typeof(SpatialInfo), ObjectCache.Get<Translators.SpatialTranslator>().Load(stage));
-            translators.Add(typeof(StateMachineInfo),  ObjectCache.Get<Translators.StateMachineTranslator>().Load(stage));
+
+            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
+            void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
+            {
+                var translator = ObjectCache.Get<T>();
+                translators.Add(typeof(E), translator.Load(stage));
+            }
+            
+            Translator<StageTranslator, StageInfo>();
+            Translator<TickerTranslator, TickerInfo>();
+            Translator<SeatTranslator, SeatInfo>();
+            Translator<TagTranslator, TagInfo>();
+            Translator<AttributeTranslator, AttributeInfo>();
+            Translator<SpatialTranslator, SpatialInfo>();
+            Translator<StateMachineTranslator, StateMachineInfo>();
         }
 
         protected override void OnDisassemble()

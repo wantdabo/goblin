@@ -679,6 +679,34 @@ namespace Goblin.Gameplay.Logic.Core
         }
 
         /// <summary>
+        /// 获取指定类型的所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="infos">BehaviorInfo 列表</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfos<T>(out List<T> infos) where T : BehaviorInfo
+        {
+            infos = GetBehaviorInfos<T>();
+        
+            return null != infos;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 BehaviorInfo 列表
+        /// </summary>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo 列表</returns>
+        /// 
+        public List<T> GetBehaviorInfos<T>() where T : BehaviorInfo
+        {
+            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
+            var result = ObjectCache.Get<List<T>>();
+            foreach (var i in infos) result.Add(i as T);
+            
+            return result;
+        }
+
+        /// <summary>
         /// 获取 BehaviorInfo
         /// </summary>
         /// <param name="id">ActorID</param>
@@ -707,6 +735,32 @@ namespace Goblin.Gameplay.Logic.Core
             return (T)behaviorinfo;
         }
 
+        /// <summary>
+        /// 添加 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
+        /// <exception cref="Exception">Actor 不存在 | BehaviorInfo 已存在</exception>
+        public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
+        {
+            // 检查 Actor 是否存在
+            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
+            // 检查 BehaviorInfo 容器是否存在
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+            // 检查 BehaviorInfo 是否已经存在容器中
+            if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
+            // 初始化 BehaviorInfos
+            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Get<List<BehaviorInfo>>());
+
+            var behaviorinfo = ObjectCache.Get<T>();
+            dict.Add(typeof(T), behaviorinfo);
+            list.Add(behaviorinfo);
+            behaviorinfo.Ready(id);
+            
+            return behaviorinfo;
+        }
+        
         /// <summary>
         /// 构建初始化 Stage
         /// </summary>
@@ -740,32 +794,6 @@ namespace Goblin.Gameplay.Logic.Core
                 // 入座
                 seat.Enter(player.seat, hero.id);
             }
-        }
-
-        /// <summary>
-        /// 添加 BehaviorInfo
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-        /// <returns>BehaviorInfo</returns>
-        /// <exception cref="Exception">Actor 不存在 | BehaviorInfo 已存在</exception>
-        public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
-        {
-            // 检查 Actor 是否存在
-            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
-            // 检查 BehaviorInfo 容器是否存在
-            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
-            // 检查 BehaviorInfo 是否已经存在容器中
-            if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
-            // 初始化 BehaviorInfos
-            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Get<List<BehaviorInfo>>());
-
-            var behaviorinfo = ObjectCache.Get<T>();
-            dict.Add(typeof(T), behaviorinfo);
-            list.Add(behaviorinfo);
-            behaviorinfo.Ready(id);
-            
-            return behaviorinfo;
         }
         
         /// <summary>
