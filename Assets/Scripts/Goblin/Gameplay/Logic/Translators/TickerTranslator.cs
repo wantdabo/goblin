@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Translators
         {
             stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, new RIL_TICKER
             {
-                timescale = (stage.timescale * info.timescale * stage.cfg.FP2Int).AsUInt()
+                timescale = (stage.timescale * info.timescale * stage.cfg.fp2int).AsUInt()
             });
         }
     }

@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.Translators
                 current = info.current, 
                 last = info.last, 
                 frames = info.frames, 
-                elapsed = (info.elapsed * stage.cfg.FP2Int).AsUInt()
+                elapsed = (info.elapsed * stage.cfg.fp2int).AsUInt()
             });
         }
     }

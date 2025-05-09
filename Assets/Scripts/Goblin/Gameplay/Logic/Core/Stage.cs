@@ -137,6 +137,7 @@ namespace Goblin.Gameplay.Logic.Core
             info.Ready(sa);
             info.state = StageState.Initialized;
             AddActor(sa);
+            GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
             AddBehavior<Config>(sa);
             AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);

@@ -14,6 +14,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public ulong owner { get; set; }
         /// <summary>
+        /// 管线的时间长度, 根据管线 ID 列表中区间结束的最大值来计算得出
+        /// </summary>
+        public ulong length { get; set; }
+        /// <summary>
         /// 管线的时间线
         /// </summary>
         public ulong timeline { get; set; }
@@ -22,7 +26,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public ulong elapsed { get; set; }
         /// <summary>
-        /// 管线的 ID 集合, 用于指向管线数据
+        /// 管线的 ID 列表, 用于指向管线数据
         /// </summary>
         public List<uint> pipelines { get; set; }
         /// <summary>
@@ -33,6 +37,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReady()
         {
             owner = 0;
+            length = 0;
             timeline = 0;
             elapsed = 0;
             pipelines = ObjectCache.Get<List<uint>>();
@@ -42,6 +47,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReset()
         {
             owner = 0;
+            length = 0;
             timeline = 0;
             elapsed = 0;
             pipelines.Clear();
@@ -60,6 +66,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             var clone = ObjectCache.Get<PipelineInfo>();
             clone.Ready(id);
             clone.owner = owner;
+            clone.length = length;
             clone.timeline = timeline;
             clone.elapsed = elapsed;
             foreach (var pipeline in pipelines) clone.pipelines.Add(pipeline);

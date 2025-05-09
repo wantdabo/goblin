@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Director
             }
             set
             {
-                stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.Int2FP;
+                stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.int2fp;
             }
         }
         

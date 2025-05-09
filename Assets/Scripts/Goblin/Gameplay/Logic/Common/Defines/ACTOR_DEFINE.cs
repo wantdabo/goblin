@@ -14,8 +14,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// </summary>
         public const byte STAGE = 1;
         /// <summary>
+        /// 管线
+        /// </summary>
+        public const byte PIPELINE = 2;
+        /// <summary>
         /// 英雄
         /// </summary>
-        public const byte HERO = 2;
+        public const byte HERO = 3;
     }
 }
