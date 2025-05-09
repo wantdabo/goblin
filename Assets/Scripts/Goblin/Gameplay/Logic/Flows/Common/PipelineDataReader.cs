@@ -1,14 +1,39 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
+using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows.Common
 {
     /// <summary>
-    /// 管道数据读取
+    /// 管线数据读取
     /// </summary>
     public static class PipelineDataReader
     {
+        /// <summary>
+        /// 缓存, 管线数据字典, 键为管线 ID, 值为管线数据
+        /// </summary>
+        private static Dictionary<uint, PipelineData> datas { get; set; } = new();
+
+        /// <summary>
+        /// 加载管线数据
+        /// </summary>
+        /// <param name="id">管线 ID</param>
+        /// <returns>管线数据</returns>
+        public static PipelineData LoadPipelineData(uint id)
+        {
+            if (datas.TryGetValue(id, out var data)) return data;
+
+            // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes
+            var bytes = Export.engine.gameres.location.LoadPipelineSync(id.ToString());
+            
+            data = MessagePackSerializer.Deserialize<PipelineData>(bytes);
+            datas.Add(id, data);
+
+            return data;
+        }
+        
         /// <summary>
         /// 查询指令
         /// </summary>

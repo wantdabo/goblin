@@ -22,12 +22,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
+            // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes 构建
             location = Export.engine.cfg.location;
         }
 
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
+            location = null;
         }
     }
 }

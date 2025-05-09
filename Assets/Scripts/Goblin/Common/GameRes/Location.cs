@@ -10,14 +10,14 @@ namespace Goblin.Common.GameRes
     /// </summary>
     public class Location : Comp
     {
-        private const string soundpath = "Assets/GameRes/Sound/";
+        public const string soundpath = "Assets/GameRes/Sound/";
         public const string modelpath = "Assets/GameRes/Model/";
-        private const string effectpath = "Assets/GameRes/Effect/";
+        public const string effectpath = "Assets/GameRes/Effect/";
         public const string uieffectpath = "Assets/GameRes/UIEffect/";
         public const string uiprefabpath = "Assets/GameRes/UIPrefab/";
         public const string spritespath = "Assets/GameRes/UISprite/";
         public const string configpath = "Assets/GameRes/Raw/Configs/";
-        public const string skilldatapath = "Assets/GameRes/Raw/SkillDatas/";
+        public const string pipelinepath = "Assets/GameRes/Raw/Pipelines/";
 
         /// <summary>
         /// 异步加载音效预制体
@@ -172,23 +172,23 @@ namespace Goblin.Common.GameRes
         }
         
         /// <summary>
-        /// 同步加载 SkillData 的 Bytes
+        /// 同步加载 PipelineData 的 Bytes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>RawBytes</returns>
-        public byte[] LoadSkillDataSync(string res)
+        public byte[] LoadPipelineSync(string res)
         {
-            return engine.gameres.LoadRawFileSync(skilldatapath + res);
+            return engine.gameres.LoadRawFileSync(pipelinepath + res);
         }
-        
+
         /// <summary>
-        /// 异步加载 SkillData 的 Bytes
+        /// 异步加载 PipelineData 的 Bytes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>RawBytes</returns>
-        public async Task<byte[]> LoadSkillDataAsync(string res)
+        public async Task<byte[]> LoadPipelineAsync(string res)
         {
-            return await engine.gameres.LoadRawFileAsync(skilldatapath + res);
+            return await engine.gameres.LoadRawFileAsync(pipelinepath + res);
         }
     }
 }

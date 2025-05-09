@@ -236,6 +236,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
             prefabs.Add(typeof(HeroPrefab), ObjectCache.Get<HeroPrefab>().Load(this));
+            prefabs.Add(typeof(PipelinePrefab), ObjectCache.Get<PipelinePrefab>().Load(this));
         }
         
         /// <summary>

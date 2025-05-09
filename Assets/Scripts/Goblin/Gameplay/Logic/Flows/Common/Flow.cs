@@ -4,6 +4,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Flows.Common
@@ -49,8 +50,41 @@ namespace Goblin.Gameplay.Logic.Flows.Common
             ObjectCache.Set(executors);
         }
 
-        public void StartPipeline()
+        /// <summary>
+        /// 生成管线
+        /// </summary>
+        /// <param name="owner">管线拥有者</param>
+        /// <param name="pipelines">管线的 ID 列表, 用于指向管线数据</param>
+        /// <returns>Actor</returns>
+        public Actor GenPipeline(ulong owner, List<uint> pipelines)
         {
+            return stage.Spawn<PipelinePrefab>(new PipelinePrefabInfo
+            {
+                owner = owner,
+                pipelines = pipelines,
+            });
+        }
+        
+        /// <summary>
+        /// 结束管线
+        /// </summary>
+        /// <param name="pipelineinfo">管线信息</param>
+        public void EndPipeline(PipelineInfo pipelineinfo)
+        {
+            foreach (var pipelineid in pipelineinfo.pipelines)
+            {
+                var data = PipelineDataReader.LoadPipelineData(pipelineid);
+                // 使用时间线最大值溢出的数值, 查询到所有指令, 如果该指令在执行中, 则退出
+                if (false == data.Query(PIPELINE_DEFINE.OVERFLOW_LENGTH, out var instrinfos)) continue;
+                foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
+                {
+                    if (false == pipelineinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(instrinfo.index)) continue;
+                    ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
+                }
+            }
+            
+            // 结束管线
+            stage.RmvActor(pipelineinfo.id);
         }
 
         /// <summary>
@@ -61,11 +95,13 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         {
             foreach (var pipelineid in pipelineinfo.pipelines)
             {
-                // TODO 临时虚构一个, 后续要根据 ID 进行加载管线数据
-                PipelineData data = null;
+                var data = PipelineDataReader.LoadPipelineData(pipelineid);
+                // 未找到改时间线可以执行的指令
                 if (false == data.Query(pipelineinfo.timeline, out var instrinfos)) continue;
+                
                 foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
                 {
+                    // 如果指令已经执行过, 则直接执行, 如果不在时间区间内则退出
                     if (pipelineinfo.doings.TryGetValue(pipelineid, out var indexes) && indexes.Contains(instrinfo.index))
                     {
                         ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
@@ -73,32 +109,13 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                         continue;
                     }
                     
+                    // 指令进入 && 指令执行
                     if (false == instrinfo.inside) continue;
                     if (false == CheckCondition(instrinfo.instruct.conditions, pipelineinfo)) continue;
                     ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
                     ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
                 }
             }
-        }
-        
-        /// <summary>
-        /// 结束管线
-        /// </summary>
-        /// <param name="pipelineinfo">管线信息</param>
-        private void EndPipeline(PipelineInfo pipelineinfo)
-        {
-            foreach (var pipelineid in pipelineinfo.pipelines)
-            {
-                // TODO 临时虚构一个, 后续要根据 ID 进行加载管线数据
-                PipelineData data = null;
-                if (false == data.Query(PIPELINE_DEFINE.OVERFLOW_LENGTH, out var instrinfos)) continue;
-                foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
-                {
-                    if (false == pipelineinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(instrinfo.index)) continue;
-                    ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
-                }
-            }
-            stage.RmvActor(pipelineinfo.id);
         }
         
         protected override void OnTick(FP tick)
@@ -115,6 +132,8 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                     pipelineinfo.timeline += GAME_DEFINE.LOGIC_TICK_MS;
                     pipelineinfo.elapsed -= GAME_DEFINE.LOGIC_TICK_MS;
                 }
+                
+                // 如果管线的时间线已经超过了管线的长度, 结束管线
                 if (pipelineinfo.timeline >= pipelineinfo.length) EndPipeline(pipelineinfo);
             }
 
