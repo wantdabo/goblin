@@ -58,7 +58,7 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// <returns>Actor</returns>
         public Actor GenPipeline(ulong owner, List<uint> pipelines)
         {
-            return stage.Spawn<PipelinePrefab>(new PipelinePrefabInfo
+            return stage.Spawn(new PipelinePrefabInfo
             {
                 owner = owner,
                 pipelines = pipelines,

@@ -54,13 +54,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         protected override void OnEndTick()
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
-            
-            if (translators.TryGetValue(typeof(StageInfo), out var t)) t.Translate(info);
+            if (translators.TryGetValue(typeof(StageInfo), out var translator)) translator.Translate(info);
             foreach (var kv in info.behaviorinfos)
             {
                 foreach (var behaviorinfo in kv.Value)
                 {
-                    if (false == translators.TryGetValue(kv.Key, out var translator)) continue;
+                    if (false == translators.TryGetValue(kv.Key, out translator)) continue;
                     translator.Translate(behaviorinfo);
                 }
             }

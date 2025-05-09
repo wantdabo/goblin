@@ -235,8 +235,8 @@ namespace Goblin.Gameplay.Logic.Core
         private void Prefabs()
         {
             prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
-            prefabs.Add(typeof(HeroPrefab), ObjectCache.Get<HeroPrefab>().Load(this));
-            prefabs.Add(typeof(PipelinePrefab), ObjectCache.Get<PipelinePrefab>().Load(this));
+            prefabs.Add(typeof(HeroPrefabInfo), ObjectCache.Get<HeroPrefab>().Load(this));
+            prefabs.Add(typeof(PipelinePrefabInfo), ObjectCache.Get<PipelinePrefab>().Load(this));
         }
         
         /// <summary>
@@ -419,11 +419,17 @@ namespace Goblin.Gameplay.Logic.Core
         /// <typeparam name="T">预制构建器类型</typeparam>
         /// <returns>Actor</returns>
         /// <exception cref="Exception">预制构建器类型不存在</exception>
-        public Actor Spawn<T>(IPrefabInfo prefabinfo) where T : Prefab
+        public Actor Spawn<T>(T prefabinfo) where T : IPrefabInfo
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
-            
-            return prefab.Processing(GenActor(), prefabinfo);
+
+            var state = ObjectCache.Get<PrefabInfoState<T>>();
+            state.info = prefabinfo;
+            var actor = prefab.Processing(GenActor(), state);
+            state.Reset();
+            ObjectCache.Set(state);
+
+            return actor;
         }
 
         /// <summary>
@@ -774,7 +780,7 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 var heroinfo = cfg.location.HeroInfos.Get(player.hero);
                 var attributeinfo = cfg.location.AttributeInfos.Get(heroinfo.Attribute);
-                var hero = Spawn<HeroPrefab>(new HeroPrefabInfo
+                var hero = Spawn(new HeroPrefabInfo
                 {
                     hero = player.hero,
                     model = heroinfo.Model,
