@@ -1,4 +1,5 @@
 # Goblin
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/wantdabo/goblin)
 这是基于 Unity 开发的一套框架，支持网络游戏开发
 ### 大致全貌
 - TCP 通信
