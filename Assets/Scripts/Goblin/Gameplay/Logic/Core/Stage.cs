@@ -7,6 +7,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Common.GPDatas;
+using Goblin.Gameplay.Logic.Flows.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -102,13 +103,17 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Random random => GetBehavior<Random>(sa);
         /// <summary>
-        /// 渲染指令同步
-        /// </summary>
-        public RILSync rilsync => GetBehavior<RILSync>(sa);
-        /// <summary>
         /// 事件订阅器
         /// </summary>
         public Eventor eventor => GetBehavior<Eventor>(sa);
+        /// <summary>
+        /// 管线流
+        /// </summary>
+        public Flow flow => GetBehavior<Flow>(sa);
+        /// <summary>
+        /// 渲染指令同步
+        /// </summary>
+        public RILSync rilsync => GetBehavior<RILSync>(sa);
         /// <summary>
         /// 预制创建器集合
         /// </summary>
@@ -141,6 +146,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Config>(sa);
             AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
+            AddBehavior<Flow>(sa);
             AddBehavior<RILSync>(sa);
             // 添加批处理
             Batches();
