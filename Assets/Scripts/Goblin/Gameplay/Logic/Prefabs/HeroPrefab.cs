@@ -42,6 +42,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
         {
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();
+            actor.AddBehavior<SkillLauncher>();
 
             actor.AddBehaviorInfo<TickerInfo>();
             

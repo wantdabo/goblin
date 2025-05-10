@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -58,13 +59,25 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// <returns>Actor</returns>
         public Actor GenPipeline(ulong owner, List<uint> pipelines)
         {
-            return stage.Spawn(new PipelinePrefabInfo
+            var actor = stage.Spawn(new PipelinePrefabInfo
             {
                 owner = owner,
                 pipelines = pipelines,
             });
+
+            return actor;
         }
-        
+
+        /// <summary>
+        /// 结束管线
+        /// </summary>
+        /// <param name="id">管线 ActorID</param>
+        public void EndPipeline(ulong id)
+        {
+            if (false == stage.SeekBehaviorInfo(id, out PipelineInfo pipelineinfo)) return;
+            EndPipeline(pipelineinfo);
+        }
+
         /// <summary>
         /// 结束管线
         /// </summary>
@@ -82,7 +95,6 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                     ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, pipelineinfo);
                 }
             }
-            
             // 结束管线
             stage.RmvActor(pipelineinfo.id);
         }
