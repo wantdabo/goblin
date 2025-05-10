@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Director
     /// <summary>
     /// 状态同步导演
     /// </summary>
-    public class StateDirector : GameDirector
+    public class StateSyncDirector : GameDirector
     {
         public override bool rendering { get; }
         

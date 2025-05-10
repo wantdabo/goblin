@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Director
     /// <summary>
     /// 锁步/帧同步导演
     /// </summary>
-    public class LockstepDirector : GameDirector
+    public class LockstepSyncDirector : GameDirector
     {
         public override bool rendering { get; }
         
