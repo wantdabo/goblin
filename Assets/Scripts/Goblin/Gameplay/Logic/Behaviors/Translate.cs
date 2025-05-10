@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Gameplay.Logic.Translators.Common;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Batchs
+namespace Goblin.Gameplay.Logic.Behaviors
 {
     /// <summary>
     /// 翻译 RIL 渲染指令, 所有 Stage BehaviorInfo 来生成渲染指令
@@ -23,13 +22,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Batchs
         {
             base.OnAssemble();
 
-            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
             void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
             {
                 var translator = ObjectCache.Get<T>();
                 translators.Add(typeof(E), translator.Load(stage));
             }
             
+            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
             Translator<StageTranslator, StageInfo>();
             Translator<TickerTranslator, TickerInfo>();
             Translator<SeatTranslator, SeatInfo>();

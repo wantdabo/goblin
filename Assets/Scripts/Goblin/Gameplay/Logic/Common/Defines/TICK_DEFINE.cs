@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Behaviors.Batchs;
 using Goblin.Gameplay.Logic.Flows.Common;
 
 namespace Goblin.Gameplay.Logic.Common.Defines
@@ -20,6 +19,8 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Movement),
             typeof(StateMachine),
             typeof(Flow),
+            typeof(SkillLauncher),
+            typeof(Bullet),
             typeof(Translate)
         };
     }

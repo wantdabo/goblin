@@ -113,18 +113,19 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                 
                 foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
                 {
-                    // 如果指令已经执行过, 则直接执行, 如果不在时间区间内则退出
-                    if (flowinfo.doings.TryGetValue(pipelineid, out var indexes) && indexes.Contains(instrinfo.index))
+                    flowinfo.doings.TryGetValue(pipelineid, out var indexes);
+                    // 如果不在时间区间内则退出
+                    if (false == instrinfo.inside)
                     {
-                        ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
-                        if (false == instrinfo.inside) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                        if (null != indexes && indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+
                         continue;
                     }
                     
                     // 指令进入 && 指令执行
-                    if (false == instrinfo.inside) continue;
                     if (false == CheckCondition(instrinfo.instruct.conditions, flowinfo)) continue;
-                    ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                    if (null == indexes || false == indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+
                     ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
                 }
             }

@@ -13,9 +13,9 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 技能 ID
         /// </summary>
-        public uint skillid { get; set; }
+        public uint skill { get; set; }
         /// <summary>
-        /// 技能强度
+        /// 技能的伤害强度
         /// </summary>
         public FP strength { get; set; }
         /// <summary>
@@ -40,7 +40,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 正在进行的技能管线 ActorID
         /// </summary>
-        public ulong pipeline { get; set; }
+        public ulong flow { get; set; }
         /// <summary>
         /// 是否有技能在释放中
         /// </summary>
@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReady()
         {
             skill = 0;
-            pipeline = 0;
+            flow = 0;
             casting = false;
             loadedskills = ObjectCache.Get<Dictionary<uint, SkillInfo>>();
         }
@@ -61,7 +61,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReset()
         {
             skill = 0;
-            pipeline = 0;
+            flow = 0;
             casting = false;
             foreach (var kv in loadedskills)
             {
@@ -77,12 +77,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             var clone = ObjectCache.Get<SkillLauncherInfo>();
             clone.Ready(id);
             clone.skill = skill;
-            clone.pipeline = pipeline;
+            clone.flow = flow;
             clone.casting = casting;
             foreach (var kv in loadedskills)
             {
                 var skillinfo = ObjectCache.Get<SkillInfo>();
-                skillinfo.skillid = kv.Value.skillid;
+                skillinfo.skill = kv.Value.skill;
                 skillinfo.strength = kv.Value.strength;
                 skillinfo.cooldown = kv.Value.cooldown;
                 skillinfo.pipelines = ObjectCache.Get<List<uint>>();

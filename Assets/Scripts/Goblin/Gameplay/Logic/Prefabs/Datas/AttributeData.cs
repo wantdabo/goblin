@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Prefabs.Datas
         /// <summary>
         /// 移动速度
         /// </summary>
-        public uint moveseed { get; set; }
+        public uint movespeed { get; set; }
         /// <summary>
         /// 攻击力
         /// </summary>

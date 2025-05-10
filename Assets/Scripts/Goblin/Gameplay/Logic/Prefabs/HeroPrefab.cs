@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
             var attribute = actor.AddBehaviorInfo<AttributeInfo>();
             attribute.hp = info.attribute.hp;
             attribute.maxhp = info.attribute.maxhp;
-            attribute.moveseed = info.attribute.moveseed;
+            attribute.movespeed = info.attribute.movespeed;
             attribute.attack = info.attribute.attack;
             
             var spatial = actor.AddBehaviorInfo<SpatialInfo>();

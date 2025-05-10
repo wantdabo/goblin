@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 移动速度
         /// </summary>
-        public uint moveseed { get; set; }
+        public uint movespeed { get; set; }
         /// <summary>
         /// 攻击力
         /// </summary>
@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             hp = 0;
             maxhp = 0;
-            moveseed = 0;
+            movespeed = 0;
             attack = 0;
         }
 
@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.Ready(id);
             clone.hp = hp;
             clone.maxhp = maxhp;
-            clone.moveseed = moveseed;
+            clone.movespeed = movespeed;
             clone.attack = attack;
             
             return clone;

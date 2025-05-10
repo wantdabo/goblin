@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             {
                 if (actor.SeekBehavior(out Movement movement) && actor.SeekBehaviorInfo(out AttributeInfo attribute))
                 {
-                    var motion = joystick.dire.normalized * attribute.moveseed * tick;
+                    var motion = joystick.dire.normalized * attribute.movespeed * tick;
                     movement.Move(new FPVector3(motion.x, 0, motion.y));
                 }
             }

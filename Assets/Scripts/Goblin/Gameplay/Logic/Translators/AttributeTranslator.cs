@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Translators
             {
                 hp = info.hp,
                 maxhp = info.maxhp,
-                movespeed = info.moveseed,
+                movespeed = info.movespeed,
                 attack = info.attack
             });
         }

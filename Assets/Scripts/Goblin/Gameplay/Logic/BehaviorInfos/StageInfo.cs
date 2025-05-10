@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 当前 Stage 状态
         /// </summary>
-        public StageState state { get; set; } = StageState.None;
+        public StageState state { get; set; }
         /// <summary>
         /// 帧号
         /// </summary>

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Behaviors.Batchs;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
@@ -107,6 +106,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Eventor eventor => GetBehavior<Eventor>(sa);
         /// <summary>
+        /// 属性数值计算
+        /// </summary>
+        public AttributeCalc calc => GetBehavior<AttributeCalc>(sa);
+        /// <summary>
         /// 管线流
         /// </summary>
         public Flow flow => GetBehavior<Flow>(sa);
@@ -146,6 +149,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Config>(sa);
             AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
+            AddBehavior<AttributeCalc>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<RILSync>(sa);
             // 添加批处理
@@ -240,9 +244,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">不能重复添加</exception>
         private void Prefabs()
         {
+            void Prefab<T, E>() where T : Prefab, new() where E : IPrefabInfo, new()
+            {
+                prefabs.Add(typeof(E), ObjectCache.Get<T>().Load(this));
+            }
             prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
-            prefabs.Add(typeof(HeroPrefabInfo), ObjectCache.Get<HeroPrefab>().Load(this));
-            prefabs.Add(typeof(FlowPrefabInfo), ObjectCache.Get<FlowPrefab>().Load(this));
+            Prefab<FlowPrefab, FlowPrefabInfo>();
+            Prefab<HeroPrefab, HeroPrefabInfo>();
+            Prefab<BulletPrefab, BulletPrefabInfo>();
         }
         
         /// <summary>
@@ -794,7 +803,7 @@ namespace Goblin.Gameplay.Logic.Core
                     {
                         hp = (uint)attributeinfo.HP,
                         maxhp = (uint)attributeinfo.MaxHP,
-                        moveseed = (uint)attributeinfo.MoveSpeed,
+                        movespeed = (uint)attributeinfo.MoveSpeed,
                         attack = (uint)attributeinfo.Attack,
                     },
                     spatial = new()

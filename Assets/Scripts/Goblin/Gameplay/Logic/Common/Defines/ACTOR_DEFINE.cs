@@ -21,5 +21,9 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 英雄
         /// </summary>
         public const byte HERO = 3;
+        /// <summary>
+        /// 子弹
+        /// </summary>
+        public const byte BULLET = 4;
     }
 }

@@ -114,19 +114,19 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private void Resolvers()
         {
-            void AddResolver<T>() where T : Resolver, new()
+            void Resolver<T>() where T : Resolver, new()
             {
                 var resolver = AddComp<T>().Initialize(this);
                 resolver.Create();
             }
             
-            AddResolver<AttributeResolver>();
-            AddResolver<SeatResolver>();
-            AddResolver<SpatialResolver>();
-            AddResolver<StageResolver>();
-            AddResolver<StateMachineResolver>();
-            AddResolver<TagResolver>();
-            AddResolver<TickerResolver>();
+            Resolver<AttributeResolver>();
+            Resolver<SeatResolver>();
+            Resolver<SpatialResolver>();
+            Resolver<StageResolver>();
+            Resolver<StateMachineResolver>();
+            Resolver<TagResolver>();
+            Resolver<TickerResolver>();
         }
 
         /// <summary>
@@ -134,15 +134,15 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private void Enchants()
         {
-            void AddEnchant<T>() where T : AgentEnchant, new()
+            void Enchant<T>() where T : AgentEnchant, new()
             {
                 var enchant = AddComp<T>().Initialize(this);
                 enchant.Create();
             }
             
-            AddEnchant<NodeEnchant>();
-            AddEnchant<ModelEnchant>();
-            AddEnchant<AnimationEnchant>();
+            Enchant<NodeEnchant>();
+            Enchant<ModelEnchant>();
+            Enchant<AnimationEnchant>();
         }
 
         /// <summary>
