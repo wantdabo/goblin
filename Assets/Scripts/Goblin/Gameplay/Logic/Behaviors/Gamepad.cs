@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -15,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            var joystick = GetInput(InputType.Joystick);
+            var joystick = GetInput(INPUT_DEFINE.JOYSTICK);
             if (joystick.press)
             {
                 if (actor.SeekBehavior(out Movement movement) && actor.SeekBehaviorInfo(out AttributeInfo attribute))
@@ -37,7 +38,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="inputType">按键类型</param>
         /// <returns>按键数据</returns>
         /// <exception cref="Exception">未找到该类型按键的数据</exception>
-        public InputInfo GetInput(InputType inputType)
+        public InputInfo GetInput(ushort inputType)
         {
             if (info.inputdict.TryGetValue(inputType, out InputInfo input)) return input;
 
@@ -50,7 +51,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="inputType">按键类型</param>
         /// <param name="press">摁下之后 -> TRUE</param>
         /// <param name="dire">按键的方向</param>
-        public void SetInput(InputType inputType, bool press, FPVector2 dire)
+        public void SetInput(ushort inputType, bool press, FPVector2 dire)
         {
             var input = new InputInfo
             {
@@ -74,18 +75,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         public void ClearReleaseTokenAll()
         {
-            ClearReleaseToken(InputType.Joystick);
-            ClearReleaseToken(InputType.BA);
-            ClearReleaseToken(InputType.BB);
-            ClearReleaseToken(InputType.BC);
-            ClearReleaseToken(InputType.BD);
+            ClearReleaseToken(INPUT_DEFINE.JOYSTICK);
+            ClearReleaseToken(INPUT_DEFINE.BA);
+            ClearReleaseToken(INPUT_DEFINE.BB);
+            ClearReleaseToken(INPUT_DEFINE.BC);
+            ClearReleaseToken(INPUT_DEFINE.BD);
         }
 
         /// <summary>
         /// 清理按键松发状态
         /// </summary>
         /// <param name="inputType">按键类型</param>
-        public void ClearReleaseToken(InputType inputType)
+        public void ClearReleaseToken(ushort inputType)
         {
             var input = GetInput(inputType);
             input.release = false;

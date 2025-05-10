@@ -1,37 +1,11 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
-    /// <summary>
-    /// 按键输入枚举
-    /// </summary>
-    public enum InputType
-    {
-        /// <summary>
-        /// 摇杆
-        /// </summary>
-        Joystick = 1,
-        /// <summary>
-        /// 按钮 A
-        /// </summary>
-        BA = 2,
-        /// <summary>
-        /// 按钮 B
-        /// </summary>
-        BB = 3,
-        /// <summary>
-        /// 按钮 C
-        /// </summary>
-        BC = 4,
-        /// <summary>
-        /// 按钮 D
-        /// </summary>
-        BD = 5,
-    }
-
     /// <summary>
     /// 按键输入的结构体
     /// </summary>
@@ -59,16 +33,16 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 输入数据集合
         /// </summary>
-        public Dictionary<InputType, InputInfo> inputdict { get; set; }
+        public Dictionary<ushort, InputInfo> inputdict { get; set; }
 
         protected override void OnReady()
         {
-            inputdict = ObjectCache.Get<Dictionary<InputType, InputInfo>>();
-            inputdict.Add(InputType.Joystick, new InputInfo { press = false, release = false, dire = FPVector2.zero });
-            inputdict.Add(InputType.BA, new InputInfo { press = false, release = false, dire = FPVector2.zero });
-            inputdict.Add(InputType.BB, new InputInfo { press = false, release = false, dire = FPVector2.zero });
-            inputdict.Add(InputType.BC, new InputInfo { press = false, release = false, dire = FPVector2.zero });
-            inputdict.Add(InputType.BD, new InputInfo { press = false, release = false, dire = FPVector2.zero });
+            inputdict = ObjectCache.Get<Dictionary<ushort, InputInfo>>();
+            inputdict.Add(INPUT_DEFINE.JOYSTICK, new InputInfo { press = false, release = false, dire = FPVector2.zero });
+            inputdict.Add(INPUT_DEFINE.BA, new InputInfo { press = false, release = false, dire = FPVector2.zero });
+            inputdict.Add(INPUT_DEFINE.BB, new InputInfo { press = false, release = false, dire = FPVector2.zero });
+            inputdict.Add(INPUT_DEFINE.BC, new InputInfo { press = false, release = false, dire = FPVector2.zero });
+            inputdict.Add(INPUT_DEFINE.BD, new InputInfo { press = false, release = false, dire = FPVector2.zero });
         }
 
         protected override void OnReset()

@@ -305,7 +305,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="inputType">按键类型</param>
         /// <param name="press">摁下之后 -> TRUE</param>
         /// <param name="dire">按键的方向</param>
-        public void SetInput(ulong id, InputType inputType, bool press, GPVector2 dire)
+        public void SetInput(ulong id, ushort inputType, bool press, GPVector2 dire)
         {
             var actor = seat.GetActor(id);
             if (false == info.actors.Contains(actor)) return;

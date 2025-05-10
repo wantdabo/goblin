@@ -4,6 +4,7 @@ using Goblin.Core;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Render.Core;
@@ -25,18 +26,18 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 输入数据集合
         /// </summary>
-        public Dictionary<InputType, (bool press, GPVector2 dire)> inputdict { get; set; }
+        public Dictionary<ushort, (bool press, GPVector2 dire)> inputdict { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
             world.ticker.eventor.Listen<TickEvent>(OnTick);
-            inputdict = ObjectCache.Get<Dictionary<InputType, (bool press, GPVector2 dire)>>();
-            inputdict.Add(InputType.Joystick, default);
-            inputdict.Add(InputType.BA, default);
-            inputdict.Add(InputType.BB, default);
-            inputdict.Add(InputType.BC, default);
-            inputdict.Add(InputType.BD, default);
+            inputdict = ObjectCache.Get<Dictionary<ushort, (bool press, GPVector2 dire)>>();
+            inputdict.Add(INPUT_DEFINE.JOYSTICK, default);
+            inputdict.Add(INPUT_DEFINE.BA, default);
+            inputdict.Add(INPUT_DEFINE.BB, default);
+            inputdict.Add(INPUT_DEFINE.BC, default);
+            inputdict.Add(INPUT_DEFINE.BD, default);
         }
 
         protected override void OnDestroy()
@@ -64,7 +65,7 @@ namespace Goblin.Gameplay.Render.Common
         /// </summary>
         /// <param name="type">输入类型</param>
         /// <returns>输入信息</returns>
-        public (bool press, GPVector2 dire) GetInput(InputType type)
+        public (bool press, GPVector2 dire) GetInput(ushort type)
         {
             if (inputdict.TryGetValue(type, out var input))
             {
@@ -81,8 +82,8 @@ namespace Goblin.Gameplay.Render.Common
         /// <param name="dire">方向</param>
         public void SetInput(bool press, GPVector2 dire)
         {
-            inputdict.Remove(InputType.Joystick);
-            inputdict.Add(InputType.Joystick, (press, dire));
+            inputdict.Remove(INPUT_DEFINE.JOYSTICK);
+            inputdict.Add(INPUT_DEFINE.JOYSTICK, (press, dire));
         }
 
         private void OnTick(TickEvent e)
