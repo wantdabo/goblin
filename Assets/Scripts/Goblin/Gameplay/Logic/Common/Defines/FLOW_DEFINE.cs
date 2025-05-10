@@ -3,7 +3,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     /// <summary>
     /// 管线定义
     /// </summary>
-    public class PIPELINE_DEFINE
+    public class FLOW_DEFINE
     {
         /// <summary>
         /// 管线长度最大值

@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// </summary>
         /// <param name="id">管线 ID</param>
         /// <returns>管线数据</returns>
-        public static PipelineData LoadPipelineData(uint id)
+        public static PipelineData ReadPipelineData(uint id)
         {
             if (datas.TryGetValue(id, out var data)) return data;
 

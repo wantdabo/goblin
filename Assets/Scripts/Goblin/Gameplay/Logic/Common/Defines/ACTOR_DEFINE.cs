@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 管线
         /// </summary>
-        public const byte PIPELINE = 2;
+        public const byte FLOW = 2;
         /// <summary>
         /// 英雄
         /// </summary>

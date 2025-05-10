@@ -37,50 +37,50 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// 指令进入
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        public void Enter(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        public void Enter(Instruct instruct, FlowInfo flowinfo)
         {
-            OnEnter(instruct, pipelineinfo);
+            OnEnter(instruct, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        public void Execute(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        public void Execute(Instruct instruct, FlowInfo flowinfo)
         {
-            OnExecute(instruct, pipelineinfo);
+            OnExecute(instruct, flowinfo);
         }
         
         /// <summary>
         /// 指令离开
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        public void Exit(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        public void Exit(Instruct instruct, FlowInfo flowinfo)
         {
-            OnExit(instruct, pipelineinfo);
+            OnExit(instruct, flowinfo);
         }
         
         /// <summary>
         /// 指令进入
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnEnter(Instruct instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnEnter(Instruct instruct, FlowInfo flowinfo);
         /// <summary>
         /// 指令执行
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnExecute(Instruct instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnExecute(Instruct instruct, FlowInfo flowinfo);
         /// <summary>
         /// 指令离开
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnExit(Instruct instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnExit(Instruct instruct, FlowInfo flowinfo);
     }
 
     /// <summary>
@@ -93,49 +93,49 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// 指令进入
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected override void OnEnter(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        protected override void OnEnter(Instruct instruct, FlowInfo flowinfo)
         {
-            OnEnter(instruct as T, pipelineinfo);
+            OnEnter(instruct as T, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected override void OnExecute(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        protected override void OnExecute(Instruct instruct, FlowInfo flowinfo)
         {
-            OnExecute(instruct as T, pipelineinfo);
+            OnExecute(instruct as T, flowinfo);
         }
 
         /// <summary>
         /// 指令离开
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected override void OnExit(Instruct instruct, PipelineInfo pipelineinfo)
+        /// <param name="flowinfo">管线信息</param>
+        protected override void OnExit(Instruct instruct, FlowInfo flowinfo)
         {
-            OnExit(instruct as T, pipelineinfo);
+            OnExit(instruct as T, flowinfo);
         }
 
         /// <summary>
         /// 指令进入
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnEnter(T instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnEnter(T instruct, FlowInfo flowinfo);
         /// <summary>
         /// 指令执行
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnExecute(T instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnExecute(T instruct, FlowInfo flowinfo);
         /// <summary>
         /// 指令离开
         /// </summary>
         /// <param name="instruct">指令</param>
-        /// <param name="pipelineinfo">管线信息</param>
-        protected abstract void OnExit(T instruct, PipelineInfo pipelineinfo);
+        /// <param name="flowinfo">管线信息</param>
+        protected abstract void OnExit(T instruct, FlowInfo flowinfo);
     }
 }

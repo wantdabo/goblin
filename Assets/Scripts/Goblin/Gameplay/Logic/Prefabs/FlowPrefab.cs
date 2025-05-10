@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
     /// <summary>
     /// 管线预制创建器信息
     /// </summary>
-    public struct PipelinePrefabInfo : IPrefabInfo
+    public struct FlowPrefabInfo : IPrefabInfo
     {
         /// <summary>
         /// 管线的拥有者
@@ -26,18 +26,18 @@ namespace Goblin.Gameplay.Logic.Prefabs
     /// <summary>
     /// 管线预制创建器
     /// </summary>
-    public class PipelinePrefab : Prefab<PipelinePrefabInfo>
+    public class FlowPrefab : Prefab<FlowPrefabInfo>
     {
-        public override byte type => ACTOR_DEFINE.PIPELINE;
+        public override byte type => ACTOR_DEFINE.FLOW;
         
-        protected override void OnProcessing(Actor actor, PipelinePrefabInfo info)
+        protected override void OnProcessing(Actor actor, FlowPrefabInfo info)
         {
-            var pipelineinfo = actor.AddBehaviorInfo<PipelineInfo>();
-            pipelineinfo.owner = info.owner;
+            var flowinfo = actor.AddBehaviorInfo<FlowInfo>();
+            flowinfo.owner = info.owner;
             
             info.pipelines.Clear();
-            ObjectCache.Set(pipelineinfo.pipelines);
-            pipelineinfo.pipelines = info.pipelines;
+            ObjectCache.Set(flowinfo.pipelines);
+            flowinfo.pipelines = info.pipelines;
         }
     }
 }

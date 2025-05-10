@@ -37,20 +37,20 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// 检查指令条件
         /// </summary>
         /// <param name="condition">指令条件</param>
-        /// <param name="pipelineinfo">管线信息</param>
+        /// <param name="flowinfo">管线信息</param>
         /// <returns>YES/NO</returns>
-        public bool Check(Condition condition, PipelineInfo pipelineinfo)
+        public bool Check(Condition condition, FlowInfo flowinfo)
         {
-            return OnCheck(condition, pipelineinfo);
+            return OnCheck(condition, flowinfo);
         }
 
         /// <summary>
         /// 检查指令条件
         /// </summary>
         /// <param name="condition">指令条件</param>
-        /// <param name="pipelineinfo">管线信息</param>
+        /// <param name="flowinfo">管线信息</param>
         /// <returns>YES/NO</returns>
-        protected abstract bool OnCheck(Condition condition, PipelineInfo pipelineinfo);
+        protected abstract bool OnCheck(Condition condition, FlowInfo flowinfo);
     }
 
     /// <summary>
@@ -63,19 +63,19 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// 检查指令条件
         /// </summary>
         /// <param name="condition">指令条件</param>
-        /// <param name="pipelineinfo">管线信息</param>
+        /// <param name="flowinfo">管线信息</param>
         /// <returns>YES/NO</returns>
-        protected override bool OnCheck(Condition condition, PipelineInfo pipelineinfo)
+        protected override bool OnCheck(Condition condition, FlowInfo flowinfo)
         {
-            return OnCheck(condition as T, pipelineinfo);
+            return OnCheck(condition as T, flowinfo);
         }
         
         /// <summary>
         /// 检查指令条件
         /// </summary>
         /// <param name="condition">指令条件</param>
-        /// <param name="pipelineinfo">管线信息</param>
+        /// <param name="flowinfo">管线信息</param>
         /// <returns>YES/NO</returns>
-        protected abstract bool OnCheck(T condition, PipelineInfo pipelineinfo);
+        protected abstract bool OnCheck(T condition, FlowInfo flowinfo);
     }
 }

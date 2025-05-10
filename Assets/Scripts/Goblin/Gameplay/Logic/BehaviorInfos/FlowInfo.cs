@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     /// <summary>
     /// 管线信息
     /// </summary>
-    public class PipelineInfo : BehaviorInfo
+    public class FlowInfo : BehaviorInfo
     {
         /// <summary>
         /// 管线的拥有者
@@ -63,7 +63,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<PipelineInfo>();
+            var clone = ObjectCache.Get<FlowInfo>();
             clone.Ready(id);
             clone.owner = owner;
             clone.length = length;
