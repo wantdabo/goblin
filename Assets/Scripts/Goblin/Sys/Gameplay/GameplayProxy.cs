@@ -21,9 +21,9 @@ namespace Goblin.Sys.Gameplay
     /// </summary>
     public class GameplayProxy : Proxy<GameplayModel>
     {
-        public GameDirector director { get; private set; }
+        public GameplayDirector director { get; private set; }
 
-        public void Load<T>(GPData data) where T : GameDirector, new()
+        public void Load<T>(GPData data) where T : GameplayDirector, new()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
             if (null != director)

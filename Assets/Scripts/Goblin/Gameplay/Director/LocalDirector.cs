@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Director
     /// <summary>
     /// 本地单机, 本地导演
     /// </summary>
-    public class LocalDirector : GameDirector
+    public class LocalDirector : GameplayDirector
     {
         /// <summary>
         /// 是否渲染 (驱动 World)
