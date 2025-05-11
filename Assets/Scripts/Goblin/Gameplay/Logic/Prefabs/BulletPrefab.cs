@@ -46,8 +46,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
         protected override void OnProcessing(Actor actor, BulletPrefabInfo info)
         {
             actor.AddBehavior<Bullet>();
-            
-            if (false == actor.SeekBehaviorInfo(out BulletInfo bullet)) return;
+
+            actor.SeekBehaviorInfo(out BulletInfo bullet);
             bullet.owner = info.owner;
             bullet.flow = stage.flow.GenPipeline(actor.id, info.pipelines).id;
             bullet.strength = info.strength;
