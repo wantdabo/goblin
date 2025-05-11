@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public ulong owner { get; set; }
         /// <summary>
-        /// 子弹的 ID 列表, 用于指向子弹数据
+        /// 正在进行的子弹管线 ActorID
         /// </summary>
         public ulong flow { get; set; }
         /// <summary>
