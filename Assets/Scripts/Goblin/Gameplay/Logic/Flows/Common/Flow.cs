@@ -137,6 +137,8 @@ namespace Goblin.Gameplay.Logic.Flows.Common
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos)
             {
+                // 叠加持有者的 timescale
+                if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo ownertickerinfo)) tick *= ownertickerinfo.timescale;
                 // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
                 flowinfo.elapsed += (tick * stage.cfg.fp2int).AsUInt();
                 while (flowinfo.elapsed >= GAME_DEFINE.LOGIC_TICK_MS)

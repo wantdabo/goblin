@@ -91,14 +91,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             if (false == info.casting) return;
-
-            // 技能 timescale 覆盖 flow timescale
-            if (actor.SeekBehaviorInfo(out TickerInfo tickerinfo) && stage.SeekBehaviorInfo(info.flow, out TickerInfo flowtickerinfo))
-            {
-                flowtickerinfo.timescale = tickerinfo.timescale;
-            }
-
             if (false == info.loadedskills.TryGetValue(info.skill, out var skillinfo) || false == stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo)) return;
+            
             var damage = stage.calc.ChargeDamage(actor.id, skillinfo.strength);
             while (collisioninfo.collisions.TryDequeue(out var target))
             {
