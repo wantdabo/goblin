@@ -365,8 +365,32 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private void RecycleActors()
         {
+            // 拆解 Behavior
             foreach (var rmvactor in cache.rmvactors)
             {
+                if (false == SeekBehaviors(rmvactor, out var behaviors)) continue;
+                foreach (var behavior in behaviors) behavior.Disassemble();
+            }
+
+            // 重置 BehaviorInfo
+            foreach (var rmvactor in cache.rmvactors)
+            {
+                if (false == SeekBehaviorInfos(rmvactor, out var behaviorinfos)) continue;
+                foreach (var behaviorinfo in behaviorinfos) behaviorinfo.Reset();
+            }
+            
+            // 拆解 Actor
+            foreach (var rmvactor in cache.rmvactors)
+            {
+                var actor = GetActor(rmvactor);
+                if (null == actor) continue;
+                actor.Disassemble();
+            }
+            
+            // 回收清理
+            foreach (var rmvactor in cache.rmvactors)
+            {
+                // 回收清理 Behavior
                 if (cache.behaviordict.TryGetValue(rmvactor, out var dict))
                 {
                     foreach (var behavior in dict.Values)
@@ -380,14 +404,12 @@ namespace Goblin.Gameplay.Logic.Core
                                 cache.behaviors.Remove(behavior.GetType());
                             }
                         }
-                        behavior.Disassemble();
                         ObjectCache.Set(behavior);  
                     }
                     dict.Clear();
                     ObjectCache.Set(dict);
                     cache.behaviordict.Remove(rmvactor);
                 }
-
                 if (info.behaviortypes.TryGetValue(rmvactor, out var types))
                 {
                     types.Clear();
@@ -396,6 +418,7 @@ namespace Goblin.Gameplay.Logic.Core
                     info.behaviortypes.Remove(rmvactor);
                 }
                 
+                // 回收清理 BehaviorInfo
                 if (cache.behaviorinfodict.TryGetValue(rmvactor, out var infodict))
                 {
                     foreach (var behaviorinfo in infodict.Values)
@@ -409,21 +432,21 @@ namespace Goblin.Gameplay.Logic.Core
                                 info.behaviorinfos.Remove(behaviorinfo.GetType());
                             }
                         }
-                        behaviorinfo.Reset();
                         ObjectCache.Set(behaviorinfo);
                     }
                     infodict.Clear();
                     ObjectCache.Set(infodict);
                     cache.behaviorinfodict.Remove(rmvactor);
                 }
-
+            
+                // 回收清理 Actor
                 if (cache.actordict.TryGetValue(rmvactor, out var actor))
                 {
                     info.actors.Remove(rmvactor);
                     cache.actordict.Remove(rmvactor);
-                    actor.Disassemble();
                 }
             }
+            
             cache.rmvactors.Clear();
         }
 
@@ -725,6 +748,33 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
             var result = ObjectCache.Get<List<T>>();
             foreach (var i in infos) result.Add(i as T);
+            
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="infos">BehaviorInfo 列表</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfos(ulong id, out List<BehaviorInfo> infos)
+        {
+            infos = GetBehaviorInfos(id);
+        
+            return null != infos;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <returns>BehaviorInfo 列表</returns>
+        public List<BehaviorInfo> GetBehaviorInfos(ulong id)
+        {
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
+            var result = ObjectCache.Get<List<BehaviorInfo>>();
+            foreach (var i in dict.Values) result.Add(i);
             
             return result;
         }
