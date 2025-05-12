@@ -8,18 +8,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Seat : Behavior<SeatInfo>
     {
-        protected override void OnAssemble()
-        {
-            base.OnAssemble();
-            stage.eventor.Listen<ActorDeadEvent>(actor.eventor, OnActorDead);
-        }
-
-        protected override void OnDisassemble()
-        {
-            base.OnDisassemble();
-            stage.eventor.UnListen<ActorDeadEvent>(actor.eventor, OnActorDead);
-        }
-        
         /// <summary>
         /// 根据座位 ID 获取 ActorID
         /// </summary>
@@ -49,24 +37,28 @@ namespace Goblin.Gameplay.Logic.Behaviors
         }
 
         /// <summary>
-        /// 进入座位
+        /// 坐下
         /// </summary>
         /// <param name="seat">座位 ID</param>
-        /// <param name="actor">ActorID</param>
-        public void Enter(ulong seat, ulong actor)
+        /// <param name="id">ActorID</param>
+        public void Sitdown(ulong seat, ulong id)
         {
             if (info.sadict.ContainsKey(seat)) info.sadict.Remove(seat);
-            if (info.asdict.ContainsKey(actor)) info.asdict.Remove(actor);
+            if (info.asdict.ContainsKey(id)) info.asdict.Remove(id);
             
-            info.sadict.Add(seat, actor);
-            info.asdict.Add(actor, seat);
+            info.sadict.Add(seat, id);
+            info.asdict.Add(id, seat);
         }
 
-        private void OnActorDead(ActorDeadEvent e)
+        /// <summary>
+        /// 站起
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        public void Standup(ulong id)
         {
-            if (false == info.asdict.TryGetValue(e.id, out var seat)) return;
+            if (false == info.asdict.TryGetValue(id, out var seat)) return;
             
-            info.asdict.Remove(e.id);
+            info.asdict.Remove(id);
             info.sadict.Remove(seat);
         }
     }

@@ -17,28 +17,6 @@ using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
-    /// Actor 诞生事件
-    /// </summary>
-    public struct ActorBronEvent : IEvent
-    {
-        /// <summary>
-        /// ActorID
-        /// </summary>
-        public ulong id { get; set; }
-    }
-
-    /// <summary>
-    /// Actor 死亡事件
-    /// </summary>
-    public struct ActorDeadEvent : IEvent
-    {
-        /// <summary>
-        /// ActorID
-        /// </summary>
-        public ulong id { get; set; }
-    }
-
-    /// <summary>
     /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据
     /// </summary>
     public sealed class Stage
@@ -101,10 +79,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// 随机数
         /// </summary>
         public Random random => GetBehavior<Random>(sa);
-        /// <summary>
-        /// 事件订阅器
-        /// </summary>
-        public Eventor eventor => GetBehavior<Eventor>(sa);
         /// <summary>
         /// 属性数值计算
         /// </summary>
@@ -493,7 +467,9 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
-            eventor.Tell(new ActorDeadEvent { id = id });
+            
+            
+            seat.Standup(id);
         }
 
         /// <summary>
@@ -504,7 +480,6 @@ namespace Goblin.Gameplay.Logic.Core
         {
             // 生成一个 Actor
             var actor = AddActor(++info.increment);
-            eventor.Tell(new ActorBronEvent { id = actor.id });
             
             return actor;
         }
@@ -526,7 +501,6 @@ namespace Goblin.Gameplay.Logic.Core
             actor.Assemble(id, this);
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
             actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
-            actor.AddBehavior<Eventor>();
             
             return actor;
         }
@@ -865,7 +839,7 @@ namespace Goblin.Gameplay.Logic.Core
                 });
                 hero.AddBehavior<Gamepad>();
                 // 入座
-                seat.Enter(player.seat, hero.id);
+                seat.Sitdown(player.seat, hero.id);
             }
         }
         

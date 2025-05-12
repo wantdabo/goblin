@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Flows.BehaviorInfos;
 using Goblin.Gameplay.Logic.Flows.Common;
@@ -14,18 +15,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class SkillLauncher : Behavior<SkillLauncherInfo>
     {
-        protected override void OnAssemble()
-        {
-            base.OnAssemble();
-            stage.eventor.Listen<ActorDeadEvent>(actor.eventor, OnActorDead);
-        }
-
-        protected override void OnDisassemble()
-        {
-            base.OnDisassemble();
-            stage.eventor.UnListen<ActorDeadEvent>(actor.eventor, OnActorDead);
-        }
-
         /// <summary>
         /// 装载技能
         /// </summary>
@@ -44,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             skillinfo.pipelines = pipelines;
             info.loadedskills.Add(skill, skillinfo);
         }
-        
+
         /// <summary>
         /// 卸载技能
         /// </summary>
@@ -52,10 +41,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Unload(uint skill)
         {
             if (false == info.loadedskills.TryGetValue(skill, out var skillinfo)) return;
-            
+
             skillinfo.pipelines.Clear();
             ObjectCache.Set(skillinfo.pipelines);
-            
+
             info.loadedskills.Remove(skill);
             ObjectCache.Set(skillinfo);
         }
@@ -77,10 +66,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (info.casting) return;
             if (false == info.loadedskills.TryGetValue(skill, out var skillinfo)) return;
-            
+
             var pipelines = ObjectCache.Get<List<uint>>();
             foreach (var pipeline in skillinfo.pipelines) pipelines.Add(pipeline);
-            
+
             // 创建管线
             info.skill = skill;
             info.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
@@ -91,24 +80,30 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             if (false == info.casting) return;
-            if (false == info.loadedskills.TryGetValue(info.skill, out var skillinfo) || false == stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo)) return;
-            
-            var damage = stage.calc.ChargeDamage(actor.id, skillinfo.strength);
-            while (collisioninfo.collisions.TryDequeue(out var target))
-            {
-                stage.calc.ToDamage(actor.id, target, damage);
-            }
-        }
 
-        private void OnActorDead(ActorDeadEvent e)
-        {
-            if (false == info.casting) return;
-            if (e.id != info.id) return;
+            // 碰撞检测
+            if (info.loadedskills.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo))
+            {
+                var damage = stage.calc.ChargeDamage(actor.id, skillinfo.strength);
+                while (collisioninfo.collisions.TryDequeue(out var target))
+                {
+                    stage.calc.ToDamage(actor.id, target, damage);
+                }
+            }
+
+            // 技能管线结束检查
+            if (false == stage.SeekBehaviorInfo(info.flow, out FlowInfo flowinfo) || flowinfo.timeline >= flowinfo.length)
+            {
+                info.skill = 0;
+                info.flow = 0;
+                info.casting = false;
+            }
             
-            // 技能管线 Actor 被移除, 结束了
-            info.skill = 0;
-            info.flow = 0;
-            info.casting = false;
+            // 切换状态机中状态
+            if (actor.SeekBehavior(out StateMachine statemachine))
+            {
+                statemachine.ChangeState(info.casting ? STATE_DEFINE.CASTING : STATE_DEFINE.IDLE);
+            }
         }
     }
 }
