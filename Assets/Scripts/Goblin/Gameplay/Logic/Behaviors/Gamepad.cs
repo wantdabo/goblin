@@ -73,7 +73,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 清理所有按键松发状态
         /// </summary>
-        public void ClearReleaseTokenAll()
+        private void ClearReleaseTokenAll()
         {
             ClearReleaseToken(INPUT_DEFINE.JOYSTICK);
             ClearReleaseToken(INPUT_DEFINE.BA);
@@ -86,7 +86,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// 清理按键松发状态
         /// </summary>
         /// <param name="inputType">按键类型</param>
-        public void ClearReleaseToken(ushort inputType)
+        private void ClearReleaseToken(ushort inputType)
         {
             var input = GetInput(inputType);
             input.release = false;

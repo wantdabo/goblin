@@ -55,19 +55,5 @@ namespace Goblin.Gameplay.Logic.Flows.Common
             
             return null != instrinfos && instrinfos.Count > 0;
         }
-        
-        /// <summary>
-        /// 排序指令
-        /// </summary>
-        /// <param name="data">管道数据</param>
-        public static void Sort(this PipelineData data)
-        {
-            data.instructs.Sort((x, y) =>
-            {
-                if (x.begin == y.begin) return 0;
-                
-                return x.begin < y.begin ? -1 : 1;
-            });
-        }
     }
 }
