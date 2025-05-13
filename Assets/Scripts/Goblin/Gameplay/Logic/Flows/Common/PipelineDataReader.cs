@@ -27,13 +27,30 @@ namespace Goblin.Gameplay.Logic.Flows.Common
 
             // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes
             var bytes = Export.engine.gameres.location.LoadPipelineSync(id.ToString());
-            
+
             data = MessagePackSerializer.Deserialize<PipelineData>(bytes);
             datas.Add(id, data);
 
             return data;
         }
-        
+
+        /// <summary>
+        /// 格式化管线数据
+        /// </summary>
+        /// <param name="data">管线数据</param>
+        public static void Format(this PipelineData data)
+        {
+            // 求出最大的管线长度
+            ulong length = 0;
+            foreach (var instruct in data.instructs)
+            {
+                if (length >= instruct.end) continue;
+                length = instruct.end;
+            }
+            data.length = length;
+            data.instructs.Sort((a, b) => a.begin.CompareTo(b.begin));
+        }
+
         /// <summary>
         /// 查询指令
         /// </summary>
@@ -52,7 +69,7 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                 if (null == instrinfos) instrinfos = ObjectCache.Get<List<(bool inside, uint index, Instruct instruct)>>();
                 instrinfos.Add((instruct.begin >= timeline && instruct.end >= timeline, index, instruct));
             }
-            
+
             return null != instrinfos && instrinfos.Count > 0;
         }
     }

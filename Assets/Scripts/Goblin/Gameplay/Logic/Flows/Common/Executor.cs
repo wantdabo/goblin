@@ -36,106 +36,106 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// <summary>
         /// 指令进入
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Enter(Instruct instruct, FlowInfo flowinfo)
+        public void Enter(InstructData data, FlowInfo flowinfo)
         {
-            OnEnter(instruct, flowinfo);
+            OnEnter(data, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Execute(Instruct instruct, FlowInfo flowinfo)
+        public void Execute(InstructData data, FlowInfo flowinfo)
         {
-            OnExecute(instruct, flowinfo);
+            OnExecute(data, flowinfo);
         }
         
         /// <summary>
         /// 指令离开
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Exit(Instruct instruct, FlowInfo flowinfo)
+        public void Exit(InstructData data, FlowInfo flowinfo)
         {
-            OnExit(instruct, flowinfo);
+            OnExit(data, flowinfo);
         }
         
         /// <summary>
         /// 指令进入
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnEnter(Instruct instruct, FlowInfo flowinfo);
+        protected abstract void OnEnter(InstructData data, FlowInfo flowinfo);
         /// <summary>
         /// 指令执行
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExecute(Instruct instruct, FlowInfo flowinfo);
+        protected abstract void OnExecute(InstructData data, FlowInfo flowinfo);
         /// <summary>
         /// 指令离开
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExit(Instruct instruct, FlowInfo flowinfo);
+        protected abstract void OnExit(InstructData data, FlowInfo flowinfo);
     }
 
     /// <summary>
     /// 指令执行器
     /// </summary>
-    /// <typeparam name="T">指令类型</typeparam>
-    public abstract class Executor<T> : Executor where T : Instruct
+    /// <typeparam name="T">指令数据类型</typeparam>
+    public abstract class Executor<T> : Executor where T : InstructData
     {
         /// <summary>
         /// 指令进入
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnEnter(Instruct instruct, FlowInfo flowinfo)
+        protected override void OnEnter(InstructData data, FlowInfo flowinfo)
         {
-            OnEnter(instruct as T, flowinfo);
+            OnEnter(data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnExecute(Instruct instruct, FlowInfo flowinfo)
+        protected override void OnExecute(InstructData data, FlowInfo flowinfo)
         {
-            OnExecute(instruct as T, flowinfo);
+            OnExecute(data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令离开
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnExit(Instruct instruct, FlowInfo flowinfo)
+        protected override void OnExit(InstructData data, FlowInfo flowinfo)
         {
-            OnExit(instruct as T, flowinfo);
+            OnExit(data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令进入
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnEnter(T instruct, FlowInfo flowinfo);
+        protected abstract void OnEnter(T data, FlowInfo flowinfo);
         /// <summary>
         /// 指令执行
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExecute(T instruct, FlowInfo flowinfo);
+        protected abstract void OnExecute(T data, FlowInfo flowinfo);
         /// <summary>
         /// 指令离开
         /// </summary>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExit(T instruct, FlowInfo flowinfo);
+        protected abstract void OnExit(T data, FlowInfo flowinfo);
     }
 }

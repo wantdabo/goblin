@@ -9,10 +9,6 @@ namespace Goblin.Gameplay.Logic.Flows.Common
     public class PipelineData
     {
         /// <summary>
-        /// 管线 ID
-        /// </summary>
-        public uint id { get; set; }
-        /// <summary>
         /// 管线长度, 根据指令列表中区间结束的最大值来计算得出
         /// </summary>
         public ulong length { get; set; }

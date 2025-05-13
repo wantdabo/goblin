@@ -16,6 +16,25 @@ namespace Goblin.Gameplay.Logic.Flows.Common
     public class Flow : Behavior
     {
         /// <summary>
+        /// 指令执行类型
+        /// </summary>
+        private enum ExecuteInstrucType
+        {
+            /// <summary>
+            /// 进入
+            /// </summary>
+            Enter,
+            /// <summary>
+            /// 执行
+            /// </summary>
+            Execute,
+            /// <summary>
+            /// 退出
+            /// </summary>
+            Exit,
+        }
+        
+        /// <summary>
         /// 指令条件检查器列表
         /// </summary>
         private Dictionary<ushort, Checker> checkers { get; set; }
@@ -173,25 +192,6 @@ namespace Goblin.Gameplay.Logic.Flows.Common
 
             return true;
         }
-
-        /// <summary>
-        /// 指令执行类型
-        /// </summary>
-        private enum ExecuteInstrucType
-        {
-            /// <summary>
-            /// 进入
-            /// </summary>
-            Enter,
-            /// <summary>
-            /// 执行
-            /// </summary>
-            Execute,
-            /// <summary>
-            /// 退出
-            /// </summary>
-            Exit,
-        }
         
         /// <summary>
         /// 执行指令
@@ -204,20 +204,20 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
         private void ExecuteInstruct(ExecuteInstrucType type, uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)
         {
-            if (false == executors.TryGetValue(instruct.id, out var executor)) throw new Exception($"id : {instruct.id} cannot find executor.");
+            if (false == executors.TryGetValue(instruct.data.id, out var executor)) throw new Exception($"id : {instruct.data.id} cannot find executor.");
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Get<List<uint>>());
             
             switch (type)
             {
                 case ExecuteInstrucType.Enter:
-                    executor.Enter(instruct, flowinfo);
+                    executor.Enter(instruct.data, flowinfo);
                     if (false == indexes.Contains(index)) indexes.Add(index);
                     break;
                 case ExecuteInstrucType.Execute:
-                    executor.Execute(instruct, flowinfo);
+                    executor.Execute(instruct.data, flowinfo);
                     break;
                 case ExecuteInstrucType.Exit:
-                    executor.Exit(instruct, flowinfo);
+                    executor.Exit(instruct.data, flowinfo);
                     if (indexes.Contains(index)) indexes.Remove(index);
                     break;
             }
