@@ -9,7 +9,6 @@
 - MessagePack 协议
 - Kowtow 物理引擎
 - Yooasset 资源管理
-- HybridCLR 代码热更
 - Luban 配置
 
 #### [项目结构](#projectdire)
