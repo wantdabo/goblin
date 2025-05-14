@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
     public struct GPStageData
     {
         /// <summary>
-        /// 游戏的种子，用于随机数生成等目的
+        /// 游戏的种子，用于随机数生成等等
         /// </summary>
         public int seed { get; set; }
         /// <summary>

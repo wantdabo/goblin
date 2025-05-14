@@ -118,6 +118,8 @@ namespace Goblin.Gameplay.Logic.Core
             info = ObjectCache.Get<StageInfo>();
             info.Ready(sa);
             info.state = StageState.Initialized;
+            
+            // 操作 Sa Behavior
             AddActor(sa);
             GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
             AddBehavior<Config>(sa);
@@ -126,8 +128,8 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<RILSync>(sa);
-            // 添加批处理
-            Batches();
+            AddBehavior<Translate>(sa);
+            
             // 添加预制创建器
             Prefabs();
             // 构建初始化 Stage
@@ -226,14 +228,6 @@ namespace Goblin.Gameplay.Logic.Core
             Prefab<FlowPrefab, FlowPrefabInfo>();
             Prefab<HeroPrefab, HeroPrefabInfo>();
             Prefab<BulletPrefab, BulletPrefabInfo>();
-        }
-        
-        /// <summary>
-        /// 添加批处理
-        /// </summary>
-        private void Batches()
-        {
-            AddBehavior<Translate>(sa);
         }
 
         /// <summary>
