@@ -1,10 +1,13 @@
-using System;
 using System.Collections.Generic;
 using Goblin.Core;
+using Goblin.Gameplay.Flows.Executors.Common;
+using Goblin.Gameplay.Flows.Scriptings;
+using Goblin.Gameplay.Flows.Scriptings.Common;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using MessagePack;
 
-namespace Goblin.Gameplay.Logic.Flows.Common
+namespace Goblin.Gameplay.Flows
 {
     /// <summary>
     /// 管线数据读取
@@ -12,9 +15,21 @@ namespace Goblin.Gameplay.Logic.Flows.Common
     public static class PipelineDataReader
     {
         /// <summary>
-        /// 缓存, 管线数据字典, 键为管线 ID, 值为管线数据
+        /// 管线数据字典, 键为管线 ID, 值为管线数据
         /// </summary>
         private static Dictionary<uint, PipelineData> datas { get; set; } = new();
+        /// <summary>
+        /// 脚本数据字典, 键为脚本 ID, 值为脚本处理器
+        /// </summary>
+        private static Dictionary<uint, Scripting> scriptings { get; set; } = new();
+
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
+        static PipelineDataReader()
+        {
+            Scriptings();
+        }
 
         /// <summary>
         /// 加载管线数据
@@ -24,6 +39,15 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         public static PipelineData ReadPipelineData(uint id)
         {
             if (datas.TryGetValue(id, out var data)) return data;
+
+            // 从脚本处理器中尝试获取 PipelineData
+            if (scriptings.TryGetValue(id, out var scripting))
+            {
+                data = scripting.Script();
+                datas.Add(id, data);
+
+                return data;
+            }
 
             // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes
             var bytes = Export.engine.gameres.location.LoadPipelineSync(id.ToString());
@@ -71,6 +95,14 @@ namespace Goblin.Gameplay.Logic.Flows.Common
             }
 
             return null != instrinfos && instrinfos.Count > 0;
+        }
+
+        /// <summary>
+        /// 初始化脚本处理器
+        /// </summary>
+        private static void Scriptings()
+        {
+            scriptings.Add(FLOW_DEFINE.S100000001, new S100000001());
         }
     }
 }

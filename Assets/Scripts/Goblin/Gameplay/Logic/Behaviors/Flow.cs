@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.BehaviorInfos;
+using Goblin.Gameplay.Flows;
+using Goblin.Gameplay.Flows.Checkers;
+using Goblin.Gameplay.Flows.Checkers.Common;
+using Goblin.Gameplay.Flows.Executors;
+using Goblin.Gameplay.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Flows.Common
+namespace Goblin.Gameplay.Behaviors
 {
     /// <summary>
     /// 管线流
@@ -113,6 +118,8 @@ namespace Goblin.Gameplay.Logic.Flows.Common
                     if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(instrinfo.index)) continue;
                     ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
                 }
+                instrinfos.Clear();
+                ObjectCache.Set(instrinfos);
             }
             // 结束管线
             stage.RmvActor(flowinfo.id);
@@ -147,6 +154,8 @@ namespace Goblin.Gameplay.Logic.Flows.Common
 
                     ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
                 }
+                instrinfos.Clear();
+                ObjectCache.Set(instrinfos);
             }
         }
         
@@ -228,7 +237,13 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// </summary>
         private void Checkers()
         {
+            void Checker<T>(ushort id) where T : Checker, new()
+            {
+                checkers.Add(id, ObjectCache.Get<T>().Load(stage));
+            }
+            
             checkers = ObjectCache.Get<Dictionary<ushort, Checker>>();
+            Checker<TestChecker>(INSTR_DEFINE.TEST);
         }
 
         /// <summary>
@@ -236,7 +251,13 @@ namespace Goblin.Gameplay.Logic.Flows.Common
         /// </summary>
         private void Executors()
         {
+            void Executor<T>(ushort id) where T : Executor, new()
+            {
+                executors.Add(id, ObjectCache.Get<T>().Load(stage));
+            }
+            
             executors = ObjectCache.Get<Dictionary<ushort, Executor>>();
+            Executor<TestExecutor>(INSTR_DEFINE.TEST);
         }
     }
 }

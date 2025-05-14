@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.Flows.Common;
+using Goblin.Gameplay.Flows.Checkers.Common;
+using Goblin.Gameplay.Flows.Executors.Common;
 
 namespace Goblin.Gameplay.Flows.Scriptings.Common
 {
@@ -124,7 +125,7 @@ namespace Goblin.Gameplay.Flows.Scriptings.Common
             /// <returns>指令操作器</returns>
             public InstructOperation After<T>(ulong offset, ulong length, T data) where T : InstructData
             {
-                return ScriptMachine.Instruct(instruct.end + offset, instruct.end + length, data);
+                return Instruct(instruct.end + offset, instruct.end + length, data);
             }
         }
     }

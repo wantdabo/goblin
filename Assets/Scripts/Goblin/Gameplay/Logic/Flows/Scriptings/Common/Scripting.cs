@@ -1,4 +1,4 @@
-using Goblin.Gameplay.Logic.Flows.Common;
+using Goblin.Gameplay.Flows.Executors.Common;
 
 namespace Goblin.Gameplay.Flows.Scriptings.Common
 {

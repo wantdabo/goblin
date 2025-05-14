@@ -13,5 +13,10 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 管线长度最大值 - 溢出
         /// </summary>
         public const ulong OVERFLOW_LENGTH = ulong.MaxValue;
+        
+        /// <summary>
+        /// 脚本 ID
+        /// </summary>
+        public const uint S100000001 = 100000001;
     }
 }

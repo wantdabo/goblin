@@ -1,6 +1,6 @@
+using Goblin.Gameplay.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Flows.BehaviorInfos;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors

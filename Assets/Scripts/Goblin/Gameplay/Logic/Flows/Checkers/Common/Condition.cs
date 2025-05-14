@@ -1,4 +1,4 @@
-namespace Goblin.Gameplay.Logic.Flows.Common
+namespace Goblin.Gameplay.Flows.Checkers.Common
 {
     /// <summary>
     /// 管线指令执行条件

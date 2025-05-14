@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.Behaviors;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Common.GPDatas;
-using Goblin.Gameplay.Logic.Flows.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;

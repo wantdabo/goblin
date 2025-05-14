@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.BehaviorInfos;
+using Goblin.Gameplay.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Flows.BehaviorInfos;
-using Goblin.Gameplay.Logic.Flows.Common;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
