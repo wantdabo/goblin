@@ -59,7 +59,12 @@ namespace Kowtow.Math
         {
             return new FP((float)System.Math.Pow(2, x.rawvalue));
         }
-        
+
+        public static FP Log(FP x)
+        {
+            return new FP(System.Math.Log(x.AsFloat()));
+        }
+
         /// <summary>
         /// Returns the base-2 logarithm of a specified number.
         /// Provides at least 9 decimals of accuracy.
@@ -69,7 +74,7 @@ namespace Kowtow.Math
         /// </exception>
         public static FP Log2(FP x)
         {
-            return new FP(float.Log2(x.rawvalue));
+            return Log(x) / Log(2);
         }
 
         /// <summary>
@@ -106,7 +111,7 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Floor(FP value)
         {
-            return new FP(float.Floor(value.rawvalue));
+            return new FP(System.Math.Floor(value.rawvalue));
         }
 
         /// <summary>
@@ -114,7 +119,7 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Ceiling(FP value)
         {
-            return new FP(float.Ceiling(value.rawvalue));
+            return new FP(System.Math.Ceiling(value.rawvalue));
         }
 
         /// <summary>
@@ -123,17 +128,17 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Round(FP value)
         {
-            return new FP(float.Round(value.rawvalue));
+            return new FP(System.Math.Round(value.rawvalue));
         }
 
         public static FP Max(FP left, FP right)
         {
-            return new FP(float.Max(left.rawvalue, right.rawvalue));
+            return new FP(System.Math.Max(left.rawvalue, right.rawvalue));
         }
 
         public static FP Min(FP left, FP right)
         {
-            return new FP(float.Min(left.rawvalue, right.rawvalue));
+            return new FP(System.Math.Min(left.rawvalue, right.rawvalue));
         }
 
         public static FP Clamp(FP origin, FP min, FP max)
@@ -251,7 +256,7 @@ namespace Kowtow.Math
         /// </exception>
         public static FP Sqrt(FP x)
         {
-            return new FP(float.Sqrt(x.rawvalue));
+            return new FP(System.Math.Sqrt(x.rawvalue));
         }
 
         /// <summary>
@@ -262,7 +267,7 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Sin(FP x)
         {
-            return new FP(float.Sin(x.rawvalue));
+            return new FP(System.Math.Sin(x.rawvalue));
         }
 
         /// <summary>
@@ -281,7 +286,7 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Cos(FP x)
         {
-            return new FP(float.Cos(x.rawvalue));
+            return new FP(System.Math.Cos(x.rawvalue));
         }
 
         /// <summary>
@@ -301,7 +306,7 @@ namespace Kowtow.Math
         /// </remarks>
         public static FP Tan(FP x)
         {
-            return new FP(float.Tan(x.rawvalue));
+            return new FP(System.Math.Tan(x.rawvalue));
         }
 
         /// <summary>
@@ -310,12 +315,12 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Atan(FP z)
         {
-            return new FP(float.Atan(z.rawvalue));
+            return new FP(System.Math.Atan(z.rawvalue));
         }
 
         public static FP Atan2(FP y, FP x)
         {
-            return new FP(float.Atan2(y.rawvalue, x.rawvalue));
+            return new FP(System.Math.Atan2(y.rawvalue, x.rawvalue));
         }
 
         public static FP Asin(FP value)
@@ -329,7 +334,7 @@ namespace Kowtow.Math
         /// </summary>
         public static FP Acos(FP x)
         {
-            return new FP(float.Acos(x.rawvalue));
+            return new FP(System.Math.Acos(x.rawvalue));
         }
 
         public static implicit operator FP(long value)
@@ -461,7 +466,12 @@ namespace Kowtow.Math
         {
             this.rawvalue = val;
         }
-        
+
+        FP(double val)
+        {
+            this.rawvalue = (float)val;
+        }
+
         FP(long val)
         {
             this.rawvalue = val;
