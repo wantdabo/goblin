@@ -1,5 +1,4 @@
-﻿using Goblin.SkillPipelineEditor;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 
 namespace Goblin.Custom
@@ -9,7 +8,6 @@ namespace Goblin.Custom
         [MenuItem("工具/GOBLIN 技能管线编辑器", false, 1)]
         public static void OpenDirectorWindow()
         {
-            ActionEditorWindow.ShowWindow();
         }
 
         [MenuItem("工具/GOBLIN 运行时", false, 0)]
