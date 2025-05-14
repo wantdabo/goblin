@@ -71,6 +71,12 @@ namespace Goblin.Gameplay.Logic.Core
             return stage.SeekBehavior<T>(id, out behavior);
         }
         
+        /// <summary>
+        /// 寻找 Behavior
+        /// </summary>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behavior">Behavior</param>
+        /// <returns>YES/NO</returns>
         public bool SeekBehavior(Type type, out Behavior behavior)
         {
             return stage.SeekBehavior(id, type, out behavior);

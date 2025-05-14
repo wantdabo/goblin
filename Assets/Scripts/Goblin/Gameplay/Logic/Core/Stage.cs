@@ -869,6 +869,10 @@ namespace Goblin.Gameplay.Logic.Core
             /// </summary>
             public List<ulong> rmvactors { get; set; }
         
+            /// <summary>
+            /// 初始化 StageCache
+            /// </summary>
+            /// <returns>StageCache</returns>
             public StageCache Initialize()
             {
                 actordict = ObjectCache.Get<Dictionary<ulong, Actor>>();
@@ -880,7 +884,10 @@ namespace Goblin.Gameplay.Logic.Core
                 return this;
             }
         
-            public StageCache Dispose()
+            /// <summary>
+            /// 销毁 StageCache
+            /// </summary>
+            public void Dispose()
             {
                 actordict.Clear();
                 ObjectCache.Set(actordict);
@@ -896,8 +903,6 @@ namespace Goblin.Gameplay.Logic.Core
             
                 rmvactors.Clear();
                 ObjectCache.Set(rmvactors);
-
-                return this;
             }
         }
     }

@@ -1,7 +1,3 @@
-#if HYBRID_CLR
-using HybridCLR.Editor.Commands;
-using HybridCLR.Editor.Settings;
-#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +17,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/发布/发布 APK")]
         public static void BuildAPK()
         {
-            BuildScripts();
             BuildAssetBundles(BuildTarget.Android);
             Release(BuildTarget.Android, "android/game.apk");
         }
@@ -72,7 +67,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/补丁/APK")]
         public static void BuildPatchAPK()
         {
-            BuildScripts();
             var version = BuildAssetBundles(BuildTarget.Android);
             var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/Android/Package/" + version;
         }
@@ -80,7 +74,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/补丁/EXE32")]
         public static void BuildPatchEXE32()
         {
-            BuildScripts();
             var version = BuildAssetBundles(BuildTarget.StandaloneWindows);
             var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows/Package/" + version;
         }
@@ -88,7 +81,6 @@ namespace Goblin.Custom
         [MenuItem("工具/构建/补丁/EXE64")]
         public static void BuildPatchEXE64()
         {
-            BuildScripts();
             var version = BuildAssetBundles(BuildTarget.StandaloneWindows64);
             var path = Application.dataPath.Replace("/Assets", "") + "/Bundles/StandaloneWindows64/Package/" + version;
         }
@@ -134,65 +126,6 @@ namespace Goblin.Custom
             }
 
             return version;
-        }
-
-        [MenuItem("工具/构建/构建代码")]
-        public static void BuildScripts()
-        {
-            GenScripts();
-            ScriptsCopy();
-        }
-
-        private static void GenScripts()
-        {
-#if HYBRID_CLR
-            PrebuildCommand.GenerateAll();
-#endif
-        }
-
-        private static void ScriptsCopy()
-        {
-#if HYBRID_CLR
-            var rootPath = Application.dataPath.Replace("/Assets", "/");
-            var scriptResPath = Application.dataPath + "/GameRes/Raws/Scripts/";
-#if UNITY_STANDALONE_WIN
-            var hotfixDLLPath = rootPath + HybridCLRSettings.Instance.hotUpdateDllCompileOutputRootDir + "/StandaloneWindows64/";
-            var aotDLLPath = rootPath + HybridCLRSettings.Instance.strippedAOTDllOutputRootDir + "/StandaloneWindows64/";
-#elif UNITY_ANDROID
-            var hotfixDLLPath = rootPath + HybridCLRSettings.Instance.hotUpdateDllCompileOutputRootDir + "/Android/";
-            var aotDLLPath = rootPath + HybridCLRSettings.Instance.strippedAOTDllOutputRootDir + "/Android/";
-#elif UNITY_STANDALONE_OSX
-            var hotfixDLLPath = rootPath + HybridCLRSettings.Instance.hotUpdateDllCompileOutputRootDir + "/StandaloneWindows64/";
-            var aotDLLPath = rootPath + HybridCLRSettings.Instance.strippedAOTDllOutputRootDir + "/StandaloneWindows64/";
-#elif UNITY_WEBGL
-            var hotfixDLLPath = rootPath + HybridCLRSettings.Instance.hotUpdateDllCompileOutputRootDir + "/WebGL/";
-            var aotDLLPath = rootPath + HybridCLRSettings.Instance.strippedAOTDllOutputRootDir + "/WebGL/";
-#endif
-
-            if (Directory.Exists(scriptResPath))
-            {
-                foreach (var filePath in Directory.GetFiles(scriptResPath)) File.Delete(filePath);
-                Directory.Delete(scriptResPath);
-            }
-
-            Directory.CreateDirectory(scriptResPath);
-            File.Copy($"{hotfixDLLPath}/Goblin.dll", $"{scriptResPath}/Goblin.dll.bytes");
-
-            var filePaths = Directory.GetFiles(aotDLLPath);
-            string fileNames = "";
-            for (int i = 0; i < filePaths.Length; i++)
-            {
-                var filePath = filePaths[i];
-                FileInfo fileInfo = new FileInfo(filePath);
-                var fileName = fileInfo.Name;
-                File.Copy(filePath, $"{scriptResPath}{fileName}.bytes");
-                fileNames += fileName + (i < filePaths.Length - 1 ? "|" : "");
-            }
-            File.WriteAllText($"{scriptResPath}AOT_DLL_LIST.bytes", fileNames);
-
-            Debug.Log("ScriptPackage Finished.");
-            AssetDatabase.Refresh();
-#endif
         }
     }
 }
