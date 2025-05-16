@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -10,21 +11,21 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Collisions
     public class ColliderInfo : BehaviorInfo
     {
         /// <summary>
+        /// 碰撞层
+        /// </summary>
+        public int layer { get; set; }
+        /// <summary>
         /// 几何体类型
         /// </summary>
         public byte shape { get; set; }
         /// <summary>
-        /// 偏移
+        /// 立方体
         /// </summary>
-        public FPVector3 offset { get; set; }
+        public Box box { get; set; }
         /// <summary>
-        /// 尺寸
+        /// 球体
         /// </summary>
-        public FPVector3 size { get; set; }
-        /// <summary>
-        /// 半径
-        /// </summary>
-        public FP radius { get; set; }
+        public Sphere sphere { get; set; }
         
         protected override void OnReady()
         {
@@ -33,20 +34,20 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Collisions
 
         protected override void OnReset()
         {
+            layer = COLLIDER_DEFINE.LAYER_DEFAULT;
             shape = 0;
-            offset = FPVector3.zero;
-            size = FPVector3.zero;
-            radius = FP.Zero;
+            box = default;
+            sphere = default;
         }
 
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Get<ColliderInfo>();
             clone.Ready(id);
+            clone.layer = layer;
             clone.shape = shape;
-            clone.offset = offset;
-            clone.size = size;
-            clone.radius = radius;
+            clone.box = box;
+            clone.sphere = sphere;
 
             return clone;
         }
