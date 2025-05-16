@@ -5,8 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Goblin.Gameplay.Common.SkillData;
-using Goblin.Gameplay.Common.SkillData.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using UnityEditor;
 using UnityEngine;
