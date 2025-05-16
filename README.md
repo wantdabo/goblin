@@ -7,7 +7,6 @@
 - UDP 通信
 - WebSocket 通信
 - MessagePack 协议
-- Kowtow 物理引擎
 - Yooasset 资源管理
 - Luban 配置
 

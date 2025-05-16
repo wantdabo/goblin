@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 逻辑帧 TICK (毫秒)
         /// </summary>
-        public static uint LOGIC_TICK_MS { get; private set; } = LOGIC_TICK.AsUInt();
+        public static uint LOGIC_TICK_MS { get; private set; } = (uint)(1000 / LOGIC_FRAME);
         /// <summary>
         /// 技能管线数据帧率
         /// </summary>
