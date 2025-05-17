@@ -10,9 +10,24 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors
 {
     /// <summary>
+    /// 碰撞结果
+    /// </summary>
+    public struct HitResult
+    {
+        /// <summary>
+        /// 是否碰撞
+        /// </summary>
+        public bool hit { get; set; }
+        /// <summary>
+        /// 碰撞列表
+        /// </summary>
+        public List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)> colliders { get; set; }
+    }
+    
+    /// <summary>
     /// 碰撞检测
     /// </summary>
-    public class Detection : Behavior<DetectionInfo>
+    public class Detection : Behavior
     {
         /// <summary>
         /// 判断 AABB 是否包含另一个 AABB
@@ -675,22 +690,26 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// 计算 AABB 包围盒
         /// </summary>
         /// <param name="id">ActorID</param>
-        /// <returns>AABB 包围盒</returns>
-        public AABB CalcAABB(ulong id)
+        /// <param name="aabb">AABB 包围盒</param>
+        /// <returns>YES/NO</returns>
+        public bool CalcAABB(ulong id, out AABB aabb)
         {
-            if (false == stage.SeekBehaviorInfo(id, out ColliderInfo collider)) return default;
+            aabb = default;
+            if (false == stage.SeekBehaviorInfo(id, out ColliderInfo collider)) return false;
 
-            return CalcAABB(collider);
+            return CalcAABB(collider, out aabb);
         }
 
         /// <summary>
         /// 计算 AABB 包围盒
         /// </summary>
         /// <param name="collider">碰撞盒信息</param>
-        /// <returns>AABB 包围盒</returns>
-        public AABB CalcAABB(ColliderInfo collider)
+        /// <param name="aabb">AABB 包围盒</param>
+        /// <returns>YES/NO</returns>
+        public bool CalcAABB(ColliderInfo collider,  out AABB aabb)
         {
-            if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) return default;
+            aabb = default;
+            if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) return false;
 
             FPVector3 position = spatial.position;
             FPQuaternion rotation = FPQuaternion.Euler(spatial.euler);
@@ -726,21 +745,25 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     ObjectCache.Set(vertices);
 
                     // 计算最终的 AABB
-                    return new AABB
+                    aabb = new AABB
                     {
                         position = position + (min + max) * FP.Half,
                         size = max - min
                     };
+                    
+                    return true;
                 case COLLIDER_DEFINE.SPHERE:
                     // Sphere 不受旋转影响
-                    return new AABB
+                    aabb = new AABB
                     {
                         position = position + rotation * collider.sphere.offset,
                         size = new FPVector3(collider.sphere.radius * 2)
                     };
+                    
+                    return true;
             }
 
-            return default;
+            return false;
         }
         
         /// <summary>

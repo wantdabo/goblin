@@ -84,6 +84,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public AttributeCalc calc => GetBehavior<AttributeCalc>(sa);
         /// <summary>
+        /// 碰撞检测
+        /// </summary>
+        public Detection detection => GetBehavior<Detection>(sa);
+        /// <summary>
         /// 管线流
         /// </summary>
         public Flow flow => GetBehavior<Flow>(sa);
@@ -126,6 +130,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<AttributeCalc>(sa);
+            AddBehavior<Detection>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<RILSync>(sa);
             AddBehavior<Translate>(sa);
