@@ -50,7 +50,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             ObjectCache.Set(translators);
         }
 
-        protected override void OnEndTick()
+        /// <summary>
+        /// 执行翻译
+        /// </summary>
+        public void Execute()
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
             if (translators.TryGetValue(typeof(StageInfo), out var translator)) translator.Translate(info);
@@ -62,6 +65,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     translator.Translate(behaviorinfo);
                 }
             }
+        }
+
+        protected override void OnEndTick()
+        {
+            Execute();
         }
     }
 }

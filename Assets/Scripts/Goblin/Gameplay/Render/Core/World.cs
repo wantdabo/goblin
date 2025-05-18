@@ -77,6 +77,10 @@ namespace Goblin.Gameplay.Render.Core
         /// Agent 集合
         /// </summary>
         private Dictionary<ulong, Dictionary<Type, Agent>> agentdict { get; set; }
+        /// <summary>
+        /// 快照之后产生的 Agent
+        /// </summary>
+        private List<Agent> snapshotagents { get; set; }
 
         protected override void OnCreate()
         {
@@ -99,6 +103,7 @@ namespace Goblin.Gameplay.Render.Core
             Batches();
             
             agentdict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Agent>>>();
+            snapshotagents = ObjectCache.Get<List<Agent>>();
             
             ticker.eventor.Listen<TickEvent>(OnTick);
         }
@@ -106,6 +111,8 @@ namespace Goblin.Gameplay.Render.Core
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            ticker.eventor.UnListen<TickEvent>(OnTick);
+            
             // 回收所有 Agents
             foreach (var kv in agentdict)
             {
@@ -121,7 +128,8 @@ namespace Goblin.Gameplay.Render.Core
             agentdict.Clear();
             ObjectCache.Set(agentdict);
             
-            ticker.eventor.UnListen<TickEvent>(OnTick);
+            snapshotagents.Clear();
+            ObjectCache.Set(snapshotagents);
         }
         
         /// <summary>
@@ -143,7 +151,31 @@ namespace Goblin.Gameplay.Render.Core
         {
             AddComp<SpatialBatch>().Initialize(this).Create();
         }
-        
+
+        /// <summary>
+        /// 拍摄
+        /// </summary>
+        public void Snapshot()
+        {
+            snapshotagents.Clear();
+        }
+
+        /// <summary>
+        /// 恢复
+        /// </summary>
+        public void Restore()
+        {
+            foreach (var agent in snapshotagents) RmvAgent(agent);
+            snapshotagents.Clear();
+            foreach (var kv in agentdict)
+            {
+                foreach (var kv2 in kv.Value)
+                {
+                    kv2.Value.Flash();
+                }
+            }
+        }
+
         /// <summary>
         /// 获取 Agent, 如果不存在则创建
         /// </summary>
@@ -204,6 +236,7 @@ namespace Goblin.Gameplay.Render.Core
             agent = ObjectCache.Get<T>();
             agent.Ready(actor, this);
             agents.Add(typeof(T), agent);
+            snapshotagents.Add(agent);
 
             return agent as T;
         }

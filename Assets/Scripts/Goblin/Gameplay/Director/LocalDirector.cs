@@ -82,12 +82,15 @@ namespace Goblin.Gameplay.Director
 
         protected override void OnSnapshot()
         {
+            world.Snapshot();
             stage.Snapshot();
         }
 
         protected override void OnRestore()
         {
+            world.statebucket.LossAllStates();
             stage.Restore();
+            world.Restore();
         }
 
         /// <summary>

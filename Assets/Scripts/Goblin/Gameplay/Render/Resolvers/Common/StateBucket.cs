@@ -88,12 +88,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            foreach (var states in statedict.Values)
-            {
-                states.Clear();
-                ObjectCache.Set(states);
-            }
-            statedict.Clear();
+            LossAllStates();
             ObjectCache.Set(statedict);
         }
 
@@ -143,6 +138,19 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             Enchant<NodeEnchant>();
             Enchant<ModelEnchant>();
             Enchant<AnimationEnchant>();
+        }
+
+        /// <summary>
+        /// 清除所有的状态
+        /// </summary>
+        public void LossAllStates()
+        {
+            foreach (var states in statedict.Values)
+            {
+                states.Clear();
+                ObjectCache.Set(states);
+            }
+            statedict.Clear();
         }
 
         /// <summary>
