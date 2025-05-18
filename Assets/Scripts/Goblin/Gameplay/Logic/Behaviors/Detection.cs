@@ -115,10 +115,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             switch (collider.shape)
             {
                 case COLLIDER_DEFINE.BOX:
-                    result = Overlap(spatial.position, FPQuaternion.Euler(spatial.euler), collider.box.size, collider.layer);
+                    result = OverlapBox(spatial.position, FPQuaternion.Euler(spatial.euler), collider.box.size, collider.layer);
                     break;
                 case COLLIDER_DEFINE.SPHERE:
-                    result = Overlap(spatial.position, collider.sphere.radius, collider.layer);
+                    result = OverlapSphere(spatial.position, collider.sphere.radius, collider.layer);
                     break;
             }
 
@@ -148,7 +148,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="size">尺寸</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public HitResult Overlap(FPVector3 position, FPQuaternion rotation, FPVector3 size, int layer = -1)
+        public HitResult OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, int layer = -1)
         {
             if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return default;
             
@@ -195,7 +195,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="radius">半径</param>
         /// <param name="layer">层级 (-1, 默认全检测)</param>
         /// <returns>结果</returns>
-        public HitResult Overlap(FPVector3 position, FP radius, int layer = -1)
+        public HitResult OverlapSphere(FPVector3 position, FP radius, int layer = -1)
         {
             if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return default;
             
@@ -766,14 +766,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
                     // 定义 box 的 8 个顶点（以中心为基准）
                     var vertices = ObjectCache.Get<List<FPVector3>>();
-                    vertices[0] = new FPVector3(-halfSize.x, -halfSize.y, -halfSize.z);
-                    vertices[1] = new FPVector3(halfSize.x, -halfSize.y, -halfSize.z);
-                    vertices[2] = new FPVector3(-halfSize.x, halfSize.y, -halfSize.z);
-                    vertices[3] = new FPVector3(halfSize.x, halfSize.y, -halfSize.z);
-                    vertices[4] = new FPVector3(-halfSize.x, -halfSize.y, halfSize.z);
-                    vertices[5] = new FPVector3(halfSize.x, -halfSize.y, halfSize.z);
-                    vertices[6] = new FPVector3(-halfSize.x, halfSize.y, halfSize.z);
-                    vertices[7] = new FPVector3(halfSize.x, halfSize.y, halfSize.z);
+                    vertices.Add(new FPVector3(-halfSize.x, -halfSize.y, -halfSize.z));
+                    vertices.Add(new FPVector3(halfSize.x, -halfSize.y, -halfSize.z));
+                    vertices.Add(new FPVector3(-halfSize.x, halfSize.y, -halfSize.z));
+                    vertices.Add(new FPVector3(halfSize.x, halfSize.y, -halfSize.z));
+                    vertices.Add(new FPVector3(-halfSize.x, -halfSize.y, halfSize.z));
+                    vertices.Add(new FPVector3(halfSize.x, -halfSize.y, halfSize.z));
+                    vertices.Add(new FPVector3(-halfSize.x, halfSize.y, halfSize.z));
+                    vertices.Add(new FPVector3(halfSize.x, halfSize.y, halfSize.z));
+                    
 
                     // 初始化 AABB 的最小值和最大值
                     FPVector3 min = FPVector3.MaxValue;
@@ -819,9 +820,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         private static List<FPVector3> GetAxes(FPQuaternion rotation)
         {
             var vertices = ObjectCache.Get<List<FPVector3>>();
-            vertices[0] = rotation * FPVector3.right;
-            vertices[1] = rotation * FPVector3.up;
-            vertices[2] = rotation * FPVector3.forward;
+            vertices.Add(rotation * FPVector3.right);
+            vertices.Add(rotation * FPVector3.up);
+            vertices.Add(rotation * FPVector3.forward);
 
             return vertices;
         }
@@ -865,14 +866,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
             FPVector3 extents = box.size * FP.Half;
 
             // 生成相对于中心的8个顶点
-            vertices[0] = position + rotation * new FPVector3(-extents.x, -extents.y, -extents.z);
-            vertices[1] = position + rotation * new FPVector3(extents.x, -extents.y, -extents.z);
-            vertices[2] = position + rotation * new FPVector3(extents.x, extents.y, -extents.z);
-            vertices[3] = position + rotation * new FPVector3(-extents.x, extents.y, -extents.z);
-            vertices[4] = position + rotation * new FPVector3(-extents.x, -extents.y, extents.z);
-            vertices[5] = position + rotation * new FPVector3(extents.x, -extents.y, extents.z);
-            vertices[6] = position + rotation * new FPVector3(extents.x, extents.y, extents.z);
-            vertices[7] = position + rotation * new FPVector3(-extents.x, extents.y, extents.z);
+            vertices.Add(position + rotation * new FPVector3(-extents.x, -extents.y, -extents.z));
+            vertices.Add(position + rotation * new FPVector3(extents.x, -extents.y, -extents.z));
+            vertices.Add(position + rotation * new FPVector3(extents.x, extents.y, -extents.z));
+            vertices.Add(position + rotation * new FPVector3(-extents.x, extents.y, -extents.z));
+            vertices.Add(position + rotation * new FPVector3(-extents.x, -extents.y, extents.z));
+            vertices.Add(position + rotation * new FPVector3(extents.x, -extents.y, extents.z));
+            vertices.Add(position + rotation * new FPVector3(extents.x, extents.y, extents.z));
+            vertices.Add(position + rotation * new FPVector3(-extents.x, extents.y, extents.z));
 
             return vertices;
         }

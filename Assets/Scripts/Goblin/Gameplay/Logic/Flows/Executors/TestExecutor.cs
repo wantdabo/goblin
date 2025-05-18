@@ -1,5 +1,6 @@
 using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Collisions;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
@@ -17,6 +18,8 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter(TestInstr data, FlowInfo flowinfo)
         {
             if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
+
+            var result = stage.detection.OverlapBox(spatial.position, FPQuaternion.identity, FPVector3.one);
             
             var hero = stage.Spawn(new HeroPrefabInfo
             {
