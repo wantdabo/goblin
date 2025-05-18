@@ -1,5 +1,6 @@
 using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Goblin.Gameplay.Logic.Prefabs;
@@ -17,16 +18,17 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
             
-            stage.Spawn(new HeroPrefabInfo
+            var hero = stage.Spawn(new HeroPrefabInfo
             {
-                hero = 100001,
+                hero = data.hero,
                 spatial = new()
                 {
-                    position = spatial.position + FPVector3.forward,
+                    position = spatial.position,
                     euler = spatial.euler,
                     scale = spatial.scale,
                 }
             });
+            hero.AddBehavior<TestAIMove>();
         }
 
         protected override void OnExecute(TestInstr data, FlowInfo flowinfo)

@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings
 
         protected override void OnScript()
         {
-            Instruct(0, 1000, new TestInstr { content = "TestInstr 1" });
+            Instruct(0, 1000, new TestInstr { hero = 200001});
             // Instruct(0, 1000, new TestInstr { content = "TestInstr 1"})
             //     .Condition(new TestCondi { })
             //     .After(0, 1000, new TestInstr { content = "TestInstr 2"})

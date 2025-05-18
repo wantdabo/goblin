@@ -49,8 +49,8 @@ namespace Goblin.Gameplay.Render.Batches
         protected override void OnCreate()
         {
             base.OnCreate();
-            // 初始化 Jobs 相关数据, Transform 数组大小为 5 (如果超过，将会分批次，上限 5)
-            transforms = new Transform[5];
+            // 初始化 Jobs 相关数据, Transform 数组大小为 5 (如果超过，将会分批次，上限 20)
+            transforms = new Transform[20];
             transformaccess = new TransformAccessArray(transforms);
             positions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
             tarpositions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
@@ -77,6 +77,7 @@ namespace Goblin.Gameplay.Render.Batches
             base.OnTick(e);
             if (false == world.statebucket.SeekStates<SpatialState>(out var states)) return;
             // 收集所有需要更新的节点, 进行 Jobs 处理
+            int notreset = 0;
             int index = 0;
             int statecnt = states.Count;
             float t = Mathf.Clamp01(e.tick / GAME_DEFINE.LOGIC_TICK.AsFloat());
@@ -94,10 +95,11 @@ namespace Goblin.Gameplay.Render.Batches
                     tarrotations[index] = Quaternion.Euler(state.euler);
                     tarscales[index] = state.scale;
                     index++;
+                    notreset++;
                 }
                 
                 // 如果超过了 Jobs 的最大数量, 则分批次处理
-                if (transforms.Length == index || statecnt == index)
+                if (transforms.Length == index || statecnt == notreset)
                 {
                     var job = new SpatialJob
                     {

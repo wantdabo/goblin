@@ -13,19 +13,22 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 移动
         /// </summary>
-        /// <param name="motion">运动数据</param>
-        public void Move(FPVector3 motion)
+        /// <param name="dire">运动数据</param>
+        /// <param name="tick">tick</param>
+        public void Move(FPVector3 dire, FP tick)
         {
-            if (false == actor.SeekBehavior(out StateMachine machine) || false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
-            if (actor.SeekBehaviorInfo(out SpatialInfo spatial))
-            {
-                spatial.position += motion;
-                
-                var dire = motion.normalized;
-                FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
-                spatial.euler = FPVector3.up * angle;
-            }
-            
+            if (false == actor.SeekBehavior(out StateMachine machine)) return;
+            if (false == actor.SeekBehaviorInfo(out AttributeInfo attribute)) return;
+            if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
+            if (false == actor.SeekBehaviorInfo(out SpatialInfo spatial)) return;
+
+            dire = dire.normalized;
+            var motion = dire * attribute.movespeed * tick;
+            spatial.position += motion;
+
+            FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
+            spatial.euler = FPVector3.up * angle;
+
             MarkMoving();
         }
 
@@ -40,22 +43,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
+            if (false == actor.SeekBehavior(out Gamepad gamepad)) return;
             
-            if (actor.SeekBehavior(out Gamepad gamepad))
-            {
-                var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
-                if (joystick.press)
-                {
-                    if (false == actor.SeekBehavior(out StateMachine statemachine)) return;
-                    if (false == statemachine.TryChangeState(STATE_DEFINE.MOVE)) return;
-                    
-                    if (actor.SeekBehaviorInfo(out AttributeInfo attribute))
-                    {
-                        var motion = joystick.dire.normalized * attribute.movespeed * tick;
-                        Move(new FPVector3(motion.x, 0, motion.y));
-                    }
-                }
-            }
+            var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
+            if (false == joystick.press) return;
+            
+            Move(new FPVector3(joystick.dire.x, 0, joystick.dire.y), tick);
         }
 
         protected override void OnEndTick()

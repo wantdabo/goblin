@@ -94,6 +94,7 @@ namespace Goblin.Gameplay.Render.Core
             world.statebucket.eventor.Listen<RStateEvent>(OnRState);
             world.statebucket.eventor.Listen<EStateEvent>(OnEState);
             OnReady();
+            Flash();
         }
         
         /// <summary>

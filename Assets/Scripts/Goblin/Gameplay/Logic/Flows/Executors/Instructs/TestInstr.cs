@@ -7,6 +7,6 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
     {
         public override ushort id => INSTR_DEFINE.TEST;
         
-        public string content { get; set; }
+        public int hero { get; set; }
     }
 }

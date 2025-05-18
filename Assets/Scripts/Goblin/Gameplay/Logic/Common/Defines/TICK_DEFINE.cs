@@ -22,7 +22,8 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(SkillTrigger),
             typeof(SkillLauncher),
             typeof(Bullet),
-            typeof(Translate)
+            typeof(Translate),
+            typeof(TestAIMove)
         };
     }
 }
