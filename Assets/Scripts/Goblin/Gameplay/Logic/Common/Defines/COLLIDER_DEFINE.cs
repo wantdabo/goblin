@@ -17,7 +17,6 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         public const byte SPHERE = 2;
         
         
-        
         /// <summary>
         /// 默认
         /// </summary>

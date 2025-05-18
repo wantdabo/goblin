@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     /// <summary>
     /// 技能信息
     /// </summary>
-    public class SkillInfo
+    public struct SkillInfo
     {
         /// <summary>
         /// 技能 ID
@@ -46,16 +46,21 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public bool casting { get; set; }
         /// <summary>
+        /// 技能列表
+        /// </summary>
+        public List<uint> loadedskills { get; set; }
+        /// <summary>
         /// 技能字典, 键为技能 ID, 值为技能信息
         /// </summary>
-        public Dictionary<uint, SkillInfo> loadedskills { get; set; }
+        public Dictionary<uint, SkillInfo> loadedskilldict { get; set; }
 
         protected override void OnReady()
         {
             skill = 0;
             flow = 0;
             casting = false;
-            loadedskills = ObjectCache.Get<Dictionary<uint, SkillInfo>>();
+            loadedskills = ObjectCache.Get<List<uint>>();
+            loadedskilldict = ObjectCache.Get<Dictionary<uint, SkillInfo>>();
         }
 
         protected override void OnReset()
@@ -63,13 +68,15 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             skill = 0;
             flow = 0;
             casting = false;
-            foreach (var kv in loadedskills)
+            loadedskills.Clear();
+            ObjectCache.Set(loadedskills);
+            foreach (var kv in loadedskilldict)
             {
                 kv.Value.pipelines.Clear();
                 ObjectCache.Set(kv.Value.pipelines);
             }
-            loadedskills.Clear();
-            ObjectCache.Set(loadedskills);
+            loadedskilldict.Clear();
+            ObjectCache.Set(loadedskilldict);
         }
 
         protected override BehaviorInfo OnClone()
@@ -79,15 +86,19 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.skill = skill;
             clone.flow = flow;
             clone.casting = casting;
-            foreach (var kv in loadedskills)
+            foreach (var skillid in loadedskills) clone.loadedskills.Add(skillid);
+            foreach (var kv in loadedskilldict)
             {
-                var skillinfo = ObjectCache.Get<SkillInfo>();
-                skillinfo.skill = kv.Value.skill;
-                skillinfo.strength = kv.Value.strength;
-                skillinfo.cooldown = kv.Value.cooldown;
-                skillinfo.pipelines = ObjectCache.Get<List<uint>>();
+                var skillinfo = new SkillInfo
+                {
+                    skill = kv.Value.skill,
+                    strength = kv.Value.strength,
+                    cooldown = kv.Value.cooldown,
+                    pipelines = ObjectCache.Get<List<uint>>()
+                };
                 foreach (var pipeline in kv.Value.pipelines) skillinfo.pipelines.Add(pipeline);
-                clone.loadedskills.Add(kv.Key, skillinfo);
+                
+                clone.loadedskilldict.Add(kv.Key, skillinfo);
             }
 
             return clone;

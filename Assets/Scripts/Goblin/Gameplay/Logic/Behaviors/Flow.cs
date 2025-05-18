@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.BehaviorInfos;
-using Goblin.Gameplay.Flows;
-using Goblin.Gameplay.Flows.Checkers;
-using Goblin.Gameplay.Flows.Checkers.Common;
-using Goblin.Gameplay.Flows.Executors;
-using Goblin.Gameplay.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Flows;
+using Goblin.Gameplay.Logic.Flows.Checkers;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
+using Goblin.Gameplay.Logic.Flows.Executors;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
@@ -110,7 +110,7 @@ namespace Goblin.Gameplay.Behaviors
         {
             foreach (var pipelineid in flowinfo.pipelines)
             {
-                var data = PipelineDataReader.ReadPipelineData(pipelineid);
+                var data = PipelineDataReader.Read(pipelineid);
                 // 使用时间线最大值溢出的数值, 查询到所有指令, 如果该指令在执行中, 则退出
                 if (false == data.Query(FLOW_DEFINE.OVERFLOW_LENGTH, out var instrinfos)) continue;
                 foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
@@ -133,7 +133,7 @@ namespace Goblin.Gameplay.Behaviors
         {
             foreach (var pipelineid in flowinfo.pipelines)
             {
-                var data = PipelineDataReader.ReadPipelineData(pipelineid);
+                var data = PipelineDataReader.Read(pipelineid);
                 // 未找到改时间线可以执行的指令
                 if (false == data.Query(flowinfo.timeline, out var instrinfos)) continue;
                 

@@ -1,7 +1,7 @@
 using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Flows.Executors.Common
+namespace Goblin.Gameplay.Logic.Flows.Executors.Common
 {
     /// <summary>
     /// 指令执行器

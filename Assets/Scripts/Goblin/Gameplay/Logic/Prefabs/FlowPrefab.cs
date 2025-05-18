@@ -5,6 +5,7 @@ using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 
 namespace Goblin.Gameplay.Logic.Prefabs
@@ -35,10 +36,14 @@ namespace Goblin.Gameplay.Logic.Prefabs
         {
             var flowinfo = actor.AddBehaviorInfo<FlowInfo>();
             flowinfo.owner = info.owner;
-            
-            info.pipelines.Clear();
-            ObjectCache.Set(flowinfo.pipelines);
             flowinfo.pipelines = info.pipelines;
+            
+            // 计算管线的时间长度
+            foreach (var pipeline in flowinfo.pipelines)
+            {
+                var data = PipelineDataReader.Read(pipeline);
+                if (data.length > flowinfo.length ) flowinfo.length = data.length;
+            }
         }
     }
 }

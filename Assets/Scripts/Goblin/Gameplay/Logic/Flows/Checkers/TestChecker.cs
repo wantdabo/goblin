@@ -1,8 +1,8 @@
 using Goblin.Gameplay.BehaviorInfos;
-using Goblin.Gameplay.Flows.Checkers.Common;
-using Goblin.Gameplay.Flows.Checkers.Conditions;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
+using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 
-namespace Goblin.Gameplay.Flows.Checkers
+namespace Goblin.Gameplay.Logic.Flows.Checkers
 {
     /// <summary>
     /// 测试指令条件检查器

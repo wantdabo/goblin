@@ -23,13 +23,13 @@ namespace Goblin.Gameplay.Logic.Prefabs
         /// </summary>
         public FP strength { get; set; }
         /// <summary>
-        /// 管线列表
-        /// </summary>
-        public List<uint> pipelines { get; set; }
-        /// <summary>
         /// 子弹的移动速度
         /// </summary>
         public FP movespeed { get; set; }
+        /// <summary>
+        /// 管线列表
+        /// </summary>
+        public List<uint> pipelines { get; set; }
         /// <summary>
         /// 空间信息
         /// </summary>

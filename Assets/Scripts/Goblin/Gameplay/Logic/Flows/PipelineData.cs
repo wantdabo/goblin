@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
 
-namespace Goblin.Gameplay.Flows
+namespace Goblin.Gameplay.Logic.Flows
 {
     /// <summary>
     /// 管线数据

@@ -132,6 +132,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
             AddBehavior<Flow>(sa);
+            AddBehavior<SkillTrigger>(sa);
             AddBehavior<RILSync>(sa);
             AddBehavior<Translate>(sa);
             
@@ -816,19 +817,9 @@ namespace Goblin.Gameplay.Logic.Core
             this.sdata = data;
             foreach (var player in data.players)
             {
-                var heroinfo = cfg.location.HeroInfos.Get(player.hero);
-                var attributeinfo = cfg.location.AttributeInfos.Get(heroinfo.Attribute);
                 var hero = Spawn(new HeroPrefabInfo
                 {
                     hero = player.hero,
-                    model = heroinfo.Model,
-                    attribute = new()
-                    {
-                        hp = (uint)attributeinfo.HP,
-                        maxhp = (uint)attributeinfo.MaxHP,
-                        movespeed = (uint)attributeinfo.MoveSpeed,
-                        attack = (uint)attributeinfo.Attack,
-                    },
                     spatial = new()
                     {
                         position = player.position.ToFPVector3(),

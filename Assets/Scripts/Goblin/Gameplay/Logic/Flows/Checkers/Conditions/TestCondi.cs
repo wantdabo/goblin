@@ -1,6 +1,6 @@
-using Goblin.Gameplay.Flows.Checkers.Common;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 
-namespace Goblin.Gameplay.Flows.Checkers.Conditions
+namespace Goblin.Gameplay.Logic.Flows.Checkers.Conditions
 {
     public class TestCondi : Condition
     {

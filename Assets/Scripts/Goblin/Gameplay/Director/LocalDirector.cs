@@ -110,9 +110,9 @@ namespace Goblin.Gameplay.Director
             if (StageState.Ticking != stage.state) return;
             
             var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
+            var ba = world.input.GetInput(INPUT_DEFINE.BA);
             stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
-            // 第二个单位, 镜像输入
-            stage.SetInput(2, INPUT_DEFINE.JOYSTICK, joystick.press, new GPVector2(-joystick.dire.x, -joystick.dire.y));
+            stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
             
             stage.Step();
         }

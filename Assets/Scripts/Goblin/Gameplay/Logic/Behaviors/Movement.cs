@@ -37,6 +37,27 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.moving = true;
         }
 
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            
+            if (actor.SeekBehavior(out Gamepad gamepad))
+            {
+                var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
+                if (joystick.press)
+                {
+                    if (false == actor.SeekBehavior(out StateMachine statemachine)) return;
+                    if (false == statemachine.TryChangeState(STATE_DEFINE.MOVE)) return;
+                    
+                    if (actor.SeekBehaviorInfo(out AttributeInfo attribute))
+                    {
+                        var motion = joystick.dire.normalized * attribute.movespeed * tick;
+                        Move(new FPVector3(motion.x, 0, motion.y));
+                    }
+                }
+            }
+        }
+
         protected override void OnEndTick()
         {
             base.OnEndTick();

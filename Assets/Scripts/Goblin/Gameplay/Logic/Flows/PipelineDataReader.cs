@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Goblin.Core;
-using Goblin.Gameplay.Flows.Executors.Common;
-using Goblin.Gameplay.Flows.Scriptings;
-using Goblin.Gameplay.Flows.Scriptings.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Scriptings;
+using Goblin.Gameplay.Logic.Flows.Scriptings.Common;
 using MessagePack;
 
-namespace Goblin.Gameplay.Flows
+namespace Goblin.Gameplay.Logic.Flows
 {
     /// <summary>
     /// 管线数据读取
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Flows
         /// </summary>
         /// <param name="id">管线 ID</param>
         /// <returns>管线数据</returns>
-        public static PipelineData ReadPipelineData(uint id)
+        public static PipelineData Read(uint id)
         {
             if (datas.TryGetValue(id, out var data)) return data;
 
@@ -91,7 +91,7 @@ namespace Goblin.Gameplay.Flows
                 index++;
                 if (instruct.begin > timeline) break;
                 if (null == instrinfos) instrinfos = ObjectCache.Get<List<(bool inside, uint index, Instruct instruct)>>();
-                instrinfos.Add((instruct.begin >= timeline && instruct.end >= timeline, index, instruct));
+                instrinfos.Add((instruct.begin <= timeline && instruct.end >= timeline, index, instruct));
             }
 
             return null != instrinfos && instrinfos.Count > 0;

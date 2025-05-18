@@ -1,4 +1,4 @@
-namespace Goblin.Gameplay.Flows.Executors.Common
+namespace Goblin.Gameplay.Logic.Flows.Executors.Common
 {
     /// <summary>
     /// 指令数据

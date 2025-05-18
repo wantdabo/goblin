@@ -416,7 +416,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="normal">从 SphereB 指向 SphereA 的法线</param>
         /// <param name="penetration">穿透深度</param>
         /// <returns>YES/NO</returns>
-        private bool Detect(Sphere a, Sphere b, FPVector3 apos, FPVector3 bpos, out FPVector3 point, out FPVector3 normal, out FP penetration)
+        public bool Detect(Sphere a, Sphere b, FPVector3 apos, FPVector3 bpos, out FPVector3 point, out FPVector3 normal, out FP penetration)
         {
             point = FPVector3.zero;
             normal = FPVector3.zero;
@@ -459,7 +459,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="normal">从 Box 指向 Sphere 的法线</param>
         /// <param name="penetration">穿透深度</param>
         /// <returns>YES/NO</returns>
-        private bool Detect(Box a, Sphere b, FPVector3 apos, FPVector3 bpos, FPQuaternion arot, out FPVector3 point, out FPVector3 normal, out FP penetration)
+        public bool Detect(Box a, Sphere b, FPVector3 apos, FPVector3 bpos, FPQuaternion arot, out FPVector3 point, out FPVector3 normal, out FP penetration)
         {
             point = FPVector3.zero;
             normal = FPVector3.zero;
@@ -653,7 +653,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="normal">射中 Sphere 的法线</param>
         /// <param name="penetration">穿透深度</param>
         /// <returns>YES/NO</returns>
-        private static bool Raycast(FPVector3 origin, FPVector3 dire, FP distance, Sphere sphere, FPVector3 position, out FPVector3 point, out FPVector3 normal, out FP penetration)
+        public static bool Raycast(FPVector3 origin, FPVector3 dire, FP distance, Sphere sphere, FPVector3 position, out FPVector3 point, out FPVector3 normal, out FP penetration)
         {
             point = FPVector3.zero;
             normal = FPVector3.zero;
@@ -684,6 +684,51 @@ namespace Goblin.Gameplay.Logic.Behaviors
             penetration = sphere.radius - currentDistance;
 
             return true;
+        }
+
+        /// <summary>
+        /// 设置碰撞盒信息
+        /// </summary>
+        /// <param name="collider">碰撞盒</param>
+        /// <param name="colliderid">碰撞盒配置 ID</param>
+        public void SetColliderInfo(ColliderInfo collider, int colliderid)
+        {
+            var data = stage.cfg.location.ColliderInfos.Get(colliderid);
+            if (null == data) return;
+            
+            switch (data.Type)
+            {
+                case COLLIDER_DEFINE.BOX:
+                    collider.shape = COLLIDER_DEFINE.BOX;
+                    collider.box = new Box
+                    {
+                        offset = new FPVector3
+                        (
+                            data.Offset[0] * stage.cfg.int2fp,
+                            data.Offset[1] * stage.cfg.int2fp,
+                            data.Offset[2] * stage.cfg.int2fp
+                        ),
+                        size = new FPVector3(
+                            data.Shape[0] * FP.Half * stage.cfg.int2fp,
+                            data.Shape[1] * FP.Half * stage.cfg.int2fp,
+                            data.Shape[2] * FP.Half * stage.cfg.int2fp
+                        )
+                    };
+                    break;
+                case COLLIDER_DEFINE.SPHERE:
+                    collider.shape = COLLIDER_DEFINE.SPHERE;
+                    collider.sphere = new Sphere
+                    {
+                        offset = new FPVector3
+                        (
+                            data.Offset[0] * stage.cfg.int2fp,
+                            data.Offset[1] * stage.cfg.int2fp,
+                            data.Offset[2] * stage.cfg.int2fp
+                        ),
+                        radius = data.Shape[0] * stage.cfg.int2fp
+                    };
+                    break;
+            }
         }
 
         /// <summary>

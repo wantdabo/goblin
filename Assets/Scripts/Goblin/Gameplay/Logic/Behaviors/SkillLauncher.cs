@@ -25,13 +25,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <exception cref="Exception">技能重复加载</exception>
         public void Load(uint skill, FP strength, FP cooldown, List<uint> pipelines)
         {
-            if (info.loadedskills.ContainsKey(skill)) throw new Exception($"skill : {skill} already loaded.");
-            var skillinfo = ObjectCache.Get<SkillInfo>();
-            skillinfo.skill = skill;
-            skillinfo.strength = strength;
-            skillinfo.cooldown = cooldown;
-            skillinfo.pipelines = pipelines;
-            info.loadedskills.Add(skill, skillinfo);
+            if (info.loadedskilldict.ContainsKey(skill)) throw new Exception($"skill : {skill} already loaded.");
+            var skillinfo = new SkillInfo
+            {
+                skill = skill,
+                strength = strength,
+                cooldown = cooldown,
+                pipelines = pipelines
+            };
+            info.loadedskills.Add(skill);
+            info.loadedskilldict.Add(skill, skillinfo);
         }
 
         /// <summary>
@@ -40,12 +43,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="skill">技能 ID</param>
         public void Unload(uint skill)
         {
-            if (false == info.loadedskills.TryGetValue(skill, out var skillinfo)) return;
+            if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
 
+            info.loadedskills.Remove(skill);
+            
             skillinfo.pipelines.Clear();
             ObjectCache.Set(skillinfo.pipelines);
 
-            info.loadedskills.Remove(skill);
+            info.loadedskilldict.Remove(skill);
             ObjectCache.Set(skillinfo);
         }
 
@@ -65,13 +70,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Launch(uint skill)
         {
             if (info.casting) return;
-            if (false == info.loadedskills.TryGetValue(skill, out var skillinfo)) return;
-
-            var pipelines = ObjectCache.Get<List<uint>>();
-            foreach (var pipeline in skillinfo.pipelines) pipelines.Add(pipeline);
+            if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
 
             // 创建管线
             info.skill = skill;
+            var pipelines = ObjectCache.Get<List<uint>>();
+            foreach (var pipeline in skillinfo.pipelines) pipelines.Add(pipeline);
             info.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
             info.casting = true;
         }
@@ -79,10 +83,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
+            
             if (false == info.casting) return;
 
             // 碰撞检测
-            if (info.loadedskills.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo))
+            if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo))
             {
                 var damage = stage.calc.ChargeDamage(actor.id, skillinfo.strength);
                 while (collisioninfo.collisions.TryDequeue(out var target))

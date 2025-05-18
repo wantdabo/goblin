@@ -20,6 +20,8 @@ public sealed partial class HeroInfo : Luban.BeanBase
         Attribute = _buf.ReadInt();
         Name = _buf.ReadString();
         Model = _buf.ReadInt();
+        Collider = _buf.ReadInt();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Skills = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Skills.Add(_e0);}}
     }
 
     public static HeroInfo DeserializeHeroInfo(ByteBuf _buf)
@@ -43,6 +45,14 @@ public sealed partial class HeroInfo : Luban.BeanBase
     /// 模型
     /// </summary>
     public readonly int Model;
+    /// <summary>
+    /// 碰撞盒 ID
+    /// </summary>
+    public readonly int Collider;
+    /// <summary>
+    /// 技能列表
+    /// </summary>
+    public readonly System.Collections.Generic.List<int> Skills;
    
     public const int __ID__ = -1793672366;
     public override int GetTypeId() => __ID__;
@@ -58,6 +68,8 @@ public sealed partial class HeroInfo : Luban.BeanBase
         + "Attribute:" + Attribute + ","
         + "Name:" + Name + ","
         + "Model:" + Model + ","
+        + "Collider:" + Collider + ","
+        + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
         + "}";
     }
 }

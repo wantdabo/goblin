@@ -1,8 +1,8 @@
 using Goblin.Gameplay.BehaviorInfos;
-using Goblin.Gameplay.Flows.Executors.Common;
-using Goblin.Gameplay.Flows.Executors.Instructs;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 
-namespace Goblin.Gameplay.Flows.Executors
+namespace Goblin.Gameplay.Logic.Flows.Executors
 {
     /// <summary>
     /// 测试指令执行器

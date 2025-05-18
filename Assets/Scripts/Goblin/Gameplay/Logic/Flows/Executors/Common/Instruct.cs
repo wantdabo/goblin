@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Flows.Checkers.Common;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 
-namespace Goblin.Gameplay.Flows.Executors.Common
+namespace Goblin.Gameplay.Logic.Flows.Executors.Common
 {
     /// <summary>
     /// 管线指令

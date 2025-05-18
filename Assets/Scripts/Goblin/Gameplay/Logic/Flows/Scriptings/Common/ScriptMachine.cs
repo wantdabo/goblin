@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Flows.Checkers.Common;
-using Goblin.Gameplay.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
 
-namespace Goblin.Gameplay.Flows.Scriptings.Common
+namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
 {
     /// <summary>
     /// 脚本状态机
@@ -39,11 +39,11 @@ namespace Goblin.Gameplay.Flows.Scriptings.Common
         {
             if (null == pipelinedata) throw new Exception("scriptmachine is not running.");
 
-            var pipelineData = pipelinedata;
-            pipelinedata = null;
             pipelinedata.Format();
+            var data = pipelinedata;
+            pipelinedata = null;
 
-            return pipelineData;
+            return data;
         }
 
         /// <summary>

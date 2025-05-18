@@ -10,6 +10,7 @@ using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Render.Core;
 using Kowtow.Math;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using Config = Goblin.Common.Config;
 
 namespace Goblin.Gameplay.Render.Common
@@ -78,12 +79,13 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 设置输入
         /// </summary>
+        /// <param name="type">输入类型</param>
         /// <param name="press">长按</param>
         /// <param name="dire">方向</param>
-        public void SetInput(bool press, GPVector2 dire)
+        public void SetInput(ushort type, bool press, GPVector2 dire)
         {
-            inputdict.Remove(INPUT_DEFINE.JOYSTICK);
-            inputdict.Add(INPUT_DEFINE.JOYSTICK, (press, dire));
+            inputdict.Remove(type);
+            inputdict.Add(type, (press, dire));
         }
 
         private void OnTick(TickEvent e)
@@ -108,8 +110,11 @@ namespace Goblin.Gameplay.Render.Common
                 Vector3 worldDirection = joystickdire.x * right + joystickdire.y * forward;
                 joystickdire = new Vector2(worldDirection.x, worldDirection.z);
             }
-
-            SetInput(Vector2.zero != joystickdire, new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int)));
+            
+            SetInput(INPUT_DEFINE.JOYSTICK, Vector2.zero != joystickdire, new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int)));
+            
+            var leftclick = engine.u3dkit.gamepad.Player.Fire.ReadValue<float>();
+            SetInput(INPUT_DEFINE.BA, leftclick > 0, new GPVector2(0, 0));
         }
     }
 }
