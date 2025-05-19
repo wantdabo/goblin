@@ -124,6 +124,11 @@ namespace Goblin.Gameplay.Render.Core
             ObjectCache.Set(stateActions);
         }
         
+        /// <summary>
+        /// 关心状态
+        /// </summary>
+        /// <param name="func">回调</param>
+        /// <typeparam name="T">状态类型</typeparam>
         protected void CareState<T>(Action<T> func) where T : State
         {
             if (false == stateActions.TryGetValue(typeof(T), out var list)) stateActions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
