@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
 
             var result = stage.detection.OverlapBox(spatial.position, FPQuaternion.identity, FPVector3.one);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 var hero = stage.Spawn(new HeroPrefabInfo
                 {
