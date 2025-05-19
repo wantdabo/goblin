@@ -77,7 +77,7 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// 观察状态映射集合
         /// </summary>
-        private Dictionary<Type, List<Invoker>> stateActions { get; set; }
+        private Dictionary<Type, List<Invoker>> stateactions { get; set; }
         
         /// <summary>
         /// 初始化
@@ -89,10 +89,8 @@ namespace Goblin.Gameplay.Render.Core
             this.actor = id;
             this.world = world;
             this.status = ChaseStatus.Chasing;
-            stateActions = ObjectCache.Get<Dictionary<Type, List<Invoker>>>();
+            stateactions = ObjectCache.Get<Dictionary<Type, List<Invoker>>>();
             
-            world.statebucket.eventor.Listen<RStateEvent>(OnRState);
-            world.statebucket.eventor.Listen<EStateEvent>(OnEState);
             OnReady();
             Flash();
         }
@@ -103,13 +101,11 @@ namespace Goblin.Gameplay.Render.Core
         public void Reset()
         {
             OnReset();
-            world.statebucket.eventor.UnListen<RStateEvent>(OnRState);
-            world.statebucket.eventor.UnListen<EStateEvent>(OnEState);
             
             this.actor = 0;
             this.world = null;
             this.status = ChaseStatus.Chasing;
-            foreach (var kv in stateActions)
+            foreach (var kv in stateactions)
             {
                 foreach (var invoker in kv.Value)
                 {
@@ -120,8 +116,8 @@ namespace Goblin.Gameplay.Render.Core
                 kv.Value.Clear();
                 ObjectCache.Set(kv.Value);
             }
-            stateActions.Clear();
-            ObjectCache.Set(stateActions);
+            stateactions.Clear();
+            ObjectCache.Set(stateactions);
         }
         
         /// <summary>
@@ -131,10 +127,20 @@ namespace Goblin.Gameplay.Render.Core
         /// <typeparam name="T">状态类型</typeparam>
         protected void CareState<T>(Action<T> func) where T : State
         {
-            if (false == stateActions.TryGetValue(typeof(T), out var list)) stateActions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
+            if (false == stateactions.TryGetValue(typeof(T), out var list)) stateactions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
             var invoker = ObjectCache.Get<Invoker<T>>();
             invoker.Ready(actor, func);
             list.Add(invoker);
+        }
+        
+        /// <summary>
+        /// 处理渲染状态
+        /// </summary>
+        /// <param name="state">渲染状态</param>
+        public void DoState(State state)
+        {
+            if (false == stateactions.TryGetValue(state.GetType(), out var invokers)) return;
+            foreach (var invoker in invokers) invoker.Invoke(state);
         }
         
         /// <summary>
@@ -166,18 +172,6 @@ namespace Goblin.Gameplay.Render.Core
         public void ChangeStatus(ChaseStatus status)
         {
             this.status = status;
-        }
-
-        private void OnRState(RStateEvent e)
-        {
-            if (false == stateActions.TryGetValue(e.state.GetType(), out var invokers)) return;
-            foreach (var invoker in invokers) invoker.Invoke(e.state);
-        }
-
-        private void OnEState(EStateEvent e)
-        {
-            if (false == stateActions.TryGetValue(e.state.GetType(), out var invokers)) return;
-            foreach (var invoker in invokers) invoker.Invoke(e.state);
         }
 
         /// <summary>

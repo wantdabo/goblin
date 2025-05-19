@@ -233,6 +233,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             {
                 eventor.Tell(new EStateEvent { state = state });
                 eventor.Tell(new EStateEvent<T> { state = state });
+                SendToAgent(state);
                 
                 state.Reset();
                 ObjectCache.Set(state);
@@ -261,6 +262,19 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             dict.Add(type, state);
             eventor.Tell(new RStateEvent { state = state });
             eventor.Tell(new RStateEvent<T> { state = state });
+            SendToAgent(state);
+        }
+
+        /// <summary>
+        /// 渲染指令状态推送至 Agent 处理
+        /// </summary>
+        /// <param name="state">渲染指令状态</param>
+        private void SendToAgent(State state)
+        {
+            var dict= world.GetAgents(state.actor);
+            if (null == dict) return;
+            
+            foreach (var kv in dict) kv.Value.DoState(state);
         }
     }
 }

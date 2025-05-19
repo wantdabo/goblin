@@ -20,18 +20,21 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
 
             var result = stage.detection.OverlapBox(spatial.position, FPQuaternion.identity, FPVector3.one);
-            
-            var hero = stage.Spawn(new HeroPrefabInfo
+
+            for (int i = 0; i < 1000; i++)
             {
-                hero = data.hero,
-                spatial = new()
+                var hero = stage.Spawn(new HeroPrefabInfo
                 {
-                    position = spatial.position,
-                    euler = spatial.euler,
-                    scale = spatial.scale,
-                }
-            });
-            hero.AddBehavior<TestAIMove>();
+                    hero = data.hero,
+                    spatial = new()
+                    {
+                        position = spatial.position,
+                        euler = spatial.euler,
+                        scale = spatial.scale,
+                    }
+                });
+                hero.AddBehavior<TestAIMove>();
+            }
         }
 
         protected override void OnExecute(TestInstr data, FlowInfo flowinfo)

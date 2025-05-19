@@ -203,6 +203,18 @@ namespace Goblin.Gameplay.Render.Core
 
             return agent as T;
         }
+        
+        /// <summary>
+        /// 获取 Agent 集合
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <returns>Agent 集合</returns>
+        public Dictionary<Type, Agent> GetAgents(ulong actor)
+        {
+            if (false == agentdict.TryGetValue(actor, out var agents)) return default;
+
+            return agents;
+        }
 
         /// <summary>
         /// 移除 Agent
