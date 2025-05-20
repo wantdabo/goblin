@@ -454,8 +454,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>Actor</returns>
         public Actor GetActor(ulong id)
         {
-            // Actor 不存在
-            if (false == info.actors.Contains(id)) return default;
             if (false == cache.actordict.TryGetValue(id, out var actor)) return default;
             
             return actor;
@@ -498,7 +496,6 @@ namespace Goblin.Gameplay.Logic.Core
             var actor = ObjectCache.Get<Actor>();
             if (false == info.actors.Contains(id)) info.actors.Add(id);
             if (cache.actordict.ContainsKey(id)) throw new Exception($"actor {id} already exists.");
-            
             cache.actordict.Add(id, actor);
             
             actor.Assemble(id, this);
@@ -649,7 +646,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>Behavior</returns>
         public Behavior GetBehavior(ulong id, Type type)
         {
-            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(type, out var behavior)) return default;
             
@@ -677,7 +673,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">Actor 不存在 | Behavior 已存在</exception>
         private Behavior AddBehavior(ulong id, Type type)
         {
-            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             // 检查 Behavior 容器是否存在
             if (false == cache.behaviors.TryGetValue(type, out var list)) cache.behaviors.Add(type, list = ObjectCache.Get<List<Behavior>>());
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) cache.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, Behavior>>());
@@ -794,8 +789,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">Actor 不存在 | BehaviorInfo 已存在</exception>
         public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
         {
-            // 检查 Actor 是否存在
-            if (false == info.actors.Contains(id)) throw new Exception($"actor {id} is not exist.");
             // 检查 BehaviorInfo 容器是否存在
             if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
             // 检查 BehaviorInfo 是否已经存在容器中
