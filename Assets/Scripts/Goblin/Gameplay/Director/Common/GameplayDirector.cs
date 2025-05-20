@@ -65,8 +65,7 @@ namespace Goblin.Gameplay.Director.Common
                 {
                     var ms = DateTime.Now.Millisecond;
                     OnStep();
-                    stepms = DateTime.Now.Millisecond - ms;
-                    stepms = Math.Clamp(stepms, 0, int.MaxValue);
+                    stepms = Math.Clamp(DateTime.Now.Millisecond - ms, 0, int.MaxValue);
                     
                     if (stepms <= logicms)
                     {
