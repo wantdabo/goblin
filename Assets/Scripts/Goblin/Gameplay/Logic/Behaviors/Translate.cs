@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
@@ -56,15 +57,21 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Execute()
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
+            // 先处理StageInfo（通常需要在其他翻译之前完成）
             if (translators.TryGetValue(typeof(StageInfo), out var translator)) translator.Translate(info);
-            foreach (var kv in info.behaviorinfos)
+    
+            // 并行处理各种类型的行为信息
+            Parallel.ForEach(info.behaviorinfos, kv => 
             {
-                foreach (var behaviorinfo in kv.Value)
+                if (translators.TryGetValue(kv.Key, out var translator))
                 {
-                    if (false == translators.TryGetValue(kv.Key, out translator)) continue;
-                    translator.Translate(behaviorinfo);
+                    // 对每个类型的所有行为信息进行处理
+                    foreach (var behaviorinfo in kv.Value)
+                    {
+                        translator.Translate(behaviorinfo);
+                    }
                 }
-            }
+            });
         }
 
         protected override void OnEndTick()

@@ -24,14 +24,14 @@ namespace Goblin.Sys.Gameplay.View
         protected override void OnLoad()
         {
             base.OnLoad();
-            engine.ticker.eventor.Listen<FixedLateTickEvent>(OnFixedLateTick);
+            engine.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed += OnEscape;
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
-            engine.ticker.eventor.UnListen<FixedLateTickEvent>(OnFixedLateTick);
+            engine.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
             engine.u3dkit.gamepad.UI.Escape.performed -= OnEscape;
         }
 
@@ -90,7 +90,7 @@ namespace Goblin.Sys.Gameplay.View
             });
         }
 
-        private void OnFixedLateTick(FixedLateTickEvent e)
+        private void OnLateTick(LateTickEvent e)
         {
             if (null == synopsisText) return;
             if (null == engine.proxy.gameplay.director) return;

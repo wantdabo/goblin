@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using Goblin.Common;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
@@ -38,6 +41,8 @@ namespace Goblin.Gameplay.Director
                 stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.int2fp;
             }
         }
+
+        private ConcurrentQueue<RILState> states = new();
         
         /// <summary>
         /// 逻辑场景
@@ -93,31 +98,41 @@ namespace Goblin.Gameplay.Director
             world.Restore();
         }
 
+        protected override void OnTick()
+        {
+            int maxcnt = 1000;
+            int cnt = 0;
+            while (states.TryDequeue(out var rilstate))
+            {
+                cnt++;
+                if (cnt >= maxcnt) break;
+                // 发送 RIL 渲染状态
+                world.eventor.Tell(new RILEvent
+                {
+                    rilstate = rilstate 
+                });
+            }
+        }
+        
+        protected override void OnStep()
+        {
+            if (null == stage) return;
+            if (StageState.Ticking != stage.state) return;
+
+            var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
+            var ba = world.input.GetInput(INPUT_DEFINE.BA);
+            stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
+            stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+            stage.Step();
+        }
+
         /// <summary>
         /// 处理 RIL 渲染状态
         /// </summary>
         /// <param name="rilstate">RIL 渲染状态</param>
         private void OnRIL(RILState rilstate)
         {
-            // 发送 RIL 渲染状态
-            world.eventor.Tell(new RILEvent
-            {
-                rilstate = rilstate 
-            });
-        }
-
-        protected override void OnFixedTick(FixedTickEvent e)
-        {
-            base.OnFixedTick(e);
-            if (null == stage) return;
-            if (StageState.Ticking != stage.state) return;
-            
-            var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
-            var ba = world.input.GetInput(INPUT_DEFINE.BA);
-            stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
-            stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
-            
-            stage.Step();
+            states.Enqueue(rilstate);
         }
     }
 }

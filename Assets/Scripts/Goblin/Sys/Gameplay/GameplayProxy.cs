@@ -23,7 +23,13 @@ namespace Goblin.Sys.Gameplay
     {
         public GameplayDirector director { get; private set; }
 
-        public void Load<T>(GPData data) where T : GameplayDirector, new()
+        /// <summary>
+        /// 加载战斗
+        /// </summary>
+        /// <param name="data">游戏数据</param>
+        /// <param name="multithread">是否多线程</param>
+        /// <typeparam name="T">战斗驱动器</typeparam>
+        public void Load<T>(GPData data, bool multithread = false) where T : GameplayDirector, new()
         {
             Time.fixedDeltaTime = GAME_DEFINE.LOGIC_TICK.AsFloat();
             if (null != director)
@@ -35,9 +41,12 @@ namespace Goblin.Sys.Gameplay
             director = AddComp<T>();
             director.Create();
             
-            director.CreateGame(data);
+            director.CreateGame(data, multithread);
         }
         
+        /// <summary>
+        /// 卸载战斗
+        /// </summary>
         public void UnLoad()
         {
             if (null == director) return;

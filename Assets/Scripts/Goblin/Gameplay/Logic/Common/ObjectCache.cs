@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Core;
 
@@ -12,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 对象池字典，键为类型，值为该类型的对象池（字典，键为关键字，值为对象队列）
         /// </summary>
-        private static readonly Dictionary<Type, Dictionary<string, Queue<object>>> pool = new();
+        private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, ConcurrentQueue<object>>> pool = new();
 
         /// <summary>
         /// 从对象池获得一个实例化对象
@@ -35,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Common
         {
             if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {
-                return queue.Dequeue();
+                if (queue.TryDequeue(out var obj)) return obj;
             }
 
             return Activator.CreateInstance(type);
@@ -54,16 +55,14 @@ namespace Goblin.Gameplay.Logic.Common
             if (false == pool.TryGetValue(type, out var dict))
             {
                 dict = new();
-                pool.Add(type, dict);
+                pool.TryAdd(type, dict);
             }
 
             if (false == dict.TryGetValue(key, out var queue))
             {
                 queue = new();
-                dict.Add(key, queue);
+                dict.TryAdd(key, queue);
             }
-
-            if (queue.Contains(obj)) throw new Exception($"Object {key} already exists.");
 
             queue.Enqueue(obj);
         }

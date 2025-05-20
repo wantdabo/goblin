@@ -1,5 +1,7 @@
+using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Render.Core;
 
@@ -23,31 +25,42 @@ namespace Goblin.Gameplay.Director.Common
         /// 世界
         /// </summary>
         public World world { get; protected set; }
-
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-            engine.ticker.eventor.Listen<TickEvent>(OnTick);
-            engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
-            engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
-        }
+        /// <summary>
+        /// 是否多线程
+        /// </summary>
+        public bool multithread { get; private set; }
+        /// <summary>
+        /// 子线程
+        /// </summary>
+        private Thread thread { get; set; }
 
         /// <summary>
         /// 创建游戏
         /// </summary>
         /// <param name="data">游戏数据</param>
-        public void CreateGame(GPData data)
+        public void CreateGame(GPData data, bool multithread = false)
         {
             this.data = data;
+            this.multithread = multithread;
             world = AddComp<World>().Initialize(data.seat);
             world.Create();
             OnCreateGame();
+            
+            engine.ticker.eventor.Listen<TickEvent>(OnTick);
+            if (false == multithread)
+            {
+                engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
+                return;
+            }
+            var thread = new Thread(() =>
+            {
+                while (true)
+                {
+                    OnStep();
+                    Thread.Sleep((int)GAME_DEFINE.LOGIC_TICK_MS);
+                }
+            });
+            thread.Start();
         }
 
         /// <summary>
@@ -57,6 +70,14 @@ namespace Goblin.Gameplay.Director.Common
         {
             OnDestroyGame();
             world.Destroy();
+            
+            engine.ticker.eventor.UnListen<TickEvent>(OnTick);
+            if (false == multithread)
+            {
+                engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
+                return;
+            }
+            thread.Abort();
         }
 
         /// <summary>
@@ -107,15 +128,16 @@ namespace Goblin.Gameplay.Director.Common
             OnRestore();
         }
         
-        protected virtual void OnTick(TickEvent e)
+        protected void OnTick(TickEvent e)
         {
             if (false == rendering) return;
-
             world.ticker.Tick(e.tick);
+            OnTick();
         }
         
-        protected virtual void OnFixedTick(FixedTickEvent e)
+        protected void OnFixedTick(FixedTickEvent e)
         {
+            OnStep();
         }
 
         /// <summary>
@@ -150,5 +172,13 @@ namespace Goblin.Gameplay.Director.Common
         /// 恢复
         /// </summary>
         protected abstract void OnRestore();
+        /// <summary>
+        /// 渲染层驱动 (单线程)
+        /// </summary>
+        protected abstract void OnTick();
+        /// <summary>
+        /// 逻辑层驱动 (根据配置决定单线程还是多线程)
+        /// </summary>
+        protected abstract void OnStep();
     }
 }
