@@ -1,27 +1,27 @@
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Resolvers.Common;
-using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers.Enchants
 {
     /// <summary>
     /// 模型代理的赋能
     /// </summary>
-    public class ModelEnchant : AgentEnchant<TagState>
+    public class ModelEnchant : AgentEnchant<RIL_TAG>
     {
-        protected override void OnRState(TagState state)
+        protected override void OnRIL(RIL_TAG ril)
         {
             // 如果没有模型定义, 则回收模型代理, 有则创建模型代理
-            if (state.tags.ContainsKey(TAG_DEFINE.MODEL))
+            if (ril.tags.ContainsKey(TAG_DEFINE.MODEL))
             {
-                statebucket.world.EnsureAgent<ModelAgent>(state.actor);
+                rilbucket.world.EnsureAgent<ModelAgent>(ril.actor);
             }
             else
             {
-                var agent = statebucket.world.EnsureAgent<ModelAgent>(state.actor);
+                var agent = rilbucket.world.EnsureAgent<ModelAgent>(ril.actor);
                 if (null == agent) return;
-                statebucket.world.RmvAgent(agent);
+                rilbucket.world.RmvAgent(agent);
             }
         }
     }

@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Logic.Flows.Checkers.Common
         /// </summary>
         public void Unload()
         {
-            this.stage = null;
+            stage = null;
         }
 
         /// <summary>

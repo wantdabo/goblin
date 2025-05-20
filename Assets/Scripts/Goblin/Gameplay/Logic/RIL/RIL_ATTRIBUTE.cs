@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 属性渲染指令
     /// </summary>
-    public struct RIL_ATTRIBUTE : IRIL
+    public class RIL_ATTRIBUTE : IRIL
     {
-        public ushort id => RIL_DEFINE.ATTRIBUTE;
+        public override ushort id => RIL_DEFINE.ATTRIBUTE;
         
         /// <summary>
         /// 当前生命值
@@ -26,8 +26,24 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 攻击力
         /// </summary>
         public uint attack { get; set; }
-        
-        public byte[] Serialize()
+
+        public override void OnReady()
+        {
+            hp = 0;
+            maxhp = 0;
+            movespeed = 0;
+            attack = 0;
+        }
+
+        public override void OnReset()
+        {
+            hp = 0;
+            maxhp = 0;
+            movespeed = 0;
+            attack = 0;
+        }
+
+        public override byte[] Serialize()
         {
             throw new System.NotImplementedException();
         }

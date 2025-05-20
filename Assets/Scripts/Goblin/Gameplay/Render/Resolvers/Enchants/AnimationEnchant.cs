@@ -1,35 +1,35 @@
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Resolvers.Common;
-using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Resolvers.Enchants
 {
     /// <summary>
     /// 动画代理赋能
     /// </summary>
-    public class AnimationEnchant : AgentEnchant<TagState>
+    public class AnimationEnchant : AgentEnchant<RIL_TAG>
     {
-        protected override void OnRState(TagState state)
+        protected override void OnRIL(RIL_TAG ril)
         {
             // 如果没有模型定义, 则回收动画代理
-            if (false == state.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) 
+            if (false == ril.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) 
             {
-                RecycleAgent(state.actor);
+                RecycleAgent(ril.actor);
                 return;
             }
             
             // 如果模型定义没有动画配置, 则回收动画代理
-            var modelinfo = statebucket.engine.cfg.location.ModelInfos.Get(model);
+            var modelinfo = rilbucket.engine.cfg.location.ModelInfos.Get(model);
             if (null == modelinfo || string.IsNullOrEmpty(modelinfo.Animation))
             {
-                RecycleAgent(state.actor);
+                RecycleAgent(ril.actor);
                 return;
             }
             
             // 如果模型定义有动画配置, 则创建动画代理
-            statebucket.world.EnsureAgent<AnimationAgent>(state.actor);
+            rilbucket.world.EnsureAgent<AnimationAgent>(ril.actor);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
         /// <param name="actor">ActorID</param>
         private void RecycleAgent(ulong actor)
         {
-            var agent = statebucket.world.GetAgent<AnimationAgent>(actor);
+            var agent = rilbucket.world.GetAgent<AnimationAgent>(actor);
             if (null == agent) return;
-            statebucket.world.RmvAgent(agent);
+            rilbucket.world.RmvAgent(agent);
         }
     }
 }

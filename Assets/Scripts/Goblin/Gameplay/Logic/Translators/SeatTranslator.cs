@@ -14,10 +14,10 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(SeatInfo info)
         {
-            RIL_SEAT ril = new RIL_SEAT();
-            ril.seatdict = ObjectCache.Get<Dictionary<ulong, ulong>>();
+            var ril = ObjectCache.Get<RIL_SEAT>();
+            ril.Ready(info.id);
             foreach (var kv in info.sadict) ril.seatdict.Add(kv.Key, kv.Value);
-            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, ril);
+            stage.rilsync.Send(ril);
         }
     }
 }

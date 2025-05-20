@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Core;
-using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -40,17 +40,17 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReady()
         {
             RecycleModel();
-            this.id = 0;
-            this.res = null;
-            this.go = null;
+            id = 0;
+            res = null;
+            go = null;
         }
 
         protected override void OnReset()
         {
             RecycleModel();
-            this.id = 0;
-            this.res = null;
-            this.go = null;
+            id = 0;
+            res = null;
+            go = null;
         }
         
         /// <summary>
@@ -60,7 +60,7 @@ namespace Goblin.Gameplay.Render.Agents
         {
             if (null != go)
             {
-                world.engine.pool.Set(go, $"MODEL_GO_KEY_{this.res}");
+                world.engine.pool.Set(go, $"MODEL_GO_KEY_{res}");
                 go.transform.SetParent(modelpool.transform, false);
             }
         }
@@ -76,8 +76,8 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         public void Load()
         {
-            if (false == world.statebucket.SeekState<TagState>(actor, out var state)) return;
-            if (false == state.tags.TryGetValue(TAG_DEFINE.MODEL, out var id))
+            if (false == world.rilbucket.SeekRIL<RIL_TAG>(actor, out var ril)) return;
+            if (false == ril.tags.TryGetValue(TAG_DEFINE.MODEL, out var id))
             {
                 RecycleModel();
                 return;
@@ -87,10 +87,10 @@ namespace Goblin.Gameplay.Render.Agents
             RecycleModel();
             this.id = id;
             var modelinfo = world.engine.cfg.location.ModelInfos.Get(this.id);
-            this.res = modelinfo.Res;
+            res = modelinfo.Res;
             
-            go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{this.res}");
-            if (null == go) go = world.engine.gameres.location.LoadModelSync(this.res);
+            go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{res}");
+            if (null == go) go = world.engine.gameres.location.LoadModelSync(res);
             var node = world.EnsureAgent<NodeAgent>(actor);
             go.transform.SetParent(node.go.transform, false);
             go.transform.localPosition = Vector3.zero;

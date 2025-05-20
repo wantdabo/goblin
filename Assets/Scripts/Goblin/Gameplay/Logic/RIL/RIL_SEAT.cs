@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 
@@ -7,16 +8,27 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 座位渲染指令
     /// </summary>
-    public struct RIL_SEAT : IRIL
+    public class RIL_SEAT : IRIL
     {
-        public ushort id => RIL_DEFINE.SEAT;
+        public override ushort id => RIL_DEFINE.SEAT;
         
         /// <summary>
         /// 座位字典, 键为座位 ID, 值为 ActorID
         /// </summary>
         public Dictionary<ulong, ulong> seatdict { get; set; }
-        
-        public byte[] Serialize()
+
+        public override void OnReady()
+        {
+            seatdict = ObjectCache.Get<Dictionary<ulong, ulong>>();
+        }
+
+        public override void OnReset()
+        {
+            seatdict.Clear();
+            ObjectCache.Set(seatdict);
+        }
+
+        public override byte[] Serialize()
         {
             throw new System.NotImplementedException();
         }

@@ -1,8 +1,9 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
+using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
-using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -38,7 +39,7 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
 
-            CareState<SpatialState>((state) => ChangeStatus(ChaseStatus.Chasing));
+            WatchRIL<RIL_SPATIAL>((ril) => ChangeStatus(ChaseStatus.Chasing));
         }
 
         protected override void OnReset()
@@ -51,19 +52,19 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override bool OnArrived()
         {
-            if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return true;
-            return go.transform.position == state.position &&
-                   go.transform.rotation.eulerAngles == state.euler &&
-                   go.transform.localScale == state.scale;
+            if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return true;
+            return go.transform.position == ril.position.ToVector3() &&
+                   go.transform.rotation.eulerAngles == ril.euler.ToVector3() &&
+                   go.transform.localScale == ril.scale.ToVector3();
         }
         
         protected override void OnFlash()
         {
             base.OnFlash();
-            if (false == world.statebucket.SeekState<SpatialState>(actor, out var state)) return;
-            go.transform.position = state.position;
-            go.transform.rotation = Quaternion.Euler(state.euler);
-            go.transform.localScale = state.scale;
+            if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return;
+            go.transform.position = ril.position.ToVector3();
+            go.transform.rotation = Quaternion.Euler(ril.euler.ToVector3());
+            go.transform.localScale = ril.scale.ToVector3();
         }
     }
 }

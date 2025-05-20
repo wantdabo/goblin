@@ -1,9 +1,10 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
+using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
-using Goblin.Gameplay.Render.Resolvers.States;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -50,7 +51,7 @@ namespace Goblin.Gameplay.Render.Batches
         {
             base.OnCreate();
             // 初始化 Jobs 相关数据, Transform 数组大小为 5 (如果超过，将会分批次，上限 20)
-            transforms = new Transform[20];
+            transforms = new Transform[1000];
             transformaccess = new TransformAccessArray(transforms);
             positions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
             tarpositions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);
@@ -75,31 +76,31 @@ namespace Goblin.Gameplay.Render.Batches
         protected override void OnTick(TickEvent e)
         {
             base.OnTick(e);
-            if (false == world.statebucket.SeekStates<SpatialState>(out var states)) return;
+            if (false == world.rilbucket.SeekRILS<RIL_SPATIAL>(out var rils)) return;
             // 收集所有需要更新的节点, 进行 Jobs 处理
             int notreset = 0;
             int index = 0;
-            int statecnt = states.Count;
+            int rilcnt = rils.Count;
             float t = Mathf.Clamp01(e.tick / GAME_DEFINE.LOGIC_TICK.AsFloat());
-            foreach (var state in states)
+            foreach (var ril in rils)
             {
-                var node = world.GetAgent<NodeAgent>(state.actor);
-                if (null == node || ChaseStatus.Arrived == node.status) statecnt--;
+                var node = world.GetAgent<NodeAgent>(ril.actor);
+                if (null == node || ChaseStatus.Arrived == node.status) rilcnt--;
                 else
                 {
                     // 收集
                     transforms[index] = node.go.transform;
                     positions[index] = node.go.transform.position;
-                    tarpositions[index] = state.position;
+                    tarpositions[index] = ril.position.ToVector3();
                     rotations[index] = Quaternion.Euler(node.go.transform.eulerAngles);
-                    tarrotations[index] = Quaternion.Euler(state.euler);
-                    tarscales[index] = state.scale;
+                    tarrotations[index] = Quaternion.Euler(ril.euler.ToVector3());
+                    tarscales[index] = ril.scale.ToVector3();
                     index++;
                     notreset++;
                 }
                 
                 // 如果超过了 Jobs 的最大数量, 则分批次处理
-                if (transforms.Length == index || statecnt == notreset)
+                if (transforms.Length == index || rilcnt == notreset)
                 {
                     var job = new SpatialJob
                     {
@@ -119,8 +120,8 @@ namespace Goblin.Gameplay.Render.Batches
                     handle.Complete();
                 }
             }
-            states.Clear();
-            ObjectCache.Set(states);
+            rils.Clear();
+            ObjectCache.Set(rils);
         }
 
         /// <summary>

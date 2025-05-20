@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.RIL;
@@ -15,13 +16,13 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(StateMachineInfo info)
         {
-            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, new RIL_STATE_MACHINE
-            {
-                current = info.current, 
-                last = info.last, 
-                frames = info.frames, 
-                elapsed = (info.elapsed * stage.cfg.fp2int).AsUInt()
-            });
+            var ril = ObjectCache.Get<RIL_STATE_MACHINE>();
+            ril.Ready(info.id);
+            ril.current = info.current;
+            ril.last = info.last;
+            ril.frames = info.frames;
+            ril.elapsed = (info.elapsed * stage.cfg.fp2int).AsUInt();
+            stage.rilsync.Send(ril);
         }
     }
 }

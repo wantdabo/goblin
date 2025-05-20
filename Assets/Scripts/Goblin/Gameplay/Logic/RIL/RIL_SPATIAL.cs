@@ -7,9 +7,9 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 空间渲染指令
     /// </summary>
-    public struct RIL_SPATIAL : IRIL
+    public class RIL_SPATIAL : IRIL
     {
-        public ushort id => RIL_DEFINE.SPATIAL;
+        public override ushort id => RIL_DEFINE.SPATIAL;
         /// <summary>
         /// 位置
         /// </summary>
@@ -23,7 +23,21 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public FPVector3 scale { get; set; }
 
-        public byte[] Serialize()
+        public override void OnReady()
+        {
+            position = FPVector3.zero;
+            euler = FPVector3.zero;
+            scale = FPVector3.one;
+        }
+
+        public override void OnReset()
+        {
+            position = FPVector3.zero;
+            euler = FPVector3.zero;
+            scale = FPVector3.one;
+        }
+
+        public override byte[] Serialize()
         {
             throw new System.NotImplementedException();
         }

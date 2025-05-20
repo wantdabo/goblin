@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Director
             }
         }
 
-        private ConcurrentQueue<RILState> states = new();
+        private ConcurrentQueue<IRIL> rilqueue = new();
         
         /// <summary>
         /// 逻辑场景
@@ -93,24 +93,17 @@ namespace Goblin.Gameplay.Director
 
         protected override void OnRestore()
         {
-            world.statebucket.LossAllStates();
+            world.rilbucket.LossAllRIL();
             stage.Restore();
             world.Restore();
         }
 
         protected override void OnTick()
         {
-            int maxcnt = 1000;
-            int cnt = 0;
-            while (states.TryDequeue(out var rilstate))
+            while (rilqueue.TryDequeue(out var ril))
             {
-                cnt++;
-                if (cnt >= maxcnt) break;
                 // 发送 RIL 渲染状态
-                world.eventor.Tell(new RILEvent
-                {
-                    rilstate = rilstate 
-                });
+                world.rilbucket.SetRIL(ril);
             }
         }
         
@@ -129,10 +122,10 @@ namespace Goblin.Gameplay.Director
         /// <summary>
         /// 处理 RIL 渲染状态
         /// </summary>
-        /// <param name="rilstate">RIL 渲染状态</param>
-        private void OnRIL(RILState rilstate)
+        /// <param name="ril">RIL 渲染状态</param>
+        private void OnRIL(IRIL ril)
         {
-            states.Enqueue(rilstate);
+            rilqueue.Enqueue(ril);
         }
     }
 }

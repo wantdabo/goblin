@@ -6,15 +6,25 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 驱动渲染指令
     /// </summary>
-    public struct RIL_TICKER : IRIL
+    public class RIL_TICKER : IRIL
     {
-        public ushort id => RIL_DEFINE.TICKER;
+        public override ushort id => RIL_DEFINE.TICKER;
         /// <summary>
         /// 时间缩放
         /// </summary>
         public uint timescale { get; set; }
 
-        public byte[] Serialize()
+        public override void OnReady()
+        {
+            timescale = 1;
+        }
+
+        public override void OnReset()
+        {
+            timescale = 1;
+        }
+
+        public override byte[] Serialize()
         {
             throw new System.NotImplementedException();
         }

@@ -5,7 +5,6 @@ using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Resolvers.Common;
-using Goblin.Gameplay.Render.Resolvers.States;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Agents
@@ -49,9 +48,9 @@ namespace Goblin.Gameplay.Render.Agents
             animancer = null;
             animstate = null;
             
-            CareState<StateMachineState>((state) =>
+            WatchRIL<RIL_STATE_MACHINE>((ril) =>
             {
-                StateConv2AnimData(state);
+                RILConv2AnimData(ril);
             });
         }
 
@@ -64,10 +63,10 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 状态机状态转换为动画数据
         /// </summary>
-        /// <param name="state">状态机状态</param>
-        private void StateConv2AnimData(StateMachineState state)
+        /// <param name="ril">状态机状态</param>
+        private void RILConv2AnimData(RIL_STATE_MACHINE ril)
         {
-            if (false == world.statebucket.SeekState<TagState>(state.actor, out var tagstate) || false == tagstate.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) return;
+            if (false == world.rilbucket.SeekRIL<RIL_TAG>(ril.actor, out var rils) || false == rils.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) return;
             var modelinfo = world.engine.cfg.location.ModelInfos.Get(model);
             
             if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
@@ -77,14 +76,14 @@ namespace Goblin.Gameplay.Render.Agents
                 animcfg = world.engine.gameres.location.LoadModelAnimationConfigSync(cfgname);
             }
                 
-            var animinfo = animcfg.GetAnimationInfo(state.current);
+            var animinfo = animcfg.GetAnimationInfo(ril.current);
             if (null == animinfo) return;
                 
             animname = animinfo.name;
             mixduration = animinfo.mixduration;
-            tarduration = state.elapsed * Config.Int2Float;
+            tarduration = ril.elapsed * Config.Int2Float;
 
-            var beforeAnimInfo = animinfo.GetMixAnimationInfo(state.last);
+            var beforeAnimInfo = animinfo.GetMixAnimationInfo(ril.last);
             if (null != beforeAnimInfo && tarduration < beforeAnimInfo.duration)
             {
                 animname = beforeAnimInfo.name;

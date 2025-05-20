@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 场景渲染指令
     /// </summary>
-    public struct RIL_STAGE : IRIL
+    public class RIL_STAGE : IRIL
     {
-        public ushort id => RIL_DEFINE.STAGE;
+        public override ushort id => RIL_DEFINE.STAGE;
         /// <summary>
         /// 帧号
         /// </summary>
@@ -33,8 +33,28 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 快照帧号
         /// </summary>
         public uint snapshotframe { get; set; }
-        
-        public byte[] Serialize()
+
+        public override void OnReady()
+        {
+            frame = 0;
+            actorcnt = 0;
+            behaviorcnt = 0;
+            behaviorinfocnt = 0;
+            hassnapshot = false;
+            snapshotframe = 0;
+        }
+
+        public override void OnReset()
+        {
+            frame = 0;
+            actorcnt = 0;
+            behaviorcnt = 0;
+            behaviorinfocnt = 0;
+            hassnapshot = false;
+            snapshotframe = 0;
+        }
+
+        public override byte[] Serialize()
         {
             throw new System.NotImplementedException();
         }

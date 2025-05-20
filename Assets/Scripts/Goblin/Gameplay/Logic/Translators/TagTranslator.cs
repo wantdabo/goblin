@@ -14,10 +14,10 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(TagInfo info)
         {
-            RIL_TAG ril = new RIL_TAG();
-            ril.tags = ObjectCache.Get<Dictionary<ushort, int>>();
+            var ril = ObjectCache.Get<RIL_TAG>();
+            ril.Ready(info.id);
             foreach (var tag in info.tags) ril.tags.Add(tag.Key, tag.Value);
-            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, ril);
+            stage.rilsync.Send(ril);
         }
     }
 }

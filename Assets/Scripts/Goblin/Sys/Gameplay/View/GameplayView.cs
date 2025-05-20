@@ -1,6 +1,6 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Director;
-using Goblin.Gameplay.Render.Resolvers.States;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
@@ -94,23 +94,23 @@ namespace Goblin.Sys.Gameplay.View
         {
             if (null == synopsisText) return;
             if (null == engine.proxy.gameplay.director) return;
-            var state = engine.proxy.gameplay.director.world.statebucket.GetState<StageState>(engine.proxy.gameplay.director.world.sa);
-            if (null == state) return;
+            var ril = engine.proxy.gameplay.director.world.rilbucket.GetRIL<RIL_STAGE>(engine.proxy.gameplay.director.world.sa);
+            if (null == ril) return;
             
             var content =
-                $"帧号 : {state.frame}\n" +
-                $"Actor : {state.actorcnt}\n" +
-                $"Behavior : {state.behaviorcnt}\n" +
-                $"BehaviorInfo : {state.behaviorinfocnt}\n";
-            content += "存在快照 : " + (state.hassnapshot ? "是\n" : "否\n");
-            if (state.hassnapshot) content += $"快照帧号 : {state.snapshotframe}";
+                $"帧号 : {ril.frame}\n" +
+                $"Actor : {ril.actorcnt}\n" +
+                $"Behavior : {ril.behaviorcnt}\n" +
+                $"BehaviorInfo : {ril.behaviorinfocnt}\n";
+            content += "存在快照 : " + (ril.hassnapshot ? "是\n" : "否\n");
+            if (ril.hassnapshot) content += $"快照帧号 : {ril.snapshotframe}";
             
             synopsisText.text = content;
             
             var localdirector = (engine.proxy.gameplay.director as LocalDirector);
             if (null == localdirector) return;
-            if (false == state.hassnapshot) return;
-            if (state.frame - state.snapshotframe > 1) return;
+            if (false == ril.hassnapshot) return;
+            if (ril.frame - ril.snapshotframe > 1) return;
             gameSpeedSlider.value = localdirector.timescale;
             gameSpeedDescText.text = localdirector.timescale.ToString();
         }

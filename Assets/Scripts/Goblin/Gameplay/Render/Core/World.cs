@@ -11,21 +11,9 @@ using Goblin.Gameplay.Render.Batches;
 using Goblin.Gameplay.Render.Cameras;
 using Goblin.Gameplay.Render.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
-using Goblin.Gameplay.Render.Resolvers.States;
 
 namespace Goblin.Gameplay.Render.Core
 {
-    /// <summary>
-    /// RIL 指令事件
-    /// </summary>
-    public struct RILEvent : IEvent
-    {
-        /// <summary>
-        /// 渲染状态
-        /// </summary>
-        public RILState rilstate { get; set; }
-    }
-
     /// <summary>
     /// 世界/渲染, 负责容纳所有的渲染层的单位
     /// </summary>
@@ -47,8 +35,8 @@ namespace Goblin.Gameplay.Render.Core
         public ulong self {
             get
             {
-                if (false == statebucket.SeekState<SeatState>(sa, out var state)) return 0;
-                if (false == state.seatdict.TryGetValue(selfseat, out var actor)) return 0;
+                if (false == rilbucket.SeekRIL<RIL_SEAT>(sa, out var ril)) return 0;
+                if (false == ril.seatdict.TryGetValue(selfseat, out var actor)) return 0;
                 
                 return actor;
             }
@@ -68,7 +56,7 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// 桶
         /// </summary>
-        public StateBucket statebucket { get; private set; }
+        public RILBucket rilbucket { get; private set; }
         /// <summary>
         /// 眼睛/摄像机
         /// </summary>
@@ -94,8 +82,8 @@ namespace Goblin.Gameplay.Render.Core
             input = AddComp<InputSystem>();
             input.Initialize(this).Create();
             
-            statebucket = AddComp<StateBucket>();
-            statebucket.Initialize(this).Create();
+            rilbucket = AddComp<RILBucket>();
+            rilbucket.Initialize(this).Create();
             
             eyes = AddComp<Eyes>();
             eyes.Initialize(this).Create();
@@ -258,10 +246,11 @@ namespace Goblin.Gameplay.Render.Core
             foreach (var kv in agentdict)
             {
                 float timescale = 1f;
-                if (statebucket.SeekState<TickerState>(kv.Key, out var state)) timescale = state.timescale;
+                if (rilbucket.SeekRIL<RIL_TICKER>(kv.Key, out var ril)) timescale = ril.timescale * Config.Int2Float;
 
                 foreach (var agent in kv.Value.Values)
                 {
+                    if (ChaseStatus.Arrived == agent.status) continue;
                     agent.Chase(e.tick, timescale);
                 }
             }

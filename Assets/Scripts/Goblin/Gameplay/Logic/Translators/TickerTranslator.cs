@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
@@ -12,10 +13,10 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override void OnRIL(TickerInfo info)
         {
-            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, new RIL_TICKER
-            {
-                timescale = (stage.timescale * info.timescale * stage.cfg.fp2int).AsUInt()
-            });
+            var ril = ObjectCache.Get<RIL_TICKER>();
+            ril.Ready(info.id);
+            ril.timescale = (stage.timescale * info.timescale * stage.cfg.fp2int).AsUInt();
+            stage.rilsync.Send(ril);
         }
     }
 }

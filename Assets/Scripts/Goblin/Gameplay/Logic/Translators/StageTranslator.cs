@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
@@ -16,16 +17,16 @@ namespace Goblin.Gameplay.Logic.Translators
             foreach (var types in info.behaviortypes.Values) behaviorcnt += (uint)types.Count;
             uint behaviorinfocnt = 0;
             foreach (var behaviors in info.behaviorinfos.Values) behaviorinfocnt += (uint)behaviors.Count;
-            RIL_STAGE ril = new RIL_STAGE
-            {
-                frame = stage.frame,
-                actorcnt = (uint)info.actors.Count,
-                behaviorcnt = behaviorcnt,
-                behaviorinfocnt = behaviorinfocnt,
-                hassnapshot = stage.hassnapshot,
-                snapshotframe = stage.snapshotframe,
-            };
-            stage.rilsync.Send(RIL_DEFINE.TYPE_RENDER, info.id, ril);
+
+            var ril = ObjectCache.Get<RIL_STAGE>();
+            ril.Ready(info.id);
+            ril.frame = stage.frame;
+            ril.actorcnt = (uint)info.actors.Count;
+            ril.behaviorcnt = behaviorcnt;
+            ril.behaviorinfocnt = behaviorinfocnt;
+            ril.hassnapshot = stage.hassnapshot;
+            ril.snapshotframe = stage.snapshotframe;
+            stage.rilsync.Send(ril);
         }
     }
 }

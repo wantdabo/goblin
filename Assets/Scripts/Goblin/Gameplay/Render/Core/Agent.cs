@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Core
@@ -34,26 +35,26 @@ namespace Goblin.Gameplay.Render.Core
         
         public void Reset()
         {
-            this.actor = 0;
-            this.func = null;
+            actor = 0;
+            func = null;
         }
 
-        public void Invoke(State state)
+        public void Invoke(IRIL ril)
         {
-            OnInvoke(state);
+            OnInvoke(ril);
         }
 
-        protected virtual void OnInvoke(State state) { }
+        protected virtual void OnInvoke(IRIL ril) { }
     }
     
-    public class Invoker<T> : Invoker where T : State
+    public class Invoker<T> : Invoker where T : IRIL
     {
-        protected override void OnInvoke(State state)
+        protected override void OnInvoke(IRIL ril)
         {
-            base.OnInvoke(state);
-            if (state.actor != actor) return;
+            base.OnInvoke(ril);
+            if (ril.actor != actor) return;
             
-            (func as Action<T>).Invoke(state as T);
+            (func as Action<T>).Invoke(ril as T);
         }
     }
 
@@ -77,7 +78,7 @@ namespace Goblin.Gameplay.Render.Core
         /// <summary>
         /// 观察状态映射集合
         /// </summary>
-        private Dictionary<Type, List<Invoker>> stateactions { get; set; }
+        private Dictionary<Type, List<Invoker>> rilactions { get; set; }
         
         /// <summary>
         /// 初始化
@@ -86,10 +87,10 @@ namespace Goblin.Gameplay.Render.Core
         /// <param name="world">世界</param>
         public void Ready(ulong id, World world)
         {
-            this.actor = id;
+            actor = id;
             this.world = world;
-            this.status = ChaseStatus.Chasing;
-            stateactions = ObjectCache.Get<Dictionary<Type, List<Invoker>>>();
+            status = ChaseStatus.Chasing;
+            rilactions = ObjectCache.Get<Dictionary<Type, List<Invoker>>>();
             
             OnReady();
             Flash();
@@ -102,10 +103,10 @@ namespace Goblin.Gameplay.Render.Core
         {
             OnReset();
             
-            this.actor = 0;
-            this.world = null;
-            this.status = ChaseStatus.Chasing;
-            foreach (var kv in stateactions)
+            actor = 0;
+            world = null;
+            status = ChaseStatus.Chasing;
+            foreach (var kv in rilactions)
             {
                 foreach (var invoker in kv.Value)
                 {
@@ -116,31 +117,18 @@ namespace Goblin.Gameplay.Render.Core
                 kv.Value.Clear();
                 ObjectCache.Set(kv.Value);
             }
-            stateactions.Clear();
-            ObjectCache.Set(stateactions);
-        }
-        
-        /// <summary>
-        /// 关心状态
-        /// </summary>
-        /// <param name="func">回调</param>
-        /// <typeparam name="T">状态类型</typeparam>
-        protected void CareState<T>(Action<T> func) where T : State
-        {
-            if (false == stateactions.TryGetValue(typeof(T), out var list)) stateactions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
-            var invoker = ObjectCache.Get<Invoker<T>>();
-            invoker.Ready(actor, func);
-            list.Add(invoker);
+            rilactions.Clear();
+            ObjectCache.Set(rilactions);
         }
         
         /// <summary>
         /// 处理渲染状态
         /// </summary>
-        /// <param name="state">渲染状态</param>
-        public void DoState(State state)
+        /// <param name="ril">渲染指令</param>
+        public void DoRIL(IRIL ril)
         {
-            if (false == stateactions.TryGetValue(state.GetType(), out var invokers)) return;
-            foreach (var invoker in invokers) invoker.Invoke(state);
+            if (false == rilactions.TryGetValue(ril.GetType(), out var invokers)) return;
+            foreach (var invoker in invokers) invoker.Invoke(ril);
         }
         
         /// <summary>
@@ -172,6 +160,19 @@ namespace Goblin.Gameplay.Render.Core
         public void ChangeStatus(ChaseStatus status)
         {
             this.status = status;
+        }
+        
+        /// <summary>
+        /// 关心状态
+        /// </summary>
+        /// <param name="func">回调</param>
+        /// <typeparam name="T">状态类型</typeparam>
+        protected void WatchRIL<T>(Action<T> func) where T : IRIL
+        {
+            if (false == rilactions.TryGetValue(typeof(T), out var list)) rilactions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
+            var invoker = ObjectCache.Get<Invoker<T>>();
+            invoker.Ready(actor, func);
+            list.Add(invoker);
         }
 
         /// <summary>
