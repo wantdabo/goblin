@@ -92,6 +92,7 @@ namespace Goblin.Core
 
             scheduler = AddComp<CoroutineScheduler>();
             scheduler.Initialize(TickType.Tick, ticker);
+            scheduler.Create();
 
             gameres = AddComp<GameRes>();
             gameres.Create();
