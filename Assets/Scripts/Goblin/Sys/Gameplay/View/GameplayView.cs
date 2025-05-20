@@ -97,8 +97,12 @@ namespace Goblin.Sys.Gameplay.View
             var ril = engine.proxy.gameplay.director.world.rilbucket.GetRIL<RIL_STAGE>(engine.proxy.gameplay.director.world.sa);
             if (null == ril) return;
             
+            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+            if (null == localdirector) return;
+            
             var content =
                 $"帧号 : {ril.frame}\n" +
+                $"逻辑耗时 (毫秒) : {localdirector.stepms}\n" +
                 $"Actor : {ril.actorcnt}\n" +
                 $"Behavior : {ril.behaviorcnt}\n" +
                 $"BehaviorInfo : {ril.behaviorinfocnt}\n";
@@ -107,8 +111,6 @@ namespace Goblin.Sys.Gameplay.View
             
             synopsisText.text = content;
             
-            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
-            if (null == localdirector) return;
             if (false == ril.hassnapshot) return;
             if (ril.frame - ril.snapshotframe > 1) return;
             gameSpeedSlider.value = localdirector.timescale;

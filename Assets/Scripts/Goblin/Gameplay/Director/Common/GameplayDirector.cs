@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
@@ -33,6 +35,10 @@ namespace Goblin.Gameplay.Director.Common
         /// 子线程
         /// </summary>
         private Thread thread { get; set; }
+        /// <summary>
+        /// 逻辑 Step 耗时
+        /// </summary>
+        public int stepms { get; private set; }
 
         /// <summary>
         /// 创建游戏
@@ -54,10 +60,18 @@ namespace Goblin.Gameplay.Director.Common
             }
             var thread = new Thread(() =>
             {
+                int logicms = (int)GAME_DEFINE.LOGIC_TICK_MS;
                 while (true)
                 {
+                    var ms = DateTime.Now.Millisecond;
                     OnStep();
-                    Thread.Sleep((int)GAME_DEFINE.LOGIC_TICK_MS);
+                    stepms = DateTime.Now.Millisecond - ms;
+                    stepms = Math.Clamp(stepms, 0, int.MaxValue);
+                    
+                    if (stepms <= logicms)
+                    {
+                        Thread.Sleep(logicms - stepms);
+                    }
                 }
             });
             thread.Start();
@@ -77,7 +91,14 @@ namespace Goblin.Gameplay.Director.Common
                 engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
                 return;
             }
-            thread.Abort();
+
+            try
+            {
+                thread.Abort();
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         /// <summary>
