@@ -13,37 +13,8 @@ namespace Goblin.Gameplay.Logic.Common
         /// <summary>
         /// 对象池字典，键为类型，值为该类型的对象池（字典，键为关键字，值为对象队列）
         /// </summary>
-        private static readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, ConcurrentQueue<object>>> pool = new();
+        private static readonly Dictionary<Type, Dictionary<string, Queue<object>>> pool = new();
 
-        /// <summary>
-        /// 从对象池获得一个实例化对象
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <param name="key">KEY/关键字</param>
-        /// <returns>实例化对象</returns>
-        public static T Get<T>(string key = "") where T : new()
-        {
-            var obj = Get(typeof(T), key);
-            if (null != obj) return (T)obj;
-        
-            return default;
-        }
-        
-        /// <summary>
-        /// 从对象池获得一个实例化对象
-        /// </summary>
-        /// <param name="key">KEY/关键字</param>
-        /// <returns>实例化对象</returns>
-        public static object Get(Type type, string key = "")
-        {
-            if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
-            {
-                if (queue.TryDequeue(out var obj)) return obj;
-            }
-        
-            return default;
-        }
-        
         /// <summary>
         /// 从对象池获得一个实例化对象
         /// </summary>
@@ -84,13 +55,13 @@ namespace Goblin.Gameplay.Logic.Common
             if (false == pool.TryGetValue(type, out var dict))
             {
                 dict = new();
-                pool.TryAdd(type, dict);
+                pool.Add(type, dict);
             }
 
             if (false == dict.TryGetValue(key, out var queue))
             {
                 queue = new();
-                dict.TryAdd(key, queue);
+                dict.Add(key, queue);
             }
 
             queue.Enqueue(obj);

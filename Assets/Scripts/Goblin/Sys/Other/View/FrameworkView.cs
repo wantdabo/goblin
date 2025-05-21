@@ -87,7 +87,7 @@ namespace Goblin.Sys.Other.View
 
         private void OnMessageBlow(MessageBlowEvent e)
         {
-            var msgGo = engine.pool.Get<GameObject>("MESSAGE_BLOW_GO_KEY");
+            var msgGo = ObjectPool.Get<GameObject>("MESSAGE_BLOW_GO_KEY");
             if (null == msgGo)
             {
                 msgGo = GameObject.Instantiate(messageOrgGo, messageContentGo.transform);
@@ -101,7 +101,7 @@ namespace Goblin.Sys.Other.View
             msgGo.SetActive(true);
             engine.ticker.Timing((t) =>
             {
-                engine.pool.Set(msgGo, "MESSAGE_BLOW_GO_KEY");
+                ObjectPool.Set(msgGo, "MESSAGE_BLOW_GO_KEY");
                 msgGo.SetActive(false);
             }, 3.5f, 1);
         }

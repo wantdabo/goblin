@@ -19,19 +19,13 @@ namespace Goblin.Gameplay.Logic.RIL
 
         protected override void OnReady()
         {
-            tags = ObjectCache.Ensure<Dictionary<ushort, int>>();
+            tags = RILCache.Ensure<Dictionary<ushort, int>>();
         }
 
         protected override void OnReset()
         {
             tags.Clear();
-            ObjectCache.Set(tags);
-        }
-
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_TAG ril) return;
-            foreach (var kv in tags) ril.tags.Add(kv.Key, kv.Value);
+            RILCache.Set(tags);
         }
 
         public override byte[] Serialize()

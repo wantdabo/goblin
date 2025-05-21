@@ -90,8 +90,8 @@ namespace Goblin.Gameplay.Render.Core
 
             Batches();
             
-            agentdict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, Agent>>>();
-            snapshotagents = ObjectCache.Ensure<List<Agent>>();
+            agentdict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, Agent>>>();
+            snapshotagents = ObjectPool.Ensure<List<Agent>>();
             
             ticker.eventor.Listen<TickEvent>(OnTick);
         }
@@ -107,17 +107,17 @@ namespace Goblin.Gameplay.Render.Core
                 foreach (var agent in kv.Value)
                 {
                     agent.Value.Reset();
-                    ObjectCache.Set(agent.Value);
+                    ObjectPool.Set(agent.Value);
                 }
                 
                 kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
+                ObjectPool.Set(kv.Value);
             }
             agentdict.Clear();
-            ObjectCache.Set(agentdict);
+            ObjectPool.Set(agentdict);
             
             snapshotagents.Clear();
-            ObjectCache.Set(snapshotagents);
+            ObjectPool.Set(snapshotagents);
         }
         
         /// <summary>
@@ -214,7 +214,7 @@ namespace Goblin.Gameplay.Render.Core
 
             agents.Remove(agent.GetType());
             agent.Reset();
-            ObjectCache.Set(agent);
+            ObjectPool.Set(agent);
         }
 
         /// <summary>
@@ -228,12 +228,12 @@ namespace Goblin.Gameplay.Render.Core
         {
             if (false == agentdict.TryGetValue(actor, out var agents))
             {
-                agentdict.Add(actor, agents = ObjectCache.Ensure<Dictionary<Type, Agent>>());
+                agentdict.Add(actor, agents = ObjectPool.Ensure<Dictionary<Type, Agent>>());
             }
 
             if (agents.TryGetValue(typeof(T), out var agent)) throw new Exception($"agent {typeof(T)} already exists");
             
-            agent = ObjectCache.Ensure<T>();
+            agent = ObjectPool.Ensure<T>();
             agent.Ready(actor, this);
             agents.Add(typeof(T), agent);
             snapshotagents.Add(agent);

@@ -60,7 +60,7 @@ namespace Goblin.Gameplay.Render.Agents
         {
             if (null != go)
             {
-                world.engine.pool.Set(go, $"MODEL_GO_KEY_{res}");
+                ObjectPool.Set(go, $"MODEL_GO_KEY_{res}");
                 go.transform.SetParent(modelpool.transform, false);
             }
         }
@@ -89,7 +89,7 @@ namespace Goblin.Gameplay.Render.Agents
             var modelinfo = world.engine.cfg.location.ModelInfos.Get(this.id);
             res = modelinfo.Res;
             
-            go = world.engine.pool.Get<GameObject>($"MODEL_GO_KEY_{res}");
+            go = ObjectPool.Get<GameObject>($"MODEL_GO_KEY_{res}");
             if (null == go) go = world.engine.gameres.location.LoadModelSync(res);
             var node = world.EnsureAgent<NodeAgent>(actor);
             go.transform.SetParent(node.go.transform, false);

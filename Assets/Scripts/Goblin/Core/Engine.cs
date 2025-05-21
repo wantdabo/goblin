@@ -26,10 +26,6 @@ namespace Goblin.Core
         /// </summary>
         public Eventor eventor { get; private set; }
         /// <summary>
-        /// 对象池
-        /// </summary>
-        public ObjectPool pool { get; private set; }
-        /// <summary>
         /// 随机器
         /// </summary>
         public Common.Random random { get; private set; }
@@ -79,9 +75,6 @@ namespace Goblin.Core
             base.OnCreate();
             eventor = AddComp<Eventor>();
             eventor.Create();
-
-            pool = AddComp<ObjectPool>();
-            pool.Create();
 
             random = AddComp<Common.Random>();
             random.Initial(19491001);

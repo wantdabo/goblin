@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
-            go = ObjectCache.Ensure<GameObject>("NODE_GO_KEY");
+            go = ObjectPool.Ensure<GameObject>("NODE_GO_KEY");
             if (null == go) go = new GameObject();
             go.SetActive(true);
             go.name = actor.ToString();
@@ -47,7 +47,7 @@ namespace Goblin.Gameplay.Render.Agents
             if (null == go) return;
 
             go.SetActive(false);
-            ObjectCache.Set(go, "NODE_GO_KEY");
+            ObjectPool.Set(go, "NODE_GO_KEY");
         }
         
         protected override bool OnArrived()

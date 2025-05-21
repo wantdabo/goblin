@@ -90,7 +90,7 @@ namespace Goblin.Gameplay.Render.Core
             actor = id;
             this.world = world;
             status = ChaseStatus.Chasing;
-            rilactions = ObjectCache.Ensure<Dictionary<Type, List<Invoker>>>();
+            rilactions = ObjectPool.Ensure<Dictionary<Type, List<Invoker>>>();
             
             OnReady();
             Flash();
@@ -111,14 +111,14 @@ namespace Goblin.Gameplay.Render.Core
                 foreach (var invoker in kv.Value)
                 {
                     invoker.Reset();
-                    ObjectCache.Set(invoker);
+                    ObjectPool.Set(invoker);
                 }
                 
                 kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
+                ObjectPool.Set(kv.Value);
             }
             rilactions.Clear();
-            ObjectCache.Set(rilactions);
+            ObjectPool.Set(rilactions);
         }
         
         /// <summary>
@@ -169,8 +169,8 @@ namespace Goblin.Gameplay.Render.Core
         /// <typeparam name="T">状态类型</typeparam>
         protected void WatchRIL<T>(Action<T> func) where T : IRIL
         {
-            if (false == rilactions.TryGetValue(typeof(T), out var list)) rilactions.Add(typeof(T), list = ObjectCache.Ensure<List<Invoker>>());
-            var invoker = ObjectCache.Ensure<Invoker<T>>();
+            if (false == rilactions.TryGetValue(typeof(T), out var list)) rilactions.Add(typeof(T), list = ObjectPool.Ensure<List<Invoker>>());
+            var invoker = ObjectPool.Ensure<Invoker<T>>();
             invoker.Ready(actor, func);
             list.Add(invoker);
         }

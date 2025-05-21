@@ -37,14 +37,6 @@ namespace Goblin.Gameplay.Logic.RIL
             scale = FPVector3.one;
         }
 
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_SPATIAL ril) return;
-            ril.position = position;
-            ril.euler = euler;
-            ril.scale = scale;
-        }
-
         public override byte[] Serialize()
         {
             throw new System.NotImplementedException();

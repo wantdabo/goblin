@@ -34,7 +34,7 @@ namespace Goblin.Common.Sounds
         /// <returns>音效</returns>
         public SoundInfo Load(string res)
         {
-            var sound = engine.pool.Get<SoundInfo>($"SOUND_KEY{res}");
+            var sound = ObjectPool.Get<SoundInfo>($"SOUND_KEY{res}");
             if (null == sound)
             {
                 sound = AddComp<SoundInfo>();
@@ -63,7 +63,7 @@ namespace Goblin.Common.Sounds
         {
             if (null == sound) return;
 
-            engine.pool.Set(sound, $"SOUND_KEY{sound.res}");
+            ObjectPool.Set(sound, $"SOUND_KEY{sound.res}");
         }
     }
 }

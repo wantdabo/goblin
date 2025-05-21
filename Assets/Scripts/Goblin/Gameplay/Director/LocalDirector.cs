@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Goblin.Common;
@@ -20,34 +21,32 @@ namespace Goblin.Gameplay.Director
         /// <summary>
         /// 是否渲染 (驱动 World)
         /// </summary>
-        public override bool rendering 
+        public override bool rendering
         {
-            get
-            {
-                return null != stage && StageState.Ticking == stage.state;
-            }
+            get { return null != stage && StageState.Ticking == stage.state; }
         }
-        
+
         /// <summary>
         /// 时间缩放 (本地游戏独有)
         /// </summary>
-        public float timescale {
-            get
-            {
-                return stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale.AsFloat();
-            }
-            set
-            {
-                stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.int2fp;
-            }
+        public float timescale
+        {
+            get { return stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale.AsFloat(); }
+            set { stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.int2fp; }
         }
-
-        private ConcurrentQueue<IRIL> rilqueue = new();
         
         /// <summary>
         /// 逻辑场景
         /// </summary>
         private Stage stage { get; set; }
+        /// <summary>
+        /// 同步锁对象
+        /// </summary>
+        private readonly object @lock = new();
+        /// <summary>
+        /// RIL 队列
+        /// </summary>
+        private readonly Queue<IRIL> rilqueue = new();
 
         protected override void OnCreateGame()
         {
@@ -65,25 +64,10 @@ namespace Goblin.Gameplay.Director
             stage.onril -= OnRIL;
         }
 
-        protected override void OnStartGame()
-        {
-            stage.Start();
-        }
-
-        protected override void OnPauseGame()
-        {
-            stage.Pause();
-        }
-
-        protected override void OnResumeGame()
-        {
-            stage.Resume();
-        }
-
-        protected override void OnStopGame()
-        {
-            stage.Stop();
-        }
+        protected override void OnStartGame() => stage.Start();
+        protected override void OnPauseGame() => stage.Pause();
+        protected override void OnResumeGame() => stage.Resume();
+        protected override void OnStopGame() => stage.Stop();
 
         protected override void OnSnapshot()
         {
@@ -100,17 +84,16 @@ namespace Goblin.Gameplay.Director
 
         protected override void OnTick()
         {
-            while (rilqueue.TryDequeue(out var ril))
+            lock (@lock)
             {
                 // 发送 RIL 渲染状态
-                world.rilbucket.SetRIL(ril);
+                while (rilqueue.Count > 0) world.rilbucket.SetRIL(rilqueue.Dequeue());
             }
         }
-        
+
         protected override void OnStep()
         {
-            if (null == stage) return;
-            if (StageState.Ticking != stage.state) return;
+            if (null == stage || StageState.Ticking != stage.state) return;
 
             var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
             var ba = world.input.GetInput(INPUT_DEFINE.BA);
@@ -125,7 +108,10 @@ namespace Goblin.Gameplay.Director
         /// <param name="ril">RIL 渲染状态</param>
         private void OnRIL(IRIL ril)
         {
-            rilqueue.Enqueue(ril);
+            lock (@lock)
+            {
+                rilqueue.Enqueue(ril);
+            }
         }
     }
 }

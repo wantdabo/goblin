@@ -54,17 +54,6 @@ namespace Goblin.Gameplay.Logic.RIL
             snapshotframe = 0;
         }
 
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_STAGE ril) return;
-            ril.frame = frame;
-            ril.actorcnt = actorcnt;
-            ril.behaviorcnt = behaviorcnt;
-            ril.behaviorinfocnt = behaviorinfocnt;
-            ril.hassnapshot = hassnapshot;
-            ril.snapshotframe = snapshotframe;
-        }
-
         public override byte[] Serialize()
         {
             throw new System.NotImplementedException();

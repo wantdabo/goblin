@@ -121,7 +121,7 @@ namespace Goblin.Gameplay.Render.Batches
                 }
             }
             rils.Clear();
-            ObjectCache.Set(rils);
+            ObjectPool.Set(rils);
         }
 
         /// <summary>

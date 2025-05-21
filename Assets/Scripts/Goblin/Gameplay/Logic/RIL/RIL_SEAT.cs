@@ -19,19 +19,13 @@ namespace Goblin.Gameplay.Logic.RIL
 
         protected override void OnReady()
         {
-            seatdict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
+            seatdict = RILCache.Ensure<Dictionary<ulong, ulong>>();
         }
 
         protected override void OnReset()
         {
             seatdict.Clear();
-            ObjectCache.Set(seatdict);
-        }
-
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_SEAT ril) return;
-            foreach (var kv in seatdict) ril.seatdict.Add(kv.Key, kv.Value);
+            RILCache.Set(seatdict);
         }
 
         public override byte[] Serialize()

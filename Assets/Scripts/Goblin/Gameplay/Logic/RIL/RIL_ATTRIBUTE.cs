@@ -43,15 +43,6 @@ namespace Goblin.Gameplay.Logic.RIL
             attack = 0;
         }
 
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_ATTRIBUTE ril) return;
-            ril.hp = hp;
-            ril.maxhp = maxhp;
-            ril.movespeed = movespeed;
-            ril.attack = attack;
-        }
-
         public override byte[] Serialize()
         {
             throw new System.NotImplementedException();

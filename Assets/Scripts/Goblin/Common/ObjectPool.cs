@@ -1,18 +1,17 @@
-﻿using Goblin.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Goblin.Common
 {
     /// <summary>
     /// 对象池
     /// </summary>
-    public class ObjectPool : Comp
+    public static class ObjectPool
     {
-        private readonly Dictionary<Type, Dictionary<string, Queue<object>>> pool = new();
+        /// <summary>
+        /// 对象池字典，键为类型，值为该类型的对象池（字典，键为关键字，值为对象队列）
+        /// </summary>
+        private static readonly Dictionary<Type, Dictionary<string, Queue<object>>> pool = new();
 
         /// <summary>
         /// 从对象池获得一个实例化对象
@@ -20,30 +19,70 @@ namespace Goblin.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public T Get<T>(string key = "") where T : new()
+        public static T Get<T>(string key = "") where T : new()
         {
-            if (pool.TryGetValue(typeof(T), out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
+            var obj = Get(typeof(T), key);
+            if (null != obj) return (T)obj;
+        
+            return default;
+        }
+        
+        /// <summary>
+        /// 从对象池获得一个实例化对象
+        /// </summary>
+        /// <param name="key">KEY/关键字</param>
+        /// <returns>实例化对象</returns>
+        public static object Get(Type type, string key = "")
+        {
+            if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
             {
-                return (T)queue.Dequeue();
+                if (queue.TryDequeue(out var obj)) return obj;
+            }
+        
+            return default;
+        }
+        
+        /// <summary>
+        /// 从对象池获得一个实例化对象
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">KEY/关键字</param>
+        /// <returns>实例化对象</returns>
+        public static T Ensure<T>(string key = "") where T : new()
+        {
+            return (T)Ensure(typeof(T), key);
+        }
+        
+        /// <summary>
+        /// 从对象池获得一个实例化对象
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <param name="key">KEY/关键字</param>
+        /// <returns>实例化对象</returns>
+        public static object Ensure(Type type, string key = "")
+        {
+            if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
+            {
+                if (queue.TryDequeue(out var obj)) return obj;
             }
 
-            return default;
+            return Activator.CreateInstance(type);
         }
 
         /// <summary>
         /// 将一个实例化对象存入对象池
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
         /// <param name="obj">实例化对象</param>
         /// <param name="key">KEY/关键字</param>
-        public void Set<T>(T obj, string key = "")
+        public static void Set(object obj, string key = "")
         {
             if (null == obj) return;
 
-            if (false == pool.TryGetValue(typeof(T), out var dict))
+            var type = obj.GetType();
+            if (false == pool.TryGetValue(type, out var dict))
             {
                 dict = new();
-                pool.Add(typeof(T), dict);
+                pool.Add(type, dict);
             }
 
             if (false == dict.TryGetValue(key, out var queue))
@@ -51,8 +90,6 @@ namespace Goblin.Common
                 queue = new();
                 dict.Add(key, queue);
             }
-
-            if (queue.Contains(obj)) return;
 
             queue.Enqueue(obj);
         }

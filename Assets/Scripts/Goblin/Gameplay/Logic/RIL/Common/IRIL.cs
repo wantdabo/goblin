@@ -43,16 +43,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         }
 
         /// <summary>
-        /// 复制
-        /// </summary>
-        /// <param name="target">目标</param>
-        public void Copy(IRIL target)
-        {
-            target.Ready(actor, hashcode);
-            OnCopy( target);
-        }
-
-        /// <summary>
         /// 初始化
         /// </summary>
         protected abstract void OnReady();
@@ -60,11 +50,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// 重置
         /// </summary>
         protected abstract void OnReset();
-        /// <summary>
-        /// 复制
-        /// </summary>
-        /// <param name="target">目标</param>
-        protected abstract void OnCopy(IRIL target);
         /// <summary>
         /// 序列化
         /// </summary>

@@ -24,12 +24,6 @@ namespace Goblin.Gameplay.Logic.RIL
             timescale = 1;
         }
 
-        protected override void OnCopy(IRIL target)
-        {
-            if (target is not RIL_TICKER ril) return;
-            ril.timescale = timescale;
-        }
-
         public override byte[] Serialize()
         {
             throw new System.NotImplementedException();

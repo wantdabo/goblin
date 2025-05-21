@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             eventor = AddComp<Eventor>();
             eventor.Create();
             
-            rildict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
+            rildict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
             Enchants();
         }
 
@@ -57,15 +57,15 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             base.OnDestroy();
             LossAllRIL();
-            ObjectCache.Set(rildict);
+            ObjectPool.Set(rildict);
 
             foreach (var kv in enchantdict)
             {
                 kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
+                ObjectPool.Set(kv.Value);
             }
             enchantdict.Clear();
-            ObjectCache.Set(enchantdict);
+            ObjectPool.Set(enchantdict);
         }
 
         /// <summary>
@@ -85,12 +85,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private void Enchants()
         {
-            enchantdict = ObjectCache.Ensure<Dictionary<ushort, List<AgentEnchant>>>();
+            enchantdict = ObjectPool.Ensure<Dictionary<ushort, List<AgentEnchant>>>();
             void Enchant<T>(ushort id) where T : AgentEnchant, new()
             {
                 var enchant = AddComp<T>().Initialize(this);
                 enchant.Create();
-                if (false == enchantdict.TryGetValue(id, out var list)) enchantdict.Add(id, list = ObjectCache.Ensure<List<AgentEnchant>>());
+                if (false == enchantdict.TryGetValue(id, out var list)) enchantdict.Add(id, list = ObjectPool.Ensure<List<AgentEnchant>>());
                 list.Add(enchant);
             }
             
@@ -107,7 +107,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             foreach (var rils in rildict.Values)
             {
                 rils.Clear();
-                ObjectCache.Set(rils);
+                ObjectPool.Set(rils);
             }
             rildict.Clear();
         }
@@ -147,7 +147,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         public List<T> GetRILS<T>() where T : IRIL
         {
             var type = typeof(T);
-            var rils = ObjectCache.Ensure<List<T>>();
+            var rils = ObjectPool.Ensure<List<T>>();
             foreach (var kv in rildict)
             {
                 if (false == kv.Value.ContainsKey(type)) continue;
@@ -158,7 +158,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             // 没有找到
             if (0 == rils.Count)
             {
-                ObjectCache.Set(rils);
+                ObjectPool.Set(rils);
 
                 return default;
             }
@@ -188,18 +188,18 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             // 渲染状态
             var type = ril.GetType();
-            if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectCache.Ensure<Dictionary<Type, IRIL>>());
+            if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectPool.Ensure<Dictionary<Type, IRIL>>());
             if (dict.TryGetValue(type, out var oldril))
             {
                 if (ril.hashcode.Equals(oldril.hashcode))
                 {
                     ril.Reset();
-                    ObjectCache.Set(ril);
+                    RILCache.Set(ril);
                     return;
                 }
                 
                 oldril.Reset();
-                ObjectCache.Set(oldril);
+                RILCache.Set(oldril);
                 dict.Remove(type);
             }
             
