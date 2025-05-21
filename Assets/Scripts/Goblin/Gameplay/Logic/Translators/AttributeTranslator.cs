@@ -11,10 +11,13 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class AttributeTranslator : Translator<AttributeInfo>
     {
-        protected override void OnRIL(AttributeInfo info)
+        protected override void OnRIL(AttributeInfo info, int hashcode)
         {
+            if (stage.rilsync.Query(info.id, RIL_DEFINE.ATTRIBUTE).Equals(hashcode)) return;
+            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.ATTRIBUTE, hashcode);
+            
             var ril = ObjectCache.Get<RIL_ATTRIBUTE>();
-            ril.Ready(info.id);
+            ril.Ready(info.id, hashcode);
             ril.hp = info.hp;
             ril.maxhp = info.maxhp;
             ril.movespeed = info.movespeed;

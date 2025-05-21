@@ -11,10 +11,13 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class SpatialTranslator : Translator<SpatialInfo>
     {
-        protected override void OnRIL(SpatialInfo info)
+        protected override void OnRIL(SpatialInfo info, int hashcode)
         {
+            if (stage.rilsync.Query(info.id, RIL_DEFINE.SPATIAL).Equals(hashcode)) return;
+            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.SPATIAL, hashcode);
+
             var ril = ObjectCache.Get<RIL_SPATIAL>();
-            ril.Ready(info.id);
+            ril.Ready(info.id, hashcode);
             ril.position = info.position;
             ril.euler = info.euler;
             ril.scale = info.scale;

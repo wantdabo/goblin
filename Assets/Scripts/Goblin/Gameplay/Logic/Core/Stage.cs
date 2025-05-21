@@ -219,8 +219,7 @@ namespace Goblin.Gameplay.Logic.Core
                 }
             }
 
-            // 恢复需要重新推一次最新的状态到渲染层
-            if (SeekBehavior(sa, out Translate translate)) translate.Execute();
+            rilsync.RefreshRILS();
         }
 
         /// <summary>

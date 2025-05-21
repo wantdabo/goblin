@@ -15,14 +15,20 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// ActorID
         /// </summary>
         public ulong actor { get; private set; }
+        /// <summary>
+        /// 哈希值
+        /// </summary>
+        public int hashcode { get; private set; }
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="actor">ActorID</param>
-        public void Ready(ulong actor)
+        /// <param name="hashcode">哈希值</param>
+        public void Ready(ulong actor, int hashcode)
         {
             this.actor = actor;
+            this.hashcode = hashcode;
             OnReady();
         }
 
@@ -43,7 +49,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// 重置
         /// </summary>
         public abstract void OnReset();
-
         /// <summary>
         /// 序列化
         /// </summary>

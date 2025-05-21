@@ -191,7 +191,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectCache.Get<Dictionary<Type, IRIL>>());
             if (dict.TryGetValue(type, out var oldril))
             {
-                if (ril.GetHashCode().Equals(oldril.GetHashCode()))
+                if (ril.hashcode.Equals(oldril.hashcode))
                 {
                     ril.Reset();
                     ObjectCache.Set(ril);

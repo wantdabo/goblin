@@ -150,5 +150,39 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
             return clone;
         }
+
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + state.GetHashCode();
+            hash = hash * 31 + frame.GetHashCode();
+            hash = hash * 31 + elapsed.GetHashCode();
+            hash = hash * 31 + timescale.GetHashCode();
+            hash = hash * 31 + increment.GetHashCode();
+
+            foreach (var actor in actors)
+            {
+                hash = hash * 31 + actor.GetHashCode();
+            }
+            
+            foreach (var kv in behaviortypes)
+            {
+                foreach (var type in kv.Value)
+                {
+                    hash = hash * 31 + type.GetHashCode();
+                }
+            }
+            
+            foreach (var kv in behaviorinfos)
+            {
+                foreach (var info in kv.Value)
+                {
+                    hash = hash * 31 + info.GetHashCode();
+                }
+            }
+
+            return hash;
+        }
     }
 }

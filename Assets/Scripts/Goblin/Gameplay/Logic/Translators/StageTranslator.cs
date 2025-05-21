@@ -11,15 +11,18 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class StageTranslator : Translator<StageInfo>
     {
-        protected override void OnRIL(StageInfo info)
+        protected override void OnRIL(StageInfo info, int hashcode)
         {
+            if (stage.rilsync.Query(info.id, RIL_DEFINE.STAGE).Equals(hashcode)) return;
+            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.STAGE, hashcode);
+
             uint behaviorcnt = 0;
             foreach (var types in info.behaviortypes.Values) behaviorcnt += (uint)types.Count;
             uint behaviorinfocnt = 0;
             foreach (var behaviors in info.behaviorinfos.Values) behaviorinfocnt += (uint)behaviors.Count;
 
             var ril = ObjectCache.Get<RIL_STAGE>();
-            ril.Ready(info.id);
+            ril.Ready(info.id, hashcode);
             ril.frame = stage.frame;
             ril.actorcnt = (uint)info.actors.Count;
             ril.behaviorcnt = behaviorcnt;

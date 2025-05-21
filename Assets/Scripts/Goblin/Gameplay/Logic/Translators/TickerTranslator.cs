@@ -11,10 +11,16 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class TickerTranslator : Translator<TickerInfo>
     {
-        protected override void OnRIL(TickerInfo info)
+        protected override void OnRIL(TickerInfo info, int hashcode)
         {
+            // ticker.timescale 依赖 stage.timescale
+            hashcode += hashcode * 31 + stage.timescale.GetHashCode();
+            
+            if (stage.rilsync.Query(info.id, RIL_DEFINE.TICKER).Equals(hashcode)) return;
+            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.TICKER, hashcode);
+
             var ril = ObjectCache.Get<RIL_TICKER>();
-            ril.Ready(info.id);
+            ril.Ready(info.id, hashcode);
             ril.timescale = (stage.timescale * info.timescale * stage.cfg.fp2int).AsUInt();
             stage.rilsync.Send(ril);
         }

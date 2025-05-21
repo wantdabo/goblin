@@ -60,13 +60,14 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <param name="info">BehaviorInfo</param>
         protected override void OnRIL(BehaviorInfo info)
         {
-            OnRIL((T)info);
+            OnRIL((T)info, info.GetHashCode());
         }
         
         /// <summary>
         /// 渲染指令处理
         /// </summary>
         /// <param name="info">BehaviorInfo</param>
-        protected abstract void OnRIL(T info);
+        /// <param name="hascode">BehaviorInfo 哈希值</param>
+        protected abstract void OnRIL(T info, int hascode);
     }
 }
