@@ -243,17 +243,23 @@ namespace Goblin.Gameplay.Render.Core
 
         private void OnTick(TickEvent e)
         {
+            // 执行过程中, 可能会触发修改 agentdict, 导致错误
+            var agents = ObjectPool.Ensure<List<(Agent agents, float timescale)>>();
             foreach (var kv in agentdict)
             {
                 float timescale = 1f;
                 if (rilbucket.SeekRIL<RIL_TICKER>(kv.Key, out var ril)) timescale = ril.timescale * Config.Int2Float;
-
                 foreach (var agent in kv.Value.Values)
                 {
                     if (ChaseStatus.Arrived == agent.status) continue;
-                    agent.Chase(e.tick, timescale);
+                    agents.Add((agent, timescale));
                 }
             }
+
+            // 收集后再处理
+            foreach ((Agent agent, float timescale) in agents) agent.Chase(e.tick, timescale);
+            agents.Clear();
+            ObjectPool.Set(agents);
         }
     }
 }
