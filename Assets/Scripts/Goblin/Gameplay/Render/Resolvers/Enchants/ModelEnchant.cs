@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             }
             else
             {
-                var agent = rilbucket.world.EnsureAgent<ModelAgent>(ril.actor);
+                var agent = rilbucket.world.GetAgent<ModelAgent>(ril.actor);
                 if (null == agent) return;
                 rilbucket.world.RmvAgent(agent);
             }
