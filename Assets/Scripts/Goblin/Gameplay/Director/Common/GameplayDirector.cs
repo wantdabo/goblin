@@ -58,7 +58,7 @@ namespace Goblin.Gameplay.Director.Common
                 engine.ticker.eventor.Listen<FixedTickEvent>(OnFixedTick);
                 return;
             }
-            var thread = new Thread(() =>
+            thread = new Thread(() =>
             {
                 int logicms = (int)GAME_DEFINE.LOGIC_TICK_MS;
                 while (true)
@@ -94,6 +94,7 @@ namespace Goblin.Gameplay.Director.Common
             try
             {
                 thread.Abort();
+                thread = null;
             }
             catch (Exception e)
             {
@@ -151,8 +152,8 @@ namespace Goblin.Gameplay.Director.Common
         protected void OnTick(TickEvent e)
         {
             if (false == rendering) return;
-            world.ticker.Tick(e.tick);
             OnTick();
+            world.ticker.Tick(e.tick);
         }
         
         protected void OnFixedTick(FixedTickEvent e)
