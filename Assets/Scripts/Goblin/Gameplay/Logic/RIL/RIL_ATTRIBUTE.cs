@@ -43,7 +43,7 @@ namespace Goblin.Gameplay.Logic.RIL
             attack = 0;
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_ATTRIBUTE ril) return;
             ril.hp = hp;

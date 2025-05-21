@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Logic.RIL
             snapshotframe = 0;
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_STAGE ril) return;
             ril.frame = frame;

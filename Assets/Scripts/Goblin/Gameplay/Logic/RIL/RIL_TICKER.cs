@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.RIL
             timescale = 1;
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_TICKER ril) return;
             ril.timescale = timescale;

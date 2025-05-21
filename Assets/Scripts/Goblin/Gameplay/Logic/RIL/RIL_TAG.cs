@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.RIL
             ObjectCache.Set(tags);
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_TAG ril) return;
             foreach (var kv in tags) ril.tags.Add(kv.Key, kv.Value);

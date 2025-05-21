@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.RIL
             ObjectCache.Set(seatdict);
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_SEAT ril) return;
             foreach (var kv in seatdict) ril.seatdict.Add(kv.Key, kv.Value);

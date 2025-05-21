@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Logic.RIL
             elapsed = 0;
         }
 
-        protected override void OnCopy(ref IRIL target)
+        protected override void OnCopy(IRIL target)
         {
             if (target is not RIL_STATE_MACHINE ril) return;
             ril.current = current;
