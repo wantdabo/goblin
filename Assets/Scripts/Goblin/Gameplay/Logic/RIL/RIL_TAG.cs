@@ -33,19 +33,6 @@ namespace Goblin.Gameplay.Logic.RIL
             throw new System.NotImplementedException();
         }
         
-        public override int GetHashCode()
-        {
-            if (null == tags) return 0;
-            int hash = 17;
-            foreach (var kv in tags)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            
-            return hash;
-        }
-
         public override string ToString()
         {
             if (null == tags) return "RIL_TAG: tags=null";

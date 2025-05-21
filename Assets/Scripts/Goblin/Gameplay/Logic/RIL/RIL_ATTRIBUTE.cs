@@ -48,18 +48,6 @@ namespace Goblin.Gameplay.Logic.RIL
             throw new System.NotImplementedException();
         }
 
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
-            hash = hash * 31 + hp.GetHashCode();
-            hash = hash * 31 + maxhp.GetHashCode();
-            hash = hash * 31 + movespeed.GetHashCode();
-            hash = hash * 31 + attack.GetHashCode();
-            
-            return hash;
-        }
-
         public override string ToString()
         {
             return $"RIL_ATTRIBUTE: hp={hp}, maxhp={maxhp}, movespeed={movespeed}, attack={attack}";

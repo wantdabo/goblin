@@ -39,6 +39,7 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         {
             OnReset();
             this.actor = 0;
+            this.hashcode = 0;
         }
 
         /// <summary>

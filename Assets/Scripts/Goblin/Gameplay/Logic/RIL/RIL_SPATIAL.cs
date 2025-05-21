@@ -41,16 +41,6 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-        
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + position.GetHashCode();
-            hash = hash * 31 + euler.GetHashCode();
-            hash = hash * 31 + scale.GetHashCode();
-            
-            return hash;
-        }
 
         public override string ToString()
         {

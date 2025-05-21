@@ -28,12 +28,7 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             throw new System.NotImplementedException();
         }
-
-        public override int GetHashCode()
-        {
-            return id.GetHashCode() ^ timescale.GetHashCode();
-        }
-
+        
         public override string ToString()
         {
             return $"RIL_TICKER: timescale={timescale}";

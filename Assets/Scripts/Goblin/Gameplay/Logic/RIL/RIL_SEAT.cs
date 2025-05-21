@@ -33,20 +33,6 @@ namespace Goblin.Gameplay.Logic.RIL
             throw new System.NotImplementedException();
         }
         
-        public override int GetHashCode()
-        {
-            if (null == seatdict) return 0;
-
-            int hash = 17;
-            foreach (var kv in seatdict)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            
-            return hash;
-        }
-
         public override string ToString()
         {
             if (null == seatdict) return "RIL_SEAT: seatdict=null";
