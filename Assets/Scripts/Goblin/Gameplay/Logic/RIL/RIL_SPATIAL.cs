@@ -23,18 +23,26 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public FPVector3 scale { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;
             scale = FPVector3.one;
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;
             scale = FPVector3.one;
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_SPATIAL ril) return;
+            ril.position = position;
+            ril.euler = euler;
+            ril.scale = scale;
         }
 
         public override byte[] Serialize()

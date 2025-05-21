@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public uint snapshotframe { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             frame = 0;
             actorcnt = 0;
@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Logic.RIL
             snapshotframe = 0;
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             frame = 0;
             actorcnt = 0;
@@ -52,6 +52,17 @@ namespace Goblin.Gameplay.Logic.RIL
             behaviorinfocnt = 0;
             hassnapshot = false;
             snapshotframe = 0;
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_STAGE ril) return;
+            ril.frame = frame;
+            ril.actorcnt = actorcnt;
+            ril.behaviorcnt = behaviorcnt;
+            ril.behaviorinfocnt = behaviorinfocnt;
+            ril.hassnapshot = hassnapshot;
+            ril.snapshotframe = snapshotframe;
         }
 
         public override byte[] Serialize()

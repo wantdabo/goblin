@@ -14,14 +14,20 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public uint timescale { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             timescale = 1;
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             timescale = 1;
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_TICKER ril) return;
+            ril.timescale = timescale;
         }
 
         public override byte[] Serialize()

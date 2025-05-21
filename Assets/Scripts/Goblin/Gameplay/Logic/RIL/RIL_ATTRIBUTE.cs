@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public uint attack { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             hp = 0;
             maxhp = 0;
@@ -35,12 +35,21 @@ namespace Goblin.Gameplay.Logic.RIL
             attack = 0;
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             hp = 0;
             maxhp = 0;
             movespeed = 0;
             attack = 0;
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_ATTRIBUTE ril) return;
+            ril.hp = hp;
+            ril.maxhp = maxhp;
+            ril.movespeed = movespeed;
+            ril.attack = attack;
         }
 
         public override byte[] Serialize()

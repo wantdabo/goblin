@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public uint elapsed { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             current = 0;
             last = 0;
@@ -34,12 +34,21 @@ namespace Goblin.Gameplay.Logic.RIL
             elapsed = 0;
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             current = 0;
             last = 0;
             frames = 0;
             elapsed = 0;
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_STATE_MACHINE ril) return;
+            ril.current = current;
+            ril.last = last;
+            ril.frames = frames;
+            ril.elapsed = elapsed;
         }
 
         public override byte[] Serialize()

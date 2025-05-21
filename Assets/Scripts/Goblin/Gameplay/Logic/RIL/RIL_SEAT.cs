@@ -17,15 +17,21 @@ namespace Goblin.Gameplay.Logic.RIL
         /// </summary>
         public Dictionary<ulong, ulong> seatdict { get; set; }
 
-        public override void OnReady()
+        protected override void OnReady()
         {
             seatdict = ObjectCache.Get<Dictionary<ulong, ulong>>();
         }
 
-        public override void OnReset()
+        protected override void OnReset()
         {
             seatdict.Clear();
             ObjectCache.Set(seatdict);
+        }
+
+        protected override void OnCopy(ref IRIL target)
+        {
+            if (target is not RIL_SEAT ril) return;
+            foreach (var kv in seatdict) ril.seatdict.Add(kv.Key, kv.Value);
         }
 
         public override byte[] Serialize()
