@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Render.Common
         {
             base.OnCreate();
             world.ticker.eventor.Listen<TickEvent>(OnTick);
-            inputdict = ObjectCache.Get<Dictionary<ushort, (bool press, GPVector2 dire)>>();
+            inputdict = ObjectCache.Ensure<Dictionary<ushort, (bool press, GPVector2 dire)>>();
             inputdict.Add(INPUT_DEFINE.JOYSTICK, default);
             inputdict.Add(INPUT_DEFINE.BA, default);
             inputdict.Add(INPUT_DEFINE.BB, default);

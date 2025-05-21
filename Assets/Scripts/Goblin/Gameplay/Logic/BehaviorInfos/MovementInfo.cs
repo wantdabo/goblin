@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<MovementInfo>();
+            var clone = ObjectCache.Ensure<MovementInfo>();
             clone.Ready(id);
             clone.moving = moving;
             

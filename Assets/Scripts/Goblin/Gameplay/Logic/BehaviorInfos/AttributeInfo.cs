@@ -40,7 +40,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<AttributeInfo>();
+            var clone = ObjectCache.Ensure<AttributeInfo>();
             clone.Ready(id);
             clone.hp = hp;
             clone.maxhp = maxhp;

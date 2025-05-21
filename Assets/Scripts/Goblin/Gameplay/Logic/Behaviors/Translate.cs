@@ -25,11 +25,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
             void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
             {
-                var translator = ObjectCache.Get<T>();
+                var translator = ObjectCache.Ensure<T>();
                 translators.Add(typeof(E), translator.Load(stage));
             }
             
-            translators = ObjectCache.Get<Dictionary<Type, Translator>>();
+            translators = ObjectCache.Ensure<Dictionary<Type, Translator>>();
             Translator<StageTranslator, StageInfo>();
             Translator<TickerTranslator, TickerInfo>();
             Translator<SeatTranslator, SeatInfo>();

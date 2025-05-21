@@ -90,9 +90,9 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             timescale = FP.One;
             increment = 0;
             
-            actors = ObjectCache.Get<List<ulong>>();
-            behaviortypes = ObjectCache.Get<Dictionary<ulong, List<Type>>>();
-            behaviorinfos = ObjectCache.Get<Dictionary<Type, List<BehaviorInfo>>>();
+            actors = ObjectCache.Ensure<List<ulong>>();
+            behaviortypes = ObjectCache.Ensure<Dictionary<ulong, List<Type>>>();
+            behaviorinfos = ObjectCache.Ensure<Dictionary<Type, List<BehaviorInfo>>>();
         }
 
         protected override void OnReset()
@@ -115,7 +115,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<StageInfo>();
+            var clone = ObjectCache.Ensure<StageInfo>();
             clone.Ready(id);
             clone.state = state;
             clone.frame = frame;
@@ -130,7 +130,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             foreach (var kv in behaviortypes)
             {
-                var list = ObjectCache.Get<List<Type>>();
+                var list = ObjectCache.Ensure<List<Type>>();
                 foreach (var type in kv.Value)
                 {
                     list.Add(type);
@@ -140,7 +140,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             foreach (var kv in behaviorinfos)
             {
-                var list = ObjectCache.Get<List<BehaviorInfo>>();
+                var list = ObjectCache.Ensure<List<BehaviorInfo>>();
                 foreach (var info in kv.Value)
                 {
                     list.Add(info.Clone());

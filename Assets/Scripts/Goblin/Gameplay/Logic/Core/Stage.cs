@@ -119,7 +119,7 @@ namespace Goblin.Gameplay.Logic.Core
             
             // 构建 StageInfo, 因为 Stage 的数据也是走 BehaviorInfo, 无法通过自举的方式走 API 添加
             // 悖论存在, 此处手动添加
-            info = ObjectCache.Get<StageInfo>();
+            info = ObjectCache.Ensure<StageInfo>();
             info.Ready(sa);
             info.state = StageState.Initialized;
             
@@ -203,7 +203,7 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 foreach (var behaviorinfo in behaviorinfos)
                 {
-                    if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.id, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+                    if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.id, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.id, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
                     dict.Add(behaviorinfo.GetType(), behaviorinfo);
                 }
             }
@@ -230,9 +230,9 @@ namespace Goblin.Gameplay.Logic.Core
         {
             void Prefab<T, E>() where T : Prefab, new() where E : IPrefabInfo, new()
             {
-                prefabs.Add(typeof(E), ObjectCache.Get<T>().Load(this));
+                prefabs.Add(typeof(E), ObjectCache.Ensure<T>().Load(this));
             }
-            prefabs = ObjectCache.Get<Dictionary<Type, Prefab>>();
+            prefabs = ObjectCache.Ensure<Dictionary<Type, Prefab>>();
             Prefab<FlowPrefab, FlowPrefabInfo>();
             Prefab<HeroPrefab, HeroPrefabInfo>();
             Prefab<BulletPrefab, BulletPrefabInfo>();
@@ -437,7 +437,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
 
-            var state = ObjectCache.Get<PrefabInfoState<T>>();
+            var state = ObjectCache.Ensure<PrefabInfoState<T>>();
             state.info = prefabinfo;
             var actor = prefab.Processing(GenActor(), state);
             state.Reset();
@@ -492,7 +492,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">Actor 已存在</exception>
         private Actor AddActor(ulong id)
         {
-            var actor = ObjectCache.Get<Actor>();
+            var actor = ObjectCache.Ensure<Actor>();
             if (false == info.actors.Contains(id)) info.actors.Add(id);
             if (cache.actordict.ContainsKey(id)) throw new Exception($"actor {id} already exists.");
             cache.actordict.Add(id, actor);
@@ -528,7 +528,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
 
             // 根据类型去获取所有 Behavior
-            var result = ObjectCache.Get<List<T>>();
+            var result = ObjectCache.Ensure<List<T>>();
             foreach (var behavior in list) result.Add(behavior as T);
 
             return result;
@@ -555,7 +555,7 @@ namespace Goblin.Gameplay.Logic.Core
         public List<Behavior> GetBehaviors(Type type)
         {
             if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
-            var result = ObjectCache.Get<List<Behavior>>();
+            var result = ObjectCache.Ensure<List<Behavior>>();
             foreach (var behavior in list) result.Add(behavior);
 
             return result;
@@ -584,7 +584,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
 
             // 根据 ActorID 获取所有 Behavior
-            var result = ObjectCache.Get<List<Behavior>>();
+            var result = ObjectCache.Ensure<List<Behavior>>();
             foreach (var type in types)
             {
                 if (false == SeekBehavior(id, type, out var behavior)) continue;
@@ -673,13 +673,13 @@ namespace Goblin.Gameplay.Logic.Core
         private Behavior AddBehavior(ulong id, Type type)
         {
             // 检查 Behavior 容器是否存在
-            if (false == cache.behaviors.TryGetValue(type, out var list)) cache.behaviors.Add(type, list = ObjectCache.Get<List<Behavior>>());
-            if (false == cache.behaviordict.TryGetValue(id, out var dict)) cache.behaviordict.Add(id, dict = ObjectCache.Get<Dictionary<Type, Behavior>>());
+            if (false == cache.behaviors.TryGetValue(type, out var list)) cache.behaviors.Add(type, list = ObjectCache.Ensure<List<Behavior>>());
+            if (false == cache.behaviordict.TryGetValue(id, out var dict)) cache.behaviordict.Add(id, dict = ObjectCache.Ensure<Dictionary<Type, Behavior>>());
             // 检查 Behavior 是否已经存在容器中
             if (dict.ContainsKey(type)) throw new Exception($"behavior {type} is exist.");
-            if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Get<List<Type>>());
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Ensure<List<Type>>());
             
-            var behavior = ObjectCache.Get(type) as Behavior;
+            var behavior = ObjectCache.Ensure(type) as Behavior;
             if (false == types.Contains(type)) types.Add(type);
             dict.Add(type, behavior);
             list.Add(behavior);
@@ -717,7 +717,7 @@ namespace Goblin.Gameplay.Logic.Core
         public List<T> GetBehaviorInfos<T>() where T : BehaviorInfo
         {
             if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
-            var result = ObjectCache.Get<List<T>>();
+            var result = ObjectCache.Ensure<List<T>>();
             foreach (var i in infos) result.Add(i as T);
             
             return result;
@@ -744,7 +744,7 @@ namespace Goblin.Gameplay.Logic.Core
         public List<BehaviorInfo> GetBehaviorInfos(ulong id)
         {
             if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
-            var result = ObjectCache.Get<List<BehaviorInfo>>();
+            var result = ObjectCache.Ensure<List<BehaviorInfo>>();
             foreach (var i in dict.Values) result.Add(i);
             
             return result;
@@ -789,13 +789,13 @@ namespace Goblin.Gameplay.Logic.Core
         public T AddBehaviorInfo<T>(ulong id) where T : BehaviorInfo, new()
         {
             // 检查 BehaviorInfo 容器是否存在
-            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Get<Dictionary<Type, BehaviorInfo>>());
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
             // 检查 BehaviorInfo 是否已经存在容器中
             if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
             // 初始化 BehaviorInfos
-            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Get<List<BehaviorInfo>>());
+            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Ensure<List<BehaviorInfo>>());
 
-            var behaviorinfo = ObjectCache.Get<T>();
+            var behaviorinfo = ObjectCache.Ensure<T>();
             dict.Add(typeof(T), behaviorinfo);
             list.Add(behaviorinfo);
             behaviorinfo.Ready(id);
@@ -860,11 +860,11 @@ namespace Goblin.Gameplay.Logic.Core
             /// <returns>StageCache</returns>
             public StageCache Initialize()
             {
-                actordict = ObjectCache.Get<Dictionary<ulong, Actor>>();
-                behaviordict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, Behavior>>>();
-                behaviors = ObjectCache.Get<Dictionary<Type, List<Behavior>>>();
-                behaviorinfodict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
-                rmvactors = ObjectCache.Get<List<ulong>>();
+                actordict = ObjectCache.Ensure<Dictionary<ulong, Actor>>();
+                behaviordict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, Behavior>>>();
+                behaviors = ObjectCache.Ensure<Dictionary<Type, List<Behavior>>>();
+                behaviorinfodict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
+                rmvactors = ObjectCache.Ensure<List<ulong>>();
 
                 return this;
             }

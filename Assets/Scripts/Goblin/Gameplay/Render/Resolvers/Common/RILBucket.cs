@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             eventor = AddComp<Eventor>();
             eventor.Create();
             
-            rildict = ObjectCache.Get<Dictionary<ulong, Dictionary<Type, IRIL>>>();
+            rildict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
             Enchants();
         }
 
@@ -85,12 +85,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private void Enchants()
         {
-            enchantdict = ObjectCache.Get<Dictionary<ushort, List<AgentEnchant>>>();
+            enchantdict = ObjectCache.Ensure<Dictionary<ushort, List<AgentEnchant>>>();
             void Enchant<T>(ushort id) where T : AgentEnchant, new()
             {
                 var enchant = AddComp<T>().Initialize(this);
                 enchant.Create();
-                if (false == enchantdict.TryGetValue(id, out var list)) enchantdict.Add(id, list = ObjectCache.Get<List<AgentEnchant>>());
+                if (false == enchantdict.TryGetValue(id, out var list)) enchantdict.Add(id, list = ObjectCache.Ensure<List<AgentEnchant>>());
                 list.Add(enchant);
             }
             
@@ -147,7 +147,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         public List<T> GetRILS<T>() where T : IRIL
         {
             var type = typeof(T);
-            var rils = ObjectCache.Get<List<T>>();
+            var rils = ObjectCache.Ensure<List<T>>();
             foreach (var kv in rildict)
             {
                 if (false == kv.Value.ContainsKey(type)) continue;
@@ -188,7 +188,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         {
             // 渲染状态
             var type = ril.GetType();
-            if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectCache.Get<Dictionary<Type, IRIL>>());
+            if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectCache.Ensure<Dictionary<Type, IRIL>>());
             if (dict.TryGetValue(type, out var oldril))
             {
                 if (ril.hashcode.Equals(oldril.hashcode))

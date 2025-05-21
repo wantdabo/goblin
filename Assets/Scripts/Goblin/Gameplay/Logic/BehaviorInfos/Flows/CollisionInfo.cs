@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.BehaviorInfos.Flows
         
         protected override void OnReady()
         {
-            collisions = ObjectCache.Get<Queue<ulong>>();
+            collisions = ObjectCache.Ensure<Queue<ulong>>();
         }
 
         protected override void OnReset()
@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.BehaviorInfos.Flows
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<CollisionInfo>();
+            var clone = ObjectCache.Ensure<CollisionInfo>();
             clone.Ready(id);
             foreach (var id in collisions)
             {

@@ -40,8 +40,8 @@ namespace Goblin.Gameplay.BehaviorInfos
             length = 0;
             timeline = 0;
             elapsed = 0;
-            pipelines = ObjectCache.Get<List<uint>>();
-            doings = ObjectCache.Get<Dictionary<uint, List<uint>>>();
+            pipelines = ObjectCache.Ensure<List<uint>>();
+            doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
         }
 
         protected override void OnReset()
@@ -63,7 +63,7 @@ namespace Goblin.Gameplay.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<FlowInfo>();
+            var clone = ObjectCache.Ensure<FlowInfo>();
             clone.Ready(id);
             clone.owner = owner;
             clone.length = length;

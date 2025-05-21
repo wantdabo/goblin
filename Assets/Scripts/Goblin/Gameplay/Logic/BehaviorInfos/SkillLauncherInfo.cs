@@ -59,8 +59,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             skill = 0;
             flow = 0;
             casting = false;
-            loadedskills = ObjectCache.Get<List<uint>>();
-            loadedskilldict = ObjectCache.Get<Dictionary<uint, SkillInfo>>();
+            loadedskills = ObjectCache.Ensure<List<uint>>();
+            loadedskilldict = ObjectCache.Ensure<Dictionary<uint, SkillInfo>>();
         }
 
         protected override void OnReset()
@@ -81,7 +81,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<SkillLauncherInfo>();
+            var clone = ObjectCache.Ensure<SkillLauncherInfo>();
             clone.Ready(id);
             clone.skill = skill;
             clone.flow = flow;
@@ -94,7 +94,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
                     skill = kv.Value.skill,
                     strength = kv.Value.strength,
                     cooldown = kv.Value.cooldown,
-                    pipelines = ObjectCache.Get<List<uint>>()
+                    pipelines = ObjectCache.Ensure<List<uint>>()
                 };
                 foreach (var pipeline in kv.Value.pipelines) skillinfo.pipelines.Add(pipeline);
                 

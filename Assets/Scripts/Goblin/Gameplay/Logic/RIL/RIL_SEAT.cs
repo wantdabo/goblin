@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         protected override void OnReady()
         {
-            seatdict = ObjectCache.Get<Dictionary<ulong, ulong>>();
+            seatdict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
         }
 
         protected override void OnReset()

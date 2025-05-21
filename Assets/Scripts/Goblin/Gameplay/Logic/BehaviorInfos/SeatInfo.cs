@@ -20,8 +20,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         
         protected override void OnReady()
         {
-            sadict = ObjectCache.Get<Dictionary<ulong, ulong>>();
-            asdict = ObjectCache.Get<Dictionary<ulong, ulong>>();
+            sadict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
+            asdict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
         }
 
         protected override void OnReset()
@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<SeatInfo>();
+            var clone = ObjectCache.Ensure<SeatInfo>();
             clone.Ready(id);
             foreach (var kv in sadict) clone.sadict.Add(kv.Key, kv.Value);
             foreach (var kv in asdict) clone.asdict.Add(kv.Key, kv.Value);

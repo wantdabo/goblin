@@ -215,7 +215,7 @@ namespace Goblin.Gameplay.Behaviors
         private void ExecuteInstruct(ExecuteInstrucType type, uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)
         {
             if (false == executors.TryGetValue(instruct.data.id, out var executor)) throw new Exception($"id : {instruct.data.id} cannot find executor.");
-            if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Get<List<uint>>());
+            if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
             
             switch (type)
             {
@@ -240,10 +240,10 @@ namespace Goblin.Gameplay.Behaviors
         {
             void Checker<T>(ushort id) where T : Checker, new()
             {
-                checkers.Add(id, ObjectCache.Get<T>().Load(stage));
+                checkers.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            checkers = ObjectCache.Get<Dictionary<ushort, Checker>>();
+            checkers = ObjectCache.Ensure<Dictionary<ushort, Checker>>();
             Checker<TestChecker>(INSTR_DEFINE.TEST);
         }
 
@@ -254,10 +254,10 @@ namespace Goblin.Gameplay.Behaviors
         {
             void Executor<T>(ushort id) where T : Executor, new()
             {
-                executors.Add(id, ObjectCache.Get<T>().Load(stage));
+                executors.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            executors = ObjectCache.Get<Dictionary<ushort, Executor>>();
+            executors = ObjectCache.Ensure<Dictionary<ushort, Executor>>();
             Executor<TestExecutor>(INSTR_DEFINE.TEST);
         }
     }

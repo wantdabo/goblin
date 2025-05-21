@@ -90,7 +90,7 @@ namespace Goblin.Gameplay.Render.Core
             actor = id;
             this.world = world;
             status = ChaseStatus.Chasing;
-            rilactions = ObjectCache.Get<Dictionary<Type, List<Invoker>>>();
+            rilactions = ObjectCache.Ensure<Dictionary<Type, List<Invoker>>>();
             
             OnReady();
             Flash();
@@ -169,8 +169,8 @@ namespace Goblin.Gameplay.Render.Core
         /// <typeparam name="T">状态类型</typeparam>
         protected void WatchRIL<T>(Action<T> func) where T : IRIL
         {
-            if (false == rilactions.TryGetValue(typeof(T), out var list)) rilactions.Add(typeof(T), list = ObjectCache.Get<List<Invoker>>());
-            var invoker = ObjectCache.Get<Invoker<T>>();
+            if (false == rilactions.TryGetValue(typeof(T), out var list)) rilactions.Add(typeof(T), list = ObjectCache.Ensure<List<Invoker>>());
+            var invoker = ObjectCache.Ensure<Invoker<T>>();
             invoker.Ready(actor, func);
             list.Add(invoker);
         }

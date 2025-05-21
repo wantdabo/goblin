@@ -72,7 +72,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             int hashcode = CalcHashCode(info as T, info.GetHashCode());
             if (stage.rilsync.Query(info.id, id).Equals(hashcode)) return;
             
-            var ril = ObjectCache.Get<E>();
+            var ril = ObjectCache.Ensure<E>();
             ril.Ready(info.id, hashcode);
             OnRIL(info as T, ril);
             stage.rilsync.Send(ril);

@@ -37,7 +37,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReady()
         {
-            inputdict = ObjectCache.Get<Dictionary<ushort, InputInfo>>();
+            inputdict = ObjectCache.Ensure<Dictionary<ushort, InputInfo>>();
             inputdict.Add(INPUT_DEFINE.JOYSTICK, new InputInfo { press = false, release = false, dire = FPVector2.zero });
             inputdict.Add(INPUT_DEFINE.BA, new InputInfo { press = false, release = false, dire = FPVector2.zero });
             inputdict.Add(INPUT_DEFINE.BB, new InputInfo { press = false, release = false, dire = FPVector2.zero });
@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<GamepadInfo>();
+            var clone = ObjectCache.Ensure<GamepadInfo>();
             clone.Ready(id);
             foreach (var kv in inputdict)
             {

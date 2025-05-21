@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         protected override void OnReady()
         {
-            tags = ObjectCache.Get<Dictionary<ushort, int>>();
+            tags = ObjectCache.Ensure<Dictionary<ushort, int>>();
         }
 
         protected override void OnReset()

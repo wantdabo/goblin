@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            hashcodedict = ObjectCache.Get<ConcurrentDictionary<(ulong, ushort), int>>();
+            hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();
         }
 
         protected override void OnDisassemble()

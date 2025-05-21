@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<TickerInfo>();
+            var clone = ObjectCache.Ensure<TickerInfo>();
             clone.Ready(id);
             clone.timescale = timescale;
             

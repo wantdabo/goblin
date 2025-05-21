@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Collisions
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<ColliderInfo>();
+            var clone = ObjectCache.Ensure<ColliderInfo>();
             clone.Ready(id);
             clone.layer = layer;
             clone.shape = shape;

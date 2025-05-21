@@ -90,7 +90,7 @@ namespace Goblin.Gameplay.Logic.Flows
             {
                 index++;
                 if (instruct.begin > timeline) break;
-                if (null == instrinfos) instrinfos = ObjectCache.Get<List<(bool inside, uint index, Instruct instruct)>>();
+                if (null == instrinfos) instrinfos = ObjectCache.Ensure<List<(bool inside, uint index, Instruct instruct)>>();
                 instrinfos.Add((instruct.begin <= timeline && instruct.end >= timeline, index, instruct));
             }
 

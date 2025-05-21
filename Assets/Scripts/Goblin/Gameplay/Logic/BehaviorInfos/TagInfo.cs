@@ -17,7 +17,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReady()
         {
-            tags = ObjectCache.Get<Dictionary<ushort, int>>();
+            tags = ObjectCache.Ensure<Dictionary<ushort, int>>();
         }
 
         protected override void OnReset()
@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Get<TagInfo>();
+            var clone = ObjectCache.Ensure<TagInfo>();
             clone.Ready(id);
             foreach (var kv in tags)
             {

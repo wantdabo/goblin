@@ -125,7 +125,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 如果发生碰撞，清除当前碰撞体
             if (result.hit)
             {
-                var colliders = ObjectCache.Get<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                var colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 foreach (var c in result.colliders)
                 {
                     if (collider.id == c.id) continue;
@@ -179,7 +179,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 if (false == hit) continue;
                 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Get<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.id, point, normal, penetration));
             }
             colliders.Clear();
@@ -226,7 +226,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 if (false == hit) continue;
 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Get<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.id, point, normal, penetration));
             }
             colliders.Clear();
@@ -270,7 +270,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 if (false == hit) continue;
                 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Get<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.id, point, normal, penetration));
             }
             colliders.Clear();
@@ -343,7 +343,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var baxes = GetAxes(brot);
 
             // 生成所有分离轴（15个轴）
-            var axes = ObjectCache.Get<List<FPVector3>>();
+            var axes = ObjectCache.Ensure<List<FPVector3>>();
             axes.AddRange(aaxes);
             axes.AddRange(baxes);
 
@@ -765,7 +765,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     FPVector3 halfSize = collider.box.size * FP.Half;
 
                     // 定义 box 的 8 个顶点（以中心为基准）
-                    var vertices = ObjectCache.Get<List<FPVector3>>();
+                    var vertices = ObjectCache.Ensure<List<FPVector3>>();
                     vertices.Add(new FPVector3(-halfSize.x, -halfSize.y, -halfSize.z));
                     vertices.Add(new FPVector3(halfSize.x, -halfSize.y, -halfSize.z));
                     vertices.Add(new FPVector3(-halfSize.x, halfSize.y, -halfSize.z));
@@ -819,7 +819,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>局部坐标轴（右、上、前）</returns>
         private static List<FPVector3> GetAxes(FPQuaternion rotation)
         {
-            var vertices = ObjectCache.Get<List<FPVector3>>();
+            var vertices = ObjectCache.Ensure<List<FPVector3>>();
             vertices.Add(rotation * FPVector3.right);
             vertices.Add(rotation * FPVector3.up);
             vertices.Add(rotation * FPVector3.forward);
@@ -862,7 +862,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>8 个顶点位置</returns>
         private List<FPVector3> GetBoxVertices(Box box, FPVector3 position, FPQuaternion rotation)
         {
-            var vertices = ObjectCache.Get<List<FPVector3>>();
+            var vertices = ObjectCache.Ensure<List<FPVector3>>();
             FPVector3 extents = box.size * FP.Half;
 
             // 生成相对于中心的8个顶点
