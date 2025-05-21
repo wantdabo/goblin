@@ -10,17 +10,13 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 座位信息翻译器
     /// </summary>
-    public class SeatTranslator : Translator<SeatInfo>
+    public class SeatTranslator : Translator<SeatInfo, RIL_SEAT>
     {
-        protected override void OnRIL(SeatInfo info, int hashcode)
+        protected override ushort id => RIL_DEFINE.SEAT;
+
+        protected override void OnRIL(SeatInfo info, RIL_SEAT ril)
         {
-            if (stage.rilsync.Query(info.id, RIL_DEFINE.SEAT).Equals(hashcode)) return;
-            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.SEAT, hashcode);
-            
-            var ril = ObjectCache.Get<RIL_SEAT>();
-            ril.Ready(info.id, hashcode);
             foreach (var kv in info.sadict) ril.seatdict.Add(kv.Key, kv.Value);
-            stage.rilsync.Send(ril);
         }
     }
 }

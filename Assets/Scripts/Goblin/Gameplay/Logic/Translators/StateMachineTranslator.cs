@@ -12,20 +12,16 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 状态机信息翻译器
     /// </summary>
-    public class StateMachineTranslator : Translator<StateMachineInfo>
+    public class StateMachineTranslator : Translator<StateMachineInfo, RIL_STATE_MACHINE>
     {
-        protected override void OnRIL(StateMachineInfo info, int hashcode)
-        {
-            if (stage.rilsync.Query(info.id, RIL_DEFINE.STATE_MACHINE).Equals(hashcode)) return;
-            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.STATE_MACHINE, hashcode);
+        protected override ushort id => RIL_DEFINE.STATE_MACHINE;
 
-            var ril = ObjectCache.Get<RIL_STATE_MACHINE>();
-            ril.Ready(info.id, hashcode);
+        protected override void OnRIL(StateMachineInfo info, RIL_STATE_MACHINE ril)
+        {
             ril.current = info.current;
             ril.last = info.last;
             ril.frames = info.frames;
             ril.elapsed = (info.elapsed * stage.cfg.fp2int).AsUInt();
-            stage.rilsync.Send(ril);
         }
     }
 }

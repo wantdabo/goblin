@@ -10,17 +10,13 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 标签翻译器
     /// </summary>
-    public class TagTranslator : Translator<TagInfo>
+    public class TagTranslator : Translator<TagInfo, RIL_TAG>
     {
-        protected override void OnRIL(TagInfo info, int hashcode)
-        {
-            if (stage.rilsync.Query(info.id, RIL_DEFINE.TAG).Equals(hashcode)) return;
-            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.TAG, hashcode);
+        protected override ushort id => RIL_DEFINE.TAG;
 
-            var ril = ObjectCache.Get<RIL_TAG>();
-            ril.Ready(info.id, hashcode);
+        protected override void OnRIL(TagInfo info, RIL_TAG ril)
+        {
             foreach (var tag in info.tags) ril.tags.Add(tag.Key, tag.Value);
-            stage.rilsync.Send(ril);
         }
     }
 }

@@ -9,19 +9,15 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 空间信息翻译器
     /// </summary>
-    public class SpatialTranslator : Translator<SpatialInfo>
+    public class SpatialTranslator : Translator<SpatialInfo, RIL_SPATIAL>
     {
-        protected override void OnRIL(SpatialInfo info, int hashcode)
-        {
-            if (stage.rilsync.Query(info.id, RIL_DEFINE.SPATIAL).Equals(hashcode)) return;
-            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.SPATIAL, hashcode);
+        protected override ushort id => RIL_DEFINE.SPATIAL;
 
-            var ril = ObjectCache.Get<RIL_SPATIAL>();
-            ril.Ready(info.id, hashcode);
+        protected override void OnRIL(SpatialInfo info, RIL_SPATIAL ril)
+        {
             ril.position = info.position;
             ril.euler = info.euler;
             ril.scale = info.scale;
-            stage.rilsync.Send(ril);
         }
     }
 }

@@ -9,20 +9,16 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 属性信息翻译器
     /// </summary>
-    public class AttributeTranslator : Translator<AttributeInfo>
+    public class AttributeTranslator : Translator<AttributeInfo, RIL_ATTRIBUTE>
     {
-        protected override void OnRIL(AttributeInfo info, int hashcode)
+        protected override ushort id => RIL_DEFINE.ATTRIBUTE;
+
+        protected override void OnRIL(AttributeInfo info, RIL_ATTRIBUTE ril)
         {
-            if (stage.rilsync.Query(info.id, RIL_DEFINE.ATTRIBUTE).Equals(hashcode)) return;
-            stage.rilsync.CacheHashCode(info.id, RIL_DEFINE.ATTRIBUTE, hashcode);
-            
-            var ril = ObjectCache.Get<RIL_ATTRIBUTE>();
-            ril.Ready(info.id, hashcode);
             ril.hp = info.hp;
             ril.maxhp = info.maxhp;
             ril.movespeed = info.movespeed;
             ril.attack = info.attack;
-            stage.rilsync.Send(ril);
         }
     }
 }
