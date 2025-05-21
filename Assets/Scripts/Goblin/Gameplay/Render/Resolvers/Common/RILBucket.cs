@@ -38,6 +38,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// 渲染状态集合
         /// </summary>
         private Dictionary<ulong, Dictionary<Type, IRIL>> rildict { get; set; }
+        /// <summary>
+        /// Agent 赋能集合
+        /// </summary>
         private Dictionary<ushort, List<AgentEnchant>> enchantdict { get; set; }
 
         protected override void OnCreate()
@@ -55,7 +58,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             base.OnDestroy();
             LossAllRIL();
             ObjectCache.Set(rildict);
-            
+
+            foreach (var kv in enchantdict)
+            {
+                kv.Value.Clear();
+                ObjectCache.Set(kv.Value);
+            }
             enchantdict.Clear();
             ObjectCache.Set(enchantdict);
         }
