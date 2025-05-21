@@ -61,7 +61,7 @@ namespace Goblin.Gameplay.Logic.RIL
 
         public override string ToString()
         {
-            return $"RIL_SYNOPSIS: frame={frame}, actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
+            return $"RIL_STAGE: frame={frame}, actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";
         }
     }
 }

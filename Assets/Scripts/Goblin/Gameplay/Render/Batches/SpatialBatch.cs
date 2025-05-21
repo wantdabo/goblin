@@ -50,7 +50,7 @@ namespace Goblin.Gameplay.Render.Batches
         protected override void OnCreate()
         {
             base.OnCreate();
-            // 初始化 Jobs 相关数据, Transform 数组大小为 5 (如果超过，将会分批次，上限 20)
+            // 初始化 Jobs 相关数据, Transform 数组大小为 1000 (如果超过，将会分批次，上限 1000)
             transforms = new Transform[1000];
             transformaccess = new TransformAccessArray(transforms);
             positions = new NativeArray<float3>(transforms.Length, Allocator.TempJob);

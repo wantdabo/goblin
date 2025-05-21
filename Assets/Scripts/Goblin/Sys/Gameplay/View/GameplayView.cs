@@ -87,6 +87,7 @@ namespace Goblin.Sys.Gameplay.View
                 engine.gameui.Open<LobbyView>();
                 engine.proxy.gameplay.director.StopGame();
                 engine.proxy.gameplay.director.DestroyGame();
+                engine.proxy.gameplay.UnLoad();
             });
         }
 
