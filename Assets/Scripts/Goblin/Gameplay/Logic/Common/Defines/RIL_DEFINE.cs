@@ -6,6 +6,15 @@
     public class RIL_DEFINE
     {
         /// <summary>
+        /// RIL 删除
+        /// </summary>
+        public const byte DIFF_DEL = 0;
+        /// <summary>
+        /// RIL 增加
+        /// </summary>
+        public const byte DIFF_NEW = 1;
+        
+        /// <summary>
         /// STAGE 场景指令
         /// </summary>
         public const ushort STAGE = 0;

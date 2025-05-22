@@ -183,7 +183,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// 设置状态
         /// </summary>
         /// <param name="ril"></param>
-        /// <typeparam name="T">数据状态</typeparam>
         public void SetRIL(IRIL ril)
         {
             // 渲染状态
