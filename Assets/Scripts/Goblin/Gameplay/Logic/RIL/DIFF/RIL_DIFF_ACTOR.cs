@@ -6,31 +6,25 @@ using Goblin.Gameplay.Logic.RIL.Common;
 namespace Goblin.Gameplay.Logic.RIL.DIFF
 {
     /// <summary>
-    /// 标签渲染指令差值
+    /// Actor 渲染指令差值
     /// </summary>
-    public class RIL_DIFF_TAG : IRIL_DIFF
+    public class RIL_DIFF_ACTOR : IRIL_DIFF
     {
-        public override ushort id => RIL_DEFINE.TAG;
+        public override ushort id => RIL_DEFINE.ACTOR;
         
         /// <summary>
-        /// 标签的键
+        /// ActorID
         /// </summary>
-        public ushort key { get; set; }
-        /// <summary>
-        /// 标签的值
-        /// </summary>
-        public int value { get; set; }
+        public ulong target { get; set; }
         
         protected override void OnReady()
         {
-            key = 0;
-            value = 0;
+            target = 0;
         }
 
         protected override void OnReset()
         {
-            key = 0;
-            value = 0;
+            target = 0;
         }
 
         public override byte[] Serialize()

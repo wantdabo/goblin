@@ -205,6 +205,23 @@ namespace Goblin.Gameplay.Render.Core
         }
 
         /// <summary>
+        /// 移除 Agents
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        public void RmvAgent(ulong actor)
+        {
+            var agentdict = GetAgents(actor);
+            if (null == agentdict) return;
+            
+            var agents = ObjectPool.Ensure<List<Agent>>();
+            foreach (var kv in agentdict) agents.Add(kv.Value);
+            foreach (var agent in agents) RmvAgent(agent);
+            
+            agents.Clear();
+            ObjectPool.Set(agents);
+        }
+
+        /// <summary>
         /// 移除 Agent
         /// </summary>
         /// <param name="agent">Agent</param>

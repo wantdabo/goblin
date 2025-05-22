@@ -42,5 +42,9 @@
         /// ATTRIBUTE 属性指令
         /// </summary>
         public const ushort ATTRIBUTE = 6;
+        /// <summary>
+        /// ACTOR 单位指令
+        /// </summary>
+        public const ushort ACTOR = 7;
     }
 }

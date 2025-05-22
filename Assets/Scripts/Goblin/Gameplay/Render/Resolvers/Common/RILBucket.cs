@@ -60,6 +60,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             
             rildict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
             rilidsdict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
+            Cross();
             Enchants();
         }
 
@@ -108,6 +109,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             }
             
             Cross<TagCross>(RIL_DEFINE.TAG);
+            Cross<ActorsCross>(RIL_DEFINE.ACTOR);
         }
 
         /// <summary>
@@ -249,10 +251,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 switch (diff.token)
                 {
                     case RIL_DEFINE.DIFF_DEL:
-                        cross.HasDels(ril, diff);
+                        cross.HasDel(ril, diff);
                         break;
                     case RIL_DEFINE.DIFF_NEW:
-                        cross.HasNews(ril, diff);
+                        cross.HasNew(ril, diff);
                         break;
                 }
             }

@@ -24,7 +24,8 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         public Translator Load(Stage stage)
         {
             this.stage = stage;
-
+            OnLoad();
+            
             return this;
         }
 
@@ -33,6 +34,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// </summary>
         public void Unload()
         {
+            OnUnload();
             stage = null;
         }
 
@@ -82,11 +84,10 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// 计算哈希值
         /// </summary>
         /// <param name="info">BehaviorInfo</param>
-        /// <param name="hashcode">BehaviorInfo 哈希值</param>
         /// <returns>BehaviorInfo 哈希值</returns>
-        protected virtual int CalcHashCode(T info, int hashcode)
+        protected virtual int OnCalcHashCode(T info)
         {
-            return hashcode;
+            return info.GetHashCode();
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <returns>(diffed : 是否有差异, hashcode : 哈希值)</returns>
         protected (bool diffed, int hashcode) CacheHashCode(BehaviorInfo info)
         {
-            int hashcode = CalcHashCode(info as T, info.GetHashCode());
+            int hashcode = OnCalcHashCode(info as T);
             if (stage.rilsync.Query(info.id, id).Equals(hashcode)) return (false, hashcode);
             stage.rilsync.CacheHashCode(info.id, id, hashcode);
 
@@ -133,60 +134,5 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <param name="info">BehaviorInfo</param>
         /// <param name="ril">渲染指令</param>
         protected abstract void OnRIL(T info, E ril);
-    }
-
-    /// <summary>
-    /// 渲染指令翻译器
-    /// </summary>
-    /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-    /// <typeparam name="E">RIL 类型</typeparam>
-    /// <typeparam name="D">RIL_DIFF 类型</typeparam>
-    public abstract class Translator<T, E, D> : Translator<T, E> where T : BehaviorInfo where E : IRIL, new() where D : IRIL_DIFF, new()
-    {
-        protected override void OnRIL(BehaviorInfo info)
-        {
-            var result = CacheHashCode(info);
-            if (false == result.diffed) return;
-            
-            var deldiff = RILCache.Ensure<D>();
-            var newdiff = RILCache.Ensure<D>();
-            deldiff.Ready(info.id, RIL_DEFINE.DIFF_DEL);
-            newdiff.Ready(info.id, RIL_DEFINE.DIFF_NEW);
-            
-            // Diff 检查
-            var diff = OnDiff(info as T, deldiff, newdiff);
-            if (diff.deldiff) 
-            {
-                stage.rilsync.Send(deldiff);
-            }
-            else
-            {
-                deldiff.Reset();
-                RILCache.Set(deldiff);
-            }
-
-            if (diff.newdiff)
-            {
-                stage.rilsync.Send(newdiff);
-            }
-            else
-            {
-                newdiff.Reset();
-                RILCache.Set(newdiff);
-            }
-
-            if (diff.deldiff || diff.newdiff) return;
-            
-            GenRIL(info, result.hashcode);
-        }
-
-        /// <summary>
-        /// 渲染指令 Diff 检查
-        /// </summary>
-        /// <param name="info">BehaviorInfo</param>
-        /// <param name="deldiff">RIL 移除的</param>
-        /// <param name="newdiff">RIL 新增的</param>
-        /// <returns>(DEL, YES/NO, NEW, YES/NO)</returns>
-        protected abstract (bool deldiff, bool newdiff) OnDiff(T info, D deldiff, D newdiff);
     }
 }

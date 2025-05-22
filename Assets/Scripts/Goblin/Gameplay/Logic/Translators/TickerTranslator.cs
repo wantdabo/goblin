@@ -13,10 +13,10 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         protected override ushort id => RIL_DEFINE.TICKER;
 
-        protected override int CalcHashCode(TickerInfo info, int hashcode)
+        protected override int OnCalcHashCode(TickerInfo info)
         {
             // ticker.timescale 依赖 stage.timescale
-            return hashcode * 31 + stage.timescale.GetHashCode();
+            return base.OnCalcHashCode(info) * 31 + stage.timescale.GetHashCode();
         }
 
         protected override void OnRIL(TickerInfo info, RIL_TICKER ril)

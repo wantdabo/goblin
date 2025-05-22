@@ -3,34 +3,29 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 
-namespace Goblin.Gameplay.Logic.RIL.DIFF
+namespace Goblin.Gameplay.Logic.RIL
 {
     /// <summary>
-    /// 标签渲染指令差值
+    /// Actors 渲染指令
     /// </summary>
-    public class RIL_DIFF_TAG : IRIL_DIFF
+    public class RIL_ACTORS : IRIL
     {
-        public override ushort id => RIL_DEFINE.TAG;
+        public override ushort id => RIL_DEFINE.ACTOR;
         
         /// <summary>
-        /// 标签的键
+        /// Actor 列表
         /// </summary>
-        public ushort key { get; set; }
-        /// <summary>
-        /// 标签的值
-        /// </summary>
-        public int value { get; set; }
+        public List<ulong> actors { get; set; }
         
         protected override void OnReady()
         {
-            key = 0;
-            value = 0;
+            actors = RILCache.Ensure<List<ulong>>();
         }
 
         protected override void OnReset()
         {
-            key = 0;
-            value = 0;
+            actors.Clear();
+            RILCache.Set(actors);
         }
 
         public override byte[] Serialize()

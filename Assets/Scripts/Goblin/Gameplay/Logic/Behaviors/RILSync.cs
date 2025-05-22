@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// RIL 翻译器集合
         /// </summary>
-        private Dictionary<Type, Translator> translators { get; set; }
+        private Dictionary<Type, List<Translator>> translatordict { get; set; }
         /// <summary>
         /// 渲染指令的哈希值缓存
         /// </summary>
@@ -29,13 +29,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
+            translatordict = ObjectCache.Ensure<Dictionary<Type, List<Translator>>>();
             void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
             {
+                var type = typeof(E);
+                if (false == translatordict.TryGetValue(type, out var translators)) translatordict.Add(type, translators = ObjectCache.Ensure<List<Translator>>());
                 var translator = ObjectCache.Ensure<T>();
-                translators.Add(typeof(E), translator.Load(stage));
+                translators.Add(translator.Load(stage));
             }
             
-            translators = ObjectCache.Ensure<Dictionary<Type, Translator>>();
             Translator<StageTranslator, StageInfo>();
             Translator<TickerTranslator, TickerInfo>();
             Translator<SeatTranslator, SeatInfo>();
@@ -43,6 +45,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Translator<AttributeTranslator, AttributeInfo>();
             Translator<SpatialTranslator, SpatialInfo>();
             Translator<StateMachineTranslator, StateMachineInfo>();
+            Translator<ActorTranslator, StageInfo>();
             
             hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();
         }
@@ -50,13 +53,19 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
-            foreach (var translator in translators.Values)
+            foreach (var list in translatordict.Values)
             {
-                translator.Unload();
-                ObjectCache.Set(translator);
+                foreach (var translator in list)
+                {
+                    translator.Unload();
+                    ObjectCache.Set(translator);
+                }
+                
+                list.Clear();
+                ObjectCache.Set(list);
             }
-            translators.Clear();
-            ObjectCache.Set(translators);
+            translatordict.Clear();
+            ObjectCache.Set(translatordict);
             
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
@@ -115,17 +124,23 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
             // 先处理StageInfo（通常需要在其他翻译之前完成）
-            if (translators.TryGetValue(typeof(StageInfo), out var translator)) translator.Translate(info);
-    
-            // 并行处理各种类型的行为信息
-            Parallel.ForEach(info.behaviorinfos, kv => 
+            if (translatordict.TryGetValue(typeof(StageInfo), out var translators))
             {
-                if (translators.TryGetValue(kv.Key, out var translator))
+                foreach (var translator in translators) translator.Translate(info);
+            }
+
+            // 并行处理各种类型的行为信息
+            Parallel.ForEach(info.behaviorinfos, kv =>
+            {
+                if (translatordict.TryGetValue(kv.Key, out var translators))
                 {
-                    // 对每个类型的所有行为信息进行处理
-                    foreach (var behaviorinfo in kv.Value)
+                    foreach (var translator in translators)
                     {
-                        translator.Translate(behaviorinfo);
+                        // 对每个类型的所有行为信息进行处理
+                        foreach (var behaviorinfo in kv.Value)
+                        {
+                            translator.Translate(behaviorinfo);
+                        }
                     }
                 }
             });

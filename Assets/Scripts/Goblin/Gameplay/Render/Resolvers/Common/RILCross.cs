@@ -30,7 +30,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         /// <param name="ril">数据状态</param>
         /// <param name="diff">移除的数据状态</param>
-        public virtual void HasDels(IRIL ril, IRIL_DIFF diff)
+        public virtual void HasDel(IRIL ril, IRIL_DIFF diff)
         {
             
         }
@@ -40,7 +40,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         /// <param name="ril">数据状态</param>
         /// <param name="diff">新增的数据状态</param>
-        public virtual void HasNews(IRIL ril, IRIL_DIFF diff)
+        public virtual void HasNew(IRIL ril, IRIL_DIFF diff)
         {
             
         }
@@ -53,16 +53,15 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
     /// <typeparam name="E">差异的数据状态类型</typeparam>
     public abstract class RILCross<T, E> : RILCross where T : IRIL where E : IRIL_DIFF
     {
-        public override void HasDels(IRIL ril, IRIL_DIFF diff)
+        /// <summary>
+        /// 合并移除的数据状态
+        /// </summary>
+        /// <param name="ril">数据状态</param>
+        /// <param name="diff">移除的数据状态</param>
+        public override void HasDel(IRIL ril, IRIL_DIFF diff)
         {
-            base.HasDels(ril, diff);
-            OnHasDels(ril as T, diff as E);
-        }
-
-        public override void HasNews(IRIL ril, IRIL_DIFF diff)
-        {
-            base.HasNews(ril, diff);
-            OnHasNews(ril as T, diff as E);
+            base.HasDel(ril, diff);
+            OnHasDel(ril as T, diff as E);
         }
 
         /// <summary>
@@ -70,12 +69,23 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         /// <param name="ril">数据状态</param>
         /// <param name="diff">新增的数据状态</param>
-        protected abstract void OnHasDels(T ril, E diff);
+        public override void HasNew(IRIL ril, IRIL_DIFF diff)
+        {
+            base.HasNew(ril, diff);
+            OnHasNew(ril as T, diff as E);
+        }
+
+        /// <summary>
+        /// 合并新增的数据状态
+        /// </summary>
+        /// <param name="ril">数据状态</param>
+        /// <param name="diff">新增的数据状态</param>
+        protected abstract void OnHasDel(T ril, E diff);
         /// <summary>
         /// 合并移除的数据状态
         /// </summary>
         /// <param name="ril">数据状态</param>
         /// <param name="diff">移除的数据状态</param>
-        protected abstract void OnHasNews(T ril, E diff);
+        protected abstract void OnHasNew(T ril, E diff);
     }
 }

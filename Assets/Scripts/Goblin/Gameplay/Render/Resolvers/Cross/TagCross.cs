@@ -10,21 +10,15 @@ namespace Goblin.Gameplay.Render.Resolvers.Cross
     /// </summary>
     public class TagCross : RILCross<RIL_TAG, RIL_DIFF_TAG>
     {
-        protected override void OnHasDels(RIL_TAG ril, RIL_DIFF_TAG diff)
+        protected override void OnHasDel(RIL_TAG ril, RIL_DIFF_TAG diff)
         {
-            foreach (var tag in diff.tags)
-            {
-                ril.tags.Remove(tag.Key);
-            }
+            ril.tags.Remove(diff.key);
         }
 
-        protected override void OnHasNews(RIL_TAG ril, RIL_DIFF_TAG diff)
+        protected override void OnHasNew(RIL_TAG ril, RIL_DIFF_TAG diff)
         {
-            foreach (var tag in diff.tags)
-            {
-                if (ril.tags.ContainsKey(tag.Key)) ril.tags.Remove(tag.Key);
-                ril.tags.Add(tag.Key, tag.Value);
-            }
+            if (ril.tags.ContainsKey(diff.key)) ril.tags.Remove(diff.key);
+            ril.tags.Add(diff.key, diff.value);
         }
     }
 }
