@@ -47,6 +47,10 @@ namespace Goblin.Gameplay.Director
         /// RIL 队列
         /// </summary>
         private readonly Queue<IRIL> rilqueue = new();
+        /// <summary>
+        /// RIL_DIFF 队列
+        /// </summary>
+        private readonly Queue<IRIL_DIFF> diffqueue = new();
 
         protected override void OnCreateGame()
         {
@@ -54,6 +58,8 @@ namespace Goblin.Gameplay.Director
             stage = new Stage().Initialize(data.sdata);
             // 监听 RIL 渲染状态
             stage.onril += OnRIL;
+            // 监听 RIL_DIFF 渲染状态
+            stage.ondiff += OnDiff;
         }
 
         protected override void OnDestroyGame()
@@ -62,6 +68,8 @@ namespace Goblin.Gameplay.Director
             stage.Dispose();
             // 取消监听 RIL 渲染状态
             stage.onril -= OnRIL;
+            // 取消监听 RIL_DIFF 渲染状态
+            stage.ondiff -= OnDiff;
         }
 
         protected override void OnStartGame() => stage.Start();
@@ -111,6 +119,18 @@ namespace Goblin.Gameplay.Director
             lock (@lock)
             {
                 rilqueue.Enqueue(ril);
+            }
+        }
+
+        /// <summary>
+        /// 处理 RIL_DIFF 渲染状态
+        /// </summary>
+        /// <param name="diff">差异状态</param>
+        private void OnDiff(IRIL_DIFF diff)
+        {
+            lock (@lock)
+            {
+                diffqueue.Enqueue(diff);
             }
         }
     }

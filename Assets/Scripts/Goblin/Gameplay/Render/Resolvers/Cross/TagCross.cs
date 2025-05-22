@@ -12,12 +12,19 @@ namespace Goblin.Gameplay.Render.Resolvers.Cross
     {
         protected override void OnHasDels(RIL_TAG ril, RIL_DIFF_TAG diff)
         {
-            throw new System.NotImplementedException();
+            foreach (var tag in diff.tags)
+            {
+                ril.tags.Remove(tag.Key);
+            }
         }
 
         protected override void OnHasNews(RIL_TAG ril, RIL_DIFF_TAG diff)
         {
-            throw new System.NotImplementedException();
+            foreach (var tag in diff.tags)
+            {
+                if (ril.tags.ContainsKey(tag.Key)) ril.tags.Remove(tag.Key);
+                ril.tags.Add(tag.Key, tag.Value);
+            }
         }
     }
 }
