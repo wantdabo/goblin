@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Flows.Checkers
     {
         protected override bool OnCheck(TestCondi condition, FlowInfo flowinfo)
         {
-            return true;
+            return stage.timescale * 1000 > condition.timescale;
         }
     }
 }
