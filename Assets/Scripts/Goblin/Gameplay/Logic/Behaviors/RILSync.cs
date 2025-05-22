@@ -64,8 +64,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="ril">渲染指令</param>
         public void Send(IRIL ril)
         {
-            // 产生渲染状态
+            // 发送渲染指令
             stage.onril?.Invoke(ril);
+        }
+
+        /// <summary>
+        /// 发送差异渲染指令
+        /// </summary>
+        /// <param name="diff">差异指令</param>
+        public void Send(IRIL_DIFF diff)
+        {
+            // 发送差异渲染指令
+            stage.ondiff?.Invoke(diff);
         }
 
         /// <summary>

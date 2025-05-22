@@ -103,6 +103,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// 对外暴露抛出 RIL 的事件
         /// </summary>
         public Action<IRIL> onril { get; set; }
+        /// <summary>
+        /// 对外暴露抛出 RIL_DIFF 的事件
+        /// </summary>
+        public Action<IRIL_DIFF> ondiff { get; set; }
 
         /// <summary>
         /// 初始化 Stage

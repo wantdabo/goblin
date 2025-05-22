@@ -6,6 +6,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
+using Goblin.Gameplay.Render.Resolvers.Cross;
 using Goblin.Gameplay.Render.Resolvers.Enchants;
 
 namespace Goblin.Gameplay.Render.Resolvers.Common
@@ -39,6 +40,14 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private Dictionary<ulong, Dictionary<Type, IRIL>> rildict { get; set; }
         /// <summary>
+        /// 渲染状态集合
+        /// </summary>
+        private Dictionary<ulong, Dictionary<ushort, IRIL>> rilidsdict { get; set; }
+        /// <summary>
+        /// 渲染状态交叉集合
+        /// </summary>
+        private Dictionary<ushort, RILCross> crossdict { get; set; }
+        /// <summary>
         /// Agent 赋能集合
         /// </summary>
         private Dictionary<ushort, List<AgentEnchant>> enchantdict { get; set; }
@@ -50,6 +59,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             eventor.Create();
             
             rildict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
+            rilidsdict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
             Enchants();
         }
 
@@ -58,6 +68,10 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             base.OnDestroy();
             LossAllRIL();
             ObjectPool.Set(rildict);
+            ObjectPool.Set(rilidsdict);
+            
+            crossdict.Clear();
+            ObjectPool.Set(crossdict);
 
             foreach (var kv in enchantdict)
             {
@@ -78,6 +92,22 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             this.world = world;
 
             return this;
+        }
+
+        /// <summary>
+        /// 初始化 RIL 合并器
+        /// </summary>
+        private void Cross()
+        {
+            crossdict = ObjectPool.Ensure<Dictionary<ushort, RILCross>>();
+            void Cross<T>(ushort id) where T : RILCross, new()
+            {
+                var cross = AddComp<T>().Initialize(this);
+                cross.Create();
+                crossdict.Add(id, cross);
+            }
+            
+            Cross<TagCross>(RIL_DEFINE.TAG);
         }
 
         /// <summary>
@@ -110,6 +140,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 ObjectPool.Set(rils);
             }
             rildict.Clear();
+            rilidsdict.Clear();
         }
 
         /// <summary>
@@ -135,6 +166,20 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         public bool SeekRIL<T>(ulong actor, out T ril) where T : IRIL
         {
             ril = GetRIL<T>(actor);
+            
+            return null != ril;
+        }
+
+        /// <summary>
+        /// 获取状态
+        /// </summary>
+        /// <param name="id">RIL ID</param>
+        /// <param name="actor">ActorID</param>
+        /// <param name="ril">数据状态</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekRIL(ushort id, ulong actor, out IRIL ril)
+        {
+            ril = GetRIL(id, actor);
             
             return null != ril;
         }
@@ -180,14 +225,52 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         }
 
         /// <summary>
+        /// 获取状态
+        /// </summary>
+        /// <param name="id">RIL ID</param>
+        /// <param name="actor">ActorID</param>
+        /// <returns name="ril">数据状态</returns>
+        public IRIL GetRIL(ushort id, ulong actor)
+        {
+            if (false == rilidsdict.TryGetValue(actor, out var dict)) return default;
+            if (false == dict.TryGetValue(id, out var result)) return default;
+            
+            return result;
+        }
+
+        /// <summary>
+        /// 合并状态
+        /// </summary>
+        /// <param name="diff">状态差异</param>
+        public void CrossRIL(IRIL_DIFF diff)
+        {
+            if (false == SeekRIL(diff.id, diff.actor, out var ril) && false == crossdict.TryGetValue(diff.id, out var cross))
+            {
+                switch (diff.token)
+                {
+                    case RIL_DEFINE.DIFF_DEL:
+                        cross.HasDels(ril, diff);
+                        break;
+                    case RIL_DEFINE.DIFF_NEW:
+                        cross.HasNews(ril, diff);
+                        break;
+                }
+            }
+
+            diff.Reset();
+            RILCache.Set(diff);
+        }
+
+        /// <summary>
         /// 设置状态
         /// </summary>
-        /// <param name="ril"></param>
+        /// <param name="ril">渲染状态</param>
         public void SetRIL(IRIL ril)
         {
             // 渲染状态
             var type = ril.GetType();
             if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectPool.Ensure<Dictionary<Type, IRIL>>());
+            if (false == rilidsdict.TryGetValue(ril.actor, out var iddict)) rilidsdict.Add(ril.actor, iddict = ObjectPool.Ensure<Dictionary<ushort, IRIL>>());
             if (dict.TryGetValue(type, out var oldril))
             {
                 if (ril.hashcode.Equals(oldril.hashcode))
@@ -200,9 +283,11 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 oldril.Reset();
                 RILCache.Set(oldril);
                 dict.Remove(type);
+                iddict.Remove(ril.id);
             }
             
             dict.Add(type, ril);
+            iddict.Add(ril.id, ril);
             eventor.Tell(new RILEvent { ril = ril });
             RILDispatch(ril);
         }

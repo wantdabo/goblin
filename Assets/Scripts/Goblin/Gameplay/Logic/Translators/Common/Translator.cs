@@ -155,9 +155,9 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             
             // Diff 检查
             var diff = OnDiff(info as T, deldiff, newdiff);
-            if (diff.deldiff)
+            if (diff.deldiff) 
             {
-                // TODO 发送 DEL_DIFF
+                stage.rilsync.Send(deldiff);
             }
             else
             {
@@ -167,7 +167,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
 
             if (diff.newdiff)
             {
-                // TODO 发送 NEW_DIFF
+                stage.rilsync.Send(newdiff);
             }
             else
             {
