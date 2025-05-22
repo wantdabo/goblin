@@ -96,6 +96,7 @@ namespace Goblin.Gameplay.Director
             {
                 // 发送 RIL 渲染状态
                 while (rilqueue.Count > 0) world.rilbucket.SetRIL(rilqueue.Dequeue());
+                while (diffqueue.Count > 0) world.rilbucket.CrossRIL(diffqueue.Dequeue());
             }
         }
 

@@ -138,7 +138,6 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Flow>(sa);
             AddBehavior<SkillTrigger>(sa);
             AddBehavior<RILSync>(sa);
-            AddBehavior<Translate>(sa);
             
             // 添加预制创建器
             Prefabs();
@@ -223,7 +222,7 @@ namespace Goblin.Gameplay.Logic.Core
                 }
             }
 
-            rilsync.RefreshRILS();
+            rilsync.Execute();
         }
 
         /// <summary>

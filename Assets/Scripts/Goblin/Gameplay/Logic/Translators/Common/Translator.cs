@@ -180,6 +180,13 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             GenRIL(info, result.hashcode);
         }
 
+        /// <summary>
+        /// 渲染指令 Diff 检查
+        /// </summary>
+        /// <param name="info">BehaviorInfo</param>
+        /// <param name="deldiff">RIL 移除的</param>
+        /// <param name="newdiff">RIL 新增的</param>
+        /// <returns>(DEL, YES/NO, NEW, YES/NO)</returns>
         protected abstract (bool deldiff, bool newdiff) OnDiff(T info, D deldiff, D newdiff);
     }
 }

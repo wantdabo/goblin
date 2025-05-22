@@ -24,7 +24,6 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Bullet),
             typeof(TestAIMove),
             typeof(RILSync),
-            typeof(Translate),
         };
     }
 }
