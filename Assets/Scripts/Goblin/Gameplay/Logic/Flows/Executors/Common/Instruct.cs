@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
     /// <summary>
     /// 管线指令
     /// </summary>
-    public class Instruct
+    public sealed class Instruct
     {
         /// <summary>
         /// 区间开始
