@@ -238,12 +238,12 @@ namespace Goblin.Gameplay.Behaviors
         /// </summary>
         private void Checkers()
         {
+            checkers = ObjectCache.Ensure<Dictionary<ushort, Checker>>();
             void Checker<T>(ushort id) where T : Checker, new()
             {
                 checkers.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            checkers = ObjectCache.Ensure<Dictionary<ushort, Checker>>();
             Checker<TestChecker>(CONDITION_DEFINE.TEST);
         }
 
@@ -252,12 +252,12 @@ namespace Goblin.Gameplay.Behaviors
         /// </summary>
         private void Executors()
         {
+            executors = ObjectCache.Ensure<Dictionary<ushort, Executor>>();
             void Executor<T>(ushort id) where T : Executor, new()
             {
                 executors.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            executors = ObjectCache.Ensure<Dictionary<ushort, Executor>>();
             Executor<TestExecutor>(INSTR_DEFINE.TEST);
         }
     }
