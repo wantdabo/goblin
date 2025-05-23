@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// Actors 渲染指令
     /// </summary>
-    public class RIL_ACTORS : IRIL
+    public class RIL_ACTOR : IRIL
     {
         public override ushort id => RIL_DEFINE.ACTOR;
         
@@ -26,11 +26,6 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             actors.Clear();
             RILCache.Set(actors);
-        }
-
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

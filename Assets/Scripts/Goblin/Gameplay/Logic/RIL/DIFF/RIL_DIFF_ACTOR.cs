@@ -27,9 +27,10 @@ namespace Goblin.Gameplay.Logic.RIL.DIFF
             target = 0;
         }
 
-        public override byte[] Serialize()
+        protected override void OnClone(IRIL_DIFF clone)
         {
-            throw new System.NotImplementedException();
+            if (clone is not RIL_DIFF_ACTOR diff) return;
+            diff.target = target;
         }
     }
 }

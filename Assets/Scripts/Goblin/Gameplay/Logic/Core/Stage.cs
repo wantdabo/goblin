@@ -10,6 +10,7 @@ using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Logic.RIL.DIFF;
 using Kowtow.Math;
 using Config = Goblin.Gameplay.Logic.Behaviors.Config;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
@@ -471,6 +472,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
             
+            DiffActor(id, RIL_DEFINE.DIFF_DEL);
             
             seat.Standup(id);
         }
@@ -484,9 +486,11 @@ namespace Goblin.Gameplay.Logic.Core
             // 生成一个 Actor
             var actor = AddActor(++info.increment);
             
+            DiffActor(actor.id, RIL_DEFINE.DIFF_NEW);
+            
             return actor;
         }
-        
+
         /// <summary>
         /// 添加 Actor
         /// </summary>
@@ -829,6 +833,19 @@ namespace Goblin.Gameplay.Logic.Core
                 // 入座
                 seat.Sitdown(player.seat, hero.id);
             }
+        }
+        
+        /// <summary>
+        /// Actor 差异
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="token">RIL 差异标记</param>
+        private void DiffActor(ulong id, byte token)
+        {
+            var diff = ObjectCache.Ensure<RIL_DIFF_ACTOR>();
+            diff.Ready(sa, token);
+            diff.target = id;
+            rilsync.Send(diff);
         }
         
         /// <summary>

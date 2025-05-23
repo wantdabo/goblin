@@ -27,11 +27,6 @@ namespace Goblin.Gameplay.Logic.RIL
             tags.Clear();
             RILCache.Set(tags);
         }
-
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
         
         public override string ToString()
         {

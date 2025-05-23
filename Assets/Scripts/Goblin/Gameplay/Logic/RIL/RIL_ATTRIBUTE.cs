@@ -43,11 +43,6 @@ namespace Goblin.Gameplay.Logic.RIL
             attack = 0;
         }
 
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string ToString()
         {
             return $"RIL_ATTRIBUTE: hp={hp}, maxhp={maxhp}, movespeed={movespeed}, attack={attack}";

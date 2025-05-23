@@ -28,11 +28,6 @@ namespace Goblin.Gameplay.Logic.RIL
             RILCache.Set(seatdict);
         }
 
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
-        
         public override string ToString()
         {
             if (null == seatdict) return "RIL_SEAT: seatdict=null";

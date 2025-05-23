@@ -1,7 +1,7 @@
 namespace Goblin.Gameplay.Logic.RIL.Common
 {
     /// <summary>
-    /// RIL 差值
+    /// RIL 差值, 不允许存在引用 Field, 请使用纯值类型
     /// </summary>
     public abstract class IRIL_DIFF
     {
@@ -41,6 +41,19 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         }
 
         /// <summary>
+        /// 克隆
+        /// </summary>
+        /// <param name="clone">目标</param>
+        /// <returns>目标克隆后</returns>
+        public IRIL_DIFF Clone(IRIL_DIFF clone)
+        {
+            clone.Ready(actor, token);
+            OnClone(clone);
+
+            return clone;
+        }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         protected abstract void OnReady();
@@ -49,9 +62,9 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// </summary>
         protected abstract void OnReset();
         /// <summary>
-        /// 序列化
+        /// 克隆
         /// </summary>
-        /// <returns>二进制</returns>
-        public abstract byte[] Serialize();
+        /// <param name="clone">目标</param>
+        protected abstract void OnClone(IRIL_DIFF clone);
     }
 }

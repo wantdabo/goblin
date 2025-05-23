@@ -11,9 +11,11 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// Actors 渲染指令翻译器
     /// </summary>
-    public class ActorTranslator : Translator<StageInfo, RIL_ACTORS>
+    public class ActorTranslator : Translator<StageInfo, RIL_ACTOR>
     {
         protected override ushort id => RIL_DEFINE.ACTOR;
+
+        protected override bool once => true;
 
         protected override int OnCalcHashCode(StageInfo info)
         {
@@ -26,7 +28,7 @@ namespace Goblin.Gameplay.Logic.Translators
             return hash;
         }
 
-        protected override void OnRIL(StageInfo info, RIL_ACTORS ril)
+        protected override void OnRIL(StageInfo info, RIL_ACTOR ril)
         {
             foreach (var actor in info.actors) ril.actors.Add(actor);
         }

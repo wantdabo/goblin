@@ -109,7 +109,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             }
             
             Cross<TagCross>(RIL_DEFINE.TAG);
-            Cross<ActorsCross>(RIL_DEFINE.ACTOR);
+            Cross<ActorCross>(RIL_DEFINE.ACTOR);
         }
 
         /// <summary>
@@ -244,9 +244,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// 合并状态
         /// </summary>
         /// <param name="diff">状态差异</param>
-        public void CrossRIL(IRIL_DIFF diff)
+        public void SetDiff(IRIL_DIFF diff)
         {
-            if (false == SeekRIL(diff.id, diff.actor, out var ril) && false == crossdict.TryGetValue(diff.id, out var cross))
+            if (SeekRIL(diff.id, diff.actor, out var ril) && crossdict.TryGetValue(diff.id, out var cross))
             {
                 switch (diff.token)
                 {

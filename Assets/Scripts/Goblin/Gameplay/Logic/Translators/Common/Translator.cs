@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -79,7 +80,32 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// 渲染指令 ID
         /// </summary>
         protected abstract ushort id { get; }
-        
+        /// <summary>
+        /// 是否只处理一次
+        /// </summary>
+        protected virtual bool once => false;
+        /// <summary>
+        /// 处理了的 RIL ActorID 列表
+        /// </summary>
+        private List<ulong> rileds { get; set; }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            if (false == once) return;
+            
+            rileds = RILCache.Ensure<List<ulong>>();
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+            if (false == once) return;
+            
+            rileds.Clear();
+            ObjectCache.Set(rileds);
+        }
+
         /// <summary>
         /// 计算哈希值
         /// </summary>
@@ -96,9 +122,17 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <param name="info">BehaviorInfo</param>
         protected override void OnRIL(BehaviorInfo info)
         {
+            // 只处理一次 RIL
+            if (once && rileds.Contains(info.id)) return;
             var result = CacheHashCode(info);
             if (false == result.diffed) return;
-            GenRIL(info, result.hashcode);
+            // 记录已经处理过 RIL 的 ActorID
+            if (once) rileds.Add(info.id);
+            
+            var ril = RILCache.Ensure<E>();
+            ril.Ready(info.id, result.hashcode);
+            OnRIL(info as T, ril);
+            stage.rilsync.Send(ril);
         }
         
         /// <summary>
@@ -115,19 +149,6 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             return (true, hashcode);
         }
         
-        /// <summary>
-        /// 生成渲染指令
-        /// </summary>
-        /// <param name="info">BehaviorInfo</param>
-        /// <param name="hashcode">哈希值</param>
-        protected void GenRIL(BehaviorInfo info, int hashcode)
-        {
-            var ril = RILCache.Ensure<E>();
-            ril.Ready(info.id, hashcode);
-            OnRIL(info as T, ril);
-            stage.rilsync.Send(ril);
-        }
-
         /// <summary>
         /// 渲染指令处理
         /// </summary>

@@ -22,6 +22,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         private Dictionary<Type, List<Translator>> translatordict { get; set; }
         /// <summary>
+        /// 渲染指令差异队列
+        /// </summary>
+        private Queue<IRIL_DIFF> diffqueue { get; set; }
+        /// <summary>
         /// 渲染指令的哈希值缓存
         /// </summary>
         private ConcurrentDictionary<(ulong, ushort), int> hashcodedict { get; set; }
@@ -47,6 +51,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Translator<StateMachineTranslator, StateMachineInfo>();
             Translator<ActorTranslator, StageInfo>();
             
+            diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
             hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();
         }
 
@@ -66,6 +71,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
             translatordict.Clear();
             ObjectCache.Set(translatordict);
+
+            while (diffqueue.TryDequeue(out var diff))
+            {
+                diff.Reset();
+                ObjectCache.Set(diff);
+            }
+            diffqueue.Clear();
             
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
@@ -113,8 +125,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="diff">差异指令</param>
         public void Send(IRIL_DIFF diff)
         {
-            // 发送差异渲染指令
-            stage.ondiff?.Invoke(diff);
+            diffqueue.Enqueue(diff);
         }
 
         /// <summary>
@@ -144,6 +155,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     }
                 }
             });
+
+            // 处理渲染指令差异
+            while (diffqueue.TryDequeue(out var diff))
+            {
+                var clone = diff.Clone(RILCache.Ensure(diff.GetType()) as IRIL_DIFF);
+                diff.Reset();
+                ObjectCache.Set(diff);
+                
+                stage.ondiff?.Invoke(clone);
+            }
         }
 
         protected override void OnEndTick()

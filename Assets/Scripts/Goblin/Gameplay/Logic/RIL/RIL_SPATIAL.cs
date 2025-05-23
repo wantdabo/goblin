@@ -37,11 +37,6 @@ namespace Goblin.Gameplay.Logic.RIL
             scale = FPVector3.one;
         }
 
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string ToString()
         {
             return $"RIL_SPATIAL: position={position}, euler={euler}, scale={scale}";

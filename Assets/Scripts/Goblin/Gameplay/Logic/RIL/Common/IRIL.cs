@@ -50,10 +50,5 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// 重置
         /// </summary>
         protected abstract void OnReset();
-        /// <summary>
-        /// 序列化
-        /// </summary>
-        /// <returns>二进制</returns>
-        public abstract byte[] Serialize();
     }
 }

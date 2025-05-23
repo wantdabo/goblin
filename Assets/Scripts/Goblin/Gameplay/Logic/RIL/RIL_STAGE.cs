@@ -54,11 +54,6 @@ namespace Goblin.Gameplay.Logic.RIL
             snapshotframe = 0;
         }
 
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string ToString()
         {
             return $"RIL_STAGE: frame={frame}, actorcnt={actorcnt}, behaviorcnt={behaviorcnt}, behaviorinfocnt={behaviorinfocnt}, hassnapshot={hassnapshot}, snapshotframe={snapshotframe}";

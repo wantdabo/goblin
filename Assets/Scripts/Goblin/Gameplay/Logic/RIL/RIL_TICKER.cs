@@ -23,11 +23,6 @@ namespace Goblin.Gameplay.Logic.RIL
         {
             timescale = 1;
         }
-
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
         
         public override string ToString()
         {

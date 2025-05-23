@@ -41,12 +41,7 @@ namespace Goblin.Gameplay.Logic.RIL
             frames = 0;
             elapsed = 0;
         }
-
-        public override byte[] Serialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public override string ToString()
         {
             return $"RIL_STATE_MACHINE: current={current}, last={last}, frames={frames}, elapsed={elapsed}";
