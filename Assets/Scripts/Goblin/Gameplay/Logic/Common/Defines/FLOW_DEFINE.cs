@@ -15,8 +15,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         public const ulong OVERFLOW_LENGTH = ulong.MaxValue;
         
         /// <summary>
-        /// 脚本 ID
+        /// 脚本 ID 100000001
         /// </summary>
         public const uint S100000001 = 100000001;
+        /// <summary>
+        /// 脚本 ID 100000002
+        /// </summary>
+        public const uint S100000002 = 100000002;
     }
 }

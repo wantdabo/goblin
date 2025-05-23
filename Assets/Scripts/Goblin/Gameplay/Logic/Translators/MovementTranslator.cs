@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Translators
         
         protected override void OnRIL(MovementInfo info, RIL_MOVEMENT ril)
         {
-            ril.motion = info.motion;
+            ril.motion = info.type;
         }
     }
 }

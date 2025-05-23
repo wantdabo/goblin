@@ -18,6 +18,6 @@ namespace Goblin.Gameplay.Logic.Prefabs.Datas
         /// <summary>
         /// 缩放
         /// </summary>
-        public FPVector3 scale { get; set; }
+        public FP scale { get; set; }
     }
 }

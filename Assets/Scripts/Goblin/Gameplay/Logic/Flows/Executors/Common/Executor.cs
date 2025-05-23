@@ -124,18 +124,26 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// </summary>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnEnter(T data, FlowInfo flowinfo);
+        protected virtual void OnEnter(T data, FlowInfo flowinfo)
+        {
+        }
+
         /// <summary>
         /// 指令执行
         /// </summary>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExecute(T data, FlowInfo flowinfo);
+        protected virtual void OnExecute(T data, FlowInfo flowinfo)
+        {
+        }
+
         /// <summary>
         /// 指令离开
         /// </summary>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExit(T data, FlowInfo flowinfo);
+        protected virtual void OnExit(T data, FlowInfo flowinfo)
+        {
+        }
     }
 }

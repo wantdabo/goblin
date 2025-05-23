@@ -56,7 +56,12 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         private void ShouldBeChange()
         {
-            if (false == world.rilbucket.SeekRIL<RIL_MOVEMENT>(actor, out var ril)) return;
+            if (false == world.rilbucket.SeekRIL<RIL_MOVEMENT>(actor, out var ril))
+            {
+                ChangeStatus(ChaseStatus.Chasing);
+
+                return;
+            }
             
             switch (ril.motion)
             {
@@ -77,7 +82,7 @@ namespace Goblin.Gameplay.Render.Agents
             if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return true;
             return go.transform.position == ril.position.ToVector3() &&
                    go.transform.rotation.eulerAngles == ril.euler.ToVector3() &&
-                   go.transform.localScale == ril.scale.ToVector3();
+                   go.transform.localScale == Vector3.one * ril.scale.AsFloat();
         }
         
         protected override void OnFlash()
@@ -86,7 +91,7 @@ namespace Goblin.Gameplay.Render.Agents
             if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return;
             go.transform.position = ril.position.ToVector3();
             go.transform.rotation = Quaternion.Euler(ril.euler.ToVector3());
-            go.transform.localScale = ril.scale.ToVector3();
+            go.transform.localScale = Vector3.one * ril.scale.AsFloat();
         }
     }
 }

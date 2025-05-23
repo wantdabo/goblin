@@ -6,7 +6,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     public class MOVEMENT_DEFINE
     {
         /// <summary>
-        /// 移动
+        /// 运动
         /// </summary>
         public const byte MOVE = 1;
         /// <summary>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs.Common;
@@ -23,17 +24,17 @@ namespace Goblin.Gameplay.Logic.Prefabs
         /// </summary>
         public FP strength { get; set; }
         /// <summary>
-        /// 子弹的移动速度
+        /// 子弹的速度
         /// </summary>
-        public FP movespeed { get; set; }
-        /// <summary>
-        /// 管线列表
-        /// </summary>
-        public List<uint> pipelines { get; set; }
+        public FP speed { get; set; }
         /// <summary>
         /// 空间信息
         /// </summary>
         public SpatialData spatial { get; set; }
+        /// <summary>
+        /// 管线列表
+        /// </summary>
+        public List<uint> pipelines { get; set; }
     }
 
     /// <summary>
@@ -45,19 +46,24 @@ namespace Goblin.Gameplay.Logic.Prefabs
 
         protected override void OnProcessing(Actor actor, BulletPrefabInfo info)
         {
-            actor.AddBehavior<Bullet>();
-
-            actor.SeekBehaviorInfo(out BulletInfo bullet);
+            var bullet = actor.AddBehaviorInfo<BulletInfo>();
             bullet.owner = info.owner;
-            bullet.flow = stage.flow.GenPipeline(actor.id, info.pipelines).id;
             bullet.strength = info.strength;
-            bullet.moveseepd = info.movespeed;
+            bullet.speed = info.speed;
             bullet.damage = stage.calc.ChargeDamage(bullet.owner, bullet.strength);
             
             var spatial = actor.AddBehaviorInfo<SpatialInfo>();
             spatial.position = info.spatial.position;
             spatial.euler = info.spatial.euler;
             spatial.scale = info.spatial.scale;
+
+            var pipelines = ObjectCache.Ensure<List<uint>>();
+            pipelines.AddRange(info.pipelines);
+            bullet.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
+            
+            // TODO 临时加模型, 记得删除
+            if (false == actor.SeekBehavior(out Tag tag)) return;
+            tag.Set(TAG_DEFINE.MODEL, 200001);
         }
     }
 }

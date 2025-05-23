@@ -6,8 +6,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     public class INSTR_DEFINE
     {
         /// <summary>
-        /// 测试指令
+        /// 生成子弹指令
         /// </summary>
-        public const ushort TEST = 1;
+        public const ushort CREATE_BULLET = 1;
+        /// <summary>
+        /// 子弹运动指令
+        /// </summary>
+        public const ushort BULLET_MOTION = 2;
     }
 }

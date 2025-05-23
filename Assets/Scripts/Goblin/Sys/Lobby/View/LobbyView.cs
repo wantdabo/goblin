@@ -50,7 +50,7 @@ namespace Goblin.Sys.Lobby.View
                             hero = 100001,
                             position = new GPVector3(0, 0, 0),
                             euler = new GPVector3(0, 0, 0),
-                            scale = new GPVector3(1000, 1000, 1000),
+                            scale = 1000,
                         },
                         new GPPlayerData
                         {
@@ -58,7 +58,7 @@ namespace Goblin.Sys.Lobby.View
                             hero = 100001,
                             position = new GPVector3(0, 0, 0),
                             euler = new GPVector3(0, 0, 0),
-                            scale = new GPVector3(1000, 1000, 1000),
+                            scale = 1000,
                         },
                     }
                 };

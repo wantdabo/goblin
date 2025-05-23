@@ -20,7 +20,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 缩放
         /// </summary>
-        public FPVector3 scale { get; set; }
+        public FP scale { get; set; }
 
         protected override void OnReady()
         {
@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;
-            scale = FPVector3.one;
+            scale = FP.One;
         }
 
         protected override BehaviorInfo OnClone()

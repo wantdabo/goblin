@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Behaviors;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
@@ -136,8 +135,9 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
-            AddBehavior<Flow>(sa);
             AddBehavior<SkillTrigger>(sa);
+            AddBehavior<Flow>(sa);
+            AddBehavior<Bullet>(sa);
             AddBehavior<RILSync>(sa);
             
             // 添加预制创建器
@@ -306,9 +306,6 @@ namespace Goblin.Gameplay.Logic.Core
             // 帧号递增 & 时间流逝
             info.frame++;
             info.elapsed += info.tick;
-            
-            // TODO 销毁第二个英雄测试, 请记得删除
-            if (elapsed >= 5) RmvActor(2);
 
             // Tick 驱动
             foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
@@ -829,7 +826,7 @@ namespace Goblin.Gameplay.Logic.Core
                     {
                         position = player.position.ToFPVector3(),
                         euler = player.euler.ToFPVector3(),
-                        scale = player.scale.ToFPVector3(),
+                        scale = player.scale * cfg.int2fp,
                     }
                 });
                 hero.AddBehavior<Gamepad>();

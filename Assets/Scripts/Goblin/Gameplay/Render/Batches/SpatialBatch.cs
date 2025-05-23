@@ -94,7 +94,7 @@ namespace Goblin.Gameplay.Render.Batches
                     tarpositions[index] = ril.position.ToVector3();
                     rotations[index] = Quaternion.Euler(node.go.transform.eulerAngles);
                     tarrotations[index] = Quaternion.Euler(ril.euler.ToVector3());
-                    tarscales[index] = ril.scale.ToVector3();
+                    tarscales[index] = Vector3.one * ril.scale.AsFloat();
                     index++;
                     notreset++;
                 }

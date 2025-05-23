@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors;
 
 namespace Goblin.Gameplay.Logic.Common.Defines
@@ -22,7 +21,6 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(SkillTrigger),
             typeof(SkillLauncher),
             typeof(Bullet),
-            typeof(TestAIMove),
             typeof(RILSync),
         };
     }

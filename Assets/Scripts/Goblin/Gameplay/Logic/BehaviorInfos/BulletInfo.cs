@@ -24,9 +24,9 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public FP strength { get; set; }
         /// <summary>
-        /// 子弹的移动速度
+        /// 子弹的速度
         /// </summary>
-        public FP moveseepd { get; set; }
+        public FP speed { get; set; }
         /// <summary>
         /// 子弹的伤害
         /// </summary>
@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             owner = 0;
             flow = 0;
-            moveseepd = 0;
+            speed = 0;
             damage = default;
         }
 
@@ -51,7 +51,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.Ready(id);
             clone.owner = owner;
             clone.flow = flow;
-            clone.moveseepd = moveseepd;
+            clone.speed = speed;
             clone.damage = damage;
             
             return clone;
@@ -63,7 +63,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             hash = hash * 31 + owner.GetHashCode();
             hash = hash * 31 + flow.GetHashCode();
             hash = hash * 31 + strength.GetHashCode();
-            hash = hash * 31 + moveseepd.GetHashCode();
+            hash = hash * 31 + speed.GetHashCode();
             hash = hash * 31 + damage.GetHashCode();
 
             return hash;

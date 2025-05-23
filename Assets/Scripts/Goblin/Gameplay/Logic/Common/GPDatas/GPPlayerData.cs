@@ -24,6 +24,6 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// <summary>
         /// 缩放
         /// </summary>
-        public GPVector3 scale { get; set; }
+        public int scale { get; set; }
     }
 }

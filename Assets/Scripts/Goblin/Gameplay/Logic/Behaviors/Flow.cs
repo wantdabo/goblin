@@ -13,7 +13,7 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors
 {
     /// <summary>
     /// 管线流
@@ -258,7 +258,8 @@ namespace Goblin.Gameplay.Behaviors
                 executors.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            Executor<TestExecutor>(INSTR_DEFINE.TEST);
+            Executor<CreateBulletExecutor>(INSTR_DEFINE.CREATE_BULLET);
+            Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
         }
     }
 }

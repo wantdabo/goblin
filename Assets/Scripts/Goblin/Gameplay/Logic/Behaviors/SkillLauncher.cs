@@ -74,9 +74,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
             // 创建管线
             info.skill = skill;
-            var pipelines = ObjectCache.Ensure<List<uint>>();
-            foreach (var pipeline in skillinfo.pipelines) pipelines.Add(pipeline);
-            info.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
+            info.flow = stage.flow.GenPipeline(actor.id, skillinfo.pipelines).id;
             info.casting = true;
         }
 

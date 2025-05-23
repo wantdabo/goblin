@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -8,16 +11,35 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// 子弹行为
     /// </summary>
-    public class Bullet : Behavior<BulletInfo>
+    public class Bullet : Behavior
     {
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            if (false == stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo)) return;
-            
-            while (collisioninfo.collisions.TryDequeue(out var target))
+            if (false == stage.SeekBehaviorInfos(out List<BulletInfo> bullets)) return;
+            foreach (var bullet in bullets) Execute(bullet);
+            bullets.Clear();
+            ObjectCache.Set(bullets);
+        }
+
+        /// <summary>
+        /// 执行子弹行为
+        /// </summary>
+        /// <param name="bullet">子弹信息</param>
+        private void Execute(BulletInfo bullet)
+        {
+            if (stage.SeekBehaviorInfo(bullet.flow, out CollisionInfo collisioninfo))
             {
-                stage.calc.ToDamage(actor.id, target, info.damage);
+                while (collisioninfo.collisions.TryDequeue(out var target))
+                {
+                    stage.calc.ToDamage(actor.id, target, bullet.damage);
+                }
+            }
+            
+            // 子弹管线结束检查
+            if (false == stage.SeekBehaviorInfo(bullet.flow, out FlowInfo flowinfo) || flowinfo.timeline >= flowinfo.length)
+            {
+                stage.RmvActor(bullet.id);
             }
         }
     }

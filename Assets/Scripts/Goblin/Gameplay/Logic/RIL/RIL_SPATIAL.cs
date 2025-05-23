@@ -21,20 +21,20 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 缩放
         /// </summary>
-        public FPVector3 scale { get; set; }
+        public FP scale { get; set; }
 
         protected override void OnReady()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;
-            scale = FPVector3.one;
+            scale = FP.Zero;
         }
 
         protected override void OnReset()
         {
             position = FPVector3.zero;
             euler = FPVector3.zero;
-            scale = FPVector3.one;
+            scale = FP.Zero;
         }
 
         public override string ToString()

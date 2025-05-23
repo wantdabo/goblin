@@ -10,13 +10,13 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     public class MovementInfo : BehaviorInfo
     {
         /// <summary>
-        /// 当前帧驱动了移动, 标记
+        /// 当前帧驱动了运动, 标记
         /// </summary>
-        public bool turnmove { get; set; }
+        public bool turnmotion { get; set; }
         /// <summary>
         /// 运动类型
         /// </summary>
-        public byte motion { get; set; }
+        public byte type { get; set; }
 
         
         protected override void OnReady()
@@ -26,16 +26,16 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReset()
         {
-            motion = 0;
-            turnmove = false;
+            type = 0;
+            turnmotion = false;
         }
 
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<MovementInfo>();
             clone.Ready(id);
-            clone.turnmove = turnmove;
-            clone.motion = motion;
+            clone.turnmotion = turnmotion;
+            clone.type = type;
             
             return clone;
         }
@@ -44,8 +44,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             int hash = 17;
             hash = hash * 31 + id.GetHashCode();
-            hash = hash * 31 + turnmove.GetHashCode();
-            hash = hash * 31 + motion.GetHashCode();
+            hash = hash * 31 + turnmotion.GetHashCode();
+            hash = hash * 31 + type.GetHashCode();
             
             return hash;
         }

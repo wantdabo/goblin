@@ -7,6 +7,7 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.Prefabs.Datas;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Prefabs
 {
