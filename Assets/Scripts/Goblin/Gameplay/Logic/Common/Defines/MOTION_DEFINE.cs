@@ -3,19 +3,15 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     /// <summary>
     /// 运动定义
     /// </summary>
-    public class MOVEMENT_DEFINE
+    public class MOTION_DEFINE
     {
         /// <summary>
         /// 运动
         /// </summary>
-        public const byte MOVE = 1;
+        public const byte MOTION = 1;
         /// <summary>
-        /// 传送
+        /// 位置
         /// </summary>
-        public const byte TRANSPORT = 2;
-        /// <summary>
-        /// 管线
-        /// </summary>
-        public const byte FLOW = 3;
+        public const byte POSITION = 2;
     }
 }

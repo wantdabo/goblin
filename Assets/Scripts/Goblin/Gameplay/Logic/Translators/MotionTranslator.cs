@@ -6,15 +6,15 @@ using Goblin.Gameplay.Logic.Translators.Common;
 namespace Goblin.Gameplay.Logic.Translators
 {
     /// <summary>
-    /// Movement 渲染指令翻译器
+    /// 运动信息翻译器
     /// </summary>
-    public class MovementTranslator : Translator<MovementInfo, RIL_MOVEMENT>
+    public class MotionTranslator : Translator<MotionInfo, RIL_MOTION>
     {
-        protected override ushort id => RIL_DEFINE.MOVEMENT;
+        protected override ushort id => RIL_DEFINE.MOTION;
         
-        protected override void OnRIL(MovementInfo info, RIL_MOVEMENT ril)
+        protected override void OnRIL(MotionInfo info, RIL_MOTION ril)
         {
-            ril.motion = info.type;
+            ril.motion = info.motion;
         }
     }
 }

@@ -32,15 +32,16 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReady()
         {
             go = ObjectPool.Ensure<GameObject>("NODE_GO_KEY");
-            if (null == go) go = new GameObject();
-            go.SetActive(true);
+            if (null == go)
+            {
+                go = new GameObject();
+                go.SetActive(false);
+            }
             go.name = actor.ToString();
             go.transform.SetParent(root.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localRotation = Quaternion.identity;
 
             WatchRIL<RIL_SPATIAL>((ril) => ShouldBeChange());
-            WatchRIL<RIL_MOVEMENT>((ril) => ShouldBeChange());
+            WatchRIL<RIL_MOTION>((ril) => ShouldBeChange());
         }
 
         protected override void OnReset()
@@ -56,23 +57,19 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         private void ShouldBeChange()
         {
-            if (false == world.rilbucket.SeekRIL<RIL_MOVEMENT>(actor, out var ril))
+            if (false == world.rilbucket.SeekRIL<RIL_MOTION>(actor, out var ril))
             {
                 ChangeStatus(ChaseStatus.Chasing);
-
                 return;
             }
             
             switch (ril.motion)
             {
-                case MOVEMENT_DEFINE.MOVE:
+                case MOTION_DEFINE.MOTION:
                     ChangeStatus(ChaseStatus.Chasing);
                     break;
-                case MOVEMENT_DEFINE.TRANSPORT:
+                case MOTION_DEFINE.POSITION:
                     Flash();
-                    break;
-                case MOVEMENT_DEFINE.FLOW:
-                    ChangeStatus(ChaseStatus.Chasing);
                     break;
             }   
         }
@@ -92,6 +89,7 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.position = ril.position.ToVector3();
             go.transform.rotation = Quaternion.Euler(ril.euler.ToVector3());
             go.transform.localScale = Vector3.one * ril.scale.AsFloat();
+            go.SetActive(true);
         }
     }
 }

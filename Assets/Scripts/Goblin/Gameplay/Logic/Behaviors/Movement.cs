@@ -11,19 +11,19 @@ namespace Goblin.Gameplay.Logic.Behaviors
     public class Movement : Behavior<MovementInfo>
     {
         /// <summary>
-        /// 运动
+        /// 移动
         /// </summary>
-        /// <param name="dire">运动数据</param>
+        /// <param name="dire">方向</param>
         /// <param name="tick">步长</param>
-        public void Motion(FPVector3 dire, FP tick)
+        public void Move(FPVector3 dire, FP tick)
         {
             if (false == actor.SeekBehavior(out StateMachine machine)) return;
             if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
+            
             if (false == actor.SeekBehaviorInfo(out AttributeInfo attribute)) return;
             if (false == actor.SeekBehaviorInfo(out SpatialInfo spatial)) return;
             
             info.turnmotion = true;
-            info.type = MOVEMENT_DEFINE.MOVE;
             
             dire = dire.normalized;
             var motion = dire * attribute.movespeed * tick;
@@ -31,28 +31,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
             FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
             spatial.euler = FPVector3.up * angle;
-        }
-
-        /// <summary>
-        /// 传送
-        /// </summary>
-        /// <param name="position">位置</param>
-        public void Transport(FPVector3 position)
-        {
-            if (false == actor.SeekBehaviorInfo(out SpatialInfo spatial)) return;
-            info.type = MOVEMENT_DEFINE.TRANSPORT;
-            spatial.position = position;
-        }
-
-        /// <summary>
-        /// 管线
-        /// </summary>
-        /// <param name="position">位置</param>
-        public void Flow(FPVector3 position)
-        {
-            if (false == actor.SeekBehaviorInfo(out SpatialInfo spatial)) return;
-            info.type = MOVEMENT_DEFINE.FLOW;
-            spatial.position = position;
         }
 
         protected override void OnTick(FP tick)
@@ -63,7 +41,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
             if (false == joystick.press) return;
             
-            Motion(new FPVector3(joystick.dire.x, 0, joystick.dire.y), tick);
+            Move(new FPVector3(joystick.dire.x, 0, joystick.dire.y), tick);
         }
 
         protected override void OnEndTick()

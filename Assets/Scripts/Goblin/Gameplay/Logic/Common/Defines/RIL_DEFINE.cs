@@ -47,8 +47,8 @@
         /// </summary>
         public const ushort ACTOR = 7;
         /// <summary>
-        /// MOVEMENT 运动指令
+        /// MOTION 运动指令
         /// </summary>
-        public const ushort MOVEMENT = 8;
+        public const ushort MOTION = 8;
     }
 }

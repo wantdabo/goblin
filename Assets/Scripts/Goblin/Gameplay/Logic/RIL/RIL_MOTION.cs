@@ -6,9 +6,9 @@ namespace Goblin.Gameplay.Logic.RIL
     /// <summary>
     /// 运动指令
     /// </summary>
-    public class RIL_MOVEMENT : IRIL
+    public class RIL_MOTION : IRIL
     {
-        public override ushort id => RIL_DEFINE.MOVEMENT;
+        public override ushort id => RIL_DEFINE.MOTION;
         
         /// <summary>
         /// 运动类型
