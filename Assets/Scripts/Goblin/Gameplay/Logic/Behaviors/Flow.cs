@@ -244,7 +244,7 @@ namespace Goblin.Gameplay.Behaviors
             }
             
             checkers = ObjectCache.Ensure<Dictionary<ushort, Checker>>();
-            Checker<TestChecker>(INSTR_DEFINE.TEST);
+            Checker<TestChecker>(CONDITION_DEFINE.TEST);
         }
 
         /// <summary>
