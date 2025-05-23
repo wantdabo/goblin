@@ -306,6 +306,9 @@ namespace Goblin.Gameplay.Logic.Core
             // 帧号递增 & 时间流逝
             info.frame++;
             info.elapsed += info.tick;
+            
+            // TODO 销毁第二个英雄测试, 请记得删除
+            if (elapsed >= 5) RmvActor(2);
 
             // Tick 驱动
             foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
