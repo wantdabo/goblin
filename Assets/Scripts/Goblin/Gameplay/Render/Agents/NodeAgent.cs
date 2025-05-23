@@ -39,7 +39,8 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
 
-            WatchRIL<RIL_SPATIAL>((ril) => ChangeStatus(ChaseStatus.Chasing));
+            WatchRIL<RIL_SPATIAL>((ril) => ShouldBeChange());
+            WatchRIL<RIL_MOVEMENT>((ril) => ShouldBeChange());
         }
 
         protected override void OnReset()
@@ -49,7 +50,28 @@ namespace Goblin.Gameplay.Render.Agents
             go.SetActive(false);
             ObjectPool.Set(go, "NODE_GO_KEY");
         }
-        
+
+        /// <summary>
+        /// 是否需要改变状态
+        /// </summary>
+        private void ShouldBeChange()
+        {
+            if (false == world.rilbucket.SeekRIL<RIL_MOVEMENT>(actor, out var ril)) return;
+            
+            switch (ril.motion)
+            {
+                case MOVEMENT_DEFINE.MOVE:
+                    ChangeStatus(ChaseStatus.Chasing);
+                    break;
+                case MOVEMENT_DEFINE.TRANSPORT:
+                    Flash();
+                    break;
+                case MOVEMENT_DEFINE.FLOW:
+                    ChangeStatus(ChaseStatus.Chasing);
+                    break;
+            }   
+        }
+
         protected override bool OnArrived()
         {
             if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return true;
