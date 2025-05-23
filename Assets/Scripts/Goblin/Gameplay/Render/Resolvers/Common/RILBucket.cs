@@ -146,6 +146,32 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         }
 
         /// <summary>
+        /// 清除 Actor 的所有状态
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        public void LossRIL(ulong actor)
+        {
+            if (false == rildict.TryGetValue(actor, out var dict)) return;
+            
+            foreach (var kv in dict)
+            {
+                var ril = kv.Value;
+                ril.Reset();
+                RILCache.Set(ril);
+            }
+            rildict.Remove(actor);
+            dict.Clear();
+            ObjectPool.Set(dict);
+
+            if (rilidsdict.TryGetValue(actor, out var iddict))
+            {
+                rilidsdict.Remove(actor);
+                iddict.Clear();
+                ObjectPool.Set(iddict);
+            }
+        }
+
+        /// <summary>
         /// 获取所有的状态
         /// </summary>
         /// <param name="rils">数据状态列表</param>

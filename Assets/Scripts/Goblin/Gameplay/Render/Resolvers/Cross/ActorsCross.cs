@@ -11,6 +11,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Cross
     {
         protected override void OnHasDel(RIL_ACTOR ril, RIL_DIFF_ACTOR diff)
         {
+            rilbucket.LossRIL(diff.target);
+
             rilbucket.world.RmvAgent(diff.target);
             ril.actors.Remove(diff.target);
         }
