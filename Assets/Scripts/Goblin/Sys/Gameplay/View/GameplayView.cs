@@ -1,5 +1,7 @@
 ﻿using Goblin.Common;
 using Goblin.Gameplay.Director;
+using Goblin.Gameplay.Logic.Commands;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
@@ -57,7 +59,10 @@ namespace Goblin.Sys.Gameplay.View
                 var localdirector = (engine.proxy.gameplay.director as LocalDirector);
                 if (null == localdirector) return;
                 var timescale = Mathf.Round(gameSpeedSlider.value / 0.25f) * 0.25f;
-                localdirector.timescale = timescale;
+                var command = ObjectPool.Ensure<TimeScaleCommand>();
+                command.timescale = (int)(timescale * 1000);
+                localdirector.world.input.EnqueueCommand(command);
+                
                 gameSpeedDescText.text = timescale.ToString();
             });
             

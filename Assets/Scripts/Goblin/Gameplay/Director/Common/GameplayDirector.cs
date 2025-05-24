@@ -81,24 +81,26 @@ namespace Goblin.Gameplay.Director.Common
         /// </summary>
         public void DestroyGame()
         {
-            OnDestroyGame();
-            world.Destroy();
-            
             engine.ticker.eventor.UnListen<TickEvent>(OnTick);
             if (false == multithread)
             {
                 engine.ticker.eventor.UnListen<FixedTickEvent>(OnFixedTick);
-                return;
             }
-
-            try
+            else
             {
-                thread.Abort();
-                thread = null;
+                try
+                {
+                    thread.Abort();
+                    thread = null;
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
             }
-            catch (Exception e)
-            {
-            }
+            
+            OnDestroyGame();
+            world.Destroy();
         }
 
         /// <summary>
@@ -158,6 +160,7 @@ namespace Goblin.Gameplay.Director.Common
         
         protected void OnFixedTick(FixedTickEvent e)
         {
+            stepms = (int)(e.tick * 1000);
             OnStep();
         }
 

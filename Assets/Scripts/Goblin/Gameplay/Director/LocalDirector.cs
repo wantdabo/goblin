@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Goblin.Common;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
@@ -21,20 +22,11 @@ namespace Goblin.Gameplay.Director
         /// <summary>
         /// 是否渲染 (驱动 World)
         /// </summary>
-        public override bool rendering
-        {
-            get { return null != stage && StageState.Ticking == stage.state; }
-        }
-
+        public override bool rendering => null != stage && StageState.Ticking == stage.state;
         /// <summary>
-        /// 时间缩放 (本地游戏独有)
+        /// 时间缩放
         /// </summary>
-        public float timescale
-        {
-            get { return stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale.AsFloat(); }
-            set { stage.GetBehaviorInfo<StageInfo>(stage.sa).timescale = ((int)(value * Config.Float2Int)) * stage.cfg.int2fp; }
-        }
-        
+        public float timescale => stage.timescale.AsFloat();
         /// <summary>
         /// 逻辑场景
         /// </summary>
@@ -112,6 +104,13 @@ namespace Goblin.Gameplay.Director
         protected override void OnStep()
         {
             if (null == stage || StageState.Ticking != stage.state) return;
+
+            while (world.input.TryDequeueCommand(out var command))
+            {
+                stage.SetCommand(command);
+                command.Reset();
+                ObjectPool.Set(command);
+            }
 
             var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
             var ba = world.input.GetInput(INPUT_DEFINE.BA);

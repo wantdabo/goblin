@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Commands;
+using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
@@ -43,7 +45,11 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 时间缩放
         /// </summary>
-        public FP timescale => info.timescale;
+        public FP timescale
+        {
+            get => info.timescale;
+            set => info.timescale = value;
+        }
         /// <summary>
         /// Stage 缓存
         /// </summary>
@@ -88,6 +94,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// 碰撞检测
         /// </summary>
         public Detection detection => GetBehavior<Detection>(sa);
+        /// <summary>
+        /// 输入指令
+        /// </summary>
+        public Captain captain => GetBehavior<Captain>(sa);
         /// <summary>
         /// 管线流
         /// </summary>
@@ -140,6 +150,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
+            AddBehavior<Captain>(sa);
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<Bullet>(sa);
@@ -284,21 +295,26 @@ namespace Goblin.Gameplay.Logic.Core
         }
 
         /// <summary>
-        /// 输入
+        /// 输入 Gamepad
         /// </summary>
         /// <param name="id">座位 ID</param>
-        /// <param name="inputType">按键类型</param>
+        /// <param name="type">按键类型</param>
         /// <param name="press">摁下之后 -> TRUE</param>
         /// <param name="dire">按键的方向</param>
-        public void SetInput(ulong id, ushort inputType, bool press, GPVector2 dire)
+        public void SetInput(ulong id, ushort type, bool press, GPVector2 dire)
         {
-            var actor = seat.GetActor(id);
-            if (false == info.actors.Contains(actor)) return;
+            if (false == SeekBehavior(id, out Gamepad gamepad)) return;
             
-            var gamepad = GetBehavior<Gamepad>(actor);
-            if (null == gamepad) return;
-            
-            gamepad.SetInput(inputType, press, dire.ToFPVector2());
+            gamepad.SetInput(type, press, dire.ToFPVector2());
+        }
+        
+        /// <summary>
+        /// 输入指令
+        /// </summary>
+        /// <param name="command"></param>
+        public void SetCommand(Command command)
+        {
+            captain.SetCommand(command.Clone(ObjectCache.Ensure(command.GetType()) as Command));
         }
 
         /// <summary>
@@ -343,14 +359,6 @@ namespace Goblin.Gameplay.Logic.Core
             }
             
             RecycleActors();
-            
-            // TODO 测试跳字, 请记得删除
-            var e = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
-            e.from = 1;
-            e.to = 1;
-            e.crit = true;
-            e.damage = 10086;
-            rilsync.Send(e);
         }
 
         /// <summary>

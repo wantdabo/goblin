@@ -27,6 +27,14 @@ namespace Goblin.Gameplay.Logic.RIL.EVENT
         /// </summary>
         public int damage { get; set; }
 
+        protected override void OnReset()
+        {
+            from = 0;
+            to = 0;
+            crit = false;
+            damage = 0;
+        }
+
         protected override void OnClone(IRIL_EVENT clone)
         {
             if (clone is not RIL_EVENT_DAMAGE e) return;

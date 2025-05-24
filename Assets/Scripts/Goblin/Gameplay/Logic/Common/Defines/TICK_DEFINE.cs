@@ -14,11 +14,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// </summary>
         public static List<Type> TICK_TYPE_LIST { get; private set; } = new()
         {
+            typeof(Captain),
             typeof(Gamepad),
+            typeof(SkillBinding),
             typeof(Movement),
             typeof(StateMachine),
             typeof(Flow),
-            typeof(SkillBinding),
             typeof(SkillLauncher),
             typeof(Bullet),
             typeof(RILSync),

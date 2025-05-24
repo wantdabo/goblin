@@ -1,15 +1,15 @@
-namespace Goblin.Gameplay.Logic.RIL.Common
+namespace Goblin.Gameplay.Logic.Commands.Common
 {
     /// <summary>
-    /// RIL 事件, 不允许存在引用 Field, 请使用纯值类型
+    /// 输入指令
     /// </summary>
-    public abstract class IRIL_EVENT
+    public abstract class Command
     {
         /// <summary>
         /// 指令
         /// </summary>
         public abstract ushort id { get; }
-        
+
         /// <summary>
         /// 重置
         /// </summary>
@@ -17,13 +17,13 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         {
             OnReset();
         }
-        
+
         /// <summary>
         /// 克隆
         /// </summary>
         /// <param name="clone">目标</param>
         /// <returns>目标克隆后</returns>
-        public IRIL_EVENT Clone(IRIL_EVENT clone)
+        public Command Clone(Command clone)
         {
             OnClone(clone);
 
@@ -38,6 +38,6 @@ namespace Goblin.Gameplay.Logic.RIL.Common
         /// 克隆
         /// </summary>
         /// <param name="clone">目标</param>
-        protected abstract void OnClone(IRIL_EVENT clone);
+        protected abstract void OnClone(Command clone);
     }
 }

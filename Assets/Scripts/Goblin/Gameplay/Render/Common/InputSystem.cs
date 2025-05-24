@@ -3,6 +3,7 @@ using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
@@ -27,18 +28,18 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 输入数据集合
         /// </summary>
-        public Dictionary<ushort, (bool press, GPVector2 dire)> inputdict { get; set; }
+        private Dictionary<ushort, (bool press, GPVector2 dire)> inputdict { get; set; }
+        /// <summary>
+        /// 输入指令队列
+        /// </summary>
+        private Queue<Command> cmdqueue { get; set; }
 
         protected override void OnCreate()
         {
             base.OnCreate();
             world.ticker.eventor.Listen<TickEvent>(OnTick);
             inputdict = ObjectPool.Ensure<Dictionary<ushort, (bool press, GPVector2 dire)>>();
-            inputdict.Add(INPUT_DEFINE.JOYSTICK, default);
-            inputdict.Add(INPUT_DEFINE.BA, default);
-            inputdict.Add(INPUT_DEFINE.BB, default);
-            inputdict.Add(INPUT_DEFINE.BC, default);
-            inputdict.Add(INPUT_DEFINE.BD, default);
+            cmdqueue = ObjectPool.Ensure<Queue<Command>>();
         }
 
         protected override void OnDestroy()
@@ -47,6 +48,9 @@ namespace Goblin.Gameplay.Render.Common
             world.ticker.eventor.UnListen<TickEvent>(OnTick);
             inputdict.Clear();
             ObjectPool.Set(inputdict);
+            
+            cmdqueue.Clear();
+            ObjectPool.Set(cmdqueue);
         }
 
         /// <summary>
@@ -84,8 +88,30 @@ namespace Goblin.Gameplay.Render.Common
         /// <param name="dire">方向</param>
         public void SetInput(ushort type, bool press, GPVector2 dire)
         {
-            inputdict.Remove(type);
+            if (inputdict.ContainsKey(type)) inputdict.Remove(type);
+            
             inputdict.Add(type, (press, dire));
+        }
+        
+        /// <summary>
+        /// 尝试出队指令
+        /// </summary>
+        /// <param name="command">输入指令</param>
+        /// <returns>YES/NO</returns>
+        public bool TryDequeueCommand(out Command command)
+        {
+            return cmdqueue.TryDequeue(out command);
+        }
+
+        /// <summary>
+        /// 设置输入指令
+        /// </summary>
+        /// <param name="command">输入指令</param>
+        public void EnqueueCommand(Command command)
+        {
+            if (null == command) return;
+
+            cmdqueue.Enqueue(command);
         }
 
         private void OnTick(TickEvent e)

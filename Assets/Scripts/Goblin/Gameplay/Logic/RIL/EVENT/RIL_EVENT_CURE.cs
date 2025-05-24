@@ -23,6 +23,13 @@ namespace Goblin.Gameplay.Logic.RIL.EVENT
         /// </summary>
         public int cure { get; set; }
 
+        protected override void OnReset()
+        {
+            from = 0;
+            to = 0;
+            cure = 0;
+        }
+
         protected override void OnClone(IRIL_EVENT clone)
         {
             if (clone is not RIL_EVENT_CURE e) return;

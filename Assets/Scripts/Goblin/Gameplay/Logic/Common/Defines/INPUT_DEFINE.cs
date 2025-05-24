@@ -25,5 +25,14 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 按钮 D
         /// </summary>
         public const ushort BD = 1005;
+
+        /// <summary>
+        /// GM 指令
+        /// </summary>
+        public const ushort GM = 0;
+        /// <summary>
+        /// 时间缩放指令
+        /// </summary>
+        public const ushort TIMESCALE = 1;
     }
 }
