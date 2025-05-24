@@ -2,6 +2,7 @@ using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Collisions;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
@@ -26,6 +27,8 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     spatialdata.position = spatial.position;
                     break;
             }
+            spatialdata.position += data.offset.ToFPVector3();
+
             switch (data.euler)
             {
                 case FLOW_BULLET_DEFINE.BORN_EULER_OWNER:
