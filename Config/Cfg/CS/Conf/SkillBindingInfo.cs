@@ -12,17 +12,17 @@ using Luban;
 
 namespace Conf
 {
-public sealed partial class SkillTriggerInfo : Luban.BeanBase
+public sealed partial class SkillBindingInfo : Luban.BeanBase
 {
-    public SkillTriggerInfo(ByteBuf _buf) 
+    public SkillBindingInfo(ByteBuf _buf) 
     {
         Id = _buf.ReadInt();
         Key = _buf.ReadInt();
     }
 
-    public static SkillTriggerInfo DeserializeSkillTriggerInfo(ByteBuf _buf)
+    public static SkillBindingInfo DeserializeSkillBindingInfo(ByteBuf _buf)
     {
-        return new Conf.SkillTriggerInfo(_buf);
+        return new Conf.SkillBindingInfo(_buf);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public sealed partial class SkillTriggerInfo : Luban.BeanBase
     /// </summary>
     public readonly int Key;
    
-    public const int __ID__ = 1494153471;
+    public const int __ID__ = 1889870668;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

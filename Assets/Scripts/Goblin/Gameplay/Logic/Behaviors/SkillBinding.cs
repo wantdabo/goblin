@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// 技能触发器
     /// </summary>
-    public class SkillTrigger : Behavior
+    public class SkillBinding : Behavior
     {
         protected override void OnTick(FP tick)
         {
@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 if (false == stage.SeekBehavior(launcher.id, out Gamepad gamepad)) continue;
                 foreach (var skill in launcher.info.loadedskills)
                 {
-                    var trigger = stage.cfg.location.SkillTriggerInfos.Get((int)skill);
+                    var trigger = stage.cfg.location.SkillBindingInfos.Get((int)skill);
                     if (null == trigger) continue;
                     if (false == gamepad.GetInput((ushort)trigger.Key).release) continue;
                     

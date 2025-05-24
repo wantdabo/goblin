@@ -135,7 +135,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
-            AddBehavior<SkillTrigger>(sa);
+            AddBehavior<SkillBinding>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<Bullet>(sa);
             AddBehavior<RILSync>(sa);

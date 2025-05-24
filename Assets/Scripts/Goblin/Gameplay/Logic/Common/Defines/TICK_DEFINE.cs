@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Movement),
             typeof(StateMachine),
             typeof(Flow),
-            typeof(SkillTrigger),
+            typeof(SkillBinding),
             typeof(SkillLauncher),
             typeof(Bullet),
             typeof(RILSync),
