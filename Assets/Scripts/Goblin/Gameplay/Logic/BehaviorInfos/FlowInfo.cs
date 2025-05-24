@@ -70,7 +70,12 @@ namespace Goblin.Gameplay.BehaviorInfos
             clone.timeline = timeline;
             clone.elapsed = elapsed;
             foreach (var pipeline in pipelines) clone.pipelines.Add(pipeline);
-            foreach (var doing in doings) clone.doings.Add(doing.Key, doing.Value);
+            foreach (var doing in doings)
+            {
+                var list = ObjectCache.Ensure<List<uint>>();
+                list.AddRange(doing.Value);
+                clone.doings.Add(doing.Key, list);
+            }
 
             return clone;
         }
