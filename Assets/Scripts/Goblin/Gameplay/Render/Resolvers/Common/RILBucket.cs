@@ -127,8 +127,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             }
             
             Enchant<NodeEnchant>(RIL_DEFINE.SPATIAL);
-            Enchant<ModelEnchant>(RIL_DEFINE.TAG);
-            Enchant<AnimationEnchant>(RIL_DEFINE.TAG);
+            Enchant<ModelEnchant>(RIL_DEFINE.FACADE);
+            Enchant<AnimationEnchant>(RIL_DEFINE.FACADE);
         }
 
         /// <summary>

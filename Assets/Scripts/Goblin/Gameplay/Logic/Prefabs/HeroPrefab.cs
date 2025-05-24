@@ -47,7 +47,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
             {
                 foreach (var skill in herocfg.Skills)
                 {
-                    var data = stage.cfg.location.SkillInfos.Get((int)skill);
+                    var data = stage.cfg.location.SkillInfos.Get(skill);
                     if (null == data) continue;
                     
                     var strength = data.Strength * stage.cfg.int2fp;
@@ -58,6 +58,9 @@ namespace Goblin.Gameplay.Logic.Prefabs
                     launcher.Load((uint)skill, strength, cooldown, pipelines);
                 }
             }
+
+            var facade = actor.AddBehavior<Facade>();
+            facade.SetModel(herocfg.Model);
 
             actor.AddBehaviorInfo<TickerInfo>();
             var attribute = actor.AddBehaviorInfo<AttributeInfo>();
@@ -73,12 +76,6 @@ namespace Goblin.Gameplay.Logic.Prefabs
 
             var collider = actor.AddBehaviorInfo<ColliderInfo>();
             stage.detection.SetColliderInfo(collider, herocfg.Collider);
-
-            if (actor.SeekBehavior(out Tag tag))
-            {
-                tag.Set(TAG_DEFINE.HERO, info.hero);
-                tag.Set(TAG_DEFINE.MODEL, herocfg.Model);
-            }
         }
     }
 }

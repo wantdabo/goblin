@@ -9,19 +9,19 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
     /// <summary>
     /// 动画代理赋能
     /// </summary>
-    public class AnimationEnchant : AgentEnchant<RIL_TAG>
+    public class AnimationEnchant : AgentEnchant<RIL_FACADE>
     {
-        protected override void OnRIL(RIL_TAG ril)
+        protected override void OnRIL(RIL_FACADE ril)
         {
             // 如果没有模型定义, 则回收动画代理
-            if (false == ril.tags.TryGetValue(TAG_DEFINE.MODEL, out var model)) 
+            if (0 >= ril.model) 
             {
                 RecycleAgent(ril.actor);
                 return;
             }
             
             // 如果模型定义没有动画配置, 则回收动画代理
-            var modelinfo = rilbucket.engine.cfg.location.ModelInfos.Get(model);
+            var modelinfo = rilbucket.engine.cfg.location.ModelInfos.Get(ril.model);
             if (null == modelinfo || string.IsNullOrEmpty(modelinfo.Animation))
             {
                 RecycleAgent(ril.actor);

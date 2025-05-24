@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 模型 ID
         /// </summary>
-        public int id { get; private set; } = 0;
+        public int model { get; private set; } = 0;
         /// <summary>
         /// 资源名
         /// </summary>
@@ -40,7 +40,7 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReady()
         {
             RecycleModel();
-            id = 0;
+            model = 0;
             res = null;
             go = null;
         }
@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Render.Agents
         protected override void OnReset()
         {
             RecycleModel();
-            id = 0;
+            model = 0;
             res = null;
             go = null;
         }
@@ -76,17 +76,17 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         public void Load()
         {
-            if (false == world.rilbucket.SeekRIL<RIL_TAG>(actor, out var ril)) return;
-            if (false == ril.tags.TryGetValue(TAG_DEFINE.MODEL, out var id))
+            if (false == world.rilbucket.SeekRIL(actor, out RIL_FACADE facade) || 0 >= facade.model)
             {
                 RecycleModel();
                 return;
             }
-            if (this.id == id) return;
+            
+            if (model == facade.model) return;
             
             RecycleModel();
-            this.id = id;
-            var modelinfo = world.engine.cfg.location.ModelInfos.Get(this.id);
+            model = facade.model;
+            var modelinfo = world.engine.cfg.location.ModelInfos.Get(model);
             res = modelinfo.Res;
             
             go = ObjectPool.Get<GameObject>($"MODEL_GO_KEY_{res}");

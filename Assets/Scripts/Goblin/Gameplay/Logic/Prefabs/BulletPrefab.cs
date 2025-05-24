@@ -62,8 +62,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
             bullet.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
             
             // TODO 临时加模型, 记得删除
-            if (false == actor.SeekBehavior(out Tag tag)) return;
-            tag.Set(TAG_DEFINE.MODEL, 200001);
+            var facade = actor.AddBehavior<Facade>();
+            facade.SetModel(200001);
         }
     }
 }

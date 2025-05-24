@@ -51,6 +51,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Translator<StateMachineTranslator, StateMachineInfo>();
             Translator<ActorTranslator, StageInfo>();
             Translator<MotionTranslator, MotionInfo>();
+            Translator<FacadeTranslator, FacadeInfo>();
             
             diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
             hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();

@@ -50,5 +50,9 @@
         /// MOTION 运动指令
         /// </summary>
         public const ushort MOTION = 8;
+        /// <summary>
+        /// FACADE 外观指令
+        /// </summary>
+        public const ushort FACADE = 9;
     }
 }
