@@ -283,6 +283,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                         cross.HasNew(ril, diff);
                         break;
                 }
+                
+                // 分发合并后的渲染指令
+                RILDispatch(ril);
             }
 
             diff.Reset();
@@ -316,7 +319,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             
             dict.Add(type, ril);
             iddict.Add(ril.id, ril);
-            eventor.Tell(new RILEvent { ril = ril });
             RILDispatch(ril);
         }
 
@@ -326,6 +328,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// <param name="ril">渲染指令状态</param>
         private void RILDispatch(IRIL ril)
         {
+            // 发送渲染指令事件
+            eventor.Tell(new RILEvent { ril = ril });
+
             // Enchant 分发 RIL
             if (enchantdict.TryGetValue(ril.id, out var list)) foreach (var enchant in list) enchant.DoRIL(ril);
             
