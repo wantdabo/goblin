@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
@@ -136,13 +137,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         public void LossAllRIL()
         {
-            foreach (var rils in rildict.Values)
-            {
-                rils.Clear();
-                ObjectPool.Set(rils);
-            }
-            rildict.Clear();
-            rilidsdict.Clear();
+            var actors = ObjectPool.Get<List<ulong>>();
+            foreach (var actor in rildict.Keys) actors.Add(actor);
+            foreach (var actor in actors) LossRIL(actor);
+            
+            actors.Clear();
+            ObjectPool.Set(actors);
         }
 
         /// <summary>
