@@ -152,7 +152,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         public void LossAllRIL()
         {
-            var actors = ObjectPool.Get<List<ulong>>();
+            var actors = ObjectPool.Ensure<List<ulong>>();
             foreach (var actor in rildict.Keys) actors.Add(actor);
             foreach (var actor in actors) LossRIL(actor);
             
