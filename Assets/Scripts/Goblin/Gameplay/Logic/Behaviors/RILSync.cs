@@ -26,6 +26,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         private Queue<IRIL_DIFF> diffqueue { get; set; }
         /// <summary>
+        /// 渲染指令事件队列
+        /// </summary>
+        private Queue<IRIL_EVENT> eventqueue { get; set; }
+        /// <summary>
         /// 渲染指令的哈希值缓存
         /// </summary>
         private ConcurrentDictionary<(ulong, ushort), int> hashcodedict { get; set; }
@@ -54,6 +58,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Translator<FacadeTranslator, FacadeInfo>();
             
             diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
+            eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
             hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();
         }
 
@@ -80,6 +85,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 ObjectCache.Set(diff);
             }
             diffqueue.Clear();
+            
+            while (eventqueue.TryDequeue(out var e))
+            {
+                ObjectCache.Set(e);
+            }
+            eventqueue.Clear();
             
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
@@ -131,6 +142,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
         }
 
         /// <summary>
+        /// 发送渲染指令事件
+        /// </summary>
+        /// <param name="e">事件指令</param>
+        public void Send(IRIL_EVENT e)
+        {
+            eventqueue.Enqueue(e);
+        }
+
+        /// <summary>
         /// 执行翻译
         /// </summary>
         public void Execute()
@@ -171,6 +191,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 ObjectCache.Set(diff);
                 
                 stage.ondiff?.Invoke(clone);
+            }
+            
+            // 处理渲染指令事件
+            while (eventqueue.TryDequeue(out var e))
+            {
+                var clone = e.Clone(RILCache.Ensure(e.GetType()) as IRIL_EVENT);
+                ObjectCache.Set(e);
+                
+                stage.onevent?.Invoke(clone);
             }
         }
 

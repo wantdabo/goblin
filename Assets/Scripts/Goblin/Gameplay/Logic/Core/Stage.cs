@@ -10,6 +10,7 @@ using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.RIL.DIFF;
+using Goblin.Gameplay.Logic.RIL.EVENT;
 using Kowtow.Math;
 using Config = Goblin.Gameplay.Logic.Behaviors.Config;
 using Random = Goblin.Gameplay.Logic.Behaviors.Random;
@@ -107,6 +108,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// 对外暴露抛出 RIL_DIFF 的事件
         /// </summary>
         public Action<IRIL_DIFF> ondiff { get; set; }
+        /// <summary>
+        /// 对外暴露抛出 RIL_EVENT 的事件
+        /// </summary>
+        public Action<IRIL_EVENT> onevent { get; set; }
 
         /// <summary>
         /// 初始化 Stage
@@ -338,6 +343,14 @@ namespace Goblin.Gameplay.Logic.Core
             }
             
             RecycleActors();
+            
+            // TODO 测试跳字, 请记得删除
+            var e = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
+            e.from = 1;
+            e.to = 1;
+            e.crit = true;
+            e.damage = 10086;
+            rilsync.Send(e);
         }
 
         /// <summary>

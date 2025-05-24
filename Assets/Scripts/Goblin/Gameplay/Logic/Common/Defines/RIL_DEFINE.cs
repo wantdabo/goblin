@@ -6,13 +6,22 @@
     public class RIL_DEFINE
     {
         /// <summary>
-        /// RIL 删除
+        /// RIL_DIFF 删除
         /// </summary>
         public const byte DIFF_DEL = 0;
         /// <summary>
-        /// RIL 增加
+        /// RIL_DIFF 增加
         /// </summary>
         public const byte DIFF_NEW = 1;
+
+        /// <summary>
+        /// RIL_EVENT 伤害
+        /// </summary>
+        public const ushort EVENT_DAMAGE = 1;
+        /// <summary>
+        /// RIL_EVENT 治疗
+        /// </summary>
+        public const ushort EVENT_CURE = 2;
         
         /// <summary>
         /// STAGE 场景指令

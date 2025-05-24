@@ -9,20 +9,10 @@ using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Resolvers.Cross;
 using Goblin.Gameplay.Render.Resolvers.Enchants;
+using Goblin.Gameplay.Render.Resolvers.Salutes;
 
 namespace Goblin.Gameplay.Render.Resolvers.Common
 {
-    /// <summary>
-    /// RIL 指令事件
-    /// </summary>
-    public struct RILEvent : IEvent
-    {
-        /// <summary>
-        /// 渲染状态
-        /// </summary>
-        public IRIL ril { get; set; }
-    }
-
     /// <summary>
     /// 数据状态桶, 存储着渲染层的所有数据状态
     /// </summary>
@@ -45,9 +35,13 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// </summary>
         private Dictionary<ulong, Dictionary<ushort, IRIL>> rilidsdict { get; set; }
         /// <summary>
-        /// 渲染状态交叉集合
+        /// RIL 合并器集合
         /// </summary>
         private Dictionary<ushort, RILCross> crossdict { get; set; }
+        /// <summary>
+        /// RILSalute 集合
+        /// </summary>
+        private Dictionary<ushort, RILSalute> salutedict { get; set; }
         /// <summary>
         /// Agent 赋能集合
         /// </summary>
@@ -62,6 +56,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             rildict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, IRIL>>>();
             rilidsdict = ObjectPool.Ensure<Dictionary<ulong, Dictionary<ushort, IRIL>>>();
             Cross();
+            Salutes();
             Enchants();
         }
 
@@ -74,6 +69,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             
             crossdict.Clear();
             ObjectPool.Set(crossdict);
+            
+            salutedict.Clear();
+            ObjectPool.Set(salutedict);
 
             foreach (var kv in enchantdict)
             {
@@ -111,6 +109,23 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
             
             Cross<TagCross>(RIL_DEFINE.TAG);
             Cross<ActorCross>(RIL_DEFINE.ACTOR);
+        }
+
+        /// <summary>
+        /// 初始化 RILSalute
+        /// </summary>
+        private void Salutes()
+        {
+            salutedict = ObjectPool.Ensure<Dictionary<ushort, RILSalute>>();
+            void Salute<T>(ushort id) where T : RILSalute, new()
+            {
+                var salute = AddComp<T>().Initialize(this);
+                salute.Create();
+                salutedict.Add(id, salute);
+            }
+            
+            Salute<DamageSalute>(RIL_DEFINE.EVENT_DAMAGE);
+            Salute<CureSalute>(RIL_DEFINE.EVENT_CURE);
         }
 
         /// <summary>
@@ -267,6 +282,16 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         }
 
         /// <summary>
+        /// 收到事件
+        /// </summary>
+        /// <param name="e">RIL 事件</param>
+        public void SetEvent(IRIL_EVENT e)
+        {
+            if (salutedict.TryGetValue(e.id, out var salute)) salute.Salute(e);
+            RILCache.Set(e);
+        }
+
+        /// <summary>
         /// 合并状态
         /// </summary>
         /// <param name="diff">状态差异</param>
@@ -328,9 +353,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// <param name="ril">渲染指令状态</param>
         private void RILDispatch(IRIL ril)
         {
-            // 发送渲染指令事件
-            eventor.Tell(new RILEvent { ril = ril });
-
             // Enchant 分发 RIL
             if (enchantdict.TryGetValue(ril.id, out var list)) foreach (var enchant in list) enchant.DoRIL(ril);
             
