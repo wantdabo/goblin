@@ -29,7 +29,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             switch (data.euler)
             {
                 case FLOW_BULLET_DEFINE.BORN_EULER_OWNER:
-                    spatial.euler = spatialdata.euler;
+                    spatialdata.euler = spatial.euler;
                     break;
             }
             spatialdata.scale = data.scale * stage.cfg.int2fp;
