@@ -31,11 +31,11 @@ namespace Goblin.RendererFeatures
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
-                cmd = CommandBufferPool.Get("CombatFluxPass");
-                cmd.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);
-                cmd.DrawMesh(RenderingUtils.fullscreenMesh, Matrix4x4.identity, material);
-                context.ExecuteCommandBuffer(cmd);
-                CommandBufferPool.Release(cmd);
+                // cmd = CommandBufferPool.Get("CombatFluxPass");
+                // cmd.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);
+                // cmd.DrawMesh(RenderingUtils.fullscreenMesh, Matrix4x4.identity, material);
+                // context.ExecuteCommandBuffer(cmd);
+                // CommandBufferPool.Release(cmd);
             }
         }
     }
