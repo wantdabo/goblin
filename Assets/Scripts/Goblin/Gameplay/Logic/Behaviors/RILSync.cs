@@ -153,7 +153,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 执行翻译
         /// </summary>
-        public void Execute()
+        public void Translate()
         {
             var info = stage.GetBehaviorInfo<StageInfo>(stage.sa);
             // 先处理StageInfo（通常需要在其他翻译之前完成）
@@ -205,7 +205,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
         protected override void OnEndTick()
         {
-            Execute();
+            Translate();
         }
     }
 }

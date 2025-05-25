@@ -48,16 +48,18 @@ namespace Goblin.Gameplay.Render.Agents
             animancer = null;
             animstate = null;
             
-            WatchRIL<RIL_STATE_MACHINE>((ril) =>
-            {
-                RILConv2AnimData(ril);
-            });
+            WatchRIL<RIL_STATE_MACHINE>(OnRILStateMachine);
         }
 
         protected override void OnReset()
         {
             animancer = null;
             animstate = null;
+        }
+        
+        private void OnRILStateMachine(RIL_STATE_MACHINE ril)
+        {
+            RILConv2AnimData(ril);
         }
 
         /// <summary>

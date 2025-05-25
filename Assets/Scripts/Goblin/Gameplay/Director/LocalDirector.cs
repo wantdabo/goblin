@@ -22,7 +22,17 @@ namespace Goblin.Gameplay.Director
         /// <summary>
         /// 是否渲染 (驱动 World)
         /// </summary>
-        public override bool rendering => null != stage && StageState.Ticking == stage.state;
+        public override bool rendering
+        {
+            get
+            {
+                if (restoreing) return false;
+                if (null == stage || StageState.Ticking != stage.state) return false;
+                
+                return true; 
+            }
+        }
+
         /// <summary>
         /// 时间缩放
         /// </summary>
@@ -31,6 +41,10 @@ namespace Goblin.Gameplay.Director
         /// 逻辑场景
         /// </summary>
         private Stage stage { get; set; }
+        /// <summary>
+        /// 是否正在恢复
+        /// </summary>
+        private bool restoreing { get; set; } = false;
         /// <summary>
         /// 同步锁对象
         /// </summary>
@@ -85,24 +99,55 @@ namespace Goblin.Gameplay.Director
 
         protected override void OnRestore()
         {
+            restoreing = true;
             world.rilbucket.LossAllRIL();
-            stage.Restore();
+            lock (@lock)
+            {
+                while (rilqueue.TryDequeue(out var ril))
+                {
+                    ril.Reset();
+                    RILCache.Set(ril);
+                }
+
+                while (diffqueue.TryDequeue(out var diff))
+                {
+                    diff.Reset();
+                    RILCache.Set(diff);
+                }
+
+                while (eventqueue.TryDequeue(out var e))
+                {
+                    e.Reset();
+                    RILCache.Set(e);
+                }
+            }
+            
             world.Restore();
         }
 
         protected override void OnTick()
         {
+            if (restoreing) return;
+            
             lock (@lock)
             {
-                // 发送 RIL 渲染状态
-                while (rilqueue.Count > 0) world.rilbucket.SetRIL(rilqueue.Dequeue());
-                while (diffqueue.Count > 0) world.rilbucket.SetDiff(diffqueue.Dequeue());
-                while (eventqueue.Count > 0) world.rilbucket.SetEvent(eventqueue.Dequeue());
+                while(rilqueue.TryDequeue(out var ril)) world.rilbucket.SetRIL(ril);
+                while (diffqueue.TryDequeue(out var diff)) world.rilbucket.SetDiff(diff);
+                while (eventqueue.TryDequeue(out var e)) world.rilbucket.SetEvent(e);
             }
         }
 
         protected override void OnStep()
         {
+            // 如果正在恢复, 则直接恢复
+            if (restoreing)
+            {
+                stage.Restore();
+                restoreing = false;
+
+                return;
+            }
+
             if (null == stage || StageState.Ticking != stage.state) return;
 
             while (world.input.TryDequeueCommand(out var command))

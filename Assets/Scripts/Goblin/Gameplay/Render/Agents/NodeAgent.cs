@@ -40,8 +40,8 @@ namespace Goblin.Gameplay.Render.Agents
             go.name = actor.ToString();
             go.transform.SetParent(root.transform);
 
-            WatchRIL<RIL_SPATIAL>((ril) => ShouldBeChange());
-            WatchRIL<RIL_MOTION>((ril) => ShouldBeChange());
+            WatchRIL<RIL_SPATIAL>(OnRILSpatial);
+            WatchRIL<RIL_MOTION>(OnRILMotion);
         }
 
         protected override void OnReset()
@@ -50,6 +50,16 @@ namespace Goblin.Gameplay.Render.Agents
 
             go.SetActive(false);
             ObjectPool.Set(go, "NODE_GO_KEY");
+        }
+
+        private void OnRILSpatial(RIL_SPATIAL ril)
+        {
+            ShouldBeChange();
+        }
+        
+        private void OnRILMotion(RIL_MOTION ril)
+        {
+            ShouldBeChange();
         }
 
         /// <summary>

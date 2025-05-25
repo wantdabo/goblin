@@ -238,8 +238,8 @@ namespace Goblin.Gameplay.Logic.Core
                     AddBehavior(id, type);
                 }
             }
-
-            rilsync.Execute();
+            
+            rilsync.Translate();
         }
 
         /// <summary>
