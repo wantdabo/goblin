@@ -20,7 +20,9 @@
     "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
-        "Animancer.Lite.dll"
+        "Animancer.Lite.dll",
+        "Sirenix.OdinInspector.Attributes.dll",
+        "Sirenix.OdinInspector.Editor.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [],

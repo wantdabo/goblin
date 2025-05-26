@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common
@@ -13,6 +14,8 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 动画配置信息列表
         /// </summary>
+        [LabelText("动画配置信息列表")]
+        [TableMatrix]
         public List<AnimationInfo> animations;
         
         /// <summary>
@@ -42,18 +45,24 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 状态
         /// </summary>
+        [LabelText("状态")]
+        [ValueDropdown("@OdinDefineSelector.GetStateDefine()")]
         public byte state;
         /// <summary>
         /// 动画名称
         /// </summary>
+        [LabelText("动画名称")]
         public string name;
         /// <summary>
         /// 动画混合时间
         /// </summary>
+        [LabelText("动画混合时间")]
         public float mixduration;
         /// <summary>
         /// 动画前置混合动画列表
         /// </summary>
+        [LabelText("动画前置混合动画列表")]
+        [TableMatrix]
         public List<AnimationBeforeInfo> mixanimations;
         
         /// <summary>
@@ -83,18 +92,23 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 状态
         /// </summary>
+        [LabelText("状态")]
+        [ValueDropdown("@OdinDefineSelector.GetStateDefine()")]
         public byte state;
         /// <summary>
         /// 动画名称
         /// </summary>
+        [LabelText("动画名称")]
         public string name;
         /// <summary>
         /// 动画持续时间
         /// </summary>
+        [LabelText("动画持续时间")]
         public float duration;
         /// <summary>
         /// 动画混合时间
         /// </summary>
+        [LabelText("动画混合时间")]
         public float mixduration;
     }
 }
