@@ -26,3 +26,5 @@ Assets/Resources/BuildinFileManifest.asset.meta
 *.DS_Store
 *.csproj
 *.sln
+/Assets/Plugins/Sirenix
+Assets/Plugins/Sirenix.meta
