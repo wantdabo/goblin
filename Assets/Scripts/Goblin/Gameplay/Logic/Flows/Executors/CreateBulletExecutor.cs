@@ -19,6 +19,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     {
         protected override void OnEnter(CreateBulletData data, FlowInfo flowinfo)
         {
+            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out AttributeInfo attribute)) return;
             if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
             
             var spatialdata = new SpatialData();
