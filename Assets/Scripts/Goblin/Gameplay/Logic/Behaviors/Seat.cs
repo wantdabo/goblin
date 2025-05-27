@@ -11,13 +11,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            stage.eventor.Listen<ActorDeadEvent>(OnActorDead);
+            stage.eventor.Listen<ActorDeadEvent>(this, OnActorDead);
         }
 
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
-            stage.eventor.UnListen<ActorDeadEvent>(OnActorDead);
+            stage.eventor.UnListen<ActorDeadEvent>(this, OnActorDead);
         }
 
         /// <summary>

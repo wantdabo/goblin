@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
@@ -13,14 +14,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// <summary>
     /// 事件订阅派发者
     /// </summary>
-    public class Eventor : Behavior
+    public class Eventor : Behavior<EventorInfo>
     {
-        private Dictionary<Type, List<Delegate>> eventdict { get; set; }
+        private Dictionary<Type, List<(uint index, Delegate action)>> eventdict { get; set; }
         
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            eventdict = ObjectCache.Ensure<Dictionary<Type, List<Delegate>>>();
+            eventdict = ObjectCache.Ensure<Dictionary<Type, List<(uint index, Delegate)>>>();
         }
 
         protected override void OnDisassemble()
@@ -41,10 +42,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         /// <typeparam name="T">事件的结构体</typeparam>
         /// <param name="func">事件的回调</param>
-        public void UnListen<T>(Action<T> func) where T : IEvent
+        public void UnListen<T>(Behavior behavior, Action<T> func) where T : IEvent
         {
             if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
-            funcs.Remove(func);
+            var behaviorhash = behavior.GetHashCode();
+            if (false == info.indexes.TryGetValue((behaviorhash, behavior.id), out var index)) return;
+            funcs.Remove((index, func));
+            info.indexes.Remove((behaviorhash, behavior.id));
         }
         
         /// <summary>
@@ -52,18 +56,29 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         /// <typeparam name="T">事件的结构体</typeparam>
         /// <param name="func">事件的回调</param>
-        public void Listen<T>(Action<T> func) where T : IEvent
+        public void Listen<T>(Behavior behavior, Action<T> func) where T : IEvent
         {
-            if (null == eventdict) eventdict = new Dictionary<Type, List<Delegate>>();
-
             if (false == eventdict.TryGetValue(typeof(T), out var funcs))
             {
-                funcs = ObjectCache.Ensure<List<Delegate>>();
+                funcs = ObjectCache.Ensure<List<(uint index, Delegate)>>();
                 eventdict.Add(typeof(T), funcs);
             }
-            if (funcs.Contains(func)) return;
 
-            funcs.Add(func);
+            var behaviorhash = behavior.GetHashCode();
+            bool notsort = false;
+            if (false == info.indexes.TryGetValue((behaviorhash, behavior.id), out var index))
+            {
+                info.increment = info.increment + 1;
+                index = info.increment;
+                info.indexes.Add((behaviorhash, behavior.id), index);
+                notsort = true;
+            }
+
+            if (funcs.Contains((index, func))) return;
+            funcs.Add((index, func));
+            
+            if (notsort) return;
+            funcs.Sort((funca, funcb) => funca.index.CompareTo(funcb.index));
         }
         
         /// <summary>
