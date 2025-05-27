@@ -6,7 +6,7 @@ namespace Goblin.Custom
     public static class MenusEditor
     {
         [MenuItem("工具/GOBLIN 管线编辑器", false, 1)]
-        public static void OpenDirectorWindow()
+        public static void OpenPipelineScene()
         {
             EditorSceneManager.OpenScene("Assets/UERes/Gameplay/Workspaces/PipelineScene.unity");
         }

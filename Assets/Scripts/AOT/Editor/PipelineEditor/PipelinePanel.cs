@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace PipelineEditor
+namespace Goblin.PipelineEditor
 {
     /// <summary>
     /// Pipeline 面板

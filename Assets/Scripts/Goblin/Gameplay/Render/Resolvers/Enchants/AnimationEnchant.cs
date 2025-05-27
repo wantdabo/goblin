@@ -21,8 +21,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             }
             
             // 如果模型定义没有动画配置, 则回收动画代理
-            var modelinfo = rilbucket.engine.cfg.location.ModelInfos.Get(ril.model);
-            if (null == modelinfo || string.IsNullOrEmpty(modelinfo.Animation))
+            if (false == engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) return;
+            if (string.IsNullOrEmpty(modelinfo.Animation))
             {
                 RecycleAgent(ril.actor);
                 return;

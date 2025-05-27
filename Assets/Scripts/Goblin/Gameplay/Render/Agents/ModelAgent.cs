@@ -86,7 +86,7 @@ namespace Goblin.Gameplay.Render.Agents
             
             RecycleModel();
             model = facade.model;
-            var modelinfo = world.engine.cfg.location.ModelInfos.Get(model);
+            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
             res = modelinfo.Res;
             
             go = ObjectPool.Get<GameObject>($"MODEL_GO_KEY_{res}");

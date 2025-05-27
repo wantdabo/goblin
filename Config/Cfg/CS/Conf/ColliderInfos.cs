@@ -34,6 +34,7 @@ public partial class ColliderInfos
     public System.Collections.Generic.Dictionary<int, Conf.ColliderInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.ColliderInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.ColliderInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.ColliderInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.ColliderInfo Get(int key) => _dataMap[key];
     public Conf.ColliderInfo this[int key] => _dataMap[key];

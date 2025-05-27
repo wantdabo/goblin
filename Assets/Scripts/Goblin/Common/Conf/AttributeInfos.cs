@@ -34,6 +34,7 @@ public partial class AttributeInfos
     public System.Collections.Generic.Dictionary<int, Conf.AttributeInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.AttributeInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.AttributeInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.AttributeInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.AttributeInfo Get(int key) => _dataMap[key];
     public Conf.AttributeInfo this[int key] => _dataMap[key];

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace PipelineEditor
+namespace Goblin.PipelineEditor
 {
     public class PipelineWorkspace
     {

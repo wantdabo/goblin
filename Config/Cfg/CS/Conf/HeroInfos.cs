@@ -34,6 +34,7 @@ public partial class HeroInfos
     public System.Collections.Generic.Dictionary<int, Conf.HeroInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.HeroInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.HeroInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.HeroInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.HeroInfo Get(int key) => _dataMap[key];
     public Conf.HeroInfo this[int key] => _dataMap[key];

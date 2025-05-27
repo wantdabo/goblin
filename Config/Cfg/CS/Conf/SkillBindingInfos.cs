@@ -34,6 +34,7 @@ public partial class SkillBindingInfos
     public System.Collections.Generic.Dictionary<int, Conf.SkillBindingInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.SkillBindingInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.SkillBindingInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.SkillBindingInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.SkillBindingInfo Get(int key) => _dataMap[key];
     public Conf.SkillBindingInfo this[int key] => _dataMap[key];

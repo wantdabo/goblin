@@ -34,6 +34,7 @@ public partial class SkillInfos
     public System.Collections.Generic.Dictionary<int, Conf.SkillInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.SkillInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.SkillInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.SkillInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.SkillInfo Get(int key) => _dataMap[key];
     public Conf.SkillInfo this[int key] => _dataMap[key];

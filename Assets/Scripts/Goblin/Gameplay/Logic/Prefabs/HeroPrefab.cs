@@ -35,8 +35,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
 
         protected override void OnProcessing(Actor actor, HeroPrefabInfo info)
         {
-            var herocfg = stage.cfg.location.HeroInfos.Get(info.hero);
-            var attrcfg = stage.cfg.location.AttributeInfos.Get(herocfg.Attribute);
+            if (false == stage.cfg.location.HeroInfos.TryGetValue(info.hero, out var herocfg)) return;
+            if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrcfg)) return;
 
             actor.AddBehavior<StateMachine>();
             actor.AddBehavior<Movement>();
@@ -47,13 +47,13 @@ namespace Goblin.Gameplay.Logic.Prefabs
             {
                 foreach (var skill in herocfg.Skills)
                 {
-                    var data = stage.cfg.location.SkillInfos.Get(skill);
-                    if (null == data) continue;
+                    if (false == stage.cfg.location.SkillInfos.TryGetValue(skill, out var skillcfg)) return;
+                    if (null == skillcfg) continue;
                     
-                    var strength = data.Strength * stage.cfg.int2fp;
-                    var cooldown = data.Cooldown * stage.cfg.int2fp;
+                    var strength = skillcfg.Strength * stage.cfg.int2fp;
+                    var cooldown = skillcfg.Cooldown * stage.cfg.int2fp;
                     var pipelines = ObjectCache.Ensure<List<uint>>();
-                    foreach (var pipeline in data.Pipelines) pipelines.Add((uint)pipeline);
+                    foreach (var pipeline in skillcfg.Pipelines) pipelines.Add((uint)pipeline);
                     
                     launcher.Load((uint)skill, strength, cooldown, pipelines);
                 }

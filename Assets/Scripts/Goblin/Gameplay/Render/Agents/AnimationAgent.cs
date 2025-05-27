@@ -69,7 +69,7 @@ namespace Goblin.Gameplay.Render.Agents
         private void RILConv2AnimData(RIL_STATE_MACHINE ril)
         {
             if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE facade) || 0 >= facade.model) return;
-            var modelinfo = world.engine.cfg.location.ModelInfos.Get(facade.model);
+            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
             
             if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
             {

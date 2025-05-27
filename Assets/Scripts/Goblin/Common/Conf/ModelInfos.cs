@@ -34,6 +34,7 @@ public partial class ModelInfos
     public System.Collections.Generic.Dictionary<int, Conf.ModelInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.ModelInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.ModelInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.ModelInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.ModelInfo Get(int key) => _dataMap[key];
     public Conf.ModelInfo this[int key] => _dataMap[key];

@@ -22,9 +22,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 if (false == stage.SeekBehavior(launcher.id, out Gamepad gamepad)) continue;
                 foreach (var skill in launcher.info.loadedskills)
                 {
-                    var trigger = stage.cfg.location.SkillBindingInfos.Get((int)skill);
-                    if (null == trigger) continue;
-                    if (false == gamepad.GetInput((ushort)trigger.Key).release) continue;
+                    if (false == stage.cfg.location.SkillBindingInfos.TryGetValue((int)skill, out var binding)) return;
+                    if (null == binding) continue;
+                    if (false == gamepad.GetInput((ushort)binding.Key).release) continue;
                     
                     // 技能释放
                     launcher.Launch(skill);

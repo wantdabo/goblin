@@ -691,12 +691,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         /// <param name="collider">碰撞盒</param>
         /// <param name="colliderid">碰撞盒配置 ID</param>
-        public void SetColliderInfo(ColliderInfo collider, int colliderid)
+        public void SetColliderInfo(ColliderInfo collider, int id)
         {
-            var data = stage.cfg.location.ColliderInfos.Get(colliderid);
-            if (null == data) return;
+            if (false == stage.cfg.location.ColliderInfos.TryGetValue(id, out var collidercfg)) return;
+            if (null == collidercfg) return;
             
-            switch (data.Type)
+            switch (collidercfg.Type)
             {
                 case COLLIDER_DEFINE.BOX:
                     collider.shape = COLLIDER_DEFINE.BOX;
@@ -704,14 +704,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     {
                         offset = new FPVector3
                         (
-                            data.Offset[0] * stage.cfg.int2fp,
-                            data.Offset[1] * stage.cfg.int2fp,
-                            data.Offset[2] * stage.cfg.int2fp
+                            collidercfg.Offset[0] * stage.cfg.int2fp,
+                            collidercfg.Offset[1] * stage.cfg.int2fp,
+                            collidercfg.Offset[2] * stage.cfg.int2fp
                         ),
                         size = new FPVector3(
-                            data.Shape[0] * FP.Half * stage.cfg.int2fp,
-                            data.Shape[1] * FP.Half * stage.cfg.int2fp,
-                            data.Shape[2] * FP.Half * stage.cfg.int2fp
+                            collidercfg.Shape[0] * FP.Half * stage.cfg.int2fp,
+                            collidercfg.Shape[1] * FP.Half * stage.cfg.int2fp,
+                            collidercfg.Shape[2] * FP.Half * stage.cfg.int2fp
                         )
                     };
                     break;
@@ -721,11 +721,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     {
                         offset = new FPVector3
                         (
-                            data.Offset[0] * stage.cfg.int2fp,
-                            data.Offset[1] * stage.cfg.int2fp,
-                            data.Offset[2] * stage.cfg.int2fp
+                            collidercfg.Offset[0] * stage.cfg.int2fp,
+                            collidercfg.Offset[1] * stage.cfg.int2fp,
+                            collidercfg.Offset[2] * stage.cfg.int2fp
                         ),
-                        radius = data.Shape[0] * stage.cfg.int2fp
+                        radius = collidercfg.Shape[0] * stage.cfg.int2fp
                     };
                     break;
             }
