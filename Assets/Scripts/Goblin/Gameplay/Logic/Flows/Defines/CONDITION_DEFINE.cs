@@ -1,4 +1,4 @@
-namespace Goblin.Gameplay.Logic.Common.Defines
+namespace Goblin.Gameplay.Logic.Flows.Defines
 {
     /// <summary>
     /// 条件定义

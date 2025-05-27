@@ -4,6 +4,7 @@ using Goblin.Gameplay.Logic.Commands.Soliders;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Flows.Defines;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
