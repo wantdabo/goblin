@@ -46,9 +46,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
             var behaviorhash = behavior.GetHashCode();
-            if (false == info.indexes.TryGetValue((behaviorhash, behavior.id), out var index)) return;
+            if (false == info.indexes.TryGetValue((behaviorhash, behavior.actor), out var index)) return;
             funcs.Remove((index, func));
-            info.indexes.Remove((behaviorhash, behavior.id));
+            info.indexes.Remove((behaviorhash, behavior.actor));
         }
         
         /// <summary>
@@ -66,11 +66,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
             var behaviorhash = behavior.GetHashCode();
             bool notsort = false;
-            if (false == info.indexes.TryGetValue((behaviorhash, behavior.id), out var index))
+            if (false == info.indexes.TryGetValue((behaviorhash, behavior.actor), out var index))
             {
                 info.increment = info.increment + 1;
                 index = info.increment;
-                info.indexes.Add((behaviorhash, behavior.id), index);
+                info.indexes.Add((behaviorhash, behavior.actor), index);
                 notsort = true;
             }
 
@@ -90,7 +90,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (null == eventdict) return;
             if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
-            for (int i = funcs.Count - 1; i >= 0; i--) (funcs[i] as Action<T>).Invoke(e);
+            for (int i = funcs.Count - 1; i >= 0; i--) (funcs[i].action as Action<T>).Invoke(e);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="owner">管线拥有者</param>
         /// <param name="pipelines">管线的 ID 列表, 用于指向管线数据</param>
         /// <returns>Actor</returns>
-        public Actor GenPipeline(ulong owner, List<uint> pipelines)
+        public ulong GenPipeline(ulong owner, List<uint> pipelines)
         {
             var actor = stage.Spawn(new FlowPrefabInfo
             {
@@ -122,7 +122,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 ObjectCache.Set(instrinfos);
             }
             // 结束管线
-            stage.RmvActor(flowinfo.id);
+            stage.RmvActor(flowinfo.actor);
         }
 
         /// <summary>

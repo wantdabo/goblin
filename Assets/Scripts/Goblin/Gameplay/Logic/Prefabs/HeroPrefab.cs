@@ -33,15 +33,15 @@ namespace Goblin.Gameplay.Logic.Prefabs
     {
         public override byte type => ACTOR_DEFINE.HERO;
 
-        protected override void OnProcessing(Actor actor, HeroPrefabInfo info)
+        protected override void OnProcessing(ulong actor, HeroPrefabInfo info)
         {
             if (false == stage.cfg.location.HeroInfos.TryGetValue(info.hero, out var herocfg)) return;
             if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrcfg)) return;
 
-            actor.AddBehavior<StateMachine>();
-            actor.AddBehavior<Movement>();
+            stage.AddBehavior<StateMachine>(actor);
+            stage.AddBehavior<Movement>(actor);
             
-            var launcher = actor.AddBehavior<SkillLauncher>();
+            var launcher = stage.AddBehavior<SkillLauncher>(actor);
             // 设置技能释放器的技能
             if (null != herocfg.Skills)
             {
@@ -59,22 +59,22 @@ namespace Goblin.Gameplay.Logic.Prefabs
                 }
             }
 
-            var facade = actor.AddBehavior<Facade>();
+            var facade = stage.AddBehavior<Facade>(actor);
             facade.SetModel(herocfg.Model);
 
-            actor.AddBehaviorInfo<TickerInfo>();
-            var attribute = actor.AddBehaviorInfo<AttributeInfo>();
+            stage.AddBehaviorInfo<TickerInfo>(actor);
+            var attribute = stage.AddBehaviorInfo<AttributeInfo>(actor);
             attribute.hp = (uint)attrcfg.HP;
             attribute.maxhp = (uint)attrcfg.HP;
             attribute.movespeed = (uint)attrcfg.MoveSpeed;
             attribute.attack = (uint)attrcfg.Attack;
             
-            var spatial = actor.AddBehaviorInfo<SpatialInfo>();
+            var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
             spatial.position = info.spatial.position;
             spatial.euler = info.spatial.euler;
             spatial.scale = info.spatial.scale;
 
-            var collider = actor.AddBehaviorInfo<ColliderInfo>();
+            var collider = stage.AddBehaviorInfo<ColliderInfo>(actor);
             stage.detection.SetColliderInfo(collider, herocfg.Collider);
         }
     }

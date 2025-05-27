@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 遍历所有的技能释放器, 检查 Gamepad 的输入, 是否响应技能释放
             foreach (var launcher in launchers)
             {
-                if (false == stage.SeekBehavior(launcher.id, out Gamepad gamepad)) continue;
+                if (false == stage.SeekBehavior(launcher.actor, out Gamepad gamepad)) continue;
                 foreach (var skill in launcher.info.loadedskills)
                 {
                     if (false == stage.cfg.location.SkillBindingInfos.TryGetValue((int)skill, out var binding)) return;

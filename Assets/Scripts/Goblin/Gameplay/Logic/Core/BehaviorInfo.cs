@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// ActorID
         /// </summary>
-        public ulong id { get; private set; }
+        public ulong actor { get; private set; }
 
         /// <summary>
         /// 初始化
@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="actor">ActorID</param>
         public void Ready(ulong actor)
         {
-            this.id = actor;
+            this.actor = actor;
             OnReady();
         }
 
@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.Core
         public void Reset()
         {
             OnReset();
-            this.id = 0;
+            this.actor = 0;
         }
 
         /// <summary>

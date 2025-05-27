@@ -27,12 +27,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 计算伤害数值
         /// </summary>
-        /// <param name="id">ActorID</param>
+        /// <param name="actor">ActorID</param>
         /// <param name="strength">伤害强度</param>
         /// <returns>伤害</returns>
-        public DamageInfo ChargeDamage(ulong id, FP strength)
+        public DamageInfo ChargeDamage(ulong actor, FP strength)
         {
-            if (false == stage.SeekBehaviorInfo(id, out AttributeInfo attribute)) return default;
+            if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return default;
             
             DamageInfo damage = new()
             {
@@ -46,12 +46,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 计算抵抗后的伤害数值
         /// </summary>
-        /// <param name="id">ActorID</param>
+        /// <param name="actor">ActorID</param>
         /// <param name="damage">伤害</param>
         /// <returns>抵抗后的伤害</returns>
-        public DamageInfo DischargeDamage(ulong id, DamageInfo damage)
+        public DamageInfo DischargeDamage(ulong actor, DamageInfo damage)
         {
-            if (false == stage.SeekBehaviorInfo(id, out AttributeInfo attribute)) return damage;
+            if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return damage;
 
             return damage;
         }

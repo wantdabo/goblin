@@ -123,14 +123,14 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         protected override void OnRIL(BehaviorInfo info)
         {
             // 只处理一次 RIL
-            if (once && rileds.Contains(info.id)) return;
+            if (once && rileds.Contains(info.actor)) return;
             var result = CacheHashCode(info);
             if (false == result.diffed) return;
             // 记录已经处理过 RIL 的 ActorID
-            if (once) rileds.Add(info.id);
+            if (once) rileds.Add(info.actor);
             
             var ril = RILCache.Ensure<E>();
-            ril.Ready(info.id, result.hashcode);
+            ril.Ready(info.actor, result.hashcode);
             OnRIL(info as T, ril);
             stage.rilsync.Send(ril);
         }
@@ -143,8 +143,8 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         protected (bool diffed, int hashcode) CacheHashCode(BehaviorInfo info)
         {
             int hashcode = OnCalcHashCode(info as T);
-            if (stage.rilsync.Query(info.id, id).Equals(hashcode)) return (false, hashcode);
-            stage.rilsync.CacheHashCode(info.id, id, hashcode);
+            if (stage.rilsync.Query(info.actor, id).Equals(hashcode)) return (false, hashcode);
+            stage.rilsync.CacheHashCode(info.actor, id, hashcode);
 
             return (true, hashcode);
         }

@@ -35,7 +35,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<EventorInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.increment = increment;
             clone.indexes = ObjectCache.Ensure<Dictionary<(int type, ulong actor), uint>>();
             foreach (var kv in indexes) clone.indexes.Add(kv.Key, kv.Value);

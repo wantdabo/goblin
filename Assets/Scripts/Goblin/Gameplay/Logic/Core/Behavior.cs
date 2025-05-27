@@ -15,21 +15,17 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// ActorID
         /// </summary>
-        public ulong id { get; private set; }
-        /// <summary>
-        /// 实体
-        /// </summary>
-        public Actor actor => stage.GetActor(id);
+        public ulong actor { get; private set; }
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="stage">场景</param>
-        /// <param name="id">ActorID</param>
-        public void Initialize(Stage stage, ulong id)
+        /// <param name="actor">ActorID</param>
+        public void Initialize(Stage stage, ulong actor)
         {
             this.stage = stage;
-            this.id = id;
+            this.actor = actor;
         }
 
         /// <summary>
@@ -104,13 +100,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// BehaviorInfo 快捷访问
         /// </summary>
-        public T info => stage.GetBehaviorInfo<T>(id);
+        public T info => stage.GetBehaviorInfo<T>(actor);
 
         protected override void OnAssemble()
         {
             base.OnAssemble();
             // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
-            if (false == stage.SeekBehaviorInfo(id, out T info)) stage.AddBehaviorInfo<T>(id);
+            if (false == stage.SeekBehaviorInfo(actor, out T info)) stage.AddBehaviorInfo<T>(actor);
         }
     }
 }

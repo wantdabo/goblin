@@ -21,7 +21,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <summary>
         /// 碰撞列表
         /// </summary>
-        public List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)> colliders { get; set; }
+        public List<(ulong actor, FPVector3 point, FPVector3 normal, FP penetration)> colliders { get; set; }
+
+        /// <summary>
+        /// 重置
+        /// </summary>
+        public void Reset()
+        {
+            if (null == colliders) return;
+            
+            colliders.Clear();
+            ObjectCache.Set(colliders);
+        }
     }
     
     /// <summary>
@@ -69,7 +80,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             if (false == COLLIDER_DEFINE.QUERY(a.layer, b.layer)) return false;
 
             // 获取空间信息
-            if (false == stage.SeekBehaviorInfo(a.id, out SpatialInfo aspatial) || false == stage.SeekBehaviorInfo(b.id, out SpatialInfo bspatial)) return false;
+            if (false == stage.SeekBehaviorInfo(a.actor, out SpatialInfo aspatial) || false == stage.SeekBehaviorInfo(b.actor, out SpatialInfo bspatial)) return false;
 
             var apos = aspatial.position;
             var arot = FPQuaternion.Euler(aspatial.euler);
@@ -109,7 +120,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>结果</returns>
         public HitResult Overlap(ColliderInfo collider)
         {
-            if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) return default;
+            if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) return default;
 
             HitResult result = new();
             switch (collider.shape)
@@ -125,10 +136,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 如果发生碰撞，清除当前碰撞体
             if (result.hit)
             {
-                var colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                List<(ulong actor, FPVector3 point, FPVector3 normal, FP penetration)> colliders = ObjectCache.Ensure<List<(ulong actor, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 foreach (var c in result.colliders)
                 {
-                    if (collider.id == c.id) continue;
+                    if (collider.actor == c.actor) continue;
                     colliders.Add(c);
                 }
                 result.colliders.Clear();
@@ -160,7 +171,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             HitResult result = new();
             foreach (var collider in colliders)
             {
-                if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) continue;
+                if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
                 if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
                 
                 bool hit = false;
@@ -180,7 +191,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 
                 result.hit = hit;
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
-                result.colliders.Add((collider.id, point, normal, penetration));
+                result.colliders.Add((collider.actor, point, normal, penetration));
             }
             colliders.Clear();
             ObjectCache.Set(colliders);
@@ -207,7 +218,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             HitResult result = new();
             foreach (var collider in colliders)
             {
-                if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) continue;
+                if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
                 if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
 
                 bool hit = false;
@@ -227,7 +238,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
                 result.hit = hit;
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
-                result.colliders.Add((collider.id, point, normal, penetration));
+                result.colliders.Add((collider.actor, point, normal, penetration));
             }
             colliders.Clear();
             ObjectCache.Set(colliders);
@@ -251,7 +262,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             HitResult result = new();
             foreach (var collider in colliders)
             {
-                if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) continue;
+                if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
                 if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
 
                 bool hit = false;
@@ -271,7 +282,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 
                 result.hit = hit;
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
-                result.colliders.Add((collider.id, point, normal, penetration));
+                result.colliders.Add((collider.actor, point, normal, penetration));
             }
             colliders.Clear();
             ObjectCache.Set(colliders);
@@ -754,7 +765,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public bool CalcAABB(ColliderInfo collider,  out AABB aabb)
         {
             aabb = default;
-            if (false == stage.SeekBehaviorInfo(collider.id, out SpatialInfo spatial)) return false;
+            if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) return false;
 
             FPVector3 position = spatial.position;
             FPQuaternion rotation = FPQuaternion.Euler(spatial.euler);

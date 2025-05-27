@@ -54,7 +54,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<GamepadInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             foreach (var kv in inputdict)
             {
                 clone.inputdict.Remove(kv.Key);
@@ -67,7 +67,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + actor.GetHashCode();
             foreach (var kv in inputdict)
             {
                 hash = hash * 31 + kv.Key.GetHashCode();

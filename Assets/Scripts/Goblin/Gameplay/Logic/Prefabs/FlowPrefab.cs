@@ -32,9 +32,9 @@ namespace Goblin.Gameplay.Logic.Prefabs
     {
         public override byte type => ACTOR_DEFINE.FLOW;
         
-        protected override void OnProcessing(Actor actor, FlowPrefabInfo info)
+        protected override void OnProcessing(ulong actor, FlowPrefabInfo info)
         {
-            var flowinfo = actor.AddBehaviorInfo<FlowInfo>();
+            var flowinfo = stage.AddBehaviorInfo<FlowInfo>(actor);
             flowinfo.owner = info.owner;
             var pipelines = ObjectCache.Ensure<List<uint>>();
             pipelines.AddRange(info.pipelines);

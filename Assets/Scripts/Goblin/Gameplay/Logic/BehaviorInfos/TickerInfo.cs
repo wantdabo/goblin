@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<TickerInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.timescale = timescale;
             
             return clone;
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         public override int GetHashCode()
         {
-            return id.GetHashCode() ^ timescale.GetHashCode();
+            return actor.GetHashCode() ^ timescale.GetHashCode();
         }
     }
 }

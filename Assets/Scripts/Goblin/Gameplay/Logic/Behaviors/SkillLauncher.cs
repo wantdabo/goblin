@@ -74,7 +74,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
 
             // 创建管线
             info.skill = skill;
-            info.flow = stage.flow.GenPipeline(actor.id, skillinfo.pipelines).id;
+            info.flow = stage.flow.GenPipeline(actor, skillinfo.pipelines);
             info.casting = true;
         }
 
@@ -87,10 +87,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 碰撞检测
             if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo))
             {
-                var damage = stage.calc.ChargeDamage(actor.id, skillinfo.strength);
+                var damage = stage.calc.ChargeDamage(actor, skillinfo.strength);
                 while (collisioninfo.collisions.TryDequeue(out var target))
                 {
-                    stage.calc.ToDamage(actor.id, target, damage);
+                    stage.calc.ToDamage(actor, target, damage);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
             
             // 切换状态机中状态
-            if (actor.SeekBehavior(out StateMachine statemachine))
+            if (stage.SeekBehavior(actor, out StateMachine statemachine))
             {
                 statemachine.ChangeState(info.casting ? STATE_DEFINE.CASTING : STATE_DEFINE.IDLE);
             }

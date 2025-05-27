@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<SeatInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             foreach (var kv in sadict) clone.sadict.Add(kv.Key, kv.Value);
             foreach (var kv in asdict) clone.asdict.Add(kv.Key, kv.Value);
 
@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + actor.GetHashCode();
             foreach (var kv in sadict)
             {
                 hash = hash * 31 + kv.Key.GetHashCode();

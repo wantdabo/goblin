@@ -40,10 +40,9 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// </summary>
         /// <param name="actor">Actor</param>
         /// <param name="state">预制创建器状态</param>
-        /// <returns>Actor</returns>
-        public Actor Processing(Actor actor, PrefabInfoState state)
+        public void Processing(ulong actor, PrefabInfoState state)
         {
-            return OnProcessing(actor, state);
+            OnProcessing(actor, state);
         }
 
         /// <summary>
@@ -51,10 +50,8 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// </summary>
         /// <param name="actor">Actor</param>
         /// <param name="state">预制创建器状态</param>
-        /// <returns>Actor</returns>
-        protected virtual Actor OnProcessing(Actor actor, PrefabInfoState state)
+        protected virtual void OnProcessing(ulong actor, PrefabInfoState state)
         {
-            return default;
         }
     }
     
@@ -69,16 +66,14 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// </summary>
         public abstract byte type { get; }
         
-        protected override Actor OnProcessing(Actor actor, PrefabInfoState state)
+        protected override void OnProcessing(ulong actor, PrefabInfoState state)
         {
-            if (actor.SeekBehavior(out Tag tag))
+            if (stage.SeekBehavior(actor, out Tag tag))
             {
                 tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
             }
             
             OnProcessing(actor, (state as PrefabInfoState<T>).info);
-
-            return actor;
         }
 
         /// <summary>
@@ -86,6 +81,6 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// </summary>
         /// <param name="actor">Actor</param>
         /// <param name="info">预制创建器信息</param>
-        protected abstract void OnProcessing(Actor actor, T info);
+        protected abstract void OnProcessing(ulong actor, T info);
     }
 }

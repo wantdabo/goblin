@@ -32,14 +32,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
             {
                 while (collisioninfo.collisions.TryDequeue(out var target))
                 {
-                    stage.calc.ToDamage(actor.id, target, bullet.damage);
+                    stage.calc.ToDamage(bullet.actor, target, bullet.damage);
                 }
             }
             
             // 子弹管线结束检查
             if (false == stage.SeekBehaviorInfo(bullet.flow, out FlowInfo flowinfo) || flowinfo.timeline >= flowinfo.length)
             {
-                stage.RmvActor(bullet.id);
+                stage.RmvActor(bullet.actor);
             }
         }
     }

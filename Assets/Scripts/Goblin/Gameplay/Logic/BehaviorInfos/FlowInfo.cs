@@ -64,7 +64,7 @@ namespace Goblin.Gameplay.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<FlowInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.owner = owner;
             clone.length = length;
             clone.timeline = timeline;
@@ -83,7 +83,7 @@ namespace Goblin.Gameplay.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + actor.GetHashCode();
             hash = hash * 31 + owner.GetHashCode();
             hash = hash * 31 + length.GetHashCode();
             hash = hash * 31 + timeline.GetHashCode();

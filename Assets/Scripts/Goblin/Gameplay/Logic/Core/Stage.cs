@@ -250,7 +250,7 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 foreach (var behaviorinfo in behaviorinfos)
                 {
-                    if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.id, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.id, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
+                    if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.actor, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.actor, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
                     dict.Add(behaviorinfo.GetType(), behaviorinfo);
                 }
             }
@@ -361,7 +361,7 @@ namespace Goblin.Gameplay.Logic.Core
                 if (false == SeekBehaviors(type, out var behaviors)) continue;
                 foreach (var behavior in behaviors)
                 {
-                    if (SeekBehaviorInfo(behavior.actor.id, out TickerInfo ticker))
+                    if (SeekBehaviorInfo(behavior.actor, out TickerInfo ticker))
                     {
                         behavior.Tick(ticker.timescale * info.tick);
                         continue;
@@ -405,14 +405,6 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 if (false == SeekBehaviorInfos(rmvactor, out var behaviorinfos)) continue;
                 foreach (var behaviorinfo in behaviorinfos) behaviorinfo.Reset();
-            }
-            
-            // 拆解 Actor
-            foreach (var rmvactor in cache.rmvactors)
-            {
-                var actor = GetActor(rmvactor);
-                if (null == actor) continue;
-                actor.Disassemble();
             }
             
             // 回收清理
@@ -467,12 +459,7 @@ namespace Goblin.Gameplay.Logic.Core
                     cache.behaviorinfodict.Remove(rmvactor);
                 }
             
-                // 回收清理 Actor
-                if (cache.actordict.TryGetValue(rmvactor, out var actor))
-                {
-                    info.actors.Remove(rmvactor);
-                    cache.actordict.Remove(rmvactor);
-                }
+                info.actors.Remove(rmvactor);
             }
             
             cache.rmvactors.Clear();
@@ -485,31 +472,20 @@ namespace Goblin.Gameplay.Logic.Core
         /// <typeparam name="T">预制构建器类型</typeparam>
         /// <returns>Actor</returns>
         /// <exception cref="Exception">预制构建器类型不存在</exception>
-        public Actor Spawn<T>(T prefabinfo) where T : IPrefabInfo
+        public ulong Spawn<T>(T prefabinfo) where T : IPrefabInfo
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
 
             var state = ObjectCache.Ensure<PrefabInfoState<T>>();
             state.info = prefabinfo;
-            var actor = prefab.Processing(GenActor(), state);
+            var actor = GenActor();
+            prefab.Processing(actor, state);
             state.Reset();
             ObjectCache.Set(state);
 
             return actor;
         }
 
-        /// <summary>
-        /// 获取 Actor
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <returns>Actor</returns>
-        public Actor GetActor(ulong id)
-        {
-            if (false == cache.actordict.TryGetValue(id, out var actor)) return default;
-            
-            return actor;
-        }
-        
         /// <summary>
         /// 移除 Actor
         /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Stage.RmvActors)
@@ -528,12 +504,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// 生成 Actor
         /// </summary>
         /// <returns>Actor</returns>
-        public Actor GenActor()
+        public ulong GenActor()
         {
             // 生成一个 Actor
-            var actor = AddActor(++info.increment);
-            eventor.Tell(new ActorBornEvent { actor = actor.id });
-            DiffActor(actor.id, RIL_DEFINE.DIFF_NEW);
+            var actor = ++info.increment;
+            AddActor(actor);
+            eventor.Tell(new ActorBornEvent { actor = actor });
+            DiffActor(actor, RIL_DEFINE.DIFF_NEW);
             
             return actor;
         }
@@ -541,21 +518,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 添加 Actor
         /// </summary>
-        /// <param name="id">ActorID</param>
+        /// <param name="actor">ActorID</param>
         /// <returns>Actor</returns>
         /// <exception cref="Exception">Actor 已存在</exception>
-        private Actor AddActor(ulong id)
+        private void AddActor(ulong actor)
         {
-            var actor = ObjectCache.Ensure<Actor>();
-            if (false == info.actors.Contains(id)) info.actors.Add(id);
-            if (cache.actordict.ContainsKey(id)) throw new Exception($"actor {id} already exists.");
-            cache.actordict.Add(id, actor);
-            
-            actor.Assemble(id, this);
+            if (false == info.actors.Contains(actor)) info.actors.Add(actor);
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
-            actor.AddBehavior<Tag>().Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
-            
-            return actor;
+            AddBehavior<Tag>(actor).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
         }
 
         /// <summary>
@@ -742,7 +712,7 @@ namespace Goblin.Gameplay.Logic.Core
             // 排序
             list.Sort((a, b) =>
             {
-                return a.id.CompareTo(b.id);
+                return a.actor.CompareTo(b.actor);
             });
             behavior.Assemble();
 
@@ -876,9 +846,9 @@ namespace Goblin.Gameplay.Logic.Core
                         scale = player.scale * cfg.int2fp,
                     }
                 });
-                hero.AddBehavior<Gamepad>();
+                AddBehavior<Gamepad>(hero);
                 // 入座
-                seat.Sitdown(player.seat, hero.id);
+                seat.Sitdown(player.seat, hero);
             }
         }
         
@@ -900,10 +870,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private sealed class StageCache
         {
-            /// <summary>
-            /// Actor 列表, 键为 ActorID, 值为 Actor 实例
-            /// </summary>
-            public Dictionary<ulong, Actor> actordict { get; set; }
             /// <summary>
             /// 行为列表, 键为 ActorID, 值为该 Actor 上的所有行为
             /// </summary>
@@ -927,7 +893,6 @@ namespace Goblin.Gameplay.Logic.Core
             /// <returns>StageCache</returns>
             public StageCache Initialize()
             {
-                actordict = ObjectCache.Ensure<Dictionary<ulong, Actor>>();
                 behaviordict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, Behavior>>>();
                 behaviors = ObjectCache.Ensure<Dictionary<Type, List<Behavior>>>();
                 behaviorinfodict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
@@ -941,9 +906,6 @@ namespace Goblin.Gameplay.Logic.Core
             /// </summary>
             public void Dispose()
             {
-                actordict.Clear();
-                ObjectCache.Set(actordict);
-            
                 behaviordict.Clear();
                 ObjectCache.Set(behaviordict);
             

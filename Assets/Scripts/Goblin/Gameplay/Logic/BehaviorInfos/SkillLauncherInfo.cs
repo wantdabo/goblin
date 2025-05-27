@@ -82,7 +82,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<SkillLauncherInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.skill = skill;
             clone.flow = flow;
             clone.casting = casting;
@@ -107,7 +107,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + actor.GetHashCode();
             hash = hash * 31 + skill.GetHashCode();
             hash = hash * 31 + flow.GetHashCode();
             hash = hash * 31 + casting.GetHashCode();

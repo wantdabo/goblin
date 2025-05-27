@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<AttributeInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.hp = hp;
             clone.maxhp = maxhp;
             clone.movespeed = movespeed;
@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + id.GetHashCode();
+            hash = hash * 31 + actor.GetHashCode();
             hash = hash * 31 + hp.GetHashCode();
             hash = hash * 31 + maxhp.GetHashCode();
             hash = hash * 31 + movespeed.GetHashCode();

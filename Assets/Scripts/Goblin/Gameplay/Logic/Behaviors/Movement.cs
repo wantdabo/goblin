@@ -17,11 +17,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="tick">步长</param>
         public void Move(FPVector3 dire, FP tick)
         {
-            if (false == actor.SeekBehavior(out StateMachine machine)) return;
+            if (false == stage.SeekBehavior(actor, out StateMachine machine)) return;
             if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
             
-            if (false == actor.SeekBehaviorInfo(out AttributeInfo attribute)) return;
-            if (false == actor.SeekBehaviorInfo(out SpatialInfo spatial)) return;
+            if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return;
+            if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
             
             info.turnmotion = true;
             
@@ -36,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            if (false == actor.SeekBehavior(out Gamepad gamepad)) return;
+            if (false == stage.SeekBehavior(actor, out Gamepad gamepad)) return;
             
             var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
             if (false == joystick.press) return;
@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnEndTick();
             // 如果没有在移动状态, 则尝试切换到 Idle 状态
-            if (false == info.turnmotion && actor.SeekBehavior(out StateMachine machine))
+            if (false == info.turnmotion && stage.SeekBehavior(actor, out StateMachine machine))
             {
                 machine.TryChangeState(STATE_DEFINE.IDLE);
             }

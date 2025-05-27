@@ -44,25 +44,25 @@ namespace Goblin.Gameplay.Logic.Prefabs
     {
         public override byte type => ACTOR_DEFINE.BULLET;
 
-        protected override void OnProcessing(Actor actor, BulletPrefabInfo info)
+        protected override void OnProcessing(ulong actor, BulletPrefabInfo info)
         {
-            var bullet = actor.AddBehaviorInfo<BulletInfo>();
+            var bullet = stage.AddBehaviorInfo<BulletInfo>(actor);
             bullet.owner = info.owner;
             bullet.strength = info.strength;
             bullet.speed = info.speed;
             bullet.damage = stage.calc.ChargeDamage(bullet.owner, bullet.strength);
             
-            var spatial = actor.AddBehaviorInfo<SpatialInfo>();
+            var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
             spatial.position = info.spatial.position;
             spatial.euler = info.spatial.euler;
             spatial.scale = info.spatial.scale;
 
             var pipelines = ObjectCache.Ensure<List<uint>>();
             pipelines.AddRange(info.pipelines);
-            bullet.flow = stage.flow.GenPipeline(actor.id, pipelines).id;
+            bullet.flow = stage.flow.GenPipeline(actor, pipelines);
             
             // TODO 临时加模型, 记得删除
-            var facade = actor.AddBehavior<Facade>();
+            var facade = stage.AddBehavior<Facade>(actor);
             facade.SetModel(200001);
         }
     }

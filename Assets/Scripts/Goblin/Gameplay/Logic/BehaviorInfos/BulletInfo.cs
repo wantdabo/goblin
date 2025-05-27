@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<BulletInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.owner = owner;
             clone.flow = flow;
             clone.speed = speed;

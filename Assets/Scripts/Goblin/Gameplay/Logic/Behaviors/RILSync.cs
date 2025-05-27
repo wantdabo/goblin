@@ -172,7 +172,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                         // 对每个类型的所有行为信息进行处理
                         foreach (var behaviorinfo in kv.Value)
                         {
-                            if (stage.SeekBehavior(behaviorinfo.id, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
+                            if (stage.SeekBehavior(behaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                             {
                                 if (val == ACTOR_DEFINE.FLOW) continue;
                             }

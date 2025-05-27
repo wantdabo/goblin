@@ -28,7 +28,7 @@ namespace Goblin.Gameplay.BehaviorInfos.Flows
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<CollisionInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             foreach (var id in collisions)
             {
                 clone.collisions.Enqueue(id);

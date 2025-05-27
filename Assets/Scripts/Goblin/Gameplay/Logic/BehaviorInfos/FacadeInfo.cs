@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<FacadeInfo>();
-            clone.Ready(id);
+            clone.Ready(actor);
             clone.model = model;
             
             return clone;
