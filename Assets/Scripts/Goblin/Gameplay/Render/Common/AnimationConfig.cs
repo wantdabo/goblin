@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Render.Common
         /// 状态
         /// </summary>
         [LabelText("状态")]
-        [ValueDropdown("@OdinDefineSelector.GetStateDefine()")]
+        [ValueDropdown("@OdinDefineValueDropdownList.GetStateDefine()")]
         public byte state;
         /// <summary>
         /// 动画名称
@@ -93,7 +93,7 @@ namespace Goblin.Gameplay.Render.Common
         /// 状态
         /// </summary>
         [LabelText("状态")]
-        [ValueDropdown("@OdinDefineSelector.GetStateDefine()")]
+        [ValueDropdown("@OdinDefineValueDropdownList.GetStateDefine()")]
         public byte state;
         /// <summary>
         /// 动画名称
