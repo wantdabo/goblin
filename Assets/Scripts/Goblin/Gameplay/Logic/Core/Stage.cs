@@ -20,6 +20,28 @@ using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 namespace Goblin.Gameplay.Logic.Core
 {
     /// <summary>
+    /// Actor 出生事件
+    /// </summary>
+    public struct ActorBornEvent : IEvent
+    {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong actor { get; set; }
+    }
+
+    /// <summary>
+    /// Actor 死亡事件
+    /// </summary>
+    public struct ActorDeadEvent : IEvent
+    {
+        /// <summary>
+        /// ActorID
+        /// </summary>
+        public ulong actor { get; set; }
+    }
+
+    /// <summary>
     /// 场景, 逻辑层的容器, 负责容纳所有的 Actor, 以及 Actor 的行为 & 行为数据
     /// </summary>
     public sealed class Stage
@@ -78,6 +100,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// 配置
         /// </summary>
         public Config cfg => GetBehavior<Config>(sa);
+        /// <summary>
+        /// 事件订阅派发者
+        /// </summary>
+        public Eventor eventor => GetBehavior<Eventor>(sa);
         /// <summary>
         /// 座位
         /// </summary>
@@ -146,13 +172,14 @@ namespace Goblin.Gameplay.Logic.Core
             AddActor(sa);
             GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
             AddBehavior<Config>(sa);
+            AddBehavior<Eventor>(sa);
             AddBehavior<Seat>(sa);
             AddBehavior<Random>(sa).Initialze(data.seed);
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
             AddBehavior<Captain>(sa);
-            AddBehavior<SkillBinding>(sa);
             AddBehavior<Flow>(sa);
+            AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
             AddBehavior<RILSync>(sa);
             
@@ -492,10 +519,9 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
-            
+
+            eventor.Tell(new ActorDeadEvent { actor = id });
             DiffActor(id, RIL_DEFINE.DIFF_DEL);
-            
-            seat.Standup(id);
         }
 
         /// <summary>
@@ -506,7 +532,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             // 生成一个 Actor
             var actor = AddActor(++info.increment);
-            
+            eventor.Tell(new ActorBornEvent { actor = actor.id });
             DiffActor(actor.id, RIL_DEFINE.DIFF_NEW);
             
             return actor;

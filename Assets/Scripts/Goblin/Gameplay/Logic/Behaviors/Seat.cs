@@ -8,6 +8,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Seat : Behavior<SeatInfo>
     {
+        protected override void OnAssemble()
+        {
+            base.OnAssemble();
+            stage.eventor.Listen<ActorDeadEvent>(OnActorDead);
+        }
+
+        protected override void OnDisassemble()
+        {
+            base.OnDisassemble();
+            stage.eventor.UnListen<ActorDeadEvent>(OnActorDead);
+        }
+
         /// <summary>
         /// 根据座位 ID 获取 ActorID
         /// </summary>
@@ -15,10 +27,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>ActorID</returns>
         public ulong GetActor(ulong seat)
         {
-            if (info.sadict.TryGetValue(seat, out var actor))
-            {
-                return actor;
-            }
+            if (info.sadict.TryGetValue(seat, out var actor)) return actor;
+            
             return 0;
         }
         
@@ -29,10 +39,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>座位 ID</returns>
         public ulong GetSeat(ulong actor)
         {
-            if (info.asdict.TryGetValue(actor, out var seat))
-            {
-                return seat;
-            }
+            if (info.asdict.TryGetValue(actor, out var seat)) return seat;
+            
             return 0;
         }
 
@@ -49,16 +57,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.sadict.Add(seat, id);
             info.asdict.Add(id, seat);
         }
-
-        /// <summary>
-        /// 站起
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        public void Standup(ulong id)
+        
+        private void OnActorDead(ActorDeadEvent e)
         {
-            if (false == info.asdict.TryGetValue(id, out var seat)) return;
+            // 站起
+            if (false == info.asdict.TryGetValue(e.actor, out var seat)) return;
             
-            info.asdict.Remove(id);
+            info.asdict.Remove(e.actor);
             info.sadict.Remove(seat);
         }
     }

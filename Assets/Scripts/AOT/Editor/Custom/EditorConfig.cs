@@ -21,7 +21,6 @@ namespace Goblin.Custom
         {
             location = new Tables((cfg) =>
             {
-                Debug.Log($"{Application.dataPath}/GameRes/Raw/Configs/{cfg}.bytes");
                 return new ByteBuf( File.ReadAllBytes($"{Application.dataPath}/GameRes/Raw/Configs/{cfg}.bytes"));
             });
         }
