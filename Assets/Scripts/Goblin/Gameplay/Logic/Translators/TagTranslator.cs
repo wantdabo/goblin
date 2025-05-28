@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class TagTranslator : Translator<TagInfo, RIL_TAG>
     {
-        protected override ushort id => RIL_DEFINE.TAG;
+        public override ushort id => RIL_DEFINE.TAG;
 
         protected override void OnRIL(TagInfo info, RIL_TAG ril)
         {

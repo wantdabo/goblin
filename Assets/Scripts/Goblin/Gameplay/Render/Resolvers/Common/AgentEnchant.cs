@@ -1,4 +1,5 @@
 using Goblin.Core;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 
 namespace Goblin.Gameplay.Render.Resolvers.Common
@@ -24,12 +25,32 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
 
             return this;
         }
-        
+
         /// <summary>
         /// 处理数据状态
         /// </summary>
         /// <param name="ril">数据状态</param>
-        public virtual void DoRIL(IRIL ril){ }
+        public virtual void DoRIL(IRIL ril)
+        {
+            
+        }
+        
+        /// <summary>
+        /// 处理数据状态
+        /// </summary>
+        /// <param name="ril"></param>
+        public void LossRIL(RIL_LOSS ril)
+        {
+            OnLossRIL(ril);
+        }
+        
+        /// <summary>
+        /// 处理数据状态移除
+        /// </summary>
+        /// <param name="ril">LOSS 丢弃渲染指令</param>
+        protected virtual void OnLossRIL(RIL_LOSS ril)
+        {
+        }
     }
 
     /// <summary>

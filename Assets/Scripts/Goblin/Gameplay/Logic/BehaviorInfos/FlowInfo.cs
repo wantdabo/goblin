@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.BehaviorInfos
         /// <summary>
         /// 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
         /// </summary>
-        public ulong elapsed { get; set; }
+        public ulong framepass { get; set; }
         /// <summary>
         /// 管线的 ID 列表, 用于指向管线数据
         /// </summary>
@@ -39,7 +39,7 @@ namespace Goblin.Gameplay.BehaviorInfos
             owner = 0;
             length = 0;
             timeline = 0;
-            elapsed = 0;
+            framepass = 0;
             pipelines = ObjectCache.Ensure<List<uint>>();
             doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
         }
@@ -49,7 +49,7 @@ namespace Goblin.Gameplay.BehaviorInfos
             owner = 0;
             length = 0;
             timeline = 0;
-            elapsed = 0;
+            framepass = 0;
             pipelines.Clear();
             ObjectCache.Set(pipelines);
             foreach (var doing in doings)
@@ -68,7 +68,7 @@ namespace Goblin.Gameplay.BehaviorInfos
             clone.owner = owner;
             clone.length = length;
             clone.timeline = timeline;
-            clone.elapsed = elapsed;
+            clone.framepass = framepass;
             foreach (var pipeline in pipelines) clone.pipelines.Add(pipeline);
             foreach (var doing in doings)
             {
@@ -87,7 +87,7 @@ namespace Goblin.Gameplay.BehaviorInfos
             hash = hash * 31 + owner.GetHashCode();
             hash = hash * 31 + length.GetHashCode();
             hash = hash * 31 + timeline.GetHashCode();
-            hash = hash * 31 + elapsed.GetHashCode();
+            hash = hash * 31 + framepass.GetHashCode();
             foreach (var pipeline in pipelines) hash = hash * 31 + pipeline.GetHashCode();
             foreach (var doing in doings)
             {

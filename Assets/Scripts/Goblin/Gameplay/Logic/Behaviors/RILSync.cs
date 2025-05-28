@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Gameplay.Logic.Translators.Common;
@@ -18,7 +20,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
     public class RILSync : Behavior
     {
         /// <summary>
-        /// RIL 翻译器集合
+        /// RIL 翻译器集合 (Translator 类型 -> Translator 列表)
         /// </summary>
         private Dictionary<Type, List<Translator>> translatordict { get; set; }
         /// <summary>
@@ -149,6 +151,36 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             eventqueue.Enqueue(e);
         }
+        
+        /// <summary>
+        /// 发送丢失的渲染指令 (RIL_LOSS)
+        /// </summary>
+        private void SendLossRIL()
+        {
+            foreach (var rmvbehaviorinfo in stage.cache.rmvbehaviorinfos)
+            {
+                if (stage.SeekBehavior(rmvbehaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
+                {
+                    if (val == ACTOR_DEFINE.FLOW) continue;
+                }
+                
+                if (false == translatordict.TryGetValue(rmvbehaviorinfo.GetType(), out var translators)) continue;
+                foreach (var translator in translators)
+                {
+                    var ril =  RILCache.Ensure<RIL_LOSS>();
+                    ril.Ready(rmvbehaviorinfo.actor, 0);
+                    ril.loss = translator.id;
+                    
+                    translator.RmvOnceActor(rmvbehaviorinfo.actor);
+                    if (hashcodedict.ContainsKey((rmvbehaviorinfo.actor, translator.id))) 
+                    {
+                        hashcodedict.Remove((rmvbehaviorinfo.actor, translator.id), out _);
+                    }
+                    
+                    Send(ril);
+                }
+            }
+        }
 
         /// <summary>
         /// 执行翻译
@@ -162,6 +194,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 foreach (var translator in translators) translator.Translate(info);
             }
 
+            SendLossRIL();
             // 并行处理各种类型的行为信息
             Parallel.ForEach(info.behaviorinfos, kv =>
             {
@@ -172,6 +205,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
                         // 对每个类型的所有行为信息进行处理
                         foreach (var behaviorinfo in kv.Value)
                         {
+                            if (stage.cache.rmvactors.Contains(behaviorinfo.actor)) continue;
+                            if (stage.cache.rmvbehaviorinfos.Contains(behaviorinfo)) continue;
                             if (stage.SeekBehavior(behaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                             {
                                 if (val == ACTOR_DEFINE.FLOW) continue;

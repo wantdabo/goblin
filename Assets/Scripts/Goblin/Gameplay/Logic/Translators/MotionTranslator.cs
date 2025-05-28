@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class MotionTranslator : Translator<MotionInfo, RIL_MOTION>
     {
-        protected override ushort id => RIL_DEFINE.MOTION;
+        public override ushort id => RIL_DEFINE.MOTION;
         
         protected override void OnRIL(MotionInfo info, RIL_MOTION ril)
         {

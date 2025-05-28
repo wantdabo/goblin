@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class StageTranslator : Translator<StageInfo, RIL_STAGE>
     {
-        protected override ushort id => RIL_DEFINE.STAGE;
+        public override ushort id => RIL_DEFINE.STAGE;
 
         protected override void OnRIL(StageInfo info, RIL_STAGE ril)
         {

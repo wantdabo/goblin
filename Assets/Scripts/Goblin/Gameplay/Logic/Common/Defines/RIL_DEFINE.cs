@@ -22,46 +22,50 @@
         /// RIL_EVENT 治疗
         /// </summary>
         public const ushort EVENT_CURE = 2;
-        
+
+        /// <summary>
+        /// LOSS 丢弃渲染指令
+        /// </summary>
+        public const ushort LOSS = 0;
         /// <summary>
         /// STAGE 场景指令
         /// </summary>
-        public const ushort STAGE = 0;
+        public const ushort STAGE = 1;
         /// <summary>
         /// TICKER 驱动指令
         /// </summary>
-        public const ushort TICKER = 1;
+        public const ushort TICKER = 2;
         /// <summary>
         /// SEAT 座位指令
         /// </summary>
-        public const ushort SEAT = 2;
+        public const ushort SEAT = 3;
         /// <summary>
         /// TAG 标签指令
         /// </summary>
-        public const ushort TAG = 3;
+        public const ushort TAG = 4;
         /// <summary>
         /// SPATIAL 指令
         /// </summary>
-        public const ushort SPATIAL = 4;
+        public const ushort SPATIAL = 5;
         /// <summary>
         /// STATE 状态机指令
         /// </summary>
-        public const ushort STATE_MACHINE = 5;
+        public const ushort STATE_MACHINE = 6;
         /// <summary>
         /// ATTRIBUTE 属性指令
         /// </summary>
-        public const ushort ATTRIBUTE = 6;
+        public const ushort ATTRIBUTE = 7;
         /// <summary>
         /// ACTOR 单位指令
         /// </summary>
-        public const ushort ACTOR = 7;
+        public const ushort ACTOR = 8;
         /// <summary>
         /// MOTION 运动指令
         /// </summary>
-        public const ushort MOTION = 8;
+        public const ushort MOTION = 9;
         /// <summary>
         /// FACADE 外观指令
         /// </summary>
-        public const ushort FACADE = 9;
+        public const ushort FACADE = 10;
     }
 }

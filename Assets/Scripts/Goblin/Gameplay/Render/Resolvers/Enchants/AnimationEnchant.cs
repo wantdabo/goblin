@@ -32,6 +32,12 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             rilbucket.world.EnsureAgent<AnimationAgent>(ril.actor);
         }
 
+        protected override void OnLossRIL(RIL_LOSS ril)
+        {
+            base.OnLossRIL(ril);
+            RecycleAgent(ril.actor);
+        }
+
         /// <summary>
         /// 回收动画代理
         /// </summary>

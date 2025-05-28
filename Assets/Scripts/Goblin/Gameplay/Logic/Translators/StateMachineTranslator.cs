@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class StateMachineTranslator : Translator<StateMachineInfo, RIL_STATE_MACHINE>
     {
-        protected override ushort id => RIL_DEFINE.STATE_MACHINE;
+        public override ushort id => RIL_DEFINE.STATE_MACHINE;
 
         protected override void OnRIL(StateMachineInfo info, RIL_STATE_MACHINE ril)
         {

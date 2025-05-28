@@ -5,6 +5,7 @@ using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Render.Resolvers.Cross;
@@ -187,6 +188,22 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         }
 
         /// <summary>
+        /// 清除指定状态
+        /// </summary>
+        /// <param name="loss">LOSS 丢弃渲染指令</param>
+        public void LossRIL(RIL_LOSS loss)
+        {
+            if (false == rilidsdict.TryGetValue(loss.actor, out var iddict)) return;
+            if (false == iddict.TryGetValue(loss.loss, out var ril)) return;
+            ril.Reset();
+            RILCache.Set(ril);
+            iddict.Remove(loss.loss);
+            
+            if (false == rildict.TryGetValue(loss.actor, out var dict)) return;
+            dict.Remove(ril.GetType());
+        }
+
+        /// <summary>
         /// 获取所有的状态
         /// </summary>
         /// <param name="rils">数据状态列表</param>
@@ -323,6 +340,18 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         /// <param name="ril">渲染状态</param>
         public void SetRIL(IRIL ril)
         {
+            if (ril.id == RIL_DEFINE.LOSS)
+            {
+                var loss = ril as RIL_LOSS;
+                if (enchantdict.TryGetValue(loss.loss, out var list)) foreach (var enchant in list) enchant.LossRIL(loss);
+                LossRIL(loss);
+                
+                ril.Reset();
+                RILCache.Set(ril);
+                
+                return;
+            }
+
             // 渲染状态
             var type = ril.GetType();
             if (false == rildict.TryGetValue(ril.actor, out var dict)) rildict.Add(ril.actor, dict = ObjectPool.Ensure<Dictionary<Type, IRIL>>());

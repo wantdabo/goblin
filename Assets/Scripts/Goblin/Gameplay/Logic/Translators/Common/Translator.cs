@@ -13,6 +13,10 @@ namespace Goblin.Gameplay.Logic.Translators.Common
     public abstract class Translator
     {
         /// <summary>
+        /// 渲染指令 ID
+        /// </summary>
+        public abstract ushort id { get; }
+        /// <summary>
         /// 场景
         /// </summary>
         protected Stage stage { get; private set; }
@@ -47,7 +51,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         {
             OnRIL(info);
         }
-
+        
         /// <summary>
         /// 加载
         /// </summary>
@@ -61,7 +65,15 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         protected virtual void OnUnload()
         {
         }
-
+        
+        /// <summary>
+        /// 清除只处理一次的渲染指令标记
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        public virtual void RmvOnceActor(ulong actor)
+        {
+        }
+        
         /// <summary>
         /// 渲染指令处理
         /// </summary>
@@ -76,10 +88,6 @@ namespace Goblin.Gameplay.Logic.Translators.Common
     /// <typeparam name="E">RIL 类型</typeparam>
     public abstract class Translator<T, E> : Translator where T : BehaviorInfo where E : IRIL, new()
     {
-        /// <summary>
-        /// 渲染指令 ID
-        /// </summary>
-        protected abstract ushort id { get; }
         /// <summary>
         /// 是否只处理一次
         /// </summary>
@@ -104,6 +112,13 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             
             rileds.Clear();
             ObjectCache.Set(rileds);
+        }
+
+        public override void RmvOnceActor(ulong actor)
+        {
+            base.RmvOnceActor(actor);
+            if (false == once) return;
+            if (rileds.Contains(actor)) rileds.Remove(actor);
         }
 
         /// <summary>

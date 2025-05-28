@@ -45,6 +45,22 @@ namespace Goblin.Gameplay.Logic.Core
         }
         
         /// <summary>
+        /// 添加绑定信息, 在 Behavior 被加载时调用
+        /// </summary>
+        public void AddBindingInfo()
+        {
+            OnAddBindingInfo();
+        }
+
+        /// <summary>
+        /// 移除绑定信息, 在 Behavior 被卸载时调用
+        /// </summary>
+        public void RmvBindingInfo()
+        {
+            OnRmvBindingInfo();
+        }
+
+        /// <summary>
         /// Tick, 在每一帧中, 会被调用
         /// </summary>
         /// <param name="tick">步长</param>
@@ -72,6 +88,20 @@ namespace Goblin.Gameplay.Logic.Core
         /// 拆解, 子类重写
         /// </summary>
         protected virtual void OnDisassemble()
+        {
+        }
+        
+        /// <summary>
+        /// 添加绑定信息, 子类重写
+        /// </summary>
+        protected virtual void OnAddBindingInfo()
+        {
+        }
+        
+        /// <summary>
+        /// 移除绑定信息, 子类重写
+        /// </summary>
+        protected virtual void OnRmvBindingInfo()
         {
         }
 
@@ -102,11 +132,18 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public T info => stage.GetBehaviorInfo<T>(actor);
 
-        protected override void OnAssemble()
+        protected override void OnAddBindingInfo()
         {
-            base.OnAssemble();
+            base.OnAddBindingInfo();
             // Behavior<T> 实现类, 可以指定 BehaviorInfo 用来快速访问对应的 BehaviorInfo
             if (false == stage.SeekBehaviorInfo(actor, out T info)) stage.AddBehaviorInfo<T>(actor);
+        }
+
+        protected override void OnRmvBindingInfo()
+        {
+            base.OnRmvBindingInfo();
+            // Behavior<T> 实现类, 绑定的 BehaviorInfo 在卸载时需要被移除
+            if (stage.SeekBehaviorInfo(actor, out T info)) stage.RmvBehaviorInfo(info);
         }
     }
 }

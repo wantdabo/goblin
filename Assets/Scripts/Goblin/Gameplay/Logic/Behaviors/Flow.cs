@@ -170,12 +170,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 FP flowtick = tick;
                 if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo ownertickerinfo)) flowtick *= ownertickerinfo.timescale;
                 // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
-                flowinfo.elapsed += (flowtick * stage.cfg.fp2int).AsUInt();
-                while (flowinfo.elapsed >= GAME_DEFINE.LOGIC_TICK_MS)
+                flowinfo.framepass += (flowtick * stage.cfg.fp2int).AsUInt();
+                while (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)
                 {
                     RunPipeline(flowinfo);
                     flowinfo.timeline += GAME_DEFINE.LOGIC_TICK_MS;
-                    flowinfo.elapsed -= GAME_DEFINE.LOGIC_TICK_MS;
+                    flowinfo.framepass -= GAME_DEFINE.LOGIC_TICK_MS;
                 }
                 
                 // 如果管线的时间线已经超过了管线的长度, 结束管线

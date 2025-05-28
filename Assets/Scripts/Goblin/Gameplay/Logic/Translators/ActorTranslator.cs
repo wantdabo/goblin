@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class ActorTranslator : Translator<StageInfo, RIL_ACTOR>
     {
-        protected override ushort id => RIL_DEFINE.ACTOR;
+        public override ushort id => RIL_DEFINE.ACTOR;
 
         protected override bool once => true;
 

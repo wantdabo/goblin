@@ -19,10 +19,21 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             }
             else
             {
-                var agent = rilbucket.world.GetAgent<ModelAgent>(ril.actor);
-                if (null == agent) return;
-                rilbucket.world.RmvAgent(agent);
+                RecycleAgent(ril.actor);
             }
+        }
+        
+        protected override void OnLossRIL(RIL_LOSS ril)
+        {
+            base.OnLossRIL(ril);
+            RecycleAgent(ril.actor);
+        }
+        
+        private void RecycleAgent(ulong actor)
+        {
+            var agent = rilbucket.world.GetAgent<ModelAgent>(actor);
+            if (null == agent) return;
+            rilbucket.world.RmvAgent(agent);
         }
     }
 }

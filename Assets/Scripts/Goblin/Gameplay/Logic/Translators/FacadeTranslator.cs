@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class FacadeTranslator : Translator<FacadeInfo, RIL_FACADE>
     {
-        protected override ushort id => RIL_DEFINE.FACADE;
+        public override ushort id => RIL_DEFINE.FACADE;
         
         protected override void OnRIL(FacadeInfo info, RIL_FACADE ril)
         {

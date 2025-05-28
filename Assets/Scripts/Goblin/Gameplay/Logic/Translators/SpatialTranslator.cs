@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class SpatialTranslator : Translator<SpatialInfo, RIL_SPATIAL>
     {
-        protected override ushort id => RIL_DEFINE.SPATIAL;
+        public override ushort id => RIL_DEFINE.SPATIAL;
 
         protected override void OnRIL(SpatialInfo info, RIL_SPATIAL ril)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Commands;
@@ -75,7 +76,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Stage 缓存
         /// </summary>
-        private StageCache cache { get; set; }
+        public StageCache cache { get; private set; }
         /// <summary>
         /// Stage 数据
         /// </summary>
@@ -202,7 +203,7 @@ namespace Goblin.Gameplay.Logic.Core
             // 回收 Actor
             cache.rmvactors.Clear();
             cache.rmvactors.AddRange(info.actors);
-            RecycleActors();
+            Recycle();
             
             // 卸载 Prefabs
             foreach (var prefab in prefabs.Values) prefab.Unload();
@@ -240,7 +241,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (snapshot.frame == info.frame) return;
             cache.rmvactors.Clear();
             cache.rmvactors.AddRange(info.actors);
-            RecycleActors();
+            Recycle();
             
             info.Reset();
             ObjectCache.Set(info);
@@ -385,84 +386,111 @@ namespace Goblin.Gameplay.Logic.Core
                 ObjectCache.Set(behaviors);
             }
             
-            RecycleActors();
+            Recycle();
         }
 
         /// <summary>
-        /// 回收/销毁 RmvActors
+        /// 回收/销毁 Actor/Behavior/BehaviorInfo
         /// </summary>
-        private void RecycleActors()
+        private void Recycle()
         {
-            // 拆解 Behavior
+            // 收集需要回收 Behavior/BehaviorInfo
             foreach (var rmvactor in cache.rmvactors)
             {
-                if (false == SeekBehaviors(rmvactor, out var behaviors)) continue;
-                foreach (var behavior in behaviors) behavior.Disassemble();
-            }
+                if (SeekBehaviors(rmvactor, out var behaviors))
+                {
+                    foreach (var behavior in behaviors)
+                    {
+                        RmvBehavior(behavior);
+                    }
+                    behaviors.Clear();
+                    ObjectCache.Set(behaviors);
+                }
 
-            // 重置 BehaviorInfo
-            foreach (var rmvactor in cache.rmvactors)
-            {
-                if (false == SeekBehaviorInfos(rmvactor, out var behaviorinfos)) continue;
-                foreach (var behaviorinfo in behaviorinfos) behaviorinfo.Reset();
+                if (SeekBehaviorInfos(rmvactor, out var behaviorinfos))
+                {
+                    foreach (var behaviorinfo in behaviorinfos)
+                    {
+                        RmvBehaviorInfo(behaviorinfo);
+                    }
+                    behaviorinfos.Clear();
+                    ObjectCache.Set(behaviorinfos);
+                }
             }
+            
+            var rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
+            var rmvbehaviorinfos = ObjectCache.Ensure<List<BehaviorInfo>>();
+            rmvbehaviors.AddRange(cache.rmvbehaviors);
+            rmvbehaviorinfos.AddRange(cache.rmvbehaviorinfos);
+            
+            // 拆解 Behavior
+            foreach (var rmvbehavior in rmvbehaviors)
+            {
+                if (cache.behaviors.TryGetValue(rmvbehavior.GetType(), out var behaviors))
+                {
+                    behaviors.Remove(rmvbehavior);
+                }
+
+                if (cache.behaviordict.TryGetValue(rmvbehavior.actor, out var behaviordict))
+                {
+                    behaviordict.Remove(rmvbehavior.GetType());
+                }
+
+                if (info.behaviortypes.TryGetValue(rmvbehavior.actor, out var types))
+                {
+                    types.Remove(rmvbehavior.GetType());
+                }
+
+                rmvbehavior.Disassemble();
+                ObjectCache.Set(rmvbehavior);
+            }
+            
+            // 重置 BehaviorInfo
+            foreach (var rmvbehaviorinfo in rmvbehaviorinfos)
+            {
+                if (cache.behaviorinfodict.TryGetValue(rmvbehaviorinfo.actor, out var behaviorinfodict))
+                {
+                    behaviorinfodict.Remove(rmvbehaviorinfo.GetType());
+                }
+                
+                if (info.behaviorinfos.TryGetValue(rmvbehaviorinfo.GetType(), out var behaviorinfos))
+                {
+                    behaviorinfos.Remove(rmvbehaviorinfo);
+                }
+                
+                rmvbehaviorinfo.Reset();
+                ObjectCache.Set(rmvbehaviorinfo);
+            }
+            
+            rmvbehaviors.Clear();
+            ObjectCache.Set(rmvbehaviors);
+            rmvbehaviorinfos.Clear();
+            ObjectCache.Set(rmvbehaviorinfos);
+            
             
             // 回收清理
             foreach (var rmvactor in cache.rmvactors)
             {
-                // 回收清理 Behavior
-                if (cache.behaviordict.TryGetValue(rmvactor, out var dict))
+                if (cache.behaviordict.TryGetValue(rmvactor, out var behaviordict))
                 {
-                    foreach (var behavior in dict.Values)
-                    {
-                        if (cache.behaviors.TryGetValue(behavior.GetType(), out var list))
-                        {
-                            list.Remove(behavior);
-                            if (0 == list.Count)
-                            {
-                                ObjectCache.Set(list);
-                                cache.behaviors.Remove(behavior.GetType());
-                            }
-                        }
-                        ObjectCache.Set(behavior);  
-                    }
-                    dict.Clear();
-                    ObjectCache.Set(dict);
+                    behaviordict.Clear();
+                    ObjectCache.Set(behaviordict);
                     cache.behaviordict.Remove(rmvactor);
                 }
-                if (info.behaviortypes.TryGetValue(rmvactor, out var types))
-                {
-                    types.Clear();
-                    ObjectCache.Set(types);
-                    
-                    info.behaviortypes.Remove(rmvactor);
-                }
                 
-                // 回收清理 BehaviorInfo
-                if (cache.behaviorinfodict.TryGetValue(rmvactor, out var infodict))
+                if (cache.behaviorinfodict.TryGetValue(rmvactor, out var behaviorinfodict))
                 {
-                    foreach (var behaviorinfo in infodict.Values)
-                    {
-                        if (info.behaviorinfos.TryGetValue(behaviorinfo.GetType(), out var infos))
-                        {
-                            infos.Remove(behaviorinfo);
-                            if (0 == infos.Count)
-                            {
-                                ObjectCache.Set(infos);
-                                info.behaviorinfos.Remove(behaviorinfo.GetType());
-                            }
-                        }
-                        ObjectCache.Set(behaviorinfo);
-                    }
-                    infodict.Clear();
-                    ObjectCache.Set(infodict);
+                    behaviorinfodict.Clear();
+                    ObjectCache.Set(behaviorinfodict);
                     cache.behaviorinfodict.Remove(rmvactor);
                 }
-            
+
                 info.actors.Remove(rmvactor);
             }
             
             cache.rmvactors.Clear();
+            cache.rmvbehaviors.Clear();
+            cache.rmvbehaviorinfos.Clear();
         }
 
         /// <summary>
@@ -488,7 +516,7 @@ namespace Goblin.Gameplay.Logic.Core
 
         /// <summary>
         /// 移除 Actor
-        /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Stage.RmvActors)
+        /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Cache.RmvActors)
         /// </summary>
         /// <param name="id">ActorID</param>
         public void RmvActor(ulong id)
@@ -498,6 +526,29 @@ namespace Goblin.Gameplay.Logic.Core
 
             eventor.Tell(new ActorDeadEvent { actor = id });
             DiffActor(id, RIL_DEFINE.DIFF_DEL);
+        }
+
+        /// <summary>
+        /// 移除 Behavior
+        /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Cache.RmvBehaviors)
+        /// </summary>
+        /// <param name="behavior">Behavior</param>
+        public void RmvBehavior(Behavior behavior)
+        {
+            if (cache.rmvbehaviors.Contains(behavior)) return;
+            behavior.RmvBindingInfo();
+            cache.rmvbehaviors.Add(behavior);
+        }
+
+        /// <summary>
+        /// 移除 BehaviorInfo
+        /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Cache.RmvBehaviorInfos)
+        /// </summary>
+        /// <param name="behaviorinfo">BehaviorInfo</param>
+        public void RmvBehaviorInfo(BehaviorInfo behaviorinfo)
+        {
+            if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) return;
+            cache.rmvbehaviorinfos.Add(behaviorinfo);
         }
 
         /// <summary>
@@ -578,9 +629,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// <returns>所有 Behavior 列表</returns>
         public List<Behavior> GetBehaviors(Type type)
         {
-            if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
-            var result = ObjectCache.Ensure<List<Behavior>>();
-            foreach (var behavior in list) result.Add(behavior);
+            if (false == cache.behaviors.TryGetValue(type, out var behaviors) || 0 == behaviors.Count) return default;
+            List<Behavior> result = default;
+            foreach (var behavior in behaviors)
+            {
+                if (cache.rmvbehaviors.Contains(behavior)) continue;
+                if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
+                result.Add(behavior);
+            }
 
             return result;
         }
@@ -671,6 +727,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(type, out var behavior)) return default;
+            if (cache.rmvbehaviors.Contains(behavior)) return default;
             
             return behavior;
         }
@@ -714,6 +771,7 @@ namespace Goblin.Gameplay.Logic.Core
             {
                 return a.actor.CompareTo(b.actor);
             });
+            behavior.AddBindingInfo();
             behavior.Assemble();
 
             return behavior;
@@ -768,9 +826,24 @@ namespace Goblin.Gameplay.Logic.Core
         public List<BehaviorInfo> GetBehaviorInfos(ulong id)
         {
             if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
-            var result = ObjectCache.Ensure<List<BehaviorInfo>>();
-            foreach (var i in dict.Values) result.Add(i);
-            
+            List<BehaviorInfo> result = default;
+            foreach (var behaviorinfo in dict.Values)
+            {
+                if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) continue;
+                
+                if (null == result) result = ObjectCache.Ensure<List<BehaviorInfo>>();
+                result.Add(behaviorinfo);
+            }
+
+            if (null != result)
+            {
+                // 排序
+                result.Sort((a, b) =>
+                {
+                    return a.actor.CompareTo(b.actor);
+                });
+            }
+
             return result;
         }
 
@@ -799,6 +872,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
             if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
+            if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) return default;
 
             return (T)behaviorinfo;
         }
@@ -868,7 +942,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Stage 缓存
         /// </summary>
-        private sealed class StageCache
+        public sealed class StageCache
         {
             /// <summary>
             /// 行为列表, 键为 ActorID, 值为该 Actor 上的所有行为
@@ -883,9 +957,17 @@ namespace Goblin.Gameplay.Logic.Core
             /// </summary>
             public Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfodict { get; set; }
             /// <summary>
-            /// RmvActor 列表
+            /// Rmv Actor 列表
             /// </summary>
             public List<ulong> rmvactors { get; set; }
+            /// <summary>
+            /// Rmv Behavior列表
+            /// </summary>
+            public List<Behavior> rmvbehaviors { get; set; }
+            /// <summary>
+            /// Rmv BehaviorInfo 列表
+            /// </summary>
+            public List<BehaviorInfo> rmvbehaviorinfos { get; set; }
         
             /// <summary>
             /// 初始化 StageCache
@@ -897,6 +979,8 @@ namespace Goblin.Gameplay.Logic.Core
                 behaviors = ObjectCache.Ensure<Dictionary<Type, List<Behavior>>>();
                 behaviorinfodict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
                 rmvactors = ObjectCache.Ensure<List<ulong>>();
+                rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
+                rmvbehaviorinfos = ObjectCache.Ensure<List<BehaviorInfo>>();
 
                 return this;
             }
@@ -917,6 +1001,12 @@ namespace Goblin.Gameplay.Logic.Core
             
                 rmvactors.Clear();
                 ObjectCache.Set(rmvactors);
+                
+                rmvbehaviors.Clear();
+                ObjectCache.Set(rmvbehaviors);
+                
+                rmvbehaviorinfos.Clear();
+                ObjectCache.Set(rmvbehaviorinfos);
             }
         }
     }

@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class SeatTranslator : Translator<SeatInfo, RIL_SEAT>
     {
-        protected override ushort id => RIL_DEFINE.SEAT;
+        public override ushort id => RIL_DEFINE.SEAT;
 
         protected override void OnRIL(SeatInfo info, RIL_SEAT ril)
         {

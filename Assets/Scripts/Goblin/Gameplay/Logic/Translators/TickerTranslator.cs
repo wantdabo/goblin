@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class TickerTranslator : Translator<TickerInfo, RIL_TICKER>
     {
-        protected override ushort id => RIL_DEFINE.TICKER;
+        public override ushort id => RIL_DEFINE.TICKER;
 
         protected override int OnCalcHashCode(TickerInfo info)
         {

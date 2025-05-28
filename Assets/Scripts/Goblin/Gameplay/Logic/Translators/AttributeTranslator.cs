@@ -11,7 +11,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class AttributeTranslator : Translator<AttributeInfo, RIL_ATTRIBUTE>
     {
-        protected override ushort id => RIL_DEFINE.ATTRIBUTE;
+        public override ushort id => RIL_DEFINE.ATTRIBUTE;
 
         protected override void OnRIL(AttributeInfo info, RIL_ATTRIBUTE ril)
         {
