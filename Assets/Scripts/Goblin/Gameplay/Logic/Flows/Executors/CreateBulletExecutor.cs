@@ -37,6 +37,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     spatialdata.euler = spatial.euler;
                     break;
             }
+            spatialdata.euler = new FPVector3(spatial.euler.x, spatial.euler.y + (data.angle * stage.cfg.int2fp), spatial.euler.z);
             spatialdata.scale = data.scale * stage.cfg.int2fp;
 
             stage.Spawn(new BulletPrefabInfo

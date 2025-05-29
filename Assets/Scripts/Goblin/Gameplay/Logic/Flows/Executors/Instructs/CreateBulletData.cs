@@ -35,6 +35,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// </summary>
         public byte euler { get; set; }
         /// <summary>
+        /// 子弹生成旋转角度
+        /// </summary>
+        public FP angle { get; set; }
+        /// <summary>
         /// 缩放
         /// </summary>
         public int scale { get; set; }
