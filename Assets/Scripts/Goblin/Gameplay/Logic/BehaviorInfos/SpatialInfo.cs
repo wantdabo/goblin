@@ -54,6 +54,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             hash = hash * 31 + position.z.GetHashCode();
             hash = hash * 31 + euler.x.GetHashCode();
             hash = hash * 31 + euler.y.GetHashCode();
+            hash = hash * 31 + euler.z.GetHashCode();
             hash = hash * 31 + scale.GetHashCode();
             
             return hash;
