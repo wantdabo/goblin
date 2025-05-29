@@ -6,7 +6,7 @@ using UnityEngine.Timeline;
 
 namespace Goblin.PipelineEditor.PipelineTracks
 {
-    [DisplayName("管线/动画指令")]
+    [DisplayName("管线/动画轨道")]
     [TrackClipType(typeof(AnimationAsset))]
     public class AnimationTrack : TrackAsset, IPlayableAsset, IPropertyPreview
     {
