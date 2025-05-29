@@ -210,13 +210,11 @@ namespace Goblin.Gameplay.Render.Core
         /// <param name="actor">ActorID</param>
         public void RmvAgent(ulong actor)
         {
-            var agentdict = GetAgents(actor);
-            if (null == agentdict) return;
-            
+            var dict = GetAgents(actor);
+            if (null == dict) return;
             var agents = ObjectPool.Ensure<List<Agent>>();
-            foreach (var kv in agentdict) agents.Add(kv.Value);
+            foreach (var kv in dict) agents.Add(kv.Value);
             foreach (var agent in agents) RmvAgent(agent);
-            
             agents.Clear();
             ObjectPool.Set(agents);
         }
@@ -227,11 +225,15 @@ namespace Goblin.Gameplay.Render.Core
         /// <param name="agent">Agent</param>
         public void RmvAgent(Agent agent)
         {
-            if (false == agentdict.TryGetValue(agent.actor, out var agents)) return;
+            var actor = agent.actor;
+            if (false == agentdict.TryGetValue(actor, out var dict)) return;
 
-            agents.Remove(agent.GetType());
+            dict.Remove(agent.GetType());
             agent.Reset();
             ObjectPool.Set(agent);
+            if (0 == dict.Count) agentdict.Remove(actor);
+            
+            snapshotagents.Remove(agent);
         }
 
         /// <summary>
@@ -243,16 +245,16 @@ namespace Goblin.Gameplay.Render.Core
         /// <exception cref="Exception">Agent 已存在</exception>
         private T AddAgent<T>(ulong actor) where T : Agent, new()
         {
-            if (false == agentdict.TryGetValue(actor, out var agents))
+            if (false == agentdict.TryGetValue(actor, out var dict))
             {
-                agentdict.Add(actor, agents = ObjectPool.Ensure<Dictionary<Type, Agent>>());
+                agentdict.Add(actor, dict = ObjectPool.Ensure<Dictionary<Type, Agent>>());
             }
 
-            if (agents.TryGetValue(typeof(T), out var agent)) throw new Exception($"agent {typeof(T)} already exists");
+            if (dict.TryGetValue(typeof(T), out var agent)) throw new Exception($"agent {typeof(T)} already exists");
             
             agent = ObjectPool.Ensure<T>();
             agent.Ready(actor, this);
-            agents.Add(typeof(T), agent);
+            dict.Add(typeof(T), agent);
             snapshotagents.Add(agent);
 
             return agent as T;
