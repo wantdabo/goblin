@@ -1,8 +1,6 @@
-using System.IO;
-using UnityEngine;
 using YooAsset;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     /// <summary>
     /// CDN 地址

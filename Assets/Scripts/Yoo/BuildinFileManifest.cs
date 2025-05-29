@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     /// <summary>
     /// 内置资源清单

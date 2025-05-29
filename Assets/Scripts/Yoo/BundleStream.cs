@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     /// <summary>
     /// 资源文件解密流

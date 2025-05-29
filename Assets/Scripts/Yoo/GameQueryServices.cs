@@ -1,6 +1,6 @@
 using YooAsset;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     /// <summary>
     /// 资源文件查询服务类

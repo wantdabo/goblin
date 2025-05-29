@@ -1,10 +1,7 @@
 using System.IO;
-using System.Collections.Generic;
 using UnityEngine;
-using YooAsset;
-using System;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     public class StreamingAssetsDefine
     {

@@ -2,7 +2,7 @@ using System.IO;
 using UnityEngine;
 using YooAsset;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     /// <summary>
     /// 资源文件流加载解密类

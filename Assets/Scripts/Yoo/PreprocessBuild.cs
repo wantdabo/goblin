@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace AOT.Yoo
+namespace Yoo
 {
     internal class PreprocessBuild : UnityEditor.Build.IPreprocessBuildWithReport
     {
