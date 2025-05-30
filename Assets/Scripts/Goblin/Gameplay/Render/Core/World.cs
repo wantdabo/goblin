@@ -153,7 +153,11 @@ namespace Goblin.Gameplay.Render.Core
         /// </summary>
         public void Restore()
         {
-            foreach (var agent in snapshotagents) RmvAgent(agent);
+            var agents = ObjectPool.Ensure<List<Agent>>();
+            agents.AddRange(snapshotagents);
+            foreach (var agent in agents) RmvAgent(agent);
+            agents.Clear();
+            ObjectPool.Set(agents);
             snapshotagents.Clear();
             foreach (var kv in agentdict)
             {

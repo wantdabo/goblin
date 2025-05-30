@@ -426,6 +426,12 @@ namespace Goblin.Gameplay.Logic.Core
             // 拆解 Behavior
             foreach (var rmvbehavior in rmvbehaviors)
             {
+                rmvbehavior.Disassemble();
+            }
+
+            // 回收 Behavior
+            foreach (var rmvbehavior in rmvbehaviors)
+            {
                 if (cache.behaviors.TryGetValue(rmvbehavior.GetType(), out var behaviors))
                 {
                     behaviors.Remove(rmvbehavior);
@@ -440,8 +446,6 @@ namespace Goblin.Gameplay.Logic.Core
                 {
                     types.Remove(rmvbehavior.GetType());
                 }
-
-                rmvbehavior.Disassemble();
                 ObjectCache.Set(rmvbehavior);
             }
             
@@ -727,7 +731,6 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(type, out var behavior)) return default;
-            if (cache.rmvbehaviors.Contains(behavior)) return default;
             
             return behavior;
         }
