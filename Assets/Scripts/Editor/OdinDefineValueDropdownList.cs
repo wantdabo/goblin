@@ -1,7 +1,7 @@
 using Goblin.Gameplay.Logic.Common.Defines;
 using Sirenix.OdinInspector;
 
-namespace Goblin.Custom
+namespace Goblin
 {
     /// <summary>
     /// Odin 定义值下拉列表

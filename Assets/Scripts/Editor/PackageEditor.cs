@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using YooAsset.Editor;
 
-namespace Goblin.Custom
+namespace Goblin
 {
     /// <summary>
     /// 打包编辑工具

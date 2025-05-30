@@ -4,7 +4,7 @@ using Luban;
 using UnityEditor;
 using UnityEngine;
 
-namespace Goblin.Custom
+namespace Goblin
 {
     /// <summary>
     /// 编辑器配置

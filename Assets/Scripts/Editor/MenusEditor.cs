@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditor.SceneManagement;
 
-namespace Goblin.Custom
+namespace Goblin
 {
     public static class MenusEditor
     {
