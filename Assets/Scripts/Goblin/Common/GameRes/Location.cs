@@ -12,6 +12,7 @@ namespace Goblin.Common.GameRes
     {
         public const string soundpath = "Assets/GameRes/Sound/";
         public const string modelpath = "Assets/GameRes/Model/";
+        public const string animmixpath = "Assets/GameRes/AnimationMix/";
         public const string effectpath = "Assets/GameRes/Effect/";
         public const string uieffectpath = "Assets/GameRes/UIEffect/";
         public const string uiprefabpath = "Assets/GameRes/UIPrefab/";
@@ -64,9 +65,9 @@ namespace Goblin.Common.GameRes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>AnimationConfig</returns>
-        public async Task<AnimationConfig> LoadModelAnimationConfigAsync(string res)
+        public async Task<AnimationMixConfig> LoadAnimationConfigAsync(string res)
         {
-            return await engine.gameres.LoadAssetAsync<AnimationConfig>(modelpath + res);
+            return await engine.gameres.LoadAssetAsync<AnimationMixConfig>(animmixpath + res);
         }
         
         /// <summary>
@@ -74,9 +75,9 @@ namespace Goblin.Common.GameRes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>AnimationConfig</returns>
-        public AnimationConfig LoadModelAnimationConfigSync(string res)
+        public AnimationMixConfig LoadAnimationConfigSync(string res)
         {
-            return engine.gameres.LoadAssetSync<AnimationConfig>(modelpath + res);
+            return engine.gameres.LoadAssetSync<AnimationMixConfig>(animmixpath + res);
         }
         
         /// <summary>

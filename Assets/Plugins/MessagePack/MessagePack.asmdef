@@ -16,7 +16,7 @@
         "Microsoft.NET.StringTools.dll",
         "System.Runtime.Extensions.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 动画配置
         /// </summary>
-        private AnimationConfig animcfg { get; set; } = default;
+        private AnimationMixConfig animcfg { get; set; } = default;
         /// <summary>
         /// Animancer 组件
         /// </summary>
@@ -71,11 +71,11 @@ namespace Goblin.Gameplay.Render.Agents
             if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE facade) || 0 >= facade.model) return;
             if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
             
-            if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
+            if (string.IsNullOrEmpty(cfgname) || false == modelinfo.AnimationMix.Equals(cfgname))
             {
-                cfgname = modelinfo.Animation;
+                cfgname = modelinfo.AnimationMix;
                 if (null != animcfg) GameObject.Destroy(animcfg);
-                animcfg = world.engine.gameres.location.LoadModelAnimationConfigSync(cfgname);
+                animcfg = world.engine.gameres.location.LoadAnimationConfigSync(cfgname);
             }
                 
             var animinfo = animcfg.GetAnimationInfo(ril.current);

@@ -22,6 +22,7 @@ public partial class Tables
         "Conf.ColliderInfo",
         "Conf.SkillInfo",
         "Conf.SkillBindingInfo",
+        "Conf.PipelineInfo",
     };
 
     public Conf.ItemInfos ItemInfos {get; }
@@ -31,6 +32,7 @@ public partial class Tables
     public Conf.ColliderInfos ColliderInfos {get; }
     public Conf.SkillInfos SkillInfos {get; }
     public Conf.SkillBindingInfos SkillBindingInfos {get; }
+    public Conf.PipelineInfos PipelineInfos {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -41,6 +43,7 @@ public partial class Tables
         ColliderInfos = new Conf.ColliderInfos(loader("Conf.ColliderInfo"));
         SkillInfos = new Conf.SkillInfos(loader("Conf.SkillInfo"));
         SkillBindingInfos = new Conf.SkillBindingInfos(loader("Conf.SkillBindingInfo"));
+        PipelineInfos = new Conf.PipelineInfos(loader("Conf.PipelineInfo"));
         ResolveRef();
     }
     
@@ -53,6 +56,7 @@ public partial class Tables
         ColliderInfos.ResolveRef(this);
         SkillInfos.ResolveRef(this);
         SkillBindingInfos.ResolveRef(this);
+        PipelineInfos.ResolveRef(this);
     }
 }
 

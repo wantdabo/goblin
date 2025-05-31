@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Flows.Checkers.Common;
+using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors.Common
 {
     /// <summary>
     /// 管线指令
     /// </summary>
+    [MessagePackObject(true)]
     public sealed class Instruct
     {
         /// <summary>

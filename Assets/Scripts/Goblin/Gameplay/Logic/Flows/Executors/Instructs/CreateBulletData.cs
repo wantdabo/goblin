@@ -4,12 +4,14 @@ using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Kowtow.Math;
+using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
 {
     /// <summary>
     /// 创建子弹数据
     /// </summary>
+    [MessagePackObject(true)]
     public class CreateBulletData : InstructData
     {
         public override ushort id => INSTR_DEFINE.CREATE_BULLET;
