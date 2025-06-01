@@ -6,15 +6,47 @@ using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Modules.UnityMathematics.Editor;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace Pipeline.Timeline.Assets.Common
 {
     /// <summary>
     /// PlayableAsset 基类
     /// </summary>
+    public abstract class PipelineAsset : PlayableAsset, IPlayableAsset, ITimelineClipAsset
+    {
+        public ClipCaps clipCaps => ClipCaps.None;
+        
+        /// <summary>
+        /// 指令数据
+        /// </summary>
+        /// <returns>指令数据</returns>
+        public InstructData InstructData()
+        {
+            return GetInstructData();
+        }
+        
+        [LabelText("条件列表")]
+        public List<PipelineCondition> conditions;
+
+        public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
+        {
+            throw new System.NotImplementedException();
+        }
+        
+        /// <summary>
+        /// 获取指令数据
+        /// </summary>
+        /// <returns>指令数据</returns>
+        protected abstract InstructData GetInstructData();
+    }
+
+    /// <summary>
+    /// PlayableAsset 基类
+    /// </summary>
     /// <typeparam name="T">管线行为</typeparam>
     /// <typeparam name="E">指令数据类型</typeparam>
-    public class PipelineAsset<T, E> : PlayableAsset, IPlayableAsset where T : PipelineBehavior<E>, new() where E : InstructData
+    public class PipelineAsset<T, E> : PipelineAsset where T : PipelineBehavior<E>, new() where E : InstructData
     {
         /// <summary>
         /// 指令数据
@@ -23,15 +55,17 @@ namespace Pipeline.Timeline.Assets.Common
         [PropertySpace(SpaceAfter = 10)]
         public E data;
         
-        [LabelText("条件列表")]
-        public List<PipelineCondition> conditions;
-        
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
         {
             var playable = ScriptPlayable<T>.Create(graph);
             playable.GetBehaviour().data = data;
 
             return playable;
+        }
+
+        protected override InstructData GetInstructData()
+        {
+            return data;
         }
     }
 }

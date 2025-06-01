@@ -76,7 +76,7 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
             /// <summary>
             /// 指令
             /// </summary>
-            private Instruct instruct { get; set; }
+            public Instruct instruct { get; private set; }
 
             /// <summary>
             /// 指令操作器

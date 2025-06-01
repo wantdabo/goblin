@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Flows;
+using Goblin.Gameplay.Logic.Flows.Defines;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Scriptings.Common;
 using Goblin.Misc;
 using MessagePack;
+using Pipeline.Timeline.Assets;
+using Pipeline.Timeline.Assets.Common;
 using Pipeline.Timeline.Layouts.Common;
 using Pipeline.Timeline.Tracks.Common;
 using UnityEditor;
@@ -114,13 +121,65 @@ namespace Pipeline.Timeline
         /// <param name="asset">TimelineAsset</param>
         public static void SavePipeline(uint pipeline, int model, TimelineAsset asset)
         {
-            PipelineData data = new PipelineData();
+            if (null == asset) return;
+            
+            var layout = ScriptableObject.CreateInstance<PipelineLayout>();
+            layout.name = $"{pipeline}";
+            layout.model = model;
+            layout.tracks = new();
+            
+            ScriptMachine.Begin();
+            List<List<Instruct>> instructslist = new();
+            var tracks = asset.GetOutputTracks();
+            foreach (var track in tracks)
+            {
+                var clips = track.GetClips().ToList();
+                if (0 == clips.Count) continue;
+
+                var instructs = new List<Instruct>();
+                instructslist.Add(instructs);
+                
+                foreach (var clip in clips)
+                {
+                    var pipelineasset = clip.asset as PipelineAsset;
+                    if (null == pipelineasset) continue;
+                    
+                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.InstructData());
+                    foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
+
+                    instructs.Add(opt.instruct);
+                }
+            }
+            var data = ScriptMachine.End();
+            
+            if (data.Query(FLOW_DEFINE.OVERFLOW_LENGTH, out var instrinfos))
+            {
+                foreach (var instructs in instructslist)
+                {
+                    var tracklayout = new Dictionary<ushort, List<uint>>();
+                    foreach (var instruct in instructs)
+                    {
+                        uint index = 0;
+                        foreach (var instrinfo in instrinfos)
+                        {
+                            if (instrinfo.instruct != instruct) continue;
+                            index = instrinfo.index;
+                            break;
+                        }
+                        
+                        if (0 == index) throw new System.Exception("Instruct index is zero, this should not happen");
+                        
+                        if (false == tracklayout.TryGetValue(instruct.data.id, out var indexes)) tracklayout.Add(instruct.data.id, indexes = new List<uint>());
+                        indexes.Add(index);
+                    }
+
+                    layout.tracks.Add(tracklayout);
+                }
+            }
+
             var path = Path.Combine(datadir, $"{pipeline}.pipeline");
             File.WriteAllBytes(path, MessagePackSerializer.Serialize(data));
             
-            var layout = ScriptableObject.CreateInstance<PipelineLayout>();
-            layout.model = model;
-            layout.name = $"{pipeline}";
             AssetDatabase.DeleteAsset(Path.Combine(layoutdir, layout.name + ".asset"));
             AssetDatabase.CreateAsset(layout, Path.Combine(layoutdir, layout.name + ".asset"));
             AssetDatabase.Refresh();

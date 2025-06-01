@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Pipeline.Timeline.Tracks.Common;
+using UnityEngine;
 
 namespace Pipeline.Timeline.Layouts.Common
 {
@@ -11,5 +13,9 @@ namespace Pipeline.Timeline.Layouts.Common
         /// 模型
         /// </summary>
         public int model;
+        /// <summary>
+        /// 轨道布局映射 PipelineData.Instruct.Index
+        /// </summary>
+        public List<Dictionary<ushort, List<uint>>> tracks;
     }
 }

@@ -51,7 +51,6 @@ namespace Pipeline.Timeline
         public void Save()
         {
             PipelineWorkSpace.SavePipeline(pipeline, model, asset);
-            Load();
         }
 
         /// <summary>
