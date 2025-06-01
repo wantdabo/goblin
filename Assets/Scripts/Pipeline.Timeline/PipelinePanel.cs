@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Goblin;
 using Goblin.Gameplay.Logic.Flows;
@@ -10,6 +11,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Timeline;
+using Object = System.Object;
 
 namespace Pipeline.Timeline
 {
@@ -32,10 +34,6 @@ namespace Pipeline.Timeline
             /// 创建管线
             /// </summary>
             创建管线,
-            /// <summary>
-            /// 删除管线
-            /// </summary>
-            删除管线,
         }
         
         [EnumToggleButtons, HideLabel]
@@ -51,7 +49,7 @@ namespace Pipeline.Timeline
         private ValueDropdownList<string> PipelineValueDropdown()
         {
             var result = new ValueDropdownList<string>();
-            var pipelines = PipelineWorkspace.GetPipelines();
+            var pipelines = PipelineWorkSpace.GetPipelines();
             foreach (var pipeline in pipelines) result.Add(pipeline.name, pipeline.path);
 
             return result;
@@ -68,19 +66,32 @@ namespace Pipeline.Timeline
         [ShowIf("@tab == PanelTab.修改管线 && false == string.IsNullOrEmpty(pipelinepath)")]
 
         [BoxGroup("修改管线")]
-        [PropertySpace(SpaceAfter = 5)]
+        [PropertySpace(SpaceAfter = -5)]
         [GUIColor(0, 1,0 )]
         [Button("保存", ButtonSizes.Medium)]
         private void SavePipeline()
         {
+            if (null == PipelineWorkSpace.worker) return;
+            PipelineWorkSpace.worker.Save();
+        }
+        
+        [ShowIf("@tab == PanelTab.修改管线 && false == string.IsNullOrEmpty(pipelinepath)")]
+        [BoxGroup("修改管线")]
+        [PropertySpace(SpaceAfter = -5)]
+        [GUIColor(0, 1,1 )]
+        [Button("还原", ButtonSizes.Medium)]
+        private void RevertPipeline()
+        {
+            if (null == PipelineWorkSpace.worker) return;
+            PipelineWorkSpace.worker.Revert();
         }
         
         [ShowIf("@tab == PanelTab.修改管线 && false == string.IsNullOrEmpty(pipelinepath)")]
         [BoxGroup("修改管线")]
         [PropertySpace(SpaceAfter = 5)]
         [GUIColor(1, 0,0 )]
-        [Button("还原", ButtonSizes.Medium)]
-        private void RevertPipeline()
+        [Button("删除", ButtonSizes.Medium)]
+        private void DeletePipeline()
         {
         }
 
@@ -106,11 +117,7 @@ namespace Pipeline.Timeline
         [Button("创建", ButtonSizes.Medium)]
         private void CreatePipeline()
         {
-            PipelineData data = new PipelineData();
-            data.model = createmodel;
-            
-            var path = Path.Combine(PipelineWorkspace.storedir, $"{createpipeline}.pipeline");
-            File.WriteAllBytes(path, MessagePackSerializer.Serialize(data));
+            PipelineWorkSpace.CreatePipeline(createpipeline, createmodel);
             tab = PanelTab.修改管线;
         }
         
@@ -119,7 +126,7 @@ namespace Pipeline.Timeline
         /// </summary>
         private void OnPipelinePathChanged()
         {
-            PipelineWorkspace.Work(pipelinepath);
+            PipelineWorkSpace.Work(pipelinepath);
         }
 
         /// <summary>
@@ -127,17 +134,17 @@ namespace Pipeline.Timeline
         /// </summary>
         private void OnModelChanged()
         {
-            if (null == PipelineWorkspace.worker) return;
-            PipelineWorkspace.worker.model = model;
+            if (null == PipelineWorkSpace.worker) return;
+            PipelineWorkSpace.worker.model = model;
         }
         
 #if UNITY_EDITOR
         private void Awake()
         {
-            var pipeliens = PipelineWorkspace.GetPipelines();
+            var pipeliens = PipelineWorkSpace.GetPipelines();
             if (null == pipeliens || 0 == pipeliens.Count) return;
             pipelinepath = pipeliens[0].path;
-            PipelineWorkspace.Work(pipelinepath);
+            PipelineWorkSpace.Work(pipelinepath);
         }
 #endif
  
@@ -145,9 +152,10 @@ namespace Pipeline.Timeline
         private void Update()
         {
             if (Application.isPlaying) return;
-            if (null == PipelineWorkspace.worker) return;
+            if (null == PipelineWorkSpace.worker) return;
             
-            model = PipelineWorkspace.worker.model;
+            pipelinepath = PipelineWorkSpace.worker.pipelinepath;
+            model = PipelineWorkSpace.worker.model;
         }
 #endif
 
@@ -170,7 +178,7 @@ namespace Pipeline.Timeline
         /// <returns>YES/NO</returns>
         private bool ValidCreatePipeline()
         {
-            return PipelineWorkspace.ValidPipeline(createpipeline).ok;
+            return PipelineWorkSpace.ValidPipeline(createpipeline).ok;
         }
         
         /// <summary>
@@ -181,7 +189,7 @@ namespace Pipeline.Timeline
         /// <returns>YES/NO</returns>
         private bool ValidInputPipeline(uint createpipeline, ref string errmsg)
         {
-            var result = PipelineWorkspace.ValidPipeline(createpipeline);
+            var result = PipelineWorkSpace.ValidPipeline(createpipeline);
             errmsg = result.errmsg;
             
             return result.ok;

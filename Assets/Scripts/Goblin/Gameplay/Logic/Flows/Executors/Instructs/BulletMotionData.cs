@@ -12,10 +12,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
     public class BulletMotionData : InstructData
     {
         public override ushort id => INSTR_DEFINE.BULLET_MOTION;
-        
+
         /// <summary>
         /// 子弹运动类型
         /// </summary>
-        public ushort motion { get; set; }
+        public ushort motion;
     }
 }

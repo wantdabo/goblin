@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Flows.Defines;
 using Sirenix.OdinInspector;
 
 namespace Goblin.Misc
@@ -21,6 +22,18 @@ namespace Goblin.Misc
                 { "跳跃", STATE_DEFINE.JUMP },
                 { "下坠", STATE_DEFINE.FALL },
                 { "技能", STATE_DEFINE.CASTING },
+            };
+        }
+
+        /// <summary>
+        /// 获取条件定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(条件 ID)</returns>
+        public static ValueDropdownList<ushort> GetConditionDefine()
+        {
+            return new ()
+            {
+                { "测试指令", CONDITION_DEFINE.TEST },
             };
         }
     }
