@@ -1,8 +1,11 @@
+using MessagePack;
+
 namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
     /// Stage 数据
     /// </summary>
+    [MessagePackObject(true)]
     public struct GPStageData
     {
         /// <summary>

@@ -1,8 +1,11 @@
+using MessagePack;
+
 namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
     /// 二维向量数据结构
     /// </summary>
+    [MessagePackObject(true)]
     public struct GPVector2
     {
         /// <summary>

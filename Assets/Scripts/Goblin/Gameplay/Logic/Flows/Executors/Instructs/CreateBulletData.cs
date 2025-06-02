@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// <summary>
         /// 子弹生成旋转角度
         /// </summary>
-        public FP angle;
+        public int angle;
 
         /// <summary>
         /// 缩放
@@ -55,5 +55,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 管线列表
         /// </summary>
         public List<uint> pipelines;
+        
+        public override byte[] Serialize()
+        {
+            return MessagePackSerializer.Serialize(this);
+        }
     }
 }

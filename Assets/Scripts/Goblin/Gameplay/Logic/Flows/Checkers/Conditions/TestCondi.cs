@@ -16,5 +16,10 @@ namespace Goblin.Gameplay.Logic.Flows.Checkers.Conditions
 
         [LabelText("时间缩放")]
         public uint timescale;
+        
+        public override byte[] Serialize()
+        {
+            return MessagePackSerializer.Serialize(this);
+        }
     }
 }

@@ -12,5 +12,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// 指令 ID
         /// </summary>
         public abstract ushort id { get; }
+        /// <summary>
+        /// 序列化指令数据
+        /// </summary>
+        /// <returns>二进制数据</returns>
+        public abstract byte[] Serialize();
     }
 }

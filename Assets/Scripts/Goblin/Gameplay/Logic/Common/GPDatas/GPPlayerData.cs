@@ -1,8 +1,11 @@
+using MessagePack;
+
 namespace Goblin.Gameplay.Logic.Common.GPDatas
 {
     /// <summary>
     /// 玩家数据
     /// </summary>
+    [MessagePackObject(true)]
     public struct GPPlayerData
     {
         /// <summary>

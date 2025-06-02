@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
+using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Goblin.Gameplay.Logic.Flows.Scriptings.Common;
 using Goblin.Misc;
 using MessagePack;
@@ -178,11 +180,26 @@ namespace Pipeline.Timeline
             }
 
             var path = Path.Combine(datadir, $"{pipeline}.pipeline");
-            File.WriteAllBytes(path, MessagePackSerializer.Serialize(data));
-            
-            AssetDatabase.DeleteAsset(Path.Combine(layoutdir, layout.name + ".asset"));
-            AssetDatabase.CreateAsset(layout, Path.Combine(layoutdir, layout.name + ".asset"));
-            AssetDatabase.Refresh();
+            var rawdata = data.ToPipelineRawData();
+            data = rawdata.ToPipelineData();
+
+            var createbullet = new CreateBulletData
+            {
+                strength = 1000,
+                speed = 5000,
+                origin = FLOW_BULLET_DEFINE.BORN_ORIGIN_OWNER,
+                offset = new GPVector3(0, 0, 0),
+                euler = FLOW_BULLET_DEFINE.BORN_EULER_OWNER,
+                angle = 1000,
+                scale = 1000,
+                pipelines = new List<uint> { FLOW_DEFINE.S100000002 }
+            };
+            var cbraw =  createbullet.Serialize();
+            createbullet = MessagePackSerializer.Deserialize<CreateBulletData>(cbraw);
+
+            // AssetDatabase.DeleteAsset(Path.Combine(layoutdir, layout.name + ".asset"));
+            // AssetDatabase.CreateAsset(layout, Path.Combine(layoutdir, layout.name + ".asset"));
+            // AssetDatabase.Refresh();
         }
 
         /// <summary>
