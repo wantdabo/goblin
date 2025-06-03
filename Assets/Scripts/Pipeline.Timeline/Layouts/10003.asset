@@ -10,6 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a197459e4ab441d8773bf95554e260a, type: 3}
-  m_Name: 33333
+  m_Name: 10003
   m_EditorClassIdentifier: 
-  model: 0
+  model: 100001
+  serializes:
+  - keys: 0100
+    values: 02000000
+  - keys: 0100
+    values: 01000000

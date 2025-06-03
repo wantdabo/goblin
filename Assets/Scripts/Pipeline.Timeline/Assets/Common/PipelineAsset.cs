@@ -16,16 +16,16 @@ namespace Pipeline.Timeline.Assets.Common
     public abstract class PipelineAsset : PlayableAsset, IPlayableAsset, ITimelineClipAsset
     {
         public ClipCaps clipCaps => ClipCaps.None;
-        
+
         /// <summary>
         /// 指令数据
         /// </summary>
-        /// <returns>指令数据</returns>
-        public InstructData InstructData()
+        public InstructData instrdata
         {
-            return GetInstructData();
+            get { return GetInstructData(); }
+            set { SetInstructData(value); }
         }
-        
+
         [LabelText("条件列表")]
         public List<PipelineCondition> conditions;
 
@@ -39,6 +39,11 @@ namespace Pipeline.Timeline.Assets.Common
         /// </summary>
         /// <returns>指令数据</returns>
         protected abstract InstructData GetInstructData();
+        /// <summary>
+        /// 设置指令数据
+        /// </summary>
+        /// <param name="data">指令数据</param>
+        protected abstract void SetInstructData(InstructData data);
     }
 
     /// <summary>
@@ -66,6 +71,12 @@ namespace Pipeline.Timeline.Assets.Common
         protected override InstructData GetInstructData()
         {
             return data;
+        }
+
+        protected override void SetInstructData(InstructData data)
+        {
+            if (data is not E instructData) throw new System.InvalidCastException("cannot cast InstructData to " + typeof(E).Name);
+            this.data = instructData;
         }
     }
 }

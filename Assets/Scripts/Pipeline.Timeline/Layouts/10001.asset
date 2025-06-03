@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a197459e4ab441d8773bf95554e260a, type: 3}
   m_Name: 10001
   m_EditorClassIdentifier: 
-  model: 200001
+  model: 100001
+  serializes:
+  - keys: 0100
+    values: 02000000
+  - keys: 0100
+    values: 01000000

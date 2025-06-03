@@ -32,7 +32,25 @@ namespace Pipeline.Timeline.Assets.Common
                 case CONDITION_DEFINE.TEST:
                     return testcondition;
                 default:
-                    throw new NotImplementedException($"Condition with ID {id} is not implemented.");
+                    throw new NotImplementedException($"condition with ID {id} is not implemented.");
+            }
+        }
+
+        /// <summary>
+        /// 设置条件
+        /// </summary>
+        /// <param name="condition">条件</param>
+        /// <exception cref="NotImplementedException">未能正确设置条件</exception>
+        public void SetCondition(Condition condition)
+        {
+            switch (condition.id)
+            {
+                case CONDITION_DEFINE.TEST:
+                    id = CONDITION_DEFINE.TEST;
+                        testcondition = condition as TestCondi;
+                    break;
+                default:
+                    throw new NotImplementedException($"condition with ID {condition.id} is not implemented.");
             }
         }
     }

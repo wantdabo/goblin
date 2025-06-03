@@ -14,6 +14,7 @@ using MessagePack;
 using Pipeline.Timeline.Assets;
 using Pipeline.Timeline.Assets.Common;
 using Pipeline.Timeline.Layouts.Common;
+using Pipeline.Timeline.Tracks;
 using Pipeline.Timeline.Tracks.Common;
 using UnityEditor;
 using UnityEngine;
@@ -68,6 +69,53 @@ namespace Pipeline.Timeline
         }
 
         /// <summary>
+        /// 根据 PipelineData & PipelineLayou 恢复 Timeline 布局
+        /// </summary>
+        /// <param name="timelineasset">TimelineAsset</param>
+        /// <param name="data">PipelineData</param>
+        /// <param name="layout">PipelineLayout</param>
+        public static void SettingsTimeline(TimelineAsset timelineasset, PipelineData data, PipelineLayout layout)
+        {
+            director.playableAsset = timelineasset;
+            if (null == layout) return;
+            if (null == layout.tracks) return;
+            
+            foreach (var track in layout.tracks)
+            {
+                foreach (var kv in track)
+                {
+                    PipelineTrack pipetrack = default;
+                    switch (kv.Key)
+                    {
+                        case INSTR_DEFINE.ANIMATION:
+                            pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
+                            break;
+                    }
+                    if (null == pipetrack) continue;
+
+                    foreach (var index in kv.Value)
+                    {
+                        if (false == data.Query(index, out var instrdata)) continue;
+                        var clip = pipetrack.CreateDefaultClip();
+
+                        clip.start = instrdata.begin * Config.Int2Float;
+                        clip.duration = instrdata.end * Config.Int2Float - clip.start;
+                        
+                        var pipeasset = clip.asset as PipelineAsset;
+                        foreach (var condition in instrdata.conditions)
+                        {
+                            if (null == pipeasset.conditions) pipeasset.conditions = new();
+                            var pipecondition = new PipelineCondition();
+                            pipecondition.SetCondition(condition);
+                            pipeasset.conditions.Add(pipecondition);
+                        }
+                        pipeasset.instrdata = instrdata.data;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 读取管线数据
         /// </summary>
         /// <param name="pipeline">管线 ID</param>
@@ -95,8 +143,10 @@ namespace Pipeline.Timeline
         {
             var layoutpath = Path.Combine(layoutdir, $"{pipeline}.asset");
             if (false == File.Exists(layoutpath)) return default;
+            var layout = Object.Instantiate(AssetDatabase.LoadAssetAtPath<PipelineLayout>(layoutpath));
+            layout.ReadTracks();
 
-            return Object.Instantiate(AssetDatabase.LoadAssetAtPath<PipelineLayout>(layoutpath));
+            return layout;
         }
 
         /// <summary>
@@ -130,11 +180,6 @@ namespace Pipeline.Timeline
         {
             if (null == asset) return;
             
-            var layout = ScriptableObject.CreateInstance<PipelineLayout>();
-            layout.name = $"{pipeline}";
-            layout.model = model;
-            layout.tracks = new();
-            
             ScriptMachine.Begin();
             List<List<Instruct>> instructslist = new();
             var tracks = asset.GetOutputTracks();
@@ -151,14 +196,19 @@ namespace Pipeline.Timeline
                     var pipelineasset = clip.asset as PipelineAsset;
                     if (null == pipelineasset) continue;
                     
-                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.InstructData());
+                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata);
                     foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
 
                     instructs.Add(opt.instruct);
                 }
             }
             var data = ScriptMachine.End();
+            File.WriteAllBytes(Path.Combine(datadir, $"{pipeline}.pipeline"), MessagePackSerializer.Serialize(data.ToPipelineRawData()));
             
+            var layout = ScriptableObject.CreateInstance<PipelineLayout>();
+            layout.name = $"{pipeline}";
+            layout.model = model;
+            layout.tracks = new();
             if (data.Query(FLOW_DEFINE.OVERFLOW_LENGTH, out var instrinfos))
             {
                 foreach (var instructs in instructslist)
@@ -183,28 +233,10 @@ namespace Pipeline.Timeline
                     layout.tracks.Add(tracklayout);
                 }
             }
-
-            var path = Path.Combine(datadir, $"{pipeline}.pipeline");
-            var rawdata = data.ToPipelineRawData();
-            data = rawdata.ToPipelineData();
-
-            var createbullet = new CreateBulletData
-            {
-                strength = 1000,
-                speed = 5000,
-                origin = FLOW_BULLET_DEFINE.BORN_ORIGIN_OWNER,
-                offset = new GPVector3(0, 0, 0),
-                euler = FLOW_BULLET_DEFINE.BORN_EULER_OWNER,
-                angle = 1000,
-                scale = 1000,
-                pipelines = new List<uint> { FLOW_DEFINE.S100000002 }
-            };
-            var cbraw =  createbullet.Serialize();
-            createbullet = MessagePackSerializer.Deserialize<CreateBulletData>(cbraw);
-
-            // AssetDatabase.DeleteAsset(Path.Combine(layoutdir, layout.name + ".asset"));
-            // AssetDatabase.CreateAsset(layout, Path.Combine(layoutdir, layout.name + ".asset"));
-            // AssetDatabase.Refresh();
+            layout.WriteTracks();
+            AssetDatabase.DeleteAsset(Path.Combine(layoutdir, layout.name + ".asset"));
+            AssetDatabase.CreateAsset(layout, Path.Combine(layoutdir, layout.name + ".asset"));
+            AssetDatabase.Refresh();
         }
 
         /// <summary>
@@ -232,7 +264,7 @@ namespace Pipeline.Timeline
         /// <summary>
         /// 验证管线 ID 的合法性
         /// </summary>
-        /// <param name="createpipeline"></param>
+        /// <param name="createpipeline">新管线 ID</param>
         /// <returns>(YES/NO, Feedback)</returns>
         public static (bool ok, string errmsg) ValidPipeline(uint createpipeline)
         {

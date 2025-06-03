@@ -28,7 +28,7 @@ namespace Pipeline.Timeline
         /// <summary>
         /// 管线工作的 TimelineAsset
         /// </summary>
-        public TimelineAsset asset { get; private set; }
+        public TimelineAsset timelineasset { get; private set; }
         /// <summary>
         /// 管线工作的 PipelineLayout
         /// </summary>
@@ -50,7 +50,7 @@ namespace Pipeline.Timeline
         /// </summary>
         public void Save()
         {
-            PipelineWorkSpace.SavePipeline(pipeline, model, asset);
+            PipelineWorkSpace.SavePipeline(pipeline, model, timelineasset);
         }
 
         /// <summary>
@@ -61,14 +61,17 @@ namespace Pipeline.Timeline
             Load();
         }
         
+        /// <summary>
+        /// 加载管线数据和布局
+        /// </summary>
         public void Load()
         {
             var data = PipelineWorkSpace.ReadPipelineData(pipeline);
-            asset = ScriptableObject.CreateInstance<TimelineAsset>();
+            timelineasset = ScriptableObject.CreateInstance<TimelineAsset>();
             layout = PipelineWorkSpace.ReadPipelineLayout(pipeline);
             model = layout.model;
             
-            PipelineWorkSpace.director.playableAsset = asset;
+            PipelineWorkSpace.SettingsTimeline(timelineasset, data, layout);
         }
     }
 }

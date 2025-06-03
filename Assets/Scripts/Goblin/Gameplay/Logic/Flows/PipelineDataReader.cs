@@ -79,7 +79,7 @@ namespace Goblin.Gameplay.Logic.Flows
         /// <summary>
         /// 查询指令
         /// </summary>
-        /// <param name="data">管道数据</param>
+        /// <param name="data">管线数据</param>
         /// <param name="timeline">时间线</param>
         /// <param name="instrinfos">处于时间线的指令信息列表, (index : 指令索引, instruct : 指令)</param>
         /// <returns>YES/NO</returns>
@@ -96,6 +96,22 @@ namespace Goblin.Gameplay.Logic.Flows
             }
 
             return null != instrinfos && instrinfos.Count > 0;
+        }
+
+        /// <summary>
+        /// 查询指令
+        /// </summary>
+        /// <param name="data">管道数据</param>
+        /// <param name="index">指令索引</param>
+        /// <param name="instruct">指令</param>
+        /// <returns>YES/NO</returns>
+        public static bool Query(this PipelineData data, uint index, out Instruct instruct)
+        {
+            instruct = default;
+            if (index < 1 || index > data.instructs.Count) return false;
+
+            instruct = data.instructs[(int)(index - 1)];
+            return true;
         }
 
         /// <summary>
