@@ -86,7 +86,9 @@ namespace Pipeline.Timeline
         /// <returns>管线数据</returns>
         public static PipelineData ReadPipelineData(string pipelinepath)
         {
-            return MessagePackSerializer.Deserialize<PipelineData>(File.ReadAllBytes(pipelinepath));
+            var rawdata = MessagePackSerializer.Deserialize<PipelineRawData>(File.ReadAllBytes(pipelinepath));
+
+            return rawdata.ToPipelineData();
         }
 
         public static PipelineLayout ReadPipelineLayout(uint pipeline)
@@ -104,10 +106,13 @@ namespace Pipeline.Timeline
         /// <param name="model">模型</param>
         public static void CreatePipeline(uint pipeline, int model)
         {
-            PipelineData data = new PipelineData();
+            PipelineData data = new PipelineData
+            {
+                length = 0,
+                instructs = new List<Instruct>()
+            };
             var path = Path.Combine(datadir, $"{pipeline}.pipeline");
-            File.WriteAllBytes(path, MessagePackSerializer.Serialize(data));
-            
+            File.WriteAllBytes(path, MessagePackSerializer.Serialize(data.ToPipelineRawData()));
             var layout = ScriptableObject.CreateInstance<PipelineLayout>();
             layout.model = model;
             layout.name = $"{pipeline}";
