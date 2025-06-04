@@ -32,9 +32,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// </summary>
         private Queue<IRIL_EVENT> eventqueue { get; set; }
         /// <summary>
+        /// 同步锁对象
+        /// </summary>
+        private object @lock = new();
+        /// <summary>
         /// 渲染指令的哈希值缓存
         /// </summary>
-        private ConcurrentDictionary<(ulong, ushort), int> hashcodedict { get; set; }
+        private Dictionary<(ulong, ushort), int> hashcodedict { get; set; }
 
         protected override void OnAssemble()
         {
@@ -61,7 +65,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
             
             diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
             eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
-            hashcodedict = ObjectCache.Ensure<ConcurrentDictionary<(ulong, ushort), int>>();
+            hashcodedict = ObjectCache.Ensure<Dictionary<(ulong, ushort), int>>();
+            
+            stage.eventor.Listen<ActorDeadEvent>(this, OnActorDead);
         }
 
         protected override void OnDisassemble()
@@ -96,6 +102,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
+            
+            stage.eventor.UnListen<ActorDeadEvent>(this, OnActorDead);
         }
         
         /// <summary>
@@ -106,9 +114,42 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="hashcode">RIL/BehaviorInfo 哈希值</param>
         public void CacheHashCode(ulong actor, ushort id, int hashcode)
         {
-            var key = (actor, id);
-            if (hashcodedict.ContainsKey(key)) hashcodedict.Remove(key, out _);
-            hashcodedict.TryAdd(key, hashcode);
+            lock (@lock)
+            {
+                var key = (actor, id);
+                if (hashcodedict.ContainsKey(key)) hashcodedict.Remove(key);
+                hashcodedict.Add(key, hashcode);
+            }
+        }
+
+        /// <summary>
+        /// 移除渲染指令的哈希值
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <param name="id">RIL ID</param>
+        private void RmvHashCode(ulong actor, ushort id)
+        {
+            lock (@lock)
+            {
+                var key = (actor, id);
+                if (hashcodedict.ContainsKey(key)) hashcodedict.Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// 移除 Actor 的所有渲染指令哈希值
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        private void RmvHashCode(ulong actor)
+        {
+            lock (@lock)
+            {
+                var list = ObjectCache.Ensure<List<(ulong, ushort)>>();
+                foreach (var kv in hashcodedict) if (kv.Key.Item1 == actor) list.Add(kv.Key);
+                foreach (var key in list) hashcodedict.Remove(key);
+                list.Clear();
+                ObjectCache.Set(list);
+            }
         }
 
         /// <summary>
@@ -176,7 +217,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     {
                         hashcodedict.Remove((rmvbehaviorinfo.actor, translator.id), out _);
                     }
-                    
+
+                    RmvHashCode(ril.actor, ril.loss);
                     Send(ril);
                 }
             }
@@ -211,7 +253,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                             {
                                 if (val == ACTOR_DEFINE.FLOW) continue;
                             }
-
+            
                             translator.Translate(behaviorinfo);
                         }
                     }
@@ -241,6 +283,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnEndTick()
         {
             Translate();
+        }
+        
+        private void OnActorDead(ActorDeadEvent e)
+        {
+            RmvHashCode(e.actor);
         }
     }
 }
