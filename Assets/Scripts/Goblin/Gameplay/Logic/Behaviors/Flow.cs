@@ -41,6 +41,10 @@ namespace Goblin.Gameplay.Logic.Behaviors
         }
         
         /// <summary>
+        /// 管线内未满足条件的指令列表
+        /// </summary>
+        private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexes { get; set; }
+        /// <summary>
         /// 指令条件检查器列表
         /// </summary>
         private Dictionary<ushort, Checker> checkers { get; set; }
@@ -52,6 +56,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
+            insidenotexes = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
             Checkers();
             Executors();
         }
@@ -59,6 +64,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
+            insidenotexes.Clear();
+            ObjectCache.Set(insidenotexes);
+            
             foreach (var kv in checkers)
             {
                 kv.Value.Unload();
@@ -145,14 +153,24 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     if (false == instrinfo.inside)
                     {
                         if (null != indexes && indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                        continue;
+                    }
 
+                    if (null != indexes && indexes.Contains(instrinfo.index))
+                    {
+                        ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
                         continue;
                     }
                     
                     // 指令进入 && 指令执行
-                    if (false == CheckCondition(instrinfo.instruct.conditions, flowinfo)) continue;
+                    if (false == CheckCondition(instrinfo.instruct.conditions, flowinfo))
+                    {
+                        // 如果指令不满足条件, 则记录下来, 以便后续处理
+                        insidenotexes.Add((pipelineid, instrinfo.index, instrinfo.instruct, flowinfo));
+                        continue;
+                    }
+                    
                     if (null == indexes || false == indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
-
                     ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
                 }
                 instrinfos.Clear();
@@ -177,13 +195,27 @@ namespace Goblin.Gameplay.Logic.Behaviors
                     flowinfo.timeline += GAME_DEFINE.LOGIC_TICK_MS;
                     flowinfo.framepass -= GAME_DEFINE.LOGIC_TICK_MS;
                 }
-                
-                // 如果管线的时间线已经超过了管线的长度, 结束管线
-                if (flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
             }
 
             flowinfos.Clear();
             ObjectCache.Set(flowinfos);
+        }
+
+        protected override void OnEndTick()
+        {
+            base.OnEndTick();
+            // 处理指令条件不满足的指令
+            foreach (var notexe in insidenotexes)
+            {
+                if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
+                ExecuteInstruct(ExecuteInstrucType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstrucType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+            }
+            insidenotexes.Clear();
+            
+            // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
+            if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
+            foreach (var flowinfo in flowinfos) if (flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
         }
 
         /// <summary>
