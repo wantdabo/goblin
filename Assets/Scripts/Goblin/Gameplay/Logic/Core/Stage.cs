@@ -130,6 +130,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Flow flow => GetBehavior<Flow>(sa);
         /// <summary>
+        /// 杀手行为
+        /// </summary>
+        public Killer killer => GetBehavior<Killer>(sa);
+        /// <summary>
         /// 渲染指令同步
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa);
@@ -182,6 +186,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Flow>(sa);
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
+            AddBehavior<Killer>(sa);
             AddBehavior<RILSync>(sa);
             
             // 添加预制创建器

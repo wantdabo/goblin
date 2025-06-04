@@ -68,6 +68,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             if (false == stage.SeekBehaviorInfo(to, out AttributeInfo toattribute)) return;
             
             // TODO 伤害结算
+            // 假定必杀, 防止被吞子弹 ..., 根据项目业务, 请跳过已经死掉的碰撞检测/逻辑之类的
+            stage.killer.Kill(from, to);
         }
     }
 }

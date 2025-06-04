@@ -22,6 +22,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Flow),
             typeof(SkillLauncher),
             typeof(Bullet),
+            typeof(Killer),
             typeof(RILSync),
         };
     }
