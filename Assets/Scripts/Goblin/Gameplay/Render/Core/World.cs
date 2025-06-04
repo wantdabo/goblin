@@ -235,7 +235,11 @@ namespace Goblin.Gameplay.Render.Core
             dict.Remove(agent.GetType());
             agent.Reset();
             ObjectPool.Set(agent);
-            if (0 == dict.Count) agentdict.Remove(actor);
+            if (0 == dict.Count)
+            {
+                ObjectPool.Set(dict);
+                agentdict.Remove(actor);
+            }
             
             snapshotagents.Remove(agent);
         }
