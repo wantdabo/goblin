@@ -5,6 +5,10 @@ using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows
 {
+    /// <summary>
+    /// 管线原始数据格式
+    /// 这个才能支持 MessagePack 序列化, 它的职责也仅仅是为了持久化, 与 PipelineData 等价的
+    /// </summary>
     [MessagePackObject(true)]
     public class PipelineRawData
     {
