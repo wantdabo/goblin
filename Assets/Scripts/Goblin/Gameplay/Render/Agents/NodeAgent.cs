@@ -31,13 +31,12 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
-            go = ObjectPool.Ensure<GameObject>("NODE_GO_KEY");
+            go = ObjectPool.Get<GameObject>("NODE_GO_KEY");
             if (null == go)
             {
-                go = new GameObject();
+                go = new GameObject("Node");
                 go.SetActive(false);
             }
-            go.name = actor.ToString();
             go.transform.SetParent(root.transform);
 
             WatchRIL<RIL_SPATIAL>(OnRILSpatial);
