@@ -44,14 +44,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Unload(uint skill)
         {
             if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
-
-            info.loadedskills.Remove(skill);
             
             skillinfo.pipelines.Clear();
             ObjectCache.Set(skillinfo.pipelines);
-
+            
+            info.loadedskills.Remove(skill);
             info.loadedskilldict.Remove(skill);
-            ObjectCache.Set(skillinfo);
         }
 
         /// <summary>
