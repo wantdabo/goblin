@@ -12,7 +12,7 @@ namespace Goblin.Common.GameRes
     {
         public const string soundpath = "Assets/GameRes/Sound/";
         public const string modelpath = "Assets/GameRes/Model/";
-        public const string animmixpath = "Assets/GameRes/AnimationMix/";
+        public const string animcfgpath = "Assets/GameRes/AnimCfg/";
         public const string effectpath = "Assets/GameRes/Effect/";
         public const string uieffectpath = "Assets/GameRes/UIEffect/";
         public const string uiprefabpath = "Assets/GameRes/UIPrefab/";
@@ -65,9 +65,9 @@ namespace Goblin.Common.GameRes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>AnimationConfig</returns>
-        public async Task<AnimationMixConfig> LoadAnimationConfigAsync(string res)
+        public async Task<AnimationConfig> LoadAnimationConfigAsync(string res)
         {
-            return await engine.gameres.LoadAssetAsync<AnimationMixConfig>(animmixpath + res);
+            return await engine.gameres.LoadAssetAsync<AnimationConfig>(animcfgpath + res);
         }
         
         /// <summary>
@@ -75,9 +75,9 @@ namespace Goblin.Common.GameRes
         /// </summary>
         /// <param name="res">资源地址</param>
         /// <returns>AnimationConfig</returns>
-        public AnimationMixConfig LoadAnimationConfigSync(string res)
+        public AnimationConfig LoadAnimationConfigSync(string res)
         {
-            return engine.gameres.LoadAssetSync<AnimationMixConfig>(animmixpath + res);
+            return engine.gameres.LoadAssetSync<AnimationConfig>(animcfgpath + res);
         }
         
         /// <summary>
@@ -181,7 +181,7 @@ namespace Goblin.Common.GameRes
         {
             return engine.gameres.LoadRawFileSync(pipelinepath + res);
         }
-
+    
         /// <summary>
         /// 异步加载 PipelineData 的 Bytes
         /// </summary>

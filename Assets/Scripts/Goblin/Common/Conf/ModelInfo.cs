@@ -18,7 +18,7 @@ public sealed partial class ModelInfo : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Res = _buf.ReadString();
-        AnimationMix = _buf.ReadString();
+        Animation = _buf.ReadString();
     }
 
     public static ModelInfo DeserializeModelInfo(ByteBuf _buf)
@@ -35,9 +35,9 @@ public sealed partial class ModelInfo : Luban.BeanBase
     /// </summary>
     public readonly string Res;
     /// <summary>
-    /// 动画混合路径
+    /// 动画路径
     /// </summary>
-    public readonly string AnimationMix;
+    public readonly string Animation;
    
     public const int __ID__ = 236415277;
     public override int GetTypeId() => __ID__;
@@ -51,7 +51,7 @@ public sealed partial class ModelInfo : Luban.BeanBase
         return "{ "
         + "Id:" + Id + ","
         + "Res:" + Res + ","
-        + "AnimationMix:" + AnimationMix + ","
+        + "Animation:" + Animation + ","
         + "}";
     }
 }

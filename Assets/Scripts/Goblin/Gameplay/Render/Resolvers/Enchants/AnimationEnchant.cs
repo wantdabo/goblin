@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
             
             // 如果模型定义没有动画配置, 则回收动画代理
             if (false == engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) return;
-            if (string.IsNullOrEmpty(modelinfo.AnimationMix))
+            if (string.IsNullOrEmpty(modelinfo.Animation))
             {
                 RecycleAgent(ril.actor);
                 return;

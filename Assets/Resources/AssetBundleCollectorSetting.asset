@@ -102,12 +102,12 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: AnimationMix
+    - GroupName: AnimCfg
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/GameRes/AnimationMix
+      - CollectPath: Assets/GameRes/AnimCfg
         CollectorGUID: 83c4abf726ce8a3479029ff78e78873e
         CollectorType: 0
         AddressRuleName: AddressByFileName
