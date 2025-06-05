@@ -2,6 +2,7 @@
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using MessagePack;
+using Sirenix.OdinInspector;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
 {
@@ -14,6 +15,11 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
     {
         public override ushort id => INSTR_DEFINE.ANIMATION;
 
+        /// <summary>
+        /// 动画名称
+        /// </summary>
+        [ValueDropdown("@OdinValueDropdown.GetModelAnimNames(PipelineWorkSpace.worker.model)")]
+        [LabelText("动画名称")]
         public string name;
         
         public override byte[] Serialize()
