@@ -216,6 +216,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos) if (flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
+            flowinfos.Clear();
+            ObjectCache.Set(flowinfos);
         }
 
         /// <summary>
