@@ -17,8 +17,10 @@ using Pipeline.Timeline.Layouts.Common;
 using Pipeline.Timeline.Tracks;
 using Pipeline.Timeline.Tracks.Common;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using Object = UnityEngine.Object;
 
@@ -57,6 +59,13 @@ namespace Pipeline.Timeline
         /// </summary>
         public static PipelineWorker worker { get; private set; }
 
+        [InitializeOnLoadMethod]
+        public static void Initialize()
+        {
+            EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
+            EditorSceneManager.OpenScene("Assets/GameRes/Scene/PipelineScene.unity");
+        }
+
         /// <summary>
         /// 工作者初始化
         /// </summary>
@@ -65,6 +74,8 @@ namespace Pipeline.Timeline
         {
             if (false == File.Exists(pipelinepath)) return;
             if (null == director) return;
+            
+            if (null != worker) worker.Dispose();
             worker = new PipelineWorker(pipelinepath);
         }
 
@@ -197,7 +208,8 @@ namespace Pipeline.Timeline
                     if (null == pipelineasset) continue;
                     
                     var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata);
-                    foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
+
+                    if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
 
                     instructs.Add(opt.instruct);
                 }

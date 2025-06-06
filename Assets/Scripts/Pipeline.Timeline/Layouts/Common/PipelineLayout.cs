@@ -38,7 +38,7 @@ namespace Pipeline.Timeline.Layouts.Common
                 var track = new Dictionary<ushort, List<uint>>(serialize.keys.Count);
                 for (int i = 0; i < serialize.keys.Count; i++)
                 {
-                    track.Add(serialize.keys[i], new List<uint> { serialize.values[i] });
+                    track.Add(serialize.keys[i], serialize.values);
                 }
                 tracks.Add(track);
             }

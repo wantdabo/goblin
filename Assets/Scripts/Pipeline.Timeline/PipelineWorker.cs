@@ -2,6 +2,7 @@
 using System.IO;
 using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
+using Goblin.Misc;
 using MessagePack;
 using Pipeline.Timeline.Assets;
 using Pipeline.Timeline.Layouts.Common;
@@ -36,13 +37,34 @@ namespace Pipeline.Timeline
         /// <summary>
         /// 管线模型
         /// </summary>
-        public int model { get; set; }
+        private int mmodel { get; set; }
+        public int model
+        {
+            get { return mmodel;}
+            set
+            {
+                mmodel = value;
+                LoadModel();
+            }
+        }
+        /// <summary>
+        /// 管线模型 GameObject
+        /// </summary>
+        public GameObject modelgo { get; set; }
 
         public PipelineWorker(string pipelinepath)
         {
             this.pipelinepath = pipelinepath;
             this.pipeline = uint.Parse(Path.GetFileNameWithoutExtension(pipelinepath));
             Load();
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Dispose()
+        {
+            RecycleModel();
         }
 
         /// <summary>
@@ -70,8 +92,20 @@ namespace Pipeline.Timeline
             timelineasset = ScriptableObject.CreateInstance<TimelineAsset>();
             layout = PipelineWorkSpace.ReadPipelineLayout(pipeline);
             model = layout.model;
-            
             PipelineWorkSpace.SettingsTimeline(timelineasset, data, layout);
+        }
+
+        private void LoadModel()
+        {
+            RecycleModel();
+            if (false == EditorConfig.location.ModelInfos.TryGetValue(model, out var modelcfg)) return;
+            modelgo = GameObject.Instantiate(EditorRes.LoadModel(modelcfg.Res));
+        }
+
+        private void RecycleModel()
+        {
+            if (null != modelgo) GameObject.DestroyImmediate(modelgo);
+            modelgo = null;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Pipeline.Timeline
         
         [ShowIf("@tab == PanelTab.创建管线")]
         [BoxGroup("创建管线")]
-        [ValueDropdown("ModelValueDropdown", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "选择模型")]
+        [ValueDropdown("@OdinValueDropdown.ModelValueDropdown()", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "选择模型")]
         [PropertySpace(SpaceAfter = 5)]
         [LabelText("模型")]
         public int createmodel;
