@@ -58,14 +58,13 @@ namespace Pipeline.Timeline
         
         [ShowIf("@tab == PanelTab.修改管线 && false == string.IsNullOrEmpty(pipelinepath)")]
         [BoxGroup("修改管线")]
-        [ValueDropdown("ModelValueDropdown", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "选择模型")]
+        [ValueDropdown("@OdinValueDropdown.ModelValueDropdown()", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "选择模型")]
         [OnValueChanged("OnModelChanged", true)]
         [PropertySpace(SpaceAfter = 5)]
         [LabelText("模型")]
         public int model;
 
         [ShowIf("@tab == PanelTab.修改管线 && false == string.IsNullOrEmpty(pipelinepath)")]
-
         [BoxGroup("修改管线")]
         [PropertySpace(SpaceAfter = -5)]
         [GUIColor(0, 1,0 )]
@@ -159,19 +158,6 @@ namespace Pipeline.Timeline
             model = PipelineWorkSpace.worker.model;
         }
 #endif
-
-        /// <summary>
-        /// 获取模型下拉列表
-        /// </summary>
-        /// <returns>模型下拉列表</returns>
-        private ValueDropdownList<int> ModelValueDropdown()
-        {
-            var result = new ValueDropdownList<int>();
-            result.Add(new ValueDropdownItem<int>("None", 0));
-            foreach (var modelcfg in EditorConfig.location.ModelInfos.DataList) result.Add(new ValueDropdownItem<int>(modelcfg.Res, modelcfg.Id));
-            
-            return result;
-        }
         
         /// <summary>
         /// 验证创建管线 ID 的合法性

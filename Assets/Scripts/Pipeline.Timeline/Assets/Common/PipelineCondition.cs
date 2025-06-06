@@ -12,7 +12,7 @@ namespace Pipeline.Timeline.Assets.Common
     [Serializable]
     public class PipelineCondition
     {
-        [ValueDropdown("@OdinDefineValueDropdown.GetConditionDefine()")]
+        [ValueDropdown("@OdinValueDropdown.GetConditionDefine()")]
         [LabelText("条件")]
         public ushort id = CONDITION_DEFINE.TEST;
 

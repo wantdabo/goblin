@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 动画配置
         /// </summary>
-        private AnimationMixConfig animcfg { get; set; } = default;
+        private AnimationConfig animcfg { get; set; } = default;
         /// <summary>
         /// Animancer 组件
         /// </summary>
@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 动画名称
         /// </summary>
-        private string animname { get; set; }
+        private string playname { get; set; }
         /// <summary>
         /// 动画持续时间
         /// </summary>
@@ -71,24 +71,25 @@ namespace Goblin.Gameplay.Render.Agents
             if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE facade) || 0 >= facade.model) return;
             if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
             
-            if (string.IsNullOrEmpty(cfgname) || false == modelinfo.AnimationMix.Equals(cfgname))
+            if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
             {
-                cfgname = modelinfo.AnimationMix;
+                cfgname = modelinfo.Animation;
                 if (null != animcfg) GameObject.Destroy(animcfg);
                 animcfg = world.engine.gameres.location.LoadAnimationConfigSync(cfgname);
             }
-                
-            var animinfo = animcfg.GetAnimationInfo(ril.current);
+            var curanimname = animcfg.GetAnimationName(ril.current);
+            var animinfo = animcfg.GetAnimationMixInfo(curanimname);
             if (null == animinfo) return;
                 
-            animname = animinfo.name;
+            playname = animinfo.name;
             mixduration = animinfo.mixduration;
             tarduration = ril.elapsed * Config.Int2Float;
-
-            var beforeAnimInfo = animinfo.GetMixAnimationInfo(ril.last);
+            
+            var preanimname = animcfg.GetAnimationName(ril.last);
+            var beforeAnimInfo = animinfo.GetAnimationBeforeMixInfo(preanimname);
             if (null != beforeAnimInfo && tarduration < beforeAnimInfo.duration)
             {
-                animname = beforeAnimInfo.name;
+                playname = beforeAnimInfo.name;
                 mixduration = beforeAnimInfo.mixduration;
             }
         }
@@ -111,7 +112,7 @@ namespace Goblin.Gameplay.Render.Agents
             }
 
             if (null == animancer) return;
-            animstate = animancer.TryPlay(animname, mixduration * (1 / timescale));
+            animstate = animancer.TryPlay(playname, mixduration * (1 / timescale));
             if (null == animstate) return;
             animstate.Speed = 0;
             animstate.Time = Mathf.Clamp(animstate.Time + tick * timescale, 0, tarduration);
