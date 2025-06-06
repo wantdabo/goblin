@@ -67,7 +67,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
             hashcodedict = ObjectCache.Ensure<Dictionary<(ulong, ushort), int>>();
             
-            stage.eventor.Listen<ActorDeadEvent>(this, OnActorDead);
+            stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
         }
 
         protected override void OnDisassemble()
@@ -103,7 +103,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
             
-            stage.eventor.UnListen<ActorDeadEvent>(this, OnActorDead);
+            stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
         }
         
         /// <summary>
@@ -285,7 +285,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Translate();
         }
         
-        private void OnActorDead(ActorDeadEvent e)
+        private void OnActorRmv(ActorRmvEvent e)
         {
             RmvHashCode(e.actor);
         }

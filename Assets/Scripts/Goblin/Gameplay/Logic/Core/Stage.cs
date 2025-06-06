@@ -32,9 +32,9 @@ namespace Goblin.Gameplay.Logic.Core
     }
 
     /// <summary>
-    /// Actor 死亡事件
+    /// Actor 移除事件
     /// </summary>
-    public struct ActorDeadEvent : IEvent
+    public struct ActorRmvEvent : IEvent
     {
         /// <summary>
         /// ActorID
@@ -533,7 +533,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
 
-            eventor.Tell(new ActorDeadEvent { actor = id });
+            eventor.Tell(new ActorRmvEvent { actor = id });
             DiffActor(id, RIL_DEFINE.DIFF_DEL);
         }
 

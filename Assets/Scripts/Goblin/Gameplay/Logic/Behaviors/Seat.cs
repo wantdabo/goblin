@@ -11,13 +11,13 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            stage.eventor.Listen<ActorDeadEvent>(this, OnActorDead);
+            stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
         }
 
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
-            stage.eventor.UnListen<ActorDeadEvent>(this, OnActorDead);
+            stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.asdict.Add(id, seat);
         }
         
-        private void OnActorDead(ActorDeadEvent e)
+        private void OnActorRmv(ActorRmvEvent e)
         {
             // 站起
             if (false == info.asdict.TryGetValue(e.actor, out var seat)) return;
