@@ -119,8 +119,14 @@ namespace Goblin.Gameplay.Logic.Flows
         /// </summary>
         private static void Scriptings()
         {
-            scriptings.Add(FLOW_DEFINE.S100000001, new S100000001());
-            scriptings.Add(FLOW_DEFINE.S100000002, new S100000002());
+            void Scripting<T>() where T : Scripting, new()
+            {
+                var scripting = new T();
+                scriptings.Add(scripting.id, scripting);
+            }
+
+            Scripting<S100000001>();
+            Scripting<S100000002>();
         }
     }
 }
