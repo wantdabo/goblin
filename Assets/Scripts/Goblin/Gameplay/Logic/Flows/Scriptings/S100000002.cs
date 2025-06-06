@@ -12,9 +12,15 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings
         
         protected override void OnScript()
         {
-            Instruct(0, 5000, new BulletMotionData
+            Instruct(0, 500, new BulletMotionData
             {
-                motion = FLOW_BULLET_DEFINE.MOTION_STRAIGHT
+                motion = FLOW_BULLET_DEFINE.MOTION_STRAIGHT,
+                speedrate = 1000,
+            })
+            .After(0, 3500, new BulletMotionData
+            {
+                motion = FLOW_BULLET_DEFINE.MOTION_STRAIGHT,
+                speedrate = 3500,
             });
         }
     }

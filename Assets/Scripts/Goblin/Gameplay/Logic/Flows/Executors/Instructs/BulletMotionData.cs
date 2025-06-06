@@ -17,6 +17,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 子弹运动类型
         /// </summary>
         public ushort motion;
+        /// <summary>
+        /// 子弹运动速度倍率
+        /// </summary>
+        public int speedrate;
         
         public override byte[] Serialize()
         {

@@ -41,6 +41,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             owner = 0;
             flow = 0;
+            strength = 0;
             speed = 0;
             damage = default;
         }
@@ -51,6 +52,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.Ready(actor);
             clone.owner = owner;
             clone.flow = flow;
+            clone.strength = strength;
             clone.speed = speed;
             clone.damage = damage;
             
