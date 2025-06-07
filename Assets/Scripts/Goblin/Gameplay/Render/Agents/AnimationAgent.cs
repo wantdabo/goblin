@@ -31,6 +31,14 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         private AnimancerState animstate { get; set; }
         /// <summary>
+        /// 上一个动画名称
+        /// </summary>
+        private string preplayename { get; set; }
+        /// <summary>
+        /// 当前播放动画名称
+        /// </summary>
+        private string curplayname { get; set; }
+        /// <summary>
         /// 动画名称
         /// </summary>
         private string playname { get; set; }
@@ -48,7 +56,7 @@ namespace Goblin.Gameplay.Render.Agents
             animancer = null;
             animstate = null;
             
-            WatchRIL<RIL_STATE_MACHINE>(OnRILStateMachine);
+            WatchRIL<RIL_FACADE>(OnRILStateMachine);
         }
 
         protected override void OnReset()
@@ -57,7 +65,7 @@ namespace Goblin.Gameplay.Render.Agents
             animstate = null;
         }
         
-        private void OnRILStateMachine(RIL_STATE_MACHINE ril)
+        private void OnRILStateMachine(RIL_FACADE ril)
         {
             RILConv2AnimData(ril);
         }
@@ -66,10 +74,10 @@ namespace Goblin.Gameplay.Render.Agents
         /// 状态机状态转换为动画数据
         /// </summary>
         /// <param name="ril">状态机状态</param>
-        private void RILConv2AnimData(RIL_STATE_MACHINE ril)
+        private void RILConv2AnimData(RIL_FACADE ril)
         {
-            if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE facade) || 0 >= facade.model) return;
-            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
+            if (0 >= ril.model) return;
+            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) return;
             
             if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
             {
@@ -77,16 +85,26 @@ namespace Goblin.Gameplay.Render.Agents
                 if (null != animcfg) GameObject.Destroy(animcfg);
                 animcfg = world.engine.gameres.location.LoadAnimationConfigSync(cfgname);
             }
-            var curanimname = animcfg.GetAnimationName(ril.current);
-            var animinfo = animcfg.GetAnimationMixInfo(curanimname);
-            if (null == animinfo) return;
-                
-            playname = animinfo.name;
-            mixduration = animinfo.mixduration;
-            tarduration = ril.elapsed * Config.Int2Float;
+
+            var animname = ril.animname;
+            if (null == animname) animname = animcfg.GetAnimationName(ril.animstate);
             
-            var preanimname = animcfg.GetAnimationName(ril.last);
-            var beforeAnimInfo = animinfo.GetAnimationBeforeMixInfo(preanimname);
+            if (curplayname != animname)
+            {
+                preplayename = curplayname;
+                curplayname = animname;
+            }
+            
+            playname = curplayname;
+            mixduration = 0;
+            tarduration = ril.animelapsed * Config.Int2Float;
+            
+            var animinfo = animcfg.GetAnimationMixInfo(animname);
+            if (null == animinfo) return;
+            mixduration = animinfo.mixduration;
+
+            if (null == preplayename) return;
+            var beforeAnimInfo = animinfo.GetAnimationBeforeMixInfo(preplayename);
             if (null != beforeAnimInfo && tarduration < beforeAnimInfo.duration)
             {
                 playname = beforeAnimInfo.name;

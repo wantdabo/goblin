@@ -15,6 +15,9 @@ namespace Goblin.Gameplay.Logic.Translators
         protected override void OnRIL(FacadeInfo info, RIL_FACADE ril)
         {
             ril.model = info.model;
+            ril.animstate = info.animstate;
+            ril.animname = info.animname;
+            ril.animelapsed = (info.animelapsed * stage.cfg.fp2int).AsUInt();
         }
     }
 }

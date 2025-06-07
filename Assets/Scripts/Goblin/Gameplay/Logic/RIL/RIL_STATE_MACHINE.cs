@@ -17,28 +17,22 @@ namespace Goblin.Gameplay.Logic.RIL
         /// 上一个状态
         /// </summary>
         public byte last { get; set; }
-        /// <summary>
-        /// 流逝时间
-        /// </summary>
-        public uint elapsed { get; set; }
 
         protected override void OnReady()
         {
             current = 0;
             last = 0;
-            elapsed = 0;
         }
 
         protected override void OnReset()
         {
             current = 0;
             last = 0;
-            elapsed = 0;
         }
         
         public override string ToString()
         {
-            return $"RIL_STATE_MACHINE: current={current}, last={last}, elapsed={elapsed}";
+            return $"RIL_STATE_MACHINE: current={current}, last={last}";
         }
     }
 }

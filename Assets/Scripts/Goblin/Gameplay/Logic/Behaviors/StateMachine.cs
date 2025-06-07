@@ -55,6 +55,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             info.elapsed += tick;
+            
+            if (false == stage.SeekBehavior(actor, out Facade facade)) return;
+
+            if (STATE_DEFINE.CASTING == info.current)
+            {
+                facade.SetAnimationState(STATE_DEFINE.CASTING);
+                return;
+            }
+            
+            facade.SetAnimationState(info.current, info.elapsed);
         }
     }
 }
