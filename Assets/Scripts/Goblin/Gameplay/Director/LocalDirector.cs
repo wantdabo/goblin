@@ -9,6 +9,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Core;
@@ -65,6 +66,9 @@ namespace Goblin.Gameplay.Director
 
         protected override void OnCreateGame()
         {
+            // 预载所有 Pipeline
+            foreach (var pipelinecfg in engine.cfg.location.PipelineInfos.DataList) PipelineDataReader.Read((uint)pipelinecfg.Id);
+            
             // 初始化逻辑层
             stage = new Stage().Initialize(data.sdata);
             // 监听 RIL 渲染状态
