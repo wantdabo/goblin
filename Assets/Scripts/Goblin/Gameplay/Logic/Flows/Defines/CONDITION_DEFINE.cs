@@ -31,8 +31,8 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         public const byte LT = 5;
         
         /// <summary>
-        /// 测试条件
+        /// 输入条件
         /// </summary>
-        public const ushort TEST = 1;
+        public const ushort INPUT = 1;
     }
 }

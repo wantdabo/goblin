@@ -36,6 +36,9 @@ namespace Pipeline.Timeline.Assets
                         PipelineWorkSpace.worker.modelgo.transform.position += offset;
                         break;
                     case SPATIAL_DEFINE.POSITION_SELF:
+                        var rotation = PipelineWorkSpace.worker.modelgo.transform.rotation;
+                        offset = rotation * offset;
+                        PipelineWorkSpace.worker.modelgo.transform.position += offset;
                         break;
                 }
             }

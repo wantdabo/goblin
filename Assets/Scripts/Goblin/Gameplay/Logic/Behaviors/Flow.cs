@@ -279,7 +279,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 checkers.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
-            Checker<TestChecker>(CONDITION_DEFINE.TEST);
+            Checker<InputChecker>(CONDITION_DEFINE.INPUT);
         }
 
         /// <summary>
@@ -297,6 +297,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             Executor<SpatialPositionExecutor>(INSTR_DEFINE.SPATIAL_POSITION);
             Executor<CreateBulletExecutor>(INSTR_DEFINE.CREATE_BULLET);
             Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
+            Executor<LaunchSkillExecutor>(INSTR_DEFINE.LAUNCH_SKILL);
         }
     }
 }

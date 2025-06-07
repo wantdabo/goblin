@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 {
                     if (false == stage.cfg.location.SkillBindingInfos.TryGetValue((int)skill, out var binding)) return;
                     if (null == binding) continue;
-                    if (false == gamepad.GetInput((ushort)binding.Key).release) continue;
+                    if (false == gamepad.GetInput((ushort)binding.Key).press) continue;
                     
                     // 技能释放
                     launcher.Launch(skill);

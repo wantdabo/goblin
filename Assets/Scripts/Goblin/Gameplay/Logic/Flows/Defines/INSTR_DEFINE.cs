@@ -21,5 +21,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 子弹运动指令
         /// </summary>
         public const ushort BULLET_MOTION = 4;
+        /// <summary>
+        /// 释放技能
+        /// </summary>
+        public const ushort LAUNCH_SKILL = 5;
     }
 }

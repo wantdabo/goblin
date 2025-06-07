@@ -58,6 +58,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Break()
         {
             if (false == info.casting) return;
+            info.casting = false;
             stage.flow.EndPipeline(info.flow);
         }
 

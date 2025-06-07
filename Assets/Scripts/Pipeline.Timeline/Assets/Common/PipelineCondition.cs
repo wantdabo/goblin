@@ -3,6 +3,7 @@ using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace Pipeline.Timeline.Assets.Common
 {
@@ -13,12 +14,12 @@ namespace Pipeline.Timeline.Assets.Common
     public class PipelineCondition
     {
         [ValueDropdown("@OdinValueDropdown.GetConditionDefine()")]
-        [LabelText("条件")]
-        public ushort id = CONDITION_DEFINE.TEST;
+        [HideLabel]
+        public ushort id = CONDITION_DEFINE.INPUT;
 
-        [ShowIf("@CONDITION_DEFINE.TEST == id")]
-        [LabelText("测试条件")]
-        public TestCondi testcondition;
+        [ShowIf("@CONDITION_DEFINE.INPUT == id")]
+        [HideLabel]
+        public InputCondition inputcondition;
         
         /// <summary>
         /// 获取条件
@@ -29,8 +30,8 @@ namespace Pipeline.Timeline.Assets.Common
         {
             switch (id)
             {
-                case CONDITION_DEFINE.TEST:
-                    return testcondition;
+                case CONDITION_DEFINE.INPUT:
+                    return inputcondition;
                 default:
                     throw new NotImplementedException($"condition with ID {id} is not implemented.");
             }
@@ -45,9 +46,9 @@ namespace Pipeline.Timeline.Assets.Common
         {
             switch (condition.id)
             {
-                case CONDITION_DEFINE.TEST:
-                    id = CONDITION_DEFINE.TEST;
-                        testcondition = condition as TestCondi;
+                case CONDITION_DEFINE.INPUT:
+                    id = CONDITION_DEFINE.INPUT;
+                        inputcondition = condition as InputCondition;
                     break;
                 default:
                     throw new NotImplementedException($"condition with ID {condition.id} is not implemented.");

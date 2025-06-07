@@ -80,6 +80,9 @@ namespace Goblin.Gameplay.Logic.Flows
                     case INSTR_DEFINE.SPATIAL_POSITION:
                         instruct.data = MessagePackSerializer.Deserialize<SpatialPositionData>(rawData.instrdata[i]);
                         break;
+                    case INSTR_DEFINE.LAUNCH_SKILL:
+                        instruct.data = MessagePackSerializer.Deserialize<LaunchSkillData>(rawData.instrdata[i]);
+                        break;
                 }
 
                 instruct.conditions = new List<Condition>();
@@ -89,8 +92,8 @@ namespace Goblin.Gameplay.Logic.Flows
                     Condition condition = default;
                     switch (conditiontype)
                     {
-                        case CONDITION_DEFINE.TEST:
-                            condition = MessagePackSerializer.Deserialize<TestCondi>(rawData.conditions[i][j]);
+                        case CONDITION_DEFINE.INPUT:
+                            condition = MessagePackSerializer.Deserialize<InputCondition>(rawData.conditions[i][j]);
                             break;
                     }
                     instruct.conditions.Add(condition);

@@ -27,6 +27,22 @@ namespace Goblin.Misc
                 { "技能", STATE_DEFINE.CASTING },
             };
         }
+        
+        /// <summary>
+        /// 获取输入定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(输入 ID)</returns>
+        public static ValueDropdownList<ushort> GetInputDefine()
+        {
+            return new ()
+            {
+                { "Joystick", INPUT_DEFINE.JOYSTICK },
+                { "BA", INPUT_DEFINE.BA },
+                { "BB", INPUT_DEFINE.BB },
+                { "BC", INPUT_DEFINE.BC },
+                { "BD", INPUT_DEFINE.BD },
+            };
+        }
 
         /// <summary>
         /// 获取条件定义下拉列表
@@ -36,7 +52,7 @@ namespace Goblin.Misc
         {
             return new ()
             {
-                { "测试指令", CONDITION_DEFINE.TEST },
+                { "输入条件", CONDITION_DEFINE.INPUT },
             };
         }
         
@@ -62,6 +78,22 @@ namespace Goblin.Misc
             var result = new ValueDropdownList<int>();
             result.Add(new ValueDropdownItem<int>("None", 0));
             foreach (var modelcfg in EditorConfig.location.ModelInfos.DataList) result.Add(new ValueDropdownItem<int>(modelcfg.Res, modelcfg.Id));
+            
+            return result;
+        }
+        
+        /// <summary>
+        /// 获取模型下拉列表
+        /// </summary>
+        /// <returns>模型下拉列表</returns>
+        public static ValueDropdownList<uint> SKillIds()
+        {
+            var result = new ValueDropdownList<uint>();
+            result.Add(new ValueDropdownItem<uint>("None", 0));
+            foreach (var skillcfg in EditorConfig.location.SkillInfos.DataList)
+            {
+                result.Add(new ValueDropdownItem<uint>($"{skillcfg.Id} - {skillcfg.Name}", (uint)skillcfg.Id));
+            }
             
             return result;
         }

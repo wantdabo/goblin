@@ -15,4 +15,6 @@ MonoBehaviour:
   model: 100001
   serializes:
   - keys: 0100
-    values: 0100000002000000
+    values: 0100000003000000
+  - keys: 0500
+    values: 02000000

@@ -105,6 +105,9 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.SPATIAL_POSITION:
                             pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
                             break;
+                        case INSTR_DEFINE.LAUNCH_SKILL:
+                            pipetrack = timelineasset.CreateTrack<PipelineLaunchSkillTrack>();
+                            break;
                     }
                     if (null == pipetrack) continue;
 
