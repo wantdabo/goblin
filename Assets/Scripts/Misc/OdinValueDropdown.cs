@@ -41,6 +41,19 @@ namespace Goblin.Misc
         }
         
         /// <summary>
+        /// 获取状态定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(状态)</returns>
+        public static ValueDropdownList<byte> GetSpatialPositionDefine()
+        {
+            return new ()
+            {
+                { "世界参考", SPATIAL_DEFINE.POSITION_WORLD },
+                { "自身参考", SPATIAL_DEFINE.POSITION_SELF },
+            };
+        }
+        
+        /// <summary>
         /// 获取模型下拉列表
         /// </summary>
         /// <returns>模型下拉列表</returns>

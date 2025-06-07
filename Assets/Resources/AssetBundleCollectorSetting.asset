@@ -115,16 +115,3 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Pipeline
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/GameRes/Raw/Pipelines
-        CollectorGUID: f89225788ce436d40b6c16fc21633fbf
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 

@@ -64,7 +64,7 @@ namespace Pipeline.Timeline.Assets.Common
         {
             var playable = ScriptPlayable<T>.Create(graph);
             playable.GetBehaviour().data = data;
-
+            
             return playable;
         }
 

@@ -11,13 +11,13 @@ using UnityEngine.Timeline;
 namespace Pipeline.Timeline.Assets
 {
     [DisplayName("动画指令")]
-    public class PipelineAnimationAsset : PipelineAsset<PipelineAnimationAsset.PipelineAnimationBehavior, AnimationData>, IPlayableAsset
+    public class PipelineAnimationAsset : PipelineAsset<PipelineAnimationAsset.PipelineAnimationBehavior, AnimationData>
     {
         public class PipelineAnimationBehavior : PipelineBehavior<AnimationData>
         {
-            public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+            protected override void OnExecute(Playable playable, FrameData info)
             {
-                base.ProcessFrame(playable, info, playerData);
+                base.OnExecute(playable, info);
                 if (null == PipelineWorkSpace.worker.modelgo) return;
                 var animancer = PipelineWorkSpace.worker.modelgo.GetComponent<NamedAnimancerComponent>();
                 if (null == animancer) return;

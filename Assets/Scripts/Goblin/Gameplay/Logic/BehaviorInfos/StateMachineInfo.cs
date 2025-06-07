@@ -20,10 +20,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public byte last { get; set; }
         /// <summary>
-        /// 持续帧数
-        /// </summary>
-        public uint frames { get; set; }
-        /// <summary>
         /// 流逝时间
         /// </summary>
         public FP elapsed { get; set; }
@@ -31,14 +27,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReady()
         {
             current = STATE_DEFINE.IDLE;
-            frames = 0;
             elapsed = FP.Zero;
         }
 
         protected override void OnReset()
         {
             current = STATE_DEFINE.IDLE;
-            frames = 0;
             elapsed = FP.Zero;
         }
 
@@ -47,7 +41,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             var clone = ObjectCache.Ensure<StateMachineInfo>();
             clone.Ready(actor);
             clone.current = current;
-            clone.frames = frames;
             
             return clone;
         }
@@ -57,7 +50,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             int hash = 17;
             hash = hash * 31 + actor.GetHashCode();
             hash = hash * 31 + current.GetHashCode();
-            hash = hash * 31 + frames.GetHashCode();
             hash = hash * 31 + elapsed.GetHashCode();
             
             return hash;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.BehaviorInfos.Flows
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
 {
     /// <summary>
     /// 碰撞信息

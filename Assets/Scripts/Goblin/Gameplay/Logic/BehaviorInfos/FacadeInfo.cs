@@ -13,6 +13,14 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 模型 ID
         /// </summary>
         public int model { get; set; }
+        /// <summary>
+        /// 动画名称
+        /// </summary>
+        public string animname { get; set; }
+        /// <summary>
+        /// 流逝时间
+        /// </summary>
+        public uint elapsed { get; set; } 
         
         protected override void OnReady()
         {

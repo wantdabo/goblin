@@ -62,6 +62,7 @@ namespace Pipeline.Timeline
         [InitializeOnLoadMethod]
         public static void Initialize()
         {
+            if (false == EditorSceneManager.GetActiveScene().name.Equals("PipelineScene")) return;
             EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
             EditorSceneManager.OpenScene("Assets/GameRes/Scene/PipelineScene.unity");
         }
@@ -101,6 +102,9 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.ANIMATION:
                             pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
                             break;
+                        case INSTR_DEFINE.SPATIAL_POSITION:
+                            pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
+                            break;
                     }
                     if (null == pipetrack) continue;
 
@@ -133,7 +137,7 @@ namespace Pipeline.Timeline
         /// <returns>管线数据</returns>
         public static PipelineData ReadPipelineData(uint pipeline)
         {
-            var pipelinepath = Path.Combine(datadir, $"{pipeline}.pipeline");
+            var pipelinepath = Path.Combine(datadir, $"{pipeline}.bytes");
             
             return ReadPipelineData(pipelinepath);
         }
@@ -172,7 +176,7 @@ namespace Pipeline.Timeline
                 length = 0,
                 instructs = new List<Instruct>()
             };
-            var path = Path.Combine(datadir, $"{pipeline}.pipeline");
+            var path = Path.Combine(datadir, $"{pipeline}.bytes");
             File.WriteAllBytes(path, MessagePackSerializer.Serialize(data.ToPipelineRawData()));
             var layout = ScriptableObject.CreateInstance<PipelineLayout>();
             layout.model = model;
@@ -215,7 +219,7 @@ namespace Pipeline.Timeline
                 }
             }
             var data = ScriptMachine.End();
-            File.WriteAllBytes(Path.Combine(datadir, $"{pipeline}.pipeline"), MessagePackSerializer.Serialize(data.ToPipelineRawData()));
+            File.WriteAllBytes(Path.Combine(datadir, $"{pipeline}.bytes"), MessagePackSerializer.Serialize(data.ToPipelineRawData()));
             
             var layout = ScriptableObject.CreateInstance<PipelineLayout>();
             layout.name = $"{pipeline}";
@@ -257,7 +261,7 @@ namespace Pipeline.Timeline
         /// <returns>所有管线文件</returns>
         public static List<(string name, string path)> GetPipelines()
         {
-            var files = Directory.GetFiles(datadir, "*.pipeline");
+            var files = Directory.GetFiles(datadir, "*.bytes");
             var result = new List<(string name, string path)>();
             foreach (var file in files)
             {
@@ -285,7 +289,7 @@ namespace Pipeline.Timeline
                 return (false, "管线 ID 不可以为零");
             }
 
-            var pipelinepath = $"{datadir}{createpipeline}.pipeline";
+            var pipelinepath = $"{datadir}{createpipeline}.bytes";
             if (File.Exists(pipelinepath))
             {
                 return (false, "管线 ID 已经存在");

@@ -33,7 +33,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             info.last = info.current;
             info.current = state;
-            info.frames = 0;
             info.elapsed = 0;
         }
         
@@ -55,7 +54,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            info.frames++;
             info.elapsed += tick;
         }
     }

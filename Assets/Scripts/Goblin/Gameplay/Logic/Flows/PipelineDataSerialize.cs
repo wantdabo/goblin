@@ -77,6 +77,9 @@ namespace Goblin.Gameplay.Logic.Flows
                     case INSTR_DEFINE.ANIMATION:
                         instruct.data = MessagePackSerializer.Deserialize<AnimationData>(rawData.instrdata[i]);
                         break;
+                    case INSTR_DEFINE.SPATIAL_POSITION:
+                        instruct.data = MessagePackSerializer.Deserialize<SpatialPositionData>(rawData.instrdata[i]);
+                        break;
                 }
 
                 instruct.conditions = new List<Condition>();

@@ -1,3 +1,4 @@
+using System;
 using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Common.GPDatas
@@ -5,6 +6,7 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
     /// <summary>
     /// 三维向量数据结构
     /// </summary>
+    [Serializable]
     [MessagePackObject(true)]
     public struct GPVector3
     {

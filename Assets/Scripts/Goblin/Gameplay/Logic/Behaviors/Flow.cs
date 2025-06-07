@@ -293,6 +293,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 executors.Add(id, ObjectCache.Ensure<T>().Load(stage));
             }
             
+            Executor<AnimationExecutor>(INSTR_DEFINE.ANIMATION);
+            Executor<SpatialPositionExecutor>(INSTR_DEFINE.SPATIAL_POSITION);
             Executor<CreateBulletExecutor>(INSTR_DEFINE.CREATE_BULLET);
             Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
         }

@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.Flows
             // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes
             var bytes = Export.engine.gameres.location.LoadPipelineSync(id.ToString());
 
-            data = MessagePackSerializer.Deserialize<PipelineData>(bytes);
+            data = MessagePackSerializer.Deserialize<PipelineRawData>(bytes).ToPipelineData();
             datas.Add(id, data);
 
             return data;

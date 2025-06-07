@@ -1,4 +1,5 @@
-﻿using UnityEngine.Timeline;
+﻿using Pipeline.Timeline.Assets.Common;
+using UnityEngine.Timeline;
 
 namespace Pipeline.Timeline.Tracks.Common
 {
@@ -8,5 +9,9 @@ namespace Pipeline.Timeline.Tracks.Common
     [HideInMenu]
     public class PipelineTrack : TrackAsset
     {
+        protected override void OnCreateClip(TimelineClip clip)
+        {
+            base.OnCreateClip(clip);
+        }
     }
 }
