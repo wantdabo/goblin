@@ -117,6 +117,8 @@ namespace Goblin.Gameplay.Render.Common
 
         private void OnTick(TickEvent e)
         {
+            if (CursorLockMode.Locked != Cursor.lockState) return;
+            
             var joystickdire = engine.u3dkit.gamepad.Player.Move.ReadValue<Vector2>();
             // 根据摄像机方向计算世界坐标系中的方向
             if (Vector2.zero != joystickdire && null != world.eyes.camera)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Goblin.Common;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Collisions;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;
@@ -12,7 +13,10 @@ using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.RIL.Common;
+using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
+using Goblin.RendererFeatures;
+using UnityEngine;
 
 namespace Goblin.Gameplay.Director
 {
@@ -39,6 +43,10 @@ namespace Goblin.Gameplay.Director
         /// 时间缩放
         /// </summary>
         public float timescale => stage.timescale.AsFloat();
+        /// <summary>
+        /// 绘制物理
+        /// </summary>
+        public bool physdraw { get; set; } = false;
         /// <summary>
         /// 逻辑场景
         /// </summary>
@@ -139,7 +147,38 @@ namespace Goblin.Gameplay.Director
                 while(rilqueue.TryDequeue(out var ril)) world.rilbucket.SetRIL(ril);
                 while (diffqueue.TryDequeue(out var diff)) world.rilbucket.SetDiff(diff);
                 while (eventqueue.TryDequeue(out var e)) world.rilbucket.SetEvent(e);
+                DrawPhys();
             }
+        }
+        
+        /// <summary>
+        /// 绘制物理
+        /// </summary>
+        private void DrawPhys()
+        {
+            if (false == physdraw) return;
+            if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return;
+            foreach (var collider in colliders)
+            {
+                if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
+                Color color = new Color(210 / 255f, 255 / 255f, 0 / 255f);
+                switch (collider.shape)
+                {
+                    case COLLIDER_DEFINE.BOX:
+                        var center = (spatial.position + collider.box.offset).ToVector3();
+                        var rotation = Quaternion.Euler(spatial.euler.ToVector3());
+                        var size = collider.box.size.ToVector3();
+                        DrawPhysRendererFeature.DrawPhysPass.DrawCube(center, rotation, size, color);
+                        break;
+                    case COLLIDER_DEFINE.SPHERE:
+                        center = (spatial.position + collider.sphere.offset).ToVector3();
+                        var radius = collider.sphere.radius.AsFloat();
+                        DrawPhysRendererFeature.DrawPhysPass.DrawSphere(center, radius, color);
+                        break;
+                }
+            }
+            colliders.Clear();
+            ObjectCache.Set(colliders);
         }
 
         protected override void OnStep()

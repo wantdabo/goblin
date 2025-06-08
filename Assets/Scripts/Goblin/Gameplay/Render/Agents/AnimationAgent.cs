@@ -55,6 +55,11 @@ namespace Goblin.Gameplay.Render.Agents
         {
             animancer = null;
             animstate = null;
+            preplayename = null;
+            curplayname = null;
+            playname = null;
+            tarduration = 0;
+            mixduration = 0;
             
             WatchRIL<RIL_FACADE>(OnRILStateMachine);
         }
@@ -63,6 +68,11 @@ namespace Goblin.Gameplay.Render.Agents
         {
             animancer = null;
             animstate = null;
+            preplayename = null;
+            curplayname = null;
+            playname = null;
+            tarduration = 0;
+            mixduration = 0;
         }
         
         private void OnRILStateMachine(RIL_FACADE ril)

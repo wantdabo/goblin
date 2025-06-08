@@ -720,9 +720,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
                             collidercfg.Offset[2] * stage.cfg.int2fp
                         ),
                         size = new FPVector3(
-                            collidercfg.Shape[0] * FP.Half * stage.cfg.int2fp,
-                            collidercfg.Shape[1] * FP.Half * stage.cfg.int2fp,
-                            collidercfg.Shape[2] * FP.Half * stage.cfg.int2fp
+                            collidercfg.Shape[0] * stage.cfg.int2fp,
+                            collidercfg.Shape[1] * stage.cfg.int2fp,
+                            collidercfg.Shape[2] * stage.cfg.int2fp
                         )
                     };
                     break;
