@@ -6,9 +6,15 @@ using UnityEngine.Serialization;
 
 namespace Goblin.Gameplay.Render.Common
 {
+    /// <summary>
+    /// 动画配置缓存
+    /// </summary>
     public static class AnimationConfigCache
     {
-        public static AnimationConfig current;
+        /// <summary>
+        /// 当前动画配置
+        /// </summary>
+        public static AnimationConfig current { get; set; }
     }
 
     /// <summary>
