@@ -1,12 +1,9 @@
+using System;
 using System.Collections.Generic;
-using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
-using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Scriptings;
 using Goblin.Gameplay.Logic.Flows.Scriptings.Common;
-using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows
 {
@@ -42,21 +39,26 @@ namespace Goblin.Gameplay.Logic.Flows
             if (datas.TryGetValue(id, out var data)) return data;
 
             // 从脚本处理器中尝试获取 PipelineData
-            if (scriptings.TryGetValue(id, out var scripting))
-            {
-                data = scripting.Script();
-                datas.Add(id, data);
-
-                return data;
-            }
-
-            // TODO 后续加宏, 判断非 UNITY 环境使用 File.ReadAllBytes
-            var bytes = Export.engine.gameres.location.LoadPipelineSync(id.ToString());
-
-            data = MessagePackSerializer.Deserialize<PipelineRawData>(bytes).ToPipelineData();
+            if (false == scriptings.TryGetValue(id, out var scripting)) throw new Exception("pipeline data not found.");
+            
+            data = scripting.Script();
             datas.Add(id, data);
 
             return data;
+        }
+        
+        /// <summary>
+        /// 预载入管线数据
+        /// </summary>
+        /// <param name="id">管线 ID</param>
+        /// <param name="bytes">管线二进制数据</param>
+        public static void PreloadPipelineData(uint id, byte[] bytes)
+        {
+            if (datas.ContainsKey(id)) return;
+
+            // 反序列化管线数据
+            var data = MessagePack.MessagePackSerializer.Deserialize<PipelineRawData>(bytes);
+            datas.Add(id, data.ToPipelineData());
         }
 
         /// <summary>

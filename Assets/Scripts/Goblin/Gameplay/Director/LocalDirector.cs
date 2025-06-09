@@ -74,8 +74,7 @@ namespace Goblin.Gameplay.Director
         protected override void OnCreateGame()
         {
             // 预载所有 Pipeline
-            foreach (var pipelinecfg in engine.cfg.location.PipelineInfos.DataList) PipelineDataReader.Read((uint)pipelinecfg.Id);
-            
+            foreach (var pipelinecfg in engine.cfg.location.PipelineInfos.DataList) PipelineDataReader.PreloadPipelineData((uint)pipelinecfg.Id, engine.gameres.location.LoadPipelineSync(pipelinecfg.Id.ToString()));
             // 初始化逻辑层
             stage = new Stage().Initialize(data.sdata);
             // 监听 RIL 渲染状态
