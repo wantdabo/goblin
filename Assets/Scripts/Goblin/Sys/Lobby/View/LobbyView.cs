@@ -9,7 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Goblin.Gameplay.Director;
-using Goblin.Gameplay.Logic.Common.GPDatas;
+using Goblin.Gameplay.Logic.Common.BuildDatas;
+using Kowtow.Math;
 using Goblin.Sys.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,28 +37,28 @@ namespace Goblin.Sys.Lobby.View
 
             AddUIEventListener("LocalGameBtn", (e) =>
             {
-                GPData data = new GPData();
+                BuildData data = new BuildData();
                 data.id = 10086;
                 data.seat = 1;
-                data.sdata = new GPStageData
+                data.sdata = new StageData
                 {
                     seed = 19491001,
                     players = new[]
                     {
-                        new GPPlayerData
+                        new PlayerData
                         {
                             seat = 1,
                             hero = 100001,
-                            position = new GPVector3(0, 0, 0),
-                            euler = new GPVector3(0, 0, 0),
+                            position = new IntVector3(0, 0, 0),
+                            euler = new IntVector3(0, 0, 0),
                             scale = 1000,
                         },
-                        new GPPlayerData
+                        new PlayerData
                         {
                             seat = 2,
                             hero = 100001,
-                            position = new GPVector3(0, 0, 0),
-                            euler = new GPVector3(0, 0, 0),
+                            position = new IntVector3(0, 0, 0),
+                            euler = new IntVector3(0, 0, 0),
                             scale = 1000,
                         },
                     }

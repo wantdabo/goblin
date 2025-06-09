@@ -3,6 +3,7 @@ using Animancer;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
+using Goblin.Gameplay.Render.Common.Extensions;
 using Pipeline.Timeline.Assets.Common;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -17,13 +18,15 @@ namespace Pipeline.Timeline.Assets
             protected override void OnPass(Playable playable, FrameData info)
             {
                 base.OnPass(playable, info);
-                SetPositionOffset(new Vector3(data.x, data.y, data.z) * Config.Int2Float);
+                var position = data.position.ToVector3();
+                SetPositionOffset(position);
             }
 
             protected override void OnReverse(Playable playable, FrameData info)
             {
                 base.OnReverse(playable, info);
-                SetPositionOffset(new Vector3(-data.x, -data.y, -data.z) * Config.Int2Float);
+                var position = -data.position.ToVector3();
+                SetPositionOffset(position);
             }
 
             private void SetPositionOffset(Vector3 offset)

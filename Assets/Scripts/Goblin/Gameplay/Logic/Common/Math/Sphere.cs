@@ -1,6 +1,6 @@
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Common.Collisions
+namespace Kowtow.Math
 {
     /// <summary>
     /// 球体

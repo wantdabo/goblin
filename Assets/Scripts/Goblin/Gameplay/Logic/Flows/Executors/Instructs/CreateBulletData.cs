@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Kowtow.Math;
@@ -31,7 +30,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// <summary>
         /// 子弹生成原点偏移
         /// </summary>
-        public GPVector3 offset;
+        public IntVector3 offset;
         /// <summary>
         /// 子弹生成初始旋转类型
         /// </summary>

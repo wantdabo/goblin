@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
+using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Render.Core;
 
 namespace Goblin.Gameplay.Director.Common
@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Director.Common
         /// <summary>
         /// 游戏数据
         /// </summary>
-        protected GPData data { get; private set; }
+        protected BuildData data { get; private set; }
         /// <summary>
         /// 世界
         /// </summary>
@@ -44,7 +44,7 @@ namespace Goblin.Gameplay.Director.Common
         /// 创建游戏
         /// </summary>
         /// <param name="data">游戏数据</param>
-        public void CreateGame(GPData data, bool multithread = false)
+        public void CreateGame(BuildData data, bool multithread = false)
         {
             this.data = data;
             this.multithread = multithread;

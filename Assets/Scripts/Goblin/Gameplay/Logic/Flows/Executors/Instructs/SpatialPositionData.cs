@@ -1,9 +1,10 @@
 using System;
-using Goblin.Gameplay.Logic.Common.GPDatas;
+using Kowtow.Math;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using MessagePack;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
 {
@@ -20,13 +21,9 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [PropertySpace(SpaceAfter = 5)]
         [LabelText("变化参考")]
         public byte type;
-        
-        [LabelText("X")]
-        public int x;
-        [LabelText("Y")]
-        public int y;
-        [LabelText("Z")]
-        public int z;
+
+        [LabelText("POSITION 变化数据")]
+        public IntVector3 position;
 
         public override byte[] Serialize()
         {

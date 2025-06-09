@@ -8,9 +8,9 @@ using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
@@ -98,7 +98,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
-        public GPStageData data { get; set; }
+        public StageData data { get; set; }
         /// <summary>
         /// 配置
         /// </summary>
@@ -162,7 +162,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="data">Stage 初始化的游戏数据</param>
         /// <returns>Stage</returns>
         /// <exception cref="Exception">初始化数据为空 || 重复初始化</exception>
-        public Stage Initialize(GPStageData data)
+        public Stage Initialize(StageData data)
         {
             if (null != info) throw new Exception("you cannot initialize more than once.");
             // 初始化数据存储
@@ -366,7 +366,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="type">按键类型</param>
         /// <param name="press">摁下之后 -> TRUE</param>
         /// <param name="dire">按键的方向</param>
-        public void SetInput(ulong id, ushort type, bool press, GPVector2 dire)
+        public void SetInput(ulong id, ushort type, bool press, IntVector2 dire)
         {
             if (false == SeekBehavior(id, out Gamepad gamepad)) return;
             

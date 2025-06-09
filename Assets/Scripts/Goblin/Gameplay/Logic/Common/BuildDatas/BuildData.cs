@@ -1,12 +1,12 @@
 using MessagePack;
 
-namespace Goblin.Gameplay.Logic.Common.GPDatas
+namespace Goblin.Gameplay.Logic.Common.BuildDatas
 {
     /// <summary>
     /// 游戏数据
     /// </summary>
     [MessagePackObject(true)]
-    public struct GPData
+    public struct BuildData
     {
         /// <summary>
         /// GameID
@@ -19,6 +19,6 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// <summary>
         /// Stage 数据
         /// </summary>
-        public GPStageData sdata { get; set; }
+        public StageData sdata { get; set; }
     }
 }

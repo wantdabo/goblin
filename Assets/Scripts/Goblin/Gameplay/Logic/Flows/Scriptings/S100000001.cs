@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Common.GPDatas;
+using Kowtow.Math;
 using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings
                     strength = 1000,
                     speed = 5000,
                     origin = FLOW_BULLET_DEFINE.BORN_ORIGIN_OWNER,
-                    offset = new GPVector3(0, 0, 0),
+                    offset = new IntVector3(0, 0, 0),
                     euler = FLOW_BULLET_DEFINE.BORN_EULER_OWNER,
                     angle = i * 1000,
                     scale = 1000,

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Goblin.Common;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Flows;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;

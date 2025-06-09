@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
+using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
@@ -16,7 +17,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             base.OnExecute(data, flowinfo);
             if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
-            var motion = new FPVector3(data.x, data.y, data.z) * stage.cfg.int2fp;
+            var motion = data.position.ToFPVector3();
             switch (data.type)
             {
                 case SPATIAL_DEFINE.POSITION_WORLD:

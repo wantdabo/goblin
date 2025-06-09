@@ -1,12 +1,13 @@
+using Kowtow.Math;
 using MessagePack;
 
-namespace Goblin.Gameplay.Logic.Common.GPDatas
+namespace Goblin.Gameplay.Logic.Common.BuildDatas
 {
     /// <summary>
     /// 玩家数据
     /// </summary>
     [MessagePackObject(true)]
-    public struct GPPlayerData
+    public struct PlayerData
     {
         /// <summary>
         /// 座位 ID
@@ -19,11 +20,11 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// <summary>
         /// 位置
         /// </summary>
-        public GPVector3 position { get; set; }
+        public IntVector3 position { get; set; }
         /// <summary>
         /// 旋转
         /// </summary>
-        public GPVector3 euler { get; set; }
+        public IntVector3 euler { get; set; }
         /// <summary>
         /// 缩放
         /// </summary>

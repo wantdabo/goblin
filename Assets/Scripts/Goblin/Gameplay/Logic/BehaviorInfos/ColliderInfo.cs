@@ -1,5 +1,5 @@
 using Goblin.Gameplay.Logic.Common;
-using Goblin.Gameplay.Logic.Common.Collisions;
+using Kowtow.Math;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 

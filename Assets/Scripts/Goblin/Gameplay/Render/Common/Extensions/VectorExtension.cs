@@ -1,9 +1,10 @@
-﻿using Kowtow.Math;
+﻿using Goblin.Common;
+using Kowtow.Math;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Render.Common.Extensions
 {
-    public static class FPExtension
+    public static class VectorExtension
     {
         /// <summary>
         /// FPVector2 转 Vector2
@@ -43,6 +44,26 @@ namespace Goblin.Gameplay.Render.Common.Extensions
         public static Quaternion ToQuaternion(this FPQuaternion fpquaternion)
         {
             return new Quaternion(fpquaternion.x.AsFloat(), fpquaternion.y.AsFloat(), fpquaternion.z.AsFloat(), fpquaternion.w.AsFloat());
+        }
+
+        /// <summary>
+        /// 将 IntVector3 转换为 Vector3
+        /// </summary>
+        /// <param name="vector">IntVector3</param>
+        /// <returns>Vector3</returns>
+        public static Vector3 ToVector3(this IntVector3 vector)
+        {
+            return new Vector3(vector.x * Config.Int2Float, vector.y * Config.Int2Float, vector.z * Config.Int2Float);
+        }
+
+        /// <summary>
+        /// 将 IntVector2 转换为 Vector2
+        /// </summary>
+        /// <param name="vector">IntVector2</param>
+        /// <returns>Vector2</returns>
+        public static Vector2 ToVector2(this IntVector2 vector)
+        {
+            return new Vector2(vector.x * Config.Int2Float, vector.y * Config.Int2Float);
         }
     }
 }

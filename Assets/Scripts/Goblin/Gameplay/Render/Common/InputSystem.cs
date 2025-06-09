@@ -6,7 +6,6 @@ using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Logic.Common.GPDatas;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Render.Core;
@@ -29,7 +28,7 @@ namespace Goblin.Gameplay.Render.Common
         /// <summary>
         /// 输入数据集合
         /// </summary>
-        private Dictionary<ushort, (bool press, GPVector2 dire)> inputdict { get; set; }
+        private Dictionary<ushort, (bool press, IntVector2 dire)> inputdict { get; set; }
         /// <summary>
         /// 输入指令队列
         /// </summary>
@@ -39,7 +38,7 @@ namespace Goblin.Gameplay.Render.Common
         {
             base.OnCreate();
             world.ticker.eventor.Listen<TickEvent>(OnTick);
-            inputdict = ObjectPool.Ensure<Dictionary<ushort, (bool press, GPVector2 dire)>>();
+            inputdict = ObjectPool.Ensure<Dictionary<ushort, (bool press, IntVector2 dire)>>();
             cmdqueue = ObjectPool.Ensure<Queue<Command>>();
         }
 
@@ -71,7 +70,7 @@ namespace Goblin.Gameplay.Render.Common
         /// </summary>
         /// <param name="type">输入类型</param>
         /// <returns>输入信息</returns>
-        public (bool press, GPVector2 dire) GetInput(ushort type)
+        public (bool press, IntVector2 dire) GetInput(ushort type)
         {
             if (inputdict.TryGetValue(type, out var input))
             {
@@ -87,7 +86,7 @@ namespace Goblin.Gameplay.Render.Common
         /// <param name="type">输入类型</param>
         /// <param name="press">长按</param>
         /// <param name="dire">方向</param>
-        public void SetInput(ushort type, bool press, GPVector2 dire)
+        public void SetInput(ushort type, bool press, IntVector2 dire)
         {
             if (inputdict.ContainsKey(type)) inputdict.Remove(type);
             
@@ -140,10 +139,10 @@ namespace Goblin.Gameplay.Render.Common
                 joystickdire = new Vector2(worldDirection.x, worldDirection.z);
             }
             
-            SetInput(INPUT_DEFINE.JOYSTICK, Vector2.zero != joystickdire, new GPVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int)));
+            SetInput(INPUT_DEFINE.JOYSTICK, Vector2.zero != joystickdire, new IntVector2((int)(joystickdire.x * Config.Float2Int), (int)(joystickdire.y * Config.Float2Int)));
             
             var leftclick = engine.u3dkit.gamepad.Player.Fire.ReadValue<float>();
-            SetInput(INPUT_DEFINE.BA, leftclick > 0, new GPVector2(0, 0));
+            SetInput(INPUT_DEFINE.BA, leftclick > 0, new IntVector2(0, 0));
         }
     }
 }

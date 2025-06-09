@@ -1,28 +1,34 @@
+using System;
 using MessagePack;
+using Sirenix.OdinInspector;
 
-namespace Goblin.Gameplay.Logic.Common.GPDatas
+namespace Kowtow.Math
 {
     /// <summary>
     /// 二维向量数据结构
     /// </summary>
+    [Serializable]
     [MessagePackObject(true)]
-    public struct GPVector2
+    public struct IntVector2
     {
         /// <summary>
         /// X 轴
         /// </summary>
-        public int x { get; set; }
+        [LabelText("X")]
+        public int x;
+
         /// <summary>
         /// Y 轴
         /// </summary>
-        public int y { get; set; }
+        [LabelText("Y")]
+        public int y;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="x">X 轴</param>
         /// <param name="y">Y 轴</param>
-        public GPVector2(int x, int y)
+        public IntVector2(int x, int y)
         {
             this.x = x;
             this.y = y;

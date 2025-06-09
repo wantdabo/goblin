@@ -1,27 +1,33 @@
 using System;
 using MessagePack;
+using Sirenix.OdinInspector;
 
-namespace Goblin.Gameplay.Logic.Common.GPDatas
+namespace Kowtow.Math
 {
     /// <summary>
     /// 三维向量数据结构
     /// </summary>
     [Serializable]
     [MessagePackObject(true)]
-    public struct GPVector3
+    public struct IntVector3
     {
         /// <summary>
         /// X 轴
         /// </summary>
-        public int x { get; set; }
+        [LabelText("X")]
+        public int x;
+
         /// <summary>
         /// Y 轴
         /// </summary>
-        public int y { get; set; }
+        [LabelText("Y")]
+        public int y;
+
         /// <summary>
         /// Z 轴
         /// </summary>
-        public int z { get; set; }
+        [LabelText("Z")]
+        public int z;
 
         /// <summary>
         /// 构造函数
@@ -29,7 +35,7 @@ namespace Goblin.Gameplay.Logic.Common.GPDatas
         /// <param name="x">X 轴</param>
         /// <param name="y">Y 轴</param>
         /// <param name="z">Z 轴</param>
-        public GPVector3(int x, int y, int z)
+        public IntVector3(int x, int y, int z)
         {
             this.x = x;
             this.y = y;
