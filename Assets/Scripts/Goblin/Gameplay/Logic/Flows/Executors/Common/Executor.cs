@@ -1,4 +1,4 @@
-using Goblin.Gameplay.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors.Common

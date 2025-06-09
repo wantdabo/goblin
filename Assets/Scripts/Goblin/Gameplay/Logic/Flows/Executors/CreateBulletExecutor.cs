@@ -1,6 +1,5 @@
-using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Collisions;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Defines;

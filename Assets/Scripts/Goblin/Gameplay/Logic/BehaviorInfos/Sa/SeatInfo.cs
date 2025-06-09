@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 {
     /// <summary>
     /// 座位信息

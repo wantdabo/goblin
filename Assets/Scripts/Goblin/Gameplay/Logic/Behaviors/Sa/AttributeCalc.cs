@@ -2,7 +2,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
     /// <summary>
     /// 伤害的数据结构

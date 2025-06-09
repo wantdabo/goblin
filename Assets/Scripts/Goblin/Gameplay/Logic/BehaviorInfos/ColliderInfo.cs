@@ -1,9 +1,9 @@
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Collisions;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos.Collisions
+namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
     /// <summary>
     /// 碰撞盒

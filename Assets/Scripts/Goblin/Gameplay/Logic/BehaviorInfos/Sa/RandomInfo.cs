@@ -1,7 +1,7 @@
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 {
     /// <summary>
     /// 随机信息

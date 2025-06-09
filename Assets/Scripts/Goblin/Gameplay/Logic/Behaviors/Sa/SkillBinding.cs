@@ -3,7 +3,7 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
     /// <summary>
     /// 技能触发器

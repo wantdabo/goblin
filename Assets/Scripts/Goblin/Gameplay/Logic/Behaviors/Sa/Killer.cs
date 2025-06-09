@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
     /// <summary>
     /// 杀手行为

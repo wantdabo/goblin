@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Goblin.Common;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Collisions;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.GPDatas;

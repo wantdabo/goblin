@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Prefabs.Common;
-using Goblin.Gameplay.Logic.Translators.Common;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 {
     /// <summary>
     /// 场景状态

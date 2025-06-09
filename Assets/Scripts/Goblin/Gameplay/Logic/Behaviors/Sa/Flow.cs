@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -14,7 +14,7 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
     /// <summary>
     /// 管线流

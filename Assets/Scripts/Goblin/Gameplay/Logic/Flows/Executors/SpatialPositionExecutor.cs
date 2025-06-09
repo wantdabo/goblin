@@ -1,5 +1,5 @@
-using Goblin.Gameplay.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;

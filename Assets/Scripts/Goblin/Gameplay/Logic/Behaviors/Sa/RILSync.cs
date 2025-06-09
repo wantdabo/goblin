@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -12,7 +11,7 @@ using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.Translators;
 using Goblin.Gameplay.Logic.Translators.Common;
 
-namespace Goblin.Gameplay.Logic.Behaviors
+namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
     /// <summary>
     /// RIL/渲染指令同步

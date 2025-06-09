@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Common;
@@ -15,8 +17,8 @@ using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.RIL.DIFF;
 using Goblin.Gameplay.Logic.RIL.EVENT;
 using Kowtow.Math;
-using Config = Goblin.Gameplay.Logic.Behaviors.Config;
-using Random = Goblin.Gameplay.Logic.Behaviors.Random;
+using Config = Goblin.Gameplay.Logic.Behaviors.Sa.Config;
+using Random = Goblin.Gameplay.Logic.Behaviors.Sa.Random;
 
 namespace Goblin.Gameplay.Logic.Core
 {
@@ -96,7 +98,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 初始化 Stage 的游戏数据
         /// </summary>
-        public GPStageData sdata { get; set; }
+        public GPStageData data { get; set; }
         /// <summary>
         /// 配置
         /// </summary>
@@ -163,40 +165,27 @@ namespace Goblin.Gameplay.Logic.Core
         public Stage Initialize(GPStageData data)
         {
             if (null != info) throw new Exception("you cannot initialize more than once.");
-
+            // 初始化数据存储
+            this.data = data;
             // StageCache 初始化
             cache = new StageCache().Initialize();
-            
             // 构建 StageInfo, 因为 Stage 的数据也是走 BehaviorInfo, 无法通过自举的方式走 API 添加
             // 悖论存在, 此处手动添加
             info = ObjectCache.Ensure<StageInfo>();
             info.Ready(sa);
             info.state = StageState.Initialized;
             
-            // 操作 Sa Behavior
             AddActor(sa);
-            GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
-            AddBehavior<Config>(sa);
-            AddBehavior<Eventor>(sa);
-            AddBehavior<Seat>(sa);
-            AddBehavior<Random>(sa).Initialze(data.seed);
-            AddBehavior<AttributeCalc>(sa);
-            AddBehavior<Detection>(sa);
-            AddBehavior<Captain>(sa);
-            AddBehavior<Flow>(sa);
-            AddBehavior<SkillBinding>(sa);
-            AddBehavior<Bullet>(sa);
-            AddBehavior<Killer>(sa);
-            AddBehavior<RILSync>(sa);
-            
+            // 操作 Sa Behavior
+            Behaviors();
             // 添加预制创建器
             Prefabs();
             // 构建初始化 Stage
-            Building(data);
+            Building();
 
             return this;
         }
-        
+
         /// <summary>
         /// 销毁 Stage
         /// </summary>
@@ -221,6 +210,65 @@ namespace Goblin.Gameplay.Logic.Core
 
             // StageCache 回收
             cache.Dispose();
+        }
+        
+        /// <summary>
+        /// 初始化 Stage 的 Behaviors
+        /// </summary>
+        private void Behaviors()
+        {
+            GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
+            AddBehavior<Config>(sa);
+            AddBehavior<Eventor>(sa);
+            AddBehavior<Seat>(sa);
+            AddBehavior<Random>(sa).Initialze(data.seed);
+            AddBehavior<AttributeCalc>(sa);
+            AddBehavior<Detection>(sa);
+            AddBehavior<Captain>(sa);
+            AddBehavior<Flow>(sa);
+            AddBehavior<SkillBinding>(sa);
+            AddBehavior<Bullet>(sa);
+            AddBehavior<Killer>(sa);
+            AddBehavior<RILSync>(sa);
+        }
+
+        /// <summary>
+        /// 添加预制创建器
+        /// </summary>
+        /// <exception cref="Exception">不能重复添加</exception>
+        private void Prefabs()
+        {
+            void Prefab<T, E>() where T : Prefab, new() where E : IPrefabInfo, new()
+            {
+                prefabs.Add(typeof(E), ObjectCache.Ensure<T>().Load(this));
+            }
+            prefabs = ObjectCache.Ensure<Dictionary<Type, Prefab>>();
+            Prefab<FlowPrefab, FlowPrefabInfo>();
+            Prefab<HeroPrefab, HeroPrefabInfo>();
+            Prefab<BulletPrefab, BulletPrefabInfo>();
+        }
+        
+        /// <summary>
+        /// 构建初始化 Stage
+        /// </summary>
+        public void Building()
+        {
+            foreach (var player in data.players)
+            {
+                var hero = Spawn(new HeroPrefabInfo
+                {
+                    hero = player.hero,
+                    spatial = new()
+                    {
+                        position = player.position.ToFPVector3(),
+                        euler = player.euler.ToFPVector3(),
+                        scale = player.scale * cfg.int2fp,
+                    }
+                });
+                AddBehavior<Gamepad>(hero);
+                // 入座
+                seat.Sitdown(player.seat, hero);
+            }
         }
 
         /// <summary>
@@ -273,22 +321,6 @@ namespace Goblin.Gameplay.Logic.Core
             }
             
             rilsync.Translate();
-        }
-
-        /// <summary>
-        /// 添加预制创建器
-        /// </summary>
-        /// <exception cref="Exception">不能重复添加</exception>
-        private void Prefabs()
-        {
-            void Prefab<T, E>() where T : Prefab, new() where E : IPrefabInfo, new()
-            {
-                prefabs.Add(typeof(E), ObjectCache.Ensure<T>().Load(this));
-            }
-            prefabs = ObjectCache.Ensure<Dictionary<Type, Prefab>>();
-            Prefab<FlowPrefab, FlowPrefabInfo>();
-            Prefab<HeroPrefab, HeroPrefabInfo>();
-            Prefab<BulletPrefab, BulletPrefabInfo>();
         }
 
         /// <summary>
@@ -907,31 +939,6 @@ namespace Goblin.Gameplay.Logic.Core
             behaviorinfo.Ready(id);
             
             return behaviorinfo;
-        }
-        
-        /// <summary>
-        /// 构建初始化 Stage
-        /// </summary>
-        /// <param name="data">Stage 初始化的游戏数据</param>
-        public void Building(GPStageData data)
-        {
-            this.sdata = data;
-            foreach (var player in data.players)
-            {
-                var hero = Spawn(new HeroPrefabInfo
-                {
-                    hero = player.hero,
-                    spatial = new()
-                    {
-                        position = player.position.ToFPVector3(),
-                        euler = player.euler.ToFPVector3(),
-                        scale = player.scale * cfg.int2fp,
-                    }
-                });
-                AddBehavior<Gamepad>(hero);
-                // 入座
-                seat.Sitdown(player.seat, hero);
-            }
         }
         
         /// <summary>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;

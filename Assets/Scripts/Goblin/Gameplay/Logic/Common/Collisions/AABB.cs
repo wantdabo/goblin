@@ -1,16 +1,16 @@
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos.Collisions
+namespace Goblin.Gameplay.Logic.Common.Collisions
 {
     /// <summary>
-    /// 立方体
+    /// 包围盒
     /// </summary>
-    public struct Box
+    public struct AABB
     {
         /// <summary>
-        /// 偏移
+        /// 位置
         /// </summary>
-        public FPVector3 offset { get; set; }
+        public FPVector3 position { get; set; }
         /// <summary>
         /// 尺寸
         /// </summary>
