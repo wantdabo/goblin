@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -23,31 +24,59 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// 设置动画状态
         /// </summary>
         /// <param name="state">动画状态</param>
-        /// <param name="elapsed">时间流逝</param>
-        public void SetAnimationState(byte state, FP elapsed)
+        public void SetAnimation(byte state)
         {
             info.animstate = state;
-            info.animelapsed = elapsed;
+            info.animelapsed = 0;
         }
         
         /// <summary>
-        /// 设置动画状态
+        /// 设置动画名称
         /// </summary>
-        /// <param name="state">动画状态</param>
-        public void SetAnimationState(byte state)
+        /// <param name="animname">动画名称</param>
+        public void SetAnimation(string animname)
         {
-            info.animstate = state;
+            info.animname = animname;
+            info.animelapsed = 0;
         }
 
         /// <summary>
-        /// 设置动画名称
+        /// 播放特效
         /// </summary>
-        /// <param name="name">动画名称</param>
-        /// <param name="elapsed">时间流逝</param>
-        public void SetAnimationName(string name, FP elapsed)
+        /// <param name="effect">特效</param>
+        public uint CreateEffect(EffectInfo effect)
         {
-            info.animname = name;
-            info.animelapsed = elapsed;
+            var increment = info.effectincrement++;
+            effect.id = increment;
+            effect.elapsed = 0;
+            info.effects.Add(effect.id);
+            info.effectdict.Add(effect.id, effect);
+            
+            return increment;
+        }
+
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            info.animelapsed += tick;
+
+            // 移除过期的特效
+            foreach (var rmveffect in info.rmveffects)
+            {
+                info.effects.Remove(rmveffect);
+                info.effectdict.Remove(rmveffect);
+            }
+            info.rmveffects.Clear();
+
+            // 更新特效时间流逝
+            foreach (var id in info.effects)
+            {
+                if (false == info.effectdict.TryGetValue(id, out var effect)) continue;
+                effect.elapsed += tick;
+                info.effectdict.Remove(id);
+                info.effectdict.Add(id, effect);
+                if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
+            }
         }
     }
 }

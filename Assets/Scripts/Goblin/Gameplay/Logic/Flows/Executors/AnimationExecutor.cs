@@ -14,23 +14,14 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             base.OnEnter(data, flowinfo);
             if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
-            facade.SetAnimationName(data.name, 0);
-        }
-
-        protected override void OnExecute(AnimationData data, FlowInfo flowinfo)
-        {
-            base.OnExecute(data, flowinfo);
-            if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
-            var animelapsed = facade.info.animelapsed;
-            animelapsed += (int)flowinfo.framepass * stage.cfg.int2fp;
-            facade.SetAnimationName(data.name, animelapsed);
+            facade.SetAnimation(data.name);
         }
 
         protected override void OnExit(AnimationData data, FlowInfo flowinfo)
         {
             base.OnExit(data, flowinfo);
             if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
-            facade.SetAnimationName(null, 0);
+            facade.SetAnimation(null);
         }
     }
 }

@@ -19,21 +19,15 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 上一个状态
         /// </summary>
         public byte last { get; set; }
-        /// <summary>
-        /// 流逝时间
-        /// </summary>
-        public FP elapsed { get; set; }
         
         protected override void OnReady()
         {
             current = STATE_DEFINE.IDLE;
-            elapsed = FP.Zero;
         }
 
         protected override void OnReset()
         {
             current = STATE_DEFINE.IDLE;
-            elapsed = FP.Zero;
         }
 
         protected override BehaviorInfo OnClone()
@@ -50,7 +44,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             int hash = 17;
             hash = hash * 31 + actor.GetHashCode();
             hash = hash * 31 + current.GetHashCode();
-            hash = hash * 31 + elapsed.GetHashCode();
             
             return hash;
         }

@@ -104,7 +104,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 切换状态机中状态
             if (stage.SeekBehavior(actor, out StateMachine statemachine))
             {
-                statemachine.ChangeState(info.casting ? STATE_DEFINE.CASTING : STATE_DEFINE.IDLE);
+                if (info.casting && STATE_DEFINE.CASTING != statemachine.info.current)
+                {
+                    statemachine.TryChangeState(STATE_DEFINE.CASTING);
+                }
+                else if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)
+                {
+                    statemachine.ChangeState(STATE_DEFINE.IDLE);
+                }
             }
         }
     }

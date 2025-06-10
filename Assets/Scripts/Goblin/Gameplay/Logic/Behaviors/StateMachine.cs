@@ -33,7 +33,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             info.last = info.current;
             info.current = state;
-            info.elapsed = 0;
+            
+            if (false == stage.SeekBehavior(actor, out Facade facade)) return;
+            if (STATE_DEFINE.CASTING == info.current)
+            {
+                facade.SetAnimation(STATE_DEFINE.CASTING);
+                return;
+            }
+            
+            facade.SetAnimation(info.current);
         }
         
         /// <summary>
@@ -49,22 +57,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
 
             return false;
-        }
-
-        protected override void OnTick(FP tick)
-        {
-            base.OnTick(tick);
-            info.elapsed += tick;
-            
-            if (false == stage.SeekBehavior(actor, out Facade facade)) return;
-
-            if (STATE_DEFINE.CASTING == info.current)
-            {
-                facade.SetAnimationState(STATE_DEFINE.CASTING);
-                return;
-            }
-            
-            facade.SetAnimationState(info.current, info.elapsed);
         }
     }
 }
