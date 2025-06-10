@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Cross
         protected override void OnHasNew(RIL_TAG ril, RIL_DIFF_TAG diff)
         {
             if (ril.tags.ContainsKey(diff.key)) ril.tags.Remove(diff.key);
-            ril.tags.Add(diff.key, diff.value);
+            ril.tags.Add(diff.key, diff.tag);
         }
     }
 }

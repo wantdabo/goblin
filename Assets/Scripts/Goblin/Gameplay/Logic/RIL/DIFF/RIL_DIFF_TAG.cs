@@ -19,18 +19,18 @@ namespace Goblin.Gameplay.Logic.RIL.DIFF
         /// <summary>
         /// 标签的值
         /// </summary>
-        public int value { get; set; }
+        public int tag { get; set; }
         
         protected override void OnReady()
         {
             key = 0;
-            value = 0;
+            tag = 0;
         }
 
         protected override void OnReset()
         {
             key = 0;
-            value = 0;
+            tag = 0;
         }
 
         protected override void OnClone(IRIL_DIFF clone)
@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.RIL.DIFF
             if (clone is not RIL_DIFF_TAG tag) return;
             
             tag.key = key;
-            tag.value = value;
+            tag.tag = this.tag;
         }
     }
 }

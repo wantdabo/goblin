@@ -15,6 +15,8 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         public override ushort id => RIL_DEFINE.TAG;
 
+        protected override bool once => true;
+
         protected override void OnRIL(TagInfo info, RIL_TAG ril)
         {
             foreach (var tag in info.tags) ril.tags.Add(tag.Key, tag.Value);

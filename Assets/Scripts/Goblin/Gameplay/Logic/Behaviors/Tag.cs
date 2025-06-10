@@ -1,5 +1,8 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.DIFF;
 
 namespace Goblin.Gameplay.Logic.Behaviors
 {
@@ -8,15 +11,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
     /// </summary>
     public class Tag : Behavior<TagInfo>
     {
-        /// <summary>
-        /// 移除指定的标签
-        /// </summary>
-        /// <param name="key">标签 KEY</param>
-        public void Rmv(ushort key)
-        {
-            if (info.tags.ContainsKey(key)) info.tags.Remove(key);
-        }
-        
         /// <summary>
         /// 拥有指定的标签
         /// </summary>
@@ -39,6 +33,18 @@ namespace Goblin.Gameplay.Logic.Behaviors
         }
         
         /// <summary>
+        /// 移除指定的标签
+        /// </summary>
+        /// <param name="key">标签 KEY</param>
+        public void Rmv(ushort key)
+        {
+            if (false == info.tags.TryGetValue(key, out var tag)) return;
+            
+            info.tags.Remove(key);
+            DiffTag(key, tag, RIL_DEFINE.DIFF_DEL);
+        }
+        
+        /// <summary>
         /// 设置指定标签的值
         /// </summary>
         /// <param name="key">标签 KEY</param>
@@ -46,8 +52,25 @@ namespace Goblin.Gameplay.Logic.Behaviors
         public void Set(ushort key, int tag)
         {
             if (info.tags.ContainsKey(key)) info.tags.Remove(key);
-            
             info.tags.Add(key, tag);
+            
+            DiffTag(key, tag, RIL_DEFINE.DIFF_NEW);
+        }
+
+        /// <summary>
+        /// 标签差异
+        /// </summary>
+        /// <param name="key">标签 KEY</param>
+        /// <param name="tag">标签值</param>
+        /// <param name="token">RIL 差异标记</param>
+        private void DiffTag(ushort key, int tag, byte token)
+        {
+            var diff = ObjectCache.Ensure<RIL_DIFF_TAG>();
+            diff.Ready(actor, token);
+            diff.key = key;
+            diff.tag = tag;
+            
+            stage.rilsync.Send(diff);
         }
     }
 }
