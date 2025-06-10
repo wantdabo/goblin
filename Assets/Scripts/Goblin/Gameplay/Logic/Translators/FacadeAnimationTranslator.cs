@@ -10,7 +10,19 @@ namespace Goblin.Gameplay.Logic.Translators
     public class FacadeAnimationTranslator : Translator<FacadeInfo, RIL_FACADE_ANIMATION>
     {
         public override ushort id { get; }
-        
+
+        protected override int OnCalcHashCode(FacadeInfo info)
+        {
+            int hash = 17;
+            hash = hash * 31 + info.actor.GetHashCode();
+            hash = hash * 31 + info.animstate.GetHashCode();
+            hash = hash * 31 + (info.animname != null ? info.animname.GetHashCode() : 0);
+            hash = hash * 31 + info.animelapsed.GetHashCode();
+            hash = hash * 31 + info.effectincrement.GetHashCode();
+
+            return hash;
+        }
+
         protected override void OnRIL(FacadeInfo info, RIL_FACADE_ANIMATION ril)
         {
             ril.animstate = info.animstate;
