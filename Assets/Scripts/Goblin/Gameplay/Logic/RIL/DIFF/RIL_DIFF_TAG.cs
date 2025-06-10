@@ -35,10 +35,10 @@ namespace Goblin.Gameplay.Logic.RIL.DIFF
 
         protected override void OnClone(IRIL_DIFF clone)
         {
-            if (clone is not RIL_DIFF_TAG ril) return;
+            if (clone is not RIL_DIFF_TAG diff) return;
             
-            ril.key = key;
-            ril.tag = tag;
+            diff.key = key;
+            diff.tag = tag;
         }
     }
 }
