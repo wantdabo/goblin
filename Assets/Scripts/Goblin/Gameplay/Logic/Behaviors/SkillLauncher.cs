@@ -75,6 +75,21 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.skill = skill;
             info.flow = stage.flow.GenPipeline(actor, skillinfo.pipelines);
             info.casting = true;
+
+            if (false == stage.SeekBehavior(actor, out Facade facade)) return;
+            
+            // TODO 临时测试创建特效
+            facade.CreateEffect(new EffectInfo
+            {
+                effect = 0,
+                type = EFFECT_DEFINE.TYPE_STANDAR,
+                follow = EFFECT_DEFINE.FOLLOW_ACTOR,
+                followmask = EFFECT_DEFINE.FOLLOW_POSITION,
+                duration = 1,
+                position = FPVector3.zero,
+                euler = FPVector3.zero,
+                scale = FP.One,
+            });
         }
 
         protected override void OnTick(FP tick)

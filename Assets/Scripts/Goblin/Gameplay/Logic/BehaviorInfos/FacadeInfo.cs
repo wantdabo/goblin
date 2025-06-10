@@ -135,35 +135,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + actor.GetHashCode();
-            hash = hash * 31 + model.GetHashCode();
-            hash = hash * 31 + animstate.GetHashCode();
-            hash = hash * 31 + (animname != null ? animname.GetHashCode() : 0);
-            hash = hash * 31 + animelapsed.GetHashCode();
-            hash = hash * 31 + effectincrement.GetHashCode();
-            foreach (var rmveffect in rmveffects) hash = hash * 31 + rmveffect.GetHashCode();
-            foreach (var id in effects)
-            {
-                hash = hash * 31 + id.GetHashCode();
-                if (effectdict.TryGetValue(id, out var eff))
-                {
-                    hash = hash * 31 + eff.id.GetHashCode();
-                    hash = hash * 31 + eff.effect.GetHashCode();
-                    hash = hash * 31 + eff.type.GetHashCode();
-                    hash = hash * 31 + eff.follow.GetHashCode();
-                    hash = hash * 31 + eff.followmask.GetHashCode();
-                    hash = hash * 31 + eff.duration.GetHashCode();
-                    hash = hash * 31 + eff.position.GetHashCode();
-                    hash = hash * 31 + eff.euler.GetHashCode();
-                    hash = hash * 31 + eff.scale.GetHashCode();
-                }
-            }
-            
-            return hash;
-        }
     }
 }
