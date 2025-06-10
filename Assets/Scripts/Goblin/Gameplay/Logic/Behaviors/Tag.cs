@@ -65,8 +65,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="token">RIL 差异标记</param>
         private void DiffTag(ushort key, int tag, byte token)
         {
-            if (null == stage.rilsync) return;
-            
             var diff = ObjectCache.Ensure<RIL_DIFF_TAG>();
             diff.Ready(actor, token);
             diff.key = key;
