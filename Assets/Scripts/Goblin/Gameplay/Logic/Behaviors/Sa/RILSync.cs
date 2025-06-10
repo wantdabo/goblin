@@ -179,7 +179,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <summary>
         /// 发送差异渲染指令
         /// </summary>
-        /// <param name="diff">差异指令</param>
+        /// <param name="diff">差异渲染指令</param>
+        [Obsolete("不能直接调用, 请使用 Stage.Diff() 方法发送差异渲染指令")]
         public void Send(IRIL_DIFF diff)
         {
             diffqueue.Enqueue(diff);

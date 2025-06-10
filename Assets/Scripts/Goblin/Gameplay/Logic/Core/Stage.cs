@@ -360,6 +360,17 @@ namespace Goblin.Gameplay.Logic.Core
         }
 
         /// <summary>
+        /// 发送差异渲染指令
+        /// </summary>
+        /// <param name="diff">差异渲染指令</param>
+        public void Diff(IRIL_DIFF diff)
+        {
+            if (0 == info.frame || 1 == frame) return;
+            if (null == rilsync) return;
+            rilsync.Send(diff);
+        }
+
+        /// <summary>
         /// 输入 Gamepad
         /// </summary>
         /// <param name="id">座位 ID</param>
@@ -951,7 +962,7 @@ namespace Goblin.Gameplay.Logic.Core
             var diff = ObjectCache.Ensure<RIL_DIFF_ACTOR>();
             diff.Ready(sa, token);
             diff.target = id;
-            rilsync.Send(diff);
+            Diff(diff);
         }
         
         /// <summary>

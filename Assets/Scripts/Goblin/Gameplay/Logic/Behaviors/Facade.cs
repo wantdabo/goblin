@@ -96,7 +96,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             diff.Ready(actor, token);
             diff.effect = effect;
             
-            stage.rilsync.Send(diff);
+            stage.Diff(diff);
         }
     }
 }
