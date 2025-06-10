@@ -66,6 +66,14 @@
         /// <summary>
         /// FACADE 外观指令
         /// </summary>
-        public const ushort FACADE = 10;
+        public const ushort FACADE_MODEL = 10;
+        /// <summary>
+        /// FACADE_ANIMATION 外观动画指令
+        /// </summary>
+        public const ushort FACADE_ANIMATION = 11;
+        /// <summary>
+        /// FACADE_EFFECT 外观特效指令
+        /// </summary>
+        public const ushort FACADE_EFFECT = 12;
     }
 }

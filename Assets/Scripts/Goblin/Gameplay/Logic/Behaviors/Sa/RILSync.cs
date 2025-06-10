@@ -60,7 +60,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Translator<StateMachineTranslator, StateMachineInfo>();
             Translator<ActorTranslator, StageInfo>();
             Translator<MotionTranslator, MotionInfo>();
-            Translator<FacadeTranslator, FacadeInfo>();
+            Translator<FacadeModelTranslator, FacadeInfo>();
+            Translator<FacadeAnimationTranslator, FacadeInfo>();
             
             diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
             eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();

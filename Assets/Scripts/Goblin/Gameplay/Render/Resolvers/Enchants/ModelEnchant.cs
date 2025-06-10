@@ -8,9 +8,9 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants
     /// <summary>
     /// 模型代理的赋能
     /// </summary>
-    public class ModelEnchant : AgentEnchant<RIL_FACADE>
+    public class ModelEnchant : AgentEnchant<RIL_FACADE_MODEL>
     {
-        protected override void OnRIL(RIL_FACADE ril)
+        protected override void OnRIL(RIL_FACADE_MODEL ril)
         {
             // 如果没有模型定义, 则回收模型代理, 有则创建模型代理
             if (ril.model > 0)

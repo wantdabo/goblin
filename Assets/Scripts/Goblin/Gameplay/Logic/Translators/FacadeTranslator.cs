@@ -8,16 +8,13 @@ namespace Goblin.Gameplay.Logic.Translators
     /// <summary>
     /// 外观翻译器
     /// </summary>
-    public class FacadeTranslator : Translator<FacadeInfo, RIL_FACADE>
+    public class FacadeModelTranslator : Translator<FacadeInfo, RIL_FACADE_MODEL>
     {
-        public override ushort id => RIL_DEFINE.FACADE;
+        public override ushort id => RIL_DEFINE.FACADE_MODEL;
         
-        protected override void OnRIL(FacadeInfo info, RIL_FACADE ril)
+        protected override void OnRIL(FacadeInfo info, RIL_FACADE_MODEL ril)
         {
             ril.model = info.model;
-            ril.animstate = info.animstate;
-            ril.animname = info.animname;
-            ril.animelapsed = (info.animelapsed * stage.cfg.fp2int).AsUInt();
         }
     }
 }

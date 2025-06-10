@@ -18,7 +18,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 流逝时间
         /// </summary>
         public FP elapsed { get; set; }
-        
         /// <summary>
         /// 特效资源 ID
         /// </summary>

@@ -76,17 +76,17 @@ namespace Goblin.Gameplay.Render.Agents
         /// </summary>
         public void Load()
         {
-            if (false == world.rilbucket.SeekRIL(actor, out RIL_FACADE facade) || 0 >= facade.model)
+            if (false == world.rilbucket.SeekRIL(actor, out RIL_FACADE_MODEL facademodel) || 0 >= facademodel.model)
             {
                 RecycleModel();
                 return;
             }
             
-            if (model == facade.model) return;
+            if (model == facademodel.model) return;
             
             RecycleModel();
-            model = facade.model;
-            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facade.model, out var modelinfo)) return;
+            model = facademodel.model;
+            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
             res = modelinfo.Res;
             
             go = ObjectPool.Get<GameObject>(res);

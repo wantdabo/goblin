@@ -61,7 +61,7 @@ namespace Goblin.Gameplay.Render.Agents
             tarduration = 0;
             mixduration = 0;
             
-            WatchRIL<RIL_FACADE>(OnRILStateMachine);
+            WatchRIL<RIL_FACADE_ANIMATION>(OnRILStateMachine);
         }
 
         protected override void OnReset()
@@ -75,7 +75,7 @@ namespace Goblin.Gameplay.Render.Agents
             mixduration = 0;
         }
         
-        private void OnRILStateMachine(RIL_FACADE ril)
+        private void OnRILStateMachine(RIL_FACADE_ANIMATION ril)
         {
             RILConv2AnimData(ril);
         }
@@ -84,10 +84,12 @@ namespace Goblin.Gameplay.Render.Agents
         /// 状态机状态转换为动画数据
         /// </summary>
         /// <param name="ril">状态机状态</param>
-        private void RILConv2AnimData(RIL_FACADE ril)
+        private void RILConv2AnimData(RIL_FACADE_ANIMATION ril)
         {
-            if (0 >= ril.model) return;
-            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) return;
+            if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE_MODEL facademodel)) return;
+            if (0 >= facademodel.model) return;
+            
+            if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
             
             if (string.IsNullOrEmpty(cfgname) || false == modelinfo.Animation.Equals(cfgname))
             {
