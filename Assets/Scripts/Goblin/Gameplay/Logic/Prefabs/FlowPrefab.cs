@@ -35,6 +35,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
         protected override void OnProcessing(ulong actor, FlowPrefabInfo info)
         {
             var flowinfo = stage.AddBehaviorInfo<FlowInfo>(actor);
+            flowinfo.active = true;
             flowinfo.owner = info.owner;
             flowinfo.pipelines.AddRange(info.pipelines);
             

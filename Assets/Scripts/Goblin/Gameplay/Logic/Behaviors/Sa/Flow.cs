@@ -130,6 +130,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 instrinfos.Clear();
                 ObjectCache.Set(instrinfos);
             }
+            flowinfo.active = false;
             // 结束管线
             stage.RmvActor(flowinfo.actor);
         }
@@ -142,12 +143,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             foreach (var pipelineid in flowinfo.pipelines)
             {
+                if (false == flowinfo.active) continue;
+                
                 var data = PipelineDataReader.Read(pipelineid);
                 // 未找到改时间线可以执行的指令
                 if (false == data.Query(flowinfo.timeline, out var instrinfos)) continue;
                 
                 foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
                 {
+                    if (false == flowinfo.active) continue;
+
                     flowinfo.doings.TryGetValue(pipelineid, out var indexes);
                     // 如果不在时间区间内则退出
                     if (false == instrinfo.inside)

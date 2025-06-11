@@ -10,6 +10,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
     public class FlowInfo : BehaviorInfo
     {
         /// <summary>
+        /// 管线是否激活
+        /// </summary>
+        public bool active { get; set; }
+        /// <summary>
         /// 管线的拥有者
         /// </summary>
         public ulong owner { get; set; }
@@ -36,6 +40,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
         
         protected override void OnReady()
         {
+            active = false;
             owner = 0;
             length = 0;
             timeline = 0;
@@ -46,6 +51,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 
         protected override void OnReset()
         {
+            active = false;
             owner = 0;
             length = 0;
             timeline = 0;
@@ -65,6 +71,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
         {
             var clone = ObjectCache.Ensure<FlowInfo>();
             clone.Ready(actor);
+            clone.active = active;
             clone.owner = owner;
             clone.length = length;
             clone.timeline = timeline;
@@ -84,6 +91,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
         {
             int hash = 17;
             hash = hash * 31 + actor.GetHashCode();
+            hash = hash * 31 + active.GetHashCode();
             hash = hash * 31 + owner.GetHashCode();
             hash = hash * 31 + length.GetHashCode();
             hash = hash * 31 + timeline.GetHashCode();
