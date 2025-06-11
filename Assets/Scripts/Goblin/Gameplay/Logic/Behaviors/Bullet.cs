@@ -18,8 +18,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
             base.OnTick(tick);
             if (false == stage.SeekBehaviorInfos(out List<BulletInfo> bullets)) return;
             foreach (var bullet in bullets) Execute(bullet);
-            bullets.Clear();
-            ObjectCache.Set(bullets);
         }
 
         /// <summary>

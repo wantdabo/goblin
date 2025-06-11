@@ -30,9 +30,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     launcher.Launch(skill);
                 }
             }
-            
-            launchers.Clear();
-            ObjectCache.Set(launchers);
         }
     }
 }

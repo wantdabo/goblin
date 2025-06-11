@@ -201,9 +201,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     flowinfo.framepass -= GAME_DEFINE.LOGIC_TICK_MS;
                 }
             }
-
-            flowinfos.Clear();
-            ObjectCache.Set(flowinfos);
         }
 
         protected override void OnEndTick()
@@ -221,8 +218,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos) if (flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
-            flowinfos.Clear();
-            ObjectCache.Set(flowinfos);
         }
 
         /// <summary>

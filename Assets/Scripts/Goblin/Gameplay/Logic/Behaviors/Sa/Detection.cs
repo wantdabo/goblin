@@ -191,8 +191,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            colliders.Clear();
-            ObjectCache.Set(colliders);
 
             return result;
         }
@@ -238,9 +236,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            colliders.Clear();
-            ObjectCache.Set(colliders);
-            
 
             return result;
         }
@@ -282,8 +277,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            colliders.Clear();
-            ObjectCache.Set(colliders);
             
             return result;
         }

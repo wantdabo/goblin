@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Goblin.Gameplay.Logic.BehaviorInfos;
@@ -418,8 +419,6 @@ namespace Goblin.Gameplay.Logic.Core
 
                     behavior.Tick(info.tick);
                 }
-                behaviors.Clear();
-                ObjectCache.Set(behaviors);
             }
 
             // 帧末调度
@@ -430,8 +429,6 @@ namespace Goblin.Gameplay.Logic.Core
                 {
                     behavior.EndTick();
                 }
-                behaviors.Clear();
-                ObjectCache.Set(behaviors);
             }
             
             Recycle();
@@ -445,25 +442,8 @@ namespace Goblin.Gameplay.Logic.Core
             // 收集需要回收 Behavior/BehaviorInfo
             foreach (var rmvactor in cache.rmvactors)
             {
-                if (SeekBehaviors(rmvactor, out var behaviors))
-                {
-                    foreach (var behavior in behaviors)
-                    {
-                        RmvBehavior(behavior);
-                    }
-                    behaviors.Clear();
-                    ObjectCache.Set(behaviors);
-                }
-
-                if (SeekBehaviorInfos(rmvactor, out var behaviorinfos))
-                {
-                    foreach (var behaviorinfo in behaviorinfos)
-                    {
-                        RmvBehaviorInfo(behaviorinfo);
-                    }
-                    behaviorinfos.Clear();
-                    ObjectCache.Set(behaviorinfos);
-                }
+                if (SeekBehaviors(rmvactor, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
+                if (SeekBehaviorInfos(rmvactor, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
             }
             
             var rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
@@ -519,7 +499,6 @@ namespace Goblin.Gameplay.Logic.Core
             rmvbehaviorinfos.Clear();
             ObjectCache.Set(rmvbehaviorinfos);
             
-            
             // 回收清理
             foreach (var rmvactor in cache.rmvactors)
             {
@@ -543,6 +522,14 @@ namespace Goblin.Gameplay.Logic.Core
             cache.rmvactors.Clear();
             cache.rmvbehaviors.Clear();
             cache.rmvbehaviorinfos.Clear();
+            
+            // 回收帧末临时 List
+            foreach (var list in cache.tickendrecyclelist)
+            {
+                list.Clear();
+                ObjectCache.Set(list);
+            }
+            cache.tickendrecyclelist.Clear();
         }
 
         /// <summary>
@@ -657,6 +644,7 @@ namespace Goblin.Gameplay.Logic.Core
             // 根据类型去获取所有 Behavior
             var result = ObjectCache.Ensure<List<T>>();
             foreach (var behavior in list) result.Add(behavior as T);
+            cache.tickendrecyclelist.Add(result);
 
             return result;
         }
@@ -689,6 +677,7 @@ namespace Goblin.Gameplay.Logic.Core
                 if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
                 result.Add(behavior);
             }
+            cache.tickendrecyclelist.Add(result);
 
             return result;
         }
@@ -722,6 +711,7 @@ namespace Goblin.Gameplay.Logic.Core
                 if (false == SeekBehavior(id, type, out var behavior)) continue;
                 result.Add(behavior);
             }
+            cache.tickendrecyclelist.Add(result);
 
             return result;
         }
@@ -852,7 +842,8 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
             var result = ObjectCache.Ensure<List<T>>();
             foreach (var i in infos) result.Add(i as T);
-            
+            cache.tickendrecyclelist.Add(result);
+
             return result;
         }
 
@@ -893,6 +884,7 @@ namespace Goblin.Gameplay.Logic.Core
                 {
                     return a.actor.CompareTo(b.actor);
                 });
+                cache.tickendrecyclelist.Add(result);
             }
 
             return result;
@@ -994,6 +986,10 @@ namespace Goblin.Gameplay.Logic.Core
             /// Rmv BehaviorInfo 列表
             /// </summary>
             public List<BehaviorInfo> rmvbehaviorinfos { get; set; }
+            /// <summary>
+            /// TickEnd 回收 Behavior/BehaviorInfo 列表
+            /// </summary>
+            public List<IList> tickendrecyclelist { get; set; }
         
             /// <summary>
             /// 初始化 StageCache
@@ -1007,6 +1003,7 @@ namespace Goblin.Gameplay.Logic.Core
                 rmvactors = ObjectCache.Ensure<List<ulong>>();
                 rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
                 rmvbehaviorinfos = ObjectCache.Ensure<List<BehaviorInfo>>();
+                tickendrecyclelist = ObjectCache.Ensure<List<IList>>();
 
                 return this;
             }
@@ -1033,6 +1030,14 @@ namespace Goblin.Gameplay.Logic.Core
                 
                 rmvbehaviorinfos.Clear();
                 ObjectCache.Set(rmvbehaviorinfos);
+                
+                tickendrecyclelist.Clear();
+                foreach (var list in tickendrecyclelist)
+                {
+                    list.Clear();
+                    ObjectCache.Set(list);
+                }
+                ObjectCache.Set(tickendrecyclelist);
             }
         }
     }

@@ -175,8 +175,6 @@ namespace Goblin.Gameplay.Director
                         break;
                 }
             }
-            colliders.Clear();
-            ObjectCache.Set(colliders);
         }
 
         protected override void OnStep()
