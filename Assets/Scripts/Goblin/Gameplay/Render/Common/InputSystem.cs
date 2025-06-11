@@ -49,6 +49,11 @@ namespace Goblin.Gameplay.Render.Common
             inputdict.Clear();
             ObjectPool.Set(inputdict);
             
+            foreach (var command in cmdqueue)
+            {
+                command.Reset();
+                ObjectPool.Set(command);
+            }
             cmdqueue.Clear();
             ObjectPool.Set(cmdqueue);
         }
