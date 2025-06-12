@@ -1,4 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
 
@@ -9,7 +10,7 @@ namespace Goblin.Gameplay.Logic.Translators
     /// </summary>
     public class FacadeAnimationTranslator : Translator<FacadeInfo, RIL_FACADE_ANIMATION>
     {
-        public override ushort id { get; }
+        public override ushort id => RIL_DEFINE.FACADE_ANIMATION;
 
         protected override int OnCalcHashCode(FacadeInfo info)
         {
