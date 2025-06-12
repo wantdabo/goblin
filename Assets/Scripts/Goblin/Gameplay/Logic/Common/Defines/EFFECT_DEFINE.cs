@@ -26,18 +26,18 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 特效跟随掩码 NONE 标志位
         /// </summary>
-        public const int FOLLOW_NONE = 1 << 0;
+        public const int FOLLOW_NONE = 0;
         /// <summary>
         /// 特效跟随掩码 POSITION 标志位
         /// </summary>
-        public const int FOLLOW_POSITION = 1 << 1;
+        public const int FOLLOW_POSITION = 1 << 0;
         /// <summary>
         /// 特效跟随掩码 ROTATION 标志位
         /// </summary>
-        public const int FOLLOW_ROTATION = 1 << 2;
+        public const int FOLLOW_ROTATION = 1 << 1;
         /// <summary>
         /// 特效跟随掩码 SCALE 标志位
         /// </summary>
-        public const int FOLLOW_SCALE = 1 << 3;
+        public const int FOLLOW_SCALE = 1 << 2;
     }
 }

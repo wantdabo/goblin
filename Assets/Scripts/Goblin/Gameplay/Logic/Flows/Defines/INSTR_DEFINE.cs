@@ -10,20 +10,24 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// </summary>
         public const ushort ANIMATION = 1;
         /// <summary>
+        /// 特效指令
+        /// </summary>
+        public const ushort EFFECT = 2;
+        /// <summary>
         /// POSITION 变化指令
         /// </summary>
-        public const ushort SPATIAL_POSITION = 2;
+        public const ushort SPATIAL_POSITION = 4;
         /// <summary>
         /// 生成子弹指令
         /// </summary>
-        public const ushort CREATE_BULLET = 3;
+        public const ushort CREATE_BULLET = 5;
         /// <summary>
         /// 子弹运动指令
         /// </summary>
-        public const ushort BULLET_MOTION = 4;
+        public const ushort BULLET_MOTION = 6;
         /// <summary>
         /// 释放技能
         /// </summary>
-        public const ushort LAUNCH_SKILL = 5;
+        public const ushort LAUNCH_SKILL = 7;
     }
 }

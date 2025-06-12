@@ -31,6 +31,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public byte follow { get; set; }
         /// <summary>
+        /// 挂点
+        /// </summary>
+        public ushort mount { get; set; }
+        /// <summary>
         /// 特效跟随掩码
         /// </summary>
         public int followmask { get; set; }

@@ -101,6 +101,9 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.ANIMATION:
                             pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
                             break;
+                        case INSTR_DEFINE.EFFECT:
+                            pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
+                            break;
                         case INSTR_DEFINE.SPATIAL_POSITION:
                             pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
                             break;

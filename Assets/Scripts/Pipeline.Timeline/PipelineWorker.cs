@@ -99,7 +99,7 @@ namespace Pipeline.Timeline
         {
             RecycleModel();
             if (false == EditorConfig.location.ModelInfos.TryGetValue(model, out var modelcfg)) return;
-            modelgo = GameObject.Instantiate(EditorRes.LoadModel(modelcfg.Res));
+            modelgo = EditorRes.LoadModel(modelcfg.Res);
         }
 
         private void RecycleModel()

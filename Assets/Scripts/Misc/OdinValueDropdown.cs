@@ -29,6 +29,51 @@ namespace Goblin.Misc
         }
         
         /// <summary>
+        /// 获取特效类型定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(特效类型)</returns>
+        public static ValueDropdownList<byte> GetEffectTypeDefine()
+        {
+            return new ()
+            {
+                { "标准特效", EFFECT_DEFINE.TYPE_STANDAR },
+                { "线条特效", EFFECT_DEFINE.TYPE_LINE },
+            };
+        }
+        
+        /// <summary>
+        /// 获取特效跟随定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(特效跟随)</returns>
+        public static ValueDropdownList<byte> GetEffectFollowDefine()
+        {
+            return new ()
+            {
+                { "跟随 Actor", EFFECT_DEFINE.FOLLOW_ACTOR },
+                { "跟随挂点", EFFECT_DEFINE.FOLLOW_MOUNT },
+            };
+        }
+        
+        /// <summary>
+        /// 获取特效跟随掩码定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(特效跟随掩码)</returns>
+        public static ValueDropdownList<int> GetEffectFollowMaskDefine()
+        {
+            return new ()
+            {
+                { "None", EFFECT_DEFINE.FOLLOW_NONE },
+                { "Position", EFFECT_DEFINE.FOLLOW_POSITION },
+                { "Rotation", EFFECT_DEFINE.FOLLOW_ROTATION },
+                { "Scale", EFFECT_DEFINE.FOLLOW_SCALE },
+                { "Position + Rotation + Scale", EFFECT_DEFINE.FOLLOW_POSITION | EFFECT_DEFINE.FOLLOW_ROTATION | EFFECT_DEFINE.FOLLOW_SCALE },
+                { "Position + Rotation", EFFECT_DEFINE.FOLLOW_POSITION | EFFECT_DEFINE.FOLLOW_ROTATION },
+                { "Position + Scale", EFFECT_DEFINE.FOLLOW_POSITION | EFFECT_DEFINE.FOLLOW_SCALE },
+                { "Rotation + Scale", EFFECT_DEFINE.FOLLOW_ROTATION | EFFECT_DEFINE.FOLLOW_SCALE },
+            };
+        }
+        
+        /// <summary>
         /// 获取输入定义下拉列表
         /// </summary>
         /// <returns>ValueDropdownList(输入 ID)</returns>
@@ -78,6 +123,19 @@ namespace Goblin.Misc
             var result = new ValueDropdownList<int>();
             result.Add(new ValueDropdownItem<int>("None", 0));
             foreach (var modelcfg in EditorConfig.location.ModelInfos.DataList) result.Add(new ValueDropdownItem<int>(modelcfg.Res, modelcfg.Id));
+            
+            return result;
+        }
+
+        /// <summary>
+        /// 获取特效下拉列表
+        /// </summary>
+        /// <returns>特效下拉列表</returns>
+        public static ValueDropdownList<int> EffectValueDropdown()
+        {
+            var result = new ValueDropdownList<int>();
+            result.Add(new ValueDropdownItem<int>("None", 0));
+            foreach (var effectcfg in EditorConfig.location.EffectInfos.DataList) result.Add(new ValueDropdownItem<int>($"{effectcfg.Id} - {effectcfg.Res}", effectcfg.Id));
             
             return result;
         }

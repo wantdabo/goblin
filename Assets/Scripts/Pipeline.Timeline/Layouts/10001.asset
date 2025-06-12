@@ -16,5 +16,5 @@ MonoBehaviour:
   serializes:
   - keys: 0100
     values: 0100000003000000
-  - keys: 0500
+  - keys: 0200
     values: 02000000
