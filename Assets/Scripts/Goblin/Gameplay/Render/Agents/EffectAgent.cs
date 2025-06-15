@@ -63,6 +63,7 @@ namespace Goblin.Gameplay.Render.Agents
                 controller.transform.SetParent(root.transform, false);
             }
             controller.gameObject.SetActive(true);
+            controller.Simulate(info.elapsed.AsFloat());
             effects.Add(info.id, (info, controller));
         }
 
@@ -113,21 +114,22 @@ namespace Goblin.Gameplay.Render.Agents
             {
                 var info = kv.Value.info;
                 var controller = kv.Value.controller;
-                controller.transform.position = info.position.ToVector3();
-                controller.transform.eulerAngles = info.euler.ToVector3();
-                controller.transform.localScale = Vector3.one * info.scale.AsFloat();
                 
-                var followpos = Vector3.zero;
-                var followeuler = Vector3.zero;
-                var followscale = 1f;
+                var followpos = info.position.ToVector3();
+                var followeuler = info.euler.ToVector3();
+                var followscale = info.scale.AsFloat();
                 switch (info.follow)
                 {
                     case EFFECT_DEFINE.FOLLOW_ACTOR:
                         if (world.rilbucket.SeekRIL(actor, out RIL_SPATIAL spatial))
                         {
-                            followpos = spatial.position.ToVector3();
-                            followeuler = spatial.euler.ToVector3();
-                            followscale = spatial.scale.AsFloat();
+                            var position = spatial.position.ToVector3();
+                            var euler = spatial.euler.ToVector3();
+                            var scale = spatial.scale.AsFloat();
+
+                            followpos = position + Quaternion.Euler(euler) * followpos;
+                            followeuler += euler;
+                            followscale *= scale;
                         }
                         break;
                     case EFFECT_DEFINE.FOLLOW_MOUNT:
@@ -139,15 +141,15 @@ namespace Goblin.Gameplay.Render.Agents
                 {
                     if (EFFECT_DEFINE.FOLLOW_POSITION == (info.followmask & EFFECT_DEFINE.FOLLOW_POSITION))
                     {
-                        controller.transform.position += followpos;
+                        controller.transform.position = followpos;
                     }
                     if (EFFECT_DEFINE.FOLLOW_ROTATION == (info.followmask & EFFECT_DEFINE.FOLLOW_ROTATION))
                     {
-                        controller.transform.eulerAngles += followeuler;
+                        controller.transform.eulerAngles = followeuler;
                     }
                     if (EFFECT_DEFINE.FOLLOW_SCALE == (info.followmask & EFFECT_DEFINE.FOLLOW_SCALE))
                     {
-                        controller.transform.localScale *= followscale;
+                        controller.transform.localScale = Vector3.one * followscale;
                     }
                 }
 
