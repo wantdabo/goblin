@@ -63,7 +63,6 @@ namespace Goblin.Gameplay.Render.Agents
                 controller.transform.SetParent(root.transform, false);
             }
             controller.gameObject.SetActive(true);
-            // controller.Simulate(info.elapsed.AsFloat());
             effects.Add(info.id, (info, controller));
         }
 
