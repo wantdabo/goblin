@@ -4,6 +4,7 @@ using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Render.Common;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEngine;
 
 namespace Goblin.Misc
 {
@@ -167,9 +168,15 @@ namespace Goblin.Misc
             if (false == EditorConfig.location.ModelInfos.TryGetValue(model, out var modelcfg)) return result;
             var go = EditorRes.LoadModel(modelcfg.Res);
             var animancer = go.GetComponent<NamedAnimancerComponent>();
-            if (null == animancer) return result;
+            if (null == animancer)
+            {
+                GameObject.DestroyImmediate(go);
+                return result;
+            }
             
             foreach (var clip in animancer.Animations) result.Add(clip.name, clip.name);
+            
+            GameObject.DestroyImmediate(go);
             
             return result;
         }

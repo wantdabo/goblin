@@ -16,6 +16,18 @@ namespace Goblin.Gameplay.Render.Common
         /// 粒子系统集合
         /// </summary>
         [HideInInspector] public ParticleSystem[] pss;
+        /// <summary>
+        /// 当前时间
+        /// </summary>
+        public float time { get; private set; }
+
+        /// <summary>
+        /// 重置特效控制器
+        /// </summary>
+        public void Reset()
+        {
+            time = 0;
+        }
 
         /// <summary>
         /// 特效采样
@@ -23,6 +35,7 @@ namespace Goblin.Gameplay.Render.Common
         /// <param name="time">时间</param>
         public void Simulate(float time)
         {
+            this.time = time;
             // 粒子系统采样
             foreach (var ps in pss) if (ps.gameObject.activeInHierarchy) ps.Simulate(time, true, true);
 

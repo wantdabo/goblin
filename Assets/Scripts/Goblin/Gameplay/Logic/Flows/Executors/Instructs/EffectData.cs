@@ -66,7 +66,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 特效缩放
         /// </summary>
         [LabelText("特效缩放")]
-        public int scale;
+        public int scale = 1000;
         
         public override byte[] Serialize()
         {

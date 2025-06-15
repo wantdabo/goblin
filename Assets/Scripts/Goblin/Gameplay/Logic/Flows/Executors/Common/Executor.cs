@@ -36,51 +36,57 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// <summary>
         /// 指令进入
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Enter(InstructData data, FlowInfo flowinfo)
+        public void Enter((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnEnter(data, flowinfo);
+            OnEnter(identity, data, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Execute(InstructData data, FlowInfo flowinfo)
+        public void Execute((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnExecute(data, flowinfo);
+            OnExecute(identity, data, flowinfo);
         }
         
         /// <summary>
         /// 指令离开
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        public void Exit(InstructData data, FlowInfo flowinfo)
+        public void Exit((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnExit(data, flowinfo);
+            OnExit(identity, data, flowinfo);
         }
         
         /// <summary>
         /// 指令进入
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnEnter(InstructData data, FlowInfo flowinfo);
+        protected abstract void OnEnter((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo);
         /// <summary>
         /// 指令执行
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExecute(InstructData data, FlowInfo flowinfo);
+        protected abstract void OnExecute((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo);
         /// <summary>
         /// 指令离开
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected abstract void OnExit(InstructData data, FlowInfo flowinfo);
+        protected abstract void OnExit((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo);
     }
 
     /// <summary>
@@ -92,57 +98,63 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// <summary>
         /// 指令进入
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnEnter(InstructData data, FlowInfo flowinfo)
+        protected override void OnEnter((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnEnter(data as T, flowinfo);
+            OnEnter(identity, data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnExecute(InstructData data, FlowInfo flowinfo)
+        protected override void OnExecute((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnExecute(data as T, flowinfo);
+            OnExecute(identity, data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令离开
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected override void OnExit(InstructData data, FlowInfo flowinfo)
+        protected override void OnExit((uint pipelineid, uint index) identity, InstructData data, FlowInfo flowinfo)
         {
-            OnExit(data as T, flowinfo);
+            OnExit(identity, data as T, flowinfo);
         }
 
         /// <summary>
         /// 指令进入
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected virtual void OnEnter(T data, FlowInfo flowinfo)
+        protected virtual void OnEnter((uint pipelineid, uint index) identity, T data, FlowInfo flowinfo)
         {
         }
 
         /// <summary>
         /// 指令执行
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected virtual void OnExecute(T data, FlowInfo flowinfo)
+        protected virtual void OnExecute((uint pipelineid, uint index) identity, T data, FlowInfo flowinfo)
         {
         }
 
         /// <summary>
         /// 指令离开
         /// </summary>
+        /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        protected virtual void OnExit(T data, FlowInfo flowinfo)
+        protected virtual void OnExit((uint pipelineid, uint index) identity, T data, FlowInfo flowinfo)
         {
         }
     }

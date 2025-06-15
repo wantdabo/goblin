@@ -101,14 +101,14 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.ANIMATION:
                             pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
                             break;
-                        case INSTR_DEFINE.EFFECT:
-                            pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
-                            break;
                         case INSTR_DEFINE.SPATIAL_POSITION:
                             pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
                             break;
                         case INSTR_DEFINE.LAUNCH_SKILL:
                             pipetrack = timelineasset.CreateTrack<PipelineLaunchSkillTrack>();
+                            break;
+                        case INSTR_DEFINE.EFFECT:
+                            pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
                             break;
                     }
                     if (null == pipetrack) continue;
@@ -163,7 +163,7 @@ namespace Pipeline.Timeline
         {
             var layoutpath = Path.Combine(layoutdir, $"{pipeline}.asset");
             if (false == File.Exists(layoutpath)) return default;
-            var layout = Object.Instantiate(AssetDatabase.LoadAssetAtPath<PipelineLayout>(layoutpath));
+            var layout = AssetDatabase.LoadAssetAtPath<PipelineLayout>(layoutpath);
             layout.ReadTracks();
 
             return layout;

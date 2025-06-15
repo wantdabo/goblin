@@ -53,50 +53,50 @@ namespace Goblin.Gameplay.Logic.Flows
         /// <summary>
         /// 将原始管线数据转换为管线数据格式
         /// </summary>
-        /// <param name="rawData">PipelineRawData</param>
+        /// <param name="rawdata">PipelineRawData</param>
         /// <returns>PipelineData</returns>
-        public static PipelineData ToPipelineData(this PipelineRawData rawData)
+        public static PipelineData ToPipelineData(this PipelineRawData rawdata)
         {
             var data = new PipelineData
             {
-                length = rawData.length,
+                length = rawdata.length,
                 instructs = new List<Instruct>()
             };
 
-            for (int i = 0; i < rawData.instrtypes.Length; i++)
+            for (int i = 0; i < rawdata.instrtypes.Length; i++)
             {
-                var instrtype = rawData.instrtypes[i];
+                var instrtype = rawdata.instrtypes[i];
                 var instruct = new Instruct
                 {
-                    begin = rawData.begin[i],
-                    end = rawData.end[i],
+                    begin = rawdata.begin[i],
+                    end = rawdata.end[i],
                 };
                 
                 switch (instrtype)
                 {
                     case INSTR_DEFINE.ANIMATION:
-                        instruct.data = MessagePackSerializer.Deserialize<AnimationData>(rawData.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.EFFECT:
-                        instruct.data = MessagePackSerializer.Deserialize<EffectData>(rawData.instrdata[i]);
+                        instruct.data = MessagePackSerializer.Deserialize<AnimationData>(rawdata.instrdata[i]);
                         break;
                     case INSTR_DEFINE.SPATIAL_POSITION:
-                        instruct.data = MessagePackSerializer.Deserialize<SpatialPositionData>(rawData.instrdata[i]);
+                        instruct.data = MessagePackSerializer.Deserialize<SpatialPositionData>(rawdata.instrdata[i]);
                         break;
                     case INSTR_DEFINE.LAUNCH_SKILL:
-                        instruct.data = MessagePackSerializer.Deserialize<LaunchSkillData>(rawData.instrdata[i]);
+                        instruct.data = MessagePackSerializer.Deserialize<LaunchSkillData>(rawdata.instrdata[i]);
+                        break;
+                    case INSTR_DEFINE.EFFECT:
+                        instruct.data = MessagePackSerializer.Deserialize<EffectData>(rawdata.instrdata[i]);
                         break;
                 }
 
                 instruct.conditions = new List<Condition>();
-                for (int j = 0; j < rawData.conditiontypes[i].Length; j++)
+                for (int j = 0; j < rawdata.conditiontypes[i].Length; j++)
                 {
-                    var conditiontype = rawData.conditiontypes[i][j];
+                    var conditiontype = rawdata.conditiontypes[i][j];
                     Condition condition = default;
                     switch (conditiontype)
                     {
                         case CONDITION_DEFINE.INPUT:
-                            condition = MessagePackSerializer.Deserialize<InputCondition>(rawData.conditions[i][j]);
+                            condition = MessagePackSerializer.Deserialize<InputCondition>(rawdata.conditions[i][j]);
                             break;
                     }
                     instruct.conditions.Add(condition);

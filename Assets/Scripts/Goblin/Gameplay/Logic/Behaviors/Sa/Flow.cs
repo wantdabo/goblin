@@ -255,14 +255,14 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             switch (type)
             {
                 case ExecuteInstrucType.Enter:
-                    executor.Enter(instruct.data, flowinfo);
+                    executor.Enter((pipelineid, index), instruct.data, flowinfo);
                     if (false == indexes.Contains(index)) indexes.Add(index);
                     break;
                 case ExecuteInstrucType.Execute:
-                    executor.Execute(instruct.data, flowinfo);
+                    executor.Execute((pipelineid, index), instruct.data, flowinfo);
                     break;
                 case ExecuteInstrucType.Exit:
-                    executor.Exit(instruct.data, flowinfo);
+                    executor.Exit((pipelineid, index), instruct.data, flowinfo);
                     if (indexes.Contains(index)) indexes.Remove(index);
                     break;
             }
@@ -298,6 +298,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Executor<CreateBulletExecutor>(INSTR_DEFINE.CREATE_BULLET);
             Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
             Executor<LaunchSkillExecutor>(INSTR_DEFINE.LAUNCH_SKILL);
+            Executor<EffectExecutor>(INSTR_DEFINE.EFFECT);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class LaunchSkillExecutor : Executor<LaunchSkillData>
     {
-        protected override void OnEnter(LaunchSkillData data, FlowInfo flowinfo)
+        protected override void OnEnter((uint pipelineid, uint index) identity, LaunchSkillData data, FlowInfo flowinfo)
         {
-            base.OnEnter(data, flowinfo);
+            base.OnEnter(identity, data, flowinfo);
             if (false == stage.SeekBehavior(flowinfo.owner, out SkillLauncher skilllauncher)) return;
             if (skilllauncher.info.casting) skilllauncher.Break();
             skilllauncher.Launch(data.skillid);
