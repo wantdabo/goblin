@@ -29,5 +29,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 特效指令
         /// </summary>
         public const ushort EFFECT = 6;
+        /// <summary>
+        /// 碰撞指令
+        /// </summary>
+        public const ushort COLLISION = 7;
     }
 }

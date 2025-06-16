@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
         protected override void OnReset()
         {
-            layer = COLLIDER_DEFINE.LAYER_DEFAULT;
+            layer = COLLISION_DEFINE.LAYER_DEFAULT;
             shape = 0;
             box = default;
             sphere = default;

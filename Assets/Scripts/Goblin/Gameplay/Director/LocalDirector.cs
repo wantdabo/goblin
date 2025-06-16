@@ -168,13 +168,13 @@ namespace Goblin.Gameplay.Director
                     Color color = new Color(210 / 255f, 255 / 255f, 0 / 255f);
                     switch (collider.shape)
                     {
-                        case COLLIDER_DEFINE.BOX:
+                        case COLLISION_DEFINE.COLLIDER_BOX:
                             var center = (spatial.position + collider.box.offset).ToVector3();
                             var rotation = Quaternion.Euler(spatial.euler.ToVector3());
                             var size = collider.box.size.ToVector3();
                             DrawPhysRendererFeature.DrawPhysPass.DrawCube(center, rotation, size, color);
                             break;
-                        case COLLIDER_DEFINE.SPHERE:
+                        case COLLISION_DEFINE.COLLIDER_SPHERE:
                             center = (spatial.position + collider.sphere.offset).ToVector3();
                             var radius = collider.sphere.radius.AsFloat();
                             DrawPhysRendererFeature.DrawPhysPass.DrawSphere(center, radius, color);

@@ -3,19 +3,35 @@ using System.Collections.Generic;
 namespace Goblin.Gameplay.Logic.Common.Defines
 {
     /// <summary>
-    /// 碰撞盒定义
+    /// 碰撞定义
     /// </summary>
-    public class COLLIDER_DEFINE
+    public class COLLISION_DEFINE
     {
         /// <summary>
         /// 立方体
         /// </summary>
-        public const byte BOX = 1;
+        public const byte COLLIDER_BOX = 1;
         /// <summary>
         /// 球体
         /// </summary>
-        public const byte SPHERE = 2;
-        
+        public const byte COLLIDER_SPHERE = 2;
+
+        /// <summary>
+        /// 碰撞射线
+        /// </summary>
+        public const byte COLLISION_RAY = 1;
+        /// <summary>
+        /// 碰撞线段
+        /// </summary>
+        public const byte COLLISION_LINE = 2;
+        /// <summary>
+        /// 碰撞立方体
+        /// </summary>
+        public const byte COLLISION_BOX = 3;
+        /// <summary>
+        /// 碰撞球体
+        /// </summary>
+        public const byte COLLISION_SPHERE = 4;
         
         /// <summary>
         /// 默认

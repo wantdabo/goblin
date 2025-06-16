@@ -64,7 +64,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             penetration = FP.MaxValue;
 
             // 如果两个碰撞盒的层不匹配，则不进行碰撞检测
-            if (false == COLLIDER_DEFINE.QUERY(a.layer, b.layer)) return false;
+            if (false == COLLISION_DEFINE.QUERY(a.layer, b.layer)) return false;
 
             // 获取空间信息
             if (false == stage.SeekBehaviorInfo(a.actor, out SpatialInfo aspatial) || false == stage.SeekBehaviorInfo(b.actor, out SpatialInfo bspatial)) return false;
@@ -77,21 +77,21 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             // 根据碰撞盒的形状进行不同的碰撞检测
             switch (a.shape)
             {
-                case COLLIDER_DEFINE.BOX:
+                case COLLISION_DEFINE.COLLIDER_BOX:
                     switch (b.shape)
                     {
-                        case COLLIDER_DEFINE.BOX:
+                        case COLLISION_DEFINE.COLLIDER_BOX:
                             return Detect(a.box, b.box, apos, bpos, arot, brot, out point, out normal, out penetration);
-                        case COLLIDER_DEFINE.SPHERE:
+                        case COLLISION_DEFINE.COLLIDER_SPHERE:
                             return Detect(a.box, b.sphere, apos, bpos, arot, out point, out normal, out penetration);
                     }
                     break;
-                case COLLIDER_DEFINE.SPHERE:
+                case COLLISION_DEFINE.COLLIDER_SPHERE:
                     switch (b.shape)
                     {
-                        case COLLIDER_DEFINE.BOX:
+                        case COLLISION_DEFINE.COLLIDER_BOX:
                             return Detect(b.box, a.sphere, bpos, apos, brot, out point, out normal, out penetration);
-                        case COLLIDER_DEFINE.SPHERE:
+                        case COLLISION_DEFINE.COLLIDER_SPHERE:
                             return Detect(a.sphere, b.sphere, apos, bpos, out point, out normal, out penetration);
                     }
                     break;
@@ -112,10 +112,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             HitResult result = new();
             switch (collider.shape)
             {
-                case COLLIDER_DEFINE.BOX:
+                case COLLISION_DEFINE.COLLIDER_BOX:
                     result = OverlapBox(spatial.position, FPQuaternion.Euler(spatial.euler), collider.box.size, collider.layer);
                     break;
-                case COLLIDER_DEFINE.SPHERE:
+                case COLLISION_DEFINE.COLLIDER_SPHERE:
                     result = OverlapSphere(spatial.position, collider.sphere.radius, collider.layer);
                     break;
             }
@@ -160,7 +160,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var collider in colliders)
             {
                 if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
-                if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
+                if (-1 != layer && false == COLLISION_DEFINE.QUERY(layer, collider.layer)) continue;
                 
                 bool hit = false;
                 FPVector3 point = FPVector3.zero;
@@ -168,10 +168,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 FP penetration = FP.Zero;
                 switch (collider.shape)
                 {
-                    case COLLIDER_DEFINE.BOX:
+                    case COLLISION_DEFINE.COLLIDER_BOX:
                         hit = Detect(box, collider.box, position, spatial.position, rotation, FPQuaternion.Euler(spatial.euler), out point, out normal, out penetration);
                         break;
-                    case COLLIDER_DEFINE.SPHERE:
+                    case COLLISION_DEFINE.COLLIDER_SPHERE:
                         hit = Detect(box, collider.sphere, position, spatial.position, rotation, out point, out normal, out penetration);
                         break;
                 }
@@ -206,7 +206,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var collider in colliders)
             {
                 if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
-                if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
+                if (-1 != layer && false == COLLISION_DEFINE.QUERY(layer, collider.layer)) continue;
 
                 bool hit = false;
                 FPVector3 point = FPVector3.zero;
@@ -214,10 +214,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 FP penetration = FP.Zero;
                 switch (collider.shape)
                 {
-                    case COLLIDER_DEFINE.BOX:
+                    case COLLISION_DEFINE.COLLIDER_BOX:
                         hit = Detect(collider.box, sphere, spatial.position, position, FPQuaternion.Euler(spatial.euler), out point, out normal, out penetration);
                         break;
-                    case COLLIDER_DEFINE.SPHERE:
+                    case COLLISION_DEFINE.COLLIDER_SPHERE:
                         hit = Detect(sphere, collider.sphere, position, spatial.position, out point, out normal, out penetration);
                         break;
                 }
@@ -248,7 +248,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var collider in colliders)
             {
                 if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
-                if (-1 != layer && false == COLLIDER_DEFINE.QUERY(layer, collider.layer)) continue;
+                if (-1 != layer && false == COLLISION_DEFINE.QUERY(layer, collider.layer)) continue;
 
                 bool hit = false;
                 FPVector3 point = FPVector3.zero;
@@ -256,10 +256,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 FP penetration = FP.Zero;
                 switch (collider.shape)
                 {
-                    case COLLIDER_DEFINE.BOX:
+                    case COLLISION_DEFINE.COLLIDER_BOX:
                         hit = Raycast(origin, dire, distance, collider.box, spatial.position, FPQuaternion.Euler(spatial.euler), out point, out normal, out penetration);
                         break;
-                    case COLLIDER_DEFINE.SPHERE:
+                    case COLLISION_DEFINE.COLLIDER_SPHERE:
                         hit = Raycast(origin, dire, distance, collider.sphere, spatial.position, out point, out normal, out penetration);
                         break;
                 }
@@ -691,8 +691,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             
             switch (collidercfg.Type)
             {
-                case COLLIDER_DEFINE.BOX:
-                    collider.shape = COLLIDER_DEFINE.BOX;
+                case COLLISION_DEFINE.COLLIDER_BOX:
+                    collider.shape = COLLISION_DEFINE.COLLIDER_BOX;
                     collider.box = new Box
                     {
                         offset = new FPVector3
@@ -708,8 +708,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         )
                     };
                     break;
-                case COLLIDER_DEFINE.SPHERE:
-                    collider.shape = COLLIDER_DEFINE.SPHERE;
+                case COLLISION_DEFINE.COLLIDER_SPHERE:
+                    collider.shape = COLLISION_DEFINE.COLLIDER_SPHERE;
                     collider.sphere = new Sphere
                     {
                         offset = new FPVector3
@@ -753,7 +753,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             FPQuaternion rotation = FPQuaternion.Euler(spatial.euler);
             switch (collider.shape)
             {
-                case COLLIDER_DEFINE.BOX:
+                case COLLISION_DEFINE.COLLIDER_BOX:
                     // 获取 BoxShape 的半尺寸
                     FPVector3 halfSize = collider.box.size * FP.Half;
 
@@ -791,7 +791,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     };
                     
                     return true;
-                case COLLIDER_DEFINE.SPHERE:
+                case COLLISION_DEFINE.COLLIDER_SPHERE:
                     // Sphere 不受旋转影响
                     aabb = new AABB
                     {
