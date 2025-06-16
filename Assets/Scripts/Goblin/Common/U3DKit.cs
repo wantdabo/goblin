@@ -86,8 +86,6 @@ namespace Goblin.Common
                 if (null == child) continue;
 
                 if (child is T) return child;
-
-                return (child as GameObject).GetComponent<T>();
             }
 
             return null;
