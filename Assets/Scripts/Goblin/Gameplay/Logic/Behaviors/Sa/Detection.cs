@@ -20,17 +20,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// 碰撞列表
         /// </summary>
         public List<(ulong actor, FPVector3 point, FPVector3 normal, FP penetration)> colliders { get; set; }
-
-        /// <summary>
-        /// 重置
-        /// </summary>
-        public void Reset()
-        {
-            if (null == colliders) return;
-            
-            colliders.Clear();
-            ObjectCache.Set(colliders);
-        }
     }
     
     /// <summary>
@@ -145,6 +134,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 
                 result.colliders = colliders;
             }
+            stage.cache.tickendrecyclelist.Add(result.colliders);
 
             return result;
         }
@@ -191,6 +181,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
+            stage.cache.tickendrecyclelist.Add(result.colliders);
 
             return result;
         }
@@ -236,6 +227,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
+            stage.cache.tickendrecyclelist.Add(result.colliders);
 
             return result;
         }
@@ -277,6 +269,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
+            stage.cache.tickendrecyclelist.Add(result.colliders);
             
             return result;
         }
@@ -669,16 +662,14 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             FP projection = FPVector3.Dot(direction, dire);
 
             // 如果射线的投影小于 0，表示射线背向球体
-            if (projection < FP.Zero)
-                return false;
+            if (projection < FP.Zero) return false;
 
             // 计算射线上与球体中心最近的点
             FPVector3 pointOnRay = origin + dire * projection;
 
             // 检查射线与球体的距离是否在允许范围内
             FP currentDistance = FPVector3.Distance(pointOnRay, sphereCenter);
-            if (currentDistance > sphere.radius || projection > distance)
-                return false;
+            if (currentDistance > sphere.radius || projection > distance) return false;
 
             // 计算碰撞点、法线和穿透深度
             point = pointOnRay;
@@ -692,7 +683,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// 设置碰撞盒信息
         /// </summary>
         /// <param name="collider">碰撞盒</param>
-        /// <param name="colliderid">碰撞盒配置 ID</param>
+        /// <param name="id">碰撞盒配置 ID</param>
         public void SetColliderInfo(ColliderInfo collider, int id)
         {
             if (false == stage.cfg.location.ColliderInfos.TryGetValue(id, out var collidercfg)) return;
