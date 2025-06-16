@@ -21,6 +21,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// 缩放
         /// </summary>
         public FP scale { get; set; }
+        /// <summary>
+        /// 上一帧位置, 旋转, 缩放
+        /// </summary>
+        public (FPVector3 position, FPVector3 euler, FP scale) preframe { get; set; }
 
         protected override void OnReady()
         {
@@ -32,6 +36,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             position = FPVector3.zero;
             euler = FPVector3.zero;
             scale = FP.One;
+            preframe = (FPVector3.zero, FPVector3.zero, FP.One);
         }
 
         protected override BehaviorInfo OnClone()
@@ -41,6 +46,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.position = position;
             clone.euler = euler;
             clone.scale = scale;
+            clone.preframe = preframe;
             
             return clone;
         }

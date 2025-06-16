@@ -24,6 +24,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Bullet),
             typeof(Killer),
             typeof(Facade),
+            typeof(StepEnd),
             typeof(RILSync),
         };
     }

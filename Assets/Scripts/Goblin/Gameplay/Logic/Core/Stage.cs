@@ -230,6 +230,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
             AddBehavior<Killer>(sa);
+            AddBehavior<StepEnd>(sa);
             AddBehavior<RILSync>(sa);
         }
 
