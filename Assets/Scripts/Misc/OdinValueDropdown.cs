@@ -56,6 +56,21 @@ namespace Goblin.Misc
         }
         
         /// <summary>
+        /// 获取碰撞检测类型定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(碰撞检测类型)</returns>
+        public static ValueDropdownList<byte> GetCollisionDefine()
+        {
+            return new ()
+            {
+                { "射线检测", COLLISION_DEFINE.COLLISION_RAY },
+                { "线段检测", COLLISION_DEFINE.COLLISION_LINE },
+                { "立方体检测", COLLISION_DEFINE.COLLISION_BOX },
+                { "球体检测", COLLISION_DEFINE.COLLISION_SPHERE },
+            };
+        }
+        
+        /// <summary>
         /// 获取特效跟随掩码定义下拉列表
         /// </summary>
         /// <returns>ValueDropdownList(特效跟随掩码)</returns>

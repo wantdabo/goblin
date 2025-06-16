@@ -110,6 +110,9 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.EFFECT:
                             pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
                             break;
+                        case INSTR_DEFINE.COLLISION:
+                            pipetrack = timelineasset.CreateTrack<PipelineCollisionTrack>();
+                            break;
                     }
                     if (null == pipetrack) continue;
 

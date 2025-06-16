@@ -20,6 +20,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 特效资源 ID
         /// </summary>
         [ValueDropdown("@OdinValueDropdown.EffectValueDropdown()")]
+        [LabelText("特效资源 ID")]
         public int effect;
 
         /// <summary>

@@ -86,6 +86,9 @@ namespace Goblin.Gameplay.Logic.Flows
                     case INSTR_DEFINE.EFFECT:
                         instruct.data = MessagePackSerializer.Deserialize<EffectData>(rawdata.instrdata[i]);
                         break;
+                    case INSTR_DEFINE.COLLISION:
+                        instruct.data = MessagePackSerializer.Deserialize<CollisionData>(rawdata.instrdata[i]);
+                        break;
                 }
 
                 instruct.conditions = new List<Condition>();
