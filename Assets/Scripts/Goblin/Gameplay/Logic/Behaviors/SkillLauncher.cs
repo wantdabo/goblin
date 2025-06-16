@@ -84,12 +84,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
             if (false == info.casting) return;
 
             // 碰撞检测
-            if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out CollisionInfo collisioninfo))
+            if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out FlowDamageInfo flowdamage))
             {
                 var damage = stage.calc.ChargeDamage(actor, skillinfo.strength);
-                while (collisioninfo.collisions.TryDequeue(out var target))
+                while (flowdamage.targets.TryDequeue(out var target))
                 {
-                    stage.calc.ToDamage(actor, target, damage);
+                    stage.calc.ToDamage(actor, target.actor, damage);
                 }
             }
 

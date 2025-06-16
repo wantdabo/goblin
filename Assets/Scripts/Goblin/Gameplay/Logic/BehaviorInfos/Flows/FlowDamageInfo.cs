@@ -5,33 +5,33 @@ using Goblin.Gameplay.Logic.Core;
 namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
 {
     /// <summary>
-    /// 碰撞信息
+    /// 流程伤害信息
     /// </summary>
-    public class CollisionInfo : BehaviorInfo
+    public class FlowDamageInfo : BehaviorInfo
     {
         /// <summary>
         /// 碰撞的 ActorID 列表
         /// </summary>
-        public Queue<ulong> collisions { get; set; }
+        public Queue<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
         
         protected override void OnReady()
         {
-            collisions = ObjectCache.Ensure<Queue<ulong>>();
+            targets = ObjectCache.Ensure<Queue<(ulong actor, (uint pipeline, uint index))>>();
         }
 
         protected override void OnReset()
         {
-            collisions.Clear();
-            ObjectCache.Set(collisions);
+            targets.Clear();
+            ObjectCache.Set(targets);
         }
 
         protected override BehaviorInfo OnClone()
         {
-            var clone = ObjectCache.Ensure<CollisionInfo>();
+            var clone = ObjectCache.Ensure<FlowDamageInfo>();
             clone.Ready(actor);
-            foreach (var id in collisions)
+            foreach (var id in targets)
             {
-                clone.collisions.Enqueue(id);
+                clone.targets.Enqueue(id);
             }
             
             return clone;
