@@ -10,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
     /// </summary>
     public class StepEnd : Behavior
     {
+        protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
             if (false == stage.SeekBehaviorInfos(out List<SpatialInfo> spatials)) return;
