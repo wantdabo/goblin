@@ -70,6 +70,10 @@ namespace Goblin.Gameplay.Director
         /// RIL 事件队列
         /// </summary>
         private readonly Queue<IRIL_EVENT> eventqueue = new();
+        /// <summary>
+        /// 碰撞盒列表
+        /// </summary>
+        private readonly List<ColliderInfo> colliders = new();
 
         protected override void OnCreateGame()
         {
@@ -140,12 +144,12 @@ namespace Goblin.Gameplay.Director
         {
             if (restoreing) return;
             
+            DrawPhys();
             lock (@lock)
             {
                 while(rilqueue.TryDequeue(out var ril)) world.rilbucket.SetRIL(ril);
                 while (diffqueue.TryDequeue(out var diff)) world.rilbucket.SetDiff(diff);
                 while (eventqueue.TryDequeue(out var e)) world.rilbucket.SetEvent(e);
-                DrawPhys();
             }
         }
         
@@ -155,24 +159,27 @@ namespace Goblin.Gameplay.Director
         private void DrawPhys()
         {
             if (false == physdraw) return;
-            if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return;
-            foreach (var collider in colliders)
+
+            lock (@lock)
             {
-                if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
-                Color color = new Color(210 / 255f, 255 / 255f, 0 / 255f);
-                switch (collider.shape)
+                foreach (var collider in colliders)
                 {
-                    case COLLIDER_DEFINE.BOX:
-                        var center = (spatial.position + collider.box.offset).ToVector3();
-                        var rotation = Quaternion.Euler(spatial.euler.ToVector3());
-                        var size = collider.box.size.ToVector3();
-                        DrawPhysRendererFeature.DrawPhysPass.DrawCube(center, rotation, size, color);
-                        break;
-                    case COLLIDER_DEFINE.SPHERE:
-                        center = (spatial.position + collider.sphere.offset).ToVector3();
-                        var radius = collider.sphere.radius.AsFloat();
-                        DrawPhysRendererFeature.DrawPhysPass.DrawSphere(center, radius, color);
-                        break;
+                    if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) continue;
+                    Color color = new Color(210 / 255f, 255 / 255f, 0 / 255f);
+                    switch (collider.shape)
+                    {
+                        case COLLIDER_DEFINE.BOX:
+                            var center = (spatial.position + collider.box.offset).ToVector3();
+                            var rotation = Quaternion.Euler(spatial.euler.ToVector3());
+                            var size = collider.box.size.ToVector3();
+                            DrawPhysRendererFeature.DrawPhysPass.DrawCube(center, rotation, size, color);
+                            break;
+                        case COLLIDER_DEFINE.SPHERE:
+                            center = (spatial.position + collider.sphere.offset).ToVector3();
+                            var radius = collider.sphere.radius.AsFloat();
+                            DrawPhysRendererFeature.DrawPhysPass.DrawSphere(center, radius, color);
+                            break;
+                    }
                 }
             }
         }
@@ -202,6 +209,13 @@ namespace Goblin.Gameplay.Director
             stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
             stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
             stage.Step();
+
+            lock (@lock)
+            {
+                colliders.Clear();
+                if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> infos)) return;
+                colliders.AddRange(infos);
+            }
         }
 
         /// <summary>
