@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
         
         protected override void OnReady()
         {
-            targets = ObjectCache.Ensure<Queue<(ulong actor, (uint pipeline, uint index))>>();
+            targets = ObjectCache.Ensure<Queue<(ulong actor, (uint pipeline, uint index) identity)>>();
         }
 
         protected override void OnReset()
