@@ -62,10 +62,12 @@ namespace Pipeline.Timeline.Assets
                         switch (data.follow)
                         {
                             case EFFECT_DEFINE.FOLLOW_ACTOR:
-                                if (null == PipelineWorkSpace.worker.modelgo) return;
-                                followpos = PipelineWorkSpace.worker.modelgo.transform.position;
-                                followeuler = PipelineWorkSpace.worker.modelgo.transform.eulerAngles;
-                                followscale = PipelineWorkSpace.worker.modelgo.transform.localScale.x;
+                                if (null != PipelineWorkSpace.worker.modelgo)
+                                {
+                                    followpos = PipelineWorkSpace.worker.modelgo.transform.position;
+                                    followeuler = PipelineWorkSpace.worker.modelgo.transform.eulerAngles;
+                                    followscale = PipelineWorkSpace.worker.modelgo.transform.localScale.x;
+                                }
                                 break;
                             case EFFECT_DEFINE.FOLLOW_MOUNT:
                                 // TODO 获取挂载点位置

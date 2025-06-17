@@ -153,9 +153,10 @@ namespace Pipeline.Timeline
         {
             if (Application.isPlaying) return;
             if (null == PipelineWorkSpace.worker) return;
-            
             pipelinepath = PipelineWorkSpace.worker.pipelinepath;
             model = PipelineWorkSpace.worker.model;
+            
+            PipelineWorkSpace.director.Evaluate();
         }
 #endif
         
