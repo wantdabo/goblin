@@ -92,9 +92,9 @@ namespace Goblin.Gameplay.Logic.Flows
             foreach (var instruct in data.instructs)
             {
                 index++;
-                if (instruct.begin > timeline) break;
+                if (instruct.begin >= timeline) break;
                 if (null == instrinfos) instrinfos = ObjectCache.Ensure<List<(bool inside, uint index, Instruct instruct)>>();
-                instrinfos.Add((instruct.begin <= timeline && instruct.end >= timeline, index, instruct));
+                instrinfos.Add((instruct.begin <= timeline && instruct.end > timeline, index, instruct));
             }
 
             return null != instrinfos && instrinfos.Count > 0;

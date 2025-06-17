@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 逻辑帧率
         /// </summary>
-        public static byte LOGIC_FRAME { get; private set; } = 25;
+        public static byte LOGIC_FRAME { get; private set; } = 20;
         /// <summary>
         /// 逻辑帧 TICK
         /// </summary>
