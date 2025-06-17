@@ -76,12 +76,13 @@ namespace Goblin.Gameplay.Render.Batches
         protected override void OnTick(TickEvent e)
         {
             base.OnTick(e);
+            var tick = Mathf.Clamp(e.tick, 0, 1 / 60f);
             if (false == world.rilbucket.SeekRILS<RIL_SPATIAL>(out var rils)) return;
             // 收集所有需要更新的节点, 进行 Jobs 处理
             int notreset = 0;
             int index = 0;
             int rilcnt = rils.Count;
-            float t = Mathf.Clamp01(e.tick / GAME_DEFINE.LOGIC_TICK.AsFloat());
+            float t = Mathf.Clamp01(tick / GAME_DEFINE.LOGIC_TICK.AsFloat());
             foreach (var ril in rils)
             {
                 var node = world.GetAgent<NodeAgent>(ril.actor);
@@ -98,14 +99,16 @@ namespace Goblin.Gameplay.Render.Batches
                     index++;
                     notreset++;
                 }
-                
+
+                var timescale = 1f;
+                if (world.rilbucket.SeekRIL<RIL_TICKER>(ril.actor, out var ticker)) timescale = Mathf.Clamp01(ticker.timescale * Config.Int2Float);
                 // 如果超过了 Jobs 的最大数量, 则分批次处理
                 if (transforms.Length == index || rilcnt == notreset)
                 {
                     var job = new SpatialJob
                     {
                         count = index,
-                        t = t,
+                        t = t * timescale,
                         positions = positions,
                         tarpositions = tarpositions,
                         rotations = rotations,
