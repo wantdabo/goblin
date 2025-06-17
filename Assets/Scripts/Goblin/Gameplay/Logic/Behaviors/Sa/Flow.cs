@@ -299,6 +299,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
             Executor<LaunchSkillExecutor>(INSTR_DEFINE.LAUNCH_SKILL);
             Executor<EffectExecutor>(INSTR_DEFINE.EFFECT);
+            Executor<CollisionExecutor>(INSTR_DEFINE.COLLISION);
         }
     }
 }
