@@ -20,14 +20,6 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// </summary>
         public static uint LOGIC_TICK_MS { get; private set; } = (uint)(1000 / LOGIC_FRAME);
         /// <summary>
-        /// 技能管线数据帧率
-        /// </summary>
-        public static byte SP_DATA_FRAME { get; private set; } = 50;
-        /// <summary>
-        /// 技能管线数据 TICK
-        /// </summary>
-        public static float SP_DATA_TICK { get; private set; } = 1f / SP_DATA_FRAME;
-        /// <summary>
         /// 重力
         /// </summary>
         public static FPVector3 GRAVITY { get; private set; } = FPVector3.down * 981 * FP.EN2;
