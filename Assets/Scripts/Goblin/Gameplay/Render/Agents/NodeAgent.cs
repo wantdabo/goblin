@@ -86,6 +86,16 @@ namespace Goblin.Gameplay.Render.Agents
         protected override bool OnArrived()
         {
             if (false == world.rilbucket.SeekRIL<RIL_SPATIAL>(actor, out var ril)) return true;
+            if (false == go.activeSelf)
+            {
+                go.transform.position = ril.position.ToVector3();
+                go.transform.rotation = Quaternion.Euler(ril.euler.ToVector3());
+                go.transform.localScale = Vector3.one * ril.scale.AsFloat();
+                go.SetActive(true);
+
+                return true;
+            }
+            
             return go.transform.position == ril.position.ToVector3() &&
                    go.transform.rotation.eulerAngles == ril.euler.ToVector3() &&
                    go.transform.localScale == Vector3.one * ril.scale.AsFloat();
@@ -98,7 +108,6 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.position = ril.position.ToVector3();
             go.transform.rotation = Quaternion.Euler(ril.euler.ToVector3());
             go.transform.localScale = Vector3.one * ril.scale.AsFloat();
-            go.SetActive(true);
         }
     }
 }
