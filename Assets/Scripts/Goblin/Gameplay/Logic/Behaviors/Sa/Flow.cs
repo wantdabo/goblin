@@ -120,15 +120,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var pipelineid in flowinfo.pipelines)
             {
                 var data = PipelineDataReader.Read(pipelineid);
-                // 未找到改时间线可以执行的指令
-                if (null == data || 0 == data.instructs.Count) continue;
-                uint index = 0;
-                foreach (var instruct in data.instructs)
+                if (false == flowinfo.doings.TryGetValue(pipelineid, out var list)) continue;
+                List<uint> indexes = ObjectCache.Ensure<List<uint>>();
+                indexes.AddRange(list);
+                foreach (var index in indexes)
                 {
-                    index++;
-                    if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(index)) continue;
+                    if (false == data.Query(index, out var instruct)) continue;
                     ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
                 }
+                indexes.Clear();
+                ObjectCache.Set(indexes);
             }
             flowinfo.active = false;
             // 结束管线
