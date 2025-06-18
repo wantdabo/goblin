@@ -233,23 +233,15 @@ namespace Pipeline.Timeline
             layout.name = $"{pipeline}";
             layout.model = model;
             layout.tracks = new();
-            if (data.Query(FLOW_DEFINE.OVERFLOW_LENGTH, out var instrinfos))
+            if (null != data && 0 != data.instructs.Count)
             {
                 foreach (var instructs in instructslist)
                 {
                     var tracklayout = new Dictionary<ushort, List<uint>>();
+                    uint index = 0;
                     foreach (var instruct in instructs)
                     {
-                        uint index = 0;
-                        foreach (var instrinfo in instrinfos)
-                        {
-                            if (instrinfo.instruct != instruct) continue;
-                            index = instrinfo.index;
-                            break;
-                        }
-                        
-                        if (0 == index) throw new System.Exception("Instruct index is zero, this should not happen");
-                        
+                        index++;
                         if (false == tracklayout.TryGetValue(instruct.data.id, out var indexes)) tracklayout.Add(instruct.data.id, indexes = new List<uint>());
                         indexes.Add(index);
                     }

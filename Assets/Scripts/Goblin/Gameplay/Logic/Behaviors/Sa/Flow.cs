@@ -120,15 +120,15 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var pipelineid in flowinfo.pipelines)
             {
                 var data = PipelineDataReader.Read(pipelineid);
-                // 使用时间线最大值溢出的数值, 查询到所有指令, 如果该指令在执行中, 则退出
-                if (false == data.Query(FLOW_DEFINE.OVERFLOW_LENGTH, out var instrinfos)) continue;
-                foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
+                // 未找到改时间线可以执行的指令
+                if (null == data || 0 == data.instructs.Count) continue;
+                uint index = 0;
+                foreach (var instruct in data.instructs)
                 {
-                    if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(instrinfo.index)) continue;
-                    ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                    index++;
+                    if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes) || false == indexes.Contains(index)) continue;
+                    ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
                 }
-                instrinfos.Clear();
-                ObjectCache.Set(instrinfos);
             }
             flowinfo.active = false;
             // 结束管线
@@ -147,39 +147,41 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 
                 var data = PipelineDataReader.Read(pipelineid);
                 // 未找到改时间线可以执行的指令
-                if (false == data.Query(flowinfo.timeline, out var instrinfos)) continue;
-                
-                foreach ((bool inside, uint index, Instruct instruct) instrinfo in instrinfos)
-                {
-                    if (false == flowinfo.active) continue;
+                if (null == data || 0 == data.instructs.Count) continue;
 
+                uint index = 0;
+                foreach (var instruct in data.instructs)
+                {
+                    index++;
+                    if (false == flowinfo.active) continue;
+                    if (instruct.begin > flowinfo.timeline) break;
+                    
                     flowinfo.doings.TryGetValue(pipelineid, out var indexes);
+                    var inside = instruct.begin <= flowinfo.timeline && instruct.end > flowinfo.timeline;
                     // 如果不在时间区间内则退出
-                    if (false == instrinfo.inside)
+                    if (false == inside)
                     {
-                        if (null != indexes && indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                        if (null != indexes && indexes.Contains(index)) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
                         continue;
                     }
 
-                    if (null != indexes && indexes.Contains(instrinfo.index))
+                    if (null != indexes && indexes.Contains(index))
                     {
-                        ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                        ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
                         continue;
                     }
                     
                     // 指令进入 && 指令执行
-                    if (false == CheckCondition(instrinfo.instruct.conditions, flowinfo))
+                    if (false == CheckCondition(instruct.conditions, flowinfo))
                     {
                         // 如果指令不满足条件, 则记录下来, 以便后续处理
-                        insidenotexes.Add((pipelineid, instrinfo.index, instrinfo.instruct, flowinfo));
+                        insidenotexes.Add((pipelineid, index, instruct, flowinfo));
                         continue;
                     }
                     
-                    if (null == indexes || false == indexes.Contains(instrinfo.index)) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
-                    ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, instrinfo.index, instrinfo.instruct, flowinfo);
+                    if (null == indexes || false == indexes.Contains(index)) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, index, instruct, flowinfo);
+                    ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
                 }
-                instrinfos.Clear();
-                ObjectCache.Set(instrinfos);
             }
         }
         
