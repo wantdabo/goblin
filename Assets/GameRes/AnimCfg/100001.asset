@@ -33,3 +33,27 @@ MonoBehaviour:
       name: Ani_Run_Start
       duration: 1.483
       mixduration: 0.1
+  - name: Ani_Attack_01
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_01_End
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_02
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_02_End
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_03
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_03_End
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_04
+    mixduration: 0.1
+    mixanimations: []
+  - name: Ani_Attack_04_End
+    mixduration: 0.1
+    mixanimations: []
