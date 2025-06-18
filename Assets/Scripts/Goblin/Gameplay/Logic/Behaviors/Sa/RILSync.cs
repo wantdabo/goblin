@@ -244,21 +244,21 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             {
                 if (translatordict.TryGetValue(kv.Key, out var translators))
                 {
-                    foreach (var translator in translators)
+                    Parallel.ForEach(translators, translator =>
                     {
                         // 对每个类型的所有行为信息进行处理
-                        foreach (var behaviorinfo in kv.Value)
+                        Parallel.ForEach(kv.Value, behaviorinfo =>
                         {
-                            if (stage.cache.rmvactors.Contains(behaviorinfo.actor)) continue;
-                            if (stage.cache.rmvbehaviorinfos.Contains(behaviorinfo)) continue;
+                            if (stage.cache.rmvactors.Contains(behaviorinfo.actor)) return;
+                            if (stage.cache.rmvbehaviorinfos.Contains(behaviorinfo)) return;
                             if (stage.SeekBehavior(behaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                             {
-                                if (val == ACTOR_DEFINE.FLOW) continue;
+                                if (val == ACTOR_DEFINE.FLOW) return;
                             }
-            
+
                             translator.Translate(behaviorinfo);
-                        }
-                    }
+                        });
+                    });
                 }
             });
 
