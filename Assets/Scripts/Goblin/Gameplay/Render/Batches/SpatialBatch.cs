@@ -76,13 +76,12 @@ namespace Goblin.Gameplay.Render.Batches
         protected override void OnTick(TickEvent e)
         {
             base.OnTick(e);
-            var tick = Mathf.Clamp(e.tick, 0, 1 / 60f);
             if (false == world.rilbucket.SeekRILS<RIL_SPATIAL>(out var rils)) return;
             // 收集所有需要更新的节点, 进行 Jobs 处理
             int notreset = 0;
             int index = 0;
             int rilcnt = rils.Count;
-            float t = Mathf.Clamp01(tick / GAME_DEFINE.LOGIC_TICK.AsFloat());
+            float t = Mathf.Clamp01(Mathf.Clamp(e.tick, 0, GAME_DEFINE.MAX_TICK) / GAME_DEFINE.LOGIC_TICK.AsFloat());
             foreach (var ril in rils)
             {
                 var node = world.GetAgent<NodeAgent>(ril.actor);
