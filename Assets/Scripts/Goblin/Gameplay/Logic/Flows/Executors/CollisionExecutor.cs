@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
+using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Common;
@@ -49,27 +50,26 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             switch (data.type)
             {
                 case COLLISION_DEFINE.COLLISION_TYPE_HURT:
-                    OnCollisionHurt(result, identity, data, flowinfo);
+                    OnCollision<FlowCollisionHurtInfo>(result, identity, data, flowinfo);
                     break;
                 case COLLISION_DEFINE.COLLISION_TYPE_SENSOR:
-                    OnCollisionSensor(result, identity, data, flowinfo);
+                    OnCollision<FlowCollisionHurtInfo>(result, identity, data, flowinfo);
                     break;
             }
         }
 
         /// <summary>
-        /// 处理攻击盒
+        /// 处理碰撞信息
         /// </summary>
         /// <param name="result">碰撞结果</param>
         /// <param name="identity">(管线 ID, 指令索引)</param>
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
-        private void OnCollisionHurt(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo)
+        /// <typeparam name="T">碰撞信息类型</typeparam>
+        private void OnCollision<T>(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo) where T : FlowCollisionHurtInfo, new()
         {
-            if (false == result.hit) return;
-            
-            if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo collisionhurt)) collisionhurt = stage.AddBehaviorInfo<FlowCollisionHurtInfo>(flowinfo.actor);
-            if (false == collisionhurt.records.TryGetValue(identity, out var record)) collisionhurt.records.Add(identity, record = ObjectCache.Ensure<Dictionary<ulong, uint>>());
+            if (false == stage.SeekBehaviorInfo(flowinfo.actor, out T flowcollision)) flowcollision = stage.AddBehaviorInfo<T>(flowinfo.actor);
+            if (false == flowcollision.records.TryGetValue(identity, out var record)) flowcollision.records.Add(identity, record = ObjectCache.Ensure<Dictionary<ulong, uint>>());
             foreach (var collider in result.colliders)
             {
                 var has = record.TryGetValue(collider.actor, out var count);
@@ -79,19 +79,8 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 if (has) record.Remove(collider.actor);
                 record.Add(collider.actor, count);
                 
-                collisionhurt.targets.Enqueue((collider.actor, identity));
+                flowcollision.targets.Enqueue((collider.actor, identity));
             }
-        }
-        
-        /// <summary>
-        /// 处理嗅探器
-        /// </summary>
-        /// <param name="result">碰撞结果</param>
-        /// <param name="identity">(管线 ID, 指令索引)</param>
-        /// <param name="data">指令数据</param>
-        /// <param name="flowinfo">管线信息</param>
-        private void OnCollisionSensor(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo)
-        {
         }
     }
 }
