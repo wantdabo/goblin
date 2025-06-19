@@ -52,8 +52,6 @@ namespace Goblin.RendererFeatures
                 if (raymesh == null) raymesh = CreateRay();
                 if (cubemesh == null) cubemesh = CreateWireframeCube();
                 if (spheremesh == null) spheremesh = CreateWireframeSphere();
-
-
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
