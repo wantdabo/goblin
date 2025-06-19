@@ -74,8 +74,8 @@ namespace Pipeline.Timeline.Assets.Common
 
         protected override void SetInstructData(InstructData data)
         {
-            if (data is not E instructData) throw new System.InvalidCastException("cannot cast InstructData to " + typeof(E).Name);
-            this.data = instructData;
+            if (data is not E instructdata) throw new System.InvalidCastException("cannot cast InstructData to " + typeof(E).Name);
+            this.data = instructdata;
         }
     }
 }
