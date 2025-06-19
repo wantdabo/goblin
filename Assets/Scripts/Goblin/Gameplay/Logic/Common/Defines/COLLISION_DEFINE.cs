@@ -17,6 +17,15 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         public const byte COLLIDER_SPHERE = 2;
 
         /// <summary>
+        /// 碰撞类型 - 攻击盒
+        /// </summary>
+        public const byte COLLISION_TYPE_HIT = 1;
+        /// <summary>
+        /// 碰撞类型 - 嗅探器
+        /// </summary>
+        public const byte COLLISION_TYPE_SENSOR = 2;
+
+        /// <summary>
         /// 碰撞射线
         /// </summary>
         public const byte COLLISION_RAY = 1;

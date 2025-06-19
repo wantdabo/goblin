@@ -28,7 +28,7 @@ namespace Pipeline.Timeline.Assets
                 }
 
                 var center = position + rotation * data.offset.ToVector3();
-                switch (data.type)
+                switch (data.overlaptype)
                 {
                     case COLLISION_DEFINE.COLLISION_RAY:
                         DrawPhysRendererFeature.DrawPhysPass.DrawRay(center, position + rotation * data.raydire.ToVector3().normalized, data.raydis * Config.Int2Float, Color.yellow);

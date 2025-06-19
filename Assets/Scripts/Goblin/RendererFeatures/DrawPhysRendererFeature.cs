@@ -53,13 +53,14 @@ namespace Goblin.RendererFeatures
                 if (cubemesh == null) cubemesh = CreateWireframeCube();
                 if (spheremesh == null) spheremesh = CreateWireframeSphere();
 
-                Shader shader = Shader.Find("Unlit/Color");
-                material = new Material(shader);
+
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 CommandBuffer cmd = CommandBufferPool.Get("DrawPhys");
+                Shader shader = Shader.Find("Unlit/Color");
+                material = new Material(shader);
 
                 while (rayqueue.TryDequeue(out var ray))
                 {
@@ -70,7 +71,6 @@ namespace Goblin.RendererFeatures
 
                 while (cubequeue.TryDequeue(out var cube))
                 {
-                    
                     material.SetColor("_Color", cube.color);
                     var matrix = Matrix4x4.TRS(cube.center, cube.rotation, cube.size);
                     cmd.DrawMesh(cubemesh, matrix, material);

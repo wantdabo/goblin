@@ -56,10 +56,23 @@ namespace Goblin.Misc
         }
         
         /// <summary>
+        /// 获取碰撞类型定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(碰撞检测类型)</returns>
+        public static ValueDropdownList<byte> GetCollisionTypeDefine()
+        {
+            return new ()
+            {
+                { "攻击盒", COLLISION_DEFINE.COLLISION_TYPE_HIT },
+                { "嗅探器", COLLISION_DEFINE.COLLISION_TYPE_SENSOR },
+            };
+        }
+        
+        /// <summary>
         /// 获取碰撞检测类型定义下拉列表
         /// </summary>
         /// <returns>ValueDropdownList(碰撞检测类型)</returns>
-        public static ValueDropdownList<byte> GetCollisionDefine()
+        public static ValueDropdownList<byte> GetCollisionOverlapDefine()
         {
             return new ()
             {

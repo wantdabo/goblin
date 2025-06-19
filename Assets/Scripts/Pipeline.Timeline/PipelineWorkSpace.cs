@@ -202,7 +202,7 @@ namespace Pipeline.Timeline
         public static void SavePipeline(uint pipeline, int model, TimelineAsset asset)
         {
             if (null == asset) return;
-            
+
             ScriptMachine.Begin();
             List<List<Instruct>> instructslist = new();
             var tracks = asset.GetOutputTracks();
@@ -213,40 +213,44 @@ namespace Pipeline.Timeline
 
                 var instructs = new List<Instruct>();
                 instructslist.Add(instructs);
-                
+
                 foreach (var clip in clips)
                 {
                     var pipelineasset = clip.asset as PipelineAsset;
                     if (null == pipelineasset) continue;
-                    
-                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata);
 
+                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata);
                     if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
 
                     instructs.Add(opt.instruct);
                 }
             }
+
             var data = ScriptMachine.End();
             File.WriteAllBytes(Path.Combine(datadir, $"{pipeline}.bytes"), MessagePackSerializer.Serialize(data.ToPipelineRawData()));
-            
+
             var layout = ScriptableObject.CreateInstance<PipelineLayout>();
             layout.name = $"{pipeline}";
             layout.model = model;
             layout.tracks = new();
-            if (null != data && 0 != data.instructs.Count)
+            foreach (var instructs in instructslist)
             {
-                foreach (var instructs in instructslist)
+                var tracklayout = new Dictionary<ushort, List<uint>>();
+                layout.tracks.Add(tracklayout);
+                foreach (var instruct in instructs)
                 {
-                    var tracklayout = new Dictionary<ushort, List<uint>>();
                     uint index = 0;
-                    foreach (var instruct in instructs)
+                    foreach (var instr in data.instructs)
                     {
                         index++;
-                        if (false == tracklayout.TryGetValue(instruct.data.id, out var indexes)) tracklayout.Add(instruct.data.id, indexes = new List<uint>());
-                        indexes.Add(index);
+                        if (instr != instruct) continue;
+                        break;
                     }
 
-                    layout.tracks.Add(tracklayout);
+                    if (0 == index) throw new System.Exception("Instruct index is zero, this should not happen");
+
+                    if (false == tracklayout.TryGetValue(instruct.data.id, out var indexes)) tracklayout.Add(instruct.data.id, indexes = new List<uint>());
+                    indexes.Add(index);
                 }
             }
             layout.WriteTracks();
