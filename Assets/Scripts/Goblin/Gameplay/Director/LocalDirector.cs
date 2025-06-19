@@ -160,6 +160,26 @@ namespace Goblin.Gameplay.Director
         {
             if (false == physdraw) return;
 
+            lock (stage.detection.@lock)
+            {
+                Color color = Color.yellow;
+
+                foreach (var raycast in stage.detection.raycasts)
+                {
+                    DrawPhysRendererFeature.DrawPhysPass.DrawRay(raycast.center.ToVector3(), raycast.dire.ToVector3(), raycast.dis.AsFloat(), color);
+                }
+                
+                foreach (var overlapbox in stage.detection.overlapboxes)
+                {
+                    DrawPhysRendererFeature.DrawPhysPass.DrawCube(overlapbox.position.ToVector3(), overlapbox.rotation.ToQuaternion(), overlapbox.size.ToVector3(), color);
+                }
+                
+                foreach (var overlapsphere in stage.detection.overlapspheres)
+                {
+                    DrawPhysRendererFeature.DrawPhysPass.DrawSphere(overlapsphere.position.ToVector3(), overlapsphere.radius.AsFloat(), color);
+                }
+            }
+
             lock (@lock)
             {
                 foreach (var collider in colliders)

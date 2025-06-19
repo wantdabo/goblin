@@ -58,27 +58,29 @@ namespace Goblin.RendererFeatures
             {
                 CommandBuffer cmd = CommandBufferPool.Get("DrawPhys");
                 Shader shader = Shader.Find("Unlit/Color");
-                material = new Material(shader);
+                material ??= new Material(shader);
+
+                var mpb = new MaterialPropertyBlock();
 
                 while (rayqueue.TryDequeue(out var ray))
                 {
-                    material.SetColor("_Color", ray.color);
+                    mpb.SetColor("_Color", ray.color);
                     var matrix = Matrix4x4.TRS(ray.center, Quaternion.LookRotation(ray.dire), new Vector3(1f, 1f, ray.dis));
-                    cmd.DrawMesh(raymesh, matrix, material);
+                    cmd.DrawMesh(raymesh, matrix, material, 0, -1, mpb);
                 }
 
                 while (cubequeue.TryDequeue(out var cube))
                 {
-                    material.SetColor("_Color", cube.color);
+                    mpb.SetColor("_Color", cube.color);
                     var matrix = Matrix4x4.TRS(cube.center, cube.rotation, cube.size);
-                    cmd.DrawMesh(cubemesh, matrix, material);
+                    cmd.DrawMesh(cubemesh, matrix, material, 0, -1, mpb);
                 }
 
                 while (spherequeue.TryDequeue(out var sphere))
                 {
-                    material.SetColor("_Color", sphere.color);
+                    mpb.SetColor("_Color", sphere.color);
                     var matrix = Matrix4x4.TRS(sphere.center, Quaternion.identity, Vector3.one * sphere.radius);
-                    cmd.DrawMesh(spheremesh, matrix, material);
+                    cmd.DrawMesh(spheremesh, matrix, material, 0, -1, mpb);
                 }
 
                 context.ExecuteCommandBuffer(cmd);

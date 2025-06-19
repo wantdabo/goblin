@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     result = stage.detection.Linecast(position, position + rotation * data.lineep.ToFPVector3());
                     break;
                 case COLLISION_DEFINE.COLLISION_BOX:
-                    result = stage.detection.OverlapBox(position, FPQuaternion.identity, data.boxsize.ToFPVector3());
+                    result = stage.detection.OverlapBox(position, rotation, data.boxsize.ToFPVector3());
                     break;
                 case COLLISION_DEFINE.COLLISION_SPHERE:
                     result = stage.detection.OverlapSphere(position, data.sphereradius);

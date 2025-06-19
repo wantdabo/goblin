@@ -27,6 +27,47 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
     /// </summary>
     public class Detection : Behavior
     {
+        public object @lock { get; private set; } = new();
+        public List<(FPVector3 center, FPVector3 dire, FP dis)> raycasts { get; private set; }
+        public List<(FPVector3 position, FPQuaternion rotation, FPVector3 size)> overlapboxes { get; private set; }
+        public List<(FPVector3 position, FP radius)> overlapspheres { get; private set; }
+
+        protected override void OnAssemble()
+        {
+            base.OnAssemble();
+            lock (@lock)
+            {
+                raycasts = ObjectCache.Ensure<List<(FPVector3 center, FPVector3 dire, FP dis)>>();
+                overlapboxes = ObjectCache.Ensure<List<(FPVector3 position, FPQuaternion rotation, FPVector3 size)>>();
+                overlapspheres = ObjectCache.Ensure<List<(FPVector3 position, FP radius)>>();
+            }
+        }
+
+        protected override void OnDisassemble()
+        {
+            base.OnDisassemble();
+            lock (@lock)
+            {
+                raycasts.Clear();
+                ObjectCache.Set(raycasts);
+                overlapboxes.Clear();
+                ObjectCache.Set(overlapboxes);
+                overlapspheres.Clear();
+                ObjectCache.Set(overlapspheres);
+            }
+        }
+
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            lock (@lock)
+            {
+                raycasts.Clear();
+                overlapboxes.Clear();
+                overlapspheres.Clear();
+            }
+        }
+
         /// <summary>
         /// 判断 AABB 是否包含另一个 AABB
         /// </summary>
@@ -62,7 +103,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             point = FPVector3.zero;
             normal = FPVector3.zero;
             penetration = FP.MaxValue;
-
+            
             // 如果两个碰撞盒的层不匹配，则不进行碰撞检测
             if (false == COLLISION_DEFINE.QUERY(a.layer, b.layer)) return false;
 
@@ -149,6 +190,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <returns>结果</returns>
         public HitResult OverlapBox(FPVector3 position, FPQuaternion rotation, FPVector3 size, int layer = -1)
         {
+            lock (@lock)
+            {
+                overlapboxes.Add((position, rotation, size));
+            }
+
             if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return default;
             
             Box box = new Box
@@ -195,6 +241,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <returns>结果</returns>
         public HitResult OverlapSphere(FPVector3 position, FP radius, int layer = -1)
         {
+            lock (@lock)
+            {
+                overlapspheres.Add((position, radius));
+            }
+            
             if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return default;
             
             Sphere sphere = new Sphere
@@ -242,6 +293,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <returns>结果</returns>
         public HitResult Raycast(FPVector3 origin, FPVector3 dire, FP distance, int layer = -1)
         {
+            lock (@lock)
+            {
+                raycasts.Add((origin, dire, distance));
+            }
+            
             if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> colliders)) return default;
 
             HitResult result = new();
