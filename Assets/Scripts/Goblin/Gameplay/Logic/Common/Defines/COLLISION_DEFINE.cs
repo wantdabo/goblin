@@ -19,7 +19,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 碰撞类型 - 攻击盒
         /// </summary>
-        public const byte COLLISION_TYPE_HIT = 1;
+        public const byte COLLISION_TYPE_HURT = 1;
         /// <summary>
         /// 碰撞类型 - 嗅探器
         /// </summary>

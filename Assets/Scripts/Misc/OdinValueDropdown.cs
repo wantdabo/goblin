@@ -63,7 +63,7 @@ namespace Goblin.Misc
         {
             return new ()
             {
-                { "攻击盒", COLLISION_DEFINE.COLLISION_TYPE_HIT },
+                { "攻击盒", COLLISION_DEFINE.COLLISION_TYPE_HURT },
                 { "嗅探器", COLLISION_DEFINE.COLLISION_TYPE_SENSOR },
             };
         }

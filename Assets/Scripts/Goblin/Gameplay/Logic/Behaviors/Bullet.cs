@@ -26,10 +26,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="bullet">子弹信息</param>
         private void Execute(BulletInfo bullet)
         {
-            if (stage.SeekBehaviorInfo(bullet.flow, out FlowDamageInfo flowdamage))
+            if (stage.SeekBehaviorInfo(bullet.flow, out FlowCollisionHurtInfo collisionhurt))
             {
-                while (flowdamage.targets.TryDequeue(out var target))
+                while (collisionhurt.targets.TryDequeue(out var target))
                 {
+                    if (bullet.owner == target.actor) continue;
                     stage.calc.ToDamage(bullet.actor, target.actor, bullet.damage);
                 }
             }

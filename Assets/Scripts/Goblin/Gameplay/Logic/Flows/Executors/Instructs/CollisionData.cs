@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// </summary>
         [ValueDropdown("@OdinValueDropdown.GetCollisionTypeDefine()")]
         [LabelText("类型")]
-        public byte type = COLLISION_DEFINE.COLLISION_TYPE_HIT;
+        public byte type = COLLISION_DEFINE.COLLISION_TYPE_HURT;
         
         /// <summary>
         /// 检测类型
