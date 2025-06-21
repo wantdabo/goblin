@@ -23,6 +23,7 @@ namespace Goblin.Sys.Gameplay.View
         private Text gameSpeedDescText { get; set; }
         private Toggle gamingCBToggle { get; set; }
         private Toggle physDrawerToggle { get; set; }
+        private Toggle danceCBToggle { get; set; }
         
         protected override void OnLoad()
         {
@@ -46,6 +47,7 @@ namespace Goblin.Sys.Gameplay.View
             gameSpeedDescText = engine.u3dkit.SeekNode<Text>(gameObject, "GameSpeedDesc");
             gamingCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
             physDrawerToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");
+            danceCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "DanceCB");
         }
 
         protected override void OnBindEvent()
@@ -79,8 +81,12 @@ namespace Goblin.Sys.Gameplay.View
             
             AddUIEventListener("PhysDrawerCB", (e) =>
             {
-                if (engine.proxy.gameplay.director is not LocalDirector localdirector) return;
-                localdirector.physdraw = physDrawerToggle.isOn;
+                engine.proxy.gameplay.physdraw = physDrawerToggle.isOn;
+            });
+            
+            AddUIEventListener("DanceCB", (e) =>
+            {
+                engine.proxy.gameplay.dancing = danceCBToggle.isOn;
             });
             
             AddUIEventListener("SnapshotBtn", (e) =>

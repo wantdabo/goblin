@@ -1,5 +1,8 @@
+using System;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.EVENT;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Sa
@@ -64,12 +67,30 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="damage">伤害</param>
         public void ToDamage(ulong from, ulong to, DamageInfo damage)
         {
-            if (false == stage.SeekBehaviorInfo(from, out AttributeInfo fromattribute)) return;
             if (false == stage.SeekBehaviorInfo(to, out AttributeInfo toattribute)) return;
+            if (toattribute.hp > damage.value)
+            {
+                // 直接扣血
+                toattribute.hp -= damage.value;
+            }
+            else
+            {
+                // 血量不足，扣到 0
+                toattribute.hp = 0;
+            }
+
+            // 推送伤害事件到渲染层
+            var eventdamage = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
+            eventdamage.from = from;
+            eventdamage.to = to;
+            eventdamage.crit = damage.crit;
+            eventdamage.damage = damage.value;
+            stage.rilsync.Send(eventdamage);
             
-            // TODO 伤害结算
-            // 假定必杀, 防止被吞子弹 ..., 根据项目业务, 请跳过已经死掉的碰撞检测/逻辑之类的
+            if (toattribute.hp > 0) return;
             stage.killer.Kill(from, to);
+            
+            // TODO 后续要改成真正的死亡流程
             stage.RmvActor(to);
         }
     }

@@ -43,10 +43,6 @@ namespace Goblin.Gameplay.Director
         /// </summary>
         public float timescale => stage.timescale.AsFloat();
         /// <summary>
-        /// 绘制物理
-        /// </summary>
-        public bool physdraw { get; set; } = false;
-        /// <summary>
         /// 逻辑场景
         /// </summary>
         private Stage stage { get; set; }
@@ -158,7 +154,7 @@ namespace Goblin.Gameplay.Director
         /// </summary>
         private void DrawPhys()
         {
-            if (false == physdraw) return;
+            if (false == engine.proxy.gameplay.physdraw) return;
 
             lock (stage.detection.@lock)
             {

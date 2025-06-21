@@ -19,7 +19,7 @@ namespace Goblin.Common
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">KEY/关键字</param>
         /// <returns>实例化对象</returns>
-        public static T Get<T>(string key = "") where T : new()
+        public static T Get<T>(string key = "")
         {
             var obj = Get(typeof(T), key);
             if (null != obj) return (T)obj;

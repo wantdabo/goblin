@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goblin.Sys.Other.View;
 using UnityEngine;
 
 namespace Goblin.Core
@@ -114,7 +115,8 @@ namespace Goblin.Core
             phase = AddComp<Phase>();
             phase.Create();
             
-            gameui.Open<Sys.Other.View.FrameworkView>();
+            gameui.Open<FrameworkView>();
+            gameui.Open<GameplayDanceView>();
         }
 
         /// <summary>

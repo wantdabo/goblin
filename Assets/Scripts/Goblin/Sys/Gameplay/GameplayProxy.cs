@@ -22,6 +22,14 @@ namespace Goblin.Sys.Gameplay
     public class GameplayProxy : Proxy<GameplayModel>
     {
         public GameplayDirector director { get; private set; }
+        /// <summary>
+        /// 绘制物理
+        /// </summary>
+        public bool physdraw { get; set; } = false;
+        /// <summary>
+        /// 跳字
+        /// </summary>
+        public bool dancing { get; set; } = false;
 
         /// <summary>
         /// 加载战斗

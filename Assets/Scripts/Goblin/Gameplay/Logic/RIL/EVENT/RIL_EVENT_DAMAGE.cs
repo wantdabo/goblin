@@ -25,7 +25,7 @@ namespace Goblin.Gameplay.Logic.RIL.EVENT
         /// <summary>
         /// 伤害值
         /// </summary>
-        public int damage { get; set; }
+        public uint damage { get; set; }
 
         protected override void OnReset()
         {
