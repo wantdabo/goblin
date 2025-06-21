@@ -48,17 +48,16 @@ namespace Goblin.RendererFeatures
             public DrawPhysPass()
             {
                 renderPassEvent = RenderPassEvent.AfterRendering;
-
-                if (raymesh == null) raymesh = CreateRay();
-                if (cubemesh == null) cubemesh = CreateWireframeCube();
-                if (spheremesh == null) spheremesh = CreateWireframeSphere();
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 CommandBuffer cmd = CommandBufferPool.Get("DrawPhys");
                 Shader shader = Shader.Find("Unlit/Color");
-                material ??= new Material(shader);
+                material = new Material(shader);
+                raymesh = CreateRay();
+                cubemesh = CreateWireframeCube();
+                spheremesh = CreateWireframeSphere();
 
                 var mpb = new MaterialPropertyBlock();
 
@@ -79,7 +78,7 @@ namespace Goblin.RendererFeatures
                 while (spherequeue.TryDequeue(out var sphere))
                 {
                     mpb.SetColor("_Color", sphere.color);
-                    var matrix = Matrix4x4.TRS(sphere.center, Quaternion.identity, Vector3.one * sphere.radius);
+                    var matrix = Matrix4x4.TRS(sphere.center, Quaternion.identity, Vector3.one * sphere.radius * 2);
                     cmd.DrawMesh(spheremesh, matrix, material, 0, -1, mpb);
                 }
 
