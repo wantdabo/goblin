@@ -53,11 +53,26 @@ namespace Goblin.RendererFeatures
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 CommandBuffer cmd = CommandBufferPool.Get("DrawPhys");
-                Shader shader = Shader.Find("Unlit/Color");
-                material = new Material(shader);
-                raymesh = CreateRay();
-                cubemesh = CreateWireframeCube();
-                spheremesh = CreateWireframeSphere();
+                if (null == material)
+                {
+                    Shader shader = Shader.Find("Unlit/Color");
+                    material = new Material(shader);
+                }
+
+                if (null == raymesh)
+                {
+                    raymesh = CreateRay();
+                }
+
+                if (null == cubemesh)
+                {
+                    cubemesh = CreateWireframeCube();
+                }
+
+                if (null == spheremesh)
+                {
+                    spheremesh = CreateWireframeSphere();
+                }
 
                 var mpb = new MaterialPropertyBlock();
 
