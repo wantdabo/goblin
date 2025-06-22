@@ -120,11 +120,12 @@ namespace Goblin.Gameplay.Render.Agents
                 switch (info.follow)
                 {
                     case EFFECT_DEFINE.FOLLOW_ACTOR:
-                        if (world.rilbucket.SeekRIL(actor, out RIL_SPATIAL spatial))
+                        var node = world.GetAgent<NodeAgent>(actor);
+                        if (null != node)
                         {
-                            var position = spatial.position.ToVector3();
-                            var euler = spatial.euler.ToVector3();
-                            var scale = spatial.scale.AsFloat();
+                            var position = node.go.transform.position;
+                            var euler = node.go.transform.eulerAngles;
+                            var scale = node.go.transform.localScale.x;
 
                             followpos = position + Quaternion.Euler(euler) * followpos;
                             followeuler += euler;
