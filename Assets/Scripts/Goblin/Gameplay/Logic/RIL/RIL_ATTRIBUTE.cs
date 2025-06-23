@@ -13,19 +13,19 @@ namespace Goblin.Gameplay.Logic.RIL
         /// <summary>
         /// 当前生命值
         /// </summary>
-        public uint hp { get; set; }
+        public int hp { get; set; }
         /// <summary>
         /// 最大生命值
         /// </summary>
-        public uint maxhp { get; set; }
+        public int maxhp { get; set; }
         /// <summary>
         /// 移动速度
         /// </summary>
-        public uint movespeed { get; set; }
+        public int movespeed { get; set; }
         /// <summary>
         /// 攻击力
         /// </summary>
-        public uint attack { get; set; }
+        public int attack { get; set; }
 
         protected override void OnReady()
         {

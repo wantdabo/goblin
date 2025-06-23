@@ -19,7 +19,7 @@ namespace Goblin.Sys.Gameplay.View
             desc = go.transform.Find("Desc").GetComponent<Text>();
         }
 
-        public void Settings(uint value)
+        public void Settings(int value)
         {
             var x = Random.Range(-50f, 50f);
             var quick = Random.Range(0, 3) == 2;

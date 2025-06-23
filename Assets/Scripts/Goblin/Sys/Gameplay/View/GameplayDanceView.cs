@@ -43,7 +43,7 @@ namespace Goblin.Sys.Gameplay.View
         /// <summary>
         /// 伤害数值
         /// </summary>
-        public uint damage { get; set; }
+        public int damage { get; set; }
         /// <summary>
         /// 来源/ActorID
         /// </summary>

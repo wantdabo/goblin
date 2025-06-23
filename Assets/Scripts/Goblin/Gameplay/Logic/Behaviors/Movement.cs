@@ -27,7 +27,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.turnmotion = true;
             
             dire = dire.normalized;
-            var motion = dire * attribute.movespeed * tick;
+            var movespeed = stage.calc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED);
+            var motion = dire * movespeed * tick;
             spatial.position += motion;
 
             FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;

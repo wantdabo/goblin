@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
@@ -9,43 +10,35 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     public class AttributeInfo : BehaviorInfo
     {
         /// <summary>
-        /// 当前生命值
+        /// 基础属性
         /// </summary>
-        public uint hp { get; set; }
+        public Dictionary<ushort, int> baseattributes { get; set; }
         /// <summary>
-        /// 最大生命值
+        /// 附加属性
         /// </summary>
-        public uint maxhp { get; set; }
-        /// <summary>
-        /// 移动速度
-        /// </summary>
-        public uint movespeed { get; set; }
-        /// <summary>
-        /// 攻击力
-        /// </summary>
-        public uint attack { get; set; }
+        public Dictionary<ushort, int> addiattributes { get; set; }
         
         protected override void OnReady()
         {
-            OnReset();
+            baseattributes = ObjectCache.Ensure<Dictionary<ushort, int>>();
+            addiattributes = ObjectCache.Ensure<Dictionary<ushort, int>>();
         }
 
         protected override void OnReset()
         {
-            hp = 0;
-            maxhp = 0;
-            movespeed = 0;
-            attack = 0;
+            baseattributes.Clear();
+            ObjectCache.Set(baseattributes);
+            
+            addiattributes.Clear();
+            ObjectCache.Set(addiattributes);
         }
 
         protected override BehaviorInfo OnClone()
         {
             var clone = ObjectCache.Ensure<AttributeInfo>();
             clone.Ready(actor);
-            clone.hp = hp;
-            clone.maxhp = maxhp;
-            clone.movespeed = movespeed;
-            clone.attack = attack;
+            foreach (var kv in baseattributes) clone.baseattributes.Add(kv.Key, kv.Value);
+            foreach (var kv in addiattributes) clone.addiattributes.Add(kv.Key, kv.Value);
             
             return clone;
         }
@@ -53,12 +46,17 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         public override int GetHashCode()
         {
             int hash = 17;
-            hash = hash * 31 + actor.GetHashCode();
-            hash = hash * 31 + hp.GetHashCode();
-            hash = hash * 31 + maxhp.GetHashCode();
-            hash = hash * 31 + movespeed.GetHashCode();
-            hash = hash * 31 + attack.GetHashCode();
-
+            foreach (var kv in baseattributes)
+            {
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
+            }
+            foreach (var kv in addiattributes)
+            {
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
+            }
+        
             return hash;
         }
     }

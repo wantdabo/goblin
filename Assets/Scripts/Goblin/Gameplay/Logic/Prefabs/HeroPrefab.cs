@@ -63,10 +63,10 @@ namespace Goblin.Gameplay.Logic.Prefabs
 
             stage.AddBehaviorInfo<TickerInfo>(actor);
             var attribute = stage.AddBehaviorInfo<AttributeInfo>(actor);
-            attribute.hp = (uint)attrcfg.HP;
-            attribute.maxhp = (uint)attrcfg.HP;
-            attribute.movespeed = (uint)attrcfg.MoveSpeed;
-            attribute.attack = (uint)attrcfg.Attack;
+            stage.calc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.HP, attrcfg.HP);
+            stage.calc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.MAXHP, attrcfg.MaxHP);
+            stage.calc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED, attrcfg.MoveSpeed);
+            stage.calc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.ATTACK, attrcfg.Attack);
             
             var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
             spatial.position = info.spatial.position;
