@@ -34,7 +34,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             }
             
             // 子弹管线结束检查
-            if (false == stage.SeekBehaviorInfo(bullet.flow, out FlowInfo flowinfo) || flowinfo.timeline >= flowinfo.length)
+            if (false == stage.SeekBehaviorInfo(bullet.flow, out FlowInfo flowinfo) || false == flowinfo.active || flowinfo.timeline >= flowinfo.length)
             {
                 stage.RmvActor(bullet.actor);
             }

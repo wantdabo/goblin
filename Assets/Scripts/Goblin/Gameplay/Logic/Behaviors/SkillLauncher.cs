@@ -95,7 +95,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             }
 
             // 技能管线结束检查
-            if (false == stage.SeekBehaviorInfo(info.flow, out FlowInfo flowinfo) || flowinfo.timeline >= flowinfo.length)
+            if (false == stage.SeekBehaviorInfo(info.flow, out FlowInfo flowinfo) || false == flowinfo.active || flowinfo.timeline >= flowinfo.length)
             {
                 info.skill = 0;
                 info.flow = 0;
