@@ -53,7 +53,6 @@ namespace Goblin.Gameplay.Logic.Prefabs
                     var cooldown = skillcfg.Cooldown * stage.cfg.int2fp;
                     var pipelines = ObjectCache.Ensure<List<uint>>();
                     foreach (var pipeline in skillcfg.Pipelines) pipelines.Add((uint)pipeline);
-                    
                     launcher.Load((uint)skill, strength, cooldown, pipelines);
                 }
             }
