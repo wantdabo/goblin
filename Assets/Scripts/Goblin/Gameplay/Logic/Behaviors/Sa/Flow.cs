@@ -159,15 +159,19 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     if (instruct.begin > flowinfo.timeline) break;
                     
                     flowinfo.doings.TryGetValue(pipelineid, out var indexes);
+                    // 管线已经进入, 正在运行中
+                    var isdoing = null != indexes && indexes.Contains(index);
+                    // 在时间区间内
                     var inside = instruct.begin <= flowinfo.timeline && instruct.end > flowinfo.timeline;
+                    
                     // 如果不在时间区间内则退出
                     if (false == inside)
                     {
-                        if (null != indexes && indexes.Contains(index)) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
+                        if (isdoing) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
                         continue;
                     }
-
-                    if (null != indexes && indexes.Contains(index))
+                    
+                    if (instruct.checkonce && isdoing)
                     {
                         ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
                         continue;
@@ -181,7 +185,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         continue;
                     }
                     
-                    if (null == indexes || false == indexes.Contains(index)) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, index, instruct, flowinfo);
+                    if (false == isdoing) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, index, instruct, flowinfo);
                     ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
                 }
             }

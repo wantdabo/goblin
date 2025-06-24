@@ -125,6 +125,7 @@ namespace Pipeline.Timeline
                         clip.duration = instrdata.end * Config.Int2Float - clip.start;
                         
                         var pipeasset = clip.asset as PipelineAsset;
+                        pipeasset.checkonce = instrdata.checkonce;
                         foreach (var condition in instrdata.conditions)
                         {
                             if (null == pipeasset.conditions) pipeasset.conditions = new();
@@ -219,7 +220,7 @@ namespace Pipeline.Timeline
                     var pipelineasset = clip.asset as PipelineAsset;
                     if (null == pipelineasset) continue;
 
-                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata);
+                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata, pipelineasset.checkonce);
                     if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
 
                     instructs.Add(opt.instruct);

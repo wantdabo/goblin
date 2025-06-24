@@ -25,6 +25,10 @@ namespace Goblin.Gameplay.Logic.Flows
         /// </summary>
         public ulong[] end { get; set; }
         /// <summary>
+        /// 是否只检查一次
+        /// </summary>
+        public bool[] checkonce { get; set; }
+        /// <summary>
         /// 指令类型
         /// </summary>
         public ushort[] instrtypes { get; set; }

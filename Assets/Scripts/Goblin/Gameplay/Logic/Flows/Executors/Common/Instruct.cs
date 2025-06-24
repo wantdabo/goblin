@@ -19,6 +19,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// </summary>
         public ulong end { get; set; }
         /// <summary>
+        /// 是否只检查一次
+        /// </summary>
+        public bool checkonce { get; set; }
+        /// <summary>
         /// 执行条件列表
         /// </summary>
         public List<Condition> conditions { get; set; }

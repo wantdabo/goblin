@@ -25,6 +25,9 @@ namespace Pipeline.Timeline.Assets.Common
             set { SetInstructData(value); }
         }
 
+        [LabelText("是否只检查一次")]
+        public bool checkonce = true;
+
         [LabelText("条件列表")]
         public List<PipelineCondition> conditions;
 

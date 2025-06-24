@@ -24,6 +24,7 @@ namespace Goblin.Gameplay.Logic.Flows
             raw.length = data.length;
             raw.begin = new ulong[data.instructs.Count];
             raw.end = new ulong[data.instructs.Count];
+            raw.checkonce = new bool[data.instructs.Count];
             raw.instrtypes = new ushort[data.instructs.Count];
             raw.instrdata = new byte[data.instructs.Count][];
             raw.conditiontypes = new ushort[data.instructs.Count][];
@@ -34,6 +35,7 @@ namespace Goblin.Gameplay.Logic.Flows
                 var instruct = data.instructs[i];
                 raw.begin[i] = instruct.begin;
                 raw.end[i] = instruct.end;
+                raw.checkonce[i] = instruct.checkonce;
                 raw.instrtypes[i] = instruct.data.id;
                 raw.instrdata[i] = instruct.data.Serialize();
                 
@@ -70,6 +72,7 @@ namespace Goblin.Gameplay.Logic.Flows
                 {
                     begin = rawdata.begin[i],
                     end = rawdata.end[i],
+                    checkonce = rawdata.checkonce[i],
                 };
                 
                 switch (instrtype)

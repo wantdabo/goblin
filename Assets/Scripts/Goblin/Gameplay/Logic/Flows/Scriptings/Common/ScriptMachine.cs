@@ -52,14 +52,16 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
         /// <param name="begin">区间开始时间</param>
         /// <param name="end">区间结束时间</param>
         /// <param name="data">指令数据</param>
+        /// <param name="checkonce">是否只检查一次</param>
         /// <typeparam name="T">指令数据类型</typeparam>
         /// <returns>脚本状态机操作器</returns>
-        public static InstructOperation Instruct<T>(ulong begin, ulong end, T data) where T : InstructData
+        public static InstructOperation Instruct<T>(ulong begin, ulong end, T data, bool checkonce = true) where T : InstructData
         {
             Instruct instruct = new()
             {
                 begin = begin,
                 end = end,
+                checkonce = checkonce,
                 conditions = new(),
                 data = data
             };
@@ -121,11 +123,12 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
             /// <param name="offset">时间偏移</param>
             /// <param name="length">时间长度</param>
             /// <param name="data">指令数据</param>
+            /// <param name="checkonce">是否只检查一次</param>
             /// <typeparam name="T">指令数据类型</typeparam>
             /// <returns>指令操作器</returns>
-            public InstructOperation After<T>(ulong offset, ulong length, T data) where T : InstructData
+            public InstructOperation After<T>(ulong offset, ulong length, T data, bool checkonce = true) where T : InstructData
             {
-                return Instruct(instruct.end + offset, instruct.end + length, data);
+                return Instruct(instruct.end + offset, instruct.end + length, data, checkonce);
             }
         }
     }

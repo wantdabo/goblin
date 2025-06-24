@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 最大渲染帧 TICK (秒)
         /// </summary>
-        public static float MAX_TICK { get; private set; } = 1f / (LOGIC_FRAME * 2.5f);
+        public static float MAX_TICK { get; private set; } = LOGIC_TICK.AsFloat() * 1.5f;
         /// <summary>
         /// 重力
         /// </summary>
