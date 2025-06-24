@@ -217,6 +217,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             // 处理指令条件不满足的指令
             foreach (var notexe in insidenotexes)
             {
+                if (false == notexe.flowinfo.active) continue;
                 if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
                 ExecuteInstruct(ExecuteInstrucType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
                 ExecuteInstruct(ExecuteInstrucType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
@@ -225,7 +226,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             
             // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
-            foreach (var flowinfo in flowinfos) if (flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
+            foreach (var flowinfo in flowinfos) if (flowinfo.active && flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
         }
 
         /// <summary>
