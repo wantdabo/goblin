@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 
@@ -5,6 +8,11 @@ namespace Goblin.Gameplay.Logic.Prefabs
 {
     public struct BuffPrefabInfo : IPrefabInfo
     {
+        public uint buffid { get; set; }
+        public uint layer { get; set; }
+        public ulong duration { get; set; }
+        public ulong owner { get; set; }
+        public List<uint> pipelines { get; set; }
     }
 
     public class BuffPrefab : Prefab<BuffPrefabInfo>
@@ -13,6 +21,17 @@ namespace Goblin.Gameplay.Logic.Prefabs
         
         protected override void OnProcessing(ulong actor, BuffPrefabInfo info)
         {
+            var buff = stage.AddBehaviorInfo<BuffInfo>(actor);
+            buff.buffid = info.buffid;
+            buff.layer = info.layer;
+            buff.duration = info.duration;
+            buff.owner = info.owner;
+            if (null != info.pipelines)
+            {
+                var pipelines = ObjectCache.Ensure<List<uint>>();
+                pipelines.AddRange(info.pipelines);
+                buff.flow = stage.flow.GenPipeline(buff.actor, pipelines);
+            }
         }
     }
 }

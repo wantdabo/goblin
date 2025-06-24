@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
     public class BuffInfo : BehaviorInfo
     {
-        public int buffid { get; set; }
+        public uint buffid { get; set; }
         public uint layer { get; set; }
         public ulong duration { get; set; }
         public ulong owner { get; set; }

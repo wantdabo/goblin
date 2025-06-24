@@ -130,11 +130,8 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.animname = animname;
             clone.animelapsed = animelapsed;
             clone.effectincrement = effectincrement;
-            clone.rmveffects = ObjectCache.Ensure<List<uint>>();
             clone.rmveffects.AddRange(rmveffects);
-            clone.effects = ObjectCache.Ensure<List<uint>>();
             clone.effects.AddRange(effects);
-            clone.effectdict = ObjectCache.Ensure<Dictionary<uint, EffectInfo>>();
             foreach (var kv in effectdict) clone.effectdict.Add(kv.Key, kv.Value);
             
             return clone;

@@ -248,6 +248,7 @@ namespace Goblin.Gameplay.Logic.Core
             Prefab<FlowPrefab, FlowPrefabInfo>();
             Prefab<HeroPrefab, HeroPrefabInfo>();
             Prefab<BulletPrefab, BulletPrefabInfo>();
+            Prefab<BuffPrefab, BuffPrefabInfo>();
         }
         
         /// <summary>
