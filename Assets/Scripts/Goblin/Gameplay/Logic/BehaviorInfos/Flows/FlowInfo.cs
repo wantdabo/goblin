@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
 {
     /// <summary>
     /// 管线信息

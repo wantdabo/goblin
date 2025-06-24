@@ -25,5 +25,9 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 子弹
         /// </summary>
         public const byte BULLET = 4;
+        /// <summary>
+        /// BUFF
+        /// </summary>
+        public const byte BUFF = 5;
     }
 }
