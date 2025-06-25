@@ -148,13 +148,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + frame.GetHashCode();
-            
-            return hash;
-        }
     }
 }

@@ -17,6 +17,19 @@ namespace Goblin.Gameplay.Logic.Translators
 
         protected override bool once => true;
 
+        protected override int OnCalcHashCode(TagInfo info)
+        {
+            if (null == info.tags) return 0;
+            int hash = 17;
+            foreach (var kv in info.tags)
+            {
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
+            }
+            
+            return hash;
+        }
+
         protected override void OnRIL(TagInfo info, RIL_TAG ril)
         {
             foreach (var tag in info.tags) ril.tags.Add(tag.Key, tag.Value);

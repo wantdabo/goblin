@@ -11,7 +11,16 @@ namespace Goblin.Gameplay.Logic.Translators
     public class MotionTranslator : Translator<MotionInfo, RIL_MOTION>
     {
         public override ushort id => RIL_DEFINE.MOTION;
-        
+
+        protected override int OnCalcHashCode(MotionInfo info)
+        {
+            int hash = 17;
+            hash = hash * 31 + info.actor.GetHashCode();
+            hash = hash * 31 + info.motion.GetHashCode();
+            
+            return hash;
+        }
+
         protected override void OnRIL(MotionInfo info, RIL_MOTION ril)
         {
             ril.motion = info.motion;

@@ -33,10 +33,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            return actor.GetHashCode() ^ timescale.GetHashCode();
-        }
     }
 }

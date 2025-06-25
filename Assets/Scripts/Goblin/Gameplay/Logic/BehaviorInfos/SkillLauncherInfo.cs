@@ -103,25 +103,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
 
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + actor.GetHashCode();
-            hash = hash * 31 + skill.GetHashCode();
-            hash = hash * 31 + flow.GetHashCode();
-            hash = hash * 31 + casting.GetHashCode();
-            foreach (var skillid in loadedskills) hash = hash * 31 + skillid.GetHashCode();
-            foreach (var kv in loadedskilldict)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.skill.GetHashCode();
-                hash = hash * 31 + kv.Value.strength.GetHashCode();
-                hash = hash * 31 + kv.Value.cooldown.GetHashCode();
-                foreach (var pipeline in kv.Value.pipelines) hash = hash * 31 + pipeline.GetHashCode();
-            }
-
-            return hash;
-        }
     }
 }

@@ -126,10 +126,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// </summary>
         /// <param name="info">BehaviorInfo</param>
         /// <returns>BehaviorInfo 哈希值</returns>
-        protected virtual int OnCalcHashCode(T info)
-        {
-            return info.GetHashCode();
-        }
+        protected abstract int OnCalcHashCode(T info);
 
         /// <summary>
         /// 渲染指令处理

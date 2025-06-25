@@ -14,6 +14,14 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         public override ushort id => RIL_DEFINE.STAGE;
 
+        protected override int OnCalcHashCode(StageInfo info)
+        {
+            int hash = 17;
+            hash = hash * 31 + info.frame.GetHashCode();
+            
+            return hash;
+        }
+
         protected override void OnRIL(StageInfo info, RIL_STAGE ril)
         {
             uint behaviorcnt = 0;

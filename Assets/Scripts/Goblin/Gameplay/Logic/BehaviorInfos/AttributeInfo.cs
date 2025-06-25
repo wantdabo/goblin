@@ -42,22 +42,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            foreach (var kv in baseattributes)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            foreach (var kv in addiattributes)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-        
-            return hash;
-        }
     }
 }

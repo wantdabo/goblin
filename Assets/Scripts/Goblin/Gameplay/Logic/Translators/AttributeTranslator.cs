@@ -13,6 +13,23 @@ namespace Goblin.Gameplay.Logic.Translators
     {
         public override ushort id => RIL_DEFINE.ATTRIBUTE;
 
+        protected override int OnCalcHashCode(AttributeInfo info)
+        {
+            int hash = 17;
+            foreach (var kv in info.baseattributes)
+            {
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
+            }
+            foreach (var kv in info.addiattributes)
+            {
+                hash = hash * 31 + kv.Key.GetHashCode();
+                hash = hash * 31 + kv.Value.GetHashCode();
+            }
+        
+            return hash;
+        }
+
         protected override void OnRIL(AttributeInfo info, RIL_ATTRIBUTE ril)
         {
             ril.hp = stage.calc.GetAttributeValue(info, ATTRIBUTE_DEFINE.HP);

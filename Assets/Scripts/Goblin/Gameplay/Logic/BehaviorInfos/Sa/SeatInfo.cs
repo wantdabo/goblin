@@ -42,17 +42,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
 
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + actor.GetHashCode();
-            foreach (var kv in sadict)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            return hash;
-        }
     }
 }

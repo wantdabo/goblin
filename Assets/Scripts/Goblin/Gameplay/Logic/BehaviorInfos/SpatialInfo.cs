@@ -50,20 +50,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            int hash = 17;
-            hash = hash * 31 + actor.GetHashCode();
-            hash = hash * 31 + position.x.GetHashCode();
-            hash = hash * 31 + position.y.GetHashCode();
-            hash = hash * 31 + position.z.GetHashCode();
-            hash = hash * 31 + euler.x.GetHashCode();
-            hash = hash * 31 + euler.y.GetHashCode();
-            hash = hash * 31 + euler.z.GetHashCode();
-            hash = hash * 31 + scale.GetHashCode();
-            
-            return hash;
-        }
     }
 }

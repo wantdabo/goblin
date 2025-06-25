@@ -15,8 +15,8 @@ namespace Goblin.Gameplay.Logic.Translators
 
         protected override int OnCalcHashCode(TickerInfo info)
         {
-            // ticker.timescale 依赖 stage.timescale
-            return base.OnCalcHashCode(info) * 31 + stage.timescale.GetHashCode();
+            var hash = info.actor.GetHashCode() ^ info.timescale.GetHashCode();
+            return hash * 31 + stage.timescale.GetHashCode();
         }
 
         protected override void OnRIL(TickerInfo info, RIL_TICKER ril)

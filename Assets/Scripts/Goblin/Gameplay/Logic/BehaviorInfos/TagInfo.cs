@@ -37,18 +37,5 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             
             return clone;
         }
-
-        public override int GetHashCode()
-        {
-            if (null == tags) return 0;
-            int hash = 17;
-            foreach (var kv in tags)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            
-            return hash;
-        }
     }
 }
