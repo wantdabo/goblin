@@ -118,6 +118,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="flowinfo">管线信息</param>
         public void EndPipeline(FlowInfo flowinfo)
         {
+            if (false == flowinfo.active) return;
+            
             foreach (var pipelineid in flowinfo.pipelines)
             {
                 var data = PipelineDataReader.Read(pipelineid);
@@ -197,6 +199,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos)
             {
+                if (stage.cache.rmvactors.Contains(flowinfo.owner)) continue;
+                if (false == flowinfo.active) continue;
+                
                 // 叠加持有者的 timescale
                 FP flowtick = tick;
                 if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo ownertickerinfo)) flowtick *= ownertickerinfo.timescale;
@@ -226,7 +231,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             
             // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
-            foreach (var flowinfo in flowinfos) if (flowinfo.active && flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
+            foreach (var flowinfo in flowinfos)
+            {
+                if (stage.cache.rmvactors.Contains(flowinfo.owner))
+                {
+                    EndPipeline(flowinfo);
+                    continue;
+                }
+                
+                if (flowinfo.active && flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
+            }
         }
 
         /// <summary>
