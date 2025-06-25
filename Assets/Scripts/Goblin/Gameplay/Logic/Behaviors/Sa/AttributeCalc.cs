@@ -48,13 +48,23 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         public int GetAttributeValue(AttributeInfo attribute, ushort key)
         {
             var attrkey = ConvAttribyteKey(key);
-            var mainvalue = attribute.baseattributes.GetValueOrDefault(attrkey.mainkey, 0);
-            var mainscalevalue = attribute.baseattributes.GetValueOrDefault(attrkey.scalekey, 1000);
-            var addivalue = attribute.addiattributes.GetValueOrDefault(attrkey.mainkey, 0);
-            var addiscalevalue = attribute.addiattributes.GetValueOrDefault(attrkey.scalekey, 1000);
+            var value = attribute.datas.GetValueOrDefault(attrkey.mainkey, 0);
+            var scale = attribute.datas.GetValueOrDefault(attrkey.scalekey, 1000);
             
-            var scale = (mainscalevalue + addiscalevalue) * FP.Half * stage.cfg.int2fp;
-            return ((mainvalue + addivalue) * scale).AsInt();
+            return Math.Clamp((value * (scale * stage.cfg.int2fp)).AsInt(), 0, int.MaxValue);
+        }
+        
+        /// <summary>
+        /// 获取属性的千分比值
+        /// </summary>
+        /// <param name="attribute">属性信息</param>
+        /// <param name="key">属性 Key</param>
+        /// <returns>数值</returns>
+        public int GetAttributeScaleValue(AttributeInfo attribute, ushort key)
+        {
+            var attrkey = ConvAttribyteKey(key);
+            
+            return attribute.datas.GetValueOrDefault(attrkey.scalekey, 1000);
         }
 
         /// <summary>
@@ -66,8 +76,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         public void SetAttributeValue(AttributeInfo attribute, ushort key, int value)
         {
             var attrkey = ConvAttribyteKey(key);
-            if (attribute.baseattributes.ContainsKey(attrkey.mainkey)) attribute.baseattributes.Remove(attrkey.mainkey);
-            attribute.baseattributes.Add(attrkey.mainkey, value);
+            if (attribute.datas.ContainsKey(attrkey.mainkey)) attribute.datas.Remove(attrkey.mainkey);
+            attribute.datas.Add(attrkey.mainkey, value);
         }
 
         /// <summary>
@@ -76,15 +86,53 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="attribute">属性信息</param>
         /// <param name="key">属性 Key</param>
         /// <param name="value">数值</param>
-        /// <exception cref="Exception">不能设置 HP 的千分比|千分比数值必须大于 0</exception>
         public void SetAttributeScaleValue(AttributeInfo attribute, ushort key, int value)
         {
-            if (ATTRIBUTE_DEFINE.HP == key) throw new Exception("cannot set HP as scale value");
-            if (0 >= value) throw new Exception("scale value must be greater than 0");
-            
             var attrkey = ConvAttribyteKey(key);
-            if (attribute.baseattributes.ContainsKey(attrkey.scalekey)) attribute.baseattributes.Remove(attrkey.scalekey);
-            attribute.baseattributes.Add(attrkey.scalekey, value);
+            if (attribute.datas.ContainsKey(attrkey.scalekey)) attribute.datas.Remove(attrkey.scalekey);
+            attribute.datas.Add(attrkey.scalekey, value);
+        }
+        
+        /// <summary>
+        /// 修改属性值
+        /// </summary>
+        /// <param name="attribute">属性信息</param>
+        /// <param name="key">属性 Key</param>
+        /// <param name="value">数值</param>
+        /// <param name="clamp">约束范围</param>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        /// <returns>结果</returns>
+        public (int before, int after) ChangeAttributeValue(AttributeInfo attribute, ushort key, int value, bool clamp = false, int min = 0, int max = 0)
+        {
+            var before = GetAttributeValue(attribute, key);
+            var changevalue = before + value;
+            if (clamp) changevalue = Math.Clamp(changevalue, min, max);
+            SetAttributeValue(attribute, key, changevalue);
+            var after = GetAttributeValue(attribute, key);
+            
+            return (before, after);
+        }
+        
+        /// <summary>
+        /// 修改属性的千分比值
+        /// </summary>
+        /// <param name="attribute">属性信息</param>
+        /// <param name="key">属性 Key</param>
+        /// <param name="value">数值</param>
+        /// <param name="clamp">约束范围</param>
+        /// <param name="min">最小值</param>
+        /// <param name="max">最大值</param>
+        /// <returns>结果</returns>
+        public (int before, int after) ChangeAttributeScaleValue(AttributeInfo attribute, ushort key, int value, bool clamp = false, int min = 0, int max = 0)
+        {
+            var before = GetAttributeScaleValue(attribute, key);
+            var changevalue = before + value;
+            if (clamp) changevalue = Math.Clamp(changevalue, min, max);
+            SetAttributeScaleValue(attribute, key, changevalue);
+            var after = GetAttributeScaleValue(attribute, key);
+            
+            return (before, after);
         }
 
         /// <summary>
@@ -128,20 +176,18 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (false == stage.SeekBehaviorInfo(to, out AttributeInfo toattribute)) return;
             var disdamage = DischargeDamage(toattribute.actor, damage);
+            var result = ChangeAttributeValue(toattribute, ATTRIBUTE_DEFINE.HP, -disdamage.value, true, 0, GetAttributeValue(toattribute, ATTRIBUTE_DEFINE.MAXHP));
             
-            var hp = GetAttributeValue(toattribute, ATTRIBUTE_DEFINE.HP);
-            var afterhp = Math.Clamp(hp - disdamage.value, 0, GetAttributeValue(toattribute, ATTRIBUTE_DEFINE.MAXHP));
-            SetAttributeValue(toattribute, ATTRIBUTE_DEFINE.HP, afterhp);
-            
+            // TODO 后续要改为统一推送这类事件到渲染层 (伤害跳字, 治疗跳字, 效果跳字等)
             // 推送伤害事件到渲染层
             var eventdamage = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
             eventdamage.from = from;
             eventdamage.to = to;
             eventdamage.crit = disdamage.crit;
-            eventdamage.damage = disdamage.value;
+            eventdamage.damage = result.before - result.after;
             stage.rilsync.Send(eventdamage);
             
-            if (afterhp > 0) return;
+            if (result.after > 0) return;
             stage.killer.Kill(from, to);
             
             // TODO 后续要改成真正的死亡流程

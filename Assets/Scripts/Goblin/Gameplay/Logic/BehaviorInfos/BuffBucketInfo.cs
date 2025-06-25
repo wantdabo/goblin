@@ -4,9 +4,18 @@ using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
+    /// <summary>
+    /// Buff 桶信息
+    /// </summary>
     public class BuffBucketInfo : BehaviorInfo
     {
+        /// <summary>
+        /// Buff 列表
+        /// </summary>
         public List<ulong> buffs { get; set; }
+        /// <summary>
+        /// Buff 字典, 键为 BuffID, 值为 ActorID
+        /// </summary>
         public Dictionary<uint, ulong> buffdict { get; set; }
         
         protected override void OnReady()

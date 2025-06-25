@@ -16,12 +16,7 @@ namespace Goblin.Gameplay.Logic.Translators
         protected override int OnCalcHashCode(AttributeInfo info)
         {
             int hash = 17;
-            foreach (var kv in info.baseattributes)
-            {
-                hash = hash * 31 + kv.Key.GetHashCode();
-                hash = hash * 31 + kv.Value.GetHashCode();
-            }
-            foreach (var kv in info.addiattributes)
+            foreach (var kv in info.datas)
             {
                 hash = hash * 31 + kv.Key.GetHashCode();
                 hash = hash * 31 + kv.Value.GetHashCode();
