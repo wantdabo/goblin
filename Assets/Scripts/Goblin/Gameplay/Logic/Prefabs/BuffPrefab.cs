@@ -7,15 +7,36 @@ using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Prefabs
 {
+    /// <summary>
+    /// Buff 预制信息
+    /// </summary>
     public struct BuffPrefabInfo : IPrefabInfo
     {
+        /// <summary>
+        /// BuffID
+        /// </summary>
         public uint buffid { get; set; }
+        /// <summary>
+        /// Buff 层数
+        /// </summary>
         public uint layer { get; set; }
+        /// <summary>
+        /// Buff 生命周期
+        /// </summary>
         public FP lifetime { get; set; }
+        /// <summary>
+        /// Buff 拥有者
+        /// </summary>
         public ulong owner { get; set; }
+        /// <summary>
+        /// Buff 管线列表
+        /// </summary>
         public List<uint> pipelines { get; set; }
     }
 
+    /// <summary>
+    /// Buff 预制创建器
+    /// </summary>
     public class BuffPrefab : Prefab<BuffPrefabInfo>
     {
         public override byte type => ACTOR_DEFINE.BUFF;

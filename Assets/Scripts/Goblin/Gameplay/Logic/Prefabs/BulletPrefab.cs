@@ -11,7 +11,7 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Prefabs
 {
     /// <summary>
-    /// 子弹预制体信息
+    /// 子弹预制信息
     /// </summary>
     public struct BulletPrefabInfo : IPrefabInfo
     {
@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
     }
 
     /// <summary>
-    /// 子弹预制体
+    /// 子弹预制创建器
     /// </summary>
     public class BulletPrefab : Prefab<BulletPrefabInfo>
     {

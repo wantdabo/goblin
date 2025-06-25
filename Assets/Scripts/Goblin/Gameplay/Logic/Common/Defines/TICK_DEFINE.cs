@@ -23,6 +23,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Flow),
             typeof(SkillLauncher),
             typeof(Bullet),
+            typeof(Buff),
             typeof(Killer),
             typeof(Facade),
             typeof(StepEnd),

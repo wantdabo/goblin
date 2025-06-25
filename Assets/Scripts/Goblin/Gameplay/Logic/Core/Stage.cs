@@ -133,6 +133,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Flow flow => GetBehavior<Flow>(sa);
         /// <summary>
+        /// Buff
+        /// </summary>
+        public Buff buff => GetBehavior<Buff>(sa);
+        /// <summary>
         /// 杀手行为
         /// </summary>
         public Killer killer => GetBehavior<Killer>(sa);
@@ -229,6 +233,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Flow>(sa);
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
+            AddBehavior<Buff>(sa);
             AddBehavior<Killer>(sa);
             AddBehavior<StepEnd>(sa);
             AddBehavior<RILSync>(sa);

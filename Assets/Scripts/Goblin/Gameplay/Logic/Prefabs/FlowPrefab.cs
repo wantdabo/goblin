@@ -12,7 +12,7 @@ using Goblin.Gameplay.Logic.Prefabs.Common;
 namespace Goblin.Gameplay.Logic.Prefabs
 {
     /// <summary>
-    /// 管线预制创建器信息
+    /// 管线预制信息
     /// </summary>
     public struct FlowPrefabInfo : IPrefabInfo
     {

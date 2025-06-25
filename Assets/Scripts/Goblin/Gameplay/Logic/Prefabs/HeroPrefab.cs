@@ -11,7 +11,7 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Prefabs
 {
     /// <summary>
-    /// 英雄预设信息结构体
+    /// 英雄预制信息
     /// </summary>
     public struct HeroPrefabInfo : IPrefabInfo
     {

@@ -38,7 +38,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public uint skill { get; set; }
         /// <summary>
-        /// 正在进行的技能管线 ActorID
+        /// 技能管线
         /// </summary>
         public ulong flow { get; set; }
         /// <summary>
