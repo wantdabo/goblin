@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos
 {
@@ -7,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     {
         public uint buffid { get; set; }
         public uint layer { get; set; }
-        public ulong duration { get; set; }
+        public FP lifetime { get; set; }
         public ulong owner { get; set; }
         public ulong flow { get; set; }
         
@@ -15,7 +16,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             buffid = 0;
             layer = 0;
-            duration = 0;
+            lifetime = 0;
             owner = 0;
             flow = 0;
         }
@@ -24,7 +25,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         {
             buffid = 0;
             layer = 0;
-            duration = 0;
+            lifetime = 0;
             owner = 0;
             flow = 0;
         }
@@ -35,7 +36,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.Ready(actor);
             clone.buffid = buffid;
             clone.layer = layer;
-            clone.duration = duration;
+            clone.lifetime = lifetime;
             clone.owner = owner;
             clone.flow = flow;
 
