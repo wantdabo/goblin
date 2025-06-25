@@ -26,12 +26,11 @@ namespace Goblin.Gameplay.Logic.Prefabs
             buff.layer = info.layer;
             buff.duration = info.duration;
             buff.owner = info.owner;
-            if (null != info.pipelines)
-            {
-                var pipelines = ObjectCache.Ensure<List<uint>>();
-                pipelines.AddRange(info.pipelines);
-                buff.flow = stage.flow.GenPipeline(buff.actor, pipelines);
-            }
+            
+            if (null == info.pipelines) return;
+            var pipelines = ObjectCache.Ensure<List<uint>>();
+            pipelines.AddRange(info.pipelines);
+            buff.flow = stage.flow.GenPipeline(actor, pipelines);
         }
     }
 }
