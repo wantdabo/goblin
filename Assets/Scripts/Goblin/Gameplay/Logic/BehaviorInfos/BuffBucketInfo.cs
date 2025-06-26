@@ -16,12 +16,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// Buff 字典, 键为 BuffID, 值为 ActorID
         /// </summary>
-        public Dictionary<uint, ulong> buffdict { get; set; }
+        public Dictionary<int, ulong> buffdict { get; set; }
         
         protected override void OnReady()
         {
             buffs = ObjectCache.Ensure<List<ulong>>();
-            buffdict = ObjectCache.Ensure<Dictionary<uint, ulong>>();
+            buffdict = ObjectCache.Ensure<Dictionary<int, ulong>>();
         }
 
         protected override void OnReset()

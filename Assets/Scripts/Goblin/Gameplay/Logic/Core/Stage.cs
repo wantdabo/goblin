@@ -276,6 +276,10 @@ namespace Goblin.Gameplay.Logic.Core
                 AddBehavior<Gamepad>(hero);
                 // 入座
                 seat.Sitdown(player.seat, hero);
+                
+                // TODO 记得删除
+                // 添加测试 Buff
+                buff.AddBuff(hero, 1000001, 1, 10);
             }
         }
 

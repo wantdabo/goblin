@@ -18,7 +18,8 @@ public sealed partial class BuffInfo : Luban.BeanBase
     {
         Id = _buf.ReadInt();
         Name = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Enchants = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Enchants.Add(_e0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EnchantMains = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); EnchantMains.Add(_e0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EnchantScales = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); EnchantScales.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Pipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Pipelines.Add(_e0);}}
     }
 
@@ -38,7 +39,11 @@ public sealed partial class BuffInfo : Luban.BeanBase
     /// <summary>
     /// 属性赋予
     /// </summary>
-    public readonly System.Collections.Generic.List<int> Enchants;
+    public readonly System.Collections.Generic.List<int> EnchantMains;
+    /// <summary>
+    /// 属性赋予 (千分比)
+    /// </summary>
+    public readonly System.Collections.Generic.List<int> EnchantScales;
     /// <summary>
     /// 管线
     /// </summary>
@@ -56,7 +61,8 @@ public sealed partial class BuffInfo : Luban.BeanBase
         return "{ "
         + "Id:" + Id + ","
         + "Name:" + Name + ","
-        + "Enchants:" + Luban.StringUtil.CollectionToString(Enchants) + ","
+        + "EnchantMains:" + Luban.StringUtil.CollectionToString(EnchantMains) + ","
+        + "EnchantScales:" + Luban.StringUtil.CollectionToString(EnchantScales) + ","
         + "Pipelines:" + Luban.StringUtil.CollectionToString(Pipelines) + ","
         + "}";
     }

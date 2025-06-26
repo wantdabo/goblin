@@ -15,15 +15,7 @@ namespace Goblin.Gameplay.Logic.Prefabs
         /// <summary>
         /// BuffID
         /// </summary>
-        public uint buffid { get; set; }
-        /// <summary>
-        /// Buff 层数
-        /// </summary>
-        public uint layer { get; set; }
-        /// <summary>
-        /// Buff 生命周期
-        /// </summary>
-        public FP lifetime { get; set; }
+        public int buffid { get; set; }
         /// <summary>
         /// Buff 拥有者
         /// </summary>
@@ -45,8 +37,6 @@ namespace Goblin.Gameplay.Logic.Prefabs
         {
             var buff = stage.AddBehaviorInfo<BuffInfo>(actor);
             buff.buffid = info.buffid;
-            buff.layer = info.layer;
-            buff.lifetime = info.lifetime;
             buff.owner = info.owner;
             
             if (null == info.pipelines) return;

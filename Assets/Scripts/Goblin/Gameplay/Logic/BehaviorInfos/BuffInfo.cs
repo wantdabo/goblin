@@ -12,11 +12,11 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// BuffID
         /// </summary>
-        public uint buffid { get; set; }
+        public int buffid { get; set; }
         /// <summary>
         /// Buff 层数
         /// </summary>
-        public uint layer { get; set; }
+        public int layer { get; set; }
         /// <summary>
         /// Buff 生命周期
         /// </summary>
@@ -29,6 +29,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// Buff 管线
         /// </summary>
         public ulong flow { get; set; }
+        /// <summary>
+        /// Buff 是否附魔
+        /// </summary>
+        public bool enchanted { get; set; }
         
         protected override void OnReady()
         {
@@ -37,6 +41,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             lifetime = 0;
             owner = 0;
             flow = 0;
+            enchanted = false;
         }
 
         protected override void OnReset()
@@ -46,6 +51,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             lifetime = 0;
             owner = 0;
             flow = 0;
+            enchanted = false;
         }
 
         protected override BehaviorInfo OnClone()
@@ -57,6 +63,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             clone.lifetime = lifetime;
             clone.owner = owner;
             clone.flow = flow;
+            clone.enchanted = enchanted;
 
             return clone;
         }
