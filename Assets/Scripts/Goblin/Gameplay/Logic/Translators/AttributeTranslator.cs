@@ -27,10 +27,10 @@ namespace Goblin.Gameplay.Logic.Translators
 
         protected override void OnRIL(AttributeInfo info, RIL_ATTRIBUTE ril)
         {
-            ril.hp = stage.calc.GetAttributeValue(info, ATTRIBUTE_DEFINE.HP);
-            ril.maxhp = stage.calc.GetAttributeValue(info, ATTRIBUTE_DEFINE.MAXHP);
-            ril.movespeed = stage.calc.GetAttributeValue(info, ATTRIBUTE_DEFINE.MOVESPEED);
-            ril.attack = stage.calc.GetAttributeValue(info, ATTRIBUTE_DEFINE.ATTACK);
+            ril.hp = stage.attrc.GetAttributeValue(info, ATTRIBUTE_DEFINE.HP);
+            ril.maxhp = stage.attrc.GetAttributeValue(info, ATTRIBUTE_DEFINE.MAXHP);
+            ril.movespeed = stage.attrc.GetAttributeValue(info, ATTRIBUTE_DEFINE.MOVESPEED);
+            ril.attack = stage.attrc.GetAttributeValue(info, ATTRIBUTE_DEFINE.ATTACK);
         }
     }
 }

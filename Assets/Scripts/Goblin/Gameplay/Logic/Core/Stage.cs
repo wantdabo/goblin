@@ -119,7 +119,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 属性数值计算
         /// </summary>
-        public AttributeCalc calc => GetBehavior<AttributeCalc>(sa);
+        public AttributeCalc attrc => GetBehavior<AttributeCalc>(sa);
         /// <summary>
         /// 碰撞检测
         /// </summary>

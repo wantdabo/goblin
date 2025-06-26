@@ -146,7 +146,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 var key = (ushort) buffcfg.EnchantMains[i];
                 var value = buffcfg.EnchantMains[i + 1] * buffinfo.layer;
                 value = flag ? value : -value;
-                stage.calc.ChangeAttributeValue(attribute, key, value);
+                stage.attrc.ChangeAttributeValue(attribute, key, value);
             }
             
             for (int i = 0; i < buffcfg.EnchantScales.Count; i += 2)
@@ -154,7 +154,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 var key = (ushort) buffcfg.EnchantScales[i];
                 var value = buffcfg.EnchantScales[i + 1] * buffinfo.layer;
                 value = flag ? value : -value;
-                stage.calc.ChangeAttributeScaleValue(attribute, key, value);
+                stage.attrc.ChangeAttributeScaleValue(attribute, key, value);
             }
         }
 

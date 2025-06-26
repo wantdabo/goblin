@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             info.turnmotion = true;
             
             dire = dire.normalized;
-            var movespeed = stage.calc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED);
+            var movespeed = stage.attrc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED);
             var motion = dire * movespeed * tick;
             spatial.position += motion;
 

@@ -29,7 +29,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 while (collisionhurt.targets.TryDequeue(out var target))
                 {
                     if (bullet.owner == target.actor) continue;
-                    stage.calc.ToDamage(bullet.actor, target.actor, bullet.damage);
+                    stage.attrc.ToDamage(bullet.actor, target.actor, bullet.damage);
                 }
             }
             
