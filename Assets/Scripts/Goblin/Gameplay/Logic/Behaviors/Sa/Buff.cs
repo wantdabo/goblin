@@ -43,9 +43,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             var buffinfo = GetBuff(owner, buffid);
             if (null != buffinfo)
             {
-                // 保留 Layer, 移除 Buff
-                layer += buffinfo.layer;
-                RmvBuff(owner, buffid);
+                SetBuff(buffinfo.owner, buffinfo.buffid, buffinfo.layer += layer, buffinfo.lifetime);
+                return;
             }
 
             // 创建新的 Buff
@@ -58,6 +57,14 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             });
             buffbucket.buffs.Add(buff);
             buffbucket.buffdict.Add(buffid, buff);
+        }
+
+        public void SetBuff(ulong owner, uint buffid, uint layer, FP lifetime)
+        {
+            if (false == stage.SeekBehaviorInfo(owner, out BuffBucketInfo buffbucket)) return;
+            if (false == buffbucket.buffdict.TryGetValue(buffid, out var buff) || false == stage.SeekBehaviorInfo(buff, out BuffInfo buffinfo)) return;
+            buffinfo.layer = layer;
+            buffinfo.lifetime = lifetime;
         }
 
         /// <summary>

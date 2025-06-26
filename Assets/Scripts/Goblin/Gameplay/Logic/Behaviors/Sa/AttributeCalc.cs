@@ -86,8 +86,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="attribute">属性信息</param>
         /// <param name="key">属性 Key</param>
         /// <param name="value">数值</param>
+        /// <exception cref="Exception">HP 属性的千分比值不允许被修改</exception>
         public void SetAttributeScaleValue(AttributeInfo attribute, ushort key, int value)
         {
+            if (ATTRIBUTE_DEFINE.HP == key) throw new Exception("HP 属性的千分比值不允许被修改");
+            
             var attrkey = ConvAttribyteKey(key);
             if (attribute.datas.ContainsKey(attrkey.scalekey)) attribute.datas.Remove(attrkey.scalekey);
             attribute.datas.Add(attrkey.scalekey, value);
