@@ -307,6 +307,8 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
         public void SetEvent(IRIL_EVENT e)
         {
             if (salutedict.TryGetValue(e.id, out var salute)) salute.Salute(e);
+            
+            e.Reset();
             RILCache.Set(e);
         }
 
