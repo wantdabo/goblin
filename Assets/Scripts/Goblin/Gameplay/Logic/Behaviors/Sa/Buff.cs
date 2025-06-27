@@ -23,7 +23,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (null == buffinfo) return;
             if (false == stage.SeekBehaviorInfo(owner, out BuffBucketInfo buffbucket)) return;
             
-            if (buffinfo.enchanted) EnchantErase(buffinfo);
+            if (buffinfo.enchanted) EraseEnchant(buffinfo);
             // 移除 Buff
             buffbucket.buffdict.Remove(buffid);
             buffbucket.buffs.Remove(buffinfo.actor);
@@ -85,8 +85,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (buffinfo.layer != layer)
             {
                 buffinfo.layer = layer;
-                if (buffinfo.enchanted) EnchantErase(buffinfo);
-                EnchantStamp(buffinfo);
+                if (buffinfo.enchanted) EraseEnchant(buffinfo);
+                StampEnchant(buffinfo);
             }
             buffinfo.lifetime = lifetime;
         }
@@ -111,7 +111,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// 擦除 Buff 属性增幅
         /// </summary>
         /// <param name="buffinfo">Buff 信息</param>
-        private void EnchantErase(BuffInfo buffinfo)
+        private void EraseEnchant(BuffInfo buffinfo)
         {
             if (false == stage.SeekBehaviorInfo(buffinfo.owner, out AttributeInfo attribute)) return;
             if (false == buffinfo.enchanted) return;
@@ -123,7 +123,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// 印下 Buff 属性增幅
         /// </summary>
         /// <param name="buffinfo">Buff 信息</param>
-        private void EnchantStamp(BuffInfo buffinfo)
+        private void StampEnchant(BuffInfo buffinfo)
         {
             if (false == stage.SeekBehaviorInfo(buffinfo.owner, out AttributeInfo attribute)) return;
             if (buffinfo.enchanted) return;
