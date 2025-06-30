@@ -20,19 +20,17 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (false == stage.SeekBehavior(actor, out StateMachine machine)) return;
             if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
-            
             if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return;
             if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
             
-            info.turnmotion = true;
-            
-            dire = dire.normalized;
-            var movespeed = stage.attrc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED);
-            var motion = dire * movespeed * tick;
+            dire.Normalize();
+            var motion = dire * stage.attrc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED) * tick;
             spatial.position += motion;
 
             FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
             spatial.euler = FPVector3.up * angle;
+            
+            info.turnmotion = true;
         }
 
         protected override void OnTick(FP tick)

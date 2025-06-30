@@ -8,25 +8,33 @@ namespace Goblin.Gameplay.Logic.Common.Defines
     public class STATE_DEFINE
     {
         /// <summary>
+        /// 出生
+        /// </summary>
+        public const byte BORN = 0;
+        /// <summary>
+        /// 死亡
+        /// </summary>
+        public const byte DEAD = 1;
+        /// <summary>
         /// 待机
         /// </summary>
-        public const byte IDLE = 0;
+        public const byte IDLE = 2;
         /// <summary>
         /// 移动
         /// </summary>
-        public const byte MOVE = 1;
+        public const byte MOVE = 3;
         /// <summary>
         /// 跳跃
         /// </summary>
-        public const byte JUMP = 2;
+        public const byte JUMP = 4;
         /// <summary>
         /// 下坠
         /// </summary>
-        public const byte FALL = 3;
+        public const byte FALL = 5;
         /// <summary>
         /// 技能
         /// </summary>
-        public const byte CASTING = 4;
+        public const byte CASTING = 6;
 
         /// <summary>
         /// 状态切换规则
