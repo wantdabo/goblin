@@ -65,15 +65,16 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// 预制类型
         /// </summary>
         public abstract byte type { get; }
+        /// <summary>
+        /// 出生
+        /// </summary>
+        public virtual bool born { get; }
         
         protected override void OnProcessing(ulong actor, PrefabInfoState state)
         {
-            if (stage.SeekBehavior(actor, out Tag tag))
-            {
-                tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
-            }
-            
+            if (stage.SeekBehavior(actor, out Tag tag)) tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
             OnProcessing(actor, (state as PrefabInfoState<T>).info);
+            if (born) stage.silentmercy.Born(actor);            
         }
 
         /// <summary>

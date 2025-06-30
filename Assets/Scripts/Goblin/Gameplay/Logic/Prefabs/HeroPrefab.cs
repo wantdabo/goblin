@@ -32,6 +32,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
     {
         public override byte type => ACTOR_DEFINE.HERO;
 
+        public override bool born => true;
+
         protected override void OnProcessing(ulong actor, HeroPrefabInfo info)
         {
             if (false == stage.cfg.location.HeroInfos.TryGetValue(info.hero, out var herocfg)) return;

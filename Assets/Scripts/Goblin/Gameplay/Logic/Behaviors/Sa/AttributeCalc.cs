@@ -191,7 +191,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             stage.rilsync.Send(eventdamage);
             
             if (result.after > 0) return;
-            stage.killer.Kill(from, to);
+            stage.silentmercy.Kill(from, to);
             
             // TODO 后续要改成真正的死亡流程
             stage.RmvActor(to);

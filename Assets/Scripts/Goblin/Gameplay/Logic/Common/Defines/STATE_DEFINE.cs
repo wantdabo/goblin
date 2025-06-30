@@ -18,7 +18,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// <summary>
         /// 死亡
         /// </summary>
-        public const byte DEAD = 2;
+        public const byte DEATH = 2;
         /// <summary>
         /// 待机
         /// </summary>
@@ -46,7 +46,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         public static Dictionary<byte, List<byte>> PASSES { get; private set; } = new()
         {
             { BORN, new List<byte>() { } },
-            { DEAD, new List<byte>() { } },
+            { DEATH, new List<byte>() { } },
             { IDLE, new List<byte>() { MOVE, FALL, CASTING } },
             { MOVE, new List<byte>() { IDLE, FALL, CASTING } },
             { JUMP, new List<byte>() { FALL, CASTING } },

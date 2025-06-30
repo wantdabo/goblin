@@ -137,9 +137,9 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Buff buff => GetBehavior<Buff>(sa);
         /// <summary>
-        /// 杀手行为
+        /// 生与死
         /// </summary>
-        public Killer killer => GetBehavior<Killer>(sa);
+        public SilentMercy silentmercy => GetBehavior<SilentMercy>(sa);
         /// <summary>
         /// 渲染指令同步
         /// </summary>
@@ -230,11 +230,11 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<AttributeCalc>(sa);
             AddBehavior<Detection>(sa);
             AddBehavior<Captain>(sa);
+            AddBehavior<SilentMercy>(sa);
             AddBehavior<Flow>(sa);
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
             AddBehavior<Buff>(sa);
-            AddBehavior<Killer>(sa);
             AddBehavior<StepEnd>(sa);
             AddBehavior<RILSync>(sa);
         }
@@ -557,14 +557,13 @@ namespace Goblin.Gameplay.Logic.Core
         public ulong Spawn<T>(T prefabinfo) where T : IPrefabInfo
         {
             if (false == prefabs.TryGetValue(typeof(T), out var prefab)) throw new Exception($"prefab {typeof(T)} is not exist.");
-
+            var actor = GenActor();
             var state = ObjectCache.Ensure<PrefabInfoState<T>>();
             state.info = prefabinfo;
-            var actor = GenActor();
             prefab.Processing(actor, state);
             state.Reset();
             ObjectCache.Set(state);
-
+            
             return actor;
         }
 

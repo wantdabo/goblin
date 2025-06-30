@@ -24,7 +24,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(SkillLauncher),
             typeof(Bullet),
             typeof(Buff),
-            typeof(Killer),
+            typeof(SilentMercy),
             typeof(Facade),
             typeof(StepEnd),
             typeof(RILSync),

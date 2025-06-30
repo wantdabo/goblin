@@ -22,7 +22,7 @@ namespace Goblin.Misc
             return new ()
             {
                 { "出生", STATE_DEFINE.BORN },
-                { "死亡", STATE_DEFINE.DEAD },
+                { "死亡", STATE_DEFINE.DEATH },
                 { "待机", STATE_DEFINE.IDLE },
                 { "移动", STATE_DEFINE.MOVE },
                 { "跳跃", STATE_DEFINE.JUMP },
