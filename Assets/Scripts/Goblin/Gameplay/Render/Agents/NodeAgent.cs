@@ -40,7 +40,6 @@ namespace Goblin.Gameplay.Render.Agents
             go.transform.SetParent(root.transform);
 
             WatchRIL<RIL_SPATIAL>(OnRILSpatial);
-            WatchRIL<RIL_MOTION>(OnRILMotion);
         }
 
         protected override void OnReset()
@@ -53,34 +52,7 @@ namespace Goblin.Gameplay.Render.Agents
 
         private void OnRILSpatial(RIL_SPATIAL ril)
         {
-            ShouldBeChange();
-        }
-        
-        private void OnRILMotion(RIL_MOTION ril)
-        {
-            ShouldBeChange();
-        }
-
-        /// <summary>
-        /// 是否需要改变状态
-        /// </summary>
-        private void ShouldBeChange()
-        {
-            if (false == world.rilbucket.SeekRIL<RIL_MOTION>(actor, out var ril))
-            {
-                ChangeStatus(ChaseStatus.Chasing);
-                return;
-            }
-            
-            switch (ril.motion)
-            {
-                case MOTION_DEFINE.MOTION:
-                    ChangeStatus(ChaseStatus.Chasing);
-                    break;
-                case MOTION_DEFINE.POSITION:
-                    Flash();
-                    break;
-            }   
+            ChangeStatus(ChaseStatus.Chasing);
         }
 
         protected override bool OnArrived()

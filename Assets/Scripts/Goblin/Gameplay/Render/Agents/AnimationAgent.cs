@@ -53,6 +53,8 @@ namespace Goblin.Gameplay.Render.Agents
         
         protected override void OnReady()
         {
+            cfgname = null;
+            animcfg = null;
             animancer = null;
             animstate = null;
             preplayename = null;
@@ -66,6 +68,8 @@ namespace Goblin.Gameplay.Render.Agents
 
         protected override void OnReset()
         {
+            cfgname = null;
+            animcfg = null;
             animancer = null;
             animstate = null;
             preplayename = null;

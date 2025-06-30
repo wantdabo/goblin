@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: 100001
   animationstates:
-  - state: 2
-    name: Ani_Idle
   - state: 3
+    name: Ani_Idle
+  - state: 4
     name: Ani_Run
   animationmixs:
   - name: Ani_Idle

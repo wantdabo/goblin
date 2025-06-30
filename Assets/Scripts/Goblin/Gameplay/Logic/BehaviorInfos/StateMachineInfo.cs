@@ -22,12 +22,14 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         
         protected override void OnReady()
         {
-            current = STATE_DEFINE.IDLE;
+            current = STATE_DEFINE.NONE;
+            last = STATE_DEFINE.NONE;
         }
 
         protected override void OnReset()
         {
-            current = STATE_DEFINE.IDLE;
+            current = STATE_DEFINE.NONE;
+            last = STATE_DEFINE.NONE;
         }
 
         protected override BehaviorInfo OnClone()

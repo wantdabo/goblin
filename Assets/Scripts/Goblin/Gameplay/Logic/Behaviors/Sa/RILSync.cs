@@ -59,7 +59,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Translator<SpatialTranslator, SpatialInfo>();
             Translator<StateMachineTranslator, StateMachineInfo>();
             Translator<ActorTranslator, StageInfo>();
-            Translator<MotionTranslator, MotionInfo>();
             Translator<FacadeModelTranslator, FacadeInfo>();
             Translator<FacadeAnimationTranslator, FacadeInfo>();
             Translator<FacadeEffectTranslator, FacadeInfo>();

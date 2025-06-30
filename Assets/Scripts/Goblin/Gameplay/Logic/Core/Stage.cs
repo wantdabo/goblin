@@ -277,6 +277,10 @@ namespace Goblin.Gameplay.Logic.Core
                 // 入座
                 seat.Sitdown(player.seat, hero);
                 
+                // TODO 临时添加, 记得删除
+                // 后续要走 Born 流程
+                if (SeekBehavior(hero, out StateMachine machine)) machine.TryChangeState(STATE_DEFINE.IDLE);
+                
                 // TODO 记得删除
                 // 添加测试 Buff
                 buff.AddBuff(hero, 1000001, 1, 10);

@@ -111,7 +111,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 }
                 else if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)
                 {
-                    statemachine.ChangeState(STATE_DEFINE.IDLE);
+                    statemachine.ChangeState(STATE_DEFINE.NONE);
                 }
             }
         }

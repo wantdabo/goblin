@@ -17,12 +17,11 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter((uint pipelineid, uint index) identity, EffectData data, FlowInfo flowinfo)
         {
             base.OnEnter(identity, data, flowinfo);
-
+            if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
             var pipeline = PipelineDataReader.Read(identity.pipelineid);
             if (null == pipeline) return;
             if (false == pipeline.Query(identity.index, out var instruct)) return;
-            
-            if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
+
             facade.CreateEffect(new EffectInfo
             {
                 effect = data.effect,

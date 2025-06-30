@@ -51,6 +51,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <returns>YES/NO</returns>
         private bool QueryPassState(byte state)
         {
+            if (STATE_DEFINE.NONE == info.current) return true;
             if (STATE_DEFINE.PASSES.TryGetValue(info.current, out var passes) && passes.Contains(state))
             {
                 return true;
