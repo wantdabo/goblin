@@ -81,17 +81,17 @@ namespace Goblin.Gameplay.Render.Agents
                 RecycleModel();
                 return;
             }
-            
             if (model == facademodel.model) return;
+            
+            var node = world.EnsureAgent<NodeAgent>(actor);
+            if (null == node || null == node.go) return;
             
             RecycleModel();
             model = facademodel.model;
             if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
             res = modelinfo.Res;
-            
             go = ObjectPool.Get<GameObject>(res);
             if (null == go) go = world.engine.gameres.location.LoadModelSync(res);
-            var node = world.EnsureAgent<NodeAgent>(actor);
             go.transform.SetParent(node.go.transform, false);
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
