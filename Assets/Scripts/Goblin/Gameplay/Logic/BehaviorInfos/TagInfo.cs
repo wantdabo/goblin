@@ -13,11 +13,11 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// <summary>
         /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
         /// </summary>
-        public Dictionary<ushort, int> tags { get; set; }
+        public Dictionary<ushort, long> tags { get; set; }
 
         protected override void OnReady()
         {
-            tags = ObjectCache.Ensure<Dictionary<ushort, int>>();
+            tags = ObjectCache.Ensure<Dictionary<ushort, long>>();
         }
 
         protected override void OnReset()

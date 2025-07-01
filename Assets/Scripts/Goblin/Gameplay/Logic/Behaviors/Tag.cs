@@ -27,7 +27,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="key">标签 KEY</param>
         /// <param name="tag">标签值</param>
         /// <returns>YES/NO</returns>
-        public bool Get(ushort key, out int tag)
+        public bool Get(ushort key, out long tag)
         {
             return info.tags.TryGetValue(key, out tag);
         }
@@ -38,10 +38,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// <param name="key">标签 KEY</param>
         public void Rmv(ushort key)
         {
-            if (false == info.tags.TryGetValue(key, out var tag)) return;
+            if (false == info.tags.TryGetValue(key, out long tag)) return;
             
             info.tags.Remove(key);
-            DiffTag(key, tag, RIL_DEFINE.DIFF_DEL);
         }
         
         /// <summary>
@@ -53,23 +52,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (info.tags.ContainsKey(key)) info.tags.Remove(key);
             info.tags.Add(key, tag);
-            
-            DiffTag(key, tag, RIL_DEFINE.DIFF_NEW);
-        }
-
-        /// <summary>
-        /// 标签差异
-        /// </summary>
-        /// <param name="key">标签 KEY</param>
-        /// <param name="tag">标签值</param>
-        /// <param name="token">RIL 差异标记</param>
-        private void DiffTag(ushort key, int tag, byte token)
-        {
-            var diff = ObjectCache.Ensure<RIL_DIFF_TAG>();
-            diff.Ready(actor, token);
-            diff.key = key;
-            diff.tag = tag;
-            stage.Diff(diff);
         }
     }
 }
