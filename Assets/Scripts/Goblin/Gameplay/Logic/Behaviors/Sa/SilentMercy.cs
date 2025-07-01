@@ -24,7 +24,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="actor">ActorID</param>
         public void Dead(ulong actor)
         {
-            info.deadths.Add(actor);
         }
         
         /// <summary>
@@ -34,10 +33,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="victim">被杀者 ID</param>
         public void Kill(ulong killer, ulong victim)
         {
-            if (info.deadths.Contains(victim)) return;
+            if (info.victimrelations.ContainsKey(victim)) return;
             if (false == info.killrelations.TryGetValue(killer, out var victims)) info.killrelations.Add(killer, victims = ObjectCache.Ensure<List<ulong>>());
             victims.Add(victim);
-
+            info.victimrelations.Add(victim, killer);
+            
             Dead(actor);
         }
 
@@ -47,10 +47,24 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="killer">杀手 ID</param>
         /// <param name="victims">被杀者列表</param>
         /// <returns>YES/NO</returns>
-        public bool Query(ulong killer, out List<ulong> victims)
+        public bool AskKiller(ulong killer, out List<ulong> victims)
         {
             victims = default;
             if (false == info.killrelations.TryGetValue(killer, out victims)) return false;
+            
+            return true;
+        }
+        
+        /// <summary>
+        /// 查询被杀关系
+        /// </summary>
+        /// <param name="victim">被杀者 ID</param>
+        /// <param name="killer">杀手 ID</param>
+        /// <returns>YES/NO</returns>
+        public bool AskVictim(ulong victim, out ulong killer)
+        {
+            killer = default;
+            if (false == info.victimrelations.TryGetValue(victim, out killer)) return false;
             
             return true;
         }
@@ -65,8 +79,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 ObjectCache.Set(kv.Value);
             }
             info.killrelations.Clear();
-            
-            info.deadths.Clear();
         }
     }
 }
