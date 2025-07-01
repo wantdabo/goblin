@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
@@ -65,16 +67,26 @@ namespace Goblin.Gameplay.Logic.Prefabs.Common
         /// 预制类型
         /// </summary>
         public abstract byte type { get; }
+
         /// <summary>
-        /// 出生
+        /// 设置职业生涯
         /// </summary>
-        public virtual bool born { get; }
-        
+        /// <param name="actor">ActorID</param>
+        /// <param name="bornpipelines">出生管线</param>
+        /// <param name="deathpipelines">死亡管线</param>
+        public void Career(ulong actor, List<int> bornpipelines, List<int> deathpipelines)
+        {
+            var career = stage.AddBehaviorInfo<CareerInfo>(actor);
+            foreach (var bornpipeline in bornpipelines) career.bornpipelines.Add((uint)bornpipeline);
+            foreach (var deathpipeline in deathpipelines) career.deathpipelines.Add((uint)deathpipeline);
+            
+            stage.silentmercy.Born(actor);
+        }
+
         protected override void OnProcessing(ulong actor, PrefabInfoState state)
         {
             if (stage.SeekBehavior(actor, out Tag tag)) tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
             OnProcessing(actor, (state as PrefabInfoState<T>).info);
-            if (born) stage.silentmercy.Born(actor);            
         }
 
         /// <summary>

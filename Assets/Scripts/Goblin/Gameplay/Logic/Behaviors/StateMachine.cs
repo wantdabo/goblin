@@ -11,6 +11,14 @@ namespace Goblin.Gameplay.Logic.Behaviors
     public class StateMachine : Behavior<StateMachineInfo>
     {
         /// <summary>
+        /// 中断状态
+        /// </summary>
+        public void Break()
+        {
+            ChangeState(STATE_DEFINE.NONE);
+        }
+
+        /// <summary>
         /// 尝试切换状态
         /// </summary>
         /// <param name="state">状态</param>
