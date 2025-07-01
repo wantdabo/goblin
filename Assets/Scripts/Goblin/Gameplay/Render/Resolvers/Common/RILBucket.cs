@@ -108,7 +108,6 @@ namespace Goblin.Gameplay.Render.Resolvers.Common
                 crossdict.Add(id, cross);
             }
             
-            Cross<TagCross>(RIL_DEFINE.TAG);
             Cross<ActorCross>(RIL_DEFINE.ACTOR);
             Cross<FacadeEffectCross>(RIL_DEFINE.FACADE_EFFECT);
         }

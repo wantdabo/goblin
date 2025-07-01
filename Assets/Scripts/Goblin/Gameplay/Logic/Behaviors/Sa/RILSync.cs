@@ -54,7 +54,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Translator<StageTranslator, StageInfo>();
             Translator<TickerTranslator, TickerInfo>();
             Translator<SeatTranslator, SeatInfo>();
-            Translator<TagTranslator, TagInfo>();
             Translator<AttributeTranslator, AttributeInfo>();
             Translator<SpatialTranslator, SpatialInfo>();
             Translator<StateMachineTranslator, StateMachineInfo>();
