@@ -212,7 +212,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     ril.Ready(rmvbehaviorinfo.actor, 0);
                     ril.loss = translator.id;
                     
-                    translator.RmvOnceActor(rmvbehaviorinfo.actor);
+                    translator.RmvOnce(rmvbehaviorinfo.actor);
                     if (hashcodedict.ContainsKey((rmvbehaviorinfo.actor, translator.id))) 
                     {
                         hashcodedict.Remove((rmvbehaviorinfo.actor, translator.id), out _);
