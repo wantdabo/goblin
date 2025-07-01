@@ -70,7 +70,7 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// 清除只处理一次的渲染指令标记
         /// </summary>
         /// <param name="actor">ActorID</param>
-        public virtual void RmvOnceActor(ulong actor)
+        public virtual void RmvOnce(ulong actor)
         {
         }
         
@@ -114,9 +114,9 @@ namespace Goblin.Gameplay.Logic.Translators.Common
             ObjectCache.Set(rileds);
         }
 
-        public override void RmvOnceActor(ulong actor)
+        public override void RmvOnce(ulong actor)
         {
-            base.RmvOnceActor(actor);
+            base.RmvOnce(actor);
             if (false == once) return;
             if (rileds.Contains(actor)) rileds.Remove(actor);
         }
