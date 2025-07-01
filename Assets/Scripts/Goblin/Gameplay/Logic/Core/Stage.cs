@@ -454,26 +454,14 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         private void Recycle()
         {
-            // 收集需要回收 Behavior/BehaviorInfo
-            foreach (var rmvactor in cache.rmvactors)
-            {
-                if (SeekBehaviors(rmvactor, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
-                if (SeekBehaviorInfos(rmvactor, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
-            }
-            
-            var rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
-            var rmvbehaviorinfos = ObjectCache.Ensure<List<BehaviorInfo>>();
-            rmvbehaviors.AddRange(cache.rmvbehaviors);
-            rmvbehaviorinfos.AddRange(cache.rmvbehaviorinfos);
-            
             // 拆解 Behavior
-            foreach (var rmvbehavior in rmvbehaviors)
+            foreach (var rmvbehavior in cache.rmvbehaviors)
             {
                 rmvbehavior.Disassemble();
             }
 
             // 回收 Behavior
-            foreach (var rmvbehavior in rmvbehaviors)
+            foreach (var rmvbehavior in cache.rmvbehaviors)
             {
                 if (cache.behaviors.TryGetValue(rmvbehavior.GetType(), out var behaviors))
                 {
@@ -493,7 +481,7 @@ namespace Goblin.Gameplay.Logic.Core
             }
             
             // 重置 BehaviorInfo
-            foreach (var rmvbehaviorinfo in rmvbehaviorinfos)
+            foreach (var rmvbehaviorinfo in cache.rmvbehaviorinfos)
             {
                 if (cache.behaviorinfodict.TryGetValue(rmvbehaviorinfo.actor, out var behaviorinfodict))
                 {
@@ -508,11 +496,6 @@ namespace Goblin.Gameplay.Logic.Core
                 rmvbehaviorinfo.Reset();
                 ObjectCache.Set(rmvbehaviorinfo);
             }
-            
-            rmvbehaviors.Clear();
-            ObjectCache.Set(rmvbehaviors);
-            rmvbehaviorinfos.Clear();
-            ObjectCache.Set(rmvbehaviorinfos);
             
             // 回收清理
             foreach (var rmvactor in cache.rmvactors)
@@ -576,6 +559,8 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (cache.rmvactors.Contains(id)) return;
             cache.rmvactors.Add(id);
+            if (SeekBehaviors(id, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
+            if (SeekBehaviorInfos(id, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
 
             eventor.Tell(new ActorRmvEvent { actor = id });
             DiffActor(id, RIL_DEFINE.DIFF_DEL);
@@ -600,7 +585,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="behaviorinfo">BehaviorInfo</param>
         public void RmvBehaviorInfo(BehaviorInfo behaviorinfo)
         {
-            if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) return;
+            if (false == cache.Valid(behaviorinfo)) return;
             cache.rmvbehaviorinfos.Add(behaviorinfo);
         }
 
@@ -631,163 +616,8 @@ namespace Goblin.Gameplay.Logic.Core
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
             AddBehavior<Tag>(actor).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
         }
-
-        /// <summary>
-        /// 获取指定类型的所有 Behavior 列表
-        /// </summary>
-        /// <param name="behaviors">所有 Behavior 列表</param>
-        /// <typeparam name="T">Behavior 类型</typeparam>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviors<T>(out List<T> behaviors) where T : Behavior
-        {
-            behaviors = GetBehaviors<T>();
         
-            return null != behaviors;
-        }
-        
-        /// <summary>
-        /// 获取指定类型的所有 Behavior 列表
-        /// </summary>
-        /// <typeparam name="T">Behavior 类型</typeparam>
-        /// <returns>所有 Behavior 列表</returns>
-        public List<T> GetBehaviors<T>() where T : Behavior
-        {
-            var type = typeof(T);
-            if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
-
-            // 根据类型去获取所有 Behavior
-            var result = ObjectCache.Ensure<List<T>>();
-            foreach (var behavior in list) result.Add(behavior as T);
-            cache.tickendrecyclelist.Add(result);
-
-            return result;
-        }
-        
-        /// <summary>
-        /// 获取指定类型的所有 Behavior 列表
-        /// </summary>
-        /// <param name="type">Behavior 类型</param>
-        /// <param name="behaviors">所有 Behavior 列表</param>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviors(Type type, out List<Behavior> behaviors)
-        {
-            behaviors = GetBehaviors(type);
-        
-            return null != behaviors;
-        }
-
-        /// <summary>
-        /// 获取指定类型的所有 Behavior 列表
-        /// <param name="type">Behavior 类型</param>
-        /// </summary>
-        /// <returns>所有 Behavior 列表</returns>
-        public List<Behavior> GetBehaviors(Type type)
-        {
-            if (false == cache.behaviors.TryGetValue(type, out var behaviors) || 0 == behaviors.Count) return default;
-            List<Behavior> result = default;
-            foreach (var behavior in behaviors)
-            {
-                if (cache.rmvbehaviors.Contains(behavior)) continue;
-                if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
-                result.Add(behavior);
-            }
-            cache.tickendrecyclelist.Add(result);
-
-            return result;
-        }
-
-        /// <summary>
-        /// 获取 Actor 所有 Behavior 列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="behaviors">Behavior 列表</param>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviors(ulong id, out List<Behavior> behaviors)
-        {
-            behaviors = GetBehaviors(id);
-        
-            return null != behaviors;
-        }
-
-        /// <summary>
-        /// 获取 Actor 所有 Behavior 列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <returns>Behavior 列表</returns>
-        public List<Behavior> GetBehaviors(ulong id)
-        {
-            if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
-
-            // 根据 ActorID 获取所有 Behavior
-            var result = ObjectCache.Ensure<List<Behavior>>();
-            foreach (var type in types)
-            {
-                if (false == SeekBehavior(id, type, out var behavior)) continue;
-                result.Add(behavior);
-            }
-            cache.tickendrecyclelist.Add(result);
-
-            return result;
-        }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="behavior">Behavior</param>
-        /// <typeparam name="T">Behavior 类型</typeparam>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehavior<T>(ulong id, out T behavior) where T : Behavior, new()
-        {
-            behavior = GetBehavior<T>(id);
-        
-            return null != behavior;
-        }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="type">Behavior 类型</param>
-        /// <param name="behavior">Behavior</param>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehavior(ulong id, Type type, out Behavior behavior)
-        {
-            behavior = GetBehavior(id, type);
-        
-            return null != behavior;
-        }
-
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <typeparam name="T">Behavior 类型</typeparam>
-        /// <returns>Behavior</returns>
-        /// <exception cref="Exception">Actor 不存在</exception>
-        public T GetBehavior<T>(ulong id) where T : Behavior
-        {
-            var behavior = GetBehavior(id, typeof(T));
-            if (null == behavior) return default;
-
-            return behavior as T;
-        }
-        
-        /// <summary>
-        /// 获取 Behavior
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="type">Behavior 类型</param>
-        /// <returns>Behavior</returns>
-        public Behavior GetBehavior(ulong id, Type type)
-        {
-            if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
-            if (false == dict.TryGetValue(type, out var behavior)) return default;
-            
-            return behavior;
-        }
-
-        /// <summary>
+                /// <summary>
         /// 添加 Behavior
         /// </summary>
         /// <param name="id">ActorID</param>
@@ -831,109 +661,7 @@ namespace Goblin.Gameplay.Logic.Core
 
             return behavior;
         }
-
-        /// <summary>
-        /// 获取指定类型的所有 BehaviorInfo 列表
-        /// </summary>
-        /// <param name="infos">BehaviorInfo 列表</param>
-        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviorInfos<T>(out List<T> infos) where T : BehaviorInfo
-        {
-            infos = GetBehaviorInfos<T>();
         
-            return null != infos;
-        }
-
-        /// <summary>
-        /// 获取指定类型的所有 BehaviorInfo 列表
-        /// </summary>
-        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-        /// <returns>BehaviorInfo 列表</returns>
-        /// 
-        public List<T> GetBehaviorInfos<T>() where T : BehaviorInfo
-        {
-            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
-            var result = ObjectCache.Ensure<List<T>>();
-            foreach (var i in infos) result.Add(i as T);
-            cache.tickendrecyclelist.Add(result);
-
-            return result;
-        }
-
-        /// <summary>
-        /// 获取 Actor 所有 BehaviorInfo 列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="infos">BehaviorInfo 列表</param>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviorInfos(ulong id, out List<BehaviorInfo> infos)
-        {
-            infos = GetBehaviorInfos(id);
-        
-            return null != infos;
-        }
-
-        /// <summary>
-        /// 获取 Actor 所有 BehaviorInfo 列表
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <returns>BehaviorInfo 列表</returns>
-        public List<BehaviorInfo> GetBehaviorInfos(ulong id)
-        {
-            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
-            List<BehaviorInfo> result = default;
-            foreach (var behaviorinfo in dict.Values)
-            {
-                if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) continue;
-                
-                if (null == result) result = ObjectCache.Ensure<List<BehaviorInfo>>();
-                result.Add(behaviorinfo);
-            }
-
-            if (null != result)
-            {
-                // 排序
-                result.Sort((a, b) =>
-                {
-                    return a.actor.CompareTo(b.actor);
-                });
-                cache.tickendrecyclelist.Add(result);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 获取 BehaviorInfo
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <param name="info">BehaviorInfo</param>
-        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-        /// <returns>YES/NO</returns>
-        public bool SeekBehaviorInfo<T>(ulong id, out T info) where T : BehaviorInfo
-        {
-            info = GetBehaviorInfo<T>(id);
-            
-            return null != info;
-        }
-
-        /// <summary>
-        /// 获取 BehaviorInfo
-        /// </summary>
-        /// <param name="id">ActorID</param>
-        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
-        /// <returns>BehaviorInfo</returns>
-        public T GetBehaviorInfo<T>(ulong id) where T : BehaviorInfo
-        {
-            if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
-            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
-            if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
-            if (cache.rmvbehaviorinfos.Contains(behaviorinfo)) return default;
-
-            return (T)behaviorinfo;
-        }
-
         /// <summary>
         /// 添加 BehaviorInfo
         /// </summary>
@@ -956,6 +684,287 @@ namespace Goblin.Gameplay.Logic.Core
             behaviorinfo.Ready(id);
             
             return behaviorinfo;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <param name="behaviors">所有 Behavior 列表</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors<T>(out List<T> behaviors, bool force = false) where T : Behavior
+        {
+            behaviors = GetBehaviors<T>(force);
+        
+            return null != behaviors;
+        }
+        
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>所有 Behavior 列表</returns>
+        public List<T> GetBehaviors<T>(bool force = false) where T : Behavior
+        {
+            var type = typeof(T);
+            if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
+
+            // 根据类型去获取所有 Behavior
+            var result = ObjectCache.Ensure<List<T>>();
+            foreach (var behavior in list)
+            {
+                if (false == force && cache.rmvbehaviors.Contains(behavior)) continue;
+                result.Add(behavior as T);
+            }
+            cache.AutoRecycle(result);
+
+            return result;
+        }
+        
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// </summary>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behaviors">所有 Behavior 列表</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(Type type, out List<Behavior> behaviors, bool force = false)
+        {
+            behaviors = GetBehaviors(type, force);
+        
+            return null != behaviors;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 Behavior 列表
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// </summary>
+        /// <returns>所有 Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(Type type, bool force = false)
+        {
+            if (false == cache.behaviors.TryGetValue(type, out var behaviors) || 0 == behaviors.Count) return default;
+            List<Behavior> result = default;
+            foreach (var behavior in behaviors)
+            {
+                if (false == force && cache.rmvbehaviors.Contains(behavior)) continue;
+                if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
+                result.Add(behavior);
+            }
+            cache.AutoRecycle(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="behaviors">Behavior 列表</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviors(ulong id, out List<Behavior> behaviors, bool force = false)
+        {
+            behaviors = GetBehaviors(id, force);
+        
+            return null != behaviors;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 Behavior 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>Behavior 列表</returns>
+        public List<Behavior> GetBehaviors(ulong id, bool force = false)
+        {
+            if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
+
+            // 根据 ActorID 获取所有 Behavior
+            var result = ObjectCache.Ensure<List<Behavior>>();
+            foreach (var type in types)
+            {
+                if (false == SeekBehavior(id, type, out var behavior, force)) continue;
+                result.Add(behavior);
+            }
+            cache.AutoRecycle(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="behavior">Behavior</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehavior<T>(ulong id, out T behavior, bool force = false) where T : Behavior, new()
+        {
+            behavior = GetBehavior<T>(id, force);
+        
+            return null != behavior;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="behavior">Behavior</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehavior(ulong id, Type type, out Behavior behavior, bool force = false)
+        {
+            behavior = GetBehavior(id, type, force);
+        
+            return null != behavior;
+        }
+
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">Behavior 类型</typeparam>
+        /// <returns>Behavior</returns>
+        /// <exception cref="Exception">Actor 不存在</exception>
+        public T GetBehavior<T>(ulong id, bool force = false) where T : Behavior
+        {
+            var behavior = GetBehavior(id, typeof(T), force);
+            if (null == behavior) return default;
+
+            return behavior as T;
+        }
+        
+        /// <summary>
+        /// 获取 Behavior
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="type">Behavior 类型</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>Behavior</returns>
+        public Behavior GetBehavior(ulong id, Type type, bool force = false)
+        {
+            if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(type, out var behavior)) return default;
+            if (false == force && cache.rmvbehaviors.Contains(behavior)) return default;
+            
+            return behavior;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="infos">BehaviorInfo 列表</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfos<T>(out List<T> infos, bool force = false) where T : BehaviorInfo
+        {
+            infos = GetBehaviorInfos<T>(force);
+        
+            return null != infos;
+        }
+
+        /// <summary>
+        /// 获取指定类型的所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo 列表</returns>
+        /// 
+        public List<T> GetBehaviorInfos<T>(bool force = false) where T : BehaviorInfo
+        {
+            if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
+            var result = ObjectCache.Ensure<List<T>>();
+            foreach (var i in infos)
+            {
+                if (false == force && false == cache.Valid(i)) continue;
+                result.Add(i as T);
+            }
+            cache.AutoRecycle(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="infos">BehaviorInfo 列表</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfos(ulong id, out List<BehaviorInfo> infos, bool force = false)
+        {
+            infos = GetBehaviorInfos(id, force);
+        
+            return null != infos;
+        }
+
+        /// <summary>
+        /// 获取 Actor 所有 BehaviorInfo 列表
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <returns>BehaviorInfo 列表</returns>
+        public List<BehaviorInfo> GetBehaviorInfos(ulong id, bool force = false)
+        {
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
+            List<BehaviorInfo> result = default;
+            foreach (var behaviorinfo in dict.Values)
+            {
+                if (false == force && false == cache.Valid(behaviorinfo)) continue;
+                if (null == result) result = ObjectCache.Ensure<List<BehaviorInfo>>();
+                result.Add(behaviorinfo);
+            }
+
+            if (null != result)
+            {
+                // 排序
+                result.Sort((a, b) =>
+                {
+                    return a.actor.CompareTo(b.actor);
+                });
+                cache.AutoRecycle(result);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="info">BehaviorInfo</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>YES/NO</returns>
+        public bool SeekBehaviorInfo<T>(ulong id, out T info, bool force = false) where T : BehaviorInfo
+        {
+            info = GetBehaviorInfo<T>(id, force);
+            
+            return null != info;
+        }
+
+        /// <summary>
+        /// 获取 BehaviorInfo
+        /// </summary>
+        /// <param name="id">ActorID</param>
+        /// <param name="force">强制, 包含 Rmv</param>
+        /// <typeparam name="T">BehaviorInfo 类型</typeparam>
+        /// <returns>BehaviorInfo</returns>
+        public T GetBehaviorInfo<T>(ulong id, bool force = false) where T : BehaviorInfo
+        {
+            if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
+            if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
+            if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
+            if (false == force && false == cache.Valid(behaviorinfo)) return default;
+
+            return (T)behaviorinfo;
         }
         
         /// <summary>
@@ -1001,7 +1010,7 @@ namespace Goblin.Gameplay.Logic.Core
             /// </summary>
             public List<BehaviorInfo> rmvbehaviorinfos { get; set; }
             /// <summary>
-            /// TickEnd 回收 Behavior/BehaviorInfo 列表
+            /// TickEnd 自动回收 List 列表
             /// </summary>
             public List<IList> tickendrecyclelist { get; set; }
         
@@ -1021,7 +1030,47 @@ namespace Goblin.Gameplay.Logic.Core
 
                 return this;
             }
-        
+
+            /// <summary>
+            /// 验证 Actor 是否有效
+            /// </summary>
+            /// <param name="actor">ActorID</param>
+            /// <returns>YES/NO</returns>
+            public bool Valid(ulong actor)
+            {
+                return false == rmvactors.Contains(actor);
+            }
+
+            /// <summary>
+            /// 验证 Behavior 是否有效
+            /// </summary>
+            /// <param name="behavior">Behavior</param>
+            /// <returns>YES/NO</returns>
+            public bool Valid(Behavior behavior)
+            {
+                return false == rmvbehaviors.Contains(behavior);
+            }
+
+            /// <summary>
+            /// 验证 BehaviorInfo 是否有效
+            /// </summary>
+            /// <param name="behaviorinfo">BehaviorInfo</param>
+            /// <returns>YES/NO</returns>
+            public bool Valid(BehaviorInfo behaviorinfo)
+            {
+                return false == rmvbehaviorinfos.Contains(behaviorinfo);
+            }
+
+            /// <summary>
+            /// 添加 TickEnd 自动回收 List 列表
+            /// </summary>
+            /// <param name="list">List 列表</param>
+            public void AutoRecycle(IList list)
+            {
+                if (tickendrecyclelist.Contains(list)) return;
+                tickendrecyclelist.Add(list);
+            }
+
             /// <summary>
             /// 销毁 StageCache
             /// </summary>

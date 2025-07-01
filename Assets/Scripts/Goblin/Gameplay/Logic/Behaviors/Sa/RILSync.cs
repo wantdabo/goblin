@@ -200,7 +200,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             foreach (var rmvbehaviorinfo in stage.cache.rmvbehaviorinfos)
             {
-                if (stage.SeekBehavior(rmvbehaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
+                if (stage.SeekBehavior(rmvbehaviorinfo.actor, out Tag tag, true) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                 {
                     if (val == ACTOR_DEFINE.FLOW) continue;
                 }
@@ -247,8 +247,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         // 对每个类型的所有行为信息进行处理
                         Parallel.ForEach(kv.Value, behaviorinfo =>
                         {
-                            if (stage.cache.rmvactors.Contains(behaviorinfo.actor)) return;
-                            if (stage.cache.rmvbehaviorinfos.Contains(behaviorinfo)) return;
+                            if (false == stage.cache.Valid(behaviorinfo.actor)) return;
+                            if (false == stage.cache.Valid(behaviorinfo)) return;
                             if (stage.SeekBehavior(behaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                             {
                                 if (val == ACTOR_DEFINE.FLOW) return;

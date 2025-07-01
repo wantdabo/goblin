@@ -130,7 +130,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// BehaviorInfo 快捷访问
         /// </summary>
-        public T info => stage.GetBehaviorInfo<T>(actor);
+        public T info => stage.GetBehaviorInfo<T>(actor, true);
 
         protected override void OnAddBindingInfo()
         {
