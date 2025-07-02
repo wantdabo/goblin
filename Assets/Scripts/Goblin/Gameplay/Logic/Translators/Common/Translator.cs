@@ -95,14 +95,14 @@ namespace Goblin.Gameplay.Logic.Translators.Common
         /// <summary>
         /// 处理了的 RIL ActorID 列表
         /// </summary>
-        private List<ulong> rileds { get; set; }
+        private HashSet<ulong> rileds { get; set; }
 
         protected override void OnLoad()
         {
             base.OnLoad();
             if (false == once) return;
             
-            rileds = RILCache.Ensure<List<ulong>>();
+            rileds = RILCache.Ensure<HashSet<ulong>>();
         }
 
         protected override void OnUnload()
