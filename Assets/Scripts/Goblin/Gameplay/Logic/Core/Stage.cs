@@ -712,13 +712,18 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == cache.behaviors.TryGetValue(type, out var list) || 0 == list.Count) return default;
 
             // 根据类型去获取所有 Behavior
-            var result = ObjectCache.Ensure<List<T>>();
+            List<T> result = default;
             foreach (var behavior in list)
             {
                 if (false == force && false == cache.Valid(behavior)) continue;
+                if (null == result)
+                {
+                    result = ObjectCache.Ensure<List<T>>();
+                    cache.AutoRecycle(result);
+                }
+
                 result.Add(behavior as T);
             }
-            cache.AutoRecycle(result);
 
             return result;
         }
@@ -750,10 +755,13 @@ namespace Goblin.Gameplay.Logic.Core
             foreach (var behavior in behaviors)
             {
                 if (false == force && false == cache.Valid(behavior)) continue;
-                if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
+                if (null == result)
+                {
+                    result = ObjectCache.Ensure<List<Behavior>>();
+                    cache.AutoRecycle(result);
+                }
                 result.Add(behavior);
             }
-            cache.AutoRecycle(result);
 
             return result;
         }
@@ -783,13 +791,18 @@ namespace Goblin.Gameplay.Logic.Core
             if (false == info.behaviortypes.TryGetValue(id, out var types)) return default;
 
             // 根据 ActorID 获取所有 Behavior
-            var result = ObjectCache.Ensure<List<Behavior>>();
+            List<Behavior> result = default;
             foreach (var type in types)
             {
                 if (false == SeekBehavior(id, type, out var behavior, force)) continue;
+                if (null == result)
+                {
+                    result = ObjectCache.Ensure<List<Behavior>>();
+                    cache.AutoRecycle(result);
+                }
+
                 result.Add(behavior);
             }
-            cache.AutoRecycle(result);
 
             return result;
         }
@@ -880,13 +893,18 @@ namespace Goblin.Gameplay.Logic.Core
         public List<T> GetBehaviorInfos<T>(bool force = false) where T : BehaviorInfo
         {
             if (false == info.behaviorinfos.TryGetValue(typeof(T), out var infos)) return default;
-            var result = ObjectCache.Ensure<List<T>>();
+            List<T> result = default;
             foreach (var i in infos)
             {
                 if (false == force && false == cache.Valid(i)) continue;
+                if (null == result)
+                {
+                    result = ObjectCache.Ensure<List<T>>();
+                    cache.AutoRecycle(result);
+                }
+
                 result.Add(i as T);
             }
-            cache.AutoRecycle(result);
 
             return result;
         }
