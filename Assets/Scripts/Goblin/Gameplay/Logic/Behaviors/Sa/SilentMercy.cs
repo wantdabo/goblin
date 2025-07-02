@@ -62,7 +62,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             victims.Add(victim);
             info.victimrelations.Add(victim, killer);
             
-            Dead(actor);
+            Dead(victim);
         }
 
         /// <summary>
