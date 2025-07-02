@@ -9,6 +9,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// ActorID
         /// </summary>
         public ulong actor { get; private set; }
+        public bool active { get; set; }
 
         /// <summary>
         /// 初始化
@@ -32,7 +33,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 克隆
         /// </summary>
-        /// <returns></returns>
+        /// <returns>BehaviorInfo</returns>
         public BehaviorInfo Clone()
         {
             return OnClone();
@@ -49,7 +50,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 克隆, 克隆一个新的 BehaviorInfo
         /// </summary>
-        /// <returns></returns>
+        /// <returns>BehaviorInfo</returns>
         protected abstract BehaviorInfo OnClone();
     }
 }
