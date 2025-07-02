@@ -154,10 +154,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             switch (collider.shape)
             {
                 case COLLISION_DEFINE.COLLIDER_BOX:
-                    result = OverlapBox(spatial.position, FPQuaternion.Euler(spatial.euler), collider.box.size, collider.layer);
+                    result = OverlapBox(spatial.position + collider.box.offset, FPQuaternion.Euler(spatial.euler), collider.box.size, collider.layer);
                     break;
                 case COLLISION_DEFINE.COLLIDER_SPHERE:
-                    result = OverlapSphere(spatial.position, collider.sphere.radius, collider.layer);
+                    result = OverlapSphere(spatial.position + collider.sphere.offset, collider.sphere.radius, collider.layer);
                     break;
             }
 
