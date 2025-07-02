@@ -86,6 +86,18 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         }
 
         /// <summary>
+        /// 检查管线激活状态
+        /// </summary>
+        /// <param name="flow">管线 Actor</param>
+        /// <returns>Active (YES/NO)</returns>
+        public bool CheckFlowActive(ulong flow)
+        {
+            if (false == stage.SeekBehaviorInfo(flow, out FlowInfo flowinfo)) return false;
+            
+            return flowinfo.active;
+        }
+
+        /// <summary>
         /// 生成管线
         /// </summary>
         /// <param name="owner">管线拥有者</param>
