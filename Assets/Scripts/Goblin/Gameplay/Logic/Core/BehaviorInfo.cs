@@ -9,6 +9,9 @@ namespace Goblin.Gameplay.Logic.Core
         /// ActorID
         /// </summary>
         public ulong actor { get; private set; }
+        /// <summary>
+        /// 是否激活
+        /// </summary>
         public bool active { get; set; }
 
         /// <summary>
@@ -18,6 +21,7 @@ namespace Goblin.Gameplay.Logic.Core
         public void Ready(ulong actor)
         {
             this.actor = actor;
+            this.active = true;
             OnReady();
         }
 
@@ -28,6 +32,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             OnReset();
             this.actor = 0;
+            this.active = false;
         }
 
         /// <summary>

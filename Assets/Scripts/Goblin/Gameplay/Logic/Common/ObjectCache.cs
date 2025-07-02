@@ -64,8 +64,6 @@ namespace Goblin.Gameplay.Logic.Common
                 dict.Add(key, queue);
             }
             
-            if (queue.Contains(obj)) throw new Exception($"Object {key} already exists.");
-
             queue.Enqueue(obj);
         }
     }

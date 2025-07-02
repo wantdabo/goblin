@@ -201,6 +201,7 @@ namespace Goblin.Gameplay.Logic.Core
             
             // 回收 Actor
             cache.rmvactors.Clear();
+            cache.rmvactorset.Clear();
             cache.rmvactors.AddRange(info.actors);
             Recycle();
             
@@ -309,6 +310,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (null == snapshot) return;
             if (snapshot.frame == info.frame) return;
             cache.rmvactors.Clear();
+            cache.rmvactorset.Clear();
             cache.rmvactors.AddRange(info.actors);
             Recycle();
             
@@ -518,6 +520,7 @@ namespace Goblin.Gameplay.Logic.Core
             }
             
             cache.rmvactors.Clear();
+            cache.rmvactorset.Clear();
             cache.rmvbehaviors.Clear();
             cache.rmvbehaviorinfos.Clear();
             
@@ -557,8 +560,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="id">ActorID</param>
         public void RmvActor(ulong id)
         {
-            if (cache.rmvactors.Contains(id)) return;
+            if (false == cache.Valid(id)) return;
             cache.rmvactors.Add(id);
+            cache.rmvactorset.Add(id);
+
             if (SeekBehaviors(id, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
             if (SeekBehaviorInfos(id, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
 
@@ -573,7 +578,8 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="behavior">Behavior</param>
         public void RmvBehavior(Behavior behavior)
         {
-            if (false == cache.Valid(behavior)) return;
+            if (false == behavior.active) return;
+            behavior.active = false;
             behavior.RmvBindingInfo();
             cache.rmvbehaviors.Add(behavior);
         }
@@ -585,7 +591,8 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="behaviorinfo">BehaviorInfo</param>
         public void RmvBehaviorInfo(BehaviorInfo behaviorinfo)
         {
-            if (false == cache.Valid(behaviorinfo)) return;
+            if (false == behaviorinfo.active) return;
+            behaviorinfo.active = false;
             cache.rmvbehaviorinfos.Add(behaviorinfo);
         }
 
@@ -612,7 +619,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <exception cref="Exception">Actor 已存在</exception>
         private void AddActor(ulong actor)
         {
-            if (false == info.actors.Contains(actor)) info.actors.Add(actor);
+            info.actors.Add(actor);
             // 默认携带 Tag 行为. 写入 ActorType 为 NONE
             AddBehavior<Tag>(actor).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
         }
@@ -650,14 +657,12 @@ namespace Goblin.Gameplay.Logic.Core
             dict.Add(type, behavior);
             list.Add(behavior);
             
-            behavior.Initialize(this, id);
+            behavior.Assemble(this, id);
             // 排序
             list.Sort((a, b) =>
             {
                 return a.actor.CompareTo(b.actor);
             });
-            behavior.AddBindingInfo();
-            behavior.Assemble();
 
             return behavior;
         }
@@ -715,7 +720,7 @@ namespace Goblin.Gameplay.Logic.Core
             List<T> result = default;
             foreach (var behavior in list)
             {
-                if (false == force && false == cache.Valid(behavior)) continue;
+                if (false == force && false == behavior.active) continue;
                 if (null == result)
                 {
                     result = ObjectCache.Ensure<List<T>>();
@@ -754,7 +759,7 @@ namespace Goblin.Gameplay.Logic.Core
             List<Behavior> result = default;
             foreach (var behavior in behaviors)
             {
-                if (false == force && false == cache.Valid(behavior)) continue;
+                if (false == force && false == behavior.active) continue;
                 if (null == result)
                 {
                     result = ObjectCache.Ensure<List<Behavior>>();
@@ -864,7 +869,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(type, out var behavior)) return default;
-            if (false == force && false == cache.Valid(behavior)) return default;
+            if (false == force && false == behavior.active) return default;
             
             return behavior;
         }
@@ -896,7 +901,7 @@ namespace Goblin.Gameplay.Logic.Core
             List<T> result = default;
             foreach (var i in infos)
             {
-                if (false == force && false == cache.Valid(i)) continue;
+                if (false == force && false == i.active) continue;
                 if (null == result)
                 {
                     result = ObjectCache.Ensure<List<T>>();
@@ -935,7 +940,7 @@ namespace Goblin.Gameplay.Logic.Core
             List<BehaviorInfo> result = default;
             foreach (var behaviorinfo in dict.Values)
             {
-                if (false == force && false == cache.Valid(behaviorinfo)) continue;
+                if (false == force && false == behaviorinfo.active) continue;
                 if (null == result) result = ObjectCache.Ensure<List<BehaviorInfo>>();
                 result.Add(behaviorinfo);
             }
@@ -980,7 +985,7 @@ namespace Goblin.Gameplay.Logic.Core
             if (id == sa && typeof(T) == typeof(StageInfo)) return info as T;
             if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(typeof(T), out var behaviorinfo)) return default;
-            if (false == force && false == cache.Valid(behaviorinfo)) return default;
+            if (false == force && false == behaviorinfo.active) return default;
 
             return (T)behaviorinfo;
         }
@@ -1020,6 +1025,10 @@ namespace Goblin.Gameplay.Logic.Core
             /// </summary>
             public List<ulong> rmvactors { get; set; }
             /// <summary>
+            /// Rmv Actor 集合, 用于快速验证 Actor 是否有效
+            /// </summary>
+            public HashSet<ulong> rmvactorset { get; set; }
+            /// <summary>
             /// Rmv Behavior列表
             /// </summary>
             public List<Behavior> rmvbehaviors { get; set; }
@@ -1042,6 +1051,7 @@ namespace Goblin.Gameplay.Logic.Core
                 behaviors = ObjectCache.Ensure<Dictionary<Type, List<Behavior>>>();
                 behaviorinfodict = ObjectCache.Ensure<Dictionary<ulong, Dictionary<Type, BehaviorInfo>>>();
                 rmvactors = ObjectCache.Ensure<List<ulong>>();
+                rmvactorset = ObjectCache.Ensure<HashSet<ulong>>();
                 rmvbehaviors = ObjectCache.Ensure<List<Behavior>>();
                 rmvbehaviorinfos = ObjectCache.Ensure<List<BehaviorInfo>>();
                 tickendrecyclelist = ObjectCache.Ensure<List<IList>>();
@@ -1056,27 +1066,7 @@ namespace Goblin.Gameplay.Logic.Core
             /// <returns>YES/NO</returns>
             public bool Valid(ulong actor)
             {
-                return false == rmvactors.Contains(actor);
-            }
-
-            /// <summary>
-            /// 验证 Behavior 是否有效
-            /// </summary>
-            /// <param name="behavior">Behavior</param>
-            /// <returns>YES/NO</returns>
-            public bool Valid(Behavior behavior)
-            {
-                return false == rmvbehaviors.Contains(behavior);
-            }
-
-            /// <summary>
-            /// 验证 BehaviorInfo 是否有效
-            /// </summary>
-            /// <param name="behaviorinfo">BehaviorInfo</param>
-            /// <returns>YES/NO</returns>
-            public bool Valid(BehaviorInfo behaviorinfo)
-            {
-                return false == rmvbehaviorinfos.Contains(behaviorinfo);
+                return false == rmvactorset.Contains(actor);
             }
 
             /// <summary>
@@ -1105,6 +1095,9 @@ namespace Goblin.Gameplay.Logic.Core
             
                 rmvactors.Clear();
                 ObjectCache.Set(rmvactors);
+                
+                rmvactorset.Clear();
+                ObjectCache.Set(rmvactorset);
                 
                 rmvbehaviors.Clear();
                 ObjectCache.Set(rmvbehaviors);

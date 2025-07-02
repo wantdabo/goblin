@@ -47,11 +47,11 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         {
             { BORN, new List<byte>() { } },
             { DEATH, new List<byte>() { } },
-            { IDLE, new List<byte>() { MOVE, FALL, CASTING } },
-            { MOVE, new List<byte>() { IDLE, FALL, CASTING } },
-            { JUMP, new List<byte>() { FALL, CASTING } },
-            { FALL, new List<byte>() { IDLE, CASTING } },
-            { CASTING, new List<byte>() { } }
+            { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING } },
+            { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING } },
+            { JUMP, new List<byte>() { DEATH, FALL, CASTING } },
+            { FALL, new List<byte>() { DEATH, IDLE, CASTING } },
+            { CASTING, new List<byte>() { DEATH } }
         };
     }
 }

@@ -16,23 +16,22 @@ namespace Goblin.Gameplay.Logic.Core
         /// ActorID
         /// </summary>
         public ulong actor { get; private set; }
-
         /// <summary>
-        /// 初始化
+        /// 是否激活
         /// </summary>
-        /// <param name="stage">场景</param>
-        /// <param name="actor">ActorID</param>
-        public void Initialize(Stage stage, ulong actor)
-        {
-            this.stage = stage;
-            this.actor = actor;
-        }
+        public bool active { get; set; }
 
         /// <summary>
         /// 组装
         /// </summary>
-        public void Assemble()
+        /// <param name="stage">场景</param>
+        /// <param name="actor">ActorID</param>
+        public void Assemble(Stage stage, ulong actor)
         {
+            this.stage = stage;
+            this.actor = actor;
+            this.active = true;
+            AddBindingInfo();
             OnAssemble();
         }
         
@@ -41,6 +40,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public void Disassemble()
         {
+            this.active = false;
             OnDisassemble();
         }
         

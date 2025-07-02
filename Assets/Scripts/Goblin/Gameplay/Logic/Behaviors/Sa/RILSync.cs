@@ -248,7 +248,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         Parallel.ForEach(kv.Value, behaviorinfo =>
                         {
                             if (false == stage.cache.Valid(behaviorinfo.actor)) return;
-                            if (false == stage.cache.Valid(behaviorinfo)) return;
+                            if (false == behaviorinfo.active) return;
                             if (stage.SeekBehavior(behaviorinfo.actor, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var val))
                             {
                                 if (val == ACTOR_DEFINE.FLOW) return;
