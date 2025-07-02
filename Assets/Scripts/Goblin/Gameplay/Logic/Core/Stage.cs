@@ -573,7 +573,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="behavior">Behavior</param>
         public void RmvBehavior(Behavior behavior)
         {
-            if (cache.rmvbehaviors.Contains(behavior)) return;
+            if (false == cache.Valid(behavior)) return;
             behavior.RmvBindingInfo();
             cache.rmvbehaviors.Add(behavior);
         }
@@ -715,7 +715,7 @@ namespace Goblin.Gameplay.Logic.Core
             var result = ObjectCache.Ensure<List<T>>();
             foreach (var behavior in list)
             {
-                if (false == force && cache.rmvbehaviors.Contains(behavior)) continue;
+                if (false == force && false == cache.Valid(behavior)) continue;
                 result.Add(behavior as T);
             }
             cache.AutoRecycle(result);
@@ -749,7 +749,7 @@ namespace Goblin.Gameplay.Logic.Core
             List<Behavior> result = default;
             foreach (var behavior in behaviors)
             {
-                if (false == force && cache.rmvbehaviors.Contains(behavior)) continue;
+                if (false == force && false == cache.Valid(behavior)) continue;
                 if (null == result) result = ObjectCache.Ensure<List<Behavior>>();
                 result.Add(behavior);
             }
@@ -851,7 +851,7 @@ namespace Goblin.Gameplay.Logic.Core
         {
             if (false == cache.behaviordict.TryGetValue(id, out var dict)) return default;
             if (false == dict.TryGetValue(type, out var behavior)) return default;
-            if (false == force && cache.rmvbehaviors.Contains(behavior)) return default;
+            if (false == force && false == cache.Valid(behavior)) return default;
             
             return behavior;
         }
