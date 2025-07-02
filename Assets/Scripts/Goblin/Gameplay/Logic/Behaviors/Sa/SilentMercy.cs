@@ -4,6 +4,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Sa
 {
@@ -20,11 +21,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (false == stage.SeekBehaviorInfo(actor, out CareerInfo career)) return;
             if (0 == career.bornpipelines.Count) return;
-            info.borns.Add((actor, stage.flow.GenPipeline(actor, career.bornpipelines)));
             
+            info.borns.Add((actor, stage.flow.GenPipeline(actor, career.bornpipelines)));
             // 切换至出生状态
-            if (stage.SeekBehavior(actor, out StateMachine machine)) return;
-            machine.TryChangeState(STATE_DEFINE.BORN);
+            if (stage.SeekBehavior(actor, out StateMachine machine)) machine.ChangeState(STATE_DEFINE.BORN);
         }
 
         /// <summary>
@@ -33,13 +33,21 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="actor">ActorID</param>
         public void Dead(ulong actor)
         {
-            if (false == stage.SeekBehaviorInfo(actor, out CareerInfo career)) return;
-            if (0 == career.deathpipelines.Count) return;
-            info.deadths.Add((actor, stage.flow.GenPipeline(actor, career.deathpipelines)));
+            if (false == stage.SeekBehaviorInfo(actor, out CareerInfo career))
+            {
+                stage.RmvActor(actor);
+                return;
+            }
+
+            if (0 == career.deathpipelines.Count)
+            {
+                stage.RmvActor(actor);
+                return;
+            }
             
+            info.deadths.Add((actor, stage.flow.GenPipeline(actor, career.deathpipelines)));
             // 切换至死亡状态
-            if (stage.SeekBehavior(actor, out StateMachine machine)) return;
-            machine.TryChangeState(STATE_DEFINE.DEATH);
+            if (stage.SeekBehavior(actor, out StateMachine machine)) machine.ChangeState(STATE_DEFINE.DEATH);
         }
         
         /// <summary>
@@ -83,6 +91,23 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (false == info.victimrelations.TryGetValue(victim, out killer)) return false;
             
             return true;
+        }
+
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            foreach (var born in info.borns)
+            {
+                if (false == stage.flow.CheckFlowActive(born.flow)) continue;
+                if (stage.SeekBehavior(born.actor, out StateMachine machine) && STATE_DEFINE.BORN == machine.info.current) machine.Break();
+            }
+            
+            foreach (var death in info.deadths)
+            {
+                if (false == stage.flow.CheckFlowActive(death.flow)) continue;
+                if (stage.SeekBehavior(death.actor, out StateMachine machine) && STATE_DEFINE.DEATH == machine.info.current) machine.Break();
+                stage.RmvActor(death.actor);
+            }
         }
 
         protected override void OnEndTick()
