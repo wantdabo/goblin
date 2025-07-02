@@ -121,10 +121,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
             clone.timescale = timescale;
             clone.increment = increment;
 
-            foreach (var actor in actors)
-            {
-                clone.actors.Add(actor);
-            }
+            clone.actors.AddRange(actors);
             
             foreach (var kv in behaviortypes)
             {
