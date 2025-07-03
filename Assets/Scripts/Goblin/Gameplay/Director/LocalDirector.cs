@@ -185,8 +185,8 @@ namespace Goblin.Gameplay.Director
                     switch (collider.shape)
                     {
                         case COLLISION_DEFINE.COLLIDER_BOX:
-                            var center = (spatial.position + collider.box.offset).ToVector3();
                             var rotation = Quaternion.Euler(spatial.euler.ToVector3());
+                            var center = spatial.position.ToVector3() + rotation * collider.box.offset.ToVector3();
                             var size = collider.box.size.ToVector3();
                             DrawPhysRendererFeature.DrawPhysPass.DrawCube(center, rotation, size, color);
                             break;

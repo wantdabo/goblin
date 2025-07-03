@@ -150,7 +150,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (false == stage.SeekBehaviorInfo(collider.actor, out SpatialInfo spatial)) return default;
 
-            HitResult result = new();
+            HitResult result = default;
             switch (collider.shape)
             {
                 case COLLISION_DEFINE.COLLIDER_BOX:
@@ -172,10 +172,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 }
                 result.colliders.Clear();
                 ObjectCache.Set(result.colliders);
-                
                 result.colliders = colliders;
+                
+                stage.cache.AutoRecycle(result.colliders);
             }
-            stage.cache.AutoRecycle(result.colliders);
 
             return result;
         }
@@ -224,10 +224,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (false == hit) continue;
                 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders)
+                {
+                    result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                    stage.cache.AutoRecycle(result.colliders);
+                }
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            stage.cache.AutoRecycle(result.colliders);
 
             return result;
         }
@@ -275,10 +278,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (false == hit) continue;
 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders)
+                {
+                    result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                    stage.cache.AutoRecycle(result.colliders);
+                }
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            stage.cache.AutoRecycle(result.colliders);
 
             return result;
         }
@@ -322,10 +328,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (false == hit) continue;
                 
                 result.hit = hit;
-                if (null == result.colliders) result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                if (null == result.colliders)
+                {
+                    result.colliders = ObjectCache.Ensure<List<(ulong id, FPVector3 point, FPVector3 normal, FP penetration)>>();
+                    stage.cache.AutoRecycle(result.colliders);
+                }
                 result.colliders.Add((collider.actor, point, normal, penetration));
             }
-            stage.cache.AutoRecycle(result.colliders);
             
             return result;
         }
@@ -386,8 +395,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             normal = FPVector3.zero;
             penetration = FP.MaxValue;
             
-            apos += a.offset;
-            bpos += b.offset;
+            apos += arot * a.offset;
+            bpos += brot * b.offset;
 
             // 获取两个立方体的轴向向量
             var aaxes = GetAxes(arot);
@@ -515,7 +524,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             point = FPVector3.zero;
             normal = FPVector3.zero;
             penetration = FP.MaxValue; // 初始值设为最大
-            apos += a.offset;
+            apos += arot * a.offset;
             bpos += b.offset;
 
             // 获取 BoxShape 的局部坐标轴（右、上、前）并返回它们在世界坐标中的方向
