@@ -55,7 +55,7 @@ namespace Goblin.Gameplay.Logic.Core
         /// 通过包装 Actor 的形式使用
         /// 所以 Stage 也是 Actor, 但它是一个特殊的 Actor, 它的 ID 是 ulong.MaxValue
         /// </summary>
-        public ulong sa { get; private set; } = ulong.MaxValue;
+        public ulong sa => ulong.MaxValue;
         /// <summary>
         /// Stage 当前的运行状态
         /// </summary>
@@ -103,47 +103,47 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// 配置
         /// </summary>
-        public Config cfg => GetBehavior<Config>(sa);
+        public Config cfg => GetBehavior<Config>(sa, true);
         /// <summary>
         /// 事件订阅派发者
         /// </summary>
-        public Eventor eventor => GetBehavior<Eventor>(sa);
+        public Eventor eventor => GetBehavior<Eventor>(sa, true);
         /// <summary>
         /// 座位
         /// </summary>
-        public Seat seat => GetBehavior<Seat>(sa);
+        public Seat seat => GetBehavior<Seat>(sa, true);
         /// <summary>
         /// 随机数
         /// </summary>
-        public Random random => GetBehavior<Random>(sa);
+        public Random random => GetBehavior<Random>(sa, true);
         /// <summary>
         /// 属性数值计算
         /// </summary>
-        public AttributeCalc attrc => GetBehavior<AttributeCalc>(sa);
+        public AttributeCalc attrc => GetBehavior<AttributeCalc>(sa, true);
         /// <summary>
         /// 碰撞检测
         /// </summary>
-        public Detection detection => GetBehavior<Detection>(sa);
+        public Detection detection => GetBehavior<Detection>(sa, true);
         /// <summary>
         /// 输入指令
         /// </summary>
-        public Captain captain => GetBehavior<Captain>(sa);
+        public Captain captain => GetBehavior<Captain>(sa, true);
         /// <summary>
         /// 管线流
         /// </summary>
-        public Flow flow => GetBehavior<Flow>(sa);
+        public Flow flow => GetBehavior<Flow>(sa, true);
         /// <summary>
         /// Buff
         /// </summary>
-        public Buff buff => GetBehavior<Buff>(sa);
+        public Buff buff => GetBehavior<Buff>(sa, true);
         /// <summary>
         /// 生与死
         /// </summary>
-        public SilentMercy silentmercy => GetBehavior<SilentMercy>(sa);
+        public SilentMercy silentmercy => GetBehavior<SilentMercy>(sa, true);
         /// <summary>
         /// 渲染指令同步
         /// </summary>
-        public RILSync rilsync => GetBehavior<RILSync>(sa);
+        public RILSync rilsync => GetBehavior<RILSync>(sa, true);
         /// <summary>
         /// 预制创建器集合
         /// </summary>
@@ -203,6 +203,7 @@ namespace Goblin.Gameplay.Logic.Core
             cache.rmvactors.Clear();
             cache.rmvactorset.Clear();
             cache.rmvactors.AddRange(info.actors);
+            foreach (var actor in info.actors) ActorToRecycle(actor);
             Recycle();
             
             // 卸载 Prefabs
@@ -312,6 +313,7 @@ namespace Goblin.Gameplay.Logic.Core
             cache.rmvactors.Clear();
             cache.rmvactorset.Clear();
             cache.rmvactors.AddRange(info.actors);
+            foreach (var actor in info.actors) ActorToRecycle(actor);
             Recycle();
             
             info.Reset();
@@ -327,14 +329,13 @@ namespace Goblin.Gameplay.Logic.Core
                 }
             }
             
-            foreach (var id in info.actors)
+            foreach (var actor in info.actors)
             {
-                AddActor(id);
-                if (false == info.behaviortypes.TryGetValue(id, out var types)) continue;
+                if (false == info.behaviortypes.TryGetValue(actor, out var types)) continue;
                 foreach (var type in types)
                 {
-                    if (SeekBehavior(id, type, out _)) continue;
-                    AddBehavior(id, type);
+                    if (SeekBehavior(actor, type, out _)) continue;
+                    AddBehavior(actor, type);
                 }
             }
             
@@ -532,6 +533,23 @@ namespace Goblin.Gameplay.Logic.Core
             }
             cache.tickendrecyclelist.Clear();
         }
+        
+        /// <summary>
+        /// 将 Actor 回收
+        /// </summary>
+        /// <param name="actor">ActorID</param>
+        /// <returns>YES/NO</returns>
+        private bool ActorToRecycle(ulong actor)
+        {
+            if (false == cache.Valid(actor)) return false;
+            cache.rmvactors.Add(actor);
+            cache.rmvactorset.Add(actor);
+
+            if (SeekBehaviors(actor, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
+            if (SeekBehaviorInfos(actor, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
+
+            return true;
+        }
 
         /// <summary>
         /// 根据预制创建器构建一个 Actor
@@ -557,18 +575,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// 移除 Actor
         /// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Cache.RmvActors)
         /// </summary>
-        /// <param name="id">ActorID</param>
-        public void RmvActor(ulong id)
+        /// <param name="actor">ActorID</param>
+        public void RmvActor(ulong actor)
         {
-            if (false == cache.Valid(id)) return;
-            cache.rmvactors.Add(id);
-            cache.rmvactorset.Add(id);
-
-            if (SeekBehaviors(id, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
-            if (SeekBehaviorInfos(id, out var behaviorinfos)) foreach (var behaviorinfo in behaviorinfos) RmvBehaviorInfo(behaviorinfo);
-
-            eventor.Tell(new ActorRmvEvent { actor = id });
-            DiffActor(id, RIL_DEFINE.DIFF_DEL);
+            if (false == ActorToRecycle(actor)) return;
+            
+            eventor.Tell(new ActorRmvEvent { actor = actor });
+            DiffActor(actor, RIL_DEFINE.DIFF_DEL);
         }
 
         /// <summary>
@@ -993,13 +1006,13 @@ namespace Goblin.Gameplay.Logic.Core
         /// <summary>
         /// Actor 差异
         /// </summary>
-        /// <param name="id">ActorID</param>
+        /// <param name="actor">ActorID</param>
         /// <param name="token">RIL 差异标记</param>
-        private void DiffActor(ulong id, byte token)
+        private void DiffActor(ulong actor, byte token)
         {
             var diff = ObjectCache.Ensure<RIL_DIFF_ACTOR>();
             diff.Ready(sa, token);
-            diff.target = id;
+            diff.target = actor;
             Diff(diff);
         }
         
