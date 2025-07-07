@@ -110,6 +110,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 owner = owner,
                 pipelines = pipelines,
             });
+            RunPipeline(stage.GetBehaviorInfo<FlowInfo>(actor));
 
             return actor;
         }
