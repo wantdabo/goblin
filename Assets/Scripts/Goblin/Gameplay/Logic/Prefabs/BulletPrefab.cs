@@ -56,14 +56,14 @@ namespace Goblin.Gameplay.Logic.Prefabs
             spatial.position = info.spatial.position;
             spatial.euler = info.spatial.euler;
             spatial.scale = info.spatial.scale;
-
-            var pipelines = ObjectCache.Ensure<List<uint>>();
-            pipelines.AddRange(info.pipelines);
-            bullet.flow = stage.flow.GenPipeline(actor, pipelines);
             
             // TODO 临时加模型, 记得删除
             var facade = stage.AddBehavior<Facade>(actor);
             facade.SetModel(200001);
+            
+            var pipelines = ObjectCache.Ensure<List<uint>>();
+            pipelines.AddRange(info.pipelines);
+            bullet.flow = stage.flow.GenPipeline(actor, pipelines);
         }
     }
 }
