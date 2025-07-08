@@ -60,10 +60,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa
         /// </summary>
         public FP timescale { get; set; }
         /// <summary>
-        /// 帧步长, 结果包含 timescale 影响
-        /// </summary>
-        public FP tick => GAME_DEFINE.LOGIC_TICK * timescale;
-        /// <summary>
         /// Actor 自增 ID
         /// </summary>
         public ulong increment { get; set; }

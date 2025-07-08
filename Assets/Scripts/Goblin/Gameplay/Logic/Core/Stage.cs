@@ -418,10 +418,10 @@ namespace Goblin.Gameplay.Logic.Core
         public void Step()
         {
             if (StageState.Ticking != info.state) return;
-            
+            var tick = info.timescale * GAME_DEFINE.LOGIC_TICK;
             // 帧号递增 & 时间流逝
             info.frame++;
-            info.elapsed += info.tick;
+            info.elapsed += tick;
 
             // Tick 驱动
             foreach (var type in TICK_DEFINE.TICK_TYPE_LIST)
@@ -431,11 +431,11 @@ namespace Goblin.Gameplay.Logic.Core
                 {
                     if (SeekBehaviorInfo(behavior.actor, out TickerInfo ticker))
                     {
-                        behavior.Tick(ticker.timescale * info.tick);
+                        behavior.Tick(ticker.timescale * tick);
                         continue;
                     }
 
-                    behavior.Tick(info.tick);
+                    behavior.Tick(tick);
                 }
             }
 
