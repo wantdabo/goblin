@@ -17,12 +17,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
     /// </summary>
     public class Eventor : Behavior<EventorInfo>
     {
-        private Dictionary<Type, List<(uint index, Delegate action)>> eventdict { get; set; }
+        private Dictionary<Type, List<(uint index, Behavior behavior, Delegate action)>> eventdict { get; set; }
         
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            eventdict = ObjectCache.Ensure<Dictionary<Type, List<(uint index, Delegate)>>>();
+            eventdict = ObjectCache.Ensure<Dictionary<Type, List<(uint index, Behavior behavior, Delegate)>>>();
         }
 
         protected override void OnDisassemble()
@@ -48,7 +48,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
             var behaviorhash = behavior.GetHashCode();
             if (false == info.indexes.TryGetValue((behaviorhash, behavior.actor), out var index)) return;
-            funcs.Remove((index, func));
+            funcs.Remove((index, behavior, func));
             info.indexes.Remove((behaviorhash, behavior.actor));
         }
         
@@ -61,7 +61,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (false == eventdict.TryGetValue(typeof(T), out var funcs))
             {
-                funcs = ObjectCache.Ensure<List<(uint index, Delegate)>>();
+                funcs = ObjectCache.Ensure<List<(uint index, Behavior behavior, Delegate)>>();
                 eventdict.Add(typeof(T), funcs);
             }
 
@@ -75,8 +75,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 notsort = true;
             }
 
-            if (funcs.Contains((index, func))) return;
-            funcs.Add((index, func));
+            if (funcs.Contains((index, behavior, func))) return;
+            funcs.Add((index, behavior, func));
             
             if (notsort) return;
             funcs.Sort((funca, funcb) => funca.index.CompareTo(funcb.index));
@@ -91,7 +91,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (null == eventdict) return;
             if (false == eventdict.TryGetValue(typeof(T), out var funcs)) return;
-            for (int i = funcs.Count - 1; i >= 0; i--) (funcs[i].action as Action<T>).Invoke(e);
+            for (int i = funcs.Count - 1; i >= 0; i--)
+            {
+                var func = funcs[i];
+                if (false == func.behavior.active) continue;
+                
+                (func.action as Action<T>).Invoke(e);
+            }
         }
     }
 }
