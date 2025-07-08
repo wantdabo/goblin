@@ -42,9 +42,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         }
         
         /// <summary>
-        /// 管线内未满足条件的指令列表
+        /// 管线内未满足条件的指令列表 - 后台
         /// </summary>
-        private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexes { get; set; }
+        private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexebacks { get; set; }
+        /// <summary>
+        /// 管线内未满足条件的指令列表 - 前台
+        /// </summary>
+        private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexefronts { get; set; }
         /// <summary>
         /// 指令条件检查器列表
         /// </summary>
@@ -57,7 +61,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         protected override void OnAssemble()
         {
             base.OnAssemble();
-            insidenotexes = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
+            insidenotexebacks = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
+            insidenotexefronts = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
             Checkers();
             Executors();
         }
@@ -65,8 +70,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
-            insidenotexes.Clear();
-            ObjectCache.Set(insidenotexes);
+            insidenotexebacks.Clear();
+            ObjectCache.Set(insidenotexebacks);
+            
+            insidenotexefronts.Clear();
+            ObjectCache.Set(insidenotexefronts);
             
             foreach (var kv in checkers)
             {
@@ -196,7 +204,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     if (false == CheckCondition(instruct.conditions, flowinfo))
                     {
                         // 如果指令不满足条件, 则记录下来, 以便后续处理
-                        insidenotexes.Add((pipelineid, index, instruct, flowinfo));
+                        insidenotexebacks.Add((pipelineid, index, instruct, flowinfo));
                         continue;
                     }
                     
@@ -233,15 +241,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             base.OnEndTick();
             // 处理指令条件不满足的指令
-            foreach (var notexe in insidenotexes)
-            {
-                if (false == notexe.flowinfo.active) continue;
-                if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
-                ExecuteInstruct(ExecuteInstrucType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
-                ExecuteInstruct(ExecuteInstrucType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
-            }
-            insidenotexes.Clear();
-            
+            InsideNotExeToExecute();
             // 检查管线信息, 如果管线的时间线超过了管线的长度, 则结束管线
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos)
@@ -254,6 +254,23 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 
                 if (flowinfo.active && flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
             }
+        }
+        
+        /// <summary>
+        /// 处理管线内未满足条件的指令
+        /// </summary>
+        private void InsideNotExeToExecute()
+        {
+            (insidenotexefronts, insidenotexebacks) = (insidenotexebacks, insidenotexefronts);
+            foreach (var notexe in insidenotexefronts)
+            {
+                if (false == notexe.flowinfo.active) continue;
+                if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
+                ExecuteInstruct(ExecuteInstrucType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstrucType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+            }
+            insidenotexefronts.Clear();
+            if (0 != insidenotexebacks.Count) InsideNotExeToExecute();
         }
 
         /// <summary>
