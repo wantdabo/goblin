@@ -26,7 +26,7 @@ namespace Goblin.Gameplay.Logic.Common
         /// </summary>
         private static readonly Dictionary<Type, Dictionary<int, Queue<object>>> capacitypool = new();
         
-                /// <summary>
+        /// <summary>
         /// 查询容器对象池对应的队列
         /// </summary>
         /// <param name="capacity">容量</param>
