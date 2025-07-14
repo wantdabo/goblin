@@ -220,8 +220,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             foreach (var flowinfo in flowinfos)
             {
-                if (false == stage.cache.Valid(flowinfo.owner)) continue;
                 if (false == flowinfo.active) continue;
+                if (false == stage.cache.Valid(flowinfo.owner))
+                {
+                    EndPipeline(flowinfo);
+                    continue;
+                }
                 
                 // 叠加持有者的 timescale
                 FP flowtick = tick;
