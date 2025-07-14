@@ -224,7 +224,7 @@ namespace Kowtow.Math {
         /// Returns the smallest integral value that is greater than or equal to the specified number.
         /// </summary>
         public static FP Ceiling(FP value) {
-            return value;
+            return FP.Ceiling(value);
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace Kowtow.Math {
         public static FP SmoothDamp(FP current, FP target, ref FP currentVelocity, FP smoothTime)
         {
             FP deltaTime = FP.EN2;
-            FP positiveInfinity = -FP.MaxValue;
+            FP positiveInfinity = FP.MaxValue;
             return SmoothDamp(current, target, ref currentVelocity, smoothTime, positiveInfinity, deltaTime);
         }
 
