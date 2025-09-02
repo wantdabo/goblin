@@ -34,7 +34,7 @@
 #### <span id="qstart">1.快速开始</span>
 - 1.开发环境中，需要安装 [**.NET8+**](#installenv.1)
 - 2.安装，Unity，推荐使用 Unity 2021+ 以上版本
-- 3.安装，ODIN，推荐使用 3.3.1.13+ 以上版本
+- 3.安装，Odin，推荐使用 3.3.1.13+ 以上版本
 - 4.此时，如果上述步骤，顺利完成。使用 Unity 打开此项目即可
 #### <span id="installenv">2.环境配置</span>
 - ##### <span id="installenv.1">1.安装 .NET</span>
