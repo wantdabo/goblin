@@ -24,11 +24,30 @@
 
 ### TODO
 - Gameplay 战斗模块
-  - 2025-10-01
-    - 新增输入/帧指令
-    - 技能管线
-    - 碰撞检测
-    - Goblin 技能编辑器 2.0
+  - 2026-01-01
+    - 死亡流程
+    - 状态机重新梳理完善
+    - 顿帧
+    - 受击效果
+    - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
+    - 音效支持
+    - Flow 支持事件执行
+    - Goblin 2.6.5
+
+  - 2026-05-01
+    - Info 转 RIL 自动化
+    - 所有 Clone 自动化
+    - InstructData 数据调整，Timeline 自适应
+    - RIL 合并（同 RIL 使用最新帧号，避免浪费性能在旧 RIL）
+    - 引入主观 RIL 传输, 因为兼容状态同步，有一些数据，状态同步需要缓存。
+    - 但是主观推送
+    - 帧同步的渲染层开发过程中，需要包含。兼容两套。
+    - Scripting 扩展 Lua
+    
+- UI 模块
+  - 2026-01-01
+    - mvvm 构造
+    - UI 工作流（美术限制）
 ---
 
 #### <span id="qstart">1.快速开始</span>
