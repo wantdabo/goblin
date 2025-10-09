@@ -21,6 +21,7 @@ namespace Goblin.Misc
         {
             return new ()
             {
+                { "无", STATE_DEFINE.NONE },
                 { "出生", STATE_DEFINE.BORN },
                 { "死亡", STATE_DEFINE.DEATH },
                 { "待机", STATE_DEFINE.IDLE },
@@ -30,7 +31,20 @@ namespace Goblin.Misc
                 { "技能", STATE_DEFINE.CASTING },
             };
         }
-        
+
+        /// <summary>
+        /// 获取移除 Actor 定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(移除 Actor 目标)</returns>
+        public static ValueDropdownList<byte> GetRmvActorDefine()
+        {
+            return new()
+            {
+                {"自身", RMV_ACTOR_DEFINE.SELF},
+                {"拥有者", RMV_ACTOR_DEFINE.OWNER},
+            };
+        }
+
         /// <summary>
         /// 获取特效类型定义下拉列表
         /// </summary>

@@ -33,5 +33,13 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 碰撞指令
         /// </summary>
         public const ushort COLLISION = 7;
+        /// <summary>
+        /// 移除 Actor 指令
+        /// </summary>
+        public const ushort RMV_ACTOR = 8;
+        /// <summary>
+        /// 状态变化指令
+        /// </summary>
+        public const ushort CHANGE_STATE = 9;
     }
 }

@@ -165,7 +165,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         public DamageInfo DischargeDamage(ulong actor, DamageInfo damage)
         {
             if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return damage;
-
+            // TODO 抗性计算，例如护甲、魔法、暴击、闪避
+            
             return damage;
         }
 
@@ -192,9 +193,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             
             if (result.after > 0) return;
             stage.silentmercy.Kill(from, to);
-            
-            // TODO 后续要改成真正的死亡流程
-            stage.RmvActor(to);
         }
     }
 }

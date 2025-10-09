@@ -92,6 +92,12 @@ namespace Goblin.Gameplay.Logic.Flows
                     case INSTR_DEFINE.COLLISION:
                         instruct.data = MessagePackSerializer.Deserialize<CollisionData>(rawdata.instrdata[i]);
                         break;
+                    case INSTR_DEFINE.RMV_ACTOR:
+                        instruct.data = MessagePackSerializer.Deserialize<RmvActorData>(rawdata.instrdata[i]);
+                        break;
+                    case INSTR_DEFINE.CHANGE_STATE:
+                        instruct.data = MessagePackSerializer.Deserialize<ChangeStateData>(rawdata.instrdata[i]);
+                        break;
                 }
 
                 instruct.conditions = new List<Condition>();

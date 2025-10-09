@@ -113,6 +113,12 @@ namespace Pipeline.Timeline
                         case INSTR_DEFINE.COLLISION:
                             pipetrack = timelineasset.CreateTrack<PipelineCollisionTrack>();
                             break;
+                        case INSTR_DEFINE.RMV_ACTOR:
+                            pipetrack = timelineasset.CreateTrack<PipelineRmvActorTrack>();
+                            break;
+                        case INSTR_DEFINE.CHANGE_STATE:
+                            pipetrack = timelineasset.CreateTrack<PipelineChangeStateTrack>();
+                            break;
                     }
                     if (null == pipetrack) continue;
 
