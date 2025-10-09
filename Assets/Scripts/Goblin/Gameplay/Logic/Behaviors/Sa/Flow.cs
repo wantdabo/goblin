@@ -229,7 +229,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 
                 // 叠加持有者的 timescale
                 FP flowtick = tick;
+                if (stage.SeekBehaviorInfo(flowinfo.actor, out TickerInfo tickerinfo)) flowtick *= tickerinfo.timescale;
                 if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo ownertickerinfo)) flowtick *= ownertickerinfo.timescale;
+                
                 // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
                 flowinfo.framepass += (flowtick * stage.cfg.fp2int).AsUInt();
                 while (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)

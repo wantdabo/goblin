@@ -39,6 +39,8 @@ namespace Goblin.Gameplay.Logic.Prefabs
             flowinfo.active = true;
             flowinfo.owner = info.owner;
             flowinfo.pipelines.AddRange(info.pipelines);
+
+            stage.AddBehaviorInfo<TickerInfo>(actor);
             
             // 计算管线的时间长度
             foreach (var pipeline in flowinfo.pipelines)

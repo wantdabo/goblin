@@ -27,11 +27,12 @@
   - 2026-01-01
     - 死亡流程 ⭐
     - 状态机重新梳理完善 ⭐
-    - 顿帧
-    - 受击效果
-    - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
-    - 音效支持
     - Flow 支持事件执行
+    - 受击效果
+    - 顿帧
+    - 音效支持
+    - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
+
     - Goblin 2.6.5
 
   - 2026-05-01
