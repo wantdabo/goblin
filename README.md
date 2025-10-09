@@ -25,8 +25,8 @@
 ### TODO
 - Gameplay 战斗模块
   - 2026-01-01
-    - 死亡流程
-    - 状态机重新梳理完善
+    - 死亡流程 ⭐
+    - 状态机重新梳理完善 ⭐
     - 顿帧
     - 受击效果
     - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
