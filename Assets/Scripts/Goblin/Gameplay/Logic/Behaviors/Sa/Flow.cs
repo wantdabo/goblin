@@ -25,7 +25,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <summary>
         /// 指令执行类型
         /// </summary>
-        private enum ExecuteInstrucType
+        private enum ExecuteInstructType
         {
             /// <summary>
             /// 进入
@@ -150,7 +150,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 foreach (var index in indexes)
                 {
                     if (false == data.Query(index, out var instruct)) continue;
-                    ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct, flowinfo);
                 }
                 indexes.Clear();
                 ObjectCache.Set(indexes);
@@ -190,13 +190,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     // 如果不在时间区间内则退出
                     if (false == inside)
                     {
-                        if (isdoing) ExecuteInstruct(ExecuteInstrucType.Exit, pipelineid, index, instruct, flowinfo);
+                        if (isdoing) ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct, flowinfo);
                         continue;
                     }
                     
                     if (instruct.checkonce && isdoing)
                     {
-                        ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct, flowinfo);
                         continue;
                     }
                     
@@ -208,8 +208,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         continue;
                     }
                     
-                    if (false == isdoing) ExecuteInstruct(ExecuteInstrucType.Enter, pipelineid, index, instruct, flowinfo);
-                    ExecuteInstruct(ExecuteInstrucType.Execute, pipelineid, index, instruct, flowinfo);
+                    if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct, flowinfo);
                 }
             }
         }
@@ -272,8 +272,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             {
                 if (false == notexe.flowinfo.active) continue;
                 if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
-                ExecuteInstruct(ExecuteInstrucType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
-                ExecuteInstruct(ExecuteInstrucType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
             }
             insidenotexefronts.Clear();
             if (0 != insidenotexebacks.Count) InsideNotExeToExecute();
@@ -306,21 +306,21 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="instruct">指令</param>
         /// <param name="flowinfo">管线信息</param>
         /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
-        private void ExecuteInstruct(ExecuteInstrucType type, uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)
+        private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)
         {
             if (false == executors.TryGetValue(instruct.data.id, out var executor)) throw new Exception($"id : {instruct.data.id} cannot find executor.");
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
             
             switch (type)
             {
-                case ExecuteInstrucType.Enter:
+                case ExecuteInstructType.Enter:
                     executor.Enter((pipelineid, index), instruct.data, flowinfo);
                     if (false == indexes.Contains(index)) indexes.Add(index);
                     break;
-                case ExecuteInstrucType.Execute:
+                case ExecuteInstructType.Execute:
                     executor.Execute((pipelineid, index), instruct.data, flowinfo);
                     break;
-                case ExecuteInstrucType.Exit:
+                case ExecuteInstructType.Exit:
                     executor.Exit((pipelineid, index), instruct.data, flowinfo);
                     if (indexes.Contains(index)) indexes.Remove(index);
                     break;
