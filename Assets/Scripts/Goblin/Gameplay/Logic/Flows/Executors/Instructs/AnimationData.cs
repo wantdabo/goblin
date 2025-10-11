@@ -21,10 +21,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ValueDropdown("@OdinValueDropdown.GetModelAnimNames(PipelineWorkSpace.worker.model)")]
         [LabelText("动画名称")]
         public string name;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

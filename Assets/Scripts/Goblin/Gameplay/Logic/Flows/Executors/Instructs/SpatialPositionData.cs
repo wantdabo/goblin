@@ -24,10 +24,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
 
         [LabelText("POSITION 变化数据")]
         public IntVector3 position;
-
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

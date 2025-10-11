@@ -21,10 +21,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 子弹运动速度倍率
         /// </summary>
         public int speedrate;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

@@ -75,10 +75,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [LabelText("球体半径")]
         [ShowIf("@COLLISION_DEFINE.COLLISION_SPHERE == overlaptype")]
         public uint sphereradius = 500;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

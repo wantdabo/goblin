@@ -35,10 +35,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [LabelText("变更的状态")]
         [ValueDropdown("@OdinValueDropdown.GetStateDefine()")]
         public byte state;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

@@ -21,10 +21,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ValueDropdown("@OdinValueDropdown.GetRmvActorDefine()")]
         [LabelText("移除的目标")]
         public byte target;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }

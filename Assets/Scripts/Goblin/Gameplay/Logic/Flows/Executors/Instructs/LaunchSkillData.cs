@@ -21,10 +21,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ValueDropdown("@OdinValueDropdown.SKillIds()")]
         [LabelText("技能 ID")]
         public uint skillid;
-        
-        public override byte[] Serialize()
-        {
-           return MessagePackSerializer.Serialize(this);
-        }
     }
 }

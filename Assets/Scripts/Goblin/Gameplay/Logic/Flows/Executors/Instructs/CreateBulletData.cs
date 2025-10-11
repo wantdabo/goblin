@@ -47,10 +47,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// 管线列表
         /// </summary>
         public List<uint> pipelines;
-        
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }
