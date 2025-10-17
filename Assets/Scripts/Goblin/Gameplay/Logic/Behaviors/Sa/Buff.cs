@@ -84,8 +84,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (buffinfo.layer != layer)
             {
-                buffinfo.layer = layer;
                 if (buffinfo.enchanted) EraseEnchant(buffinfo);
+                
+                buffinfo.layer = layer;
                 StampEnchant(buffinfo);
             }
             buffinfo.lifetime = lifetime;
