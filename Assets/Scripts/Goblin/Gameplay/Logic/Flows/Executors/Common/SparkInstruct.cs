@@ -5,22 +5,18 @@ using MessagePack;
 namespace Goblin.Gameplay.Logic.Flows.Executors.Common
 {
     /// <summary>
-    /// 管线指令
+    /// 火花指令
     /// </summary>
-    public sealed class Instruct
+    public sealed class SparkInstruct
     {
         /// <summary>
-        /// 区间开始
+        /// 火花触发范围
         /// </summary>
-        public ulong begin { get; set; }
+        public sbyte influence { get; set; }
         /// <summary>
-        /// 区间结束
+        /// 火花执行时机
         /// </summary>
-        public ulong end { get; set; }
-        /// <summary>
-        /// 是否只检查一次
-        /// </summary>
-        public bool checkonce { get; set; }
+        public ushort timing { get; set; }
         /// <summary>
         /// 执行条件列表
         /// </summary>

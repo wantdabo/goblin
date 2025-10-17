@@ -21,6 +21,8 @@ namespace Goblin.Gameplay.Logic.Flows
         public static PipelineRawData ToPipelineRawData(this PipelineData data)
         {
             var raw = new PipelineRawData();
+            
+            // 初始化指令相关数据
             raw.length = data.length;
             raw.begin = new ulong[data.instructs.Count];
             raw.end = new ulong[data.instructs.Count];
@@ -29,7 +31,6 @@ namespace Goblin.Gameplay.Logic.Flows
             raw.instrdata = new byte[data.instructs.Count][];
             raw.conditiontypes = new ushort[data.instructs.Count][];
             raw.conditions = new byte[data.instructs.Count][][];
-            
             for (int i = 0; i < data.instructs.Count; i++)
             {
                 var instruct = data.instructs[i];
@@ -46,6 +47,31 @@ namespace Goblin.Gameplay.Logic.Flows
                     var condition = instruct.conditions[j];
                     raw.conditiontypes[i][j] = condition.id;
                     raw.conditions[i][j] = condition.Serialize();
+                }
+            }
+
+            // 初始化火花相关数据
+            raw.sparkinfluences = new sbyte[data.sparkinstructs.Count];
+            raw.sparktimings = new ushort[data.sparkinstructs.Count];
+            raw.sparkinstrtypes = new ushort[data.sparkinstructs.Count];
+            raw.sparkinstrdata = new byte[data.sparkinstructs.Count][];
+            raw.sparkconditiontypes = new ushort[data.sparkinstructs.Count][];
+            raw.sparkconditions = new byte[data.sparkinstructs.Count][][];
+            for (int i = 0; i < data.sparkinstructs.Count; i++)
+            {
+                var instruct = data.sparkinstructs[i];
+                raw.sparkinfluences[i] = instruct.influence;
+                raw.sparktimings[i] = instruct.timing;
+                raw.sparkinstrtypes[i] = instruct.data.id;
+                raw.sparkinstrdata[i] = instruct.data.Serialize();
+                
+                raw.sparkconditiontypes[i] = new ushort[instruct.conditions.Count];
+                raw.sparkconditions[i] = new byte[instruct.conditions.Count][];
+                for (int j = 0; j < instruct.conditions.Count; j++)
+                {
+                    var condition = instruct.conditions[j];
+                    raw.sparkconditiontypes[i][j] = condition.id;
+                    raw.sparkconditions[i][j] = condition.Serialize();
                 }
             }
 

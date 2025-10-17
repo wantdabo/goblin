@@ -44,5 +44,29 @@ namespace Goblin.Gameplay.Logic.Flows
         /// 条件数据
         /// </summary>
         public byte[][][] conditions { get; set; }
+        /// <summary>
+        /// 火花触发范围
+        /// </summary>
+        public sbyte[] sparkinfluences { get; set; }
+        /// <summary>
+        /// 火花执行时机
+        /// </summary>
+        public ushort[] sparktimings { get; set; }
+        /// <summary>
+        /// 火花指令类型
+        /// </summary>
+        public ushort[] sparkinstrtypes { get; set; }
+        /// <summary>
+        /// 火花指令数据
+        /// </summary>
+        public byte[][] sparkinstrdata { get; set; }
+        /// <summary>
+        /// 火花条件类型
+        /// </summary>
+        public ushort[][] sparkconditiontypes { get; set; }
+        /// <summary>
+        /// 火花条件数据
+        /// </summary>
+        public byte[][][] sparkconditions { get; set; }
     }
 }
