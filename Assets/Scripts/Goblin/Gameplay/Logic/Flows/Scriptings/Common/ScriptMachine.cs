@@ -26,7 +26,8 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
             pipelinedata = new PipelineData
             {
                 length = 0,
-                instructs = new List<Instruct>()
+                instructs = new (),
+                sparkinstructs = new(),
             };
         }
 
