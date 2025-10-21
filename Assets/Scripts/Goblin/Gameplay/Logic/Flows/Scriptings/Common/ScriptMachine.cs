@@ -55,7 +55,7 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
         /// <param name="data">指令数据</param>
         /// <param name="checkonce">是否只检查一次</param>
         /// <typeparam name="T">指令数据类型</typeparam>
-        /// <returns>脚本状态机操作器</returns>
+        /// <returns>指令操作器</returns>
         public static InstructOperation Instruct<T>(ulong begin, ulong end, T data, bool checkonce = true) where T : InstructData
         {
             Instruct instruct = new()
@@ -69,6 +69,30 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
             pipelinedata.instructs.Add(instruct);
 
             return new InstructOperation(instruct);
+        }
+        
+        /// <summary>
+        /// 插入火花指令
+        /// </summary>
+        /// <param name="influence">火花触发范围</param>
+        /// <param name="token">火花令牌</param>
+        /// <param name="data">指令数据</param>
+        /// <param name="tokenvariant">火花令牌变体</param>
+        /// <typeparam name="T">指令数据类型</typeparam>
+        /// <returns>火花指令操作器</returns>
+        public static SparkInstructOperation Instruct<T>(sbyte influence, string token, T data, string tokenvariant = "") where T : InstructData
+        {
+            SparkInstruct instruct = new()
+            {
+                influence = influence,
+                token = token,
+                tokenvariant = tokenvariant,
+                conditions = new(),
+                data = data
+            };
+            pipelinedata.sparkinstructs.Add(instruct);
+            
+            return new SparkInstructOperation(instruct);
         }
 
         /// <summary>
@@ -130,6 +154,54 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
             public InstructOperation After<T>(ulong offset, ulong length, T data, bool checkonce = true) where T : InstructData
             {
                 return Instruct(instruct.end + offset, instruct.end + length, data, checkonce);
+            }
+        }
+        
+        /// <summary>
+        /// 火花指令操作器
+        /// </summary>
+        public struct SparkInstructOperation
+        {
+            /// <summary>
+            /// 火花指令
+            /// </summary>
+            public SparkInstruct instruct { get; private set; }
+            
+            /// <summary>
+            /// 火花指令操作器
+            /// </summary>
+            /// <param name="instruct">火花指令</param>
+            public SparkInstructOperation(SparkInstruct instruct)
+            {
+                this.instruct = instruct;
+            }
+            
+            /// <summary>
+            /// 添加条件
+            /// </summary>
+            /// <param name="condition">条件</param>
+            /// <typeparam name="T">条件类型</typeparam>
+            /// <returns>火花指令操作器</returns>
+            public SparkInstructOperation Condition<T>(T condition) where T : Condition
+            {
+                instruct.conditions.Add(condition);
+
+                return this;
+            }
+
+            /// <summary>
+            /// 添加条件
+            /// </summary>
+            /// <param name="conditions">条件列表</param>
+            /// <returns>火花指令操作器</returns>
+            public SparkInstructOperation Condition(List<Condition> conditions)
+            {
+                foreach (var condition in conditions)
+                {
+                    instruct.conditions.Add(condition);
+                }
+
+                return this;
             }
         }
     }

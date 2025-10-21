@@ -3,9 +3,8 @@ using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Sirenix.OdinInspector;
-using UnityEngine.Serialization;
 
-namespace Pipeline.Timeline.Assets.Common
+namespace Pipeline.Timeline.Common
 {
     /// <summary>
     /// 管线条件包装

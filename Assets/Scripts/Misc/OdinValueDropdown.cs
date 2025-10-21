@@ -33,6 +33,49 @@ namespace Goblin.Misc
         }
 
         /// <summary>
+        /// 获取火花指令定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(火花指令定义)</returns>
+        public static ValueDropdownList<ushort> GetSparkInstructDefine()
+        {
+            return new()
+            {
+                { "POSITION 变化指令", INSTR_DEFINE.SPATIAL_POSITION },
+                { "释放技能", INSTR_DEFINE.LAUNCH_SKILL },
+                { "特效指令", INSTR_DEFINE.EFFECT },
+                { "碰撞指令", INSTR_DEFINE.COLLISION },
+                { "移除 Actor 指令", INSTR_DEFINE.RMV_ACTOR },
+                { "状态变化指令", INSTR_DEFINE.CHANGE_STATE },
+            };
+        }
+
+        /// <summary>
+        /// 获取火花令牌定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(火花令牌定义)</returns>
+        public static ValueDropdownList<string> GetSparkTokenDefine()
+        {
+            return new()
+            {
+                { "立即", SPARK_INSTR_DEFINE.TOKEN_IMMEDIATE }
+            };
+        }
+        
+        /// <summary>
+        /// 获取火花触发范围定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(火花触发范围)</returns>
+        public static ValueDropdownList<sbyte> GetSparkInfluenceDefine()
+        {
+            return new()
+            {
+                { "全部", SPARK_INSTR_DEFINE.ALL },
+                { "管线", SPARK_INSTR_DEFINE.FLOW },
+                { "管线拥有者", SPARK_INSTR_DEFINE.FLOW_OWNER },
+            };
+        }
+
+        /// <summary>
         /// 获取移除 Actor 定义下拉列表
         /// </summary>
         /// <returns>ValueDropdownList(移除 Actor 目标)</returns>

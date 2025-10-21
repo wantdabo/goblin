@@ -49,9 +49,13 @@ namespace Goblin.Gameplay.Logic.Flows
         /// </summary>
         public sbyte[] sparkinfluences { get; set; }
         /// <summary>
-        /// 火花执行时机
+        /// 火花令牌
         /// </summary>
-        public ushort[] sparktimings { get; set; }
+        public string[] sparktoken { get; set; }
+        /// <summary>
+        /// 火花令牌变体
+        /// </summary>
+        public string[] sparktokenvariant { get; set; }
         /// <summary>
         /// 火花指令类型
         /// </summary>

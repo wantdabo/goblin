@@ -14,9 +14,13 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// </summary>
         public sbyte influence { get; set; }
         /// <summary>
-        /// 火花执行时机
+        /// 火花令牌
         /// </summary>
-        public ushort timing { get; set; }
+        public string token { get; set; }
+        /// <summary>
+        /// 火花令牌变体
+        /// </summary>
+        public string tokenvariant { get; set; }
         /// <summary>
         /// 执行条件列表
         /// </summary>
