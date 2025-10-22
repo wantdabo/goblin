@@ -55,6 +55,17 @@ namespace Pipeline.Timeline
             }
         }
         /// <summary>
+        /// Pipeline 面板
+        /// </summary>
+        public static PipelinePanel panel{
+            get
+            {
+                var go = GameObject.Find("Pipeline");
+                if (null == go) return default;
+                return go.GetComponent<PipelinePanel>();
+            }
+        }
+        /// <summary>
         /// 工作者
         /// </summary>
         public static PipelineWorker worker { get; private set; }
@@ -78,70 +89,113 @@ namespace Pipeline.Timeline
             
             if (null != worker) worker.Dispose();
             worker = new PipelineWorker(pipelinepath);
+            worker.Load();
         }
 
         /// <summary>
         /// 根据 PipelineData & PipelineLayou 恢复 Timeline 布局
         /// </summary>
-        /// <param name="timelineasset">TimelineAsset</param>
         /// <param name="data">PipelineData</param>
-        /// <param name="layout">PipelineLayout</param>
-        public static void SettingsTimeline(TimelineAsset timelineasset, PipelineData data, PipelineLayout layout)
+        public static void SettingsTimeline(PipelineData data)
         {
+            var timelineasset = worker.timelineasset;
+            var layout = worker.layout;
             director.playableAsset = timelineasset;
-            if (null == layout) return;
-            if (null == layout.tracks) return;
-            
-            foreach (var track in layout.tracks)
+            if (null != timelineasset && null != layout)
             {
-                foreach (var kv in track)
+                foreach (var track in layout.tracks)
                 {
-                    PipelineTrack pipetrack = default;
-                    switch (kv.Key)
+                    foreach (var kv in track)
                     {
-                        case INSTR_DEFINE.ANIMATION:
-                            pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
-                            break;
-                        case INSTR_DEFINE.SPATIAL_POSITION:
-                            pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
-                            break;
-                        case INSTR_DEFINE.LAUNCH_SKILL:
-                            pipetrack = timelineasset.CreateTrack<PipelineLaunchSkillTrack>();
-                            break;
-                        case INSTR_DEFINE.EFFECT:
-                            pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
-                            break;
-                        case INSTR_DEFINE.COLLISION:
-                            pipetrack = timelineasset.CreateTrack<PipelineCollisionTrack>();
-                            break;
-                        case INSTR_DEFINE.RMV_ACTOR:
-                            pipetrack = timelineasset.CreateTrack<PipelineRmvActorTrack>();
-                            break;
-                        case INSTR_DEFINE.CHANGE_STATE:
-                            pipetrack = timelineasset.CreateTrack<PipelineChangeStateTrack>();
-                            break;
-                    }
-                    if (null == pipetrack) continue;
-
-                    foreach (var index in kv.Value)
-                    {
-                        if (false == data.Query(index, out var instrdata)) continue;
-                        var clip = pipetrack.CreateDefaultClip();
-
-                        clip.start = instrdata.begin * Config.Int2Float;
-                        clip.duration = instrdata.end * Config.Int2Float - clip.start;
-                        
-                        var pipeasset = clip.asset as PipelineAsset;
-                        pipeasset.checkonce = instrdata.checkonce;
-                        foreach (var condition in instrdata.conditions)
+                        PipelineTrack pipetrack = default;
+                        switch (kv.Key)
                         {
-                            if (null == pipeasset.conditions) pipeasset.conditions = new();
+                            case INSTR_DEFINE.ANIMATION:
+                                pipetrack = timelineasset.CreateTrack<PipelineAnimationTrack>();
+                                break;
+                            case INSTR_DEFINE.SPATIAL_POSITION:
+                                pipetrack = timelineasset.CreateTrack<PipelineSpatialPositionTrack>();
+                                break;
+                            case INSTR_DEFINE.LAUNCH_SKILL:
+                                pipetrack = timelineasset.CreateTrack<PipelineLaunchSkillTrack>();
+                                break;
+                            case INSTR_DEFINE.EFFECT:
+                                pipetrack = timelineasset.CreateTrack<PipelineEffectTrack>();
+                                break;
+                            case INSTR_DEFINE.COLLISION:
+                                pipetrack = timelineasset.CreateTrack<PipelineCollisionTrack>();
+                                break;
+                            case INSTR_DEFINE.RMV_ACTOR:
+                                pipetrack = timelineasset.CreateTrack<PipelineRmvActorTrack>();
+                                break;
+                            case INSTR_DEFINE.CHANGE_STATE:
+                                pipetrack = timelineasset.CreateTrack<PipelineChangeStateTrack>();
+                                break;
+                        }
+
+                        if (null == pipetrack) continue;
+
+                        foreach (var index in kv.Value)
+                        {
+                            if (false == data.Query(index, out var instrdata)) continue;
+                            var clip = pipetrack.CreateDefaultClip();
+
+                            clip.start = instrdata.begin * Config.Int2Float;
+                            clip.duration = instrdata.end * Config.Int2Float - clip.start;
+
+                            var pipeasset = clip.asset as PipelineAsset;
+                            pipeasset.checkonce = instrdata.checkonce;
+                            foreach (var condition in instrdata.conditions)
+                            {
+                                if (null == pipeasset.conditions) pipeasset.conditions = new();
+                                var pipecondition = new PipelineCondition();
+                                pipecondition.SetCondition(condition);
+                                pipeasset.conditions.Add(pipecondition);
+                            }
+
+                            pipeasset.instrdata = instrdata.data;
+                        }
+                    }
+                }
+            }
+
+            // 处理花火指令
+            if (null != data.sparkinstructs)
+            {
+                panel.sparkinstructs = new PipelineSparkInstruct[data.sparkinstructs.Count];
+                for (int i = 0; i < panel.sparkinstructs.Length; i++)
+                {
+                    var sparkinstruct = data.sparkinstructs[i];
+                    
+                    var useinnertoken = false;
+                    foreach (var item in OdinValueDropdown.GetSparkTokenDefine())
+                    {
+                        if (item.Value != sparkinstruct.token) continue;
+                        useinnertoken = true;
+                        break;
+                    }
+
+                    var pipelinesparkinstruct = new PipelineSparkInstruct
+                    {
+                        influence = sparkinstruct.influence,
+                        useinnertoken = useinnertoken,
+                        innertoken = sparkinstruct.token,
+                        customtoken = sparkinstruct.token,
+                        usetokenvariant = false == string.IsNullOrEmpty(sparkinstruct.tokenvariant),
+                        tokenvariant = sparkinstruct.tokenvariant,
+                        conditions = new List<PipelineCondition>()
+                    };
+                    pipelinesparkinstruct.SetInstructData(sparkinstruct.data);
+                    if (null != sparkinstruct.conditions)
+                    {
+                        foreach (var condition in sparkinstruct.conditions)
+                        {
                             var pipecondition = new PipelineCondition();
                             pipecondition.SetCondition(condition);
-                            pipeasset.conditions.Add(pipecondition);
+                            pipelinesparkinstruct.conditions.Add(pipecondition);
                         }
-                        pipeasset.instrdata = instrdata.data;
                     }
+                    panel.sparkinstructs[i] = pipelinesparkinstruct;
                 }
             }
         }
@@ -205,32 +259,42 @@ namespace Pipeline.Timeline
         /// 保存管线数据
         /// </summary>
         /// <param name="pipeline">管线 ID</param>
-        /// <param name="model">模型</param>
-        /// <param name="asset">TimelineAsset</param>
-        public static void SavePipeline(uint pipeline, int model, TimelineAsset asset)
+        public static void SavePipeline(uint pipeline)
         {
-            if (null == asset) return;
-
+            if (null == worker) return;
+            
             ScriptMachine.Begin();
             List<List<Instruct>> instructslist = new();
-            var tracks = asset.GetOutputTracks();
-            foreach (var track in tracks)
+            if (null != worker.timelineasset)
             {
-                var clips = track.GetClips().ToList();
-                if (0 == clips.Count) continue;
-
-                var instructs = new List<Instruct>();
-                instructslist.Add(instructs);
-
-                foreach (var clip in clips)
+                foreach (var track in worker.timelineasset.GetOutputTracks())
                 {
-                    var pipelineasset = clip.asset as PipelineAsset;
-                    if (null == pipelineasset) continue;
+                    var clips = track.GetClips().ToList();
+                    if (0 == clips.Count) continue;
 
-                    var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata, pipelineasset.checkonce);
-                    if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
+                    var instructs = new List<Instruct>();
+                    instructslist.Add(instructs);
 
-                    instructs.Add(opt.instruct);
+                    foreach (var clip in clips)
+                    {
+                        var pipelineasset = clip.asset as PipelineAsset;
+                        if (null == pipelineasset) continue;
+
+                        var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata, pipelineasset.checkonce);
+                        if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
+
+                        instructs.Add(opt.instruct);
+                    }
+                }
+            }
+
+            // 处理火花指令
+            if (null != panel.sparkinstructs)
+            {
+                foreach (var instruct in panel.sparkinstructs)
+                {
+                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.GetInstructData(), instruct.usetokenvariant ? instruct.tokenvariant : "");
+                    foreach (var condition in instruct.conditions) opt.Condition(condition.GetCondition());
                 }
             }
 
@@ -239,7 +303,7 @@ namespace Pipeline.Timeline
 
             var layout = ScriptableObject.CreateInstance<PipelineLayout>();
             layout.name = $"{pipeline}";
-            layout.model = model;
+            layout.model = worker.model;
             layout.tracks = new();
             foreach (var instructs in instructslist)
             {

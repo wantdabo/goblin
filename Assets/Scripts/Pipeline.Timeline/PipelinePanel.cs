@@ -122,7 +122,7 @@ namespace Pipeline.Timeline
             {
                 alignment = TextAnchor.MiddleCenter,
                 fontStyle = FontStyle.Bold,
-                normal = { textColor = UnityEngine.Color.magenta }
+                normal = { textColor = UnityEngine.Color.yellow }
             };
 
             var labelColor = new Color(0.2f, 0.4f, 0.8f); // 深蓝底

@@ -90,7 +90,8 @@ namespace Goblin.Gameplay.Logic.Flows
             var data = new PipelineData
             {
                 length = rawdata.length,
-                instructs = new List<Instruct>()
+                instructs = new List<Instruct>(),
+                sparkinstructs = new List<SparkInstruct>(),
             };
 
             for (int i = 0; i < rawdata.instrtypes.Length; i++)
@@ -101,51 +102,91 @@ namespace Goblin.Gameplay.Logic.Flows
                     begin = rawdata.begin[i],
                     end = rawdata.end[i],
                     checkonce = rawdata.checkonce[i],
+                    conditions = new List<Condition>()
                 };
                 
-                switch (instrtype)
-                {
-                    case INSTR_DEFINE.ANIMATION:
-                        instruct.data = MessagePackSerializer.Deserialize<AnimationData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.SPATIAL_POSITION:
-                        instruct.data = MessagePackSerializer.Deserialize<SpatialPositionData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.LAUNCH_SKILL:
-                        instruct.data = MessagePackSerializer.Deserialize<LaunchSkillData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.EFFECT:
-                        instruct.data = MessagePackSerializer.Deserialize<EffectData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.COLLISION:
-                        instruct.data = MessagePackSerializer.Deserialize<CollisionData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.RMV_ACTOR:
-                        instruct.data = MessagePackSerializer.Deserialize<RmvActorData>(rawdata.instrdata[i]);
-                        break;
-                    case INSTR_DEFINE.CHANGE_STATE:
-                        instruct.data = MessagePackSerializer.Deserialize<ChangeStateData>(rawdata.instrdata[i]);
-                        break;
-                }
-
-                instruct.conditions = new List<Condition>();
+                instruct.data = BytesToInstructData(instrtype, rawdata.instrdata[i]);
                 for (int j = 0; j < rawdata.conditiontypes[i].Length; j++)
                 {
                     var conditiontype = rawdata.conditiontypes[i][j];
-                    Condition condition = default;
-                    switch (conditiontype)
-                    {
-                        case CONDITION_DEFINE.INPUT:
-                            condition = MessagePackSerializer.Deserialize<InputCondition>(rawdata.conditions[i][j]);
-                            break;
-                    }
+                    Condition condition = BytesToCondition(conditiontype, rawdata.conditions[i][j]);
                     instruct.conditions.Add(condition);
                 }
 
                 data.instructs.Add(instruct);
             }
 
+            // 处理火花指令
+            for (int i = 0; i < rawdata.sparkinstrtypes.Length; i++)
+            {
+                var instrtype = rawdata.sparkinstrtypes[i];
+                var sparkinstruct = new SparkInstruct
+                {
+                    influence = rawdata.sparkinfluences[i],
+                    token = rawdata.sparktoken[i],
+                    tokenvariant = rawdata.sparktokenvariant[i],
+                    conditions = new List<Condition>(),
+                };
+                
+                sparkinstruct.data = BytesToInstructData(instrtype, rawdata.sparkinstrdata[i]);
+                sparkinstruct.conditions = new List<Condition>();
+                for (int j = 0; j < rawdata.sparkconditiontypes[i].Length; j++)
+                {
+                    var conditiontype = rawdata.sparkconditiontypes[i][j];
+                    Condition condition = BytesToCondition(conditiontype, rawdata.sparkconditions[i][j]);
+                    sparkinstruct.conditions.Add(condition);
+                }
+
+                data.sparkinstructs.Add(sparkinstruct);
+            }
+
             return data;
+        }
+        
+        /// <summary>
+        /// 将字节数组转换为指令数据
+        /// </summary>
+        /// <param name="instrtype">指令 ID</param>
+        /// <param name="data">字节数组</param>
+        /// <returns>指令数据</returns>
+        private static InstructData BytesToInstructData(ushort instrtype, byte[] data)
+        {
+            switch (instrtype)
+            {
+                case INSTR_DEFINE.ANIMATION:
+                    return MessagePackSerializer.Deserialize<AnimationData>(data);
+                case INSTR_DEFINE.SPATIAL_POSITION:
+                    return MessagePackSerializer.Deserialize<SpatialPositionData>(data);
+                case INSTR_DEFINE.LAUNCH_SKILL:
+                    return MessagePackSerializer.Deserialize<LaunchSkillData>(data);
+                case INSTR_DEFINE.EFFECT:
+                    return MessagePackSerializer.Deserialize<EffectData>(data);
+                case INSTR_DEFINE.COLLISION:
+                    return MessagePackSerializer.Deserialize<CollisionData>(data);
+                case INSTR_DEFINE.RMV_ACTOR:
+                    return MessagePackSerializer.Deserialize<RmvActorData>(data);
+                case INSTR_DEFINE.CHANGE_STATE:
+                    return MessagePackSerializer.Deserialize<ChangeStateData>(data);
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// 将字节数组转换为条件
+        /// </summary>
+        /// <param name="conditiontype">条件类型</param>
+        /// <param name="data">字节数据</param>
+        /// <returns>条件</returns>
+        private static Condition BytesToCondition(ushort conditiontype, byte[] data)
+        {
+            switch (conditiontype)
+            {
+                case CONDITION_DEFINE.INPUT:
+                    return MessagePackSerializer.Deserialize<InputCondition>(data);
+                default:
+                    return null;
+            }
         }
     }
 }

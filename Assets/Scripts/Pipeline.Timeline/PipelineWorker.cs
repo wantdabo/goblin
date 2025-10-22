@@ -56,7 +56,6 @@ namespace Pipeline.Timeline
         {
             this.pipelinepath = pipelinepath;
             this.pipeline = uint.Parse(Path.GetFileNameWithoutExtension(pipelinepath));
-            Load();
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace Pipeline.Timeline
         /// </summary>
         public void Save()
         {
-            PipelineWorkSpace.SavePipeline(pipeline, model, timelineasset);
+            PipelineWorkSpace.SavePipeline(pipeline);
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace Pipeline.Timeline
             timelineasset = ScriptableObject.CreateInstance<TimelineAsset>();
             layout = PipelineWorkSpace.ReadPipelineLayout(pipeline);
             model = layout.model;
-            PipelineWorkSpace.SettingsTimeline(timelineasset, data, layout);
+            PipelineWorkSpace.SettingsTimeline(data);
         }
 
         private void LoadModel()
