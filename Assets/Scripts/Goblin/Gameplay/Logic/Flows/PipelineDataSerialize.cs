@@ -94,51 +94,58 @@ namespace Goblin.Gameplay.Logic.Flows
                 sparkinstructs = new List<SparkInstruct>(),
             };
 
-            for (int i = 0; i < rawdata.instrtypes.Length; i++)
+            if (null != rawdata.instrtypes)
             {
-                var instrtype = rawdata.instrtypes[i];
-                var instruct = new Instruct
+                for (int i = 0; i < rawdata.instrtypes.Length; i++)
                 {
-                    begin = rawdata.begin[i],
-                    end = rawdata.end[i],
-                    checkonce = rawdata.checkonce[i],
-                    conditions = new List<Condition>()
-                };
-                
-                instruct.data = BytesToInstructData(instrtype, rawdata.instrdata[i]);
-                for (int j = 0; j < rawdata.conditiontypes[i].Length; j++)
-                {
-                    var conditiontype = rawdata.conditiontypes[i][j];
-                    Condition condition = BytesToCondition(conditiontype, rawdata.conditions[i][j]);
-                    instruct.conditions.Add(condition);
-                }
+                    var instrtype = rawdata.instrtypes[i];
+                    var instruct = new Instruct
+                    {
+                        begin = rawdata.begin[i],
+                        end = rawdata.end[i],
+                        checkonce = rawdata.checkonce[i],
+                        conditions = new List<Condition>()
+                    };
 
-                data.instructs.Add(instruct);
+                    instruct.data = BytesToInstructData(instrtype, rawdata.instrdata[i]);
+                    for (int j = 0; j < rawdata.conditiontypes[i].Length; j++)
+                    {
+                        var conditiontype = rawdata.conditiontypes[i][j];
+                        Condition condition = BytesToCondition(conditiontype, rawdata.conditions[i][j]);
+                        instruct.conditions.Add(condition);
+                    }
+
+                    data.instructs.Add(instruct);
+                }
             }
 
-            // 处理火花指令
-            for (int i = 0; i < rawdata.sparkinstrtypes.Length; i++)
+            if (null != rawdata.sparkinstrtypes)
             {
-                var instrtype = rawdata.sparkinstrtypes[i];
-                var sparkinstruct = new SparkInstruct
+                // 处理火花指令
+                for (int i = 0; i < rawdata.sparkinstrtypes.Length; i++)
                 {
-                    influence = rawdata.sparkinfluences[i],
-                    token = rawdata.sparktoken[i],
-                    tokenvariant = rawdata.sparktokenvariant[i],
-                    conditions = new List<Condition>(),
-                };
-                
-                sparkinstruct.data = BytesToInstructData(instrtype, rawdata.sparkinstrdata[i]);
-                sparkinstruct.conditions = new List<Condition>();
-                for (int j = 0; j < rawdata.sparkconditiontypes[i].Length; j++)
-                {
-                    var conditiontype = rawdata.sparkconditiontypes[i][j];
-                    Condition condition = BytesToCondition(conditiontype, rawdata.sparkconditions[i][j]);
-                    sparkinstruct.conditions.Add(condition);
-                }
+                    var instrtype = rawdata.sparkinstrtypes[i];
+                    var sparkinstruct = new SparkInstruct
+                    {
+                        influence = rawdata.sparkinfluences[i],
+                        token = rawdata.sparktoken[i],
+                        tokenvariant = rawdata.sparktokenvariant[i],
+                        conditions = new List<Condition>(),
+                    };
 
-                data.sparkinstructs.Add(sparkinstruct);
+                    sparkinstruct.data = BytesToInstructData(instrtype, rawdata.sparkinstrdata[i]);
+                    sparkinstruct.conditions = new List<Condition>();
+                    for (int j = 0; j < rawdata.sparkconditiontypes[i].Length; j++)
+                    {
+                        var conditiontype = rawdata.sparkconditiontypes[i][j];
+                        Condition condition = BytesToCondition(conditiontype, rawdata.sparkconditions[i][j]);
+                        sparkinstruct.conditions.Add(condition);
+                    }
+
+                    data.sparkinstructs.Add(sparkinstruct);
+                }
             }
+
 
             return data;
         }
