@@ -53,7 +53,6 @@ namespace Goblin.Gameplay.Logic.Flows
             // 初始化火花相关数据
             raw.sparkinfluences = new sbyte[data.sparkinstructs.Count];
             raw.sparktoken = new string[data.sparkinstructs.Count];
-            raw.sparktokenvariant = new string[data.sparkinstructs.Count];
             raw.sparkinstrtypes = new ushort[data.sparkinstructs.Count];
             raw.sparkinstrdata = new byte[data.sparkinstructs.Count][];
             raw.sparkconditiontypes = new ushort[data.sparkinstructs.Count][];
@@ -63,7 +62,6 @@ namespace Goblin.Gameplay.Logic.Flows
                 var instruct = data.sparkinstructs[i];
                 raw.sparkinfluences[i] = instruct.influence;
                 raw.sparktoken[i] = instruct.token;
-                raw.sparktokenvariant[i] = instruct.tokenvariant;
                 raw.sparkinstrtypes[i] = instruct.data.id;
                 raw.sparkinstrdata[i] = instruct.data.Serialize();
                 
@@ -129,7 +127,6 @@ namespace Goblin.Gameplay.Logic.Flows
                     {
                         influence = rawdata.sparkinfluences[i],
                         token = rawdata.sparktoken[i],
-                        tokenvariant = rawdata.sparktokenvariant[i],
                         conditions = new List<Condition>(),
                     };
 

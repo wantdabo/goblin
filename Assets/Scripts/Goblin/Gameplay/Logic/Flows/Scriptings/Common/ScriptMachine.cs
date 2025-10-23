@@ -77,16 +77,14 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings.Common
         /// <param name="influence">火花触发范围</param>
         /// <param name="token">火花令牌</param>
         /// <param name="data">指令数据</param>
-        /// <param name="tokenvariant">火花令牌变体</param>
         /// <typeparam name="T">指令数据类型</typeparam>
         /// <returns>火花指令操作器</returns>
-        public static SparkInstructOperation Instruct<T>(sbyte influence, string token, T data, string tokenvariant = "") where T : InstructData
+        public static SparkInstructOperation Instruct<T>(sbyte influence, string token, T data) where T : InstructData
         {
             SparkInstruct instruct = new()
             {
                 influence = influence,
                 token = token,
-                tokenvariant = tokenvariant,
                 conditions = new(),
                 data = data
             };

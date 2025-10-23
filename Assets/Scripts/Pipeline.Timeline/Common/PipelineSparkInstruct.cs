@@ -38,13 +38,6 @@ namespace Pipeline.Timeline.Common
         [LabelText("火花令牌")]
         public string customtoken;
 
-        [LabelText("使用火花令牌变体")]
-        public bool usetokenvariant;
-
-        [ShowIf("@true == usetokenvariant")]
-        [LabelText("火花令牌变体")]
-        public string tokenvariant;
-
         [LabelText("条件列表")]
         [PropertySpace(SpaceAfter = 5)]
         public List<PipelineCondition> conditions;

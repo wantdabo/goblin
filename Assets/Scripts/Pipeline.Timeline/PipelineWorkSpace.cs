@@ -181,8 +181,6 @@ namespace Pipeline.Timeline
                         useinnertoken = useinnertoken,
                         innertoken = sparkinstruct.token,
                         customtoken = sparkinstruct.token,
-                        usetokenvariant = false == string.IsNullOrEmpty(sparkinstruct.tokenvariant),
-                        tokenvariant = sparkinstruct.tokenvariant,
                         conditions = new List<PipelineCondition>()
                     };
                     pipelinesparkinstruct.SetInstructData(sparkinstruct.data);
@@ -293,7 +291,7 @@ namespace Pipeline.Timeline
             {
                 foreach (var instruct in panel.sparkinstructs)
                 {
-                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.GetInstructData(), instruct.usetokenvariant ? instruct.tokenvariant : "");
+                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.GetInstructData());
                     foreach (var condition in instruct.conditions) opt.Condition(condition.GetCondition());
                 }
             }

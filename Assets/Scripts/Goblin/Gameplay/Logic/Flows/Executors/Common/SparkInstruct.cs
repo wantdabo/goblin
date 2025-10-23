@@ -18,10 +18,6 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Common
         /// </summary>
         public string token { get; set; }
         /// <summary>
-        /// 火花令牌变体
-        /// </summary>
-        public string tokenvariant { get; set; }
-        /// <summary>
         /// 执行条件列表
         /// </summary>
         public List<Condition> conditions { get; set; }

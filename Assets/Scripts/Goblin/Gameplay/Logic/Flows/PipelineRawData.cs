@@ -53,10 +53,6 @@ namespace Goblin.Gameplay.Logic.Flows
         /// </summary>
         public string[] sparktoken { get; set; }
         /// <summary>
-        /// 火花令牌变体
-        /// </summary>
-        public string[] sparktokenvariant { get; set; }
-        /// <summary>
         /// 火花指令类型
         /// </summary>
         public ushort[] sparkinstrtypes { get; set; }
