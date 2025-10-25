@@ -41,7 +41,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <returns>结果</returns>
         public FP Range(FP min, FP max)
         {
-            return Range((min* 10000).AsInt(), (max * 10000).AsInt()) * FP.EN4;
+            return Range((min * 10000).AsInt(), (max * 10000).AsInt()) * FP.EN4;
         }
     }
 }

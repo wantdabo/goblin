@@ -16,7 +16,7 @@ namespace Pipeline.Timeline.Common
     {
         [LabelText("火花触发范围")]
         [ValueDropdown("@OdinValueDropdown.GetSparkInfluenceDefine()", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "触发范围")] 
-        public sbyte influence;
+        public sbyte influence = SPARK_INSTR_DEFINE.FLOW;
         
         [HideLabel]
         public string token {
@@ -109,6 +109,7 @@ namespace Pipeline.Timeline.Common
         /// <exception cref="NotImplementedException">未能正确设置指令数据</exception>
         public void SetInstructData(InstructData data)
         {
+            instrtype = data.id;
             switch (instrtype)
             {
                 case INSTR_DEFINE.SPATIAL_POSITION:

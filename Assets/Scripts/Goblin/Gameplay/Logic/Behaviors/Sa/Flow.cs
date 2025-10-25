@@ -118,8 +118,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 owner = owner,
                 pipelines = pipelines,
             });
-            RunPipeline(stage.GetBehaviorInfo<FlowInfo>(actor));
 
+            Spark(actor, SPARK_INSTR_DEFINE.TOKEN_IMMEDIATE);
+            RunPipeline(stage.GetBehaviorInfo<FlowInfo>(actor));
+            
             return actor;
         }
 
@@ -150,7 +152,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 foreach (var index in indexes)
                 {
                     if (false == data.Query(index, out var instruct)) continue;
-                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, flowinfo);
                 }
                 indexes.Clear();
                 ObjectCache.Set(indexes);
@@ -158,6 +160,40 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             flowinfo.active = false;
             // 结束管线
             stage.RmvActor(flowinfo.actor);
+        }
+
+        /// <summary>
+        /// 触发花火
+        /// </summary>
+        /// <param name="actor">触发源</param>
+        /// <param name="token">花火令牌</param>
+        public void Spark(ulong actor, string token)
+        {
+            if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
+            foreach (var flowinfo in flowinfos)
+            {
+                if (false == flowinfo.active) continue;
+                if (false == stage.cache.Valid(flowinfo.owner)) continue;
+                
+                // TODO : 优化查找
+                foreach (var pipeline in flowinfo.pipelines)
+                {
+                    var data = PipelineDataReader.Read(pipeline);
+                    if (null == data) continue;
+                    for (int i = 0; i < data.sparkinstructs.Count; i++)
+                    {
+                        var instruct = data.sparkinstructs[i];
+                        if (instruct.token != token) continue;
+                        if (SPARK_INSTR_DEFINE.FLOW == instruct.influence && flowinfo.actor != actor) continue;
+                        if (SPARK_INSTR_DEFINE.FLOW_OWNER == instruct.influence && flowinfo.owner != actor) continue;
+                        
+                        uint index = (uint)data.instructs.Count + (uint)i + 2;
+                        ExecuteInstruct(ExecuteInstructType.Enter, pipeline, index, instruct.data, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Execute, pipeline, index, instruct.data, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Exit, pipeline, index, instruct.data, flowinfo);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -190,13 +226,13 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     // 如果不在时间区间内则退出
                     if (false == inside)
                     {
-                        if (isdoing) ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct, flowinfo);
+                        if (isdoing) ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, flowinfo);
                         continue;
                     }
                     
                     if (instruct.checkonce && isdoing)
                     {
-                        ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, flowinfo);
                         continue;
                     }
                     
@@ -208,8 +244,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         continue;
                     }
                     
-                    if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct, flowinfo);
-                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct, flowinfo);
+                    if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, flowinfo);
                 }
             }
         }
@@ -272,8 +308,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             {
                 if (false == notexe.flowinfo.active) continue;
                 if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
-                ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
-                ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.flowinfo);
             }
             insidenotexefronts.Clear();
             if (0 != insidenotexebacks.Count) InsideNotExeToExecute();
@@ -303,25 +339,25 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="type">指令执行类型</param>
         /// <param name="pipelineid">管线 ID</param>
         /// <param name="index">指令索引</param>
-        /// <param name="instruct">指令</param>
+        /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
         /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
-        private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)
+        private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, FlowInfo flowinfo)
         {
-            if (false == executors.TryGetValue(instruct.data.id, out var executor)) throw new Exception($"id : {instruct.data.id} cannot find executor.");
+            if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
             
             switch (type)
             {
                 case ExecuteInstructType.Enter:
-                    executor.Enter((pipelineid, index), instruct.data, flowinfo);
+                    executor.Enter((pipelineid, index), data, flowinfo);
                     if (false == indexes.Contains(index)) indexes.Add(index);
                     break;
                 case ExecuteInstructType.Execute:
-                    executor.Execute((pipelineid, index), instruct.data, flowinfo);
+                    executor.Execute((pipelineid, index), data, flowinfo);
                     break;
                 case ExecuteInstructType.Exit:
-                    executor.Exit((pipelineid, index), instruct.data, flowinfo);
+                    executor.Exit((pipelineid, index), data, flowinfo);
                     if (indexes.Contains(index)) indexes.Remove(index);
                     break;
             }

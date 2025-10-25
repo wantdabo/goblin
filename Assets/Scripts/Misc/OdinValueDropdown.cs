@@ -69,7 +69,6 @@ namespace Goblin.Misc
         {
             return new()
             {
-                { "全部", SPARK_INSTR_DEFINE.ALL },
                 { "管线", SPARK_INSTR_DEFINE.FLOW },
                 { "管线拥有者", SPARK_INSTR_DEFINE.FLOW_OWNER },
             };

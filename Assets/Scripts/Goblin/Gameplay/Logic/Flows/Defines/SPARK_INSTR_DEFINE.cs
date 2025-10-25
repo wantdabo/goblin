@@ -6,10 +6,6 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
     public class SPARK_INSTR_DEFINE
     {
         /// <summary>
-        /// 全部
-        /// </summary>
-        public const sbyte ALL = 0;
-        /// <summary>
         /// 管线
         /// </summary>
         public const sbyte FLOW = 1;

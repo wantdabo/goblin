@@ -137,15 +137,15 @@ namespace Pipeline.Timeline
 
                         foreach (var index in kv.Value)
                         {
-                            if (false == data.Query(index, out var instrdata)) continue;
+                            if (false == data.Query(index, out var instruct)) continue;
                             var clip = pipetrack.CreateDefaultClip();
 
-                            clip.start = instrdata.begin * Config.Int2Float;
-                            clip.duration = instrdata.end * Config.Int2Float - clip.start;
+                            clip.start = instruct.begin * Config.Int2Float;
+                            clip.duration = instruct.end * Config.Int2Float - clip.start;
 
                             var pipeasset = clip.asset as PipelineAsset;
-                            pipeasset.checkonce = instrdata.checkonce;
-                            foreach (var condition in instrdata.conditions)
+                            pipeasset.checkonce = instruct.checkonce;
+                            foreach (var condition in instruct.conditions)
                             {
                                 if (null == pipeasset.conditions) pipeasset.conditions = new();
                                 var pipecondition = new PipelineCondition();
@@ -153,7 +153,7 @@ namespace Pipeline.Timeline
                                 pipeasset.conditions.Add(pipecondition);
                             }
 
-                            pipeasset.instrdata = instrdata.data;
+                            pipeasset.instrdata = instruct.data;
                         }
                     }
                 }

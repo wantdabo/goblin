@@ -53,7 +53,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     OnCollision<FlowCollisionHurtInfo>(result, identity, data, flowinfo);
                     break;
                 case COLLISION_DEFINE.COLLISION_TYPE_SENSOR:
-                    OnCollision<FlowCollisionHurtInfo>(result, identity, data, flowinfo);
+                    OnCollision<FlowCollisionSensorInfo>(result, identity, data, flowinfo);
                     break;
             }
         }
@@ -66,7 +66,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         /// <param name="data">指令数据</param>
         /// <param name="flowinfo">管线信息</param>
         /// <typeparam name="T">碰撞信息类型</typeparam>
-        private void OnCollision<T>(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo) where T : FlowCollisionHurtInfo, new()
+        private void OnCollision<T>(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo) where T : FlowCollisionInfo, new()
         {
             if (false == stage.SeekBehaviorInfo(flowinfo.actor, out T flowcollision)) flowcollision = stage.AddBehaviorInfo<T>(flowinfo.actor);
             if (false == flowcollision.records.TryGetValue(identity, out var record)) flowcollision.records.Add(identity, record = ObjectCache.Ensure<Dictionary<ulong, uint>>());
