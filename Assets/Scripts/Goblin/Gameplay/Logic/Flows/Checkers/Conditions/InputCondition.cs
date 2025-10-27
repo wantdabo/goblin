@@ -46,10 +46,5 @@ namespace Goblin.Gameplay.Logic.Flows.Checkers.Conditions
         {
             press = false == release;
         }
-
-        public override byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this);
-        }
     }
 }
