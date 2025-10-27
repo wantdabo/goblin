@@ -57,7 +57,7 @@ namespace Goblin.Misc
         {
             return new()
             {
-                { "立即", SPARK_INSTR_DEFINE.TOKEN_IMMEDIATE }
+                { "管线生成", SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN }
             };
         }
         

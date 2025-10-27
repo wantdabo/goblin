@@ -15,8 +15,8 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         public const sbyte FLOW_OWNER = 2;
 
         /// <summary>
-        /// 立即
+        /// 管线生成
         /// </summary>
-        public const string TOKEN_IMMEDIATE = "IMMEDIATE";
+        public const string TOKEN_PIPELINE_GEN = "TOKEN_PIPELINE_GEN";
     }
 }

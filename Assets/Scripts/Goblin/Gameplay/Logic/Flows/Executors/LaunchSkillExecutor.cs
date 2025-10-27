@@ -15,7 +15,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             base.OnEnter(identity, data, flowinfo);
             if (false == stage.SeekBehavior(flowinfo.owner, out SkillLauncher skilllauncher)) return;
-            if (skilllauncher.info.casting) skilllauncher.Break();
+            if (data.breakcasting) skilllauncher.Break();
             skilllauncher.Launch(data.skillid);
         }
     }

@@ -32,7 +32,7 @@ namespace Pipeline.Timeline.Common
         [LabelText("火花令牌")] 
         [ShowIf("@true == useinnertoken")]
         [ValueDropdown("@OdinValueDropdown.GetSparkTokenDefine()", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "内置火花令牌")] 
-        public string innertoken = SPARK_INSTR_DEFINE.TOKEN_IMMEDIATE;
+        public string innertoken = SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN;
 
         [ShowIf("@false == useinnertoken")]
         [LabelText("火花令牌")]

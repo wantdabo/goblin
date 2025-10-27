@@ -110,8 +110,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// </summary>
         /// <param name="owner">管线拥有者</param>
         /// <param name="pipelines">管线的 ID 列表, 用于指向管线数据</param>
+        /// <param name="gen2run">生成并运行管线</param>
         /// <returns>Actor</returns>
-        public ulong GenPipeline(ulong owner, List<uint> pipelines)
+        public ulong GenPipeline(ulong owner, List<uint> pipelines, bool gen2run = true)
         {
             var actor = stage.Spawn(new FlowPrefabInfo
             {
@@ -119,10 +120,20 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 pipelines = pipelines,
             });
 
-            Spark(actor, SPARK_INSTR_DEFINE.TOKEN_IMMEDIATE);
-            RunPipeline(stage.GetBehaviorInfo<FlowInfo>(actor));
-            
+            if (false == gen2run) return actor;
+            Gen2RunPipeline(actor);
+
             return actor;
+        }
+
+        /// <summary>
+        /// 生成转运行管线
+        /// </summary>
+        /// <param name="id">管线 ActorID</param>
+        public void Gen2RunPipeline(ulong id)
+        {
+            RunPipeline(stage.GetBehaviorInfo<FlowInfo>(id));
+            Spark(id, SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN);
         }
 
         /// <summary>

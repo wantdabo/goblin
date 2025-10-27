@@ -6,6 +6,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Flows.Defines;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors
@@ -70,11 +71,11 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (info.casting) return;
             if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
-
             // 创建管线
             info.skill = skill;
-            info.flow = stage.flow.GenPipeline(actor, skillinfo.pipelines);
             info.casting = true;
+            info.flow = stage.flow.GenPipeline(actor, skillinfo.pipelines, false);
+            stage.flow.Gen2RunPipeline(info.flow);
         }
 
         protected override void OnTick(FP tick)
