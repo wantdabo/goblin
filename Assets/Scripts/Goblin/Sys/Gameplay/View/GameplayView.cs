@@ -72,7 +72,6 @@ namespace Goblin.Sys.Gameplay.View
             
             AddUIEventListener("GamingCB", (e) =>
             {
-
                 if (gamingCBToggle.isOn)
                     engine.proxy.gameplay.director.ResumeGame(); 
                 else 
@@ -91,8 +90,9 @@ namespace Goblin.Sys.Gameplay.View
             
             AddUIEventListener("SwitchSeatBtn", (e) =>
             {
-                var seat = engine.proxy.gameplay.director.world.selfseat;
-                engine.proxy.gameplay.director.world.SwitchSeat(seat == 1 ? 2ul : 1ul);
+                var seat = engine.proxy.gameplay.director.world.selfseat == 1 ? 2ul : 1ul;
+                engine.proxy.gameplay.director.world.SwitchSeat(seat);
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = $"切换成功, 座位 {seat} 号" });
             });
             
             AddUIEventListener("SnapshotBtn", (e) =>
