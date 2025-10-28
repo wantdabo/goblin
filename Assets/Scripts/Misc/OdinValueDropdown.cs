@@ -46,6 +46,7 @@ namespace Goblin.Misc
                 { "碰撞指令", INSTR_DEFINE.COLLISION },
                 { "移除 Actor 指令", INSTR_DEFINE.RMV_ACTOR },
                 { "状态变化指令", INSTR_DEFINE.CHANGE_STATE },
+                { "火花指令", INSTR_DEFINE.SPARK },
             };
         }
 

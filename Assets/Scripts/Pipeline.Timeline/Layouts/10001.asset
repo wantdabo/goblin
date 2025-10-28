@@ -22,3 +22,5 @@ MonoBehaviour:
     values: 02000000
   - keys: 0600
     values: 03000000
+  - keys: 0a00
+    values: 06000000

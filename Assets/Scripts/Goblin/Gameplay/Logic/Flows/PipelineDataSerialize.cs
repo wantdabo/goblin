@@ -171,6 +171,8 @@ namespace Goblin.Gameplay.Logic.Flows
                     return MessagePackSerializer.Deserialize<RmvActorData>(data);
                 case INSTR_DEFINE.CHANGE_STATE:
                     return MessagePackSerializer.Deserialize<ChangeStateData>(data);
+                case INSTR_DEFINE.SPARK:
+                    return MessagePackSerializer.Deserialize<SparkData>(data);
                 default:
                     return null;
             }

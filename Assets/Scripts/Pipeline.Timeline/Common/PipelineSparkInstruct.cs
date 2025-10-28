@@ -75,6 +75,11 @@ namespace Pipeline.Timeline.Common
         [HideLabel]
         [PropertySpace(SpaceAfter = 5)]
         public ChangeStateData changestateinstr;
+        
+        [ShowIf("@INSTR_DEFINE.SPARK == instrtype")]
+        [HideLabel]
+        [PropertySpace(SpaceAfter = 5)]
+        public SparkData sparkinstr;
 
         /// <summary>
         /// 获取指令数据
@@ -97,6 +102,8 @@ namespace Pipeline.Timeline.Common
                     return rmvactorinstr;
                 case INSTR_DEFINE.CHANGE_STATE:
                     return changestateinstr;
+                case INSTR_DEFINE.SPARK:
+                    return sparkinstr;
                 default:
                     throw new NotImplementedException($"instr with type {instrtype} not implemented.");
             }
@@ -129,6 +136,9 @@ namespace Pipeline.Timeline.Common
                     break;
                 case INSTR_DEFINE.CHANGE_STATE:
                     changestateinstr = data as ChangeStateData;
+                    break;
+                case INSTR_DEFINE.SPARK:
+                    sparkinstr = data as SparkData;
                     break;
                 default:
                     throw new NotImplementedException($"instr with type {instrtype} not implemented.");

@@ -131,6 +131,9 @@ namespace Pipeline.Timeline
                             case INSTR_DEFINE.CHANGE_STATE:
                                 pipetrack = timelineasset.CreateTrack<PipelineChangeStateTrack>();
                                 break;
+                            case INSTR_DEFINE.SPARK:
+                                pipetrack = timelineasset.CreateTrack<PipelineSparkTrack>();
+                                break;
                         }
 
                         if (null == pipetrack) continue;

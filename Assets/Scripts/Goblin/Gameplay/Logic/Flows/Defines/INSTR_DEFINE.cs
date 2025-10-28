@@ -41,5 +41,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 状态变化指令
         /// </summary>
         public const ushort CHANGE_STATE = 9;
+        /// <summary>
+        /// 火花指令
+        /// </summary>
+        public const ushort SPARK = 10;
     }
 }
