@@ -169,6 +169,15 @@ namespace Goblin.Gameplay.Render.Core
         }
 
         /// <summary>
+        /// 切换座位
+        /// </summary>
+        /// <param name="seat">座位</param>
+        public void SwitchSeat(ulong seat)
+        {
+            selfseat = seat;
+        }
+
+        /// <summary>
         /// 获取 Agent, 如果不存在则创建
         /// </summary>
         /// <param name="actor">ActorID</param>

@@ -89,6 +89,12 @@ namespace Goblin.Sys.Gameplay.View
                 engine.proxy.gameplay.dancing = danceCBToggle.isOn;
             });
             
+            AddUIEventListener("SwitchSeatBtn", (e) =>
+            {
+                var seat = engine.proxy.gameplay.director.world.selfseat;
+                engine.proxy.gameplay.director.world.SwitchSeat(seat == 1 ? 2ul : 1ul);
+            });
+            
             AddUIEventListener("SnapshotBtn", (e) =>
             {
                 engine.proxy.gameplay.director.Snapshot();
