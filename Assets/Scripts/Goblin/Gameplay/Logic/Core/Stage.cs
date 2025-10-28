@@ -398,7 +398,8 @@ namespace Goblin.Gameplay.Logic.Core
         /// <param name="dire">按键的方向</param>
         public void SetInput(ulong id, ushort type, bool press, IntVector2 dire)
         {
-            if (false == SeekBehavior(id, out Gamepad gamepad)) return;
+            var actor = seat.GetActor(id);
+            if (false == SeekBehavior(actor, out Gamepad gamepad)) return;
             
             gamepad.SetInput(type, press, dire.ToFPVector2());
         }

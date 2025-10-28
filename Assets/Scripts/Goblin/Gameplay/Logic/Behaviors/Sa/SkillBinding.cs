@@ -22,7 +22,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 if (false == stage.SeekBehavior(launcher.actor, out Gamepad gamepad)) continue;
                 foreach (var skill in launcher.info.loadedskills)
                 {
-                    if (false == stage.cfg.location.SkillBindingInfos.TryGetValue((int)skill, out var binding)) return;
+                    if (false == stage.cfg.location.SkillBindingInfos.TryGetValue((int)skill, out var binding)) continue;
                     if (null == binding) continue;
                     if (false == gamepad.GetInput((ushort)binding.Key).press) continue;
                     
