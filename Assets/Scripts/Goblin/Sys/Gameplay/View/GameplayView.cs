@@ -3,6 +3,7 @@ using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.RIL;
+using Goblin.Gameplay.Render.Agents;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Goblin.Sys.Other.View;
@@ -24,6 +25,7 @@ namespace Goblin.Sys.Gameplay.View
         private Toggle gamingCBToggle { get; set; }
         private Toggle physDrawerToggle { get; set; }
         private Toggle danceCBToggle { get; set; }
+        private Transform selfSeatPoint { get; set; }
         
         protected override void OnLoad()
         {
@@ -48,6 +50,7 @@ namespace Goblin.Sys.Gameplay.View
             gamingCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
             physDrawerToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");
             danceCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "DanceCB");
+            selfSeatPoint = engine.u3dkit.SeekNode<Transform>(gameObject, "SelfSeatPoint");
         }
 
         protected override void OnBindEvent()
@@ -92,7 +95,7 @@ namespace Goblin.Sys.Gameplay.View
             {
                 var seat = engine.proxy.gameplay.director.world.selfseat == 1 ? 2ul : 1ul;
                 engine.proxy.gameplay.director.world.SwitchSeat(seat);
-                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = $"切换成功, 座位 {seat} 号" });
+                engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = $"切换成功, 座位 {seat}" });
             });
             
             AddUIEventListener("SnapshotBtn", (e) =>
@@ -119,13 +122,20 @@ namespace Goblin.Sys.Gameplay.View
 
         private void OnLateTick(LateTickEvent e)
         {
+            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
+            if (null == localdirector) return;
+            
+            // 设置主角指针位置
+            var selfnode = localdirector.world.GetAgent<NodeAgent>(localdirector.world.self);
+            var positon = selfnode.go.transform.position;
+            positon.y += 2f;
+            positon = engine.u3dkit.WorldToUILoaclPoint(selfSeatPoint.parent.GetComponent<RectTransform>(), positon);
+            selfSeatPoint.localPosition = Vector3.Lerp(selfSeatPoint.localPosition, positon, 0.1f);
+            
             if (null == synopsisText) return;
             if (null == engine.proxy.gameplay.director) return;
             var ril = engine.proxy.gameplay.director.world.rilbucket.GetRIL<RIL_STAGE>(engine.proxy.gameplay.director.world.sa);
             if (null == ril) return;
-            
-            var localdirector = (engine.proxy.gameplay.director as LocalDirector);
-            if (null == localdirector) return;
             
             var content =
                 $"帧号 : {ril.frame}\n" +

@@ -99,11 +99,11 @@ namespace Goblin.Gameplay.Render.Cameras
             if (0 != scroll.y)
             {
                 var offset = cmoff.m_Offset;
-                offset.z = Mathf.Clamp(offset.z + scroll.y * e.tick, -7.5f, 0);
-                cmoff.m_Offset = offset;
+                offset.z = Mathf.Clamp(offset.z + scroll.y, -7.5f, 0);
+                cmoff.m_Offset = Vector3.Lerp(cmoff.m_Offset, offset, 0.1f);
             }
         }
-        
+
         private void ModifyDeadZone(CinemachineFreeLook freeLookCamera, float deadZoneWidth, float deadZoneHeight)
         {
             // 遍历 CM FreeLook 的每个 Rig
