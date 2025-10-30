@@ -152,7 +152,7 @@ namespace Pipeline.Timeline
                             {
                                 if (null == pipeasset.conditions) pipeasset.conditions = new();
                                 var pipecondition = new PipelineCondition();
-                                pipecondition.SetCondition(condition);
+                                pipecondition.condition = condition;
                                 pipeasset.conditions.Add(pipecondition);
                             }
 
@@ -186,13 +186,13 @@ namespace Pipeline.Timeline
                         customtoken = sparkinstruct.token,
                         conditions = new List<PipelineCondition>()
                     };
-                    pipelinesparkinstruct.SetInstructData(sparkinstruct.data);
+                    pipelinesparkinstruct.instructData = sparkinstruct.data;
                     if (null != sparkinstruct.conditions)
                     {
                         foreach (var condition in sparkinstruct.conditions)
                         {
                             var pipecondition = new PipelineCondition();
-                            pipecondition.SetCondition(condition);
+                            pipecondition.condition = condition;
                             pipelinesparkinstruct.conditions.Add(pipecondition);
                         }
                     }
@@ -282,7 +282,7 @@ namespace Pipeline.Timeline
                         if (null == pipelineasset) continue;
 
                         var opt = ScriptMachine.Instruct((ulong)(clip.start * Config.Float2Int), (ulong)(clip.end * Config.Float2Int), pipelineasset.instrdata, pipelineasset.checkonce);
-                        if (null != pipelineasset.conditions) foreach (var condition in pipelineasset.conditions) opt.Condition(condition.GetCondition());
+                        if (null != pipelineasset.conditions) foreach (var pipelinecondition in pipelineasset.conditions) opt.Condition(pipelinecondition.condition);
 
                         instructs.Add(opt.instruct);
                     }
@@ -294,8 +294,8 @@ namespace Pipeline.Timeline
             {
                 foreach (var instruct in panel.sparkinstructs)
                 {
-                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.GetInstructData());
-                    foreach (var condition in instruct.conditions) opt.Condition(condition.GetCondition());
+                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.instructData);
+                    foreach (var pipelinecondition in instruct.conditions) opt.Condition(pipelinecondition.condition);
                 }
             }
 
