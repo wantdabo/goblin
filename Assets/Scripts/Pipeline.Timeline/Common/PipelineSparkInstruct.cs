@@ -23,10 +23,12 @@ namespace Pipeline.Timeline.Common
         [LabelText("使用内置令牌")]
         public bool useinnertoken = true;
 
+        [LabelText("内置火花令牌")]
         [ShowIf("@true == useinnertoken")]
         [ValueDropdown("@OdinValueDropdown.GetSparkTokenDefine()", NumberOfItemsBeforeEnablingSearch = 0, DropdownTitle = "内置火花令牌")] 
         public string innertoken = SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN;
 
+        [LabelText("自定义火花令牌")]
         [ShowIf("@false == useinnertoken")]
         public string customtoken;
 
@@ -35,14 +37,9 @@ namespace Pipeline.Timeline.Common
         [LabelText("条件列表")]
         public List<PipelineCondition> conditions;
 
-        [HideLabel]
+        [LabelText("火花指令数据")]
         [SerializeReference, InlineProperty]
-        [TypeFilter("GetFilteredTypes")]
-        public InstructData instructData;
-
-        private static IEnumerable<Type> GetFilteredTypes()
-        {
-            return typeof(InstructData).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(InstructData).IsAssignableFrom(t));
-        }
+        [TypeFilter("@OdinValueDropdown.GetInstructDataFilteredTypes()")]
+        public InstructData instructdata;
     }
 }

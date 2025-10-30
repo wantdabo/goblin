@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Animancer;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using Goblin.Gameplay.Logic.Flows.Defines;
+using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Render.Common;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -33,21 +38,21 @@ namespace Goblin.Misc
         }
 
         /// <summary>
-        /// 获取火花指令定义下拉列表
+        /// 获取指令数据类型列表
         /// </summary>
-        /// <returns>ValueDropdownList(火花指令定义)</returns>
-        public static ValueDropdownList<ushort> GetSparkInstructDefine()
+        /// <returns>指令数据类型列表</returns>
+        public static IEnumerable<Type> GetInstructDataFilteredTypes()
         {
-            return new()
-            {
-                { "POSITION 变化指令", INSTR_DEFINE.SPATIAL_POSITION },
-                { "释放技能", INSTR_DEFINE.LAUNCH_SKILL },
-                { "特效指令", INSTR_DEFINE.EFFECT },
-                { "碰撞指令", INSTR_DEFINE.COLLISION },
-                { "移除 Actor 指令", INSTR_DEFINE.RMV_ACTOR },
-                { "状态变化指令", INSTR_DEFINE.CHANGE_STATE },
-                { "火花指令", INSTR_DEFINE.SPARK },
-            };
+            return typeof(InstructData).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(InstructData).IsAssignableFrom(t));
+        }
+        
+        /// <summary>
+        /// 获取条件数据类型列表
+        /// </summary>
+        /// <returns>条件数据类型列表</returns>
+        public static IEnumerable<Type> GetConditionFilteredTypes()
+        {
+            return typeof(Condition).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(Condition).IsAssignableFrom(t));
         }
 
         /// <summary>

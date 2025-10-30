@@ -186,7 +186,7 @@ namespace Pipeline.Timeline
                         customtoken = sparkinstruct.token,
                         conditions = new List<PipelineCondition>()
                     };
-                    pipelinesparkinstruct.instructData = sparkinstruct.data;
+                    pipelinesparkinstruct.instructdata = sparkinstruct.data;
                     if (null != sparkinstruct.conditions)
                     {
                         foreach (var condition in sparkinstruct.conditions)
@@ -294,7 +294,7 @@ namespace Pipeline.Timeline
             {
                 foreach (var instruct in panel.sparkinstructs)
                 {
-                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.instructData);
+                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.instructdata);
                     foreach (var pipelinecondition in instruct.conditions) opt.Condition(pipelinecondition.condition);
                 }
             }

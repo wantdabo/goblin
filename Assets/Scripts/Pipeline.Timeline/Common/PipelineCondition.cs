@@ -16,14 +16,9 @@ namespace Pipeline.Timeline.Common
     [Serializable]
     public class PipelineCondition
     {
-        [HideLabel]
+        [LabelText("条件数据")]
         [SerializeReference, InlineProperty]
-        [TypeFilter("GetFilteredTypes")]
+        [TypeFilter("@OdinValueDropdown.GetConditionFilteredTypes()")]
         public Condition condition;
-        
-        private static IEnumerable<Type> GetFilteredTypes()
-        {
-            return typeof(Condition).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(Condition).IsAssignableFrom(t));
-        }
     }
 }
