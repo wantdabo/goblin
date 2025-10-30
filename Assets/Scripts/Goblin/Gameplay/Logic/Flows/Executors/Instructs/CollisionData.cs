@@ -43,7 +43,6 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// </summary>
         [LabelText("偏移")]
         public IntVector3 offset;
-        
         /// <summary>
         /// 射线方向
         /// </summary>
@@ -56,26 +55,38 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ShowIf("@COLLISION_DEFINE.COLLISION_RAY == overlaptype")]
         [LabelText("射线长度")]
         public uint raydis = 1000;
-
         /// <summary>
         /// 线段终点
         /// </summary>
         [ShowIf("@COLLISION_DEFINE.COLLISION_LINE == overlaptype")]
         [LabelText("线段终点")]
         public IntVector3 lineep = new(0, 0, 1000);
-
         /// <summary>
         /// 立方体大小
         /// </summary>
         [LabelText("立方体大小")]
         [ShowIf("@COLLISION_DEFINE.COLLISION_BOX == overlaptype")]
         public IntVector3 boxsize = new(1000, 1000, 1000);
-        
         /// <summary>
         /// 球体半径
         /// </summary>
         [LabelText("球体半径")]
         [ShowIf("@COLLISION_DEFINE.COLLISION_SPHERE == overlaptype")]
         public uint sphereradius = 500;
+        /// <summary>
+        /// 使用命中火花令牌
+        /// </summary>
+        [LabelText("使用命中火花")]
+        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type")]
+        public bool usespark;
+        /// <summary>
+        /// 命中火花令牌
+        /// </summary>
+        [HideLabel]
+        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type && usespark")]
+        [BoxGroup("命中火花", ShowLabel = false)]
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        public SparkData hitspark;
     }
 }
