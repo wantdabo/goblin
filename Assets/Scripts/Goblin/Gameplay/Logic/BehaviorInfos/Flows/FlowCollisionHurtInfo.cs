@@ -10,5 +10,29 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
     /// </summary>
     public class FlowCollisionHurtInfo : FlowCollisionInfo
     {
+        /// <summary>
+        /// 使用[自身]命中火花
+        /// </summary>
+        public bool usesparkself { get; set; }
+        /// <summary>
+        /// 命中[自身]火花触发范围
+        /// </summary>
+        public sbyte sparkselfinfluence { get; set; }
+        /// <summary>
+        /// 命中[自身]火花令牌
+        /// </summary>
+        public string sparkselftoken { get; set; }
+        /// <summary>
+        /// 使用[目标]命中火花
+        /// </summary>
+        public bool usesparktarget { get; set; }
+        /// <summary>
+        /// 命中[目标]火花触发范围
+        /// </summary>
+        public sbyte sparktargetfluence { get; set; }
+        /// <summary>
+        /// 命中[目标]火花令牌
+        /// </summary>
+        public string sparktargettoken { get; set; }
     }
 }
