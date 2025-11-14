@@ -26,11 +26,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (stage.SeekBehaviorInfo(bullet.flow, out FlowCollisionHurtInfo collisionhurt))
             {
-                while (collisionhurt.targets.TryDequeue(out var target))
+                foreach (var target in collisionhurt.targets)
                 {
                     if (bullet.owner == target.actor) continue;
                     stage.attrc.ToDamage(bullet.actor, target.actor, bullet.damage);
                 }
+                collisionhurt.targets.Clear();
             }
             
             // 子弹管线结束检查

@@ -88,11 +88,12 @@ namespace Goblin.Gameplay.Logic.Behaviors
             if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out FlowCollisionHurtInfo collisionhurt))
             {
                 var damage = stage.attrc.ChargeDamage(actor, skillinfo.strength);
-                while (collisionhurt.targets.TryDequeue(out var target))
+                foreach (var target in collisionhurt.targets)
                 {
                     if (actor == target.actor) continue;
                     stage.attrc.ToDamage(actor, target.actor, damage);
                 }
+                collisionhurt.targets.Clear();
             }
 
             // 技能管线结束检查

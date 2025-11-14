@@ -16,12 +16,12 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common
         /// <summary>
         /// 碰撞的 ActorID 列表
         /// </summary>
-        public Queue<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
+        public List<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
         
         protected override void OnReady()
         {
             records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
-            targets = ObjectCache.Ensure<Queue<(ulong actor, (uint pipeline, uint index) identity)>>();
+            targets = ObjectCache.Ensure<List<(ulong actor, (uint pipeline, uint index) identity)>>();
         }
 
         protected override void OnReset()
@@ -53,10 +53,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common
                 clone.records.Add(kv.Key, record);
             }
             
-            foreach (var id in targets)
-            {
-                clone.targets.Enqueue(id);
-            }
+            clone.targets.AddRange(targets);
             
             return clone;
         }

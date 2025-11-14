@@ -82,7 +82,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 if (has) record.Remove(collider.actor);
                 record.Add(collider.actor, count);
                 
-                flowcollision.targets.Enqueue((collider.actor, identity));
+                flowcollision.targets.Add((collider.actor, identity));
             }
         }
     }
