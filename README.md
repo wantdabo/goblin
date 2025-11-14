@@ -37,6 +37,7 @@
     - Goblin 2.6.5
 
   - 2026-05-01
+    - Skill 转为 Actor （子弹合并至此）
     - Info 转 RIL 自动化
     - 所有 Clone 自动化
     - InstructData 数据调整，Timeline 自适应
