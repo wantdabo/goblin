@@ -13,15 +13,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter((uint pipelineid, uint index) identity, SparkData data, FlowInfo flowinfo)
         {
             base.OnEnter(identity, data, flowinfo);
-            switch (data.influence)
-            {
-                case SPARK_INSTR_DEFINE.FLOW:
-                    stage.flow.Spark(flowinfo.actor, data.token);
-                    break;
-                case SPARK_INSTR_DEFINE.FLOW_OWNER:
-                    stage.flow.Spark(flowinfo.owner, data.token);
-                    break;
-            }
+            stage.flow.Spark(flowinfo, data.influence, data.token);
         }
     }
 }

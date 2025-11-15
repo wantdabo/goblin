@@ -127,10 +127,13 @@ namespace Goblin.Sys.Gameplay.View
             
             // 设置主角指针位置
             var selfnode = localdirector.world.GetAgent<NodeAgent>(localdirector.world.self);
-            var positon = selfnode.go.transform.position;
-            positon.y += 2f;
-            positon = engine.u3dkit.WorldToUILoaclPoint(selfSeatPoint.parent.GetComponent<RectTransform>(), positon);
-            selfSeatPoint.localPosition = Vector3.Lerp(selfSeatPoint.localPosition, positon, 0.1f);
+            if (null != selfnode)
+            {
+                var positon = selfnode.go.transform.position;
+                positon.y += 2f;
+                positon = engine.u3dkit.WorldToUILoaclPoint(selfSeatPoint.parent.GetComponent<RectTransform>(), positon);
+                selfSeatPoint.localPosition = Vector3.Lerp(selfSeatPoint.localPosition, positon, 0.1f);
+            }
             
             if (null == synopsisText) return;
             if (null == engine.proxy.gameplay.director) return;

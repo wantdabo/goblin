@@ -51,13 +51,16 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             {
                 case COLLISION_DEFINE.COLLISION_TYPE_HURT:
                     OnCollision<FlowCollisionHurtInfo>(result, identity, data, flowinfo);
-                    if (stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision))
-                    {
-                    }
                     break;
                 case COLLISION_DEFINE.COLLISION_TYPE_SENSOR:
                     OnCollision<FlowCollisionSensorInfo>(result, identity, data, flowinfo);
                     break;
+            }
+
+            // 命中火花
+            if (data.usespark)
+            {
+                stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
             }
         }
 

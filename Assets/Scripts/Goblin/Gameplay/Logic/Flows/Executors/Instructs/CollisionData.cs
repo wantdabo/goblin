@@ -76,36 +76,19 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         /// <summary>
         /// 使用[自身]命中火花
         /// </summary>
-        [LabelText("使用[自身]命中火花")]
-        [BoxGroup("使用命中火花")]
+        [LabelText("使用命中火花")]
+        [BoxGroup("命中火花")]
         [GUIColor(0.7f, 0.7f, 1f)]
         [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type")]
-        public bool usesparkself;
-        /// <summary>
-        /// 使用[目标]命中火花
-        /// </summary>
-        [LabelText("使用[目标]命中火花")]
-        [BoxGroup("使用命中火花")]
-        [GUIColor(0.7f, 0.7f, 1f)]
-        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type")]
-        public bool usesparktarget;
+        public bool usespark;
         /// <summary>
         /// [自身]命中火花
         /// </summary>
         [HideLabel]
-        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type && usesparkself")]
-        [BoxGroup("[自身]命中火花")]
+        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type && usespark")]
+        [BoxGroup("命中火花")]
         [InlineProperty]
         [HideReferenceObjectPicker]
-        public SparkData sparkself;
-        /// <summary>
-        /// [目标]命中火花
-        /// </summary>
-        [HideLabel]
-        [ShowIf("@COLLISION_DEFINE.COLLISION_TYPE_HURT == type && usesparktarget")]
-        [BoxGroup("[目标]命中火花")]
-        [InlineProperty]
-        [HideReferenceObjectPicker]
-        public SparkData sparktarget;
+        public SparkData spark;
     }
 }

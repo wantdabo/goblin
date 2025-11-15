@@ -34,6 +34,7 @@ namespace Goblin.Misc
                 { "跳跃", STATE_DEFINE.JUMP },
                 { "下坠", STATE_DEFINE.FALL },
                 { "技能", STATE_DEFINE.CASTING },
+                { "受击", STATE_DEFINE.BEHIT },
             };
         }
 

@@ -39,6 +39,10 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 技能
         /// </summary>
         public const byte CASTING = 7;
+        /// <summary>
+        /// 受击
+        /// </summary>
+        public const byte BEHIT = 8;
 
         /// <summary>
         /// 状态切换规则
@@ -51,7 +55,8 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING } },
             { JUMP, new List<byte>() { DEATH, FALL, CASTING } },
             { FALL, new List<byte>() { DEATH, IDLE, CASTING } },
-            { CASTING, new List<byte>() { DEATH } }
+            { CASTING, new List<byte>() { DEATH } },
+            { BEHIT, new List<byte>() { DEATH } },
         };
     }
 }

@@ -57,6 +57,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// 指令执行器列表
         /// </summary>
         private Dictionary<ushort, Executor> executors { get; set; }
+        /// <summary>
+        /// 指令执行器字典
+        /// </summary>
+        private Dictionary<Type, Executor> executordict { get; set; }
 
         protected override void OnAssemble()
         {
@@ -91,6 +95,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             }
             executors.Clear();
             ObjectCache.Set(executors);
+            executordict.Clear();
+            ObjectCache.Set(executordict);
         }
 
         /// <summary>
@@ -172,6 +178,25 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             // 结束管线
             stage.RmvActor(flowinfo.actor);
         }
+        
+        /// <summary>
+        /// 触发火花
+        /// </summary>
+        /// <param name="flowinfo">管线信息</param>
+        /// <param name="influence">触发范围</param>
+        /// <param name="token">火花令牌</param>
+        public void Spark(FlowInfo flowinfo, sbyte influence, string token)
+        {
+            switch (influence)
+            {
+                case SPARK_INSTR_DEFINE.FLOW:
+                    Spark(flowinfo.actor, token);
+                    break;
+                case SPARK_INSTR_DEFINE.FLOW_OWNER:
+                    Spark(flowinfo.owner, token);
+                    break;
+            }
+        }
 
         /// <summary>
         /// 触发花火
@@ -205,6 +230,19 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 获取指令执行器
+        /// </summary>
+        /// <typeparam name="T">指令执行器类型</typeparam>
+        /// <returns>指令执行器</returns>
+        /// <exception cref="Exception">未能找到相应的指令执行器</exception>
+        public T Executor<T>() where T : Executor
+        {
+            if (false == executordict.TryGetValue(typeof(T), out var executor)) throw new Exception("cannot find executor.");
+
+            return executor as T;
         }
 
         /// <summary>
@@ -394,9 +432,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         private void Executors()
         {
             executors = ObjectCache.Ensure<Dictionary<ushort, Executor>>();
+            executordict = ObjectCache.Ensure<Dictionary<Type, Executor>>();
             void Executor<T>(ushort id) where T : Executor, new()
             {
-                executors.Add(id, ObjectCache.Ensure<T>().Load(stage));
+                var executor = ObjectCache.Ensure<T>().Load(stage);
+                executors.Add(id, executor);
+                executordict.Add(typeof(T), executor);
             }
             
             Executor<AnimationExecutor>(INSTR_DEFINE.ANIMATION);
