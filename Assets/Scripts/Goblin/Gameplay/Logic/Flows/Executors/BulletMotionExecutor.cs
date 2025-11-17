@@ -15,11 +15,11 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class BulletMotionExecutor : Executor<BulletMotionData>
     {
-        protected override void OnExecute((uint pipelineid, uint index) identity, BulletMotionData data, FlowInfo flowinfo)
+        protected override void OnExecute((uint pipelineid, uint index) identity, BulletMotionData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnExecute(identity, data, flowinfo);
-            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
-            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out BulletInfo bullet)) return;
+            base.OnExecute(identity, data, flowinfo, target);
+            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
+            if (false == stage.SeekBehaviorInfo(target, out BulletInfo bullet)) return;
 
             switch (data.motion)
             {

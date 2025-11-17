@@ -14,10 +14,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class SpatialPositionExecutor : Executor<SpatialPositionData>
     {
-        protected override void OnExecute((uint pipelineid, uint index) identity, SpatialPositionData data, FlowInfo flowinfo)
+        protected override void OnExecute((uint pipelineid, uint index) identity, SpatialPositionData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnExecute(identity, data, flowinfo);
-            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
+            base.OnExecute(identity, data, flowinfo, target);
+            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
             var motion = data.position.ToFPVector3();
             switch (data.type)
             {

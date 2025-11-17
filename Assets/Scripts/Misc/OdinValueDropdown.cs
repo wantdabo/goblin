@@ -39,6 +39,20 @@ namespace Goblin.Misc
         }
 
         /// <summary>
+        /// 获取管线执行目标定义下拉列表
+        /// </summary>
+        /// <returns>管线执行目标定</returns>
+        public static ValueDropdownList<byte> GetExecuteTargetDefine()
+        {
+            return new()
+            {
+                { "管线", FLOW_DEFINE.ET_FLOW },
+                { "管线拥有者", FLOW_DEFINE.ET_FLOW_OWNER },
+                { "管线命中", FLOW_DEFINE.ET_FLOW_HIT },
+            };
+        }
+
+        /// <summary>
         /// 获取指令数据类型列表
         /// </summary>
         /// <returns>指令数据类型列表</returns>

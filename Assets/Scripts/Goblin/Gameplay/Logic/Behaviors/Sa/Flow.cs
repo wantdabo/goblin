@@ -395,19 +395,39 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
-            
-            switch (type)
+
+            void Do(ulong target)
             {
-                case ExecuteInstructType.Enter:
-                    executor.Enter((pipelineid, index), data, flowinfo);
-                    if (false == indexes.Contains(index)) indexes.Add(index);
+                switch (type)
+                {
+                    case ExecuteInstructType.Enter:
+                        executor.Enter((pipelineid, index), data, flowinfo, target);
+                        if (false == indexes.Contains(index)) indexes.Add(index);
+                        break;
+                    case ExecuteInstructType.Execute:
+                        executor.Execute((pipelineid, index), data, flowinfo, target);
+                        break;
+                    case ExecuteInstructType.Exit:
+                        executor.Exit((pipelineid, index), data, flowinfo, target);
+                        if (indexes.Contains(index)) indexes.Remove(index);
+                        break;
+                }
+            }
+            
+            switch (data.et)
+            {
+                case FLOW_DEFINE.ET_FLOW:
+                    Do(flowinfo.actor);
                     break;
-                case ExecuteInstructType.Execute:
-                    executor.Execute((pipelineid, index), data, flowinfo);
+                case FLOW_DEFINE.ET_FLOW_OWNER:
+                    Do(flowinfo.owner);
                     break;
-                case ExecuteInstructType.Exit:
-                    executor.Exit((pipelineid, index), data, flowinfo);
-                    if (indexes.Contains(index)) indexes.Remove(index);
+                case FLOW_DEFINE.ET_FLOW_HIT:
+                    if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
+                    foreach (var target in flowcollision.targets)
+                    {
+                        Do(target.actor);
+                    }
                     break;
             }
         }

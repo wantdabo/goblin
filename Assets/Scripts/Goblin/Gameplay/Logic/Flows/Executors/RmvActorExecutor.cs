@@ -10,16 +10,16 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class RmvActorExecutor : Executor<RmvActorData>
     {
-        protected override void OnEnter((uint pipelineid, uint index) identity, RmvActorData data, FlowInfo flowinfo)
+        protected override void OnEnter((uint pipelineid, uint index) identity, RmvActorData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnEnter(identity, data, flowinfo);
+            base.OnEnter(identity, data, flowinfo, target);
             switch (data.target)
             {
                 case RMV_ACTOR_DEFINE.SELF:
                     stage.flow.EndPipeline(flowinfo);
                     break;
                 case RMV_ACTOR_DEFINE.OWNER:
-                    stage.RmvActor(flowinfo.owner);
+                    stage.RmvActor(target);
                     break;
             }
         }

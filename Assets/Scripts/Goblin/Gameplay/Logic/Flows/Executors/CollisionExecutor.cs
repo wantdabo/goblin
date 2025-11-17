@@ -18,11 +18,11 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class CollisionExecutor : Executor<CollisionData>
     {
-        protected override void OnExecute((uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo)
+        protected override void OnExecute((uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnExecute(identity, data, flowinfo);
+            base.OnExecute(identity, data, flowinfo, target);
 
-            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
+            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
             
             var rotation = FPQuaternion.Euler(spatial.euler);
             var position = spatial.position + rotation * data.offset.ToFPVector3();

@@ -13,6 +13,19 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 管线长度最大值 - 溢出
         /// </summary>
         public const ulong OVERFLOW_LENGTH = ulong.MaxValue;
+
+        /// <summary>
+        /// 执行目标 - 管线
+        /// </summary>
+        public const byte ET_FLOW = 1;
+        /// <summary>
+        /// 执行目标 - 管线拥有者
+        /// </summary>
+        public const byte ET_FLOW_OWNER = 2;
+        /// <summary>
+        /// 执行目标 - 管线命中
+        /// </summary>
+        public const byte ET_FLOW_HIT = 3;
         
         /// <summary>
         /// 脚本 ID 100000001

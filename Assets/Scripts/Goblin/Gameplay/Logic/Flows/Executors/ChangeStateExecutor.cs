@@ -10,10 +10,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class ChangeStateExecutor : Executor<ChangeStateData>
     {
-        protected override void OnEnter((uint pipelineid, uint index) identity, ChangeStateData data, FlowInfo flowinfo)
+        protected override void OnEnter((uint pipelineid, uint index) identity, ChangeStateData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnEnter(identity, data, flowinfo);
-            if (false == stage.SeekBehavior(flowinfo.owner, out StateMachine statemachine)) return;
+            base.OnEnter(identity, data, flowinfo, target);
+            if (false == stage.SeekBehavior(target, out StateMachine statemachine)) return;
 
             if (data.breakable)
             {

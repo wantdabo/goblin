@@ -17,10 +17,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class CreateBulletExecutor : Executor<CreateBulletData>
     {
-        protected override void OnExecute((uint pipelineid, uint index) identity, CreateBulletData data, FlowInfo flowinfo)
+        protected override void OnExecute((uint pipelineid, uint index) identity, CreateBulletData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnExecute(identity, data, flowinfo);
-            if (false == stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo spatial)) return;
+            base.OnExecute(identity, data, flowinfo, target);
+            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
             
             var spatialdata = new SpatialData();
             switch (data.origin)
@@ -42,7 +42,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
 
             stage.Spawn(new BulletPrefabInfo
             {
-                owner = flowinfo.owner,
+                owner = target,
                 strength = data.strength * stage.cfg.int2fp,
                 speed = data.speed * stage.cfg.int2fp,
                 spatial = spatialdata,

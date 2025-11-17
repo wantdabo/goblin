@@ -14,10 +14,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
     /// </summary>
     public class EffectExecutor : Executor<EffectData>
     {
-        protected override void OnEnter((uint pipelineid, uint index) identity, EffectData data, FlowInfo flowinfo)
+        protected override void OnEnter((uint pipelineid, uint index) identity, EffectData data, FlowInfo flowinfo, ulong target)
         {
-            base.OnEnter(identity, data, flowinfo);
-            if (false == stage.SeekBehavior(flowinfo.owner, out Facade facade)) return;
+            base.OnEnter(identity, data, flowinfo, target);
+            if (false == stage.SeekBehavior(target, out Facade facade)) return;
             var pipeline = PipelineDataReader.Read(identity.pipelineid);
             if (null == pipeline) return;
             if (false == pipeline.Query(identity.index, out var instruct)) return;
