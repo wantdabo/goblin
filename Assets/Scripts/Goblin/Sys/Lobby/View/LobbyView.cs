@@ -37,31 +37,41 @@ namespace Goblin.Sys.Lobby.View
 
             AddUIEventListener("LocalGameBtn", (e) =>
             {
+                List<PlayerData> players = new()
+                {
+                    new PlayerData
+                    {
+                        seat = 1,
+                        hero = 100001,
+                        position = new IntVector3(0, 0, 0),
+                        euler = new IntVector3(0, 0, 0),
+                        scale = 1000,
+                    },
+                };
+                ulong seat = 2;
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        players.Add(new PlayerData
+                        {
+                            seat = seat,
+                            hero = 100001,
+                            position = new IntVector3(1000 * i, 0, 1000 * j),
+                            euler = new IntVector3(0, (i + 1) * 20000 + (j + 1) * 20000, 0),
+                            scale = 1000,
+                        });
+                        seat++;
+                    }
+                }
+                
                 BuildData data = new BuildData();
                 data.id = 10086;
                 data.seat = 1;
                 data.sdata = new StageData
                 {
                     seed = 19491001,
-                    players = new[]
-                    {
-                        new PlayerData
-                        {
-                            seat = 1,
-                            hero = 100001,
-                            position = new IntVector3(0, 0, 0),
-                            euler = new IntVector3(0, 0, 0),
-                            scale = 1000,
-                        },
-                        new PlayerData
-                        {
-                            seat = 2,
-                            hero = 100001,
-                            position = new IntVector3(0, 0, 0),
-                            euler = new IntVector3(0, 0, 0),
-                            scale = 1000,
-                        },
-                    }
+                    players = players.ToArray(),
                 };
                 
                 engine.gameui.Close(this);
