@@ -223,6 +223,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         if (SPARK_INSTR_DEFINE.FLOW == instruct.influence && flowinfo.actor != actor) continue;
                         if (SPARK_INSTR_DEFINE.FLOW_OWNER == instruct.influence && flowinfo.owner != actor) continue;
                         
+                        if (false == CheckCondition(instruct.conditions, flowinfo)) continue;
                         uint index = (uint)data.instructs.Count + (uint)i + 2;
                         ExecuteInstruct(ExecuteInstructType.Enter, pipeline, index, instruct.data, flowinfo);
                         ExecuteInstruct(ExecuteInstructType.Execute, pipeline, index, instruct.data, flowinfo);
