@@ -169,7 +169,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 foreach (var index in indexes)
                 {
                     if (false == data.Query(index, out var instruct)) continue;
-                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                 }
                 indexes.Clear();
                 ObjectCache.Set(indexes);
@@ -223,11 +223,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                         if (SPARK_INSTR_DEFINE.FLOW == instruct.influence && flowinfo.actor != actor) continue;
                         if (SPARK_INSTR_DEFINE.FLOW_OWNER == instruct.influence && flowinfo.owner != actor) continue;
                         
-                        if (false == CheckCondition(instruct.conditions, flowinfo)) continue;
+                        if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo)) continue;
                         uint index = (uint)data.instructs.Count + (uint)i + 2;
-                        ExecuteInstruct(ExecuteInstructType.Enter, pipeline, index, instruct.data, flowinfo);
-                        ExecuteInstruct(ExecuteInstructType.Execute, pipeline, index, instruct.data, flowinfo);
-                        ExecuteInstruct(ExecuteInstructType.Exit, pipeline, index, instruct.data, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Enter, pipeline, index, instruct.data, instruct.conditions, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Execute, pipeline, index, instruct.data, instruct.conditions,flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Exit, pipeline, index, instruct.data, instruct.conditions,flowinfo);
                     }
                 }
             }
@@ -276,26 +276,26 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     // 如果不在时间区间内则退出
                     if (false == inside)
                     {
-                        if (isdoing) ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, flowinfo);
+                        if (isdoing) ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                         continue;
                     }
                     
                     if (instruct.checkonce && isdoing)
                     {
-                        ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, flowinfo);
+                        ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                         continue;
                     }
                     
                     // 指令进入 && 指令执行
-                    if (false == CheckCondition(instruct.conditions, flowinfo))
+                    if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo))
                     {
                         // 如果指令不满足条件, 则记录下来, 以便后续处理
                         insidenotexebacks.Add((pipelineid, index, instruct, flowinfo));
                         continue;
                     }
                     
-                    if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, flowinfo);
-                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, flowinfo);
+                    if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                 }
             }
         }
@@ -357,9 +357,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             foreach (var notexe in insidenotexefronts)
             {
                 if (false == notexe.flowinfo.active) continue;
-                if (false == CheckCondition(notexe.instruct.conditions, notexe.flowinfo)) continue;
-                ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.flowinfo);
-                ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.flowinfo);
+                if (false == CheckCondition(notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo)) continue;
+                ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo);
+                ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions,notexe.flowinfo);
             }
             insidenotexefronts.Clear();
             if (0 != insidenotexebacks.Count) InsideNotExeToExecute();
@@ -368,11 +368,12 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <summary>
         /// 检查指令条件
         /// </summary>
+        /// <param name="data">指令数据</param>
         /// <param name="conditions">条件列表</param>
         /// <param name="flowinfo">管线信息</param>
         /// <returns>YES/NO</returns>
         /// <exception cref="Exception">未能找到相对应处理的指令执行条件检查器</exception>
-        private bool CheckCondition(List<Condition> conditions, FlowInfo flowinfo)
+        private bool CheckCondition(InstructData data, List<Condition> conditions, FlowInfo flowinfo)
         {
             foreach (var condition in conditions)
             {
@@ -390,9 +391,10 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="pipelineid">管线 ID</param>
         /// <param name="index">指令索引</param>
         /// <param name="data">指令数据</param>
+        /// <param name="conditions">指令条件</param>
         /// <param name="flowinfo">管线信息</param>
         /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
-        private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, FlowInfo flowinfo)
+        private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, List<Condition> conditions, FlowInfo flowinfo)
         {
             if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
@@ -424,9 +426,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     Do(flowinfo.owner);
                     break;
                 case FLOW_DEFINE.ET_FLOW_HIT:
+                    // HACKER
                     if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
                     foreach (var target in flowcollision.targets)
                     {
+                        if (ExecuteInstructType.Exit != type && false == CheckCondition(data, conditions, flowinfo)) continue;
                         Do(target.actor);
                     }
                     break;
