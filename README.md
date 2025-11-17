@@ -37,6 +37,10 @@
     - Goblin 2.6.5
 
   - 2026-05-01
+    - Flow 实现重构 (解决 ExecuteInstruct 函数职责越界问题)
+      - 因为要实现 ET_FLOW_HIT，在内部进行了遍历命中目标进行执行，又要考虑 doings 与 conditions，特别丑陋
+      - 需要考虑新的实现方式
+      - 目前过于 HACKER ! ! !
     - Skill 转为 Actor （子弹合并至此）
     - Info 转 RIL 自动化
     - 所有 Clone 自动化
