@@ -90,7 +90,6 @@ namespace Goblin.Gameplay.Logic.Behaviors
                 var damage = stage.attrc.ChargeDamage(actor, skillinfo.strength);
                 foreach (var target in collisionhurt.targets)
                 {
-                    if (actor == target.actor) continue;
                     stage.attrc.ToDamage(actor, target.actor, damage);
                 }
                 collisionhurt.targets.Clear();

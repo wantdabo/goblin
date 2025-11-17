@@ -28,7 +28,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             {
                 foreach (var target in collisionhurt.targets)
                 {
-                    if (bullet.owner == target.actor) continue;
                     stage.attrc.ToDamage(bullet.actor, target.actor, bullet.damage);
                 }
                 collisionhurt.targets.Clear();
