@@ -33,7 +33,12 @@
     - 顿帧
     - 音效支持
     - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
-
+    - AddBehaviorInfo/AddBehavior 存在差一帧时序问题
+      - 例如, RmvBehaviorInfo<TickerInfo>(actor); AddBehaviorInfo<TickerInfo>(actor)
+      - 会导致业务代码上出现 BUG
+      - 因为，业务代码上 SeekBehaviorInfo 是找不到已经被移除的 BehaviorInfo
+      - 此时，业务代码根据找到与否的信息来进行是否要新增 BehaviorInfo 就会导致出现逻辑层抛出重复添加 BehaviorInfo，卡死的恶性 BUG
+      - 方案，AddBehaviorInfo/AddBehavior 进行 RmvList 列表检查。使其恢复正常
     - Goblin 2.6.5
 
   - 2026-05-01
