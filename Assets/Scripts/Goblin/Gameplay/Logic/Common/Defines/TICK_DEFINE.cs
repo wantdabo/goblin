@@ -21,6 +21,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(SkillBinding),
             typeof(Movement),
             typeof(Flow),
+            typeof(HitEffect),
             typeof(SkillLauncher),
             typeof(Bullet),
             typeof(Buff),

@@ -14,6 +14,7 @@ using Kowtow.Math;
 using Goblin.Sys.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Goblin.Sys.Lobby.View
 {
@@ -43,12 +44,20 @@ namespace Goblin.Sys.Lobby.View
                     {
                         seat = 1,
                         hero = 100001,
-                        position = new IntVector3(0, 0, 0),
+                        position = new IntVector3(21000, 0, 21000),
+                        euler = new IntVector3(0, 0, 0),
+                        scale = 1000,
+                    },
+                    new PlayerData
+                    {
+                        seat = 2,
+                        hero = 100001,
+                        position = new IntVector3(20000, 0, 20000),
                         euler = new IntVector3(0, 0, 0),
                         scale = 1000,
                     },
                 };
-                ulong seat = 2;
+                ulong seat = 3;
                 for (int i = 0; i < 5; i++)
                 {
                     for (int j = 0; j < 5; j++)
@@ -58,7 +67,7 @@ namespace Goblin.Sys.Lobby.View
                             seat = seat,
                             hero = 100001,
                             position = new IntVector3(1000 * i, 0, 1000 * j),
-                            euler = new IntVector3(0, (i + 1) * 20000 + (j + 1) * 20000, 0),
+                            euler = new IntVector3(0, 0, 0),
                             scale = 1000,
                         });
                         seat++;

@@ -475,6 +475,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Executor<RmvActorExecutor>(INSTR_DEFINE.RMV_ACTOR);
             Executor<ChangeStateExecutor>(INSTR_DEFINE.CHANGE_STATE);
             Executor<SparkExecutor>(INSTR_DEFINE.SPARK);
+            Executor<HitLagExecutor>(INSTR_DEFINE.HIT_LAG);
         }
     }
 }

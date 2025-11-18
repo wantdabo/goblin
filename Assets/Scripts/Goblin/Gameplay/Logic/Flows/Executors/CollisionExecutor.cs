@@ -56,12 +56,6 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     OnCollision<FlowCollisionSensorInfo>(result, identity, data, flowinfo, target);
                     break;
             }
-
-            // 命中火花
-            if (data.usespark)
-            {
-                stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
-            }
         }
 
         /// <summary>
@@ -88,6 +82,13 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 record.Add(collider.actor, count);
                 
                 flowcollision.targets.Add((collider.actor, identity));
+            }
+
+            if (false == result.hit) return;
+            // 命中火花
+            if (data.usespark)
+            {
+                stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
             }
         }
     }

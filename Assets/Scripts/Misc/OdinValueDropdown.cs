@@ -41,7 +41,7 @@ namespace Goblin.Misc
         /// <summary>
         /// 获取管线执行目标定义下拉列表
         /// </summary>
-        /// <returns>管线执行目标定</returns>
+        /// <returns>管线执行目标定义</returns>
         public static ValueDropdownList<byte> GetExecuteTargetDefine()
         {
             return new()
@@ -49,6 +49,19 @@ namespace Goblin.Misc
                 { "管线", FLOW_DEFINE.ET_FLOW },
                 { "管线拥有者", FLOW_DEFINE.ET_FLOW_OWNER },
                 { "管线命中", FLOW_DEFINE.ET_FLOW_HIT },
+            };
+        }
+
+        /// <summary>
+        /// 获取顿帧类型定义下拉列表
+        /// </summary>
+        /// <returns>顿帧类型定义</returns>
+        public static ValueDropdownList<byte> GetHitLagTypeDefine()
+        {
+            return new()
+            {
+                { "独立处理", HIT_LAG_DEFINE.TYPE_INSTANCE },
+                { "叠加处理", HIT_LAG_DEFINE.TYPE_ADDITIVE },
             };
         }
 

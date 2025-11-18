@@ -133,6 +133,10 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public Flow flow => GetBehavior<Flow>(sa, true);
         /// <summary>
+        /// 打击效果
+        /// </summary>
+        public HitEffect hiteffect => GetBehavior<HitEffect>(sa, true);
+        /// <summary>
         /// Buff
         /// </summary>
         public Buff buff => GetBehavior<Buff>(sa, true);
@@ -234,6 +238,7 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Captain>(sa);
             AddBehavior<SilentMercy>(sa);
             AddBehavior<Flow>(sa);
+            AddBehavior<HitEffect>(sa);
             AddBehavior<SkillBinding>(sa);
             AddBehavior<Bullet>(sa);
             AddBehavior<Buff>(sa);

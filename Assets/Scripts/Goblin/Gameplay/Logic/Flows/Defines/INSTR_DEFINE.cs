@@ -45,5 +45,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 火花指令
         /// </summary>
         public const ushort SPARK = 10;
+        /// <summary>
+        /// 顿帧指令
+        /// </summary>
+        public const ushort HIT_LAG = 11;
     }
 }
