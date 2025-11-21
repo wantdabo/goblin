@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -66,6 +67,10 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         /// </summary>
         public int model { get; set; }
         /// <summary>
+        /// 动画更新类型
+        /// </summary>
+        public byte animticktype { get; set; }
+        /// <summary>
         /// 动画状态
         /// </summary>
         public byte animstate { get; set; }
@@ -97,6 +102,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReady()
         {
             model = 0;
+            animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
             animstate = 0;
             animname = null;
             animelapsed = FP.Zero;
@@ -109,6 +115,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
         protected override void OnReset()
         {
             model = 0;
+            animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
             animstate = 0;
             animname = null;
             animelapsed = FP.Zero;
@@ -126,6 +133,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
             var clone = ObjectCache.Ensure<FacadeInfo>();
             clone.Ready(actor);
             clone.model = model;
+            clone.animticktype = animticktype;
             clone.animstate = animstate;
             clone.animname = animname;
             clone.animelapsed = animelapsed;

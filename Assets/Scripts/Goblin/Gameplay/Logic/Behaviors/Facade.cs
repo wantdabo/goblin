@@ -36,8 +36,9 @@ namespace Goblin.Gameplay.Logic.Behaviors
         /// 设置动画名称
         /// </summary>
         /// <param name="animname">动画名称</param>
-        public void SetAnimation(string animname)
+        public void SetAnimation(string animname, byte ticktype = ANIM_DEFINE.TICK_AUTOMATIC)
         {
+            info.animticktype = ticktype;
             info.animname = animname;
             info.animelapsed = 0;
         }
@@ -60,8 +61,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
         protected override void OnTick(FP tick)
         {
             base.OnTick(tick);
-            info.animelapsed += tick;
-
+            if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
             // 移除过期的特效
             foreach (var rmveffect in info.rmveffects)
             {

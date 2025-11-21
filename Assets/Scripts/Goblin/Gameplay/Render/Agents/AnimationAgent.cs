@@ -33,7 +33,7 @@ namespace Goblin.Gameplay.Render.Agents
         /// <summary>
         /// 上一个动画名称
         /// </summary>
-        private string preplayename { get; set; }
+        private string preplayname { get; set; }
         /// <summary>
         /// 当前播放动画名称
         /// </summary>
@@ -57,7 +57,7 @@ namespace Goblin.Gameplay.Render.Agents
             animcfg = null;
             animancer = null;
             animstate = null;
-            preplayename = null;
+            preplayname = null;
             curplayname = null;
             playname = null;
             tarduration = 0;
@@ -72,7 +72,7 @@ namespace Goblin.Gameplay.Render.Agents
             animcfg = null;
             animancer = null;
             animstate = null;
-            preplayename = null;
+            preplayname = null;
             curplayname = null;
             playname = null;
             tarduration = 0;
@@ -107,7 +107,7 @@ namespace Goblin.Gameplay.Render.Agents
             
             if (curplayname != animname)
             {
-                preplayename = curplayname;
+                preplayname = curplayname;
                 curplayname = animname;
             }
             
@@ -119,8 +119,8 @@ namespace Goblin.Gameplay.Render.Agents
             if (null == animinfo) return;
             mixduration = animinfo.mixduration;
 
-            if (null == preplayename) return;
-            var beforeAnimInfo = animinfo.GetAnimationBeforeMixInfo(preplayename);
+            if (null == preplayname) return;
+            var beforeAnimInfo = animinfo.GetAnimationBeforeMixInfo(preplayname);
             if (null != beforeAnimInfo && tarduration < beforeAnimInfo.duration)
             {
                 playname = beforeAnimInfo.name;

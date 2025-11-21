@@ -1,6 +1,7 @@
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 
@@ -15,14 +16,21 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             base.OnEnter(identity, data, flowinfo, target);
             if (false == stage.SeekBehavior(target, out Facade facade)) return;
-            facade.SetAnimation(data.name);
+            facade.SetAnimation(data.name, ANIM_DEFINE.TICK_MANUAL);
         }
 
         protected override void OnExit((uint pipelineid, uint index) identity, AnimationData data, FlowInfo flowinfo, ulong target)
         {
             base.OnExit(identity, data, flowinfo, target);
             if (false == stage.SeekBehavior(target, out Facade facade)) return;
-            facade.SetAnimation(null);
+            facade.SetAnimation(null, ANIM_DEFINE.TICK_AUTOMATIC);
+        }
+
+        protected override void OnExecute((uint pipelineid, uint index) identity, AnimationData data, FlowInfo flowinfo, ulong target)
+        {
+            base.OnExecute(identity, data, flowinfo, target);
+            if (false == stage.SeekBehavior(target, out Facade facade)) return;
+            facade.info.animelapsed += GAME_DEFINE.LOGIC_TICK;
         }
     }
 }
