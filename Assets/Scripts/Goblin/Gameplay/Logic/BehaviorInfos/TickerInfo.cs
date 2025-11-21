@@ -10,10 +10,20 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos
     /// </summary>
     public class TickerInfo : BehaviorInfo
     {
+        private FP mtimescale = FP.One;
         /// <summary>
         /// 时间缩放
         /// </summary>
-        public FP timescale { get; set; }
+        public FP timescale {
+            get
+            {
+                return mtimescale;
+            }
+            set
+            {
+                mtimescale = FPMath.Clamp(value, 0, FP.MaxValue);
+            }
+        }
 
         protected override void OnReady()
         {
