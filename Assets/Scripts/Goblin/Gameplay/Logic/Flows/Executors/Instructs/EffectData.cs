@@ -1,4 +1,5 @@
 using System;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Kowtow.Math;
@@ -29,6 +30,20 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ValueDropdown("@OdinValueDropdown.GetEffectTypeDefine()")]
         [LabelText("特效类型")]
         public byte type;
+
+        /// <summary>
+        /// 特效持续时间类型
+        /// </summary>
+        [ValueDropdown("@OdinValueDropdown.GetEffectDurationTypeDefine()")]
+        [LabelText("特效持续时间类型")]
+        public byte durationtype = EFFECT_DEFINE.DURATION_TIMELINE;
+
+        /// <summary>
+        /// 特效持续时间(毫秒)
+        /// </summary>
+        [ShowIf("@EFFECT_DEFINE.DURATION_CUSTOM == durationtype")]
+        [LabelText("特效持续时间(毫秒)")]
+        public int duration = 1000;
 
         /// <summary>
         /// 特效跟随

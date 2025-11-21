@@ -291,12 +291,6 @@ namespace Goblin.Gameplay.Logic.Core
                 // TODO 记得删除
                 // 添加测试 Buff
                 buff.AddBuff(hero, 1000001, 1, 10);
-                
-                // player.seat == 2 单位, TickerInfo.timescale 独立设置为 0.25f;
-                if (2 == player.seat && SeekBehaviorInfo(hero, out TickerInfo ticker))
-                {
-                    ticker.timescale = FP.Half * FP.Half;
-                }
             }
         }
 

@@ -135,6 +135,20 @@ namespace Goblin.Misc
         }
         
         /// <summary>
+        /// 获取特效类型定义下拉列表
+        /// </summary>
+        /// <returns>ValueDropdownList(特效持续时间类型)</returns>
+        public static ValueDropdownList<byte> GetEffectDurationTypeDefine()
+        {
+            return new ()
+            {
+                { "时间轴", EFFECT_DEFINE.DURATION_TIMELINE },
+                { "自定义", EFFECT_DEFINE.DURATION_CUSTOM },
+                { "配置表", EFFECT_DEFINE.DURATION_USECFG },
+            };
+        }
+        
+        /// <summary>
         /// 获取特效跟随定义下拉列表
         /// </summary>
         /// <returns>ValueDropdownList(特效跟随)</returns>

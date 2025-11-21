@@ -2,6 +2,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
@@ -10,7 +11,7 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Flows.Executors
 {
     /// <summary>
-    /// 外观特效执行器
+    /// 特效执行器
     /// </summary>
     public class EffectExecutor : Executor<EffectData>
     {
@@ -18,9 +19,21 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         {
             base.OnEnter(identity, data, flowinfo, target);
             if (false == stage.SeekBehavior(target, out Facade facade)) return;
-            var pipeline = PipelineDataReader.Read(identity.pipelineid);
-            if (null == pipeline) return;
-            if (false == pipeline.Query(identity.index, out var instruct)) return;
+            
+            FP duration = FP.Zero;
+            switch (data.durationtype)
+            {
+                case EFFECT_DEFINE.DURATION_TIMELINE:
+                    var pipeline = PipelineDataReader.Read(identity.pipelineid);
+                    if (null != pipeline && pipeline.Query(identity.index, out var instruct)) duration = (int)(instruct.end - instruct.begin) * FP.EN3;
+                    break;
+                case EFFECT_DEFINE.DURATION_CUSTOM:
+                    duration = data.duration * FP.EN3;
+                    break;
+                case EFFECT_DEFINE.DURATION_USECFG:
+                    if (stage.cfg.location.EffectInfos.TryGetValue(data.effect, out var effectinfo)) duration = effectinfo.Duration * FP.EN3;
+                    break;
+            }
 
             facade.CreateEffect(new EffectInfo
             {
@@ -28,7 +41,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 type = data.type,
                 follow = data.follow,
                 followmask = data.followmask,
-                duration = (int)(instruct.end - instruct.begin) * FP.EN3,
+                duration = duration,
                 position = data.position.ToFPVector3(),
                 euler = data.euler.ToFPVector3(),
                 scale = data.scale * FP.EN3,

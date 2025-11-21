@@ -19,6 +19,7 @@ public sealed partial class EffectInfo : Luban.BeanBase
         Id = _buf.ReadInt();
         Name = _buf.ReadString();
         Res = _buf.ReadString();
+        Duration = _buf.ReadInt();
     }
 
     public static EffectInfo DeserializeEffectInfo(ByteBuf _buf)
@@ -38,6 +39,10 @@ public sealed partial class EffectInfo : Luban.BeanBase
     /// 资源路径
     /// </summary>
     public readonly string Res;
+    /// <summary>
+    /// 持续时间(毫秒)
+    /// </summary>
+    public readonly int Duration;
    
     public const int __ID__ = -1630124311;
     public override int GetTypeId() => __ID__;
@@ -52,6 +57,7 @@ public sealed partial class EffectInfo : Luban.BeanBase
         + "Id:" + Id + ","
         + "Name:" + Name + ","
         + "Res:" + Res + ","
+        + "Duration:" + Duration + ","
         + "}";
     }
 }

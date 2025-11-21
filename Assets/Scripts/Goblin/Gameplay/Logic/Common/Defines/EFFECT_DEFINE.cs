@@ -13,6 +13,19 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         /// 特效类型, 线条特效 (LineRenderer 连线)
         /// </summary>
         public const byte TYPE_LINE = 1;
+
+        /// <summary>
+        /// 特效持续时间, 按时间轴
+        /// </summary>
+        public const byte DURATION_TIMELINE = 0;
+        /// <summary>
+        /// 特效持续时间, 自定义时间
+        /// </summary>
+        public const byte DURATION_CUSTOM = 1;
+        /// <summary>
+        /// 特效持续时间, 使用配置时间
+        /// </summary>
+        public const byte DURATION_USECFG = 2;
         
         /// <summary>
         /// 特效跟随, 跟随 Actor
