@@ -30,6 +30,10 @@ namespace Goblin.Sys.Gameplay
         /// 跳字
         /// </summary>
         public bool dancing { get; set; } = false;
+        /// <summary>
+        /// 敌方自动
+        /// </summary>
+        public bool enemyautopilot { get; set; } = false;
 
         /// <summary>
         /// 加载战斗

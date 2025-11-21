@@ -25,6 +25,7 @@ namespace Goblin.Sys.Gameplay.View
         private Toggle gamingCBToggle { get; set; }
         private Toggle physDrawerToggle { get; set; }
         private Toggle danceCBToggle { get; set; }
+        private Toggle enemyAutopoilotToggle { get; set; }
         private Transform selfSeatPoint { get; set; }
         
         protected override void OnLoad()
@@ -50,6 +51,7 @@ namespace Goblin.Sys.Gameplay.View
             gamingCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "GamingCB");
             physDrawerToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "PhysDrawerCB");
             danceCBToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "DanceCB");
+            enemyAutopoilotToggle = engine.u3dkit.SeekNode<Toggle>(gameObject, "EnemyAutopoilotCB");
             selfSeatPoint = engine.u3dkit.SeekNode<Transform>(gameObject, "SelfSeatPoint");
         }
 
@@ -89,6 +91,11 @@ namespace Goblin.Sys.Gameplay.View
             AddUIEventListener("DanceCB", (e) =>
             {
                 engine.proxy.gameplay.dancing = danceCBToggle.isOn;
+            });
+            
+            AddUIEventListener("EnemyAutopoilotCB", (e) =>
+            {
+                engine.proxy.gameplay.enemyautopilot = enemyAutopoilotToggle.isOn;
             });
             
             AddUIEventListener("SwitchSeatBtn", (e) =>

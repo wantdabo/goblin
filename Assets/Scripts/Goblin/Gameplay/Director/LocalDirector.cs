@@ -15,6 +15,7 @@ using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 using Goblin.RendererFeatures;
+using Kowtow.Math;
 using UnityEngine;
 
 namespace Goblin.Gameplay.Director
@@ -224,6 +225,8 @@ namespace Goblin.Gameplay.Director
             var ba = world.input.GetInput(INPUT_DEFINE.BA);
             stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
             stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+
+            EnemyAutopoilot();
             stage.Step();
 
             lock (@lock)
@@ -231,6 +234,22 @@ namespace Goblin.Gameplay.Director
                 colliders.Clear();
                 if (false == stage.SeekBehaviorInfos(out List<ColliderInfo> infos)) return;
                 colliders.AddRange(infos);
+            }
+        }
+
+        /// <summary>
+        /// 敌人自动驾驶
+        /// </summary>
+        private void EnemyAutopoilot()
+        {
+            if (false == engine.proxy.gameplay.enemyautopilot) return;
+            for (int i = 3; i <= 3 + 25; i++)
+            {
+                var ismove = engine.random.Range(0, 100) < 70;
+                stage.SetInput((ulong)i, INPUT_DEFINE.JOYSTICK, ismove, new IntVector2(engine.random.Range(-1000, 1000), engine.random.Range(-1000, 1000)));
+                
+                var isba = engine.random.Range(0, 500) < 10;
+                stage.SetInput((ulong)i, INPUT_DEFINE.BA, isba, new IntVector2());
             }
         }
 
