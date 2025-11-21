@@ -175,6 +175,8 @@ namespace Goblin.Gameplay.Logic.Flows
                     return MessagePackSerializer.Deserialize<SparkData>(data);
                 case INSTR_DEFINE.HIT_LAG:
                     return MessagePackSerializer.Deserialize<HitLagData>(data);
+                case INSTR_DEFINE.TIMESCALE:
+                    return MessagePackSerializer.Deserialize<TimeScaleData>(data);
                 default:
                     return null;
             }

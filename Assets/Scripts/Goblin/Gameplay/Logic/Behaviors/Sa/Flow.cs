@@ -476,6 +476,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Executor<ChangeStateExecutor>(INSTR_DEFINE.CHANGE_STATE);
             Executor<SparkExecutor>(INSTR_DEFINE.SPARK);
             Executor<HitLagExecutor>(INSTR_DEFINE.HIT_LAG);
+            Executor<TimeScaleExecutor>(INSTR_DEFINE.TIMESCALE);
         }
     }
 }

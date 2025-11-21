@@ -134,6 +134,9 @@ namespace Pipeline.Timeline
                             case INSTR_DEFINE.SPARK:
                                 pipetrack = timelineasset.CreateTrack<PipelineSparkTrack>();
                                 break;
+                            case INSTR_DEFINE.TIMESCALE:
+                                pipetrack = timelineasset.CreateTrack<PipelineTimeScaleTrack>();
+                                break;
                         }
 
                         if (null == pipetrack) continue;
