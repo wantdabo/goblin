@@ -304,7 +304,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             base.OnTick(tick);
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
-            foreach (var flowinfo in flowinfos)
+            var queue = ObjectCache.Ensure<Queue<FlowInfo>, FlowInfo>(CAPACITY_DEFINE.L3);
+            foreach (var flowinfo in flowinfos) queue.Enqueue(flowinfo);
+            while (queue.TryDequeue(out var flowinfo))
             {
                 if (false == flowinfo.active) continue;
                 if (false == stage.cache.Valid(flowinfo.owner))
@@ -316,15 +318,19 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 // 叠加持有者的 timescale
                 FP flowtick = tick;
                 if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo tickerinfo)) flowtick *= tickerinfo.timescale;
-                // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
                 flowinfo.framepass += (flowtick * stage.cfg.fp2int).AsUInt();
-                while (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)
+                if (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)
                 {
                     RunPipeline(flowinfo);
                     flowinfo.timeline += GAME_DEFINE.LOGIC_TICK_MS;
                     flowinfo.framepass -= GAME_DEFINE.LOGIC_TICK_MS;
+                    // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
+                    if (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS) queue.Enqueue(flowinfo);
                 }
             }
+
+            queue.Clear();
+            ObjectCache.Set(queue);
         }
 
         protected override void OnEndTick()
