@@ -243,7 +243,7 @@ namespace Goblin.Gameplay.Director
         private void EnemyAutopoilot()
         {
             if (false == engine.proxy.gameplay.enemyautopilot) return;
-            for (int i = 3; i <= 3 + 64; i++)
+            for (int i = 3; i <= 3 + 4; i++)
             {
                 var ismove = engine.random.Range(0, 100) < 70;
                 stage.SetInput((ulong)i, INPUT_DEFINE.JOYSTICK, ismove, new IntVector2(engine.random.Range(-1000, 1000), engine.random.Range(-1000, 1000)));

@@ -58,9 +58,9 @@ namespace Goblin.Sys.Lobby.View
                     },
                 };
                 ulong seat = 3;
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 2; j++)
                     {
                         players.Add(new PlayerData
                         {

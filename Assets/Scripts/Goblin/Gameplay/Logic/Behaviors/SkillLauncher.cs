@@ -71,6 +71,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             if (info.casting) return;
             if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
+            if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
+
             // 创建管线
             info.skill = skill;
             info.casting = true;
@@ -106,11 +108,7 @@ namespace Goblin.Gameplay.Logic.Behaviors
             // 切换状态机中状态
             if (stage.SeekBehavior(actor, out StateMachine statemachine))
             {
-                if (info.casting && STATE_DEFINE.CASTING != statemachine.info.current)
-                {
-                    statemachine.TryChangeState(STATE_DEFINE.CASTING);
-                }
-                else if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)
+                if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)
                 {
                     statemachine.ChangeState(STATE_DEFINE.NONE);
                 }

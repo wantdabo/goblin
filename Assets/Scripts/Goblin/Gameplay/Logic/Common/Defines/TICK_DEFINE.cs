@@ -20,6 +20,7 @@ namespace Goblin.Gameplay.Logic.Common.Defines
             typeof(Gamepad),
             typeof(SkillBinding),
             typeof(Movement),
+            typeof(StateMachine),
             typeof(Flow),
             typeof(HitEffect),
             typeof(SkillLauncher),

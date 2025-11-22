@@ -17,6 +17,16 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             ChangeState(STATE_DEFINE.NONE);
         }
+        
+        /// <summary>
+        /// 延迟中断状态
+        /// </summary>
+        /// <param name="delay">延迟时间</param>
+        public void Break(FP delay)
+        {
+            info.usedelaybreak = true;
+            info.delaybreak = delay;
+        }
 
         /// <summary>
         /// 尝试切换状态
@@ -41,6 +51,8 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             info.last = info.current;
             info.current = state;
+            info.usedelaybreak = false;
+            info.delaybreak = FP.Zero;
             
             if (false == stage.SeekBehavior(actor, out Facade facade)) return;
             if (STATE_DEFINE.CASTING == info.current)
@@ -51,7 +63,15 @@ namespace Goblin.Gameplay.Logic.Behaviors
             
             facade.SetAnimation(info.current);
         }
-        
+
+        protected override void OnTick(FP tick)
+        {
+            base.OnTick(tick);
+            if (false == info.usedelaybreak) return;
+            info.delaybreak -= tick;
+            if (info.delaybreak <= FP.Zero) Break();
+        }
+
         /// <summary>
         /// 查询当前状态是否可以切换到指定状态
         /// </summary>

@@ -35,5 +35,18 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [LabelText("变更的状态")]
         [ValueDropdown("@OdinValueDropdown.GetStateDefine()")]
         public byte state;
+
+        /// <summary>
+        /// 是否使用延迟中断状态
+        /// </summary>
+        [LabelText("是否使用延迟中断状态")]
+        public bool usedelaybreak;
+
+        /// <summary>
+        /// 延迟中断时间
+        /// </summary>
+        [ShowIf("@usedelaybreak")]
+        [LabelText("延迟中断时间")]
+        public uint delaybreak = 1000;
     }
 }

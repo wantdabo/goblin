@@ -14,12 +14,5 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
     public class RmvActorData : InstructData
     {
         public override ushort id => INSTR_DEFINE.RMV_ACTOR;
-        
-        /// <summary>
-        /// 移除的目标
-        /// </summary>
-        [ValueDropdown("@OdinValueDropdown.GetRmvActorDefine()")]
-        [LabelText("移除的目标")]
-        public byte target;
     }
 }

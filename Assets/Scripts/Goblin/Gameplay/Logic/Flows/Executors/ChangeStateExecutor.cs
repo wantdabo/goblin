@@ -2,6 +2,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Flows.Executors
 {
@@ -20,14 +21,20 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 statemachine.Break();
                 return;
             }
-            
+
             if (data.force)
             {
                 statemachine.ChangeState(data.state);
-                return;
+            }
+            else
+            {
+                statemachine.TryChangeState(data.state);
             }
             
-            statemachine.ChangeState(data.state);
+            if (data.usedelaybreak)
+            {
+                statemachine.Break(data.delaybreak * FP.EN3);
+            }
         }
     }
 }
