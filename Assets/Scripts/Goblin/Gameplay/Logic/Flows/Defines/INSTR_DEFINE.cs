@@ -53,5 +53,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 时间缩放指令
         /// </summary>
         public const ushort TIMESCALE = 12;
+        /// <summary>
+        /// 受击指令
+        /// </summary>
+        public const ushort BEHIT = 13;
     }
 }

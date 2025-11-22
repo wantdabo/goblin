@@ -64,6 +64,19 @@ namespace Goblin.Misc
                 { "叠加处理", HIT_LAG_DEFINE.TYPE_ADDITIVE },
             };
         }
+        
+        /// <summary>
+        /// 获取受击动作类型定义下拉列表
+        /// </summary>
+        /// <returns>受击运动类型定义</returns>
+        public static ValueDropdownList<byte> GetBehitMotionTypeDefine()
+        {
+            return new()
+            {
+                { "参考自身", BEHIT_DEFINE.MOTION_SELF },
+                { "参考攻击者", BEHIT_DEFINE.MOTION_ATTACK },
+            };
+        }
 
         /// <summary>
         /// 获取指令数据类型列表
