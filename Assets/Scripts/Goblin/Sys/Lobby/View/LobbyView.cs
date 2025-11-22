@@ -58,15 +58,15 @@ namespace Goblin.Sys.Lobby.View
                     },
                 };
                 ulong seat = 3;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 8; i++)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < 8; j++)
                     {
                         players.Add(new PlayerData
                         {
                             seat = seat,
                             hero = 100001,
-                            position = new IntVector3(1000 * i, 0, 1000 * j),
+                            position = new IntVector3(1100 * i, 0, 1100 * j),
                             euler = new IntVector3(0, 0, 0),
                             scale = 1000,
                         });
