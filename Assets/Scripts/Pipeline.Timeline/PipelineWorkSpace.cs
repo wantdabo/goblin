@@ -168,39 +168,53 @@ namespace Pipeline.Timeline
             // 处理花火指令
             if (null != data.sparkinstructs)
             {
-                panel.sparkinstructs = new PipelineSparkInstruct[data.sparkinstructs.Count];
-                for (int i = 0; i < panel.sparkinstructs.Length; i++)
+                List<PipelineSparkInstruct> pipelinesparkinstrs = new();
+                foreach (var sparkinstruct in data.sparkinstructs)
                 {
-                    var sparkinstruct = data.sparkinstructs[i];
-                    
-                    var useinnertoken = false;
-                    foreach (var item in OdinValueDropdown.GetSparkTokenDefine())
+                    var pipelinesparkinstr = pipelinesparkinstrs.Find((instr) =>
                     {
-                        if (item.Value != sparkinstruct.token) continue;
-                        useinnertoken = true;
-                        break;
+                        if (instr.influence != sparkinstruct.influence) return false;
+                        if (instr.token != sparkinstruct.token) return false;
+                        
+                        return true;
+                    });
+
+                    if (null == pipelinesparkinstr)
+                    {
+                        var useinnertoken = false;
+                        foreach (var item in OdinValueDropdown.GetSparkTokenDefine())
+                        {
+                            if (item.Value != sparkinstruct.token) continue;
+                            useinnertoken = true;
+                            break;
+                        }
+
+                        pipelinesparkinstr = new PipelineSparkInstruct()
+                        {
+                            influence = sparkinstruct.influence,
+                            useinnertoken = useinnertoken,
+                            innertoken = sparkinstruct.token,
+                            customtoken = sparkinstruct.token,
+                            instructbundles = new(),
+                        };
+                        
+                        pipelinesparkinstrs.Add(pipelinesparkinstr);
                     }
 
-                    var pipelinesparkinstruct = new PipelineSparkInstruct
+                    var sparkinstrbundle = new PipelineSparkInstructBundle();
+                    sparkinstrbundle.conditions = new();
+                    foreach (var condition in sparkinstruct.conditions)
                     {
-                        influence = sparkinstruct.influence,
-                        useinnertoken = useinnertoken,
-                        innertoken = sparkinstruct.token,
-                        customtoken = sparkinstruct.token,
-                        conditions = new List<PipelineCondition>()
-                    };
-                    pipelinesparkinstruct.instructdata = sparkinstruct.data;
-                    if (null != sparkinstruct.conditions)
-                    {
-                        foreach (var condition in sparkinstruct.conditions)
+                        sparkinstrbundle.conditions.Add(new PipelineCondition
                         {
-                            var pipecondition = new PipelineCondition();
-                            pipecondition.condition = condition;
-                            pipelinesparkinstruct.conditions.Add(pipecondition);
-                        }
+                            condition = condition,
+                        });
                     }
-                    panel.sparkinstructs[i] = pipelinesparkinstruct;
+                    sparkinstrbundle.instructdata = sparkinstruct.data;
+                    pipelinesparkinstr.instructbundles.Add(sparkinstrbundle);
+                    
                 }
+                if (null != pipelinesparkinstrs && pipelinesparkinstrs.Count > 0) panel.sparkinstructs = pipelinesparkinstrs.ToArray();
             }
         }
 
@@ -297,8 +311,11 @@ namespace Pipeline.Timeline
             {
                 foreach (var instruct in panel.sparkinstructs)
                 {
-                    var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, instruct.instructdata);
-                    foreach (var pipelinecondition in instruct.conditions) opt.Condition(pipelinecondition.condition);
+                    foreach (var bundle in instruct.instructbundles)
+                    {
+                        var opt = ScriptMachine.Instruct(instruct.influence, instruct.token, bundle.instructdata);
+                        foreach (var pipelinecondition in bundle.conditions) opt.Condition(pipelinecondition.condition);
+                    }
                 }
             }
 

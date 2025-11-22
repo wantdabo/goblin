@@ -10,6 +10,18 @@ using UnityEngine.Serialization;
 
 namespace Pipeline.Timeline.Common
 {
+    [Serializable]
+    public class PipelineSparkInstructBundle
+    {
+        [LabelText("条件列表")]
+        public List<PipelineCondition> conditions;
+
+        [LabelText("火花指令数据")]
+        [SerializeReference, InlineProperty]
+        [TypeFilter("@OdinValueDropdown.GetInstructDataFilteredTypes()")]
+        public InstructData instructdata;
+    }
+    
     /// <summary>
     /// 管线火花指令包装
     /// </summary>
@@ -34,12 +46,45 @@ namespace Pipeline.Timeline.Common
 
         public string token => useinnertoken ? innertoken : customtoken;
 
-        [LabelText("条件列表")]
-        public List<PipelineCondition> conditions;
+        [LabelText("火花指令数据列表")]
+        [PropertySpace(SpaceAfter = 20)]
+        [ListDrawerSettings(OnBeginListElementGUI = nameof(BeginElement), OnEndListElementGUI = nameof(EndElement))]
+        public List<PipelineSparkInstructBundle> instructbundles;
 
-        [LabelText("火花指令数据")]
-        [SerializeReference, InlineProperty]
-        [TypeFilter("@OdinValueDropdown.GetInstructDataFilteredTypes()")]
-        public InstructData instructdata;
+#if UNITY_EDITOR
+        private void BeginElement(int index)
+        {
+            // 🎨 淡蓝交替背景
+            var color = (index % 2 == 0)
+                ? new Color(0.95f, 0.95f, 1f)
+                : new Color(0.9f, 0.9f, 1f);
+            UnityEngine.GUI.color = color;
+
+            // 🏷️ 绘制序号框
+            var rect = UnityEditor.EditorGUILayout.GetControlRect(false, 18);
+            rect.x += 4;
+            rect.y += 2;
+            rect.width = 30;
+            rect.height = 16;
+
+            var style = new UnityEngine.GUIStyle(UnityEngine.GUI.skin.box)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Bold,
+                normal = { textColor = UnityEngine.Color.magenta }
+            };
+
+            var labelColor = new Color(0.2f, 0.4f, 0.8f); // 深蓝底
+            var oldBg = UnityEngine.GUI.backgroundColor;
+            UnityEngine.GUI.backgroundColor = labelColor;
+            UnityEngine.GUI.Box(rect, (index + 1).ToString(), style);
+            UnityEngine.GUI.backgroundColor = oldBg;
+        }
+
+        private void EndElement(int index)
+        {
+            UnityEngine.GUI.color = UnityEngine.Color.white;
+        }
+#endif
     }
 }
