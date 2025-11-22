@@ -73,8 +73,10 @@ namespace Goblin.Misc
         {
             return new()
             {
-                { "参考自身", BEHIT_DEFINE.MOTION_SELF },
-                { "参考攻击者", BEHIT_DEFINE.MOTION_ATTACK },
+                { "参考自身前方", BEHIT_DEFINE.MOTION_SELF_FORWARD },
+                { "参考攻击者前方", BEHIT_DEFINE.MOTION_ATTACK_FORWARD },
+                { "参考自身到攻击者", BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF },
+                { "参考攻击者到自身", BEHIT_DEFINE.MOTION_SELF_TO_ATTACKER },
             };
         }
 

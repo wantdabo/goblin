@@ -31,7 +31,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [ShowIf("@usehitmotion")]
         [LabelText("受击运动类型")]
         [ValueDropdown("@OdinValueDropdown.GetBehitMotionTypeDefine()")]
-        public byte hitmotiontype = BEHIT_DEFINE.MOTION_SELF;
+        public byte hitmotiontype = BEHIT_DEFINE.MOTION_SELF_FORWARD;
         /// <summary>
         /// 受击运动
         /// </summary>

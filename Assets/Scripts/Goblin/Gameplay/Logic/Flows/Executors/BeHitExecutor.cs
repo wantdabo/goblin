@@ -30,17 +30,31 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             {
                 switch (data.hitmotiontype)
                 {
-                    case BEHIT_DEFINE.MOTION_SELF:
+                    case BEHIT_DEFINE.MOTION_SELF_FORWARD:
                         if (null != spatial)
                         {
                             var rotation = FPQuaternion.Euler(spatial.euler);
                             spatial.position += rotation * data.hitmotion.ToFPVector3();
                         }
                         break;
-                    case BEHIT_DEFINE.MOTION_ATTACK:
+                    case BEHIT_DEFINE.MOTION_ATTACK_FORWARD:
                         if (null != spatial && null != atkspatial)
                         {
                             var rotation = FPQuaternion.Euler(atkspatial.euler);
+                            spatial.position += rotation * data.hitmotion.ToFPVector3();
+                        }
+                        break;
+                    case BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF:
+                        if (null != spatial && null != atkspatial)
+                        {
+                            var rotation = FPQuaternion.LookRotation((spatial.position - atkspatial.position).normalized, FPVector3.up);
+                            spatial.position += rotation * data.hitmotion.ToFPVector3();
+                        }
+                        break;
+                    case BEHIT_DEFINE.MOTION_SELF_TO_ATTACKER:
+                        if (null != spatial && null != atkspatial)
+                        {
+                            var rotation = FPQuaternion.LookRotation((atkspatial.position - spatial.position).normalized, FPVector3.up);
                             spatial.position += rotation * data.hitmotion.ToFPVector3();
                         }
                         break;
