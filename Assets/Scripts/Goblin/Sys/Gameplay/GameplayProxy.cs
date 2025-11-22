@@ -27,6 +27,10 @@ namespace Goblin.Sys.Gameplay
         /// </summary>
         public bool physdraw { get; set; } = false;
         /// <summary>
+        /// 单位信息
+        /// </summary>
+        public bool showinfo { get; set; } = false;
+        /// <summary>
         /// 跳字
         /// </summary>
         public bool dancing { get; set; } = false;
