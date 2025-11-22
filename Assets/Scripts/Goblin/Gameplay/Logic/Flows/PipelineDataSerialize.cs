@@ -179,6 +179,8 @@ namespace Goblin.Gameplay.Logic.Flows
                     return MessagePackSerializer.Deserialize<TimeScaleData>(data);
                 case INSTR_DEFINE.BEHIT:
                     return MessagePackSerializer.Deserialize<BeHitData>(data);
+                case INSTR_DEFINE.SKILLBREAK:
+                    return MessagePackSerializer.Deserialize<SkillBreakData>(data);
                 default:
                     return null;
             }

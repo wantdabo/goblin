@@ -51,12 +51,12 @@ namespace Goblin.Gameplay.Logic.Common.Defines
         {
             { BORN, new List<byte>() { } },
             { DEATH, new List<byte>() { } },
-            { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING } },
-            { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING } },
-            { JUMP, new List<byte>() { DEATH, FALL, CASTING } },
-            { FALL, new List<byte>() { DEATH, IDLE, CASTING } },
-            { CASTING, new List<byte>() { DEATH } },
-            { BEHIT, new List<byte>() { DEATH } },
+            { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING, BEHIT } },
+            { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING, BEHIT } },
+            { JUMP, new List<byte>() { DEATH, FALL, CASTING, BEHIT } },
+            { FALL, new List<byte>() { DEATH, IDLE, CASTING, BEHIT } },
+            { CASTING, new List<byte>() { DEATH, BEHIT } },
+            { BEHIT, new List<byte>() { DEATH, BEHIT } },
         };
     }
 }

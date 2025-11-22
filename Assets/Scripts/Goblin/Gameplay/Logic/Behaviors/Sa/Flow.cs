@@ -486,6 +486,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Executor<HitLagExecutor>(INSTR_DEFINE.HIT_LAG);
             Executor<TimeScaleExecutor>(INSTR_DEFINE.TIMESCALE);
             Executor<BeHitExecutor>(INSTR_DEFINE.BEHIT);
+            Executor<SkillBreakExecutor>(INSTR_DEFINE.SKILLBREAK);
         }
     }
 }

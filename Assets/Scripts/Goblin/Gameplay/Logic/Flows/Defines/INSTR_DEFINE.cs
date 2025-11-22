@@ -57,5 +57,9 @@ namespace Goblin.Gameplay.Logic.Flows.Defines
         /// 受击指令
         /// </summary>
         public const ushort BEHIT = 13;
+        /// <summary>
+        /// 技能打断指令
+        /// </summary>
+        public const ushort SKILLBREAK = 14;
     }
 }
