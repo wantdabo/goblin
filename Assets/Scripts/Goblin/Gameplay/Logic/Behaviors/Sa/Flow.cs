@@ -305,7 +305,15 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             base.OnTick(tick);
             if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
             var queue = ObjectCache.Ensure<Queue<FlowInfo>, FlowInfo>(CAPACITY_DEFINE.L3);
-            foreach (var flowinfo in flowinfos) queue.Enqueue(flowinfo);
+            foreach (var flowinfo in flowinfos)
+            {
+                // 叠加持有者的 timescale
+                FP flowtick = tick;
+                if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo tickerinfo)) flowtick *= tickerinfo.timescale;
+                flowinfo.framepass += (flowtick * stage.cfg.fp2int).AsUInt();
+                queue.Enqueue(flowinfo);
+            }
+            
             while (queue.TryDequeue(out var flowinfo))
             {
                 if (false == flowinfo.active) continue;
@@ -314,11 +322,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     EndPipeline(flowinfo);
                     continue;
                 }
-                
-                // 叠加持有者的 timescale
-                FP flowtick = tick;
-                if (stage.SeekBehaviorInfo(flowinfo.owner, out TickerInfo tickerinfo)) flowtick *= tickerinfo.timescale;
-                flowinfo.framepass += (flowtick * stage.cfg.fp2int).AsUInt();
+
                 if (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)
                 {
                     RunPipeline(flowinfo);
