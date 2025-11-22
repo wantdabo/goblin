@@ -13,14 +13,8 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter((uint pipelineid, uint index) identity, RmvActorData data, FlowInfo flowinfo, ulong target)
         {
             base.OnEnter(identity, data, flowinfo, target);
-            if (target != flowinfo.actor)
-            {
-                stage.RmvActor(target);
-            }
-            else
-            {
-                stage.flow.EndPipeline(target);
-            }
+            stage.flow.EndPipeline(target);
+            stage.RmvActor(target);
         }
     }
 }
