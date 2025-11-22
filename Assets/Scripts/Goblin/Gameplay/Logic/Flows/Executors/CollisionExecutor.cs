@@ -84,12 +84,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 flowcollision.targets.Add((collider.actor, identity));
             }
 
-            if (false == result.hit) return;
             // 命中火花
-            if (data.usespark)
-            {
-                stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
-            }
+            if (false == data.usespark) return;
+            if (0 == flowcollision.targets.Count) return;
+            stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
         }
     }
 }
