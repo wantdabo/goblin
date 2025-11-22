@@ -271,7 +271,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     // 管线已经进入, 正在运行中
                     var isdoing = null != indexes && indexes.Contains(index);
                     // 在时间区间内
-                    var inside = instruct.begin <= flowinfo.timeline && instruct.end > flowinfo.timeline;
+                    var inside = instruct.begin <= flowinfo.timeline && instruct.end >= flowinfo.timeline;
                     
                     // 如果不在时间区间内则退出
                     if (false == inside)
@@ -325,9 +325,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
 
                 if (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS)
                 {
-                    RunPipeline(flowinfo);
                     flowinfo.timeline += GAME_DEFINE.LOGIC_TICK_MS;
                     flowinfo.framepass -= GAME_DEFINE.LOGIC_TICK_MS;
+                    RunPipeline(flowinfo);
                     // 管线的经过时间, 满足单帧才能执行, 如果溢出, 以此循环执行
                     if (flowinfo.framepass >= GAME_DEFINE.LOGIC_TICK_MS) queue.Enqueue(flowinfo);
                 }
