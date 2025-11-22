@@ -34,6 +34,16 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         [LabelText("检测类型")]
         public byte overlaptype = COLLISION_DEFINE.COLLISION_BOX;
         /// <summary>
+        /// 包括执行目标
+        /// </summary>
+        [LabelText("包括执行目标")]
+        public bool includetarget = false;
+        /// <summary>
+        /// 包括死亡单位
+        /// </summary>
+        [LabelText("包括死亡单位")]
+        public bool includedead = false;
+        /// <summary>
         /// 最大检测次数
         /// </summary>
         [LabelText("检测次数")]

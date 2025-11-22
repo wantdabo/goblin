@@ -17,6 +17,6 @@ MonoBehaviour:
   - keys: 0100
     values: 02000000
   - keys: 0900
-    values: 0100000004000000
+    values: 01000000
   - keys: 0800
     values: 03000000

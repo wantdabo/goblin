@@ -1,5 +1,6 @@
 ﻿using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
@@ -16,6 +17,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter((uint pipelineid, uint index) identity, BeHitData data, FlowInfo flowinfo, ulong target)
         {
             base.OnEnter(identity, data, flowinfo, target);
+            if (stage.SeekBehaviorInfo(target, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
             stage.SeekBehaviorInfo(target, out SpatialInfo spatial);
             stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo atkspatial);
             

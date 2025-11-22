@@ -21,9 +21,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnExecute((uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo, ulong target)
         {
             base.OnExecute(identity, data, flowinfo, target);
-
             if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
-            
             var rotation = FPQuaternion.Euler(spatial.euler);
             var position = spatial.position + rotation * data.offset.ToFPVector3();
 
@@ -73,7 +71,9 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             if (false == flowcollision.records.TryGetValue(identity, out var record)) flowcollision.records.Add(identity, record = ObjectCache.Ensure<Dictionary<ulong, uint>>());
             foreach (var collider in result.colliders)
             {
-                if (COLLISION_DEFINE.COLLISION_TYPE_HURT == data.type && collider.actor == target) continue;
+                if (false == data.includetarget && collider.actor == target) continue;
+                if (false == data.includedead && stage.SeekBehaviorInfo(collider.actor, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) continue;
+                
                 var has = record.TryGetValue(collider.actor, out var count);
                 if (count >= data.count) continue;
                 count++;

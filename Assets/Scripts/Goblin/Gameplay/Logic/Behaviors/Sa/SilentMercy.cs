@@ -16,27 +16,27 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <summary>
         /// 出生
         /// </summary>
-        /// <param name="actor">ActorID</param>
-        public void Born(ulong actor)
+        /// <param name="newborn">ActorID</param>
+        public void Born(ulong newborn)
         {
-            if (false == stage.SeekBehaviorInfo(actor, out CareerInfo career) || 0 == career.bornpipelines.Count) return;
+            if (false == stage.SeekBehaviorInfo(newborn, out CareerInfo career) || 0 == career.bornpipelines.Count) return;
             
-            info.borns.Add((actor, stage.flow.GenPipeline(actor, career.bornpipelines))); 
+            info.borns.Add((newborn, stage.flow.GenPipeline(newborn, career.bornpipelines))); 
         }
 
         /// <summary>
         /// 死亡
         /// </summary>
-        /// <param name="actor">ActorID</param>
-        public void Dead(ulong actor)
+        /// <param name="deadman">ActorID</param>
+        public void Dead(ulong deadman)
         {
-            if (false == stage.SeekBehaviorInfo(actor, out CareerInfo career) || 0 == career.deathpipelines.Count)
+            if (false == stage.SeekBehaviorInfo(deadman, out CareerInfo career) || 0 == career.deathpipelines.Count)
             {
-                stage.RmvActor(actor);
+                stage.RmvActor(deadman);
                 return;
             }
             
-            info.deadths.Add((actor, stage.flow.GenPipeline(actor, career.deathpipelines)));
+            info.deadths.Add((deadman, stage.flow.GenPipeline(deadman, career.deathpipelines)));
         }
         
         /// <summary>
@@ -46,6 +46,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="victim">被杀者 ID</param>
         public void Kill(ulong killer, ulong victim)
         {
+            if (stage.SeekBehaviorInfo(victim, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
+
             if (info.victimrelations.ContainsKey(victim)) return;
             if (false == info.killrelations.TryGetValue(killer, out var victims)) info.killrelations.Add(killer, victims = ObjectCache.Ensure<List<ulong>>());
             victims.Add(victim);

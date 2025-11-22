@@ -1,6 +1,8 @@
+using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 
@@ -14,6 +16,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
         protected override void OnEnter((uint pipelineid, uint index) identity, LaunchSkillData data, FlowInfo flowinfo, ulong target)
         {
             base.OnEnter(identity, data, flowinfo, target);
+            if (stage.SeekBehaviorInfo(target, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
             if (false == stage.SeekBehavior(target, out SkillLauncher skilllauncher)) return;
             if (data.breakcasting) skilllauncher.Break();
             skilllauncher.Launch(data.skillid);

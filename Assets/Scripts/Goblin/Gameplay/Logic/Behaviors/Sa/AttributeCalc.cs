@@ -178,6 +178,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         /// <param name="damage">伤害</param>
         public void ToDamage(ulong from, ulong to, DamageInfo damage)
         {
+            if (stage.SeekBehaviorInfo(to, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
+            
             if (false == stage.SeekBehaviorInfo(to, out AttributeInfo toattribute)) return;
             var disdamage = DischargeDamage(toattribute.actor, damage);
             var result = ChangeAttributeValue(toattribute, ATTRIBUTE_DEFINE.HP, -disdamage.value, true, 0, GetAttributeValue(toattribute, ATTRIBUTE_DEFINE.MAXHP));
