@@ -224,6 +224,7 @@ namespace Goblin.Sys.Gameplay.View
 
 
             var rilstage = localdirector.world.rilbucket.GetRIL<RIL_STAGE>(localdirector.world.sa);
+            if (null == rilstage) return;
             var content =
                 $"帧号 : {rilstage.frame}\n" +
                 $"逻辑耗时 (毫秒) : {localdirector.stepms}\n" +

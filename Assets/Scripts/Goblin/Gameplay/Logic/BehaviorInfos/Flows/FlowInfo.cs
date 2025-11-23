@@ -10,10 +10,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows
     public class FlowInfo : BehaviorInfo
     {
         /// <summary>
-        /// 管线是否激活
-        /// </summary>
-        public bool active { get; set; }
-        /// <summary>
         /// 管线的拥有者
         /// </summary>
         public ulong owner { get; set; }

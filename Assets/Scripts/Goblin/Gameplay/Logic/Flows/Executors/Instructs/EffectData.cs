@@ -32,6 +32,12 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
         public byte type;
 
         /// <summary>
+        /// 是否随管线回收
+        /// </summary>
+        [LabelText("是否随管线回收")]
+        public bool recywithflow;
+
+        /// <summary>
         /// 特效持续时间类型
         /// </summary>
         [ValueDropdown("@OdinValueDropdown.GetEffectDurationTypeDefine()")]

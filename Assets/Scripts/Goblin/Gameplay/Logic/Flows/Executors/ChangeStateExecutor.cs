@@ -28,6 +28,8 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             }
             else
             {
+                // TODO : HACKER 这里是为了做受击动画, 后续受击动画需要改成独立的动画状态机来处理
+                if (statemachine.info.current == data.state) statemachine.Break();
                 statemachine.TryChangeState(data.state);
             }
             

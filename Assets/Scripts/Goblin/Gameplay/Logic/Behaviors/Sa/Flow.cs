@@ -174,7 +174,6 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 indexes.Clear();
                 ObjectCache.Set(indexes);
             }
-            flowinfo.active = false;
             // 结束管线
             stage.RmvActor(flowinfo.actor);
         }

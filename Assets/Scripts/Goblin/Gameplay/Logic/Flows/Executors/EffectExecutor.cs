@@ -1,5 +1,6 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
+using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -35,7 +36,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                     break;
             }
 
-            facade.CreateEffect(new EffectInfo
+            uint effect = facade.CreateEffect(new EffectInfo
             {
                 effect = data.effect,
                 type = data.type,
@@ -46,6 +47,10 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
                 euler = data.euler.ToFPVector3(),
                 scale = data.scale * FP.EN3,
             });
+            
+            if (false == data.recywithflow) return;
+            if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowEffectInfo floweffectinfo)) floweffectinfo = stage.AddBehaviorInfo<FlowEffectInfo>(flowinfo.actor);
+            floweffectinfo.effects.Add(effect);
         }
     }
 }

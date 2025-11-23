@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -62,6 +63,17 @@ namespace Goblin.Gameplay.Logic.Behaviors
         {
             base.OnTick(tick);
             if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
+
+            // 移除已结束的管线特效
+            if (stage.SeekBehaviorInfos(out List<FlowEffectInfo> floweffects, true))
+            {
+                foreach (var floweffect in floweffects)
+                {
+                    if (floweffect.active) continue;
+                    info.rmveffects.AddRange(floweffect.effects);
+                }
+            }
+
             // 移除过期的特效
             foreach (var rmveffect in info.rmveffects)
             {
