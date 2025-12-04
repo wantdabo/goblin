@@ -170,11 +170,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     if (collider.actor == c.actor) continue;
                     colliders.Add(c);
                 }
-                result.colliders.Clear();
-                ObjectCache.Set(result.colliders);
                 result.colliders = colliders;
                 
-                stage.cache.AutoRecycle(result.colliders);
+                stage.cache.AutoRecycle(colliders);
             }
 
             return result;
