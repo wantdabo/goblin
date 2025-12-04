@@ -21,7 +21,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors
             stage.SeekBehaviorInfo(target, out SpatialInfo spatial);
             stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo atkspatial);
             
-            if (data.uselookatattacker && null != spatial  && null != atkspatial)
+            if (data.uselookatattacker && null != spatial && null != atkspatial)
             {
                 var dire = (atkspatial.position - spatial.position).normalized;
                 FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
