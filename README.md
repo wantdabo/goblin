@@ -22,6 +22,9 @@
 
 ---
 
+# 2025-12-17 01点00分 最近因为工作变动原因停止推进。PR/改进意见保持开放，预期的 TODO 等待重新调整
+## XD 相信在不久的将来，再次重新踏上旅程！他不会在很久之后，也不会很快到来。我们终将抵达终点！
+
 ### TODO
 - Gameplay 战斗模块
   - 2026-01-01
@@ -39,6 +42,8 @@
       - 因为, 业务代码上 SeekBehaviorInfo 是找不到已经被移除的 BehaviorInfo
       - 此时, 业务代码根据找到与否的信息来进行是否要新增 BehaviorInfo 就会导致出现逻辑层抛出重复添加 BehaviorInfo，卡死的恶性 BUG
       - 方案, AddBehaviorInfo/AddBehavior 进行 RmvList 列表检查。使其恢复正常
+    - 碰撞检测 (CollisionExecutor) -> 命中火花 BUG
+      - 在使用 Timescale，加速之后, Flow 也会加速，刚好碰撞检测的逻辑是写在 OnExecute 上的
     - Goblin 2.6.5
 
   - 2026-05-01
