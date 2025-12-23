@@ -77,7 +77,7 @@
   - 该项目，Luban 配置工具依赖，需要安装 [**.NET8+**](https://dotnet.microsoft.com/zh-cn/download)
   - 同时，Luban 配置工具，以及配套的第三方插件，也是基于 .NET 来开发或调用。因此，.NET 的环境在接下来的环节中，非常重要，请确保 .NET 开发环境成功配置
 - ##### <span id="installenv.2">2.安装 Unity</span>
-  - 该项目，是基于 Unity 来开发。因此，需要在开发环境中，安装好 [**Unity**](https://unity.com) 推荐 Unity 2021+ 版本
+  - 该项目，是基于 Unity 来开发。因此，需要在开发环境中，安装好 [**Unity**](https://unity.com) 推荐 Unity 2022+ 版本
 - ##### <span id="installenv.3">2.安装 Odin</span>
   - 该项目，使用 [**Odin**](https://odininspector.com/) 来进行扩展编辑器。因此需要在开发环境中部署该插件。这是一款优秀的编辑器扩展插件，需要自行购买导入
 
