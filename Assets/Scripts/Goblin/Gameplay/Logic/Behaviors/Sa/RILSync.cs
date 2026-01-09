@@ -16,7 +16,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
     /// <summary>
     /// RIL/渲染指令同步
     /// </summary>
-    public class RILSync : Behavior
+    public partial class RILSync : Behavior
     {
         /// <summary>
         /// RIL 翻译器集合 (Translator 类型 -> Translator 列表)
@@ -43,14 +43,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             base.OnAssemble();
             translatordict = ObjectCache.Ensure<Dictionary<Type, List<Translator>>>();
-            void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
-            {
-                var type = typeof(E);
-                if (false == translatordict.TryGetValue(type, out var translators)) translatordict.Add(type, translators = ObjectCache.Ensure<List<Translator>>());
-                var translator = ObjectCache.Ensure<T>();
-                translators.Add(translator.Load(stage));
-            }
-            
+            ManualTranslators();
+            diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
+            eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
+            hashcodedict = ObjectCache.Ensure<Dictionary<(ulong, ushort), int>>();
+
+            stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
+        }
+
+        private void ManualTranslators()
+        {
             Translator<StageTranslator, StageInfo>();
             Translator<TickerTranslator, TickerInfo>();
             Translator<SeatTranslator, SeatInfo>();
@@ -61,14 +63,14 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Translator<FacadeModelTranslator, FacadeInfo>();
             Translator<FacadeAnimationTranslator, FacadeInfo>();
             Translator<FacadeEffectTranslator, FacadeInfo>();
-            
-            diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
-            eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
-            hashcodedict = ObjectCache.Ensure<Dictionary<(ulong, ushort), int>>();
-            
-            stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
         }
-
+        private void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
+        {
+            var type = typeof(E);
+            if (false == translatordict.TryGetValue(type, out var translators)) translatordict.Add(type, translators = ObjectCache.Ensure<List<Translator>>());
+            var translator = ObjectCache.Ensure<T>();
+            translators.Add(translator.Load(stage));
+        }
         protected override void OnDisassemble()
         {
             base.OnDisassemble();
@@ -79,7 +81,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                     translator.Unload();
                     ObjectCache.Set(translator);
                 }
-                
+
                 list.Clear();
                 ObjectCache.Set(list);
             }
@@ -92,19 +94,19 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 ObjectCache.Set(diff);
             }
             diffqueue.Clear();
-            
+
             while (eventqueue.TryDequeue(out var e))
             {
                 ObjectCache.Set(e);
             }
             eventqueue.Clear();
-            
+
             hashcodedict.Clear();
             ObjectCache.Set(hashcodedict);
-            
+
             stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
         }
-        
+
         /// <summary>
         /// 缓存渲染指令的哈希值
         /// </summary>
@@ -192,7 +194,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             eventqueue.Enqueue(e);
         }
-        
+
         /// <summary>
         /// 发送丢失的渲染指令 (RIL_LOSS)
         /// </summary>
@@ -204,16 +206,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 {
                     if (val == ACTOR_DEFINE.FLOW) continue;
                 }
-                
+
                 if (false == translatordict.TryGetValue(rmvbehaviorinfo.GetType(), out var translators)) continue;
                 foreach (var translator in translators)
                 {
-                    var ril =  RILCache.Ensure<RIL_LOSS>();
+                    var ril = RILCache.Ensure<RIL_LOSS>();
                     ril.Ready(rmvbehaviorinfo.actor, 0);
                     ril.loss = translator.id;
-                    
+
                     translator.RmvOnce(rmvbehaviorinfo.actor);
-                    if (hashcodedict.ContainsKey((rmvbehaviorinfo.actor, translator.id))) 
+                    if (hashcodedict.ContainsKey((rmvbehaviorinfo.actor, translator.id)))
                     {
                         hashcodedict.Remove((rmvbehaviorinfo.actor, translator.id), out _);
                     }
@@ -266,16 +268,16 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
                 var clone = diff.Clone(RILCache.Ensure(diff.GetType()) as IRIL_DIFF);
                 diff.Reset();
                 ObjectCache.Set(diff);
-                
+
                 stage.ondiff?.Invoke(clone);
             }
-            
+
             // 处理渲染指令事件
             while (eventqueue.TryDequeue(out var e))
             {
                 var clone = e.Clone(RILCache.Ensure(e.GetType()) as IRIL_EVENT);
                 ObjectCache.Set(e);
-                
+
                 stage.onevent?.Invoke(clone);
             }
         }
@@ -284,10 +286,20 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             Translate();
         }
-        
         private void OnActorRmv(ActorRmvEvent e)
         {
+
             RmvHashCode(e.actor);
+        }
+    }
+
+    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Interface, AllowMultiple = false)]
+    public class RILEventErrorAttribute : System.Attribute
+    {
+        public string Message { get; }
+        public RILEventErrorAttribute(string message = "此接口/方法不允许使用！")
+        {
+            Message = message;
         }
     }
 }
