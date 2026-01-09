@@ -43,6 +43,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
         {
             base.OnAssemble();
             translatordict = ObjectCache.Ensure<Dictionary<Type, List<Translator>>>();
+            AutoTranslators();
             ManualTranslators();
             diffqueue = ObjectCache.Ensure<Queue<IRIL_DIFF>>();
             eventqueue = ObjectCache.Ensure<Queue<IRIL_EVENT>>();
@@ -50,7 +51,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
 
             stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
         }
-
+        /// <summary>
+        /// 手动注册翻译器
+        /// </summary>
         private void ManualTranslators()
         {
             Translator<StageTranslator, StageInfo>();
@@ -64,6 +67,11 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             Translator<FacadeAnimationTranslator, FacadeInfo>();
             Translator<FacadeEffectTranslator, FacadeInfo>();
         }
+        /// <summary>
+        /// 注册翻译器
+        /// </summary>
+        /// <typeparam name="T">翻译器</typeparam>
+        /// <typeparam name="E">行为信息</typeparam>
         private void Translator<T, E>() where T : Translator, new() where E : BehaviorInfo
         {
             var type = typeof(E);

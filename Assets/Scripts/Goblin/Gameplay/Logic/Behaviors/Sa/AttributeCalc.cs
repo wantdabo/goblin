@@ -192,7 +192,8 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa
             eventdamage.crit = disdamage.crit;
             eventdamage.damage = result.before - result.after;
             stage.rilsync.Send(eventdamage);
-            
+
+            stage.rileventor.OnTestDamageEvent(from, to, disdamage.crit, eventdamage.damage);
             if (result.after > 0) return;
             stage.silentmercy.Kill(from, to);
         }
