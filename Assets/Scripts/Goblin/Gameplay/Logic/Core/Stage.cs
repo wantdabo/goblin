@@ -149,10 +149,6 @@ namespace Goblin.Gameplay.Logic.Core
         /// </summary>
         public RILSync rilsync => GetBehavior<RILSync>(sa, true);
         /// <summary>
-        /// RIL 事件
-        /// </summary>
-        public RILEventor rileventor => GetBehavior<RILEventor>(sa, true);
-        /// <summary>
         /// 预制创建器集合
         /// </summary>
         public Dictionary<Type, Prefab> prefabs { get; set; }
@@ -247,7 +243,6 @@ namespace Goblin.Gameplay.Logic.Core
             AddBehavior<Bullet>(sa);
             AddBehavior<Buff>(sa);
             AddBehavior<StepEnd>(sa);
-            AddBehavior<RILEventor>(sa);
             AddBehavior<RILSync>(sa);
         }
 

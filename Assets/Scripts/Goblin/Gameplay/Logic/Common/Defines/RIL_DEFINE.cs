@@ -3,7 +3,7 @@
     /// <summary>
     /// RIL 定义
     /// </summary>
-    public partial class RIL_DEFINE
+    public class RIL_DEFINE
     {
         /// <summary>
         /// RIL_DIFF 删除
