@@ -28,3 +28,4 @@ Assets/Resources/BuildinFileManifest.asset.meta
 *.sln
 /Assets/Plugins/Sirenix
 Assets/Plugins/Sirenix.meta
+.claude/settings.local.json
