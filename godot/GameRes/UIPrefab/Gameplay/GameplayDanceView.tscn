@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[node name="GameplayDanceView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Content" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="DamageOrg" type="Control" parent="."]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 80.0
+offset_bottom = 30.0
+visible = false
+mouse_filter = 2
+
+[node name="Desc" type="RichTextLabel" parent="DamageOrg"]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 80.0
+offset_bottom = 30.0
+bbcode_enabled = true
+text = "0"
+mouse_filter = 2

@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[node name="InitializeView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Desc" type="Label" parent="."]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 500.0
+offset_right = 700.0
+offset_bottom = 530.0
+horizontal_alignment = 1
+text = "加载中..."
+
+[node name="Pro" type="ProgressBar" parent="."]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 540.0
+offset_right = 700.0
+offset_bottom = 560.0
+value = 0.0

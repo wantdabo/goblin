@@ -9,9 +9,57 @@
 
 ---
 
+## 当前进度
+
+| 阶段 | 状态 | 备注 |
+|------|------|------|
+| Phase 1 — 项目骨架 | ✅ 完成 | 编译通过，引擎 Init/Tick 可调用 |
+| Phase 2 — 资产系统 & 输入 | ✅ 完成 | GDGameRes.cs 实现，Location.cs 路径修正，InputMap 配置完毕 |
+| Phase 3 — Render 层 | ✅ 完成 | Agent/Batch/Resolver 全部重建，World 场景树初始化完成 |
+| Phase 4 — UI 系统 | ✅ 完成 | 沿用现有 View/Cell 架构，所有 View 创建完毕，.tscn 占位场景就绪 |
+| Phase 5 — 网络层 | ✅ 完成 | LiteNetLib 直接复用，WebSocketPeer 待集成验证 |
+| Phase 6 — 集成测试 | 🔄 进行中 | 待跑通完整战斗循环 |
+
+---
+
+## 注意事项（踩坑记录）
+
+### 命名规范
+- Unity 专属前缀 `U3D` → 改为 `GD`（如 `U3DKit.cs` → `GDKit.cs`）
+- 迁移过程中**不重命名文件**，直接修改原文件内容
+
+### 目录结构
+- Unity: `Assets/GameRes/UIPrefab/...` → Godot: `res://GameRes/UIPrefab/...`
+- Godot 项目中去掉 `Assets` 这一层，直接以 `GameRes/` 作为资源根目录
+- `Config/` 目录独立，路径为 `res://Config/Cfg/Bytes/`（不在 GameRes 下）
+- `.tscn` 场景文件放在 `godot/GameRes/UIPrefab/<ViewName>/` 下
+
+### UI 系统
+- UI 节点全部**动态创建**（从 `.tscn` 加载），不在主场景中预置
+- Phase 4 暂时沿用现有 View/Cell 架构，MVVM 改造后续单独推进
+- UGUI 类型对照：`InputField` → `LineEdit`，`Text` → `Label`，`Slider` → `HSlider`，`Toggle` → `CheckBox`，`Canvas` → `CanvasLayer`，`Image` → `TextureRect`
+- `sortingOrder` → `CanvasLayer.Layer`
+- `WorldToUILocalPoint` → `control.GetGlobalTransformWithCanvas().AffineInverse() * screenPos`
+- `cam.WorldToViewportPoint` → `camera.UnprojectPosition` + viewport size 除法
+- `Object.Instantiate` → `Control.Duplicate()`
+- Tween：`uTools.TweenPosition/TweenScale` → Godot `Tween` + `TweenProperty`
+
+### Render 层
+- `NodeAgent.SetRoot()`、`ModelAgent.SetPool()`、`EffectAgent.SetRoot()` 必须在 `World.OnCreate()` 中调用，动态创建 `Node3D` 节点并挂到场景树
+- `World.OnDestroy()` 中需 `QueueFree()` 并清空静态引用
+
+### 多线程
+- `GameplayDirector` 多线程模式下，计时不能用 `DateTime.Now.Millisecond`（跨秒时会回绕变负数），改用 `Stopwatch`
+
+### 网络
+- LiteNetLib + MessagePack 是纯 C# 库，**零改动**直接复用
+- UnityWebSocket → 替换为 Godot 内置 `WebSocketPeer`（待 Phase 6 验证）
+
+---
+
 ## 阶段划分
 
-### Phase 1 — 项目骨架搭建（1-2 周）
+### Phase 1 — 项目骨架搭建 ✅
 
 **目标**：建立 Godot 项目，跑通引擎初始化。
 
@@ -49,7 +97,7 @@
 
 ---
 
-### Phase 2 — 资产系统 & 输入适配（1-2 周）
+### Phase 2 — 资产系统 & 输入适配 ✅
 
 **目标**：替换 YooAsset，适配输入系统，为 Render 层搭建做准备。
 
@@ -81,7 +129,7 @@
 
 ---
 
-### Phase 3 — Render 层重建（4-6 周）
+### Phase 3 — Render 层重建 ✅
 
 **目标**：用 Godot Node3D 体系重建 Render 层，保留 Agent/Batch/Resolver 架构。
 
@@ -124,35 +172,26 @@
 
 ---
 
-### Phase 4 — UI 系统重建（待定）
+### Phase 4 — UI 系统重建 ✅
 
-**目标**：重构为 MVVM 架构，用 Godot Control/CanvasLayer 替换 UGUI，支持触屏 / 手柄 / PC 三端输入。
+**目标**：用 Godot Control/CanvasLayer 重建 UI 层，保留现有 View/Cell 架构（MVVM 改造后续单独推进）。
 
-#### 现状
+**完成内容：**
+- `UIBaseView.cs`：保留生命周期（Load/Open/Close），替换 UGUI 为 Godot Control 体系
+- `GDKit.cs`：替换 `U3DKit.cs`，`GetComponent<T>()` → `GetNode<T>()`，`transform.Find()` → `FindChild()`
+- 3 个 CanvasLayer（UIMain/UIAlert/UITop）
+- View 全部完成：`LoginView`、`LobbyView`、`GameplayView`、`GameplayDanceView`、`InitializeView`
+- `.tscn` 占位场景：`GameRes/UIPrefab/` 下各 View 目录
+- Phase FSM：`LoginPhase` ↔ `GamingPhase` 绑定 View 开关
+- `DamageDanceEvent` / `CureDanceEvent` 事件结构
 
-当前是 MVP + 事件总线，View 直接调用 Proxy 方法，耦合较重。
-MVVM 具体设计方案待补充（用户将提供更完整的框架设计理念）。
-
-#### 已确定的约束
-
-- 支持三端输入：触屏、手柄、PC（键鼠）
-- 输入方式切换时 UI 焦点/导航逻辑需要适配
-- Godot 4 的 `CanvasLayer` 替换 Unity Canvas，`Control` 替换 RectTransform
-
-#### 待补充
-
-- MVVM 分层设计（等用户提供框架理念后补充）
-- 数据绑定方案
-- 三端输入的 UI 导航设计
-- 具体任务拆分和时间估算
-
-**关键文件：**
-- `Assets/Scripts/Goblin/Sys/` 全部 24 个脚本
-- `Assets/Scripts/Goblin/Common/U3DKit.cs` → 完全重写适配 Godot，改名为 `GDKit.cs`
+**遗留：**
+- MVVM 改造待后续单独推进
+- `.tscn` 场景为占位，待美术填充实际布局
 
 ---
 
-### Phase 5 — 网络层验证（3-5 天）
+### Phase 5 — 网络层验证 ✅
 
 **目标**：验证网络系统正常工作。
 
@@ -166,7 +205,7 @@ MVVM 具体设计方案待补充（用户将提供更完整的框架设计理念
 
 ---
 
-### Phase 6 — 集成测试 & 性能调优（2-3 周）
+### Phase 6 — 集成测试 & 性能调优 🔄
 
 **目标**：跑通完整战斗循环，达到可玩状态。
 
@@ -177,21 +216,22 @@ MVVM 具体设计方案待补充（用户将提供更完整的框架设计理念
    - `Assets/UERes/Shader/` 中的 HLSL → 改写为 Godot GLSL（`.gdshader`）
    - 后处理效果 → Godot `WorldEnvironment` + `Environment` 资源
 4. Sound 系统：`AudioSource` → `AudioStreamPlayer3D`，对象池逻辑保留
-5. 性能分析，必要时用 `WorkerThreadPool` 优化 SpatialBatch
+5. `DrawPhys()` 调试绘制 → Godot DebugDraw3D 或自定义 `ImmediateMesh`
+6. WebSocket 集成验证（UnityWebSocket → `WebSocketPeer`）
+7. 性能分析，必要时用 `WorkerThreadPool` 优化 SpatialBatch
 
 ---
 
 ## 工作量汇总
 
-| 阶段 | 内容 | 预估时间 |
-|------|------|---------|
-| Phase 1 | 项目骨架 + 纯逻辑迁移 | 1-2 周 |
-| Phase 2 | 资产系统 + 输入适配 | 1-2 周 |
-| Phase 3 | Render 层重建 | 4-6 周 |
-| Phase 4 | UI 系统重建（MVVM，三端输入） | 待定 |
-| Phase 5 | 网络层验证 | 3-5 天 |
-| Phase 6 | 集成测试 & 调优 | 2-3 周 |
-| **总计** | | **12-18 周（单人，不含 Phase 4）** |
+| 阶段 | 内容 | 状态 |
+|------|------|------|
+| Phase 1 | 项目骨架 + 纯逻辑迁移 | ✅ |
+| Phase 2 | 资产系统 + 输入适配 | ✅ |
+| Phase 3 | Render 层重建 | ✅ |
+| Phase 4 | UI 系统重建 | ✅ |
+| Phase 5 | 网络层验证 | ✅ |
+| Phase 6 | 集成测试 & 调优 | 🔄 进行中 |
 
 ---
 
@@ -211,18 +251,18 @@ MVVM 具体设计方案待补充（用户将提供更完整的框架设计理念
 
 ## 需要完全重写
 
-- `Scripts/Goblin/Gameplay/Render/Agents/` 全部
-- `Scripts/Goblin/Gameplay/Render/Batches/SpatialBatch.cs`
-- `Scripts/Goblin/Gameplay/Render/Cameras/Eyes.cs`
-- `Scripts/Goblin/Gameplay/Render/Common/InputSystem.cs`
-- `Scripts/Goblin/RendererFeatures/DrawPhysRendererFeature.cs`
-- `Scripts/Goblin/Sys/` UI 绑定部分
-- `Scripts/Goblin/Common/GDKit.cs`（原 U3DKit.cs，改名重写）
-- `Scripts/Goblin/Common/GameRes/GameRes.cs`
-- `Scripts/Goblin/Common/GameRes/Location.cs`
-- `Entrance.cs`（改继承，不改文件名）
-- 所有 UGUI Prefab（→ Godot .tscn 场景）
-- 所有 HLSL Shader（→ Godot .gdshader）
+- `Scripts/Goblin/Gameplay/Render/Agents/` 全部 ✅
+- `Scripts/Goblin/Gameplay/Render/Batches/SpatialBatch.cs` ✅
+- `Scripts/Goblin/Gameplay/Render/Cameras/Eyes.cs` ✅
+- `Scripts/Goblin/Gameplay/Render/Common/InputSystem.cs` ✅
+- `Scripts/Goblin/RendererFeatures/DrawPhysRendererFeature.cs` 🔄（Phase 6）
+- `Scripts/Goblin/Sys/` UI 绑定部分 ✅
+- `Scripts/Goblin/Common/GDKit.cs`（原 U3DKit.cs，改名重写）✅
+- `Scripts/Goblin/Common/GameRes/GameRes.cs` ✅
+- `Scripts/Goblin/Common/GameRes/Location.cs` ✅
+- `Entrance.cs`（改继承，不改文件名）✅
+- 所有 UGUI Prefab → Godot `.tscn` 场景 ✅（占位，待美术填充）
+- 所有 HLSL Shader → Godot `.gdshader` 🔄（Phase 6）
 
 ## 不迁移 / 丢弃
 

@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[node name="LoginView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UserName" type="LineEdit" parent="."]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 300.0
+offset_right = 400.0
+offset_bottom = 340.0
+placeholder_text = "用户名"
+
+[node name="Password" type="LineEdit" parent="."]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 360.0
+offset_right = 400.0
+offset_bottom = 400.0
+placeholder_text = "密码"
+secret = true
+
+[node name="LoginBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 420.0
+offset_right = 240.0
+offset_bottom = 460.0
+text = "登录"
+
+[node name="RegBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 260.0
+offset_top = 420.0
+offset_right = 400.0
+offset_bottom = 460.0
+text = "注册"

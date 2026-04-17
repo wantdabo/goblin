@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[node name="GameplayView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Synopsis" type="Label" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 400.0
+offset_bottom = 200.0
+text = ""
+
+[node name="GameSpeedSlider" type="HSlider" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 210.0
+offset_right = 300.0
+offset_bottom = 230.0
+min_value = 0.25
+max_value = 4.0
+step = 0.25
+value = 1.0
+
+[node name="GameSpeedDesc" type="Label" parent="."]
+layout_mode = 1
+offset_left = 310.0
+offset_top = 210.0
+offset_right = 380.0
+offset_bottom = 230.0
+text = "1"
+
+[node name="GamingCB" type="CheckBox" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 240.0
+offset_right = 120.0
+offset_bottom = 260.0
+button_pressed = true
+text = "运行"
+
+[node name="PhysDrawerCB" type="CheckBox" parent="."]
+layout_mode = 1
+offset_left = 130.0
+offset_top = 240.0
+offset_right = 260.0
+offset_bottom = 260.0
+text = "物理绘制"
+
+[node name="ShowInfoCB" type="CheckBox" parent="."]
+layout_mode = 1
+offset_left = 270.0
+offset_top = 240.0
+offset_right = 380.0
+offset_bottom = 260.0
+text = "显示信息"
+
+[node name="DanceCB" type="CheckBox" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 270.0
+offset_right = 120.0
+offset_bottom = 290.0
+text = "跳字"
+
+[node name="EnemyAutopoilotCB" type="CheckBox" parent="."]
+layout_mode = 1
+offset_left = 130.0
+offset_top = 270.0
+offset_right = 280.0
+offset_bottom = 290.0
+text = "敌人自动"
+
+[node name="SelfSeatPoint" type="Control" parent="."]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 10.0
+offset_bottom = 10.0
+
+[node name="InfoContent" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="InfoOrgGo" type="RichTextLabel" parent="InfoContent"]
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 120.0
+visible = false
+bbcode_enabled = true
+text = ""
+
+[node name="EnterLockCursorBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 300.0
+offset_right = 160.0
+offset_bottom = 325.0
+text = "锁定鼠标"
+
+[node name="SwitchSeatBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 170.0
+offset_top = 300.0
+offset_right = 280.0
+offset_bottom = 325.0
+text = "切换座位"
+
+[node name="SnapshotBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 290.0
+offset_top = 300.0
+offset_right = 380.0
+offset_bottom = 325.0
+text = "快照"
+
+[node name="RestoreBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 390.0
+offset_top = 300.0
+offset_right = 470.0
+offset_bottom = 325.0
+text = "恢复"
+
+[node name="ExitBtn" type="Button" parent="."]
+layout_mode = 1
+offset_left = 480.0
+offset_top = 300.0
+offset_right = 560.0
+offset_bottom = 325.0
+text = "退出"
