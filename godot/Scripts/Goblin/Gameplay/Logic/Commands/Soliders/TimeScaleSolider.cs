@@ -1,15 +1,14 @@
 using Goblin.Gameplay.Logic.Commands.Common;
 
-namespace Goblin.Gameplay.Logic.Commands.Soliders
+namespace Goblin.Gameplay.Logic.Commands.Soliders;
+
+/// <summary>
+/// 时间缩放指令处理
+/// </summary>
+public class TimeScaleSolider : Solider<TimeScaleCommand>
 {
-    /// <summary>
-    /// 时间缩放指令处理
-    /// </summary>
-    public class TimeScaleSolider : Solider<TimeScaleCommand>
+    protected override void OnExecute(TimeScaleCommand command)
     {
-        protected override void OnExecute(TimeScaleCommand command)
-        {
-            stage.timescale = command.timescale * stage.cfg.int2fp;
-        }
+        stage.timescale = command.timescale * stage.cfg.int2fp;
     }
 }

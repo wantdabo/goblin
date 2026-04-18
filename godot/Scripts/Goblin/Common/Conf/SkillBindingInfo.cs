@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf
-{
+namespace Conf;
+
 public sealed partial class SkillBindingInfo : Luban.BeanBase
 {
     public SkillBindingInfo(ByteBuf _buf) 
@@ -44,11 +44,8 @@ public sealed partial class SkillBindingInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Id:" + Id + ","
-        + "key:" + Key + ","
-        + "}";
+               + "Id:" + Id + ","
+               + "key:" + Key + ","
+               + "}";
     }
 }
-
-}
-

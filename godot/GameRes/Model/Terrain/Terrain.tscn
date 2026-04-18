@@ -1,0 +1,10 @@
+[gd_scene format=3 load_steps=2]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 2.0
+height = 4.0
+
+[node name="Terrain" type="Node3D"]
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_1")

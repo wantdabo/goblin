@@ -3,15 +3,14 @@ using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using MessagePack;
 
-namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs
+namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs;
+
+/// <summary>
+/// 移除 Actor 指令数据
+/// </summary>
+[Serializable]
+[MessagePackObject(true)]
+public class RmvActorData : InstructData
 {
-    /// <summary>
-    /// 移除 Actor 指令数据
-    /// </summary>
-    [Serializable]
-    [MessagePackObject(true)]
-    public class RmvActorData : InstructData
-    {
-        public override ushort id => INSTR_DEFINE.RMV_ACTOR;
-    }
+    public override ushort id => INSTR_DEFINE.RMV_ACTOR;
 }

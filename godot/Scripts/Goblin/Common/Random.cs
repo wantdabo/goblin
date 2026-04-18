@@ -7,95 +7,94 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Goblin.Common
+namespace Goblin.Common;
+
+/// <summary>
+/// 随机器
+/// </summary>
+public class Random : Comp
 {
+    private System.Random random;
+
     /// <summary>
-    /// 随机器
+    /// 随机种子
     /// </summary>
-    public class Random : Comp
+    public int seed { get; private set; } = -1;
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="s">种子</param>
+    public void Initial(int s)
     {
-        private System.Random random;
+        seed = s;
+        random = new System.Random(seed);
+    }
 
-        /// <summary>
-        /// 随机种子
-        /// </summary>
-        public int seed { get; private set; } = -1;
+    /// <summary>
+    /// 整数范围随机
+    /// </summary>
+    /// <param name="min">最小值</param>
+    /// <param name="max">最大值</param>
+    /// <returns>结果</returns>
+    public int Range(int min, int max)
+    {
+        return random.Next(min, max);
+    }
 
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="s">种子</param>
-        public void Initial(int s)
-        {
-            seed = s;
-            random = new System.Random(seed);
-        }
+    /// <summary>
+    /// 浮点数范围随机
+    /// </summary>
+    /// <param name="min">最小值</param>
+    /// <param name="max">最大值</param>
+    /// <returns>结果</returns>
+    public float Range(float min, float max)
+    {
+        return random.Next((int)(min * Config.Float2Int), (int)(max * Config.Float2Int)) * Config.Int2Float;
+    }
 
-        /// <summary>
-        /// 整数范围随机
-        /// </summary>
-        /// <param name="min">最小值</param>
-        /// <param name="max">最大值</param>
-        /// <returns>结果</returns>
-        public int Range(int min, int max)
-        {
-            return random.Next(min, max);
-        }
+    /// <summary>
+    /// 扇形上随机点
+    /// </summary>
+    /// <param name="minDeg">最小角度</param>
+    /// <param name="maxDeg">最大角度</param>
+    /// <param name="radius">半径</param>
+    /// <returns>坐标</returns>
+    public Vector2 RandSectorPoint(float minDeg, float maxDeg, float radius = 1f)
+    {
+        return SectorPoint(Range(minDeg, maxDeg), radius);
+    }
 
-        /// <summary>
-        /// 浮点数范围随机
-        /// </summary>
-        /// <param name="min">最小值</param>
-        /// <param name="max">最大值</param>
-        /// <returns>结果</returns>
-        public float Range(float min, float max)
-        {
-            return random.Next((int)(min * Config.Float2Int), (int)(max * Config.Float2Int)) * Config.Int2Float;
-        }
+    /// <summary>
+    /// 圆上随机坐标
+    /// </summary>
+    /// <param name="deg">角度</param>
+    /// <param name="radius">半径</param>
+    /// <returns>对应扇形上坐标</returns>
+    public Vector2 SectorPoint(float deg, float radius = 1f)
+    {
+        var rad = deg * (MathF.PI / 180f);
+        var v = new Vector2(MathF.Cos(rad), MathF.Sin(rad));
+        return Vector2.Normalize(v) * radius;
+    }
 
-        /// <summary>
-        /// 扇形上随机点
-        /// </summary>
-        /// <param name="minDeg">最小角度</param>
-        /// <param name="maxDeg">最大角度</param>
-        /// <param name="radius">半径</param>
-        /// <returns>坐标</returns>
-        public Vector2 RandSectorPoint(float minDeg, float maxDeg, float radius = 1f)
-        {
-            return SectorPoint(Range(minDeg, maxDeg), radius);
-        }
+    /// <summary>
+    /// 圆内随机坐标
+    /// </summary>
+    /// <param name="radius">半径</param>
+    /// <returns>圆内某一点随机</returns>
+    public Vector2 RandCirclePoint(float radius = 1)
+    {
+        return RandDire() * radius;
+    }
 
-        /// <summary>
-        /// 圆上随机坐标
-        /// </summary>
-        /// <param name="deg">角度</param>
-        /// <param name="radius">半径</param>
-        /// <returns>对应扇形上坐标</returns>
-        public Vector2 SectorPoint(float deg, float radius = 1f)
-        {
-            var rad = deg * (MathF.PI / 180f);
-            var v = new Vector2(MathF.Cos(rad), MathF.Sin(rad));
-            return Vector2.Normalize(v) * radius;
-        }
-
-        /// <summary>
-        /// 圆内随机坐标
-        /// </summary>
-        /// <param name="radius">半径</param>
-        /// <returns>圆内某一点随机</returns>
-        public Vector2 RandCirclePoint(float radius = 1)
-        {
-            return RandDire() * radius;
-        }
-
-        /// <summary>
-        /// 随机一个方向
-        /// </summary>
-        /// <returns></returns>
-        public Vector2 RandDire()
-        {
-            var v = new Vector2(Range(-100, 100), Range(-100, 100));
-            return Vector2.Normalize(v);
-        }
+    /// <summary>
+    /// 随机一个方向
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 RandDire()
+    {
+        var v = new Vector2(Range(-100, 100), Range(-100, 100));
+        return Vector2.Normalize(v);
     }
 }

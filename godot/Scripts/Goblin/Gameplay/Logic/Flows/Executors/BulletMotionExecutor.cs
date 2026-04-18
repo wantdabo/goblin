@@ -8,27 +8,26 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Flows.Executors
-{
-    /// <summary>
-    /// 子弹运动指令执行器
-    /// </summary>
-    public class BulletMotionExecutor : Executor<BulletMotionData>
-    {
-        protected override void OnExecute((uint pipelineid, uint index) identity, BulletMotionData data, FlowInfo flowinfo, ulong target)
-        {
-            base.OnExecute(identity, data, flowinfo, target);
-            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
-            if (false == stage.SeekBehaviorInfo(target, out BulletInfo bullet)) return;
+namespace Goblin.Gameplay.Logic.Flows.Executors;
 
-            switch (data.motion)
-            {
-                case FLOW_BULLET_DEFINE.MOTION_STRAIGHT:
-                    var rotation = FPQuaternion.Euler(spatial.euler);
-                    var forward = rotation * FPVector3.forward;
-                    spatial.position += forward * data.speedrate * stage.cfg.int2fp * bullet.speed * GAME_DEFINE.LOGIC_TICK;
-                    break;
-            }
+/// <summary>
+/// 子弹运动指令执行器
+/// </summary>
+public class BulletMotionExecutor : Executor<BulletMotionData>
+{
+    protected override void OnExecute((uint pipelineid, uint index) identity, BulletMotionData data, FlowInfo flowinfo, ulong target)
+    {
+        base.OnExecute(identity, data, flowinfo, target);
+        if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
+        if (false == stage.SeekBehaviorInfo(target, out BulletInfo bullet)) return;
+
+        switch (data.motion)
+        {
+            case FLOW_BULLET_DEFINE.MOTION_STRAIGHT:
+                var rotation = FPQuaternion.Euler(spatial.euler);
+                var forward = rotation * FPVector3.forward;
+                spatial.position += forward * data.speedrate * stage.cfg.int2fp * bullet.speed * GAME_DEFINE.LOGIC_TICK;
+                break;
         }
     }
 }

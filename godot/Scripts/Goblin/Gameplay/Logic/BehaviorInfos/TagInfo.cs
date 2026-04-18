@@ -3,39 +3,38 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos
+namespace Goblin.Gameplay.Logic.BehaviorInfos;
+
+/// <summary>
+/// 标签信息, Actor 上的标签信息，用于标记 Actor 各种颗粒度细的信息
+/// </summary>
+public class TagInfo : BehaviorInfo
 {
     /// <summary>
-    /// 标签信息, Actor 上的标签信息，用于标记 Actor 各种颗粒度细的信息
+    /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
     /// </summary>
-    public class TagInfo : BehaviorInfo
+    public Dictionary<ushort, long> tags { get; set; }
+
+    protected override void OnReady()
     {
-        /// <summary>
-        /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
-        /// </summary>
-        public Dictionary<ushort, long> tags { get; set; }
+        tags = ObjectCache.Ensure<Dictionary<ushort, long>>();
+    }
 
-        protected override void OnReady()
+    protected override void OnReset()
+    {
+        tags.Clear();
+        ObjectCache.Set(tags);
+    }
+
+    protected override BehaviorInfo OnClone()
+    {
+        var clone = ObjectCache.Ensure<TagInfo>();
+        clone.Ready(actor);
+        foreach (var kv in tags)
         {
-            tags = ObjectCache.Ensure<Dictionary<ushort, long>>();
+            clone.tags.Add(kv.Key, kv.Value);
         }
-
-        protected override void OnReset()
-        {
-            tags.Clear();
-            ObjectCache.Set(tags);
-        }
-
-        protected override BehaviorInfo OnClone()
-        {
-            var clone = ObjectCache.Ensure<TagInfo>();
-            clone.Ready(actor);
-            foreach (var kv in tags)
-            {
-                clone.tags.Add(kv.Key, kv.Value);
-            }
             
-            return clone;
-        }
+        return clone;
     }
 }

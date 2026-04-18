@@ -10,124 +10,123 @@ using Goblin.Gameplay.Render.Core;
 using Godot;
 using System;
 
-namespace Goblin.Gameplay.Render.Agents
+namespace Goblin.Gameplay.Render.Agents;
+
+/// <summary>
+/// 特效代理
+/// </summary>
+public class EffectAgent : Agent
 {
-    /// <summary>
-    /// 特效代理
-    /// </summary>
-    public class EffectAgent : Agent
+    private static Node3D root;
+    public static void SetRoot(Node3D r) => root = r;
+
+    private Dictionary<uint, (EffectInfo info, EffectController controller)> effects;
+
+    protected override void OnReady()
     {
-        private static Node3D root;
-        public static void SetRoot(Node3D r) => root = r;
+        effects = ObjectPool.Ensure<Dictionary<uint, (EffectInfo, EffectController)>>();
+        WatchRIL<RIL_FACADE_EFFECT>(OnRILFacadeEffect);
+    }
 
-        private Dictionary<uint, (EffectInfo info, EffectController controller)> effects;
+    protected override void OnReset()
+    {
+        var rmv = ObjectPool.Ensure<List<uint>>();
+        foreach (var kv in effects) rmv.Add(kv.Key);
+        foreach (var id in rmv) RecycleEffect(id);
+        rmv.Clear(); ObjectPool.Set(rmv);
+        effects.Clear(); ObjectPool.Set(effects);
+    }
 
-        protected override void OnReady()
+    private void CreateEffect(EffectInfo info)
+    {
+        if (effects.ContainsKey(info.id)) return;
+        if (false == world.engine.cfg.location.EffectInfos.TryGetValue(info.effect, out var effcfg)) return;
+
+        var controller = ObjectPool.Get<EffectController>(effcfg.Res);
+        if (null == controller)
         {
-            effects = ObjectPool.Ensure<Dictionary<uint, (EffectInfo, EffectController)>>();
-            WatchRIL<RIL_FACADE_EFFECT>(OnRILFacadeEffect);
+            var scene = world.engine.gameres.LoadAssetSync<PackedScene>(Location.effectpath + effcfg.Res + ".tscn");
+            var effnode = scene?.Instantiate<Node3D>();
+            if (null == effnode) return;
+            var pnodes = effnode.FindChildren("*", "CPUParticles3D", true, false);
+            var anodes = effnode.FindChildren("*", "AnimationPlayer", true, false);
+            var ps = new CpuParticles3D[pnodes.Count];
+            var aps = new AnimationPlayer[anodes.Count];
+            for (int i = 0; i < pnodes.Count; i++) ps[i] = pnodes[i] as CpuParticles3D;
+            for (int i = 0; i < anodes.Count; i++) aps[i] = anodes[i] as AnimationPlayer;
+            controller = new EffectController { node = effnode, particles = ps, animplayers = aps };
+            root?.AddChild(effnode);
         }
+        controller.node.Visible = true;
+        effects.Add(info.id, (info, controller));
+    }
 
-        protected override void OnReset()
+    private void RecycleEffect(uint id)
+    {
+        if (false == effects.TryGetValue(id, out var effect)) return;
+        effects.Remove(id);
+        if (false == world.engine.cfg.location.EffectInfos.TryGetValue(effect.info.effect, out var effcfg)) return;
+        effect.controller.node.Visible = false;
+        effect.controller.Reset();
+        ObjectPool.Set(effect.controller, effcfg.Res);
+    }
+
+    private void OnRILFacadeEffect(RIL_FACADE_EFFECT ril)
+    {
+        var rmv = ObjectPool.Ensure<List<uint>>();
+        foreach (var kv in effects) if (false == ril.effectdict.ContainsKey(kv.Key)) rmv.Add(kv.Key);
+        foreach (var id in rmv) RecycleEffect(id);
+        rmv.Clear(); ObjectPool.Set(rmv);
+
+        foreach (var kv in ril.effectdict)
         {
-            var rmv = ObjectPool.Ensure<List<uint>>();
-            foreach (var kv in effects) rmv.Add(kv.Key);
-            foreach (var id in rmv) RecycleEffect(id);
-            rmv.Clear(); ObjectPool.Set(rmv);
-            effects.Clear(); ObjectPool.Set(effects);
-        }
-
-        private void CreateEffect(EffectInfo info)
-        {
-            if (effects.ContainsKey(info.id)) return;
-            if (false == world.engine.cfg.location.EffectInfos.TryGetValue(info.effect, out var effcfg)) return;
-
-            var controller = ObjectPool.Get<EffectController>(effcfg.Res);
-            if (null == controller)
+            if (effects.TryGetValue(kv.Key, out var effect))
             {
-                var scene = world.engine.gameres.LoadAssetSync<PackedScene>(Location.effectpath + effcfg.Res);
-                var effnode = scene?.Instantiate<Node3D>();
-                if (null == effnode) return;
-                var pnodes = effnode.FindChildren("*", "GpuParticles3D", true, false);
-                var anodes = effnode.FindChildren("*", "AnimationPlayer", true, false);
-                var ps = new GpuParticles3D[pnodes.Count];
-                var aps = new AnimationPlayer[anodes.Count];
-                for (int i = 0; i < pnodes.Count; i++) ps[i] = pnodes[i] as GpuParticles3D;
-                for (int i = 0; i < anodes.Count; i++) aps[i] = anodes[i] as AnimationPlayer;
-                controller = new EffectController { node = effnode, particles = ps, animplayers = aps };
-                root?.AddChild(effnode);
+                effects.Remove(kv.Key);
+                effects.Add(kv.Key, (kv.Value, effect.controller));
+                continue;
             }
-            controller.node.Visible = true;
-            effects.Add(info.id, (info, controller));
+            CreateEffect(kv.Value);
         }
+    }
 
-        private void RecycleEffect(uint id)
+    protected override void OnChase(float tick, float timescale)
+    {
+        base.OnChase(tick, timescale);
+        foreach (var kv in effects)
         {
-            if (false == effects.TryGetValue(id, out var effect)) return;
-            effects.Remove(id);
-            if (false == world.engine.cfg.location.EffectInfos.TryGetValue(effect.info.effect, out var effcfg)) return;
-            effect.controller.node.Visible = false;
-            effect.controller.Reset();
-            ObjectPool.Set(effect.controller, effcfg.Res);
-        }
+            var info = kv.Value.info;
+            var controller = kv.Value.controller;
 
-        private void OnRILFacadeEffect(RIL_FACADE_EFFECT ril)
-        {
-            var rmv = ObjectPool.Ensure<List<uint>>();
-            foreach (var kv in effects) if (false == ril.effectdict.ContainsKey(kv.Key)) rmv.Add(kv.Key);
-            foreach (var id in rmv) RecycleEffect(id);
-            rmv.Clear(); ObjectPool.Set(rmv);
+            var followpos = info.position.ToVector3();
+            var followeuler = info.euler.ToVector3();
+            var followscale = info.scale.AsFloat();
 
-            foreach (var kv in ril.effectdict)
+            if (info.follow == EFFECT_DEFINE.FOLLOW_ACTOR)
             {
-                if (effects.TryGetValue(kv.Key, out var effect))
+                var nodeAgent = world.GetAgent<NodeAgent>(actor);
+                if (null != nodeAgent?.node)
                 {
-                    effects.Remove(kv.Key);
-                    effects.Add(kv.Key, (kv.Value, effect.controller));
-                    continue;
+                    var pos = nodeAgent.node.Position;
+                    var euler = nodeAgent.node.Rotation * 180f / MathF.PI;
+                    var scale = nodeAgent.node.Scale.X;
+                    followpos = pos + nodeAgent.node.GlobalTransform.Basis * followpos;
+                    followeuler += euler;
+                    followscale *= scale;
                 }
-                CreateEffect(kv.Value);
             }
-        }
 
-        protected override void OnChase(float tick, float timescale)
-        {
-            base.OnChase(tick, timescale);
-            foreach (var kv in effects)
+            if (EFFECT_DEFINE.FOLLOW_NONE != info.followmask)
             {
-                var info = kv.Value.info;
-                var controller = kv.Value.controller;
-
-                var followpos = info.position.ToVector3();
-                var followeuler = info.euler.ToVector3();
-                var followscale = info.scale.AsFloat();
-
-                if (info.follow == EFFECT_DEFINE.FOLLOW_ACTOR)
-                {
-                    var nodeAgent = world.GetAgent<NodeAgent>(actor);
-                    if (null != nodeAgent?.node)
-                    {
-                        var pos = nodeAgent.node.Position;
-                        var euler = nodeAgent.node.Rotation * 180f / MathF.PI;
-                        var scale = nodeAgent.node.Scale.X;
-                        followpos = pos + nodeAgent.node.GlobalTransform.Basis * followpos;
-                        followeuler += euler;
-                        followscale *= scale;
-                    }
-                }
-
-                if (EFFECT_DEFINE.FOLLOW_NONE != info.followmask)
-                {
-                    if (EFFECT_DEFINE.FOLLOW_POSITION == (info.followmask & EFFECT_DEFINE.FOLLOW_POSITION))
-                        controller.node.Position = followpos;
-                    if (EFFECT_DEFINE.FOLLOW_ROTATION == (info.followmask & EFFECT_DEFINE.FOLLOW_ROTATION))
-                        controller.node.Rotation = followeuler * MathF.PI / 180f;
-                    if (EFFECT_DEFINE.FOLLOW_SCALE == (info.followmask & EFFECT_DEFINE.FOLLOW_SCALE))
-                        controller.node.Scale = Vector3.One * followscale;
-                }
-
-                controller.Simulate(Mathf.Clamp(controller.time + tick * timescale, 0, info.elapsed.AsFloat()));
+                if (EFFECT_DEFINE.FOLLOW_POSITION == (info.followmask & EFFECT_DEFINE.FOLLOW_POSITION))
+                    controller.node.Position = followpos;
+                if (EFFECT_DEFINE.FOLLOW_ROTATION == (info.followmask & EFFECT_DEFINE.FOLLOW_ROTATION))
+                    controller.node.Rotation = followeuler * MathF.PI / 180f;
+                if (EFFECT_DEFINE.FOLLOW_SCALE == (info.followmask & EFFECT_DEFINE.FOLLOW_SCALE))
+                    controller.node.Scale = Vector3.One * followscale;
             }
+
+            controller.Simulate(Mathf.Clamp(controller.time + tick * timescale, 0, info.elapsed.AsFloat()));
         }
     }
 }

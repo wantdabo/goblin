@@ -5,118 +5,117 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Goblin.Sys.Common
+namespace Goblin.Sys.Common;
+
+public enum UIEventEnum { BeginDrag, Drag, EndDrag, PointerClick, PointerDown, PointerUp, PointerEnter, PointerExit }
+
+public abstract class UIBase : Comp
 {
-    public enum UIEventEnum { BeginDrag, Drag, EndDrag, PointerClick, PointerDown, PointerUp, PointerEnter, PointerExit }
+    public UIBase parent;
 
-    public abstract class UIBase : Comp
+    public virtual string layerName
     {
-        public UIBase parent;
-
-        public virtual string layerName
-        {
-            get => null == parent ? (this as UIBaseView)?.layerName : parent.layerName;
-            set { }
-        }
-
-        public virtual int sorting
-        {
-            get => null == parent ? (this as UIBaseView)?.sorting ?? 0 : parent.sorting;
-            set { }
-        }
+        get => null == parent ? (this as UIBaseView)?.layerName : parent.layerName;
+        set { }
     }
 
-    public abstract class UIBase<T> : UIBase where T : UIBase
+    public virtual int sorting
     {
-        protected abstract string res { get; }
+        get => null == parent ? (this as UIBaseView)?.sorting ?? 0 : parent.sorting;
+        set { }
+    }
+}
 
-        public Control node { get; set; }
+public abstract class UIBase<T> : UIBase where T : UIBase
+{
+    protected abstract string res { get; }
 
-        private List<UIBaseCell> cellList = new();
-        private List<UIEffect> uieffectList = new();
+    public Control node { get; set; }
 
-        public async Task<UC> AddUICell<UC>(string nodePath, bool active = true) where UC : UIBaseCell, new()
-        {
-            var parentNode = node?.FindChild(nodePath, true, false) as Control ?? node;
-            return await AddUICell<UC>(parentNode, active);
-        }
+    private List<UIBaseCell> cellList = new();
+    private List<UIEffect> uieffectList = new();
 
-        public async Task<UC> AddUICell<UC>(Control parentNode, bool active = true) where UC : UIBaseCell, new()
-        {
-            var comp = AddComp<UC>();
-            cellList.Add(comp);
-            comp.Create();
-            comp.parent = this;
-            comp.container = parentNode;
-            await comp.Load();
-            comp.SetActive(active);
-            return comp;
-        }
+    public async Task<UC> AddUICell<UC>(string nodePath, bool active = true) where UC : UIBaseCell, new()
+    {
+        var parentNode = node?.FindChild(nodePath, true, false) as Control ?? node;
+        return await AddUICell<UC>(parentNode, active);
+    }
 
-        public void RmvUICell(UIBaseCell comp)
-        {
-            comp.Unload(); cellList.Remove(comp); comp.Destroy();
-        }
+    public async Task<UC> AddUICell<UC>(Control parentNode, bool active = true) where UC : UIBaseCell, new()
+    {
+        var comp = AddComp<UC>();
+        cellList.Add(comp);
+        comp.Create();
+        comp.parent = this;
+        comp.container = parentNode;
+        await comp.Load();
+        comp.SetActive(active);
+        return comp;
+    }
 
-        public void RmvUICell<UC>() where UC : UIBaseCell
-        {
-            for (int i = cellList.Count - 1; i >= 0; i--) if (cellList[i] is UC) RmvUICell(cellList[i]);
-        }
+    public void RmvUICell(UIBaseCell comp)
+    {
+        comp.Unload(); cellList.Remove(comp); comp.Destroy();
+    }
 
-        public void Unload()
-        {
-            for (int i = cellList.Count - 1; i >= 0; i--) RmvUICell(cellList[i]);
-            OnUnload();
-            node?.QueueFree();
-            node = null;
-        }
+    public void RmvUICell<UC>() where UC : UIBaseCell
+    {
+        for (int i = cellList.Count - 1; i >= 0; i--) if (cellList[i] is UC) RmvUICell(cellList[i]);
+    }
 
-        protected virtual void OnLoad() { }
-        protected virtual void OnUnload() { }
+    public void Unload()
+    {
+        for (int i = cellList.Count - 1; i >= 0; i--) RmvUICell(cellList[i]);
+        OnUnload();
+        node?.QueueFree();
+        node = null;
+    }
 
-        protected virtual void OnOpen()
-        {
-            foreach (var cell in cellList) cell.Open();
-        }
+    protected virtual void OnLoad() { }
+    protected virtual void OnUnload() { }
 
-        public void Close()
-        {
-            foreach (var cell in cellList) cell.Close();
-            OnClose();
-        }
+    protected virtual void OnOpen()
+    {
+        foreach (var cell in cellList) cell.Open();
+    }
 
-        protected virtual void OnClose() { }
-        protected virtual void OnBuildUI() { }
-        protected virtual void OnBindEvent() { }
+    public void Close()
+    {
+        foreach (var cell in cellList) cell.Close();
+        OnClose();
+    }
 
-        protected void AddUIEventListener(string nodeName, Action action, UIEventEnum eventType = UIEventEnum.PointerClick)
-        {
-            var target = node?.FindChild(nodeName, true, false) as Control;
-            if (null == target) return;
-            AddUIEventListener(target, action, eventType);
-        }
+    protected virtual void OnClose() { }
+    protected virtual void OnBuildUI() { }
+    protected virtual void OnBindEvent() { }
 
-        protected void AddUIEventListener(Control target, Action action, UIEventEnum eventType = UIEventEnum.PointerClick)
-        {
-            if (null == target) return;
-            if (eventType == UIEventEnum.PointerClick && target is Button btn)
-                btn.Pressed += action;
-            else if (eventType == UIEventEnum.PointerClick)
-                target.GuiInput += (e) => { if (e is InputEventMouseButton mb && mb.Pressed) action(); };
-        }
+    protected void AddUIEventListener(string nodeName, Action action, UIEventEnum eventType = UIEventEnum.PointerClick)
+    {
+        var target = node?.FindChild(nodeName, true, false) as Control;
+        if (null == target) return;
+        AddUIEventListener(target, action, eventType);
+    }
 
-        protected UIEffect AddUIEffect(string nodeName, string res)
-        {
-            var target = node?.FindChild(nodeName, true, false) as Control ?? node;
-            return AddUIEffect(target, res);
-        }
+    protected void AddUIEventListener(Control target, Action action, UIEventEnum eventType = UIEventEnum.PointerClick)
+    {
+        if (null == target) return;
+        if (eventType == UIEventEnum.PointerClick && target is Button btn)
+            btn.Pressed += action;
+        else if (eventType == UIEventEnum.PointerClick)
+            target.GuiInput += (e) => { if (e is InputEventMouseButton mb && mb.Pressed) action(); };
+    }
 
-        protected UIEffect AddUIEffect(Control target, string res)
-        {
-            var eff = AddComp<UIEffect>();
-            eff.Load(target, res);
-            uieffectList.Add(eff);
-            return eff;
-        }
+    protected UIEffect AddUIEffect(string nodeName, string res)
+    {
+        var target = node?.FindChild(nodeName, true, false) as Control ?? node;
+        return AddUIEffect(target, res);
+    }
+
+    protected UIEffect AddUIEffect(Control target, string res)
+    {
+        var eff = AddComp<UIEffect>();
+        eff.Load(target, res);
+        uieffectList.Add(eff);
+        return eff;
     }
 }

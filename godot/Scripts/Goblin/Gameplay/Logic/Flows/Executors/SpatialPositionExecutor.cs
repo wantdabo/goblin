@@ -7,29 +7,28 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Flows.Executors
+namespace Goblin.Gameplay.Logic.Flows.Executors;
+
+/// <summary>
+/// POSITION 变化指令
+/// </summary>
+public class SpatialPositionExecutor : Executor<SpatialPositionData>
 {
-    /// <summary>
-    /// POSITION 变化指令
-    /// </summary>
-    public class SpatialPositionExecutor : Executor<SpatialPositionData>
+    protected override void OnExecute((uint pipelineid, uint index) identity, SpatialPositionData data, FlowInfo flowinfo, ulong target)
     {
-        protected override void OnExecute((uint pipelineid, uint index) identity, SpatialPositionData data, FlowInfo flowinfo, ulong target)
+        base.OnExecute(identity, data, flowinfo, target);
+        if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
+        var motion = data.position.ToFPVector3();
+        switch (data.type)
         {
-            base.OnExecute(identity, data, flowinfo, target);
-            if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
-            var motion = data.position.ToFPVector3();
-            switch (data.type)
-            {
-                case SPATIAL_DEFINE.POSITION_WORLD:
-                    spatial.position += motion;
-                    break;
-                case SPATIAL_DEFINE.POSITION_SELF:
-                    var rotation = FPQuaternion.Euler(spatial.euler);
-                    motion = rotation * motion;
-                    spatial.position += motion;
-                    break;
-            }
+            case SPATIAL_DEFINE.POSITION_WORLD:
+                spatial.position += motion;
+                break;
+            case SPATIAL_DEFINE.POSITION_SELF:
+                var rotation = FPQuaternion.Euler(spatial.euler);
+                motion = rotation * motion;
+                spatial.position += motion;
+                break;
         }
     }
 }

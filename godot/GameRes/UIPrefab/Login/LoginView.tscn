@@ -1,40 +1,143 @@
-[gd_scene format=3]
+[gd_scene format=3 load_steps=5]
+
+[ext_resource type="Font" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime"]
+bg_color = Color(0.824, 1, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
+bg_color = Color(0.792, 0.961, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_press"]
+bg_color = Color(0.646, 0.784, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
 
 [node name="LoginView" type="Control"]
-layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="UserName" type="LineEdit" parent="."]
-layout_mode = 1
-offset_left = 100.0
-offset_top = 300.0
-offset_right = 400.0
-offset_bottom = 340.0
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="Content" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UserNameDesc" type="Label" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -30.0
+offset_right = -110.0
+offset_bottom = 10.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.765, 0.941, 0.008, 1)
+text = "账号："
+
+[node name="UserName" type="LineEdit" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -30.0
+offset_right = 95.0
+offset_bottom = 10.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
 placeholder_text = "用户名"
 
-[node name="Password" type="LineEdit" parent="."]
-layout_mode = 1
-offset_left = 100.0
-offset_top = 360.0
-offset_right = 400.0
-offset_bottom = 400.0
+[node name="PasswordDesc" type="Label" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = 30.0
+offset_right = -110.0
+offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.765, 0.941, 0.008, 1)
+text = "密码："
+
+[node name="Password" type="LineEdit" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = 30.0
+offset_right = 95.0
+offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
 placeholder_text = "密码"
 secret = true
 
-[node name="LoginBtn" type="Button" parent="."]
-layout_mode = 1
-offset_left = 100.0
-offset_top = 420.0
-offset_right = 240.0
-offset_bottom = 460.0
+[node name="LoginBtn" type="Button" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = 120.0
+offset_right = -50.0
+offset_bottom = 180.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
 text = "登录"
 
-[node name="RegBtn" type="Button" parent="."]
-layout_mode = 1
-offset_left = 260.0
-offset_top = 420.0
-offset_right = 400.0
-offset_bottom = 460.0
+[node name="RegBtn" type="Button" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = 120.0
+offset_right = 250.0
+offset_bottom = 180.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
 text = "注册"
+
+[node name="SkipBtn" type="Button" parent="Content"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 220.0
+offset_right = 100.0
+offset_bottom = 280.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
+text = "跳过"

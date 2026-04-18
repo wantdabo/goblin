@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[node name="Effect" type="CPUParticles3D"]
+amount = 16
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_amount_min = 0.1
+scale_amount_max = 0.3

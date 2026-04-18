@@ -1,27 +1,26 @@
 using System;
 using MessagePack;
 
-namespace Goblin.Gameplay.Logic.Flows.Checkers.Common
+namespace Goblin.Gameplay.Logic.Flows.Checkers.Common;
+
+/// <summary>
+/// 管线指令执行条件
+/// </summary>
+[Serializable]
+[MessagePackObject(true)]
+public abstract class Condition
 {
     /// <summary>
-    /// 管线指令执行条件
+    /// 条件 ID
     /// </summary>
-    [Serializable]
-    [MessagePackObject(true)]
-    public abstract class Condition
-    {
-        /// <summary>
-        /// 条件 ID
-        /// </summary>
-        public abstract ushort id { get; }
+    public abstract ushort id { get; }
 
-        /// <summary>
-        /// 序列化条件
-        /// </summary>
-        /// <returns>二进制数据</returns>
-        public byte[] Serialize()
-        {
-            return MessagePackSerializer.Serialize(this as object);
-        }
+    /// <summary>
+    /// 序列化条件
+    /// </summary>
+    /// <returns>二进制数据</returns>
+    public byte[] Serialize()
+    {
+        return MessagePackSerializer.Serialize(this as object);
     }
 }

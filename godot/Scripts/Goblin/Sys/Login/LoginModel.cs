@@ -1,10 +1,9 @@
 using Goblin.Sys.Common;
 
-namespace Goblin.Sys.Login
+namespace Goblin.Sys.Login;
+
+public class LoginModel : Model<LoginProxy>
 {
-    public class LoginModel : Model<LoginProxy>
-    {
-        public string uuid { get; set; }
-        public bool signined { get; set; }
-    }
+    public string uuid { get; set; }
+    public bool signined { get; set; }
 }

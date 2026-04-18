@@ -2,60 +2,59 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common
+namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
+
+/// <summary>
+/// Flow 碰撞信息基类
+/// </summary>
+public abstract class FlowCollisionInfo : BehaviorInfo
 {
     /// <summary>
-    /// Flow 碰撞信息基类
+    /// 碰撞记录
     /// </summary>
-    public abstract class FlowCollisionInfo : BehaviorInfo
-    {
-        /// <summary>
-        /// 碰撞记录
-        /// </summary>
-        public Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>> records { get; set; }
-        /// <summary>
-        /// 碰撞的 ActorID 列表
-        /// </summary>
-        public List<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
+    public Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>> records { get; set; }
+    /// <summary>
+    /// 碰撞的 ActorID 列表
+    /// </summary>
+    public List<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
         
-        protected override void OnReady()
-        {
-            records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
-            targets = ObjectCache.Ensure<List<(ulong actor, (uint pipeline, uint index) identity)>>();
-        }
+    protected override void OnReady()
+    {
+        records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
+        targets = ObjectCache.Ensure<List<(ulong actor, (uint pipeline, uint index) identity)>>();
+    }
 
-        protected override void OnReset()
+    protected override void OnReset()
+    {
+        foreach (var kv in records)
         {
-            foreach (var kv in records)
-            {
-                kv.Value.Clear();
-                ObjectCache.Set(kv.Value);
-            }
-            records.Clear();
-            ObjectCache.Set(records);
-            
-            targets.Clear();
-            ObjectCache.Set(targets);
+            kv.Value.Clear();
+            ObjectCache.Set(kv.Value);
         }
+        records.Clear();
+        ObjectCache.Set(records);
+            
+        targets.Clear();
+        ObjectCache.Set(targets);
+    }
 
-        protected override BehaviorInfo OnClone()
+    protected override BehaviorInfo OnClone()
+    {
+        var clone = ObjectCache.Ensure<FlowCollisionHurtInfo>();
+        clone.Ready(actor);
+        clone.records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
+        foreach (var kv in records)
         {
-            var clone = ObjectCache.Ensure<FlowCollisionHurtInfo>();
-            clone.Ready(actor);
-            clone.records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
-            foreach (var kv in records)
+            var record = ObjectCache.Ensure<Dictionary<ulong, uint>>();
+            foreach (var kv2 in kv.Value)
             {
-                var record = ObjectCache.Ensure<Dictionary<ulong, uint>>();
-                foreach (var kv2 in kv.Value)
-                {
-                    record.Add(kv2.Key, kv2.Value);
-                }
-                clone.records.Add(kv.Key, record);
+                record.Add(kv2.Key, kv2.Value);
             }
-            
-            clone.targets.AddRange(targets);
-            
-            return clone;
+            clone.records.Add(kv.Key, record);
         }
+            
+        clone.targets.AddRange(targets);
+            
+        return clone;
     }
 }

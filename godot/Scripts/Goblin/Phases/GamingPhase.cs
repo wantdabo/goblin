@@ -2,27 +2,26 @@
 using System;
 using System.Collections.Generic;
 
-namespace Goblin.Phases
+namespace Goblin.Phases;
+
+/// <summary>
+/// 游戏阶段
+/// </summary>
+public class GamingPhase : State
 {
-    /// <summary>
-    /// 游戏阶段
-    /// </summary>
-    public class GamingPhase : State
+    protected override List<Type> passes => new() { typeof(LoginPhase) };
+
+    public override bool OnValid() => true; // 无服务器，跳过登录，与 Unity 一致
+
+    public override void OnEnter()
     {
-        protected override List<Type> passes => new() { typeof(LoginPhase) };
+        base.OnEnter();
+        engine.gameui.Open<Sys.Lobby.View.LobbyView>();
+    }
 
-        public override bool OnValid() => engine.proxy.login.data.signined;
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            engine.gameui.Open<Sys.Lobby.View.LobbyView>();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            engine.gameui.Close<Sys.Lobby.View.LobbyView>();
-        }
+    public override void OnExit()
+    {
+        base.OnExit();
+        engine.gameui.Close<Sys.Lobby.View.LobbyView>();
     }
 }

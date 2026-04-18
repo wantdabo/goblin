@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf
-{
+namespace Conf;
+
 public sealed partial class HeroInfo : Luban.BeanBase
 {
     public HeroInfo(ByteBuf _buf) 
@@ -74,17 +74,14 @@ public sealed partial class HeroInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Id:" + Id + ","
-        + "Attribute:" + Attribute + ","
-        + "Name:" + Name + ","
-        + "Model:" + Model + ","
-        + "Collider:" + Collider + ","
-        + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
-        + "BornPipelines:" + Luban.StringUtil.CollectionToString(BornPipelines) + ","
-        + "DeathPipelines:" + Luban.StringUtil.CollectionToString(DeathPipelines) + ","
-        + "}";
+               + "Id:" + Id + ","
+               + "Attribute:" + Attribute + ","
+               + "Name:" + Name + ","
+               + "Model:" + Model + ","
+               + "Collider:" + Collider + ","
+               + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
+               + "BornPipelines:" + Luban.StringUtil.CollectionToString(BornPipelines) + ","
+               + "DeathPipelines:" + Luban.StringUtil.CollectionToString(DeathPipelines) + ","
+               + "}";
     }
 }
-
-}
-

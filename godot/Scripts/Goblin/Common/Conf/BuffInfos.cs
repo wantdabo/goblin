@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf
-{
+namespace Conf;
+
 public partial class BuffInfos
 {
     private readonly System.Collections.Generic.Dictionary<int, Conf.BuffInfo> _dataMap;
@@ -48,6 +48,3 @@ public partial class BuffInfos
     }
 
 }
-
-}
-

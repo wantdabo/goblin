@@ -1,8 +1,7 @@
 using Goblin.Sys.Common;
 
-namespace Goblin.Sys.Initialize
+namespace Goblin.Sys.Initialize;
+
+public class InitializeModel : Model
 {
-    public class InitializeModel : Model
-    {
-    }
 }

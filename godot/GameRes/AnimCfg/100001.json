@@ -1,0 +1,30 @@
+{
+  "model": 100001,
+  "animationstates": [
+    { "state": 3, "name": "Ani_Idle" },
+    { "state": 4, "name": "Ani_Run" },
+    { "state": 8, "name": "Ani_Hit_L_Front" }
+  ],
+  "animationmixs": [
+    {
+      "name": "Ani_Idle",
+      "mixduration": 0.2,
+      "mixanimations": []
+    },
+    {
+      "name": "Ani_Run",
+      "mixduration": 0.15,
+      "mixanimations": [
+        { "prename": "Ani_Idle", "name": "Ani_Run", "duration": 0.15, "mixduration": 0.15 }
+      ]
+    },
+    {
+      "name": "Ani_Hit_L_Front",
+      "mixduration": 0.1,
+      "mixanimations": [
+        { "prename": "Ani_Idle", "name": "Ani_Hit_L_Front", "duration": 0.1, "mixduration": 0.1 },
+        { "prename": "Ani_Run", "name": "Ani_Hit_L_Front", "duration": 0.1, "mixduration": 0.1 }
+      ]
+    }
+  ]
+}

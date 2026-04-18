@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf
-{
+namespace Conf;
+
 public sealed partial class BuffInfo : Luban.BeanBase
 {
     public BuffInfo(ByteBuf _buf) 
@@ -59,14 +59,11 @@ public sealed partial class BuffInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Id:" + Id + ","
-        + "Name:" + Name + ","
-        + "EnchantMains:" + Luban.StringUtil.CollectionToString(EnchantMains) + ","
-        + "EnchantScales:" + Luban.StringUtil.CollectionToString(EnchantScales) + ","
-        + "Pipelines:" + Luban.StringUtil.CollectionToString(Pipelines) + ","
-        + "}";
+               + "Id:" + Id + ","
+               + "Name:" + Name + ","
+               + "EnchantMains:" + Luban.StringUtil.CollectionToString(EnchantMains) + ","
+               + "EnchantScales:" + Luban.StringUtil.CollectionToString(EnchantScales) + ","
+               + "Pipelines:" + Luban.StringUtil.CollectionToString(Pipelines) + ","
+               + "}";
     }
 }
-
-}
-

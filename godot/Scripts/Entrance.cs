@@ -8,7 +8,12 @@ public partial class Entrance : Node
 {
 	public override void _Ready()
 	{
-		Godot.Engine.MaxFps = 0; // 不限帧率
+		Godot.Engine.MaxFps = 0;
+		CallDeferred(MethodName.Init);
+	}
+
+	private void Init()
+	{
 		Export.Init();
 	}
 

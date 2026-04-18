@@ -4,39 +4,38 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Flows.Executors
+namespace Goblin.Gameplay.Logic.Flows.Executors;
+
+/// <summary>
+/// 状态变更执行器
+/// </summary>
+public class ChangeStateExecutor : Executor<ChangeStateData>
 {
-    /// <summary>
-    /// 状态变更执行器
-    /// </summary>
-    public class ChangeStateExecutor : Executor<ChangeStateData>
+    protected override void OnEnter((uint pipelineid, uint index) identity, ChangeStateData data, FlowInfo flowinfo, ulong target)
     {
-        protected override void OnEnter((uint pipelineid, uint index) identity, ChangeStateData data, FlowInfo flowinfo, ulong target)
+        base.OnEnter(identity, data, flowinfo, target);
+        if (false == stage.SeekBehavior(target, out StateMachine statemachine)) return;
+
+        if (data.breakable)
         {
-            base.OnEnter(identity, data, flowinfo, target);
-            if (false == stage.SeekBehavior(target, out StateMachine statemachine)) return;
+            statemachine.Break();
+            return;
+        }
 
-            if (data.breakable)
-            {
-                statemachine.Break();
-                return;
-            }
-
-            if (data.force)
-            {
-                statemachine.ChangeState(data.state);
-            }
-            else
-            {
-                // TODO : HACKER 这里是为了做受击动画, 后续受击动画需要改成独立的动画状态机来处理
-                if (statemachine.info.current == data.state) statemachine.Break();
-                statemachine.TryChangeState(data.state);
-            }
+        if (data.force)
+        {
+            statemachine.ChangeState(data.state);
+        }
+        else
+        {
+            // TODO : HACKER 这里是为了做受击动画, 后续受击动画需要改成独立的动画状态机来处理
+            if (statemachine.info.current == data.state) statemachine.Break();
+            statemachine.TryChangeState(data.state);
+        }
             
-            if (data.usedelaybreak)
-            {
-                statemachine.Break(data.delaybreak * FP.EN3);
-            }
+        if (data.usedelaybreak)
+        {
+            statemachine.Break(data.delaybreak * FP.EN3);
         }
     }
 }

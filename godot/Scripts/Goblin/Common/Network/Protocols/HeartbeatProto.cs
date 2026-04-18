@@ -1,17 +1,16 @@
 ﻿using MessagePack;
 using Queen.Protocols.Common;
 
-namespace Queen.Protocols
+namespace Queen.Protocols;
+
+/// <summary>
+/// 心跳
+/// </summary>
+[MessagePackObject(true)]
+public class S2CHeartbeatMsg : INetMessage
 {
     /// <summary>
-    /// 心跳
+    /// 时间戳
     /// </summary>
-    [MessagePackObject(true)]
-    public class S2CHeartbeatMsg : INetMessage
-    {
-        /// <summary>
-        /// 时间戳
-        /// </summary>
-        public long timestamp { get; set; }
-    }
+    public long timestamp { get; set; }
 }
