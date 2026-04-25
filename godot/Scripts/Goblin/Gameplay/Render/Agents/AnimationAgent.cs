@@ -14,14 +14,14 @@ namespace Goblin.Gameplay.Render.Agents;
 /// </summary>
 public class AnimationAgent : Agent
 {
-    private string cfgname;
-    private AnimationConfig animcfg;
-    private AnimationPlayer animplayer;
-    private string preplayname;
-    private string curplayname;
-    private string playname;
-    private float tarduration;
-    private float mixduration;
+    private string cfgname { get; set; }
+    private AnimationConfig animcfg { get; set; }
+    private AnimationPlayer animplayer { get; set; }
+    private string preplayname { get; set; }
+    private string curplayname { get; set; }
+    private string playname { get; set; }
+    private float tarduration { get; set; }
+    private float mixduration { get; set; }
 
     protected override void OnReady()
     {
@@ -50,7 +50,7 @@ public class AnimationAgent : Agent
             cfgname = modelinfo.Animation;
             var bytes = world.engine.gameres.LoadRawFileSync(Location.animcfgpath + cfgname + ".json");
             if (bytes != null && bytes.Length > 0)
-                animcfg = JsonSerializer.Deserialize<AnimationConfig>(bytes, new JsonSerializerOptions { IncludeFields = true });
+                animcfg = JsonSerializer.Deserialize<AnimationConfig>(bytes);
         }
 
         var animname = ril.animname ?? animcfg?.GetAnimationName(ril.animstate);

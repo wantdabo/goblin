@@ -12,33 +12,25 @@ public class FrameworkView : UIBaseView
     protected override string res => "Other/FrameworkView";
     public override bool quickclose => false;
 
-    private Label connectStateText;
-    private Control connectBtnGo;
-    private Control disconnectBtnGo;
-    private Control messageContentGo;
-    private Control messageOrgGo;
+    private Control messageContentGo { get; set; }
+    private Control messageOrgGo { get; set; }
 
     protected override void OnLoad()
     {
         base.OnLoad();
         engine.eventor.Listen<MessageBlowEvent>(OnMessageBlow);
-        engine.ticker.eventor.Listen<TickEvent>(OnTick);
     }
 
     protected override void OnUnload()
     {
         base.OnUnload();
         engine.eventor.UnListen<MessageBlowEvent>(OnMessageBlow);
-        engine.ticker.eventor.UnListen<TickEvent>(OnTick);
     }
 
     protected override void OnBuildUI()
     {
-        connectStateText = node.FindChild("ConnectState", true, false) as Label;
-        connectBtnGo = node.FindChild("ConnectBtn", true, false) as Control;
-        disconnectBtnGo = node.FindChild("DisconnectBtn", true, false) as Control;
-        messageContentGo = node.FindChild("MessageContent", true, false) as Control;
-        messageOrgGo = node.FindChild("MessageORG", true, false) as Control;
+        messageContentGo = engine.gdkit.SeekNode<Control>(node, "MessageContent");
+        messageOrgGo = engine.gdkit.SeekNode<Control>(node, "MessageORG");
     }
 
     protected override void OnBindEvent()
@@ -78,17 +70,5 @@ public class FrameworkView : UIBaseView
             ObjectPool.Set(msgNode, "MESSAGE_BLOW_GO_KEY");
             msgNode.Visible = false;
         }, 3.5f, 1);
-    }
-
-    private void OnTick(TickEvent e)
-    {
-        if (connectBtnGo != null) connectBtnGo.Visible = !engine.net.connected;
-        if (disconnectBtnGo != null) disconnectBtnGo.Visible = engine.net.connected;
-        if (connectStateText != null)
-            connectStateText.Text = engine.net.connected ? "CONNECTED" : "DISCONNECTED";
-        if (connectStateText != null)
-            connectStateText.AddThemeColorOverride("font_color", engine.net.connected
-                ? new Godot.Color(0.765f, 0.941f, 0.008f)
-                : new Godot.Color(0.851f, 0.208f, 0f));
     }
 }

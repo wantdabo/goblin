@@ -17,10 +17,10 @@ namespace Goblin.Gameplay.Render.Agents;
 /// </summary>
 public class EffectAgent : Agent
 {
-    private static Node3D root;
+    private static Node3D root { get; set; }
     public static void SetRoot(Node3D r) => root = r;
 
-    private Dictionary<uint, (EffectInfo info, EffectController controller)> effects;
+    private Dictionary<uint, (EffectInfo info, EffectController controller)> effects { get; set; }
 
     protected override void OnReady()
     {
@@ -43,7 +43,7 @@ public class EffectAgent : Agent
         if (false == world.engine.cfg.location.EffectInfos.TryGetValue(info.effect, out var effcfg)) return;
 
         var controller = ObjectPool.Get<EffectController>(effcfg.Res);
-        if (null == controller)
+        if (null == controller || !GodotObject.IsInstanceValid(controller.node))
         {
             var scene = world.engine.gameres.LoadAssetSync<PackedScene>(Location.effectpath + effcfg.Res + ".tscn");
             var effnode = scene?.Instantiate<Node3D>();

@@ -14,25 +14,25 @@ public abstract class UIBaseView : UIBase<UIBaseView>
     public UIState state { get; private set; }
     public virtual bool quickclose { get; } = true;
 
-    private string mLayerName;
+    private string mlayername { get; set; } = string.Empty;
     public override string layerName
     {
-        get => mLayerName;
+        get => mlayername;
         set
         {
-            mLayerName = value;
-            if (node?.GetParent() is CanvasLayer cl) cl.Name = mLayerName;
+            mlayername = value;
+            if (node?.GetParent() is CanvasLayer cl) cl.Name = mlayername;
         }
     }
 
-    private int mSorting;
+    private int msorting { get; set; }
     public override int sorting
     {
-        get => mSorting;
+        get => msorting;
         set
         {
-            mSorting = value;
-            if (node?.GetParent() is CanvasLayer cl) cl.Layer = mSorting;
+            msorting = value;
+            if (node?.GetParent() is CanvasLayer cl) cl.Layer = msorting;
         }
     }
 

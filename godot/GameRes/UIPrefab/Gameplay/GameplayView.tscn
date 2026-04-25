@@ -1,92 +1,93 @@
-[gd_scene format=3 load_steps=12]
+[gd_scene format=3 uid="uid://bbrcqnfkv4ala"]
 
-[ext_resource type="Font" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+[ext_resource type="FontFile" uid="uid://bcbllkiuu7037" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime"]
 bg_color = Color(0.824, 1, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
-bg_color = Color(0.792, 0.961, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
 corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_press"]
 bg_color = Color(0.646, 0.784, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
-bg_color = Color(0.851, 0.208, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
+bg_color = Color(0.792, 0.961, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
-bg_color = Color(0.818, 0.2, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
 corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_press"]
-bg_color = Color(0.667, 0.163, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yellow"]
 bg_color = Color(1, 0.956, 0.165, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yellow_hover"]
-bg_color = Color(0.961, 0.919, 0.159, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
 corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yellow_press"]
 bg_color = Color(0.784, 0.751, 0.129, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yellow_hover"]
+bg_color = Color(0.961, 0.919, 0.159, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[node name="GameplayView" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
+bg_color = Color(0.851, 0.208, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_press"]
+bg_color = Color(0.667, 0.163, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
+bg_color = Color(0.818, 0.2, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="GameplayView" type="Control" unique_id=1589197247]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Synopsis" type="Label" parent="."]
-anchor_left = 0.0
-anchor_top = 1.0
-anchor_right = 0.0
-anchor_bottom = 1.0
+[node name="Synopsis" type="Label" parent="." unique_id=288943089]
+layout_mode = 0
 offset_left = 10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = -10.0
-grow_vertical = 0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 text = "--"
 
-[node name="Settings" type="Control" parent="."]
+[node name="Settings" type="Control" parent="." unique_id=1469912153]
+anchors_preset = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -94,37 +95,37 @@ anchor_bottom = 1.0
 offset_left = -225.0
 offset_top = -110.0
 offset_right = 225.0
-offset_bottom = 0.0
 
-[node name="GameSpeedSlider" type="HSlider" parent="Settings"]
+[node name="GameSpeedSlider" type="HSlider" parent="Settings" unique_id=1143832480]
+layout_mode = 0
 anchor_left = 0.5
-anchor_top = 0.0
 anchor_right = 0.5
-anchor_bottom = 0.0
 offset_left = -240.0
 offset_top = -20.0
 offset_right = 240.0
-offset_bottom = 0.0
 min_value = 0.25
 max_value = 4.0
 step = 0.25
 value = 1.0
 
-[node name="GameSpeedDesc" type="Label" parent="Settings"]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = -20.0
-offset_right = 60.0
-offset_bottom = 0.0
+[node name="GameSpeedDesc" type="Label" parent="Settings" unique_id=1563733907]
+layout_mode = 1
+anchors_preset = -1
+offset_left = -41.999992
+offset_top = -22.000011
+offset_right = -18.999992
+offset_bottom = 1.9999886
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0.5)
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Toggles" type="HBoxContainer" parent="."]
+[node name="Toggles" type="HBoxContainer" parent="." unique_id=1326843214]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -134,39 +135,45 @@ offset_top = -65.0
 offset_right = 200.0
 offset_bottom = -35.0
 
-[node name="GamingCB" type="CheckBox" parent="Toggles"]
+[node name="GamingCB" type="CheckBox" parent="Toggles" unique_id=400794622]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 button_pressed = true
 text = "逻辑驱动"
 
-[node name="PhysDrawerCB" type="CheckBox" parent="Toggles"]
+[node name="PhysDrawerCB" type="CheckBox" parent="Toggles" unique_id=1609020226]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 text = "绘制物理"
 
-[node name="ShowInfoCB" type="CheckBox" parent="Toggles"]
+[node name="ShowInfoCB" type="CheckBox" parent="Toggles" unique_id=394567640]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 text = "单位信息"
 
-[node name="DanceCB" type="CheckBox" parent="Toggles"]
+[node name="DanceCB" type="CheckBox" parent="Toggles" unique_id=1018464969]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 text = "伤害跳字"
 
-[node name="EnemyAutopoilotCB" type="CheckBox" parent="Toggles"]
+[node name="EnemyAutopoilotCB" type="CheckBox" parent="Toggles" unique_id=1663638306]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.824, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.824, 1, 0, 1)
-button_pressed = true
+toggle_mode = false
 text = "敌人自动"
 
-[node name="SelfSeatPoint" type="Control" parent="."]
+[node name="SelfSeatPoint" type="Control" parent="." unique_id=1462984645]
+anchors_preset = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -176,12 +183,15 @@ offset_top = -50.0
 offset_right = 50.0
 offset_bottom = 50.0
 
-[node name="InfoContent" type="Control" parent="."]
+[node name="InfoContent" type="Control" parent="." unique_id=1590719996]
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="InfoOrgGo" type="RichTextLabel" parent="InfoContent"]
+[node name="InfoOrgGo" type="RichTextLabel" parent="InfoContent" unique_id=878410716]
+visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -190,88 +200,95 @@ offset_left = -13.0
 offset_top = -109.0
 offset_right = 13.0
 offset_bottom = -91.0
-visible = false
-bbcode_enabled = true
 mouse_filter = 2
+theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_fonts/normal_font = ExtResource("1")
 theme_override_font_sizes/normal_font_size = 14
-theme_override_colors/default_color = Color(1, 1, 1, 1)
+bbcode_enabled = true
 text = "信息"
 
-[node name="EnterLockCursorBtn" type="Button" parent="."]
+[node name="EnterLockCursorBtn" type="Button" parent="." unique_id=37750258]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -21.0
+offset_top = 1.0
+offset_right = -21.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
-text = ""
 
-[node name="RestoreBtn" type="Button" parent="."]
-anchor_left = 0.0
+[node name="RestoreBtn" type="Button" parent="." unique_id=230935899]
+layout_mode = 0
 anchor_top = 1.0
-anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = -80.0
 offset_right = 110.0
 offset_bottom = -50.0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
 text = "恢复"
 
-[node name="SnapshotBtn" type="Button" parent="."]
-anchor_left = 0.0
+[node name="SnapshotBtn" type="Button" parent="." unique_id=830719420]
+layout_mode = 0
 anchor_top = 1.0
-anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = -120.0
 offset_right = 110.0
 offset_bottom = -90.0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_yellow")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yellow_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yellow_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yellow_hover")
 text = "快照"
 
-[node name="ExitBtn" type="Button" parent="."]
-anchor_left = 0.0
+[node name="ExitBtn" type="Button" parent="." unique_id=143782074]
+layout_mode = 0
 anchor_top = 1.0
-anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = -40.0
 offset_right = 110.0
 offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_red")
-theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_red_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
 text = "退出"
 
-[node name="SwitchSeatBtn" type="Button" parent="."]
+[node name="SwitchSeatBtn" type="Button" parent="." unique_id=1689865308]
+layout_mode = 1
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 offset_left = -50.0
-offset_top = 20.0
+offset_top = -177.0
 offset_right = 50.0
-offset_bottom = 50.0
+offset_bottom = -147.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_yellow")
-theme_override_styles/hover = SubResource("StyleBoxFlat_yellow_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yellow_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yellow_hover")
 text = "切换座位"

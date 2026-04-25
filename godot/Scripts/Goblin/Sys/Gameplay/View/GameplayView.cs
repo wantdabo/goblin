@@ -15,45 +15,47 @@ public class GameplayView : UIBaseView
     public override UILayer layer => UILayer.UIMain;
     protected override string res => "Gameplay/GameplayView";
 
-    private Label synopsisText;
-    private HSlider gameSpeedSlider;
-    private Label gameSpeedDescText;
-    private CheckBox gamingCBToggle;
-    private CheckBox physDrawerToggle;
-    private CheckBox showInfoCbToggle;
-    private CheckBox danceCBToggle;
-    private CheckBox enemyAutopoilotToggle;
-    private Control selfSeatPoint;
-    private Control infoContent;
-    private Control infoOrg;
+    private Label synopsisText { get; set; }
+    private HSlider gameSpeedSlider { get; set; }
+    private Label gameSpeedDescText { get; set; }
+    private CheckBox gamingCBToggle { get; set; }
+    private CheckBox physDrawerToggle { get; set; }
+    private CheckBox showInfoCbToggle { get; set; }
+    private CheckBox danceCBToggle { get; set; }
+    private CheckBox enemyAutopoilotToggle { get; set; }
+    private Control selfSeatPoint { get; set; }
+    private Control infoContent { get; set; }
+    private Control infoOrg { get; set; }
     private List<Control> infoItems = new();
 
     protected override void OnLoad()
     {
         base.OnLoad();
         engine.ticker.eventor.Listen<LateTickEvent>(OnLateTick);
+        Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 
     protected override void OnUnload()
     {
         base.OnUnload();
         engine.ticker.eventor.UnListen<LateTickEvent>(OnLateTick);
+        Input.MouseMode = Input.MouseModeEnum.Visible;
     }
 
     protected override void OnBuildUI()
     {
         base.OnBuildUI();
-        synopsisText = node.FindChild("Synopsis", true, false) as Label;
-        gameSpeedSlider = node.FindChild("GameSpeedSlider", true, false) as HSlider;
-        gameSpeedDescText = node.FindChild("GameSpeedDesc", true, false) as Label;
-        gamingCBToggle = node.FindChild("GamingCB", true, false) as CheckBox;
-        physDrawerToggle = node.FindChild("PhysDrawerCB", true, false) as CheckBox;
-        showInfoCbToggle = node.FindChild("ShowInfoCB", true, false) as CheckBox;
-        danceCBToggle = node.FindChild("DanceCB", true, false) as CheckBox;
-        enemyAutopoilotToggle = node.FindChild("EnemyAutopoilotCB", true, false) as CheckBox;
-        selfSeatPoint = node.FindChild("SelfSeatPoint", true, false) as Control;
-        infoContent = node.FindChild("InfoContent", true, false) as Control;
-        infoOrg = node.FindChild("InfoOrgGo", true, false) as Control;
+        synopsisText = engine.gdkit.SeekNode<Label>(node, "Synopsis");
+        gameSpeedSlider = engine.gdkit.SeekNode<HSlider>(node, "GameSpeedSlider");
+        gameSpeedDescText = engine.gdkit.SeekNode<Label>(node, "GameSpeedDesc");
+        gamingCBToggle = engine.gdkit.SeekNode<CheckBox>(node, "GamingCB");
+        physDrawerToggle = engine.gdkit.SeekNode<CheckBox>(node, "PhysDrawerCB");
+        showInfoCbToggle = engine.gdkit.SeekNode<CheckBox>(node, "ShowInfoCB");
+        danceCBToggle = engine.gdkit.SeekNode<CheckBox>(node, "DanceCB");
+        enemyAutopoilotToggle = engine.gdkit.SeekNode<CheckBox>(node, "EnemyAutopoilotCB");
+        selfSeatPoint = engine.gdkit.SeekNode<Control>(node, "SelfSeatPoint");
+        infoContent = engine.gdkit.SeekNode<Control>(node, "InfoContent");
+        infoOrg = engine.gdkit.SeekNode<Control>(node, "InfoOrgGo");
     }
 
     protected override void OnBindEvent()

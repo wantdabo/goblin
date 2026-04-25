@@ -7,7 +7,7 @@ namespace Goblin.Sys.Common;
 public abstract class UIBaseCell : UIBase<UIBaseCell>
 {
     public Control container { get; set; }
-    private bool active = true;
+    private bool active { get; set; } = true;
     protected bool isActive => active;
 
     public void SetActive(bool status)

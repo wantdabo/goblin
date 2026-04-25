@@ -72,8 +72,8 @@ public sealed class World : Comp
     /// </summary>
     private List<Agent> snapshotagents { get; set; }
 
-    private Node3D worldRoot;
-    private Node3D modelPool;
+    private Node3D worldRoot { get; set; }
+    private Node3D modelPool { get; set; }
 
     protected override void OnCreate()
     {

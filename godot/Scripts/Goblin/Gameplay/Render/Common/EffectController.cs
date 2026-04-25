@@ -7,9 +7,9 @@ namespace Goblin.Gameplay.Render.Common;
 /// </summary>
 public class EffectController
 {
-    public CpuParticles3D[] particles;
-    public AnimationPlayer[] animplayers;
-    public Node3D node;
+    public CpuParticles3D[] particles { get; set; }
+    public AnimationPlayer[] animplayers { get; set; }
+    public Node3D node { get; set; }
     public float time { get; private set; }
 
     public void Reset() => time = 0;

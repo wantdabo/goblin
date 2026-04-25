@@ -12,12 +12,12 @@ namespace Goblin.Gameplay.Render.Cameras;
 /// </summary>
 public class Eyes : Comp
 {
-    private World world;
+    private World world { get; set; } = null!;
     public Camera3D camera { get; private set; }
 
-    private float yaw;
-    private float pitch = 20f;
-    private float distance = 5f;
+    private float yaw { get; set; }
+    private float pitch { get; set; } = 20f;
+    private float distance { get; set; } = 5f;
     private const float pitchMin = -10f, pitchMax = 60f;
     private const float distMin = 2f, distMax = 10f;
 
@@ -53,8 +53,8 @@ public class Eyes : Comp
 
         // 鼠标/摇杆旋转
         var look = engine.gdkit.GetLookInput();
-        yaw += look.X * 120f * e.tick;
-        pitch = Mathf.Clamp(pitch - look.Y * 80f * e.tick, pitchMin, pitchMax);
+        yaw -= look.X * 120f * e.tick;
+        pitch = Mathf.Clamp(pitch + look.Y * 80f * e.tick, pitchMin, pitchMax);
 
         // 滚轮缩放
         var scroll = engine.gdkit.GetScrollInput();

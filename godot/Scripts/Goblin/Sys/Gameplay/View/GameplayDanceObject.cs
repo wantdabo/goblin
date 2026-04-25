@@ -5,7 +5,7 @@ namespace Goblin.Sys.Gameplay.View;
 public class GameplayDanceObject
 {
     public Control node { get; private set; }
-    private RichTextLabel desc;
+    private RichTextLabel desc { get; set; }
 
     public GameplayDanceObject(Control node)
     {

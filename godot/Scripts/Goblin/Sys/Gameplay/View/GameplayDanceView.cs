@@ -9,8 +9,8 @@ public class GameplayDanceView : UIBaseView
     protected override string res => "Gameplay/GameplayDanceView";
     public override UILayer layer => UILayer.UIAlert;
 
-    private Control contentNode;
-    private Control damageOrgNode;
+    private Control contentNode { get; set; }
+    private Control damageOrgNode { get; set; }
 
     protected override void OnLoad()
     {
@@ -29,8 +29,8 @@ public class GameplayDanceView : UIBaseView
     protected override void OnBuildUI()
     {
         base.OnBuildUI();
-        contentNode = node.FindChild("Content", true, false) as Control;
-        damageOrgNode = node.FindChild("DamageOrg", true, false) as Control;
+        contentNode = engine.gdkit.SeekNode<Control>(node, "Content");
+        damageOrgNode = engine.gdkit.SeekNode<Control>(node, "DamageOrg");
     }
 
     private void OnCureDance(CureDanceEvent e)

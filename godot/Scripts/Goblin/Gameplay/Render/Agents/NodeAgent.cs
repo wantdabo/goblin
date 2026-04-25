@@ -14,7 +14,7 @@ namespace Goblin.Gameplay.Render.Agents;
 /// </summary>
 public class NodeAgent : Agent
 {
-    private static Node3D root;
+    private static Node3D root { get; set; }
 
     public static void SetRoot(Node3D r) => root = r;
 
@@ -23,7 +23,7 @@ public class NodeAgent : Agent
     protected override void OnReady()
     {
         node = ObjectPool.Get<Node3D>("NODE_GO_KEY");
-        if (null == node)
+        if (null == node || !GodotObject.IsInstanceValid(node))
         {
             node = new Node3D { Name = "Node", Visible = false };
         }

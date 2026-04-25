@@ -6,12 +6,12 @@ namespace Goblin.Sys.Common;
 
 public class UIEffectController
 {
-    public GpuParticles3D[] particles;
-    public AnimationPlayer[] animplayers;
-    public Control node;
-    public float duration;
-    public string layerName;
-    public int sorting;
+    public CpuParticles3D[] particles { get; set; }
+    public AnimationPlayer[] animplayers { get; set; }
+    public Control node { get; set; }
+    public float duration { get; set; }
+    public string layerName { get; set; }
+    public int sorting { get; set; }
 
     public void Stop()
     {
@@ -31,7 +31,7 @@ public class UIEffectController
 
 public class UIEffect : Comp
 {
-    private UIEffectController uiec;
+    private UIEffectController uiec { get; set; }
     public UIEffectController UIEC => uiec;
 
     public void Load(Control parentNode, string res)
@@ -56,7 +56,7 @@ public class UIEffect : Comp
         uiec?.Stop();
     }
 
-    private uint delayTimingId;
+    private uint delayTimingId { get; set; }
 
     public void Play(string stateName = "")
     {

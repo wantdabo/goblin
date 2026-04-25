@@ -8,14 +8,14 @@ public class LoginView : UIBaseView
     public override UILayer layer => UILayer.UIMain;
     protected override string res => "Login/LoginView";
 
-    private LineEdit userNameInput;
-    private LineEdit passwordInput;
+    private LineEdit userNameInput { get; set; }
+    private LineEdit passwordInput { get; set; }
 
     protected override void OnBuildUI()
     {
         base.OnBuildUI();
-        userNameInput = node.FindChild("UserName", true, false) as LineEdit;
-        passwordInput = node.FindChild("Password", true, false) as LineEdit;
+        userNameInput = engine.gdkit.SeekNode<LineEdit>(node, "UserName");
+        passwordInput = engine.gdkit.SeekNode<LineEdit>(node, "Password");
     }
 
     protected override void OnBindEvent()

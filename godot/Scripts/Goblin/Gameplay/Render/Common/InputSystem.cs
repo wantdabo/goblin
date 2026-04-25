@@ -16,9 +16,9 @@ namespace Goblin.Gameplay.Render.Common;
 /// </summary>
 public class InputSystem : Comp
 {
-    private World world;
-    private Dictionary<ushort, (bool press, IntVector2 dire)> inputdict;
-    private Queue<Command> cmdqueue;
+    private World world { get; set; }
+    private Dictionary<ushort, (bool press, IntVector2 dire)> inputdict { get; set; }
+    private Queue<Command> cmdqueue { get; set; }
 
     protected override void OnCreate()
     {
@@ -70,7 +70,7 @@ public class InputSystem : Comp
             var right = cam.GlobalTransform.Basis.X;
             forward.Y = 0; right.Y = 0;
             forward = forward.Normalized(); right = right.Normalized();
-            var world3d = joystick.X * right + joystick.Y * forward;
+            var world3d = joystick.X * right - joystick.Y * forward;
             joystick = new Godot.Vector2(world3d.X, world3d.Z);
         }
 

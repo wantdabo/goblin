@@ -10,9 +10,9 @@ public static class AnimationConfigCache
 
 public class AnimationConfig
 {
-	public int model;
-	public List<AnimationStateInfo> animationstates;
-	public List<AnimationMixInfo> animationmixs;
+	public int model { get; set; }
+	public List<AnimationStateInfo> animationstates { get; set; }
+	public List<AnimationMixInfo> animationmixs { get; set; }
 
 	public string GetAnimationName(byte state)
 	{
@@ -32,16 +32,16 @@ public class AnimationConfig
 [Serializable]
 public class AnimationStateInfo
 {
-	public byte state;
-	public string name;
+	public byte state { get; set; }
+	public string name { get; set; }
 }
 
 [Serializable]
 public class AnimationMixInfo
 {
-	public string name;
-	public float mixduration;
-	public List<AnimationBeforeMixInfo> mixanimations;
+	public string name { get; set; }
+	public float mixduration { get; set; }
+	public List<AnimationBeforeMixInfo> mixanimations { get; set; }
 
 	public AnimationBeforeMixInfo GetAnimationBeforeMixInfo(string name)
 	{
@@ -54,8 +54,8 @@ public class AnimationMixInfo
 [Serializable]
 public class AnimationBeforeMixInfo
 {
-	public string prename;
-	public string name;
-	public float duration;
-	public float mixduration;
+	public string prename { get; set; }
+	public string name { get; set; }
+	public float duration { get; set; }
+	public float mixduration { get; set; }
 }

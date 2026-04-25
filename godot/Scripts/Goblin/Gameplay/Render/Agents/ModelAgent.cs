@@ -13,7 +13,7 @@ namespace Goblin.Gameplay.Render.Agents;
 /// </summary>
 public class ModelAgent : Agent
 {
-    private static Node3D modelpool;
+    private static Node3D modelpool { get; set; }
     public static void SetPool(Node3D pool) => modelpool = pool;
 
     public int model { get; private set; }
@@ -65,7 +65,7 @@ public class ModelAgent : Agent
         res = modelinfo.Res;
 
         node = ObjectPool.Get<Node3D>(res);
-        if (null == node)
+        if (null == node || !GodotObject.IsInstanceValid(node))
         {
             var scene = world.engine.gameres.LoadAssetSync<PackedScene>(Location.modelpath + res + ".tscn");
             node = scene?.Instantiate<Node3D>();

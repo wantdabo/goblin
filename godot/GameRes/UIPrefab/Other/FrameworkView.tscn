@@ -1,97 +1,31 @@
-[gd_scene format=3 load_steps=5]
+[gd_scene format=3 uid="uid://cdp15g5ttvfbh"]
 
-[ext_resource type="Font" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+[ext_resource type="FontFile" uid="uid://bcbllkiuu7037" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime"]
-bg_color = Color(0.824, 1, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
-bg_color = Color(0.792, 0.961, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_press"]
-bg_color = Color(0.646, 0.784, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
-
-[node name="FrameworkView" type="Control"]
+[node name="FrameworkView" type="Control" unique_id=1729703809]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Logo" type="Label" parent="."]
+[node name="Logo" type="Label" parent="." unique_id=165509954]
+layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
-offset_left = -10.0
+offset_left = -417.0
 offset_top = 10.0
-offset_right = -10.0
-offset_bottom = 10.0
+offset_right = -9.999268
+offset_bottom = 140.0
 grow_horizontal = 0
+theme_override_colors/font_color = Color(0.765, 0.941, 0.008, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 100
-theme_override_colors/font_color = Color(0.765, 0.941, 0.008, 1)
 text = "GOBLIN"
 
-[node name="ConnectState" type="Label" parent="."]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 20.0
-offset_top = 14.5
-offset_right = 180.0
-offset_bottom = 45.5
-theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.765, 0.941, 0.008, 1)
-text = "CONNECTED"
-
-[node name="ConnectBtn" type="Button" parent="."]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 20.0
-offset_top = 55.0
-offset_right = 120.0
-offset_bottom = 85.0
-theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
-text = "连接"
-
-[node name="DisconnectBtn" type="Button" parent="."]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 20.0
-offset_top = 55.0
-offset_right = 120.0
-offset_bottom = 85.0
-theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
-text = "断开连接"
-
-[node name="MessageContent" type="Control" parent="."]
+[node name="MessageContent" type="Control" parent="." unique_id=1520866590]
+anchors_preset = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -101,27 +35,31 @@ offset_top = -20.0
 offset_right = -20.0
 offset_bottom = -20.0
 
-[node name="MessageORG" type="Control" parent="MessageContent"]
+[node name="MessageORG" type="Control" parent="MessageContent" unique_id=1567079189]
+visible = false
+anchors_preset = 0
 offset_right = 330.0
 offset_bottom = 35.0
-visible = false
 
-[node name="Desc" type="Label" parent="MessageContent/MessageORG"]
+[node name="Desc" type="Label" parent="MessageContent/MessageORG" unique_id=994370826]
+layout_mode = 0
 offset_left = 10.0
 offset_right = 315.0
 offset_bottom = 35.0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 
-[node name="BG1" type="ColorRect" parent="MessageContent/MessageORG"]
+[node name="BG1" type="ColorRect" parent="MessageContent/MessageORG" unique_id=1790005809]
+visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-visible = false
 color = Color(0, 0.76, 0, 0.5)
 
-[node name="BG2" type="ColorRect" parent="MessageContent/MessageORG"]
+[node name="BG2" type="ColorRect" parent="MessageContent/MessageORG" unique_id=1599913181]
+visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-visible = false
 color = Color(0.85, 0.21, 0, 0.5)
