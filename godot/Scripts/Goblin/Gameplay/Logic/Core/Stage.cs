@@ -668,7 +668,11 @@ public sealed class Stage
         if (false == cache.behaviors.TryGetValue(type, out var list)) cache.behaviors.Add(type, list = ObjectCache.Ensure<List<Behavior>>());
         if (false == cache.behaviordict.TryGetValue(id, out var dict)) cache.behaviordict.Add(id, dict = ObjectCache.Ensure<Dictionary<Type, Behavior>>());
         // 检查 Behavior 是否已经存在容器中
-        if (dict.ContainsKey(type)) throw new Exception($"behavior {type} is exist.");
+        if (dict.TryGetValue(type, out var existing))
+        {
+            if (cache.rmvbehaviors.Remove(existing)) { existing.active = true; existing.AddBindingInfo(); return existing; }
+            throw new Exception($"behavior {type} is exist.");
+        }
         if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Ensure<List<Type>>());
             
         var behavior = ObjectCache.Ensure(type) as Behavior;
@@ -698,7 +702,11 @@ public sealed class Stage
         // 检查 BehaviorInfo 容器是否存在
         if (false == cache.behaviorinfodict.TryGetValue(id, out var dict)) cache.behaviorinfodict.Add(id, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
         // 检查 BehaviorInfo 是否已经存在容器中
-        if (dict.ContainsKey(typeof(T))) throw new Exception($"behaviorinfo {typeof(T)} is exist.");
+        if (dict.TryGetValue(typeof(T), out var existing))
+        {
+            if (cache.rmvbehaviorinfos.Remove(existing)) { existing.Reset(); existing.Ready(id); return (T)existing; }
+            throw new Exception($"behaviorinfo {typeof(T)} is exist.");
+        }
         // 初始化 BehaviorInfos
         if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Ensure<List<BehaviorInfo>>());
 

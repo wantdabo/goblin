@@ -22,14 +22,16 @@
     - 受击效果 ⭐
     - 音效支持
     - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
-    - AddBehaviorInfo/AddBehavior 存在差一帧时序问题
-      - 例如, RmvBehaviorInfo(actor); AddBehaviorInfo(actor);
-      - **业务代码上出现 BUG**
-      - 因为, 业务代码上 SeekBehaviorInfo 是找不到已经被移除的 BehaviorInfo
-      - 此时, 业务代码根据找到与否的信息来进行是否要新增 BehaviorInfo 就会导致出现逻辑层抛出重复添加 BehaviorInfo，卡死的恶性 BUG
-      - 方案, AddBehaviorInfo/AddBehavior 进行 RmvList 列表检查。使其恢复正常
+    - AddBehaviorInfo/AddBehavior 存在差一帧时序问题 ✅ 已修复
+      - 根因：RmvBehaviorInfo/RmvBehavior 是延迟回收（帧末 Recycle），但立即将 active 置为 false；SeekBehaviorInfo 因 active=false 返回 false，业务误判为不存在，AddBehaviorInfo 时 dict 里还有旧实例 → 抛出重复添加异常，卡死
+      - 修法：AddBehaviorInfo/AddBehavior 中检查 rmvbehaviorinfos/rmvbehaviors 列表，若目标在其中则取消移除并重新初始化（Reset+Ready / active=true+AddBindingInfo），而非直接抛异常
     - 碰撞检测 (CollisionExecutor) -> 命中火花 BUG
-      - 在使用 Timescale，加速之后, Flow 也会加速，刚好碰撞检测的逻辑是写在 OnExecute 上的
+      - 根因：timescale 加速时，Flow.OnTick 内 re-queue 循环会在同一个 OnTick 里连续调多次 RunPipeline
+      - targets 的消费（Spark → ET_FLOW_HIT 链）只有跨 OnTick 边界才能真正完成，re-queue 跳过了这个边界
+      - 导致：第二次 RunPipeline 时 flowcollision.targets 仍有旧数据，命中火花重复触发，BeHit/HitLag/伤害多算
+      - 修法方向：Spark() 同步消费完毕后立刻清空 targets（Spark 是同步调用，返回时 ET_FLOW_HIT 已执行完）
+      - 复杂因素：targets 有多条消费路径——① Spark → ET_FLOW_HIT 链（命中火花）；② 技能/子弹伤害结算（直接读 targets）
+      - 两条路径消费时机不统一，清空时机难以确定，结算消费机制需要整体重新设计
 
   - 2026-05-01
     - Flow 实现重构 (解决 ExecuteInstruct 函数职责越界问题)
