@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf;
-
+namespace Conf
+{
 public sealed partial class EffectInfo : Luban.BeanBase
 {
     public EffectInfo(ByteBuf _buf) 
@@ -54,10 +54,13 @@ public sealed partial class EffectInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-               + "Id:" + Id + ","
-               + "Name:" + Name + ","
-               + "Res:" + Res + ","
-               + "Duration:" + Duration + ","
-               + "}";
+        + "Id:" + Id + ","
+        + "Name:" + Name + ","
+        + "Res:" + Res + ","
+        + "Duration:" + Duration + ","
+        + "}";
     }
 }
+
+}
+

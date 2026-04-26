@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf;
-
+namespace Conf
+{
 public sealed partial class PipelineInfo : Luban.BeanBase
 {
     public PipelineInfo(ByteBuf _buf) 
@@ -44,8 +44,11 @@ public sealed partial class PipelineInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-               + "Id:" + Id + ","
-               + "Name:" + Name + ","
-               + "}";
+        + "Id:" + Id + ","
+        + "Name:" + Name + ","
+        + "}";
     }
 }
+
+}
+

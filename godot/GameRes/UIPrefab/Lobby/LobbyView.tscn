@@ -1,59 +1,42 @@
-[gd_scene format=3 load_steps=8]
+[gd_scene format=3 uid="uid://blcqhxc1yowva"]
 
-[ext_resource type="Font" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+[ext_resource type="FontFile" uid="uid://bcbllkiuu7037" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime"]
 bg_color = Color(0.824, 1, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
-bg_color = Color(0.792, 0.961, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
 corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_press"]
 bg_color = Color(0.646, 0.784, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
-bg_color = Color(0.851, 0.208, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lime_hover"]
+bg_color = Color(0.792, 0.961, 0, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
-bg_color = Color(0.818, 0.2, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
 corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_press"]
-bg_color = Color(0.667, 0.163, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_left = 5
-corner_radius_bottom_right = 5
-
-[node name="LobbyView" type="Control"]
+[node name="LobbyView" type="Control" unique_id=855284999]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=1859476779]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.08, 0.08, 0.12, 1)
 
-[node name="LocalGameBtn" type="Button" parent="."]
+[node name="LocalGameBtn" type="Button" parent="." unique_id=262425783]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -62,27 +45,10 @@ offset_left = -100.0
 offset_top = -30.0
 offset_right = 100.0
 offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_lime")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_lime_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lime_hover")
 text = "单机"
-
-[node name="LogoutBtn" type="Button" parent="."]
-anchor_left = 0.0
-anchor_top = 1.0
-anchor_right = 0.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -80.0
-offset_right = 220.0
-offset_bottom = -20.0
-theme_override_fonts/font = ExtResource("1")
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.196, 0.196, 0.196, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_red")
-theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_red_press")
-text = "登出"

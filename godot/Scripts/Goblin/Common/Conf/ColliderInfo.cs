@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf;
-
+namespace Conf
+{
 public sealed partial class ColliderInfo : Luban.BeanBase
 {
     public ColliderInfo(ByteBuf _buf) 
@@ -54,10 +54,13 @@ public sealed partial class ColliderInfo : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-               + "Id:" + Id + ","
-               + "Type:" + Type + ","
-               + "Offset:" + Luban.StringUtil.CollectionToString(Offset) + ","
-               + "Shape:" + Luban.StringUtil.CollectionToString(Shape) + ","
-               + "}";
+        + "Id:" + Id + ","
+        + "Type:" + Type + ","
+        + "Offset:" + Luban.StringUtil.CollectionToString(Offset) + ","
+        + "Shape:" + Luban.StringUtil.CollectionToString(Shape) + ","
+        + "}";
     }
 }
+
+}
+

@@ -10,8 +10,8 @@
 using Luban;
 
 
-namespace Conf;
-
+namespace Conf
+{
 public partial class ColliderInfos
 {
     private readonly System.Collections.Generic.Dictionary<int, Conf.ColliderInfo> _dataMap;
@@ -48,3 +48,6 @@ public partial class ColliderInfos
     }
 
 }
+
+}
+

@@ -1,33 +1,14 @@
 .editorconfig
 /.vs
 .vsconfig
-/Library
-/UserSettings
-/obj
-/Logs
-/Temp
-/UserSettings
-/Assets/StreamingAssets
-/Bundles
-/yoo
-/HybridCLRData
 /Build
-/Assets/GameRawRes/Scripts
-/Assets/HybridCLRData
-Assets/HybridCLRData.meta
-Assets/StreamingAssets.meta
-Assets/Resources/BuildinFileManifest.asset
-Assets/Resources/BuildinFileManifest.asset.meta
 /.idea
-/Assets/GameRes/Raws/Scripts
 /wxgame
 /TextToolDatas
 *.user
 *.DS_Store
 *.csproj
 *.sln
-/Assets/Plugins/Sirenix
-Assets/Plugins/Sirenix.meta
 .claude/settings.local.json
 
 # Godot
