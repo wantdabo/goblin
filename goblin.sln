@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "godot", "godot", "{8D4FAABC-C56A-6D5C-8531-6A6B417F5DBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "goblin", "godot\goblin.csproj", "{58433156-DA8D-F57B-5725-5E643C0B424D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58433156-DA8D-F57B-5725-5E643C0B424D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58433156-DA8D-F57B-5725-5E643C0B424D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58433156-DA8D-F57B-5725-5E643C0B424D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58433156-DA8D-F57B-5725-5E643C0B424D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{58433156-DA8D-F57B-5725-5E643C0B424D} = {8D4FAABC-C56A-6D5C-8531-6A6B417F5DBA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48381B00-5095-4EF5-ACEB-810FAD7DB51B}
+	EndGlobalSection
+EndGlobal

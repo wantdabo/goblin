@@ -3,12 +3,10 @@
 .vsconfig
 /Build
 /.idea
-/wxgame
-/TextToolDatas
+/godot/.idea
 *.user
 *.DS_Store
-*.csproj
-*.sln
+/godot/goblin.csproj
 .claude/settings.local.json
 
 # Godot
