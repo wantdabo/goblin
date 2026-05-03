@@ -137,9 +137,15 @@ public static class RILCache
     {
         if (obj == null) return;
 
-        var type = obj.GetType();
         lock (@lock)
         {
+            if (capacityidentitys.TryGetValue(obj, out var capacityqueue))
+            {
+                capacityqueue.Enqueue(obj);
+                return;
+            }
+
+            var type = obj.GetType();
             if (!pool.TryGetValue(type, out var queue))
             {
                 queue = new Queue<object>();

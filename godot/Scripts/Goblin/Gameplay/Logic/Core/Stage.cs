@@ -1132,12 +1132,12 @@ public sealed class Stage
             rmvbehaviorinfos.Clear();
             ObjectCache.Set(rmvbehaviorinfos);
                 
-            tickendrecyclelist.Clear();
             foreach (var list in tickendrecyclelist)
             {
                 list.Clear();
                 ObjectCache.Set(list);
             }
+            tickendrecyclelist.Clear();
             ObjectCache.Set(tickendrecyclelist);
         }
     }

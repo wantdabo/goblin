@@ -162,6 +162,12 @@ public static class ObjectPool
     {
         if (null == obj) return;
 
+        if (capacityidentitys.TryGetValue(obj, out var capacityqueue))
+        {
+            capacityqueue.Enqueue(obj);
+            return;
+        }
+
         var type = obj.GetType();
         if (false == pool.TryGetValue(type, out var dict))
         {
