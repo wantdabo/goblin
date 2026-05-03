@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.Threading;
 using Goblin.Common;
@@ -34,7 +33,7 @@ public abstract class GameplayDirector : Comp
     /// <summary>
     /// 子线程
     /// </summary>
-    private Thread thread { get; set; }
+    private Thread? thread { get; set; }
     /// <summary>
     /// 逻辑 Step 耗时
     /// </summary>
@@ -89,15 +88,9 @@ public abstract class GameplayDirector : Comp
         }
         else
         {
-            try
-            {
-                thread?.Interrupt();
-                thread = null;
-            }
-            catch (Exception e)
-            {
-                // ignored
-            }
+            thread?.Interrupt();
+            thread?.Join();
+            thread = null;
         }
             
         OnDestroyGame();

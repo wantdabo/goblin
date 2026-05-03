@@ -46,9 +46,9 @@ public class LocalDirector : GameplayDirector
     /// </summary>
     private Stage stage { get; set; }
     /// <summary>
-    /// 是否正在恢复
+    /// 是否正在恢复（volatile 保证逻辑线程与主线程的可见性）
     /// </summary>
-    private bool restoreing { get; set; } = false;
+    private volatile bool restoreing = false;
     /// <summary>
     /// 同步锁对象
     /// </summary>
@@ -86,14 +86,10 @@ public class LocalDirector : GameplayDirector
 
     protected override void OnDestroyGame()
     {
-        // 销毁逻辑层
-        stage.Dispose();
-        // 取消监听 RIL 渲染状态
         stage.onril -= OnRIL;
-        // 取消监听 RIL_DIFF 渲染状态
         stage.ondiff -= OnDiff;
-        // 取消监听 RIL 事件
         stage.onevent -= OnEvent;
+        stage.Dispose();
     }
 
     protected override void OnStartGame() => stage.Start();

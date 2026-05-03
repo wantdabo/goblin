@@ -117,9 +117,14 @@ public abstract class Comp
     /// <param name="comp">组件</param>
     public void RmvComp(Comp comp)
     {
-        if (false == comps.Contains(comp)) return;
-            
-        if (compdict.TryGetValue(comp.GetType(), out var list)) list.Remove(comp);
+        if (null == comps || false == comps.Contains(comp)) return;
+
+        var type = comp.GetType();
+        if (compdict.TryGetValue(type, out var list))
+        {
+            list.Remove(comp);
+            if (0 == list.Count) compdict.Remove(type);
+        }
         comps.Remove(comp);
     }
 }

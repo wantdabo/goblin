@@ -1,9 +1,6 @@
 ﻿using Goblin.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace Goblin.Common;
 
 /// <summary>
@@ -59,11 +56,11 @@ public struct FixedLateTickEvent : IEvent
     /// <summary>
     /// 帧号
     /// </summary>
-    public uint frame;
+    public uint frame { get; set; }
     /// <summary>
     /// 流逝的时间 s/秒
     /// </summary>
-    public float tick;
+    public float tick { get; set; }
 }
 
 /// <summary>
@@ -94,7 +91,7 @@ public class Ticker : Comp
     /// <summary>
     /// 时间缩放
     /// </summary>
-    public float timeScale = 1f;
+    public float timeScale { get; set; } = 1f;
 
     protected override void OnCreate()
     {
@@ -218,7 +215,7 @@ public class Ticker : Comp
     /// </summary>
     private uint timerIncrementId = 0;
     private Dictionary<uint, TimerInfo> timerDict = new();
-    private Queue<uint> recyTimers = new();
+    private HashSet<uint> recyTimers = new();
 
     /// <summary>
     /// 停止计时器
@@ -227,8 +224,7 @@ public class Ticker : Comp
     /// <param name="tickDef">计时器类型</param>
     public void StopTimer(uint id)
     {
-        if (recyTimers.Contains(id)) return;
-        recyTimers.Enqueue(id);
+        recyTimers.Add(id);
     }
 
     /// <summary>
@@ -258,20 +254,23 @@ public class Ticker : Comp
     private List<uint> timerTemps = new();
     private void TickTimerInfos(float tick)
     {
-        while (recyTimers.TryDequeue(out var tid)) timerDict.Remove(tid);
+        foreach (var tid in recyTimers) timerDict.Remove(tid);
+        recyTimers.Clear();
         if (0 == timerDict.Count) return;
             
         foreach (var kv in timerDict)
         {
             var info = kv.Value;
             info.elapsed += tick;
-            infoTemps.Add(info);
-            if (info.duration > info.elapsed) continue;
+            if (info.duration > info.elapsed)
+            {
+                infoTemps.Add(info);
+                continue;
+            }
 
             info.elapsed = Math.Max(0, info.elapsed - info.duration);
             info.loop--;
             infoTemps.Add(info);
-
             timerTemps.Add(info.id);
         }
 
