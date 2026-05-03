@@ -59,18 +59,21 @@ public static class RILCache
     /// <exception cref="InvalidOperationException">传入的容器类型为不支持类型</exception>
     public static T Ensure<T, TValue>(int capacity) where T : new()
     {
-        var queue = QueryCapacity<T>(capacity);
-        if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
-        object ins = default;
-        var type = typeof(T);
-        if (type == typeof(List<TValue>)) ins = new List<TValue>(capacity);
-        if (type == typeof(HashSet<TValue>)) ins = new HashSet<TValue>(capacity);
-        if (type == typeof(Queue<TValue>)) ins = new Queue<TValue>(capacity);
-        if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
-            
-        capacityidentitys.Add(ins, queue);
+        lock (@lock)
+        {
+            var queue = QueryCapacity<T>(capacity);
+            if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
+            object ins = default;
+            var type = typeof(T);
+            if (type == typeof(List<TValue>)) ins = new List<TValue>(capacity);
+            if (type == typeof(HashSet<TValue>)) ins = new HashSet<TValue>(capacity);
+            if (type == typeof(Queue<TValue>)) ins = new Queue<TValue>(capacity);
+            if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
 
-        return (T)ins;
+            capacityidentitys.Add(ins, queue);
+
+            return (T)ins;
+        }
     }
         
     /// <summary>
@@ -84,15 +87,18 @@ public static class RILCache
     /// <exception cref="InvalidOperationException">传入的容器类型为不支持类型</exception>
     public static T Ensure<T, TKey, TValue>(int capacity) where T : new()
     {
-        var queue = QueryCapacity<T>(capacity);
-        if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
-        object ins = default;
-        var type = typeof(T);
-        if (type == typeof(Dictionary<TKey, TValue>)) ins = new Dictionary<TKey, TValue>(capacity);
-        if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
-        capacityidentitys.Add(ins, queue);
-            
-        return (T)ins;
+        lock (@lock)
+        {
+            var queue = QueryCapacity<T>(capacity);
+            if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
+            object ins = default;
+            var type = typeof(T);
+            if (type == typeof(Dictionary<TKey, TValue>)) ins = new Dictionary<TKey, TValue>(capacity);
+            if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
+            capacityidentitys.Add(ins, queue);
+
+            return (T)ins;
+        }
     }
 
     /// <summary>
@@ -102,13 +108,16 @@ public static class RILCache
     /// <returns>实例化对象</returns>
     public static T Ensure<T>() where T : new()
     {
-        var type = typeof(T);
-        if (pool.TryGetValue(type, out var queue) && queue.Count > 0)
+        lock (@lock)
         {
-            if (queue.TryDequeue(out var obj)) return (T)obj;
+            var type = typeof(T);
+            if (pool.TryGetValue(type, out var queue) && queue.Count > 0)
+            {
+                if (queue.TryDequeue(out var obj)) return (T)obj;
+            }
+
+            return new T();
         }
-            
-        return new T();
     }
 
     /// <summary>
