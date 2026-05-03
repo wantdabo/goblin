@@ -9,7 +9,7 @@ using System;
 
 namespace Goblin.Gameplay.Render.Agents;
 
-public class SpatialNode : Agent
+public class SpatialAgent : Agent
 {
     public Vector3 position { get; set; }
     public Quaternion rotation { get; set; }
@@ -49,7 +49,7 @@ public class SpatialNode : Agent
         var tarpos = ril.position.ToVector3();
         var tarrot = Quaternion.FromEuler(ril.euler.ToVector3() * MathF.PI / 180f);
         var tarscale = ril.scale.AsFloat();
-        return position == tarpos && rotation == tarrot && scale == tarscale;
+        return position.IsEqualApprox(tarpos) && rotation.IsEqualApprox(tarrot) && Mathf.IsEqualApprox(scale, tarscale);
     }
 
     protected override void OnFlash()

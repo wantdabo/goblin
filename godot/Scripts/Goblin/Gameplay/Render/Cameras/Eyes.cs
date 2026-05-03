@@ -20,6 +20,8 @@ public class Eyes : Comp
     private float distance { get; set; } = 5f;
     private const float pitchMin = -10f, pitchMax = 60f;
     private const float distMin = 2f, distMax = 10f;
+    private ulong selfactor { get; set; }
+    private SpatialAgent spatialagent { get; set; } = null!;
 
     protected override void OnCreate()
     {
@@ -46,10 +48,15 @@ public class Eyes : Comp
 
     private void OnTick(TickEvent e)
     {
-        var node = world.GetAgent<SpatialNode>(world.self);
-        if (null == node || !node.ready) return;
+        var self = world.self;
+        if (spatialagent == null || selfactor != self || spatialagent.actor != self)
+        {
+            selfactor = self;
+            spatialagent = world.GetAgent<SpatialAgent>(self);
+        }
+        if (null == spatialagent || !spatialagent.ready) return;
 
-        var target = node.position + Vector3.Up * 1.7f;
+        var target = spatialagent.position + Vector3.Up * 1.7f;
 
         // 鼠标/摇杆旋转
         var look = engine.gdkit.GetLookInput();

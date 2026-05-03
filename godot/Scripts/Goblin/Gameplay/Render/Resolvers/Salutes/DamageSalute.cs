@@ -14,7 +14,7 @@ public class DamageSalute : RILSalute<RIL_EVENT_DAMAGE>
     protected override void OnSalute(RIL_EVENT_DAMAGE e)
     {
         var position = Vector3.Up * 0.9f;
-        var node = rilbucket.world.GetAgent<SpatialNode>(e.to);
+        var node = rilbucket.world.GetAgent<SpatialAgent>(e.to);
         if (node != null && node.ready) position += node.position;
 
         Vector2 screenpos = Vector2.Zero;

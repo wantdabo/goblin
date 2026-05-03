@@ -21,10 +21,12 @@ public class EffectAgent : Agent
     public static void SetRoot(Node3D r) => root = r;
 
     private Dictionary<uint, (EffectInfo info, EffectController controller)> effects { get; set; }
+    private SpatialAgent spatialnode { get; set; }
 
     protected override void OnReady()
     {
         effects = ObjectPool.Ensure<Dictionary<uint, (EffectInfo, EffectController)>>();
+        spatialnode = null;
         WatchRIL<RIL_FACADE_EFFECT>(OnRILFacadeEffect);
     }
 
@@ -35,6 +37,7 @@ public class EffectAgent : Agent
         foreach (var id in rmv) RecycleEffect(id);
         rmv.Clear(); ObjectPool.Set(rmv);
         effects.Clear(); ObjectPool.Set(effects);
+        spatialnode = null;
     }
 
     private void CreateEffect(EffectInfo info)
@@ -104,13 +107,13 @@ public class EffectAgent : Agent
 
             if (info.follow == EFFECT_DEFINE.FOLLOW_ACTOR)
             {
-                var nodeagent = world.GetAgent<SpatialNode>(actor);
-                if (nodeagent != null && nodeagent.ready)
+                if (spatialnode == null || spatialnode.actor != actor) spatialnode = world.GetAgent<SpatialAgent>(actor);
+                if (spatialnode != null && spatialnode.ready)
                 {
-                    var rot = nodeagent.rotation.Normalized();
-                    followpos = nodeagent.position + new Basis(rot) * followpos;
+                    var rot = spatialnode.rotation.Normalized();
+                    followpos = spatialnode.position + new Basis(rot) * followpos;
                     followeuler += rot.GetEuler() * 180f / MathF.PI;
-                    followscale *= nodeagent.scale;
+                    followscale *= spatialnode.scale;
                 }
             }
 

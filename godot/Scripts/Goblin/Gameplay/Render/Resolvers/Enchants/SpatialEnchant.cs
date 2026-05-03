@@ -4,13 +4,10 @@ using Goblin.Gameplay.Render.Resolvers.Common;
 
 namespace Goblin.Gameplay.Render.Resolvers.Enchants;
 
-/// <summary>
-/// 节点代理赋能
-/// </summary>
-public class NodeEnchant : AgentEnchant<RIL_SPATIAL>
+public class SpatialEnchant : AgentEnchant<RIL_SPATIAL>
 {
     protected override void OnRIL(RIL_SPATIAL ril)
     {
-        rilbucket.world.EnsureAgent<SpatialNode>(ril.actor);
+        rilbucket.world.EnsureAgent<SpatialAgent>(ril.actor);
     }
 }

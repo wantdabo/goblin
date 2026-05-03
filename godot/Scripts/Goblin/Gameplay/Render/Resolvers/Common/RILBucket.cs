@@ -143,7 +143,7 @@ public class RILBucket : Comp
             list.Add(enchant);
         }
             
-        Enchant<NodeEnchant>(RIL_DEFINE.SPATIAL);
+        Enchant<SpatialEnchant>(RIL_DEFINE.SPATIAL);
         Enchant<ModelEnchant>(RIL_DEFINE.FACADE_MODEL);
         Enchant<AnimationEnchant>(RIL_DEFINE.FACADE_ANIMATION);
         Enchant<EffectEnchant>(RIL_DEFINE.FACADE_EFFECT);

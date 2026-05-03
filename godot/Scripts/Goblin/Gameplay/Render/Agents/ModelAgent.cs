@@ -19,18 +19,23 @@ public class ModelAgent : Agent
     public int model { get; private set; }
     public string res { get; private set; }
     public Node3D node { get; private set; }
+    private SpatialAgent spatialnode { get; set; }
+    private bool loaddirty { get; set; }
 
     protected override void OnReady()
     {
         RecycleModel();
-        model = 0; res = null; node = null;
+        model = 0; res = null; node = null; spatialnode = null; loaddirty = true;
+        WatchRIL<RIL_FACADE_MODEL>(OnRILFacadeModel);
     }
 
     protected override void OnReset()
     {
         RecycleModel();
-        model = 0; res = null; node = null;
+        model = 0; res = null; node = null; spatialnode = null; loaddirty = false;
     }
+
+    private void OnRILFacadeModel(RIL_FACADE_MODEL ril) => loaddirty = true;
 
     private void RecycleModel()
     {
@@ -45,14 +50,14 @@ public class ModelAgent : Agent
     protected override void OnChase(float tick, float timescale)
     {
         base.OnChase(tick, timescale);
-        Load();
+        if (loaddirty) { Load(); loaddirty = false; }
 
         if (null == node) return;
-        var nodeagent = world.GetAgent<SpatialNode>(actor);
-        if (null == nodeagent || !nodeagent.ready) return;
-        node.Position = nodeagent.position;
-        node.Quaternion = nodeagent.rotation;
-        node.Scale = Vector3.One * nodeagent.scale;
+        if (spatialnode == null || spatialnode.actor != actor) spatialnode = world.GetAgent<SpatialAgent>(actor);
+        if (null == spatialnode || !spatialnode.ready) return;
+        node.Position = spatialnode.position;
+        node.Quaternion = spatialnode.rotation;
+        node.Scale = Vector3.One * spatialnode.scale;
         node.Visible = true;
     }
 

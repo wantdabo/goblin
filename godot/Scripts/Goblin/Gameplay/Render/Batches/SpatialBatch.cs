@@ -30,7 +30,10 @@ public class SpatialBatch : Batch
         lerpt = Mathf.Clamp(e.tick, 0, GAME_DEFINE.MAX_TICK) / GAME_DEFINE.LOGIC_TICK.AsFloat();
         lerpt = Mathf.Clamp(lerpt, 0f, 1f);
 
-        Parallel.ForEach(rils, processril);
+        if (rils.Count >= 32)
+            Parallel.ForEach(rils, processril);
+        else
+            foreach (var ril in rils) ProcessRIL(ril);
 
         rils.Clear();
         ObjectPool.Set(rils);
@@ -38,7 +41,7 @@ public class SpatialBatch : Batch
 
     private void ProcessRIL(RIL_SPATIAL ril)
     {
-        var spatialnode = world.GetAgent<SpatialNode>(ril.actor);
+        var spatialnode = world.GetAgent<SpatialAgent>(ril.actor);
         if (null == spatialnode || ChaseStatus.Arrived == spatialnode.status || !spatialnode.ready) return;
 
         var timescale = 1f;

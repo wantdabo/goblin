@@ -17,6 +17,7 @@ public class AnimationAgent : Agent
     private string cfgname { get; set; }
     private AnimationConfig animcfg { get; set; }
     private AnimationPlayer animplayer { get; set; }
+    private ModelAgent modelagent { get; set; }
     private string preplayname { get; set; }
     private string curplayname { get; set; }
     private string playname { get; set; }
@@ -25,7 +26,7 @@ public class AnimationAgent : Agent
 
     protected override void OnReady()
     {
-        cfgname = null; animcfg = null; animplayer = null;
+        cfgname = null; animcfg = null; animplayer = null; modelagent = null;
         preplayname = null; curplayname = null; playname = null;
         tarduration = 0; mixduration = 0;
         WatchRIL<RIL_FACADE_ANIMATION>(OnRILStateMachine);
@@ -33,7 +34,7 @@ public class AnimationAgent : Agent
 
     protected override void OnReset()
     {
-        cfgname = null; animcfg = null; animplayer = null;
+        cfgname = null; animcfg = null; animplayer = null; modelagent = null;
         preplayname = null; curplayname = null; playname = null;
         tarduration = 0; mixduration = 0;
     }
@@ -85,9 +86,9 @@ public class AnimationAgent : Agent
         base.OnChase(tick, timescale);
         if (null == animplayer)
         {
-            var model = world.GetAgent<ModelAgent>(actor);
-            if (null == model?.node) return;
-            animplayer = model.node.FindChild("AnimationPlayer", true, false) as AnimationPlayer;
+            if (modelagent == null || modelagent.actor != actor) modelagent = world.GetAgent<ModelAgent>(actor);
+            if (null == modelagent?.node) return;
+            animplayer = modelagent.node.FindChild("AnimationPlayer", true, false) as AnimationPlayer;
         }
         if (null == animplayer || string.IsNullOrEmpty(playname)) return;
         if (!animplayer.HasAnimation(playname)) return;
