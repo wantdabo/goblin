@@ -98,7 +98,7 @@ public sealed class World : Comp
         modelPool = new Node3D { Name = "ModelPool", Visible = false };
         sceneRoot?.AddChild(worldRoot);
         sceneRoot?.AddChild(modelPool);
-        NodeAgent.SetRoot(worldRoot);
+        ModelAgent.SetRoot(worldRoot);
         ModelAgent.SetPool(modelPool);
         EffectAgent.SetRoot(worldRoot);
 
@@ -135,7 +135,7 @@ public sealed class World : Comp
 
         worldRoot?.QueueFree(); worldRoot = null;
         modelPool?.QueueFree(); modelPool = null;
-        NodeAgent.SetRoot(null);
+        ModelAgent.SetRoot(null);
         ModelAgent.SetPool(null);
         EffectAgent.SetRoot(null);
     }

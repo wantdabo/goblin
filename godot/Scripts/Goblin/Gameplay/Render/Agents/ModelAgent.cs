@@ -8,12 +8,12 @@ using Godot;
 
 namespace Goblin.Gameplay.Render.Agents;
 
-/// <summary>
-/// 模型代理
-/// </summary>
 public class ModelAgent : Agent
 {
+    private static Node3D modelroot { get; set; }
     private static Node3D modelpool { get; set; }
+
+    public static void SetRoot(Node3D root) => modelroot = root;
     public static void SetPool(Node3D pool) => modelpool = pool;
 
     public int model { get; private set; }
@@ -46,6 +46,14 @@ public class ModelAgent : Agent
     {
         base.OnChase(tick, timescale);
         Load();
+
+        if (null == node) return;
+        var nodeagent = world.GetAgent<SpatialNode>(actor);
+        if (null == nodeagent || !nodeagent.ready) return;
+        node.Position = nodeagent.position;
+        node.Quaternion = nodeagent.rotation;
+        node.Scale = Vector3.One * nodeagent.scale;
+        node.Visible = true;
     }
 
     public void Load()
@@ -55,9 +63,6 @@ public class ModelAgent : Agent
             RecycleModel(); return;
         }
         if (model == facademodel.model) return;
-
-        var nodeAgent = world.EnsureAgent<NodeAgent>(actor);
-        if (null == nodeAgent || null == nodeAgent.node) return;
 
         RecycleModel();
         model = facademodel.model;
@@ -72,9 +77,10 @@ public class ModelAgent : Agent
         }
         if (null == node) return;
 
-        nodeAgent.node.AddChild(node);
+        modelroot?.AddChild(node);
         node.Position = Vector3.Zero;
         node.Rotation = Vector3.Zero;
         node.Scale = Vector3.One;
+        node.Visible = false;
     }
 }

@@ -256,7 +256,6 @@ public class RILBucket : Comp
         var rils = ObjectPool.Ensure<List<T>>();
         foreach (var kv in rildict)
         {
-            if (false == kv.Value.ContainsKey(type)) continue;
             if (false == kv.Value.TryGetValue(type, out var ril)) continue;
             rils.Add((T)ril);
         }

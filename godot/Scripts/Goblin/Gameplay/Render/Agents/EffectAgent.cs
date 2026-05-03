@@ -104,15 +104,13 @@ public class EffectAgent : Agent
 
             if (info.follow == EFFECT_DEFINE.FOLLOW_ACTOR)
             {
-                var nodeAgent = world.GetAgent<NodeAgent>(actor);
-                if (null != nodeAgent?.node)
+                var nodeagent = world.GetAgent<SpatialNode>(actor);
+                if (nodeagent != null && nodeagent.ready)
                 {
-                    var pos = nodeAgent.node.Position;
-                    var euler = nodeAgent.node.Rotation * 180f / MathF.PI;
-                    var scale = nodeAgent.node.Scale.X;
-                    followpos = pos + nodeAgent.node.GlobalTransform.Basis * followpos;
-                    followeuler += euler;
-                    followscale *= scale;
+                    var rot = nodeagent.rotation.Normalized();
+                    followpos = nodeagent.position + new Basis(rot) * followpos;
+                    followeuler += rot.GetEuler() * 180f / MathF.PI;
+                    followscale *= nodeagent.scale;
                 }
             }
 

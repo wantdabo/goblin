@@ -46,10 +46,10 @@ public class Eyes : Comp
 
     private void OnTick(TickEvent e)
     {
-        var node = world.GetAgent<NodeAgent>(world.self);
-        if (null == node?.node) return;
+        var node = world.GetAgent<SpatialNode>(world.self);
+        if (null == node || !node.ready) return;
 
-        var target = node.node.Position + Vector3.Up * 1.7f;
+        var target = node.position + Vector3.Up * 1.7f;
 
         // 鼠标/摇杆旋转
         var look = engine.gdkit.GetLookInput();

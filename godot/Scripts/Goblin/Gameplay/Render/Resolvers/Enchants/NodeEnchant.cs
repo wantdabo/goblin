@@ -11,6 +11,6 @@ public class NodeEnchant : AgentEnchant<RIL_SPATIAL>
 {
     protected override void OnRIL(RIL_SPATIAL ril)
     {
-        rilbucket.world.EnsureAgent<NodeAgent>(ril.actor);
+        rilbucket.world.EnsureAgent<SpatialNode>(ril.actor);
     }
 }

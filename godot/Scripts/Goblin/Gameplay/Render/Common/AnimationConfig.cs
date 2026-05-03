@@ -5,7 +5,7 @@ namespace Goblin.Gameplay.Render.Common;
 
 public static class AnimationConfigCache
 {
-	public static AnimationConfig current { get; set; }
+	public static AnimationConfig? current { get; set; }
 }
 
 public class AnimationConfig
