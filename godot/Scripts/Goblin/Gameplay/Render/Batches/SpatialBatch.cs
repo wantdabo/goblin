@@ -1,9 +1,7 @@
 using Goblin.Common;
-using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Render.Agents;
-using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Gameplay.Render.Core;
 using Godot;
 using System;
@@ -13,7 +11,7 @@ namespace Goblin.Gameplay.Render.Batches;
 
 public class SpatialBatch : Batch
 {
-    private float lerpt { get; set; }
+    private float dt { get; set; }
     private Action<RIL_SPATIAL> processril { get; set; } = null!;
 
     protected override void OnCreate()
@@ -27,8 +25,7 @@ public class SpatialBatch : Batch
         base.OnTick(e);
         if (false == world.rilbucket.SeekRILS<RIL_SPATIAL>(out var rils)) return;
 
-        lerpt = Mathf.Clamp(e.tick, 0, GAME_DEFINE.MAX_TICK) / GAME_DEFINE.LOGIC_TICK.AsFloat();
-        lerpt = Mathf.Clamp(lerpt, 0f, 1f);
+        dt = e.tick;
 
         if (rils.Count >= 32)
             Parallel.ForEach(rils, processril);
@@ -48,11 +45,10 @@ public class SpatialBatch : Batch
         if (world.rilbucket.SeekRIL<RIL_TICKER>(ril.actor, out var ticker))
             timescale = Mathf.Clamp(ticker.timescale * Config.Int2Float, 0f, 1f);
 
-        var tarpos = ril.position.ToVector3();
-        var tarrot = Quaternion.FromEuler(ril.euler.ToVector3() * MathF.PI / 180f);
-
-        spatialnode.position = spatialnode.position.Lerp(tarpos, lerpt * timescale);
-        spatialnode.rotation = spatialnode.rotation.Normalized().Slerp(tarrot, lerpt * timescale);
-        spatialnode.scale = ril.scale.AsFloat();
+        spatialnode.accumtime += dt * timescale;
+        var t = Mathf.Clamp(spatialnode.accumtime / GAME_DEFINE.LOGIC_TICK.AsFloat(), 0f, 1f);
+        spatialnode.position = spatialnode.prevpos.Lerp(spatialnode.nextpos, t);
+        spatialnode.rotation = spatialnode.prevrot.Normalized().Slerp(spatialnode.nextrot.Normalized(), t);
+        spatialnode.scale = spatialnode.nextscale;
     }
 }

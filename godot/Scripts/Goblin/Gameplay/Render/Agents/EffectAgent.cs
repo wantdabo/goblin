@@ -108,7 +108,7 @@ public class EffectAgent : Agent
             if (info.follow == EFFECT_DEFINE.FOLLOW_ACTOR)
             {
                 if (spatialnode == null || spatialnode.actor != actor) spatialnode = world.GetAgent<SpatialAgent>(actor);
-                if (spatialnode != null && spatialnode.ready)
+                if (spatialnode != null)
                 {
                     var rot = spatialnode.rotation.Normalized();
                     followpos = spatialnode.position + new Basis(rot) * followpos;

@@ -15,7 +15,7 @@ public class DamageSalute : RILSalute<RIL_EVENT_DAMAGE>
     {
         var position = Vector3.Up * 0.9f;
         var node = rilbucket.world.GetAgent<SpatialAgent>(e.to);
-        if (node != null && node.ready) position += node.position;
+        if (node != null) position += node.position;
 
         Vector2 screenpos = Vector2.Zero;
         var cam = rilbucket.world.eyes?.camera;
