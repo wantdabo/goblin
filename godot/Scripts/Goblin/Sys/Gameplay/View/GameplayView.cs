@@ -87,8 +87,9 @@ public class GameplayView : UIBaseView
         AddUIEventListener("EnemyAutopoilotCB", () => { engine.proxy.gameplay.enemyautopilot = enemyAutopoilotToggle?.ButtonPressed ?? false; });
         AddUIEventListener("SwitchSeatBtn", () =>
         {
-            var seat = engine.proxy.gameplay.director.world.selfseat == 1 ? 2ul : 1ul;
-            engine.proxy.gameplay.director.world.SwitchSeat(seat);
+            var world = engine.proxy.gameplay.director.world;
+            var seat = world.selfseat == 1 ? 2ul : 1ul;
+            world.SwitchSeat(seat);
             engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = $"切换成功, 座位 {seat}" });
         });
         AddUIEventListener("SnapshotBtn", () =>

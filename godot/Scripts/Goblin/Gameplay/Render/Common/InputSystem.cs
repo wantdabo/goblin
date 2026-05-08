@@ -17,6 +17,7 @@ namespace Goblin.Gameplay.Render.Common;
 public class InputSystem : Comp
 {
     private World world { get; set; }
+    private readonly object @lock = new();
     private Dictionary<ushort, (bool press, IntVector2 dire)> inputdict { get; set; }
     private Queue<Command> cmdqueue { get; set; }
 
@@ -41,14 +42,20 @@ public class InputSystem : Comp
 
     public (bool press, IntVector2 dire) GetInput(ushort type)
     {
-        inputdict.TryGetValue(type, out var input);
-        return input;
+        lock (@lock)
+        {
+            inputdict.TryGetValue(type, out var input);
+            return input;
+        }
     }
 
     public void SetInput(ushort type, bool press, IntVector2 dire)
     {
-        inputdict.Remove(type);
-        inputdict.Add(type, (press, dire));
+        lock (@lock)
+        {
+            inputdict.Remove(type);
+            inputdict.Add(type, (press, dire));
+        }
     }
 
     public bool TryDequeueCommand(out Command command) => cmdqueue.TryDequeue(out command);

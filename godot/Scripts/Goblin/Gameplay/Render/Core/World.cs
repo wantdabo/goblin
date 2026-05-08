@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Gameplay.Logic.Common;
@@ -30,7 +31,8 @@ public sealed class World : Comp
     /// <summary>
     /// 座位 ID
     /// </summary>
-    public ulong selfseat { get; private set; } = 0;
+    private ulong mselfSeat = 0;
+    public ulong selfseat => Interlocked.Read(ref mselfSeat);
     /// <summary>
     /// 自我
     /// </summary>
@@ -147,7 +149,7 @@ public sealed class World : Comp
     /// <returns>世界</returns>
     public World Initialize(ulong selfseat)
     {
-        this.selfseat = selfseat;
+        Interlocked.Exchange(ref mselfSeat, selfseat);
             
         return this;
     }
@@ -194,7 +196,7 @@ public sealed class World : Comp
     /// <param name="seat">座位</param>
     public void SwitchSeat(ulong seat)
     {
-        selfseat = seat;
+        Interlocked.Exchange(ref mselfSeat, seat);
     }
 
     /// <summary>

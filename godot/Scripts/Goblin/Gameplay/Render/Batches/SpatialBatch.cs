@@ -42,7 +42,7 @@ public class SpatialBatch : Batch
     private void ProcessRIL(RIL_SPATIAL ril)
     {
         var spatialnode = world.GetAgent<SpatialAgent>(ril.actor);
-        if (null == spatialnode || ChaseStatus.Arrived == spatialnode.status || !spatialnode.ready) return;
+        if (null == spatialnode || ChaseStatus.Arrived == spatialnode.status) return;
 
         var timescale = 1f;
         if (world.rilbucket.SeekRIL<RIL_TICKER>(ril.actor, out var ticker))

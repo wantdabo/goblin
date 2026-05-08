@@ -54,7 +54,7 @@ public class ModelAgent : Agent
 
         if (null == node) return;
         if (spatialnode == null || spatialnode.actor != actor) spatialnode = world.GetAgent<SpatialAgent>(actor);
-        if (null == spatialnode || !spatialnode.ready) return;
+        if (null == spatialnode) return;
         node.Position = spatialnode.position;
         node.Quaternion = spatialnode.rotation;
         node.Scale = Vector3.One * spatialnode.scale;

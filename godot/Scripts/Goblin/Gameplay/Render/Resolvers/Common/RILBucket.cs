@@ -65,7 +65,9 @@ public class RILBucket : Comp
     {
         base.OnDestroy();
         LossAllRIL();
+        rildict.Clear();
         ObjectPool.Set(rildict);
+        rilidsdict.Clear();
         ObjectPool.Set(rilidsdict);
             
         crossdict.Clear();
@@ -369,7 +371,7 @@ public class RILBucket : Comp
             oldril.Reset();
             RILCache.Set(oldril);
             dict.Remove(type);
-            iddict.Remove(ril.id);
+            iddict.Remove(oldril.id);
         }
             
         dict.Add(type, ril);

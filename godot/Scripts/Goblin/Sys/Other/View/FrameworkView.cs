@@ -67,8 +67,9 @@ public class FrameworkView : UIBaseView
 
         engine.ticker.Timing((t) =>
         {
-            ObjectPool.Set(msgNode, "MESSAGE_BLOW_GO_KEY");
             msgNode.Visible = false;
+            messageContentGo?.RemoveChild(msgNode);
+            ObjectPool.Set(msgNode, "MESSAGE_BLOW_GO_KEY");
         }, 3.5f, 1);
     }
 }

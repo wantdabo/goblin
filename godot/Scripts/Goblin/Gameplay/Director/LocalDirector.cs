@@ -54,6 +54,10 @@ public class LocalDirector : GameplayDirector
     /// </summary>
     private readonly object @lock = new();
     /// <summary>
+    /// 上一帧的座位号，用于检测座位切换
+    /// </summary>
+    private ulong lastseat { get; set; }
+    /// <summary>
     /// RIL 队列
     /// </summary>
     private readonly Queue<IRIL> rilqueue = new();
@@ -76,6 +80,7 @@ public class LocalDirector : GameplayDirector
         foreach (var pipelinecfg in engine.cfg.location.PipelineInfos.DataList) PipelineDataReader.PreloadPipelineData((uint)pipelinecfg.Id, engine.gameres.location.LoadPipelineSync(pipelinecfg.Id.ToString()));
         // 初始化逻辑层
         stage = new Stage().Initialize(data.sdata);
+        lastseat = world.selfseat;
         // 监听 RIL 渲染状态
         stage.onril += OnRIL;
         // 监听 RIL_DIFF 渲染状态
@@ -171,8 +176,17 @@ public class LocalDirector : GameplayDirector
 
         var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
         var ba = world.input.GetInput(INPUT_DEFINE.BA);
-        stage.SetInput(world.selfseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
-        stage.SetInput(world.selfseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+
+        var curseat = world.selfseat;
+        if (lastseat != curseat)
+        {
+            stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, false, new IntVector2());
+            stage.SetInput(lastseat, INPUT_DEFINE.BA, false, new IntVector2());
+            lastseat = curseat;
+        }
+
+        stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
+        stage.SetInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
 
         EnemyAutopoilot();
         stage.Step();
