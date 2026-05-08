@@ -27,6 +27,7 @@ public class GameplayView : UIBaseView
     private Control infoContent { get; set; }
     private Control infoOrg { get; set; }
     private List<Control> infoItems = new();
+    private bool mlmbprev { get; set; }
 
     protected override void OnLoad()
     {
@@ -116,6 +117,18 @@ public class GameplayView : UIBaseView
     {
         if (Input.IsActionJustPressed("ui_cancel"))
             Input.MouseMode = Input.MouseModeEnum.Visible;
+
+        if (Input.MouseMode == Input.MouseModeEnum.Visible)
+        {
+            var lmb = Input.IsMouseButtonPressed(MouseButton.Left);
+            if (lmb && false == mlmbprev)
+            {
+                var hovered = node?.GetViewport()?.GuiGetHoveredControl();
+                if (null == hovered) Input.MouseMode = Input.MouseModeEnum.Captured;
+            }
+            mlmbprev = lmb;
+        }
+        else mlmbprev = false;
 
         var local = engine.proxy.gameplay.director as LocalDirector;
         if (null == local) return;

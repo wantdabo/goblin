@@ -27,30 +27,20 @@ public class LobbyView : UIBaseView
         {
             var players = new List<PlayerData>
             {
-                new PlayerData { seat = 1, hero = 100001, position = new IntVector3(21000, 0, 21000), euler = new IntVector3(0, 0, 0), scale = 1000 },
-                new PlayerData { seat = 2, hero = 100001, position = new IntVector3(20000, 0, 20000), euler = new IntVector3(0, 0, 0), scale = 1000 },
+                new PlayerData { seat = 1, hero = 100001, position = new IntVector3(0, 0, 0), euler = new IntVector3(0, 0, 0), scale = 1000 },
             };
-            ulong seat = 3;
-            for (int i = 0; i < 4; i++)
+            var enemies = new List<EnemyData>
             {
-                for (int j = 0; j < 4; j++)
-                {
-                    players.Add(new PlayerData
-                    {
-                        seat = seat,
-                        hero = 100001,
-                        position = new IntVector3(1100 * i, 0, 1100 * j),
-                        euler = new IntVector3(0, 0, 0),
-                        scale = 1000,
-                    });
-                    seat++;
-                }
-            }
+                new EnemyData { enemy = 300001, position = new IntVector3(3000, 0, 0), euler = new IntVector3(0, 0, 0), scale = 1000 },
+                new EnemyData { enemy = 300001, position = new IntVector3(-3000, 0, 0), euler = new IntVector3(0, 0, 0), scale = 1000 },
+                new EnemyData { enemy = 300001, position = new IntVector3(0, 0, 3000), euler = new IntVector3(0, 0, 0), scale = 1000 },
+                new EnemyData { enemy = 300001, position = new IntVector3(0, 0, -3000), euler = new IntVector3(0, 0, 0), scale = 1000 },
+            };
             var data = new BuildData
             {
                 id = 10086,
                 seat = 1,
-                sdata = new StageData { seed = 19491001, players = players.ToArray() },
+                sdata = new StageData { seed = 19491001, players = players.ToArray(), enemies = enemies.ToArray() },
             };
             engine.gameui.Close(this);
             engine.gameui.Open<GameplayView>();

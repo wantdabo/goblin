@@ -29,4 +29,8 @@ public class ACTOR_DEFINE
     /// BUFF
     /// </summary>
     public const byte BUFF = 5;
+    /// <summary>
+    /// 敌人
+    /// </summary>
+    public const byte ENEMY = 6;
 }

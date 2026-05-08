@@ -260,6 +260,7 @@ public sealed class Stage
         Prefab<FlowPrefab, FlowPrefabInfo>();
         Prefab<HeroPrefab, HeroPrefabInfo>();
         Prefab<BulletPrefab, BulletPrefabInfo>();
+        Prefab<EnemyPrefab, EnemyPrefabInfo>();
         Prefab<BuffPrefab, BuffPrefabInfo>();
     }
         
@@ -291,6 +292,27 @@ public sealed class Stage
             // TODO 记得删除
             // 添加测试 Buff
             buff.AddBuff(hero, 1000001, 1, 10);
+        }
+
+        if (null != data.enemies)
+        {
+            foreach (var ed in data.enemies)
+            {
+                var enemy = Spawn(new EnemyPrefabInfo
+                {
+                    enemy = ed.enemy,
+                    spatial = new()
+                    {
+                        position = ed.position.ToFPVector3(),
+                        euler = ed.euler.ToFPVector3(),
+                        scale = ed.scale * cfg.int2fp,
+                    }
+                });
+
+                // TODO 临时添加, 记得删除
+                // 后续要走 Born 流程
+                if (SeekBehavior(enemy, out StateMachine machine)) machine.TryChangeState(STATE_DEFINE.IDLE);
+            }
         }
     }
 

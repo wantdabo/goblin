@@ -74,8 +74,10 @@ public sealed class World : Comp
     /// </summary>
     private List<Agent> snapshotagents { get; set; }
 
-    private Node3D worldRoot { get; set; }
-    private Node3D modelPool { get; set; }
+    private Node3D worldroot { get; set; }
+    private Node3D modelpool { get; set; }
+    private DirectionalLight3D sunlight { get; set; }
+    private WorldEnvironment worldenv { get; set; }
 
     protected override void OnCreate()
     {
@@ -96,13 +98,15 @@ public sealed class World : Comp
         eyes.Initialize(this).Create();
 
         var sceneRoot = (Godot.Engine.GetMainLoop() as SceneTree)?.Root;
-        worldRoot = new Node3D { Name = "WorldRoot" };
-        modelPool = new Node3D { Name = "ModelPool", Visible = false };
-        sceneRoot?.AddChild(worldRoot);
-        sceneRoot?.AddChild(modelPool);
-        ModelAgent.SetRoot(worldRoot);
-        ModelAgent.SetPool(modelPool);
-        EffectAgent.SetRoot(worldRoot);
+        worldroot = new Node3D { Name = "WorldRoot" };
+        modelpool = new Node3D { Name = "ModelPool", Visible = false };
+        sceneRoot?.AddChild(worldroot);
+        sceneRoot?.AddChild(modelpool);
+        ModelAgent.SetRoot(worldroot);
+        ModelAgent.SetPool(modelpool);
+        EffectAgent.SetRoot(worldroot);
+
+        SetupLighting();
 
         Batches();
 
@@ -135,11 +139,40 @@ public sealed class World : Comp
         snapshotagents.Clear();
         ObjectPool.Set(snapshotagents);
 
-        worldRoot?.QueueFree(); worldRoot = null;
-        modelPool?.QueueFree(); modelPool = null;
+        sunlight?.QueueFree(); sunlight = null;
+        worldenv?.QueueFree(); worldenv = null;
+        worldroot?.QueueFree(); worldroot = null;
+        modelpool?.QueueFree(); modelpool = null;
         ModelAgent.SetRoot(null);
         ModelAgent.SetPool(null);
         EffectAgent.SetRoot(null);
+    }
+
+    /// <summary>
+    /// 程序化布置场景灯光与环境（无 .tscn 资源）
+    /// </summary>
+    private void SetupLighting()
+    {
+        sunlight = new DirectionalLight3D
+        {
+            Name = "SunLight",
+            LightEnergy = 1.0f,
+            LightColor = new Color(1f, 0.96f, 0.88f),
+            ShadowEnabled = true,
+            RotationDegrees = new Vector3(-50f, -45f, 0f),
+        };
+        worldroot.AddChild(sunlight);
+
+        var env = new Godot.Environment
+        {
+            BackgroundMode = Godot.Environment.BGMode.Color,
+            BackgroundColor = new Color(0.45f, 0.55f, 0.65f),
+            AmbientLightSource = Godot.Environment.AmbientSource.Color,
+            AmbientLightColor = new Color(0.55f, 0.6f, 0.7f),
+            AmbientLightEnergy = 0.5f,
+        };
+        worldenv = new WorldEnvironment { Name = "WorldEnv", Environment = env };
+        worldroot.AddChild(worldenv);
     }
         
     /// <summary>

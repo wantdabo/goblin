@@ -25,6 +25,7 @@ public partial class Tables
         "Conf.SkillBindingInfo",
         "Conf.PipelineInfo",
         "Conf.EffectInfo",
+        "Conf.EnemyInfo",
     };
 
     public Conf.ItemInfos ItemInfos {get; }
@@ -37,6 +38,7 @@ public partial class Tables
     public Conf.SkillBindingInfos SkillBindingInfos {get; }
     public Conf.PipelineInfos PipelineInfos {get; }
     public Conf.EffectInfos EffectInfos {get; }
+    public Conf.EnemyInfos EnemyInfos {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -50,6 +52,7 @@ public partial class Tables
         SkillBindingInfos = new Conf.SkillBindingInfos(loader("Conf.SkillBindingInfo"));
         PipelineInfos = new Conf.PipelineInfos(loader("Conf.PipelineInfo"));
         EffectInfos = new Conf.EffectInfos(loader("Conf.EffectInfo"));
+        EnemyInfos = new Conf.EnemyInfos(loader("Conf.EnemyInfo"));
         ResolveRef();
     }
     
@@ -65,6 +68,7 @@ public partial class Tables
         SkillBindingInfos.ResolveRef(this);
         PipelineInfos.ResolveRef(this);
         EffectInfos.ResolveRef(this);
+        EnemyInfos.ResolveRef(this);
     }
 }
 

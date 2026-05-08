@@ -16,4 +16,8 @@ public struct StageData
     /// 玩家数据数组，包含了所有参与游戏的玩家信息
     /// </summary>
     public PlayerData[] players { get; set; }
+    /// <summary>
+    /// 敌人数据数组，包含了所有需要刷出的敌人信息
+    /// </summary>
+    public EnemyData[] enemies { get; set; }
 }
