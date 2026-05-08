@@ -52,16 +52,16 @@
 
 ## 3. Logic 层新增
 
-### 3.1 `ChargeAI` Behavior — TODO
+### 3.1 `ChargeAI` Behavior — DONE 2026-05-09
 当前 Logic 层无任何 AI Behavior，新增这一份。
 
-最小职责：
-- OnTick 找最近的 SA_HERO actor
-- 距离 > attackrange：朝向 hero，写 MovementInfo（推进）
-- 距离 ≤ attackrange：触发冲撞技能（SkillLauncher.Launch）
+最终实现：**Sa 系统型 Behavior**（挂 Stage Actor），不是每怪一份。
+- OnTick 一次性收集所有 HERO 位置，遍历所有 `ChargeAIInfo`，逐怪写 `MovementInfo`
+- 距离 > attackrange：朝向 hero，`wantmove=true`
+- 距离 ≤ attackrange：`wantmove=false`（站桩；攻击触发延到 D4）
 - HP=0 由 AttributeCalc 自然销毁，AI 不管
 
-**前置依赖**：[§5.1 Movement 输入解耦](#51-movement-输入抽象-todo) 必须先做。
+**前置依赖**：[§5.1 Movement 输入解耦](#51-movement-输入抽象-done-2026-05-09) 已完成。
 
 ### 3.2 `EnemyPrefab` — TODO
 组装：Spatial + StateMachine + Movement + ChargeAI + AttributeCalc + Facade。
@@ -105,16 +105,19 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 
 ## 5. 框架修改（借 MVP 顺手做）
 
-### 5.1 Movement 输入抽象 — TODO（必须做）
+### 5.1 Movement 输入抽象 — DONE 2026-05-09
 **问题**：[Movement.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Movement.cs) 直接 `stage.GetInput<GamepadInput>(actor)`，AI 走不通。
 
 **改法**：
-- Movement 只读 MovementInfo（期望方向 + 速度 + 是否移动），不再读 Input
-- 玩家侧：新增 `PlayerInputController` Behavior，把 GamepadInput 翻译成 MovementInfo
-- AI 侧：ChargeAI 直接写 MovementInfo
+- Movement 只读 MovementInfo（`dire` + `wantmove`），不再读 Input
+- 玩家侧：新增 `Pilot` Behavior，把 Gamepad 翻译成 MovementInfo
+- AI 侧：`Sa.ChargeAI` 直接写各 ChargeAIInfo.actor 的 MovementInfo
 - Movement 退化为纯执行器，"谁驱动它"取决于 Behavior 组合
 
-**收益**：AI / 远程 / 人机切换都不用改 Movement。
+**落地**：
+- 新增 [Pilot.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Pilot.cs)
+- MovementInfo 新增 `dire` / `wantmove` 两字段
+- `TICK_DEFINE` 时序补 Pilot & ChargeAI（在 Movement 之前）
 
 ### 5.2 HitLag 堆叠 bug — TODO（5 行）
 **问题**：[HitEffect.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Sa/HitEffect.cs) 的 AddHitLag 直接 `ticker.timescale -= xxx`，多次叠加会负。
@@ -146,12 +149,22 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 | Day | 目标 | 验收 | 状态 |
 |---|---|---|---|
 | D1 | 配置表骨架 + EnemyPrefab + StageRule(无 AI) | 玩家能走，怪能站桩 | DONE 2026-05-09 |
-| D2 | §5.1 输入解耦 + ChargeAI | 怪能冲过来撞玩家 | TODO |
+| D2 | §5.1 输入解耦 + ChargeAI | 怪能冲过来撞玩家 | DONE 2026-05-09 |
 | D3 | PrimitiveMeshAgent + PrimitiveAnimAgent (IDLE/MOVE/HURT 三态) | 视觉能看出三种状态 | TODO |
 | D4 | 3 段 combo + §5.2 HitLag 修复 + 伤害结算 | 能砍死一只怪 | TODO |
 | D5 | HUDView + ResultView + 串通 + 实机跑通 | 完整一局 | TODO |
 
 每天末尾留 30min 实跑 + 记问题。
+
+### D2 完成清单（2026-05-09）
+
+- §5.1 输入解耦：`Movement` 改为纯执行器（只读 MovementInfo.dire/wantmove）
+- 新增 [Pilot.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Pilot.cs)（玩家侧：Gamepad → MovementInfo）
+- 新增 [Sa/ChargeAI.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Sa/ChargeAI.cs) + [ChargeAIInfo.cs](../godot/Scripts/Goblin/Gameplay/Logic/BehaviorInfos/ChargeAIInfo.cs)（AI 侧：System 型，挂 SA，直接写各敌人 MovementInfo）
+- `EnemyPrefab` 挂 `ChargeAIInfo`（attackrange 由 EnemyData.AttackRange 注入，mm→FP），不再挂 Behavior
+- `Stage.Behaviors()` 注册 `ChargeAI`（Sa）
+- `TICK_DEFINE` 时序补 Pilot / ChargeAI（在 Movement 之前）
+- `EnemyData.xlsx` 新增 `AttackRange` 列（int mm）+ Luban 重生成
 
 ### D1 完成清单（2026-05-09）
 
@@ -183,6 +196,8 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 | 2026-05-09 | 接受 D1~D5 节奏 | 用户拍板 |
 | 2026-05-09 | §5.1 输入解耦 / §5.2 HitLag / §5.3 editorconfig 三项 MVP 期内做 | 用户拍板 |
 | 2026-05-09 | 动画语义采用方案 A（程序化映射） | 用户拍板 |
+| 2026-05-09 | ChargeAI 做成 Sa 系统型 Behavior | Hero 位置每帧只枚举一次，复杂度从 O(enemy×hero) 降到 O(enemy+hero)；与既有 Sa 行为（SilentMercy/Bullet/Buff 等）语义一致 |
+| 2026-05-09 | §5.1 玩家输入 Behavior 命名为 `Pilot`，不是 `PlayerInputController` | 项目命名规范：全小写短名，不带 Controller/Manager/Handler 后缀 |
 
 ---
 

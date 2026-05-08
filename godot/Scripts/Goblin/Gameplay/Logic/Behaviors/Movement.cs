@@ -1,7 +1,6 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Flows.Defines;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors;
@@ -36,12 +35,9 @@ public class Movement : Behavior<MovementInfo>
     protected override void OnTick(FP tick)
     {
         base.OnTick(tick);
-        if (false == stage.SeekBehavior(actor, out Gamepad gamepad)) return;
-            
-        var joystick = gamepad.GetInput(INPUT_DEFINE.JOYSTICK);
-        if (false == joystick.press) return;
-            
-        Move(new FPVector3(joystick.dire.x, 0, joystick.dire.y), tick);
+        if (false == info.wantmove) return;
+
+        Move(info.dire, tick);
     }
 
     protected override void OnEndTick()

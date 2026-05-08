@@ -24,6 +24,7 @@ public sealed partial class EnemyInfo : Luban.BeanBase
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Skills = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Skills.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BornPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); BornPipelines.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DeathPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); DeathPipelines.Add(_e0);}}
+        AttackRange = _buf.ReadInt();
     }
 
     public static EnemyInfo DeserializeEnemyInfo(ByteBuf _buf)
@@ -63,6 +64,10 @@ public sealed partial class EnemyInfo : Luban.BeanBase
     /// 死亡管线
     /// </summary>
     public readonly System.Collections.Generic.List<int> DeathPipelines;
+    /// <summary>
+    /// 攻击距离(毫米)
+    /// </summary>
+    public readonly int AttackRange;
    
     public const int __ID__ = 1196881420;
     public override int GetTypeId() => __ID__;
@@ -82,6 +87,7 @@ public sealed partial class EnemyInfo : Luban.BeanBase
         + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
         + "BornPipelines:" + Luban.StringUtil.CollectionToString(BornPipelines) + ","
         + "DeathPipelines:" + Luban.StringUtil.CollectionToString(DeathPipelines) + ","
+        + "AttackRange:" + AttackRange + ","
         + "}";
     }
 }

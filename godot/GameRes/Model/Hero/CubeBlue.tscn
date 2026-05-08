@@ -1,0 +1,15 @@
+[gd_scene format=3 load_steps=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(0.8, 1.6, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.2, 0.5, 1.0, 1.0)
+
+[node name="CubeBlue" type="Node3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_1")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

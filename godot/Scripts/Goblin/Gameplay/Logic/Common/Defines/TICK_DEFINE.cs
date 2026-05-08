@@ -18,6 +18,8 @@ public class TICK_DEFINE
         typeof(Detection),
         typeof(Captain),
         typeof(Gamepad),
+        typeof(Pilot),
+        typeof(ChargeAI),
         typeof(SkillBinding),
         typeof(Movement),
         typeof(StateMachine),

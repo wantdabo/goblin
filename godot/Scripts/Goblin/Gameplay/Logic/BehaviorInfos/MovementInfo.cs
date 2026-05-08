@@ -10,7 +10,15 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 public class MovementInfo : BehaviorInfo
 {
     /// <summary>
-    /// 当前帧驱动了运动, 标记
+    /// 期望移动方向(归一化), 由 Pilot/AI 等驱动者写入
+    /// </summary>
+    public FPVector3 dire { get; set; }
+    /// <summary>
+    /// 这帧是否想移动, 由 Pilot/AI 等驱动者写入
+    /// </summary>
+    public bool wantmove { get; set; }
+    /// <summary>
+    /// 当前帧驱动了运动, 由 Movement 自身写入(执行后标记)
     /// </summary>
     public bool turnmotion { get; set; }
 
@@ -21,6 +29,8 @@ public class MovementInfo : BehaviorInfo
 
     protected override void OnReset()
     {
+        dire = FPVector3.zero;
+        wantmove = false;
         turnmotion = false;
     }
 
@@ -28,8 +38,10 @@ public class MovementInfo : BehaviorInfo
     {
         var clone = ObjectCache.Ensure<MovementInfo>();
         clone.Ready(actor);
+        clone.dire = dire;
+        clone.wantmove = wantmove;
         clone.turnmotion = turnmotion;
-            
+
         return clone;
     }
 }

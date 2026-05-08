@@ -242,6 +242,7 @@ public sealed class Stage
         AddBehavior<SkillBinding>(sa);
         AddBehavior<Bullet>(sa);
         AddBehavior<Buff>(sa);
+        AddBehavior<ChargeAI>(sa);
         AddBehavior<StepEnd>(sa);
         AddBehavior<RILSync>(sa);
     }

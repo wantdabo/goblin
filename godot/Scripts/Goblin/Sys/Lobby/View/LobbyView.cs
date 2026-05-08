@@ -27,7 +27,7 @@ public class LobbyView : UIBaseView
         {
             var players = new List<PlayerData>
             {
-                new PlayerData { seat = 1, hero = 100001, position = new IntVector3(0, 0, 0), euler = new IntVector3(0, 0, 0), scale = 1000 },
+                new PlayerData { seat = 1, hero = 200001, position = new IntVector3(0, 0, 0), euler = new IntVector3(0, 0, 0), scale = 1000 },
             };
             var enemies = new List<EnemyData>
             {
