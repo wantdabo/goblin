@@ -38,6 +38,9 @@ public class HitEffect : Behavior
     /// <param name="hitlag">顿帧信息</param>
     public void RmvHitLag(HitLagInfo hitlag)
     {
+        hitlag.count--;
+        if (hitlag.count > 0) return;
+
         stage.RmvBehaviorInfo(hitlag);
         if (false == stage.SeekBehaviorInfo(hitlag.actor, out TickerInfo ticker)) return;
         ticker.timescale = hitlag.timescale;
@@ -51,10 +54,15 @@ public class HitEffect : Behavior
     /// <param name="duration">顿帧持续时间</param>
     public void AddHitLag(ulong target, FP strength, FP duration)
     {
-        if (false == stage.SeekBehaviorInfo(target, out HitLagInfo hitlag)) hitlag = stage.AddBehaviorInfo<HitLagInfo>(target);
-        hitlag.strength = strength;
-        hitlag.duration = duration;
+        var isnew = false == stage.SeekBehaviorInfo(target, out HitLagInfo hitlag);
+        if (isnew) hitlag = stage.AddBehaviorInfo<HitLagInfo>(target);
+
+        if (hitlag.strength < strength) hitlag.strength = strength;
+        if (hitlag.duration < duration) hitlag.duration = duration;
         hitlag.elapsed = FP.Zero;
+        hitlag.count++;
+
+        if (hitlag.count > 1) return;
 
         if (false == stage.SeekBehaviorInfo(target, out TickerInfo ticker)) return;
         hitlag.timescale = ticker.timescale;

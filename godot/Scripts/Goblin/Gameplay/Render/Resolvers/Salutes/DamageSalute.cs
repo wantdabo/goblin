@@ -21,7 +21,7 @@ public class DamageSalute : RILSalute<RIL_EVENT_DAMAGE>
         var cam = rilbucket.world.eyes?.camera;
         if (null != cam) screenpos = cam.UnprojectPosition(position);
 
-        engine.eventor.Tell(new DamageDanceEvent
+        engine.proxy.gameplay.eventor.Tell(new DamageDanceEvent
         {
             screenpos = screenpos,
             crit = e.crit,

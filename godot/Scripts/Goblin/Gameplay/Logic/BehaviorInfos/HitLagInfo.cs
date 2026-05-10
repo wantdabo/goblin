@@ -25,13 +25,18 @@ public class HitLagInfo : BehaviorInfo
     /// 已流逝时间
     /// </summary>
     public FP elapsed { get; set; }
-        
+    /// <summary>
+    /// 引用计数，保证 timescale 只被保存/恢复一次
+    /// </summary>
+    public int count { get; set; }
+
     protected override void OnReady()
     {
         timescale = FP.Zero;
         strength = FP.Zero;
         duration = FP.Zero;
         elapsed = FP.Zero;
+        count = 0;
     }
 
     protected override void OnReset()
@@ -40,6 +45,7 @@ public class HitLagInfo : BehaviorInfo
         strength = FP.Zero;
         duration = FP.Zero;
         elapsed = FP.Zero;
+        count = 0;
     }
 
     protected override BehaviorInfo OnClone()
@@ -50,6 +56,7 @@ public class HitLagInfo : BehaviorInfo
         clone.strength = strength;
         clone.duration = duration;
         clone.elapsed = elapsed;
+        clone.count = count;
 
         return clone;
     }
