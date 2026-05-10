@@ -78,6 +78,7 @@ public sealed class World : Comp
     private Node3D modelpool { get; set; }
     private DirectionalLight3D sunlight { get; set; }
     private WorldEnvironment worldenv { get; set; }
+    private MeshInstance3D floormesh { get; set; }
 
     protected override void OnCreate()
     {
@@ -104,9 +105,11 @@ public sealed class World : Comp
         sceneRoot?.AddChild(modelpool);
         ModelAgent.SetRoot(worldroot);
         ModelAgent.SetPool(modelpool);
+        PrimitiveMeshAgent.SetRoot(worldroot);
         EffectAgent.SetRoot(worldroot);
 
         SetupLighting();
+        SetupFloor();
 
         Batches();
 
@@ -141,10 +144,12 @@ public sealed class World : Comp
 
         sunlight?.QueueFree(); sunlight = null;
         worldenv?.QueueFree(); worldenv = null;
+        floormesh?.QueueFree(); floormesh = null;
         worldroot?.QueueFree(); worldroot = null;
         modelpool?.QueueFree(); modelpool = null;
         ModelAgent.SetRoot(null);
         ModelAgent.SetPool(null);
+        PrimitiveMeshAgent.SetRoot(null);
         EffectAgent.SetRoot(null);
     }
 
@@ -156,8 +161,8 @@ public sealed class World : Comp
         sunlight = new DirectionalLight3D
         {
             Name = "SunLight",
-            LightEnergy = 1.0f,
-            LightColor = new Color(1f, 0.96f, 0.88f),
+            LightEnergy = 0.6f,
+            LightColor = new Color(0.85f, 0.88f, 0.95f),
             ShadowEnabled = true,
             RotationDegrees = new Vector3(-50f, -45f, 0f),
         };
@@ -166,13 +171,43 @@ public sealed class World : Comp
         var env = new Godot.Environment
         {
             BackgroundMode = Godot.Environment.BGMode.Color,
-            BackgroundColor = new Color(0.45f, 0.55f, 0.65f),
+            BackgroundColor = new Color(0.08f, 0.10f, 0.14f),
             AmbientLightSource = Godot.Environment.AmbientSource.Color,
-            AmbientLightColor = new Color(0.55f, 0.6f, 0.7f),
-            AmbientLightEnergy = 0.5f,
+            AmbientLightColor = new Color(0.18f, 0.20f, 0.26f),
+            AmbientLightEnergy = 0.4f,
         };
         worldenv = new WorldEnvironment { Name = "WorldEnv", Environment = env };
         worldroot.AddChild(worldenv);
+    }
+
+    /// <summary>
+    /// 程序化棋盘格地面（无 .tscn 资源）
+    /// 用 ShaderMaterial 内联 GLSL，每格 1m，深浅两色交替
+    /// </summary>
+    private void SetupFloor()
+    {
+        var shader = new Shader();
+        shader.Code = @"
+shader_type spatial;
+render_mode unshaded;
+uniform vec4 color_a : source_color = vec4(0.22, 0.22, 0.24, 1.0);
+uniform vec4 color_b : source_color = vec4(0.15, 0.15, 0.17, 1.0);
+uniform float cell_size = 1.0;
+void fragment() {
+    vec2 uv = UV * cell_size;
+    float cx = floor(uv.x);
+    float cy = floor(uv.y);
+    float checker = mod(cx + cy, 2.0);
+    ALBEDO = mix(color_a, color_b, checker).rgb;
+}
+";
+        var mat = new ShaderMaterial { Shader = shader };
+        mat.SetShaderParameter("cell_size", 64f);
+        var mesh = new PlaneMesh { Size = new Vector2(64f, 64f), SubdivideDepth = 0, SubdivideWidth = 0 };
+        // UV 铺满整个平面，每格 1m → UV 范围 = 64×64
+        mesh.Material = mat;
+        floormesh = new MeshInstance3D { Name = "Floor", Mesh = mesh };
+        worldroot.AddChild(floormesh);
     }
         
     /// <summary>

@@ -19,6 +19,10 @@ public sealed partial class ModelInfo : Luban.BeanBase
         Id = _buf.ReadInt();
         Res = _buf.ReadString();
         Animation = _buf.ReadString();
+        Type = _buf.ReadString();
+        Mesh = _buf.ReadString();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Size = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Size.Add(_e0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Color = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Color.Add(_e0);}}
     }
 
     public static ModelInfo DeserializeModelInfo(ByteBuf _buf)
@@ -38,6 +42,22 @@ public sealed partial class ModelInfo : Luban.BeanBase
     /// 动画路径
     /// </summary>
     public readonly string Animation;
+    /// <summary>
+    /// 类型(glb/primitive)
+    /// </summary>
+    public readonly string Type;
+    /// <summary>
+    /// 基元形状(box/cylinder/sphere)
+    /// </summary>
+    public readonly string Mesh;
+    /// <summary>
+    /// 尺寸(mm)
+    /// </summary>
+    public readonly System.Collections.Generic.List<int> Size;
+    /// <summary>
+    /// 颜色(RGBA 0-255)
+    /// </summary>
+    public readonly System.Collections.Generic.List<int> Color;
    
     public const int __ID__ = 236415277;
     public override int GetTypeId() => __ID__;
@@ -52,6 +72,10 @@ public sealed partial class ModelInfo : Luban.BeanBase
         + "Id:" + Id + ","
         + "Res:" + Res + ","
         + "Animation:" + Animation + ","
+        + "Type:" + Type + ","
+        + "Mesh:" + Mesh + ","
+        + "Size:" + Luban.StringUtil.CollectionToString(Size) + ","
+        + "Color:" + Luban.StringUtil.CollectionToString(Color) + ","
         + "}";
     }
 }

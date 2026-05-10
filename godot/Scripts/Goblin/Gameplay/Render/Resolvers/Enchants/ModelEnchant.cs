@@ -7,31 +7,50 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants;
 
 /// <summary>
 /// 模型代理的赋能
+/// 按 ModelInfo.Type 路由到 ModelAgent(glb) 或 PrimitiveMeshAgent(primitive)
 /// </summary>
 public class ModelEnchant : AgentEnchant<RIL_FACADE_MODEL>
 {
     protected override void OnRIL(RIL_FACADE_MODEL ril)
     {
-        // 如果没有模型定义, 则回收模型代理, 有则创建模型代理
-        if (ril.model > 0)
+        // 如果没有模型定义, 则回收全部模型代理
+        if (ril.model <= 0) { RecycleAgent(ril.actor); return; }
+        if (false == engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) { RecycleAgent(ril.actor); return; }
+
+        if ("primitive" == modelinfo.Type)
         {
-            rilbucket.world.EnsureAgent<ModelAgent>(ril.actor);
+            RmvModelAgent(ril.actor);
+            rilbucket.world.EnsureAgent<PrimitiveMeshAgent>(ril.actor);
         }
         else
         {
-            RecycleAgent(ril.actor);
+            RmvPrimitiveAgent(ril.actor);
+            rilbucket.world.EnsureAgent<ModelAgent>(ril.actor);
         }
     }
-        
+
     protected override void OnLossRIL(RIL_LOSS ril)
     {
         base.OnLossRIL(ril);
         RecycleAgent(ril.actor);
     }
-        
+
     private void RecycleAgent(ulong actor)
     {
+        RmvModelAgent(actor);
+        RmvPrimitiveAgent(actor);
+    }
+
+    private void RmvModelAgent(ulong actor)
+    {
         var agent = rilbucket.world.GetAgent<ModelAgent>(actor);
+        if (null == agent) return;
+        rilbucket.world.RmvAgent(agent);
+    }
+
+    private void RmvPrimitiveAgent(ulong actor)
+    {
+        var agent = rilbucket.world.GetAgent<PrimitiveMeshAgent>(actor);
         if (null == agent) return;
         rilbucket.world.RmvAgent(agent);
     }

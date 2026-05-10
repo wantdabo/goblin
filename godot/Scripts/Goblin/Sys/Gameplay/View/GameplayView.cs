@@ -2,6 +2,7 @@ using Goblin.Common;
 using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.RIL;
+using Goblin.Gameplay.Render.Agents;
 using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
@@ -154,7 +155,8 @@ public class GameplayView : UIBaseView
             {
                 var rilspatial = local.world.rilbucket.GetRIL<RIL_SPATIAL>(actor);
                 if (null == rilspatial) continue;
-                var worldPos = rilspatial.position.ToVector3();
+                var spatialagent = local.world.GetAgent<SpatialAgent>(actor);
+                var worldPos = spatialagent != null ? spatialagent.position : rilspatial.position.ToVector3();
                 if (cam.IsPositionBehind(worldPos)) continue;
                 var sp = cam.UnprojectPosition(worldPos);
                 var vp = sp / cam.GetViewport().GetVisibleRect().Size;
@@ -183,9 +185,12 @@ public class GameplayView : UIBaseView
 
                 var infoWorldPos = rilspatial.position.ToVector3() + new Vector3(0, 1f, 0);
                 float dist = cam.GlobalPosition.DistanceTo(infoWorldPos);
-                infoItem.Scale = Vector2.One * (10f / (dist + 1f));
+                float s = Mathf.Clamp(8f / (dist + 1f), 0.4f, 2f);
+                infoItem.Scale = Vector2.One * s;
                 var uiPos = infoContent.GetGlobalTransformWithCanvas().AffineInverse() * cam.UnprojectPosition(infoWorldPos);
-                infoItem.Position = infoItem.Position.Lerp(uiPos, 0.2f);
+                // 居中：偏移半个 item 尺寸（乘以 scale 后）
+                uiPos -= infoItem.Size * s * 0.5f;
+                infoItem.Position = uiPos;
                 index++;
             }
         }

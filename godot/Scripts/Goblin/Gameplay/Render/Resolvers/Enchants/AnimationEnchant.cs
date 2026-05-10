@@ -8,6 +8,7 @@ namespace Goblin.Gameplay.Render.Resolvers.Enchants;
 
 /// <summary>
 /// 动画代理赋能
+/// 按 ModelInfo.Type 路由: primitive → PrimitiveAnimAgent, 其他 → AnimationAgent(需 AnimationConfig)
 /// </summary>
 public class AnimationEnchant : AgentEnchant<RIL_FACADE_ANIMATION>
 {
@@ -20,15 +21,23 @@ public class AnimationEnchant : AgentEnchant<RIL_FACADE_ANIMATION>
             return;
         }
 
-        // 如果模型定义没有动画配置, 则回收动画代理
         if (false == engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
+
+        if ("primitive" == modelinfo.Type)
+        {
+            RmvAnimationAgent(ril.actor);
+            rilbucket.world.EnsureAgent<PrimitiveAnimAgent>(ril.actor);
+            return;
+        }
+
+        // glb 模型需要动画配置
         if (string.IsNullOrEmpty(modelinfo.Animation))
         {
             RecycleAgent(ril.actor);
             return;
         }
-            
-        // 如果模型定义有动画配置, 则创建动画代理
+
+        RmvPrimitiveAnimAgent(ril.actor);
         rilbucket.world.EnsureAgent<AnimationAgent>(ril.actor);
     }
 
@@ -44,7 +53,20 @@ public class AnimationEnchant : AgentEnchant<RIL_FACADE_ANIMATION>
     /// <param name="actor">ActorID</param>
     private void RecycleAgent(ulong actor)
     {
+        RmvAnimationAgent(actor);
+        RmvPrimitiveAnimAgent(actor);
+    }
+
+    private void RmvAnimationAgent(ulong actor)
+    {
         var agent = rilbucket.world.GetAgent<AnimationAgent>(actor);
+        if (null == agent) return;
+        rilbucket.world.RmvAgent(agent);
+    }
+
+    private void RmvPrimitiveAnimAgent(ulong actor)
+    {
+        var agent = rilbucket.world.GetAgent<PrimitiveAnimAgent>(actor);
         if (null == agent) return;
         rilbucket.world.RmvAgent(agent);
     }
