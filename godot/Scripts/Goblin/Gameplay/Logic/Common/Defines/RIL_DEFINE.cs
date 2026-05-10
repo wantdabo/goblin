@@ -22,6 +22,10 @@ public class RIL_DEFINE
     /// RIL_EVENT 治疗
     /// </summary>
     public const ushort EVENT_CURE = 2;
+    /// <summary>
+    /// RIL_EVENT 关卡结果
+    /// </summary>
+    public const ushort EVENT_STAGE_RESULT = 3;
 
     /// <summary>
     /// LOSS 丢弃渲染指令

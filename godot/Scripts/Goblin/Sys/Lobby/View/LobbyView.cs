@@ -40,10 +40,22 @@ public class LobbyView : UIBaseView
             {
                 id = 10086,
                 seat = 1,
-                sdata = new StageData { seed = 19491001, players = players.ToArray(), enemies = enemies.ToArray() },
+                sdata = new StageData
+                {
+                    seed = 19491001,
+                    players = players.ToArray(),
+                    enemies = enemies.ToArray(),
+                    sequence = new StageSequenceData
+                    {
+                        win = StageSequenceCondition.AllEnemiesDead,
+                        lose = StageSequenceCondition.HeroDead,
+                    },
+                },
             };
             engine.gameui.Close(this);
             engine.gameui.Open<GameplayView>();
+            engine.gameui.Open<HUDView>();
+            engine.gameui.Open<ResultView>();
             engine.proxy.gameplay.Load<LocalDirector>(data, true);
             engine.proxy.gameplay.director.StartGame();
         });

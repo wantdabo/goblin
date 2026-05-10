@@ -20,4 +20,8 @@ public struct StageData
     /// 敌人数据数组，包含了所有需要刷出的敌人信息
     /// </summary>
     public EnemyData[] enemies { get; set; }
+    /// <summary>
+    /// 关卡序列数据
+    /// </summary>
+    public StageSequenceData sequence { get; set; }
 }

@@ -129,6 +129,7 @@ public class RILBucket : Comp
             
         Salute<DamageSalute>(RIL_DEFINE.EVENT_DAMAGE);
         Salute<CureSalute>(RIL_DEFINE.EVENT_CURE);
+        Salute<StageResultSalute>(RIL_DEFINE.EVENT_STAGE_RESULT);
     }
 
     /// <summary>

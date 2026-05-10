@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://hud_view_goblin"]
+
+[ext_resource type="FontFile" uid="uid://bcbllkiuu7037" path="res://GameRes/Font/YSBTH-2.ttf" id="1"]
+
+[node name="HUDView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Content" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="BarOrg" type="Control" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 10.0
+mouse_filter = 2
+
+[node name="BG" type="ColorRect" parent="BarOrg"]
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 10.0
+color = Color(0.1, 0.1, 0.1, 0.8)
+mouse_filter = 2
+
+[node name="Fill" type="ColorRect" parent="BarOrg"]
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 10.0
+color = Color(0.2, 0.85, 0.2, 1)
+mouse_filter = 2

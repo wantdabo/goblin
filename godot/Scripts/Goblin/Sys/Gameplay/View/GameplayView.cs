@@ -107,6 +107,8 @@ public class GameplayView : UIBaseView
         AddUIEventListener("ExitBtn", () =>
         {
             engine.gameui.Close(this);
+            engine.gameui.Close<HUDView>();
+            engine.gameui.Close<ResultView>();
             engine.gameui.Open<LobbyView>();
             engine.proxy.gameplay.director.StopGame();
             engine.proxy.gameplay.director.DestroyGame();

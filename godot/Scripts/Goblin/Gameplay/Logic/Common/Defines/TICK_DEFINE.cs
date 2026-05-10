@@ -32,5 +32,6 @@ public class TICK_DEFINE
         typeof(Facade),
         typeof(StepEnd),
         typeof(RILSync),
+        typeof(StageSequence),
     };
 }
