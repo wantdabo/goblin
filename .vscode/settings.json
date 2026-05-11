@@ -1,3 +1,8 @@
 {
-    "files.eol": "\r\n"
+    "files.eol": "\r\n",
+    "[csharp]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false
+    }
 }

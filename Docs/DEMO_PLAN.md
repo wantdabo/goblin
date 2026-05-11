@@ -4,7 +4,7 @@
 > 任务讨论、决策记录都围绕本文件。冲突的口头讨论以本文更新为准。
 > 范围只定 1 周 MVP，跑通后再判断下一步。
 
-最后更新：2026-05-09
+最后更新：2026-05-12
 
 ---
 
@@ -127,7 +127,7 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 - AddHitLag → count++ 且只在 count==1 时记录原值并设新值
 - RmvHitLag → count-- 且 count==0 时恢复原值
 
-### 5.3 .editorconfig 强制缩进 — TODO（基建）
+### 5.3 .editorconfig 强制缩进 — DONE 2026-05-12
 本会话内 Stage.cs 已被自动 spaces→tabs 改动两次。根目录 [.editorconfig](../.editorconfig) 强制 `.cs` 用 spaces，统一 Rider/VSCode。
 
 ---
@@ -150,9 +150,9 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 |---|---|---|---|
 | D1 | 配置表骨架 + EnemyPrefab + StageRule(无 AI) | 玩家能走，怪能站桩 | DONE 2026-05-09 |
 | D2 | §5.1 输入解耦 + ChargeAI | 怪能冲过来撞玩家 | DONE 2026-05-09 |
-| D3 | PrimitiveMeshAgent + PrimitiveAnimAgent (IDLE/MOVE/HURT 三态) | 视觉能看出三种状态 | TODO |
-| D4 | 3 段 combo + §5.2 HitLag 修复 + 伤害结算 | 能砍死一只怪 | TODO |
-| D5 | HUDView + ResultView + 串通 + 实机跑通 | 完整一局 | TODO |
+| D3 | PrimitiveMeshAgent + PrimitiveAnimAgent (IDLE/MOVE/HURT 三态) | 视觉能看出三种状态 | DONE 2026-05-09 |
+| D4 | 3 段 combo + §5.2 HitLag 修复 + 伤害结算 | 能砍死一只怪 | DONE 2026-05-12 |
+| D5 | HUDView + ResultView + 串通 + 实机跑通 | 完整一局 | DONE 2026-05-12 |
 
 每天末尾留 30min 实跑 + 记问题。
 
