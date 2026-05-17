@@ -176,17 +176,23 @@ public class LocalDirector : GameplayDirector
 
         var joystick = world.input.GetInput(INPUT_DEFINE.JOYSTICK);
         var ba = world.input.GetInput(INPUT_DEFINE.BA);
+        var bb = world.input.GetInput(INPUT_DEFINE.BB);
+        var bc = world.input.GetInput(INPUT_DEFINE.BC);
 
         var curseat = world.selfseat;
         if (lastseat != curseat)
         {
             stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, false, new IntVector2());
             stage.SetInput(lastseat, INPUT_DEFINE.BA, false, new IntVector2());
+            stage.SetInput(lastseat, INPUT_DEFINE.BB, false, new IntVector2());
+            stage.SetInput(lastseat, INPUT_DEFINE.BC, false, new IntVector2());
             lastseat = curseat;
         }
 
         stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
         stage.SetInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+        stage.SetInput(lastseat, INPUT_DEFINE.BB, bb.press, bb.dire);
+        stage.SetInput(lastseat, INPUT_DEFINE.BC, bc.press, bc.dire);
 
         EnemyAutopoilot();
         stage.Step();

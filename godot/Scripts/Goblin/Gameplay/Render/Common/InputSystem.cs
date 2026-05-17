@@ -86,5 +86,11 @@ public class InputSystem : Comp
 
         var fire = Input.IsActionPressed("fire");
         SetInput(INPUT_DEFINE.BA, fire, new IntVector2(0, 0));
+
+        var roll = Input.IsActionPressed("roll");
+        SetInput(INPUT_DEFINE.BB, roll, new IntVector2(0, 0));
+
+        var heavyattack = Input.IsActionPressed("heavy_attack");
+        SetInput(INPUT_DEFINE.BC, heavyattack, new IntVector2(0, 0));
     }
 }

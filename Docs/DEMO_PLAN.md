@@ -119,7 +119,7 @@ PrimitiveMesh 没有 AnimationPlayer。决议：**Logic 层抽象动画 ID 不�
 - MovementInfo 新增 `dire` / `wantmove` 两字段
 - `TICK_DEFINE` 时序补 Pilot & ChargeAI（在 Movement 之前）
 
-### 5.2 HitLag 堆叠 bug — TODO（5 行）
+### 5.2 HitLag 堆叠 bug — DONE 2026-05-12
 **问题**：[HitEffect.cs](../godot/Scripts/Goblin/Gameplay/Logic/Behaviors/Sa/HitEffect.cs) 的 AddHitLag 直接 `ticker.timescale -= xxx`，多次叠加会负。
 
 **改法**：

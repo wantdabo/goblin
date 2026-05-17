@@ -35,4 +35,12 @@ public class FLOW_DEFINE
     /// 脚本 ID 100000002
     /// </summary>
     public const uint S100000002 = 100000002;
+    /// <summary>
+    /// 脚本 ID 10020 — 翻滚
+    /// </summary>
+    public const uint S10020 = 10020;
+    /// <summary>
+    /// 脚本 ID 10030 — 重击
+    /// </summary>
+    public const uint S10030 = 10030;
 }

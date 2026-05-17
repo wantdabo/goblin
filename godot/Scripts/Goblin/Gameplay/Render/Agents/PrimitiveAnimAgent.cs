@@ -78,6 +78,7 @@ public class PrimitiveAnimAgent : Agent
             case STATE_DEFINE.BEHIT: PlayBeHit(); break;
             case STATE_DEFINE.DEATH: PlayDeath(); break;
             case STATE_DEFINE.CASTING: PlayCasting(); break;
+            case STATE_DEFINE.ROLL: PlayRoll(); break;
             case STATE_DEFINE.BORN:
             case STATE_DEFINE.IDLE:
             default: PlayIdle(); break;
@@ -129,6 +130,18 @@ public class PrimitiveAnimAgent : Agent
         }
         meshagent.meshinstance.Position = basemeshpos;
         meshagent.meshinstance.Scale = new Vector3(1f, 1f, stretch);
+        meshagent.material.AlbedoColor = basecolor;
+    }
+
+    private void PlayRoll()
+    {
+        const float duration = 0.32f;
+        float t = Mathf.Clamp(elapsed / duration, 0f, 1f);
+        // 压扁 + 前向拉伸，模拟翻滚的挤压感
+        float squash = 1f - Mathf.Sin(t * Mathf.Pi) * 0.4f;
+        float stretch = 1f + Mathf.Sin(t * Mathf.Pi) * 0.5f;
+        meshagent.meshinstance.Position = basemeshpos;
+        meshagent.meshinstance.Scale = new Vector3(1f, squash, stretch);
         meshagent.material.AlbedoColor = basecolor;
     }
 

@@ -43,6 +43,10 @@ public class STATE_DEFINE
     /// 受击
     /// </summary>
     public const byte BEHIT = 8;
+    /// <summary>
+    /// 翻滚（无敌帧，不可被 BEHIT 打断）
+    /// </summary>
+    public const byte ROLL = 9;
 
     /// <summary>
     /// 状态切换规则
@@ -51,11 +55,12 @@ public class STATE_DEFINE
     {
         { BORN, new List<byte>() { } },
         { DEATH, new List<byte>() { } },
-        { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING, BEHIT } },
-        { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING, BEHIT } },
+        { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING, BEHIT, ROLL } },
+        { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING, BEHIT, ROLL } },
         { JUMP, new List<byte>() { DEATH, FALL, CASTING, BEHIT } },
         { FALL, new List<byte>() { DEATH, IDLE, CASTING, BEHIT } },
         { CASTING, new List<byte>() { DEATH, BEHIT } },
         { BEHIT, new List<byte>() { DEATH, BEHIT } },
+        { ROLL, new List<byte>() { DEATH, IDLE, MOVE, CASTING } },
     };
 }

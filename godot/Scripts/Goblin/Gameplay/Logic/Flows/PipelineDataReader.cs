@@ -55,6 +55,7 @@ public static class PipelineDataReader
     public static void PreloadPipelineData(uint id, byte[] bytes)
     {
         if (datas.ContainsKey(id)) return;
+        if (bytes == null || bytes.Length == 0) return;
 
         // 反序列化管线数据
         var data = MessagePack.MessagePackSerializer.Deserialize<PipelineRawData>(bytes);
@@ -112,5 +113,7 @@ public static class PipelineDataReader
 
         Scripting<S100000001>();
         Scripting<S100000002>();
+        Scripting<S10020>();
+        Scripting<S10030>();
     }
 }
