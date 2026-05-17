@@ -22,7 +22,6 @@ public partial class Tables
         "Conf.ColliderInfo",
         "Conf.SkillInfo",
         "Conf.BuffInfo",
-        "Conf.SkillBindingInfo",
         "Conf.PipelineInfo",
         "Conf.EffectInfo",
         "Conf.EnemyInfo",
@@ -35,7 +34,6 @@ public partial class Tables
     public Conf.ColliderInfos ColliderInfos {get; }
     public Conf.SkillInfos SkillInfos {get; }
     public Conf.BuffInfos BuffInfos {get; }
-    public Conf.SkillBindingInfos SkillBindingInfos {get; }
     public Conf.PipelineInfos PipelineInfos {get; }
     public Conf.EffectInfos EffectInfos {get; }
     public Conf.EnemyInfos EnemyInfos {get; }
@@ -49,7 +47,6 @@ public partial class Tables
         ColliderInfos = new Conf.ColliderInfos(loader("Conf.ColliderInfo"));
         SkillInfos = new Conf.SkillInfos(loader("Conf.SkillInfo"));
         BuffInfos = new Conf.BuffInfos(loader("Conf.BuffInfo"));
-        SkillBindingInfos = new Conf.SkillBindingInfos(loader("Conf.SkillBindingInfo"));
         PipelineInfos = new Conf.PipelineInfos(loader("Conf.PipelineInfo"));
         EffectInfos = new Conf.EffectInfos(loader("Conf.EffectInfo"));
         EnemyInfos = new Conf.EnemyInfos(loader("Conf.EnemyInfo"));
@@ -65,7 +62,6 @@ public partial class Tables
         ColliderInfos.ResolveRef(this);
         SkillInfos.ResolveRef(this);
         BuffInfos.ResolveRef(this);
-        SkillBindingInfos.ResolveRef(this);
         PipelineInfos.ResolveRef(this);
         EffectInfos.ResolveRef(this);
         EnemyInfos.ResolveRef(this);

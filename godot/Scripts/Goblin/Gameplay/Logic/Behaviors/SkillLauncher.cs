@@ -24,7 +24,7 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     /// <param name="cooldown">技能冷却</param>
     /// <param name="pipelines">管线列表</param>
     /// <exception cref="Exception">技能重复加载</exception>
-    public void Load(uint skill, FP strength, FP cooldown, List<uint> pipelines)
+    public void Load(uint skill, FP strength, FP cooldown, ushort key, List<uint> pipelines)
     {
         if (info.loadedskilldict.ContainsKey(skill)) throw new Exception($"skill : {skill} already loaded.");
         var skillinfo = new SkillInfo
@@ -32,6 +32,7 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
             skill = skill,
             strength = strength,
             cooldown = cooldown,
+            key = key,
             pipelines = pipelines
         };
         info.loadedskills.Add(skill);

@@ -23,6 +23,10 @@ public struct SkillInfo
     /// </summary>
     public FP cooldown { get; set; }
     /// <summary>
+    /// 触发按键（INPUT_DEFINE，0 表示不绑定按键）
+    /// </summary>
+    public ushort key { get; set; }
+    /// <summary>
     /// 管线列表
     /// </summary>
     public List<uint> pipelines { get; set; }
@@ -94,6 +98,7 @@ public class SkillLauncherInfo : BehaviorInfo
                 skill = kv.Value.skill,
                 strength = kv.Value.strength,
                 cooldown = kv.Value.cooldown,
+                key = kv.Value.key,
                 pipelines = ObjectCache.Ensure<List<uint>>()
             };
             foreach (var pipeline in kv.Value.pipelines) skillinfo.pipelines.Add(pipeline);

@@ -38,23 +38,25 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
         if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrcfg)) return;
 
         stage.AddBehavior<StateMachine>(actor);
-        stage.AddBehavior<Pilot>(actor);
+        stage.AddBehavior<InputBinding>(actor);
         stage.AddBehavior<Movement>(actor);
             
         var launcher = stage.AddBehavior<SkillLauncher>(actor);
-        // 设置技能释放器的技能
+        // 设置技能释放器的技能，SkillKeys 与 Skills 一一对应
         if (null != herocfg.Skills)
         {
-            foreach (var skill in herocfg.Skills)
+            for (int i = 0; i < herocfg.Skills.Count; i++)
             {
+                var skill = herocfg.Skills[i];
                 if (false == stage.cfg.location.SkillInfos.TryGetValue(skill, out var skillcfg)) return;
                 if (null == skillcfg) continue;
-                    
+
                 var strength = skillcfg.Strength * stage.cfg.int2fp;
                 var cooldown = skillcfg.Cooldown * stage.cfg.int2fp;
+                ushort key = (herocfg.SkillKeys != null && i < herocfg.SkillKeys.Count) ? (ushort)herocfg.SkillKeys[i] : (ushort)0;
                 var pipelines = ObjectCache.Ensure<List<uint>>();
                 foreach (var pipeline in skillcfg.Pipelines) pipelines.Add((uint)pipeline);
-                launcher.Load((uint)skill, strength, cooldown, pipelines);
+                launcher.Load((uint)skill, strength, cooldown, key, pipelines);
             }
         }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -239,7 +239,7 @@ public sealed class Stage
         AddBehavior<SilentMercy>(sa);
         AddBehavior<Flow>(sa);
         AddBehavior<HitEffect>(sa);
-        AddBehavior<SkillBinding>(sa);
+        AddBehavior<InputBinding>(sa);
         AddBehavior<Bullet>(sa);
         AddBehavior<Buff>(sa);
         AddBehavior<ChargeAI>(sa);

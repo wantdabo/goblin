@@ -22,6 +22,7 @@ public sealed partial class HeroInfo : Luban.BeanBase
         Model = _buf.ReadInt();
         Collider = _buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Skills = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Skills.Add(_e0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SkillKeys = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); SkillKeys.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BornPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); BornPipelines.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DeathPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); DeathPipelines.Add(_e0);}}
     }
@@ -56,6 +57,10 @@ public sealed partial class HeroInfo : Luban.BeanBase
     /// </summary>
     public readonly System.Collections.Generic.List<int> Skills;
     /// <summary>
+    /// 技能按键列表（与 Skills 一一对应）
+    /// </summary>
+    public readonly System.Collections.Generic.List<int> SkillKeys;
+    /// <summary>
     /// 出生管线
     /// </summary>
     public readonly System.Collections.Generic.List<int> BornPipelines;
@@ -80,6 +85,7 @@ public sealed partial class HeroInfo : Luban.BeanBase
         + "Model:" + Model + ","
         + "Collider:" + Collider + ","
         + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
+        + "SkillKeys:" + Luban.StringUtil.CollectionToString(SkillKeys) + ","
         + "BornPipelines:" + Luban.StringUtil.CollectionToString(BornPipelines) + ","
         + "DeathPipelines:" + Luban.StringUtil.CollectionToString(DeathPipelines) + ","
         + "}";
