@@ -7,9 +7,10 @@
 *.user
 *.DS_Store
 /godot/goblin.csproj
-.claude/settings.local.json
+.claude/
 
 # Godot
 /godot/.godot/
 /godot/.mono/
 /godot/goblin.csproj.old
+*.lscache
