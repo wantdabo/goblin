@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -285,14 +285,6 @@ public sealed class Stage
             AddBehavior<Gamepad>(hero);
             // 入座
             seat.Sitdown(player.seat, hero);
-                
-            // TODO 临时添加, 记得删除
-            // 后续要走 Born 流程
-            if (SeekBehavior(hero, out StateMachine machine)) machine.TryChangeState(STATE_DEFINE.IDLE);
-                
-            // TODO 记得删除
-            // 添加测试 Buff
-            buff.AddBuff(hero, 1000001, 1, 10);
         }
 
         if (null != data.enemies)
@@ -309,10 +301,6 @@ public sealed class Stage
                         scale = ed.scale * cfg.int2fp,
                     }
                 });
-
-                // TODO 临时添加, 记得删除
-                // 后续要走 Born 流程
-                if (SeekBehavior(enemy, out StateMachine machine)) machine.TryChangeState(STATE_DEFINE.IDLE);
             }
         }
     }

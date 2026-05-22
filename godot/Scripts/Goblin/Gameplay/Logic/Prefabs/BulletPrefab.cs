@@ -28,6 +28,10 @@ public struct BulletPrefabInfo : IPrefabInfo
     /// </summary>
     public FP speed { get; set; }
     /// <summary>
+    /// 子弹的模型 ID
+    /// </summary>
+    public int model { get; set; }
+    /// <summary>
     /// 空间信息
     /// </summary>
     public SpatialData spatial { get; set; }
@@ -51,15 +55,17 @@ public class BulletPrefab : Prefab<BulletPrefabInfo>
         bullet.strength = info.strength;
         bullet.speed = info.speed;
         bullet.damage = stage.attrc.ChargeDamage(bullet.owner, bullet.strength);
-            
+
         var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
         spatial.position = info.spatial.position;
         spatial.euler = info.spatial.euler;
         spatial.scale = info.spatial.scale;
-            
-        // TODO 临时加模型, 记得删除
-        var facade = stage.AddBehavior<Facade>(actor);
-        facade.SetModel(200001);
+
+        if (info.model != 0)
+        {
+            var facade = stage.AddBehavior<Facade>(actor);
+            facade.SetModel(info.model);
+        }
             
         var pipelines = ObjectCache.Ensure<List<uint>>();
         pipelines.AddRange(info.pipelines);

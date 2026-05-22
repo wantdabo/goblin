@@ -47,4 +47,8 @@ public class CreateBulletData : InstructData
     /// 管线列表
     /// </summary>
     public List<uint> pipelines;
+    /// <summary>
+    /// 子弹模型 ID（0 表示无模型）
+    /// </summary>
+    public int model;
 }

@@ -28,6 +28,10 @@ public class FLOW_DEFINE
     public const byte ET_FLOW_HIT = 3;
         
     /// <summary>
+    /// 脚本 ID 10000 — 出生（切换到 IDLE）
+    /// </summary>
+    public const uint S10000 = 10000;
+    /// <summary>
     /// 脚本 ID 100000001
     /// </summary>
     public const uint S100000001 = 100000001;

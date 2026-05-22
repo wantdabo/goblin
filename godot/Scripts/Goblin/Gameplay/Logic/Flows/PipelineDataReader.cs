@@ -111,6 +111,7 @@ public static class PipelineDataReader
             scriptings.Add(scripting.id, scripting);
         }
 
+        Scripting<S10000>();
         Scripting<S100000001>();
         Scripting<S100000002>();
         Scripting<S10020>();

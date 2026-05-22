@@ -45,6 +45,7 @@ public class CreateBulletExecutor : Executor<CreateBulletData>
             owner = target,
             strength = data.strength * stage.cfg.int2fp,
             speed = data.speed * stage.cfg.int2fp,
+            model = data.model,
             spatial = spatialdata,
             pipelines = data.pipelines,
         });
