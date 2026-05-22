@@ -114,10 +114,9 @@ public class Buff : Behavior
     /// <param name="buffinfo">Buff 信息</param>
     private void EraseEnchant(BuffInfo buffinfo)
     {
-        if (false == stage.SeekBehaviorInfo(buffinfo.owner, out AttributeInfo attribute)) return;
         if (false == buffinfo.enchanted) return;
         buffinfo.enchanted = false;
-        EnchantToAttribute(attribute, buffinfo, false);
+        EnchantToAttribute(buffinfo.owner, buffinfo, false);
     }
 
     /// <summary>
@@ -126,19 +125,18 @@ public class Buff : Behavior
     /// <param name="buffinfo">Buff 信息</param>
     private void StampEnchant(BuffInfo buffinfo)
     {
-        if (false == stage.SeekBehaviorInfo(buffinfo.owner, out AttributeInfo attribute)) return;
         if (buffinfo.enchanted) return;
         buffinfo.enchanted = true;
-        EnchantToAttribute(attribute, buffinfo, true);
+        EnchantToAttribute(buffinfo.owner, buffinfo, true);
     }
 
     /// <summary>
     /// 将 Buff 属性增幅应用到属性上
     /// </summary>
-    /// <param name="attribute">属性信息</param>
+    /// <param name="owner">Buff 拥有者</param>
     /// <param name="buffinfo">Buff 信息</param>
     /// <param name="flag">标记 (TRUE 叠加/FALSE 移除)</param>
-    private void EnchantToAttribute(AttributeInfo attribute, BuffInfo buffinfo, bool flag)
+    private void EnchantToAttribute(ulong owner, BuffInfo buffinfo, bool flag)
     {
         if (false == stage.cfg.location.BuffInfos.TryGetValue(buffinfo.buffid, out var buffcfg)) return;
 
@@ -147,15 +145,15 @@ public class Buff : Behavior
             var key = (ushort) buffcfg.EnchantMains[i];
             var value = buffcfg.EnchantMains[i + 1] * buffinfo.layer;
             value = flag ? value : -value;
-            stage.attrc.ChangeAttributeValue(attribute, key, value);
+            stage.attrb.ChangeAttributeValue(owner, key, value);
         }
-            
+
         for (int i = 0; i < buffcfg.EnchantScales.Count; i += 2)
         {
             var key = (ushort) buffcfg.EnchantScales[i];
             var value = buffcfg.EnchantScales[i + 1] * buffinfo.layer;
             value = flag ? value : -value;
-            stage.attrc.ChangeAttributeScaleValue(attribute, key, value);
+            stage.attrb.ChangeAttributeScaleValue(owner, key, value);
         }
     }
 

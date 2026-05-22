@@ -56,7 +56,7 @@ public partial class RILSync : Behavior
         Translator<StageTranslator, StageInfo>();
         Translator<TickerTranslator, TickerInfo>();
         Translator<SeatTranslator, SeatInfo>();
-        Translator<AttributeTranslator, AttributeInfo>();
+        Translator<AttributeTranslator, AttributeBucketInfo>();
         Translator<SpatialTranslator, SpatialInfo>();
         Translator<StateMachineTranslator, StateMachineInfo>();
         Translator<ActorTranslator, StageInfo>();

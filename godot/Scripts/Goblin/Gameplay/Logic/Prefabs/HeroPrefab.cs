@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -35,7 +36,7 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
     protected override void OnProcessing(ulong actor, HeroPrefabInfo info)
     {
         if (false == stage.cfg.location.HeroInfos.TryGetValue(info.hero, out var herocfg)) return;
-        if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrcfg)) return;
+        if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrbfg)) return;
 
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<InputBinding>(actor);
@@ -64,11 +65,11 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
         facade.SetModel(herocfg.Model);
 
         stage.AddBehaviorInfo<TickerInfo>(actor);
-        var attribute = stage.AddBehaviorInfo<AttributeInfo>(actor);
-        stage.attrc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.HP, attrcfg.HP);
-        stage.attrc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.MAXHP, attrcfg.MaxHP);
-        stage.attrc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED, attrcfg.MoveSpeed);
-        stage.attrc.SetAttributeValue(attribute, ATTRIBUTE_DEFINE.ATTACK, attrcfg.Attack);
+        stage.attrb.Attach(actor);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.HP, attrbfg.HP);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MAXHP, attrbfg.MaxHP);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED, attrbfg.MoveSpeed);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK, attrbfg.Attack);
             
         var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
         spatial.position = info.spatial.position;

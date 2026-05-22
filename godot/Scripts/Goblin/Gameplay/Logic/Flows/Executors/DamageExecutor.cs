@@ -27,11 +27,11 @@ public class DamageExecutor : Executor<DamageData>
         // 子弹管线：owner 是子弹 Actor，伤害在发射时已预算，直接取用
         if (stage.SeekBehaviorInfo(flowinfo.owner, out BulletInfo bulletinfo))
         {
-            stage.attrc.ToDamage(bulletinfo.owner, target, bulletinfo.damage);
+            stage.attrb.ToDamage(bulletinfo.owner, target, stage.attrb.ChargeDamage(bulletinfo.owner, bulletinfo.strength));
             return;
         }
 
-        var damage = stage.attrc.ChargeDamage(flowinfo.owner, data.strength * stage.cfg.int2fp);
-        stage.attrc.ToDamage(flowinfo.owner, target, damage);
+        var damage = stage.attrb.ChargeDamage(flowinfo.owner, data.strength * stage.cfg.int2fp);
+        stage.attrb.ToDamage(flowinfo.owner, target, damage);
     }
 }

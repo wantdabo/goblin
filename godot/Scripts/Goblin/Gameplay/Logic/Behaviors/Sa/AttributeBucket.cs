@@ -1,0 +1,192 @@
+using System;
+using System.Collections.Generic;
+using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
+using Goblin.Gameplay.Logic.Common;
+using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.RIL.EVENT;
+using Kowtow.Math;
+
+namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+
+/// <summary>
+/// 伤害的数据结构
+/// </summary>
+public struct DamageInfo
+{
+    public bool crit { get; set; }
+    public int value { get; set; }
+}
+
+/// <summary>
+/// 属性桶（Sa 级，统一管理所有 Actor 的属性数据）
+/// </summary>
+public class AttributeBucket : Behavior<AttributeBucketInfo>
+{
+    protected override void OnAssemble()
+    {
+        base.OnAssemble();
+        stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
+    }
+
+    protected override void OnDisassemble()
+    {
+        base.OnDisassemble();
+        stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
+    }
+
+    /// <summary>
+    /// 将 Actor 接入属性桶
+    /// </summary>
+    public void Attach(ulong actor)
+    {
+        if (info.attributes.ContainsKey(actor)) return;
+        info.attributes.Add(actor, ObjectCache.Ensure<Dictionary<ushort, int>>());
+    }
+
+    private (ushort mainkey, ushort scalekey) ConvKey(ushort key)
+    {
+        return ((ushort)(key * 2 + 1), (ushort)(key * 2 + 2));
+    }
+
+    public int GetAttributeValue(ulong actor, ushort key)
+    {
+        if (false == info.attributes.TryGetValue(actor, out var attributes)) return 0;
+        var k = ConvKey(key);
+        var value = attributes.GetValueOrDefault(k.mainkey, 0);
+        var scale = attributes.GetValueOrDefault(k.scalekey, 1000);
+
+        return Math.Clamp((value * (scale * stage.cfg.int2fp)).AsInt(), 0, int.MaxValue);
+    }
+
+    public int GetAttributeScaleValue(ulong actor, ushort key)
+    {
+        if (false == info.attributes.TryGetValue(actor, out var attributes)) return 1000;
+        var k = ConvKey(key);
+
+        return attributes.GetValueOrDefault(k.scalekey, 1000);
+    }
+
+    public void SetAttributeValue(ulong actor, ushort key, int value)
+    {
+        if (false == info.attributes.TryGetValue(actor, out var attributes)) return;
+        var k = ConvKey(key);
+        attributes.Remove(k.mainkey);
+        attributes.Add(k.mainkey, value);
+    }
+
+    public void SetAttributeScaleValue(ulong actor, ushort key, int value)
+    {
+        if (ATTRIBUTE_DEFINE.HP == key) throw new Exception("HP 属性的千分比值不允许被修改");
+        if (false == info.attributes.TryGetValue(actor, out var attributes)) return;
+        var k = ConvKey(key);
+        attributes.Remove(k.scalekey);
+        attributes.Add(k.scalekey, value);
+    }
+
+    public (int before, int after) ChangeAttributeValue(ulong actor, ushort key, int value, bool clamp = false, int min = 0, int max = 0)
+    {
+        var before = GetAttributeValue(actor, key);
+        var changevalue = before + value;
+        if (clamp) changevalue = Math.Clamp(changevalue, min, max);
+        SetAttributeValue(actor, key, changevalue);
+        var after = GetAttributeValue(actor, key);
+
+        return (before, after);
+    }
+
+    public (int before, int after) ChangeAttributeScaleValue(ulong actor, ushort key, int value, bool clamp = false, int min = 0, int max = 0)
+    {
+        var before = GetAttributeScaleValue(actor, key);
+        var changevalue = before + value;
+        if (clamp) changevalue = Math.Clamp(changevalue, min, max);
+        SetAttributeScaleValue(actor, key, changevalue);
+        var after = GetAttributeScaleValue(actor, key);
+
+        return (before, after);
+    }
+
+    public DamageInfo ChargeDamage(ulong actor, FP strength)
+    {
+        if (false == info.attributes.ContainsKey(actor)) return default;
+
+        return new DamageInfo
+        {
+            crit = false,
+            value = FP.ToInt(strength * GetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK))
+        };
+    }
+
+    public DamageInfo DischargeDamage(ulong actor, DamageInfo damage)
+    {
+        // TODO 抗性计算，例如护甲、魔法、暴击、闪避
+        return damage;
+    }
+
+    public void ToDamage(ulong from, ulong to, DamageInfo damage)
+    {
+        if (stage.SeekBehaviorInfo(to, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
+        if (false == info.attributes.ContainsKey(to)) return;
+
+        var disdamage = DischargeDamage(to, damage);
+        var result = ChangeAttributeValue(to, ATTRIBUTE_DEFINE.HP, -disdamage.value, true, 0, GetAttributeValue(to, ATTRIBUTE_DEFINE.MAXHP));
+
+        var eventdamage = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
+        eventdamage.from = from;
+        eventdamage.to = to;
+        eventdamage.crit = disdamage.crit;
+        eventdamage.damage = result.before - result.after;
+        stage.rilsync.Send(eventdamage);
+
+        if (result.after > 0) return;
+        stage.silentmercy.Kill(from, to);
+    }
+
+    protected override void OnEndTick()
+    {
+        base.OnEndTick();
+        if (0 == info.pendings.Count) return;
+
+        // 检查 pending 中的 actor 是否还被子弹引用，没有则真正回收
+        var done = ObjectCache.Ensure<List<ulong>>();
+        if (stage.SeekBehaviorInfos(out List<BulletInfo> bullets))
+        {
+            foreach (var pending in info.pendings)
+            {
+                var inuse = false;
+                foreach (var bullet in bullets)
+                {
+                    if (bullet.owner != pending) continue;
+                    inuse = true;
+                    break;
+                }
+                if (inuse) continue;
+                done.Add(pending);
+            }
+        }
+        else
+        {
+            done.AddRange(info.pendings);
+        }
+
+        foreach (var actor in done)
+        {
+            info.pendings.Remove(actor);
+            if (false == info.attributes.TryGetValue(actor, out var attributes)) continue;
+            attributes.Clear();
+            ObjectCache.Set(attributes);
+            info.attributes.Remove(actor);
+        }
+
+        done.Clear();
+        ObjectCache.Set(done);
+    }
+
+    private void OnActorRmv(ActorRmvEvent e)
+    {
+        if (false == info.attributes.ContainsKey(e.actor)) return;
+        if (info.pendings.Contains(e.actor)) return;
+        info.pendings.Add(e.actor);
+    }
+}

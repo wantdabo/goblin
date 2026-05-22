@@ -19,11 +19,10 @@ public class Movement : Behavior<MovementInfo>
     {
         if (false == stage.SeekBehavior(actor, out StateMachine machine)) return;
         if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
-        if (false == stage.SeekBehaviorInfo(actor, out AttributeInfo attribute)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
-            
+
         dire.Normalize();
-        var motion = dire * stage.attrc.GetAttributeValue(attribute, ATTRIBUTE_DEFINE.MOVESPEED) * tick;
+        var motion = dire * stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED) * tick;
         spatial.position += motion;
 
         FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;

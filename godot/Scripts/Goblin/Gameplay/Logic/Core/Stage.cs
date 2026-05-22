@@ -117,9 +117,9 @@ public sealed class Stage
     /// </summary>
     public Random random => GetBehavior<Random>(sa, true);
     /// <summary>
-    /// 属性数值计算
+    /// 属性桶
     /// </summary>
-    public AttributeCalc attrc => GetBehavior<AttributeCalc>(sa, true);
+    public AttributeBucket attrb => GetBehavior<AttributeBucket>(sa, true);
     /// <summary>
     /// 碰撞检测
     /// </summary>
@@ -233,7 +233,7 @@ public sealed class Stage
         AddBehavior<Eventor>(sa);
         AddBehavior<Seat>(sa);
         AddBehavior<Random>(sa).Initialze(data.seed);
-        AddBehavior<AttributeCalc>(sa);
+        AddBehavior<AttributeBucket>(sa);
         AddBehavior<Detection>(sa);
         AddBehavior<Captain>(sa);
         AddBehavior<SilentMercy>(sa);

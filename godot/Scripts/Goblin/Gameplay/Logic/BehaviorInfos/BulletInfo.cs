@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
@@ -28,11 +26,7 @@ public class BulletInfo : BehaviorInfo
     /// 子弹的速度
     /// </summary>
     public FP speed { get; set; }
-    /// <summary>
-    /// 子弹的伤害
-    /// </summary>
-    public DamageInfo damage { get; set; }
-        
+
     protected override void OnReady()
     {
         OnReset();
@@ -44,7 +38,6 @@ public class BulletInfo : BehaviorInfo
         flow = 0;
         strength = 0;
         speed = 0;
-        damage = default;
     }
 
     protected override BehaviorInfo OnClone()
@@ -55,8 +48,7 @@ public class BulletInfo : BehaviorInfo
         clone.flow = flow;
         clone.strength = strength;
         clone.speed = speed;
-        clone.damage = damage;
-            
+
         return clone;
     }
 }
