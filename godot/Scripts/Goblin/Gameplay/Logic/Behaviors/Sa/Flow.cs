@@ -350,7 +350,7 @@ public class Flow : Behavior
                 EndPipeline(flowinfo);
                 continue;
             }
-                
+
             if (flowinfo.active && flowinfo.timeline >= flowinfo.length) EndPipeline(flowinfo);
         }
     }
@@ -486,5 +486,6 @@ public class Flow : Behavior
         Executor<TimeScaleExecutor>(INSTR_DEFINE.TIMESCALE);
         Executor<BeHitExecutor>(INSTR_DEFINE.BEHIT);
         Executor<SkillBreakExecutor>(INSTR_DEFINE.SKILLBREAK);
+        Executor<DamageExecutor>(INSTR_DEFINE.DAMAGE);
     }
 }

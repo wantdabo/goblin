@@ -61,4 +61,8 @@ public class INSTR_DEFINE
     /// 技能打断指令
     /// </summary>
     public const ushort SKILLBREAK = 14;
+    /// <summary>
+    /// 伤害结算指令
+    /// </summary>
+    public const ushort DAMAGE = 15;
 }

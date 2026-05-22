@@ -88,5 +88,7 @@ public class CollisionExecutor : Executor<CollisionData>
         if (false == data.usespark) return;
         if (0 == flowcollision.targets.Count) return;
         stage.flow.Spark(flowinfo, data.spark.influence, data.spark.token);
+        // spark 同步执行完毕，消费者已处理，清空本帧命中列表
+        flowcollision.targets.Clear();
     }
 }

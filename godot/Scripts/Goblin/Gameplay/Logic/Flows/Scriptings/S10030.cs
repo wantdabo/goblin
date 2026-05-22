@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings;
 // 重击管线：15 帧（600ms @ 25fps），强度 3000（轻击 1000-1500 的 2-3 倍）
 // t=0-600ms  每帧向前位移 80mm，合计 1.2m 前冲
 // t=200-500ms 大范围碰撞检测（2000x1500x2000mm），最多命中 5 个目标
-// 命中时：受击朝向攻击者反方向弹飞 + 顿帧
+// 命中时：受击朝向攻击者反方向弹飞 + 顿帧 + 伤害结算
 public class S10030 : Scripting
 {
     public override uint id => FLOW_DEFINE.S10030;
@@ -54,6 +54,12 @@ public class S10030 : Scripting
             strengthmax = 300,
             duration = 120,
             durationmax = 120,
+        });
+
+        // 命中时伤害结算（由碰撞 spark 触发，确保在 targets 填充后执行）
+        ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN, new DamageData
+        {
+            strength = 3000,
         });
     }
 }

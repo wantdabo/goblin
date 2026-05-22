@@ -54,7 +54,7 @@ public class BulletPrefab : Prefab<BulletPrefabInfo>
         bullet.owner = info.owner;
         bullet.strength = info.strength;
         bullet.speed = info.speed;
-        bullet.damage = stage.attrc.ChargeDamage(bullet.owner, bullet.strength);
+        bullet.damage = stage.attrc.ChargeDamage(info.owner, info.strength);
 
         var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
         spatial.position = info.spatial.position;

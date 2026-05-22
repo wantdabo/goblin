@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.Flows.Defines;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors;
@@ -84,19 +82,8 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     protected override void OnTick(FP tick)
     {
         base.OnTick(tick);
-            
-        if (false == info.casting) return;
 
-        // 碰撞检测
-        if (info.loadedskilldict.TryGetValue(info.skill, out var skillinfo) && stage.SeekBehaviorInfo(info.flow, out FlowCollisionHurtInfo collisionhurt))
-        {
-            var damage = stage.attrc.ChargeDamage(actor, skillinfo.strength);
-            foreach (var target in collisionhurt.targets)
-            {
-                stage.attrc.ToDamage(actor, target.actor, damage);
-            }
-            collisionhurt.targets.Clear();
-        }
+        if (false == info.casting) return;
 
         // 技能管线结束检查
         if (false == stage.flow.CheckFlowActive(info.flow))
@@ -105,7 +92,7 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
             info.flow = 0;
             info.casting = false;
         }
-            
+
         // 切换状态机中状态
         if (stage.SeekBehavior(actor, out StateMachine statemachine))
         {
