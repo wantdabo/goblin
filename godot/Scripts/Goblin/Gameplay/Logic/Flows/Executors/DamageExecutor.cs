@@ -24,14 +24,12 @@ public class DamageExecutor : Executor<DamageData>
 
     private void Apply(DamageData data, FlowInfo flowinfo, ulong target)
     {
-        // 子弹管线：owner 是子弹 Actor，伤害在发射时已预算，直接取用
-        if (stage.SeekBehaviorInfo(flowinfo.owner, out BulletInfo bulletinfo))
-        {
-            stage.attrb.ToDamage(bulletinfo.owner, target, stage.attrb.ChargeDamage(bulletinfo.owner, bulletinfo.strength));
-            return;
-        }
+        // 如果管线归属于 Magic Actor，施法者是 Magic 的 owner
+        var from = stage.SeekBehaviorInfo(flowinfo.owner, out MagicInfo magicinfo)
+            ? magicinfo.owner
+            : flowinfo.owner;
 
-        var damage = stage.attrb.ChargeDamage(flowinfo.owner, data.strength * stage.cfg.int2fp);
-        stage.attrb.ToDamage(flowinfo.owner, target, damage);
+        var damage = stage.attrb.ChargeDamage(from, data.strength * stage.cfg.int2fp);
+        stage.attrb.ToDamage(from, target, damage);
     }
 }

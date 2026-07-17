@@ -22,9 +22,9 @@ public class ACTOR_DEFINE
     /// </summary>
     public const byte HERO = 3;
     /// <summary>
-    /// 子弹
+    /// 魔法体
     /// </summary>
-    public const byte BULLET = 4;
+    public const byte MAGIC = 4;
     /// <summary>
     /// BUFF
     /// </summary>

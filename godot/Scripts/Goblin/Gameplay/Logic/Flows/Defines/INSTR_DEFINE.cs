@@ -14,13 +14,13 @@ public class INSTR_DEFINE
     /// </summary>
     public const ushort SPATIAL_POSITION = 2;
     /// <summary>
-    /// 生成子弹指令
+    /// 生成魔法体指令
     /// </summary>
-    public const ushort CREATE_BULLET = 3;
+    public const ushort CREATE_MAGIC = 3;
     /// <summary>
-    /// 子弹运动指令
+    /// 魔法体运动指令
     /// </summary>
-    public const ushort BULLET_MOTION = 4;
+    public const ushort MAGIC_MOTION = 4;
     /// <summary>
     /// 释放技能
     /// </summary>

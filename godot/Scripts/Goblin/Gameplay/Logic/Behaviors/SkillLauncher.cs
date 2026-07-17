@@ -5,6 +5,8 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
+using Goblin.Gameplay.Logic.Prefabs;
+using Goblin.Gameplay.Logic.Prefabs.Datas;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors;
@@ -17,11 +19,6 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     /// <summary>
     /// 装载技能
     /// </summary>
-    /// <param name="skill">技能 ID</param>
-    /// <param name="strength">技能强度</param>
-    /// <param name="cooldown">技能冷却</param>
-    /// <param name="pipelines">管线列表</param>
-    /// <exception cref="Exception">技能重复加载</exception>
     public void Load(uint skill, FP strength, FP cooldown, ushort key, List<uint> pipelines)
     {
         if (info.loadedskilldict.ContainsKey(skill)) throw new Exception($"skill : {skill} already loaded.");
@@ -40,43 +37,54 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     /// <summary>
     /// 卸载技能
     /// </summary>
-    /// <param name="skill">技能 ID</param>
     public void Unload(uint skill)
     {
         if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
-            
+
         skillinfo.pipelines.Clear();
         ObjectCache.Set(skillinfo.pipelines);
-            
+
         info.loadedskills.Remove(skill);
         info.loadedskilldict.Remove(skill);
     }
 
     /// <summary>
-    /// 打断技能
+    /// 打断技能（移除当前 Magic Actor）
     /// </summary>
     public void Break()
     {
         if (false == info.casting) return;
         info.casting = false;
-        stage.flow.EndPipeline(info.flow);
+        if (info.magicid != 0 && stage.cache.Valid(info.magicid))
+        {
+            stage.RmvActor(info.magicid);
+        }
+        info.magicid = 0;
     }
 
     /// <summary>
-    /// 释放技能
+    /// 释放技能（生成 Magic Actor）
     /// </summary>
-    /// <param name="skill">技能 ID</param>
     public void Launch(uint skill)
     {
         if (info.casting) return;
         if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
         if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
+        if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 
-        // 创建管线
         info.skill = skill;
         info.casting = true;
-        info.flow = stage.flow.GenPipeline(actor, skillinfo.pipelines, false);
-        stage.flow.Gen2RunPipeline(info.flow);
+        info.magicid = stage.Spawn(new MagicPrefabInfo
+        {
+            owner = actor,
+            spatial = new SpatialData
+            {
+                position = spatial.position,
+                euler = spatial.euler,
+                scale = spatial.scale,
+            },
+            pipelines = skillinfo.pipelines,
+        });
     }
 
     protected override void OnTick(FP tick)
@@ -85,15 +93,14 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
 
         if (false == info.casting) return;
 
-        // 技能管线结束检查
-        if (false == stage.flow.CheckFlowActive(info.flow))
+        // Magic Actor 消亡则技能结束
+        if (info.magicid == 0 || false == stage.cache.Valid(info.magicid))
         {
             info.skill = 0;
-            info.flow = 0;
+            info.magicid = 0;
             info.casting = false;
         }
 
-        // 切换状态机中状态
         if (stage.SeekBehavior(actor, out StateMachine statemachine))
         {
             if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)

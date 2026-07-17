@@ -25,7 +25,7 @@ public class TICK_DEFINE
         typeof(Flow),
         typeof(HitEffect),
         typeof(SkillLauncher),
-        typeof(Bullet),
+        typeof(Magic),
         typeof(Buff),
         typeof(SilentMercy),
         typeof(Facade),

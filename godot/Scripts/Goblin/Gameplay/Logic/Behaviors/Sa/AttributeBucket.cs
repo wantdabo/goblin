@@ -148,16 +148,16 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
         base.OnEndTick();
         if (0 == info.pendings.Count) return;
 
-        // 检查 pending 中的 actor 是否还被子弹引用，没有则真正回收
+        // 检查 pending 中的 actor 是否还被 Magic 引用，没有则真正回收
         var done = ObjectCache.Ensure<List<ulong>>();
-        if (stage.SeekBehaviorInfos(out List<BulletInfo> bullets))
+        if (stage.SeekBehaviorInfos(out List<MagicInfo> magics))
         {
             foreach (var pending in info.pendings)
             {
                 var inuse = false;
-                foreach (var bullet in bullets)
+                foreach (var magic in magics)
                 {
-                    if (bullet.owner != pending) continue;
+                    if (magic.owner != pending) continue;
                     inuse = true;
                     break;
                 }

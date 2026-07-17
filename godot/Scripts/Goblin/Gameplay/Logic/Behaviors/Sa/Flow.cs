@@ -474,8 +474,8 @@ public class Flow : Behavior
             
         Executor<AnimationExecutor>(INSTR_DEFINE.ANIMATION);
         Executor<SpatialPositionExecutor>(INSTR_DEFINE.SPATIAL_POSITION);
-        Executor<CreateBulletExecutor>(INSTR_DEFINE.CREATE_BULLET);
-        Executor<BulletMotionExecutor>(INSTR_DEFINE.BULLET_MOTION);
+        Executor<CreateMagicExecutor>(INSTR_DEFINE.CREATE_MAGIC);
+        Executor<MagicMotionExecutor>(INSTR_DEFINE.MAGIC_MOTION);
         Executor<LaunchSkillExecutor>(INSTR_DEFINE.LAUNCH_SKILL);
         Executor<EffectExecutor>(INSTR_DEFINE.EFFECT);
         Executor<CollisionExecutor>(INSTR_DEFINE.COLLISION);

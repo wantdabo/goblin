@@ -240,7 +240,7 @@ public sealed class Stage
         AddBehavior<Flow>(sa);
         AddBehavior<HitEffect>(sa);
         AddBehavior<InputBinding>(sa);
-        AddBehavior<Bullet>(sa);
+        AddBehavior<Magic>(sa);
         AddBehavior<Buff>(sa);
         AddBehavior<ChargeAI>(sa);
         AddBehavior<StepEnd>(sa);
@@ -260,7 +260,7 @@ public sealed class Stage
         prefabs = ObjectCache.Ensure<Dictionary<Type, Prefab>>();
         Prefab<FlowPrefab, FlowPrefabInfo>();
         Prefab<HeroPrefab, HeroPrefabInfo>();
-        Prefab<BulletPrefab, BulletPrefabInfo>();
+        Prefab<MagicPrefab, MagicPrefabInfo>();
         Prefab<EnemyPrefab, EnemyPrefabInfo>();
         Prefab<BuffPrefab, BuffPrefabInfo>();
     }

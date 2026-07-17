@@ -9,17 +9,19 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings;
 public class S100000002 : Scripting
 {
     public override uint id => FLOW_DEFINE.S100000002;
-        
+
     protected override void OnScript()
     {
-        Instruct(0, 500, new BulletMotionData
+        Instruct(0, 500, new MagicMotionData
             {
-                motion = FLOW_BULLET_DEFINE.MOTION_STRAIGHT,
+                motion = FLOW_MAGIC_DEFINE.MOTION_STRAIGHT,
+                speed = 5000,
                 speedrate = 1000,
             })
-            .After(0, 3500, new BulletMotionData
+            .After(0, 3500, new MagicMotionData
             {
-                motion = FLOW_BULLET_DEFINE.MOTION_STRAIGHT,
+                motion = FLOW_MAGIC_DEFINE.MOTION_STRAIGHT,
+                speed = 5000,
                 speedrate = 3500,
             });
     }

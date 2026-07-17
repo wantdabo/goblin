@@ -42,9 +42,9 @@ public class SkillLauncherInfo : BehaviorInfo
     /// </summary>
     public uint skill { get; set; }
     /// <summary>
-    /// 技能管线
+    /// 当前技能生成的 Magic ActorID（0 表示无）
     /// </summary>
-    public ulong flow { get; set; }
+    public ulong magicid { get; set; }
     /// <summary>
     /// 是否有技能在释放中
     /// </summary>
@@ -61,7 +61,7 @@ public class SkillLauncherInfo : BehaviorInfo
     protected override void OnReady()
     {
         skill = 0;
-        flow = 0;
+        magicid = 0;
         casting = false;
         loadedskills = ObjectCache.Ensure<List<uint>>();
         loadedskilldict = ObjectCache.Ensure<Dictionary<uint, SkillInfo>>();
@@ -70,7 +70,7 @@ public class SkillLauncherInfo : BehaviorInfo
     protected override void OnReset()
     {
         skill = 0;
-        flow = 0;
+        magicid = 0;
         casting = false;
         loadedskills.Clear();
         ObjectCache.Set(loadedskills);
@@ -88,7 +88,7 @@ public class SkillLauncherInfo : BehaviorInfo
         var clone = ObjectCache.Ensure<SkillLauncherInfo>();
         clone.Ready(actor);
         clone.skill = skill;
-        clone.flow = flow;
+        clone.magicid = magicid;
         clone.casting = casting;
         foreach (var skillid in loadedskills) clone.loadedskills.Add(skillid);
         foreach (var kv in loadedskilldict)

@@ -1,7 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
-using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
@@ -11,22 +9,22 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Flows.Executors;
 
 /// <summary>
-/// 子弹运动指令执行器
+/// 魔法体运动执行器
 /// </summary>
-public class BulletMotionExecutor : Executor<BulletMotionData>
+public class MagicMotionExecutor : Executor<MagicMotionData>
 {
-    protected override void OnExecute((uint pipelineid, uint index) identity, BulletMotionData data, FlowInfo flowinfo, ulong target)
+    protected override void OnExecute((uint pipelineid, uint index) identity, MagicMotionData data, FlowInfo flowinfo, ulong target)
     {
         base.OnExecute(identity, data, flowinfo, target);
         if (false == stage.SeekBehaviorInfo(target, out SpatialInfo spatial)) return;
-        if (false == stage.SeekBehaviorInfo(target, out BulletInfo bullet)) return;
 
         switch (data.motion)
         {
-            case FLOW_BULLET_DEFINE.MOTION_STRAIGHT:
+            case FLOW_MAGIC_DEFINE.MOTION_STRAIGHT:
                 var rotation = FPQuaternion.Euler(spatial.euler);
                 var forward = rotation * FPVector3.forward;
-                spatial.position += forward * data.speedrate * stage.cfg.int2fp * bullet.speed * GAME_DEFINE.LOGIC_TICK;
+                var speed = data.speed * stage.cfg.int2fp;
+                spatial.position += forward * data.speedrate * stage.cfg.int2fp * speed * GAME_DEFINE.LOGIC_TICK;
                 break;
         }
     }
