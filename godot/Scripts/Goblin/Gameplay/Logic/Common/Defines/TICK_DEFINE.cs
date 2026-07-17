@@ -16,7 +16,7 @@ public class TICK_DEFINE
     public static List<Type> TICK_TYPE_LIST { get; private set; } = new()
     {
         typeof(Detection),
-        typeof(Captain),
+        typeof(Herald),
         typeof(Gamepad),
         typeof(InputBinding),
         typeof(ChargeAI),

@@ -9,9 +9,9 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors.Sa;
 
 /// <summary>
-/// 输入指令
+/// 传令官 — 接收全局指令，分发给 Solider 执行
 /// </summary>
-public class Captain : Behavior
+public class Herald : Behavior
 {
     /// <summary>
     /// 输入指令队列

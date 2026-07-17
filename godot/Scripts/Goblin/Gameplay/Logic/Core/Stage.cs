@@ -125,9 +125,9 @@ public sealed class Stage
     /// </summary>
     public Detection detection => GetBehavior<Detection>(sa, true);
     /// <summary>
-    /// 输入指令
+    /// 传令官
     /// </summary>
-    public Captain captain => GetBehavior<Captain>(sa, true);
+    public Herald herald => GetBehavior<Herald>(sa, true);
     /// <summary>
     /// 管线流
     /// </summary>
@@ -235,7 +235,7 @@ public sealed class Stage
         AddBehavior<Random>(sa).Initialze(data.seed);
         AddBehavior<AttributeBucket>(sa);
         AddBehavior<Detection>(sa);
-        AddBehavior<Captain>(sa);
+        AddBehavior<Herald>(sa);
         AddBehavior<SilentMercy>(sa);
         AddBehavior<Flow>(sa);
         AddBehavior<HitEffect>(sa);
@@ -426,7 +426,7 @@ public sealed class Stage
     /// <param name="command"></param>
     public void SetCommand(Command command)
     {
-        captain.SetCommand(command.Clone(ObjectCache.Ensure(command.GetType()) as Command));
+        herald.SetCommand(command.Clone(ObjectCache.Ensure(command.GetType()) as Command));
     }
 
     /// <summary>
