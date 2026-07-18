@@ -39,19 +39,17 @@ public abstract class Checker
     /// </summary>
     /// <param name="condition">指令条件</param>
     /// <param name="flowinfo">管线信息</param>
+    /// <param name="target">执行目标（默认 0，per-target 条件时使用）</param>
     /// <returns>YES/NO</returns>
-    public bool Check(Condition condition, FlowInfo flowinfo)
+    public bool Check(Condition condition, FlowInfo flowinfo, ulong target)
     {
-        return OnCheck(condition, flowinfo);
+        return OnCheck(condition, flowinfo, target);
     }
 
     /// <summary>
     /// 检查指令条件
     /// </summary>
-    /// <param name="condition">指令条件</param>
-    /// <param name="flowinfo">管线信息</param>
-    /// <returns>YES/NO</returns>
-    protected abstract bool OnCheck(Condition condition, FlowInfo flowinfo);
+    protected abstract bool OnCheck(Condition condition, FlowInfo flowinfo, ulong target);
 }
 
 /// <summary>
@@ -63,19 +61,13 @@ public abstract class Checker<T> : Checker where T : Condition
     /// <summary>
     /// 检查指令条件
     /// </summary>
-    /// <param name="condition">指令条件</param>
-    /// <param name="flowinfo">管线信息</param>
-    /// <returns>YES/NO</returns>
-    protected override bool OnCheck(Condition condition, FlowInfo flowinfo)
+    protected override bool OnCheck(Condition condition, FlowInfo flowinfo, ulong target)
     {
-        return OnCheck(condition as T, flowinfo);
+        return OnCheck(condition as T, flowinfo, target);
     }
-        
+
     /// <summary>
     /// 检查指令条件
     /// </summary>
-    /// <param name="condition">指令条件</param>
-    /// <param name="flowinfo">管线信息</param>
-    /// <returns>YES/NO</returns>
-    protected abstract bool OnCheck(T condition, FlowInfo flowinfo);
+    protected abstract bool OnCheck(T condition, FlowInfo flowinfo, ulong target);
 }

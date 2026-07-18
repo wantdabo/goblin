@@ -25,19 +25,16 @@
     - AddBehaviorInfo/AddBehavior 存在差一帧时序问题 ✅ 已修复
       - 根因：RmvBehaviorInfo/RmvBehavior 是延迟回收（帧末 Recycle），但立即将 active 置为 false；SeekBehaviorInfo 因 active=false 返回 false，业务误判为不存在，AddBehaviorInfo 时 dict 里还有旧实例 → 抛出重复添加异常，卡死
       - 修法：AddBehaviorInfo/AddBehavior 中检查 rmvbehaviorinfos/rmvbehaviors 列表，若目标在其中则取消移除并重新初始化（Reset+Ready / active=true+AddBindingInfo），而非直接抛异常
-    - 碰撞检测 (CollisionExecutor) -> 命中火花 BUG
-      - 根因：timescale 加速时，Flow.OnTick 内 re-queue 循环会在同一个 OnTick 里连续调多次 RunPipeline
-      - targets 的消费（Spark → ET_FLOW_HIT 链）只有跨 OnTick 边界才能真正完成，re-queue 跳过了这个边界
-      - 导致：第二次 RunPipeline 时 flowcollision.targets 仍有旧数据，命中火花重复触发，BeHit/HitLag/伤害多算
-      - 修法方向：Spark() 同步消费完毕后立刻清空 targets（Spark 是同步调用，返回时 ET_FLOW_HIT 已执行完）
-      - 复杂因素：targets 有多条消费路径——① Spark → ET_FLOW_HIT 链（命中火花）；② 技能/子弹伤害结算（直接读 targets）
-      - 两条路径消费时机不统一，清空时机难以确定，结算消费机制需要整体重新设计
+    - 碰撞检测 (CollisionExecutor) -> 命中火花 BUG ✅ 已修复 (2026-07-19)
+      - 修法：Spark() 同步调用返回后立即 flowcollision.targets.Clear()
+      - Spark → ET_FLOW_HIT → Do() 链全程同步，Clear 时消费者已处理完毕
+      - 第二条消费路径（直接读 targets）实际不存在——DamageExecutor 走参数，HitLagExecutor 在 Do() 循环内部
 
   - 2026-05-01
-    - Flow 实现重构 (解决 ExecuteInstruct 函数职责越界问题)
-      - 因为要实现 ET_FLOW_HIT，在内部进行了遍历命中目标进行执行，又要考虑 doings 与 conditions，特别丑陋
-      - 需要考虑新的实现方式
-      - 目前过于 HACKER ! ! !
+    - Flow.cs 深度分析 ✅ 逐路径追踪验证 📝 Docs/ANALYSIS_FLOW.md
+      - 5条核心路径全部追踪：创建/Tick/EndPipeline/条件重试/Spark——基本正确
+      - 真问题：P0 InsideNotExeToExecute 无递归上限 / P1 ET_FLOW_HIT doings 脏数据 / P2 Spark O(F×P×S)
+      - P4(Read重复反序列化)不成立——PipelineDataReader 有字典缓存
     - Skill 转为 Actor（子弹合并至此）
     - Info 转 RIL 自动化
     - 所有 Clone 自动化

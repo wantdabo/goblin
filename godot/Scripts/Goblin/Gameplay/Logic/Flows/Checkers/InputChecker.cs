@@ -11,9 +11,9 @@ namespace Goblin.Gameplay.Logic.Flows.Checkers;
 /// </summary>
 public class InputChecker : Checker<InputCondition>
 {
-    protected override bool OnCheck(InputCondition condition, FlowInfo flowinfo)
+    protected override bool OnCheck(InputCondition condition, FlowInfo flowinfo, ulong target)
     {
-        if (false == stage.SeekBehavior(flowinfo.owner, out Gamepad gamepad)) return false;
+        if (false == stage.SeekBehavior(target, out Gamepad gamepad)) return false;
 
         foreach (var key in gamepad.keys)
         {
