@@ -4,6 +4,7 @@ using Goblin.Common.GameRes;
 using Goblin.Common.Network;
 using Goblin.Common.Parallel;
 using Goblin.Common.Sounds;
+using Goblin.Debug;
 using Goblin.Phases.Common;
 using Goblin.Sys.Common;
 using System;
@@ -67,6 +68,10 @@ public class Engine : Comp
     /// 游戏阶段
     /// </summary>
     public Phase phase { get; private set; }
+    /// <summary>
+    /// 调试服务
+    /// </summary>
+    public DebugServer debug { get; private set; }
 
     protected override void OnCreate()
     {
@@ -111,6 +116,9 @@ public class Engine : Comp
 
         phase = AddComp<Phase>();
         phase.Create();
+
+        debug = AddComp<DebugServer>();
+        debug.Create();
 
         gameui.Open<Goblin.Sys.Other.View.FrameworkView>();
         gameui.Open<Goblin.Sys.Gameplay.View.GameplayDanceView>();

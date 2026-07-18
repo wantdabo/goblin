@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Threading;
 using Goblin.Common;
@@ -38,6 +39,14 @@ public abstract class GameplayDirector : Comp
     /// 逻辑 Step 耗时
     /// </summary>
     public int stepms { get; private set; }
+    /// <summary>
+    /// 逻辑帧前钩子，返回 false 则跳过本帧 OnStep
+    /// </summary>
+    public Func<bool>? onbeforestep { get; set; }
+    /// <summary>
+    /// 渲染帧前钩子，返回 false 则跳过本帧 OnTick
+    /// </summary>
+    public Func<bool>? onbeforetick { get; set; }
 
     /// <summary>
     /// 创建游戏
@@ -147,6 +156,7 @@ public abstract class GameplayDirector : Comp
         
     protected void OnTick(TickEvent e)
     {
+        if (onbeforetick?.Invoke() == false) return;
         if (false == rendering) return;
         OnTick();
         world.ticker.Tick(e.tick);
@@ -155,6 +165,7 @@ public abstract class GameplayDirector : Comp
     protected void OnFixedTick(FixedTickEvent e)
     {
         stepms = (int)(e.tick * 1000);
+        if (onbeforestep?.Invoke() == false) return;
         OnStep();
     }
 

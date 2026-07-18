@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Goblin.Common;
+using Goblin.Debug;
 using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
@@ -87,10 +88,17 @@ public class LocalDirector : GameplayDirector
         stage.ondiff += OnDiff;
         // 监听 RIL 事件
         stage.onevent += OnEvent;
+        // 接入调试服务
+        engine.debug.Attach(new GameplayStateProvider(stage), stage);
+        onbeforestep = engine.debug.OnBeforeStep;
+        onbeforetick = engine.debug.OnBeforeTick;
     }
 
     protected override void OnDestroyGame()
     {
+        engine.debug.Detach();
+        onbeforestep = null;
+        onbeforetick = null;
         stage.onril -= OnRIL;
         stage.ondiff -= OnDiff;
         stage.onevent -= OnEvent;
