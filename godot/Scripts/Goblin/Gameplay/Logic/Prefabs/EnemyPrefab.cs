@@ -1,13 +1,9 @@
-using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.Prefabs.Datas;
-using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Prefabs;
 
@@ -41,21 +37,7 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<Movement>(actor);
 
-        var launcher = stage.AddBehavior<SkillLauncher>(actor);
-        if (null != enemycfg.Skills)
-        {
-            foreach (var skill in enemycfg.Skills)
-            {
-                if (false == stage.cfg.location.SkillInfos.TryGetValue(skill, out var skillcfg)) return;
-                if (null == skillcfg) continue;
-
-                var strength = skillcfg.Strength * stage.cfg.int2fp;
-                var cooldown = skillcfg.Cooldown * stage.cfg.int2fp;
-                var pipelines = ObjectCache.Ensure<List<uint>>();
-                foreach (var pipeline in skillcfg.Pipelines) pipelines.Add((uint)pipeline);
-                launcher.Load((uint)skill, strength, cooldown, 0, pipelines);
-            }
-        }
+		stage.AddBehavior<SkillLauncher>(actor);
 
         var facade = stage.AddBehavior<Facade>(actor);
         facade.SetModel(enemycfg.Model);

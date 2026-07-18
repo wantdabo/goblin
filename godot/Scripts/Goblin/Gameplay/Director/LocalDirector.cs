@@ -194,9 +194,13 @@ public class LocalDirector : GameplayDirector
         }
 
         stage.PushInput(lastseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
-        stage.PushInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
-        stage.PushInput(lastseat, INPUT_DEFINE.BB, bb.press, bb.dire);
-        stage.PushInput(lastseat, INPUT_DEFINE.BC, bc.press, bc.dire);
+		stage.PushInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+		stage.PushInput(lastseat, INPUT_DEFINE.BB, bb.press, bb.dire);
+		stage.PushInput(lastseat, INPUT_DEFINE.BC, bc.press, bc.dire);
+
+		// TODO 硬编码技能映射，后续由 SkillKeys 配置驱动
+		if (bb.press) stage.PushSkillFrame(lastseat, 10010);
+		if (bc.press) stage.PushSkillFrame(lastseat, 10020);
 
         EnemyAutopoilot();
         stage.Step();

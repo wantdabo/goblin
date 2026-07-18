@@ -112,9 +112,8 @@ public static class PipelineDataReader
         }
 
         Scripting<S10000>();
-        Scripting<S100000001>();
-        Scripting<S100000002>();
+        Scripting<S10001>();
+        Scripting<S10010>();
         Scripting<S10020>();
-        Scripting<S10030>();
     }
 }

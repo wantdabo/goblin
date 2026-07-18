@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
-using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -17,38 +14,6 @@ namespace Goblin.Gameplay.Logic.Behaviors;
 /// </summary>
 public class SkillLauncher : Behavior<SkillLauncherInfo>
 {
-    /// <summary>
-    /// 装载技能
-    /// </summary>
-    public void Load(uint skill, FP strength, FP cooldown, ushort key, List<uint> pipelines)
-    {
-        if (info.loadedskilldict.ContainsKey(skill)) throw new Exception($"skill : {skill} already loaded.");
-        var skillinfo = new SkillInfo
-        {
-            skill = skill,
-            strength = strength,
-            cooldown = cooldown,
-            key = key,
-            pipelines = pipelines
-        };
-        info.loadedskills.Add(skill);
-        info.loadedskilldict.Add(skill, skillinfo);
-    }
-
-    /// <summary>
-    /// 卸载技能
-    /// </summary>
-    public void Unload(uint skill)
-    {
-        if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
-
-        skillinfo.pipelines.Clear();
-        ObjectCache.Set(skillinfo.pipelines);
-
-        info.loadedskills.Remove(skill);
-        info.loadedskilldict.Remove(skill);
-    }
-
     /// <summary>
     /// 打断技能（移除当前 Magic Actor）
     /// </summary>
@@ -69,9 +34,12 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     public void Launch(uint skill)
     {
         if (info.casting) return;
-        if (false == info.loadedskilldict.TryGetValue(skill, out var skillinfo)) return;
+        if (false == stage.cfg.location.SkillInfos.TryGetValue((int)skill, out var skillcfg)) return;
         if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
+
+        var pipelines = ObjectCache.Ensure<List<uint>>();
+        foreach (var p in skillcfg.Pipelines) pipelines.Add((uint)p);
 
         info.skill = skill;
         info.casting = true;
@@ -84,8 +52,11 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
                 euler = spatial.euler,
                 scale = spatial.scale,
             },
-            pipelines = skillinfo.pipelines,
+            pipelines = pipelines,
         });
+
+        pipelines.Clear();
+        ObjectCache.Set(pipelines);
     }
 
     protected override void OnTick(FP tick)

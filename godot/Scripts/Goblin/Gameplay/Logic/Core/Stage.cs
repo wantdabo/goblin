@@ -431,21 +431,20 @@ public sealed class Stage
 				key.key = type;
 				key.action = pressed ? KeyAction.Press : KeyAction.Release;
 				gamepad.PushFrame(key);
-
-				if (pressed && SeekBehaviorInfo(actor, out SkillLauncherInfo launcher))
-				{
-					foreach (var skill in launcher.loadedskills)
-					{
-						if (launcher.loadedskilldict.TryGetValue(skill, out var skillinfo) && skillinfo.key == type)
-						{
-							var s = ObjectCache.Ensure<SkillFrame>();
-							s.skillid = skill;
-							gamepad.PushFrame(s);
-						}
-					}
-				}
 				break;
 		}
+	}
+
+	/// <summary>
+	/// 压入技能帧（由渲染层直接指定技能 ID）
+	/// </summary>
+	public void PushSkillFrame(ulong id, uint skillid)
+	{
+		var actor = seat.GetActor(id);
+		if (false == SeekBehavior(actor, out Gamepad gamepad)) return;
+		var s = ObjectCache.Ensure<SkillFrame>();
+		s.skillid = skillid;
+		gamepad.PushFrame(s);
 	}
 		
 	/// <summary>

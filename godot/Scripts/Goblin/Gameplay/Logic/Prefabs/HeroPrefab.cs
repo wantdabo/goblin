@@ -1,13 +1,9 @@
-using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.Prefabs.Datas;
-using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Prefabs;
 
@@ -41,24 +37,7 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<Movement>(actor);
             
-        var launcher = stage.AddBehavior<SkillLauncher>(actor);
-        // 设置技能释放器的技能，SkillKeys 与 Skills 一一对应
-        if (null != herocfg.Skills)
-        {
-            for (int i = 0; i < herocfg.Skills.Count; i++)
-            {
-                var skill = herocfg.Skills[i];
-                if (false == stage.cfg.location.SkillInfos.TryGetValue(skill, out var skillcfg)) return;
-                if (null == skillcfg) continue;
-
-                var strength = skillcfg.Strength * stage.cfg.int2fp;
-                var cooldown = skillcfg.Cooldown * stage.cfg.int2fp;
-                ushort key = (herocfg.SkillKeys != null && i < herocfg.SkillKeys.Count) ? (ushort)herocfg.SkillKeys[i] : (ushort)0;
-                var pipelines = ObjectCache.Ensure<List<uint>>();
-                foreach (var pipeline in skillcfg.Pipelines) pipelines.Add((uint)pipeline);
-                launcher.Load((uint)skill, strength, cooldown, key, pipelines);
-            }
-        }
+		stage.AddBehavior<SkillLauncher>(actor);
 
         var facade = stage.AddBehavior<Facade>(actor);
         facade.SetModel(herocfg.Model);

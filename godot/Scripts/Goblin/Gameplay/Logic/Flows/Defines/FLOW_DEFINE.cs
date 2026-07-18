@@ -32,6 +32,10 @@ public class FLOW_DEFINE
     /// </summary>
     public const uint S10000 = 10000;
     /// <summary>
+    /// 脚本 ID 10001 — 死亡（切换到 DEATH 并销毁）
+    /// </summary>
+    public const uint S10001 = 10001;
+    /// <summary>
     /// 脚本 ID 100000001
     /// </summary>
     public const uint S100000001 = 100000001;
@@ -42,11 +46,11 @@ public class FLOW_DEFINE
     /// <summary>
     /// 脚本 ID 10020 — 翻滚
     /// </summary>
-    public const uint S10020 = 10020;
+    public const uint S10010 = 10010;
     /// <summary>
     /// 脚本 ID 10030 — 重击
     /// </summary>
-    public const uint S10030 = 10030;
+    public const uint S10020 = 10020;
 
     /// <summary>
     /// 指令条件不满足重试递归上限
