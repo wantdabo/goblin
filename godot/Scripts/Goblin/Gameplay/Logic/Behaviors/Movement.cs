@@ -34,9 +34,9 @@ public class Movement : Behavior<MovementInfo>
     protected override void OnTick(FP tick)
     {
         base.OnTick(tick);
-        if (false == info.wantmove) return;
 
-        Move(info.dire, tick);
+        if (false == stage.SeekBehavior(actor, out Gamepad gamepad) || null == gamepad.move) return;
+        Move(new FPVector3(gamepad.move.dire.x, 0, gamepad.move.dire.y), tick);
     }
 
     protected override void OnEndTick()

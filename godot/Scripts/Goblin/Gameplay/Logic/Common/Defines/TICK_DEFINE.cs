@@ -18,8 +18,6 @@ public class TICK_DEFINE
         typeof(Detection),
         typeof(Herald),
         typeof(Gamepad),
-        typeof(InputBinding),
-        typeof(ChargeAI),
         typeof(Movement),
         typeof(StateMachine),
         typeof(Flow),

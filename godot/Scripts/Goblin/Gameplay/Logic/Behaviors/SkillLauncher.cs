@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
+using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -90,6 +91,16 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     protected override void OnTick(FP tick)
     {
         base.OnTick(tick);
+
+        // 消费技能指令
+        if (false == info.casting && stage.SeekBehavior(actor, out Gamepad gamepad))
+        {
+            foreach (var skillcmd in gamepad.skills)
+            {
+                Launch(skillcmd.skillid);
+                break;
+            }
+        }
 
         if (false == info.casting) return;
 

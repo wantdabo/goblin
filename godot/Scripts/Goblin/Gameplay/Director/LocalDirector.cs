@@ -182,17 +182,13 @@ public class LocalDirector : GameplayDirector
         var curseat = world.selfseat;
         if (lastseat != curseat)
         {
-            stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, false, new IntVector2());
-            stage.SetInput(lastseat, INPUT_DEFINE.BA, false, new IntVector2());
-            stage.SetInput(lastseat, INPUT_DEFINE.BB, false, new IntVector2());
-            stage.SetInput(lastseat, INPUT_DEFINE.BC, false, new IntVector2());
             lastseat = curseat;
         }
 
-        stage.SetInput(lastseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
-        stage.SetInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
-        stage.SetInput(lastseat, INPUT_DEFINE.BB, bb.press, bb.dire);
-        stage.SetInput(lastseat, INPUT_DEFINE.BC, bc.press, bc.dire);
+        stage.PushInput(lastseat, INPUT_DEFINE.JOYSTICK, joystick.press, joystick.dire);
+        stage.PushInput(lastseat, INPUT_DEFINE.BA, ba.press, ba.dire);
+        stage.PushInput(lastseat, INPUT_DEFINE.BB, bb.press, bb.dire);
+        stage.PushInput(lastseat, INPUT_DEFINE.BC, bc.press, bc.dire);
 
         EnemyAutopoilot();
         stage.Step();
@@ -214,10 +210,10 @@ public class LocalDirector : GameplayDirector
         for (int i = 3; i <= 3 + 16; i++)
         {
             var ismove = engine.random.Range(0, 100) < 70;
-            stage.SetInput((ulong)i, INPUT_DEFINE.JOYSTICK, ismove, new IntVector2(engine.random.Range(-1000, 1000), engine.random.Range(-1000, 1000)));
-                
+            stage.PushInput((ulong)i, INPUT_DEFINE.JOYSTICK, ismove, new IntVector2(engine.random.Range(-1000, 1000), engine.random.Range(-1000, 1000)));
+
             var isba = engine.random.Range(0, 500) < 100;
-            stage.SetInput((ulong)i, INPUT_DEFINE.BA, isba, new IntVector2());
+            stage.PushInput((ulong)i, INPUT_DEFINE.BA, isba, new IntVector2());
         }
     }
 

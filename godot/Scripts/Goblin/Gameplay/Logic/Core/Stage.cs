@@ -8,6 +8,7 @@ using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Commands.Common;
+using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -239,10 +240,8 @@ public sealed class Stage
         AddBehavior<SilentMercy>(sa);
         AddBehavior<Flow>(sa);
         AddBehavior<HitEffect>(sa);
-        AddBehavior<InputBinding>(sa);
         AddBehavior<Magic>(sa);
         AddBehavior<Buff>(sa);
-        AddBehavior<ChargeAI>(sa);
         AddBehavior<StepEnd>(sa);
         AddBehavior<RILSync>(sa);
     }
@@ -406,18 +405,47 @@ public sealed class Stage
     }
 
     /// <summary>
-    /// 输入 Gamepad
+    /// 压入输入指令
     /// </summary>
-    /// <param name="id">座位 ID</param>
-    /// <param name="type">按键类型</param>
-    /// <param name="press">摁下之后 -> TRUE</param>
-    /// <param name="dire">按键的方向</param>
-    public void SetInput(ulong id, ushort type, bool press, IntVector2 dire)
+    public void PushInput(ulong id, ushort type, bool pressed, IntVector2 dire)
     {
         var actor = seat.GetActor(id);
         if (false == SeekBehavior(actor, out Gamepad gamepad)) return;
-            
-        gamepad.SetInput(type, press, dire.ToFPVector2());
+
+        switch (type)
+        {
+            case INPUT_DEFINE.JOYSTICK:
+                if (pressed)
+                {
+                    var m = ObjectCache.Ensure<MoveFrame>();
+                    m.dire = dire.ToFPVector2();
+                    gamepad.PushFrame(m);
+                }
+                break;
+
+            case INPUT_DEFINE.BA:
+            case INPUT_DEFINE.BB:
+            case INPUT_DEFINE.BC:
+            case INPUT_DEFINE.BD:
+                var key = ObjectCache.Ensure<KeyFrame>();
+                key.key = type;
+                key.action = pressed ? KeyAction.Press : KeyAction.Release;
+                gamepad.PushFrame(key);
+
+                if (pressed && SeekBehaviorInfo(actor, out SkillLauncherInfo launcher))
+                {
+                    foreach (var skill in launcher.loadedskills)
+                    {
+                        if (launcher.loadedskilldict.TryGetValue(skill, out var skillinfo) && skillinfo.key == type)
+                        {
+                            var s = ObjectCache.Ensure<SkillFrame>();
+                            s.skillid = skill;
+                            gamepad.PushFrame(s);
+                        }
+                    }
+                }
+                break;
+        }
     }
         
     /// <summary>

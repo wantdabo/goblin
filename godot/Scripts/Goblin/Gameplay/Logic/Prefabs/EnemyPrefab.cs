@@ -61,8 +61,6 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         facade.SetModel(enemycfg.Model);
 
         stage.AddBehaviorInfo<TickerInfo>(actor);
-        var chargeai = stage.AddBehaviorInfo<ChargeAIInfo>(actor);
-        chargeai.attackrange = enemycfg.AttackRange * stage.cfg.int2fp;
         stage.attrb.Attach(actor);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.HP, attrbfg.HP);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MAXHP, attrbfg.MaxHP);

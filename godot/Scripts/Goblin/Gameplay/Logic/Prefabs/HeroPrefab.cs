@@ -39,7 +39,6 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
         if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrbfg)) return;
 
         stage.AddBehavior<StateMachine>(actor);
-        stage.AddBehavior<InputBinding>(actor);
         stage.AddBehavior<Movement>(actor);
             
         var launcher = stage.AddBehavior<SkillLauncher>(actor);
