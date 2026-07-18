@@ -9,6 +9,7 @@
 | 优先级 | 项目 | 说明 | 文件 |
 |--------|------|------|------|
 | ~~**P0**~~ ✅ | ~~`InsideNotExeToExecute` 无递归上限~~ | 常量 `MAX_INSIDE_NOTEXE_DEPTH` 移入 `FLOW_DEFINE` | `Flow.cs`, `FLOW_DEFINE.cs` |
+| ~~**P0**~~ ✅ | ~~释放技能后单位卡死在 CASTING~~ | `StageCache.Valid()` 只查了 `rmvactorset`（Recycle 后清空），加 `behaviordict.ContainsKey()` 做存在性验证。根因：Magic 自动清理为新增逻辑，暴露了 `Valid()` 的设计缺陷 | `Stage.cs` |
 
 ## 二、性能优化
 

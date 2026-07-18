@@ -1132,7 +1132,7 @@ public sealed class Stage
 		/// <returns>YES/NO</returns>
 		public bool Valid(ulong actor)
 		{
-			return false == rmvactorset.Contains(actor);
+			return false == rmvactorset.Contains(actor) && behaviordict.ContainsKey(actor);
 		}
 
 		/// <summary>
