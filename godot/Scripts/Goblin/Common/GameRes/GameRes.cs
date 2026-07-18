@@ -35,4 +35,15 @@ public class GameRes : Comp
         using var file = FileAccess.Open(res, FileAccess.ModeFlags.Read);
         return file?.GetBuffer((long)file.GetLength()) ?? System.Array.Empty<byte>();
     }
+
+    public string LoadRawFileText(string res)
+    {
+        using var file = FileAccess.Open(res, FileAccess.ModeFlags.Read);
+        return file?.GetAsText() ?? string.Empty;
+    }
+
+    public async Task<string> LoadRawFileTextAsync(string res)
+    {
+        return await Task.FromResult(LoadRawFileText(res));
+    }
 }

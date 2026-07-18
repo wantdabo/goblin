@@ -1,0 +1,32 @@
+[
+  {
+    "Id": 1000001,
+    "Name": "刀光-蓝色",
+    "Res": "Effect_Sword_Slash_1",
+    "Duration": -1
+  },
+  {
+    "Id": 1000002,
+    "Name": "刀光-蓝色-旋转",
+    "Res": "Effect_Sword_Slash_2",
+    "Duration": -1
+  },
+  {
+    "Id": 1000003,
+    "Name": "刀光-浅蓝色-力量竖劈",
+    "Res": "Effect_Sword_Slash_3",
+    "Duration": -1
+  },
+  {
+    "Id": 2000001,
+    "Name": "刀光-蓝色-打击特效",
+    "Res": "Effect_Sword_Slash_Hit_1",
+    "Duration": 500
+  },
+  {
+    "Id": 2000002,
+    "Name": "刀光-蓝色-打击特效-2",
+    "Res": "Effect_Sword_Slash_Hit_2",
+    "Duration": 200
+  }
+]

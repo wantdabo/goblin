@@ -21,7 +21,8 @@ public class AnimationEnchant : AgentEnchant<RIL_FACADE_ANIMATION>
             return;
         }
 
-        if (false == engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
+        var modelinfo = engine.cfg.location.ModelInfos.GetOrDefault(facademodel.model);
+        if (null == modelinfo) return;
 
         if ("primitive" == modelinfo.Type)
         {

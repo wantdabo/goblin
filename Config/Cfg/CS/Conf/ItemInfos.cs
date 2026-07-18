@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
@@ -17,15 +18,15 @@ public partial class ItemInfos
     private readonly System.Collections.Generic.Dictionary<int, Conf.ItemInfo> _dataMap;
     private readonly System.Collections.Generic.List<Conf.ItemInfo> _dataList;
     
-    public ItemInfos(ByteBuf _buf)
+    public ItemInfos(JsonElement _buf)
     {
         _dataMap = new System.Collections.Generic.Dictionary<int, Conf.ItemInfo>();
         _dataList = new System.Collections.Generic.List<Conf.ItemInfo>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JsonElement _ele in _buf.EnumerateArray())
         {
             Conf.ItemInfo _v;
-            _v = Conf.ItemInfo.DeserializeItemInfo(_buf);
+            _v = Conf.ItemInfo.DeserializeItemInfo(_ele);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +35,6 @@ public partial class ItemInfos
     public System.Collections.Generic.Dictionary<int, Conf.ItemInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.ItemInfo> DataList => _dataList;
 
-    public bool TryGetValue(int key, out Conf.ItemInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.ItemInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.ItemInfo Get(int key) => _dataMap[key];
     public Conf.ItemInfo this[int key] => _dataMap[key];

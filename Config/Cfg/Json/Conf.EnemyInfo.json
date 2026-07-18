@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 300001,
+    "Attribute": 100001,
+    "Name": "Charger",
+    "Model": 200001,
+    "Collider": 10001,
+    "BornPipelines": [
+      10000
+    ],
+    "DeathPipelines": [
+      10001
+    ],
+    "AttackRange": 1500
+  }
+]

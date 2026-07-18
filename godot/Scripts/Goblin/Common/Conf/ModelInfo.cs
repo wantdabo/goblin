@@ -8,24 +8,25 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class ModelInfo : Luban.BeanBase
 {
-    public ModelInfo(ByteBuf _buf) 
+    public ModelInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Res = _buf.ReadString();
-        Animation = _buf.ReadString();
-        Type = _buf.ReadString();
-        Mesh = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Size = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Size.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Color = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Color.Add(_e0);}}
+        Id = _buf.GetProperty("Id").GetInt32();
+        Res = _buf.GetProperty("Res").GetString();
+        Animation = _buf.GetProperty("Animation").GetString();
+        Type = _buf.GetProperty("Type").GetString();
+        Mesh = _buf.GetProperty("Mesh").GetString();
+        { var __json0 = _buf.GetProperty("Size"); Size = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Size.Add(__v0); }   }
+        { var __json0 = _buf.GetProperty("Color"); Color = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Color.Add(__v0); }   }
     }
 
-    public static ModelInfo DeserializeModelInfo(ByteBuf _buf)
+    public static ModelInfo DeserializeModelInfo(JsonElement _buf)
     {
         return new Conf.ModelInfo(_buf);
     }

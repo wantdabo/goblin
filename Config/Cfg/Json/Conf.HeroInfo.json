@@ -1,0 +1,28 @@
+[
+  {
+    "Id": 100001,
+    "Attribute": 100001,
+    "Name": "雅",
+    "Model": 100001,
+    "Collider": 10001,
+    "BornPipelines": [
+      10000
+    ],
+    "DeathPipelines": [
+      10001
+    ]
+  },
+  {
+    "Id": 200001,
+    "Attribute": 100001,
+    "Name": "Cube",
+    "Model": 200002,
+    "Collider": 10001,
+    "BornPipelines": [
+      10000
+    ],
+    "DeathPipelines": [
+      10001
+    ]
+  }
+]

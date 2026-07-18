@@ -8,24 +8,25 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class ItemInfo : Luban.BeanBase
 {
-    public ItemInfo(ByteBuf _buf) 
+    public ItemInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Type = _buf.ReadInt();
-        Stack = _buf.ReadInt();
-        Quality = _buf.ReadInt();
-        Name = _buf.ReadString();
-        Desc = _buf.ReadString();
-        Icon = _buf.ReadString();
+        Id = _buf.GetProperty("Id").GetInt32();
+        Type = _buf.GetProperty("Type").GetInt32();
+        Stack = _buf.GetProperty("Stack").GetInt32();
+        Quality = _buf.GetProperty("Quality").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
+        Desc = _buf.GetProperty("Desc").GetString();
+        Icon = _buf.GetProperty("Icon").GetString();
     }
 
-    public static ItemInfo DeserializeItemInfo(ByteBuf _buf)
+    public static ItemInfo DeserializeItemInfo(JsonElement _buf)
     {
         return new Conf.ItemInfo(_buf);
     }

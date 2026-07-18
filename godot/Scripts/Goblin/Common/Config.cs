@@ -1,5 +1,8 @@
 ﻿using Goblin.Core;
 using Luban;
+#if DEV
+using System.Text.Json;
+#endif
 
 namespace Goblin.Common;
 
@@ -26,6 +29,14 @@ public class Config : Comp
     protected override void OnCreate()
     {
         base.OnCreate();
-        location = new Tables((cfgName) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgName)));
+#if DEV
+        location = new Tables((cfgname) =>
+        {
+            var json = engine.gameres.location.LoadConfigJson(cfgname);
+            return JsonDocument.Parse(json).RootElement.Clone();
+        });
+#else
+        location = new Tables((cfgname) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgname)));
+#endif
     }
 }

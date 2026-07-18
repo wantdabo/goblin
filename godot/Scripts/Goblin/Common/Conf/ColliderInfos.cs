@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
@@ -17,15 +18,15 @@ public partial class ColliderInfos
     private readonly System.Collections.Generic.Dictionary<int, Conf.ColliderInfo> _dataMap;
     private readonly System.Collections.Generic.List<Conf.ColliderInfo> _dataList;
     
-    public ColliderInfos(ByteBuf _buf)
+    public ColliderInfos(JsonElement _buf)
     {
         _dataMap = new System.Collections.Generic.Dictionary<int, Conf.ColliderInfo>();
         _dataList = new System.Collections.Generic.List<Conf.ColliderInfo>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JsonElement _ele in _buf.EnumerateArray())
         {
             Conf.ColliderInfo _v;
-            _v = Conf.ColliderInfo.DeserializeColliderInfo(_buf);
+            _v = Conf.ColliderInfo.DeserializeColliderInfo(_ele);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +35,6 @@ public partial class ColliderInfos
     public System.Collections.Generic.Dictionary<int, Conf.ColliderInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.ColliderInfo> DataList => _dataList;
 
-    public bool TryGetValue(int key, out Conf.ColliderInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.ColliderInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.ColliderInfo Get(int key) => _dataMap[key];
     public Conf.ColliderInfo this[int key] => _dataMap[key];

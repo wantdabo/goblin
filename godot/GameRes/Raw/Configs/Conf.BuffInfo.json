@@ -1,0 +1,15 @@
+[
+  {
+    "Id": 1000001,
+    "Name": "测试 Buff",
+    "EnchantMains": [
+      4,
+      6
+    ],
+    "EnchantScales": [
+      3,
+      500
+    ],
+    "Pipelines": []
+  }
+]

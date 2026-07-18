@@ -20,9 +20,19 @@ public class Location : Comp
         return engine.gameres.LoadRawFileSync(configpath + res + ".bytes");
     }
 
+    public string LoadConfigJson(string res)
+    {
+        return engine.gameres.LoadRawFileText(configpath + res + ".json");
+    }
+
     public async Task<byte[]> LoadConfigAsync(string res)
     {
         return await engine.gameres.LoadRawFileAsync(configpath + res + ".bytes");
+    }
+
+    public async Task<string> LoadConfigJsonAsync(string res)
+    {
+        return await engine.gameres.LoadRawFileTextAsync(configpath + res + ".json");
     }
 
     public byte[] LoadPipelineSync(string res)

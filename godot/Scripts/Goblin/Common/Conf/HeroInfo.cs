@@ -8,26 +8,25 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class HeroInfo : Luban.BeanBase
 {
-    public HeroInfo(ByteBuf _buf) 
+    public HeroInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Attribute = _buf.ReadInt();
-        Name = _buf.ReadString();
-        Model = _buf.ReadInt();
-        Collider = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Skills = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Skills.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SkillKeys = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); SkillKeys.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BornPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); BornPipelines.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DeathPipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); DeathPipelines.Add(_e0);}}
+        Id = _buf.GetProperty("Id").GetInt32();
+        Attribute = _buf.GetProperty("Attribute").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
+        Model = _buf.GetProperty("Model").GetInt32();
+        Collider = _buf.GetProperty("Collider").GetInt32();
+        { var __json0 = _buf.GetProperty("BornPipelines"); BornPipelines = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  BornPipelines.Add(__v0); }   }
+        { var __json0 = _buf.GetProperty("DeathPipelines"); DeathPipelines = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  DeathPipelines.Add(__v0); }   }
     }
 
-    public static HeroInfo DeserializeHeroInfo(ByteBuf _buf)
+    public static HeroInfo DeserializeHeroInfo(JsonElement _buf)
     {
         return new Conf.HeroInfo(_buf);
     }
@@ -53,14 +52,6 @@ public sealed partial class HeroInfo : Luban.BeanBase
     /// </summary>
     public readonly int Collider;
     /// <summary>
-    /// 技能列表
-    /// </summary>
-    public readonly System.Collections.Generic.List<int> Skills;
-    /// <summary>
-    /// 技能按键列表（与 Skills 一一对应）
-    /// </summary>
-    public readonly System.Collections.Generic.List<int> SkillKeys;
-    /// <summary>
     /// 出生管线
     /// </summary>
     public readonly System.Collections.Generic.List<int> BornPipelines;
@@ -84,8 +75,6 @@ public sealed partial class HeroInfo : Luban.BeanBase
         + "Name:" + Name + ","
         + "Model:" + Model + ","
         + "Collider:" + Collider + ","
-        + "Skills:" + Luban.StringUtil.CollectionToString(Skills) + ","
-        + "SkillKeys:" + Luban.StringUtil.CollectionToString(SkillKeys) + ","
         + "BornPipelines:" + Luban.StringUtil.CollectionToString(BornPipelines) + ","
         + "DeathPipelines:" + Luban.StringUtil.CollectionToString(DeathPipelines) + ","
         + "}";

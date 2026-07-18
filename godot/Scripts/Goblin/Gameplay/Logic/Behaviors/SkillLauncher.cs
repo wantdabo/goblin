@@ -34,7 +34,8 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     public void Launch(uint skill)
     {
         if (info.casting) return;
-        if (false == stage.cfg.location.SkillInfos.TryGetValue((int)skill, out var skillcfg)) return;
+        var skillcfg = stage.cfg.location.SkillInfos.GetOrDefault((int)skill);
+        if (null == skillcfg) return;
         if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 

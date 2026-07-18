@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 10010,
+    "Name": "剑-翻滚",
+    "Strength": 0,
+    "Cooldown": 500,
+    "Pipelines": [
+      10010
+    ]
+  },
+  {
+    "Id": 10020,
+    "Name": "剑-重击",
+    "Strength": 3000,
+    "Cooldown": 800,
+    "Pipelines": [
+      10020
+    ]
+  }
+]

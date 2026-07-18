@@ -8,21 +8,22 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class ColliderInfo : Luban.BeanBase
 {
-    public ColliderInfo(ByteBuf _buf) 
+    public ColliderInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Type = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Offset = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Offset.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Shape = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Shape.Add(_e0);}}
+        Id = _buf.GetProperty("Id").GetInt32();
+        Type = _buf.GetProperty("Type").GetInt32();
+        { var __json0 = _buf.GetProperty("Offset"); Offset = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Offset.Add(__v0); }   }
+        { var __json0 = _buf.GetProperty("Shape"); Shape = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Shape.Add(__v0); }   }
     }
 
-    public static ColliderInfo DeserializeColliderInfo(ByteBuf _buf)
+    public static ColliderInfo DeserializeColliderInfo(JsonElement _buf)
     {
         return new Conf.ColliderInfo(_buf);
     }

@@ -8,19 +8,20 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class PipelineInfo : Luban.BeanBase
 {
-    public PipelineInfo(ByteBuf _buf) 
+    public PipelineInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Name = _buf.ReadString();
+        Id = _buf.GetProperty("Id").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
     }
 
-    public static PipelineInfo DeserializePipelineInfo(ByteBuf _buf)
+    public static PipelineInfo DeserializePipelineInfo(JsonElement _buf)
     {
         return new Conf.PipelineInfo(_buf);
     }

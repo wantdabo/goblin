@@ -8,22 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class AttributeInfo : Luban.BeanBase
 {
-    public AttributeInfo(ByteBuf _buf) 
+    public AttributeInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        HP = _buf.ReadInt();
-        MaxHP = _buf.ReadInt();
-        MoveSpeed = _buf.ReadInt();
-        Attack = _buf.ReadInt();
+        Id = _buf.GetProperty("Id").GetInt32();
+        HP = _buf.GetProperty("HP").GetInt32();
+        MaxHP = _buf.GetProperty("MaxHP").GetInt32();
+        MoveSpeed = _buf.GetProperty("MoveSpeed").GetInt32();
+        Attack = _buf.GetProperty("Attack").GetInt32();
     }
 
-    public static AttributeInfo DeserializeAttributeInfo(ByteBuf _buf)
+    public static AttributeInfo DeserializeAttributeInfo(JsonElement _buf)
     {
         return new Conf.AttributeInfo(_buf);
     }

@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
@@ -17,15 +18,15 @@ public partial class HeroInfos
     private readonly System.Collections.Generic.Dictionary<int, Conf.HeroInfo> _dataMap;
     private readonly System.Collections.Generic.List<Conf.HeroInfo> _dataList;
     
-    public HeroInfos(ByteBuf _buf)
+    public HeroInfos(JsonElement _buf)
     {
         _dataMap = new System.Collections.Generic.Dictionary<int, Conf.HeroInfo>();
         _dataList = new System.Collections.Generic.List<Conf.HeroInfo>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JsonElement _ele in _buf.EnumerateArray())
         {
             Conf.HeroInfo _v;
-            _v = Conf.HeroInfo.DeserializeHeroInfo(_buf);
+            _v = Conf.HeroInfo.DeserializeHeroInfo(_ele);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +35,6 @@ public partial class HeroInfos
     public System.Collections.Generic.Dictionary<int, Conf.HeroInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.HeroInfo> DataList => _dataList;
 
-    public bool TryGetValue(int key, out Conf.HeroInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.HeroInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.HeroInfo Get(int key) => _dataMap[key];
     public Conf.HeroInfo this[int key] => _dataMap[key];

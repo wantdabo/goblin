@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' or '$(Configuration)' == 'ExportDebug' ">
+    <DefineConstants>DEV</DefineConstants>
+  </PropertyGroup>
+</Project>

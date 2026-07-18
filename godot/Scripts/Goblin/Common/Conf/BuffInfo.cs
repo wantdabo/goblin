@@ -8,22 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class BuffInfo : Luban.BeanBase
 {
-    public BuffInfo(ByteBuf _buf) 
+    public BuffInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Name = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EnchantMains = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); EnchantMains.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EnchantScales = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); EnchantScales.Add(_e0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Pipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Pipelines.Add(_e0);}}
+        Id = _buf.GetProperty("Id").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
+        { var __json0 = _buf.GetProperty("EnchantMains"); EnchantMains = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  EnchantMains.Add(__v0); }   }
+        { var __json0 = _buf.GetProperty("EnchantScales"); EnchantScales = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  EnchantScales.Add(__v0); }   }
+        { var __json0 = _buf.GetProperty("Pipelines"); Pipelines = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Pipelines.Add(__v0); }   }
     }
 
-    public static BuffInfo DeserializeBuffInfo(ByteBuf _buf)
+    public static BuffInfo DeserializeBuffInfo(JsonElement _buf)
     {
         return new Conf.BuffInfo(_buf);
     }

@@ -8,22 +8,23 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class SkillInfo : Luban.BeanBase
 {
-    public SkillInfo(ByteBuf _buf) 
+    public SkillInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Name = _buf.ReadString();
-        Strength = _buf.ReadInt();
-        Cooldown = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Pipelines = new System.Collections.Generic.List<int>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { int _e0;  _e0 = _buf.ReadInt(); Pipelines.Add(_e0);}}
+        Id = _buf.GetProperty("Id").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
+        Strength = _buf.GetProperty("Strength").GetInt32();
+        Cooldown = _buf.GetProperty("Cooldown").GetInt32();
+        { var __json0 = _buf.GetProperty("Pipelines"); Pipelines = new System.Collections.Generic.List<int>(__json0.GetArrayLength()); foreach(JsonElement __e0 in __json0.EnumerateArray()) { int __v0;  __v0 = __e0.GetInt32();  Pipelines.Add(__v0); }   }
     }
 
-    public static SkillInfo DeserializeSkillInfo(ByteBuf _buf)
+    public static SkillInfo DeserializeSkillInfo(JsonElement _buf)
     {
         return new Conf.SkillInfo(_buf);
     }

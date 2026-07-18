@@ -8,25 +8,11 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Collections.Generic;
+using System.Text.Json;
 
 
 public partial class Tables
 {
-    public static List<string> tables { get; private set; } = new()
-    {
-        "Conf.ItemInfo",
-        "Conf.AttributeInfo",
-        "Conf.ModelInfo",
-        "Conf.HeroInfo",
-        "Conf.ColliderInfo",
-        "Conf.SkillInfo",
-        "Conf.BuffInfo",
-        "Conf.PipelineInfo",
-        "Conf.EffectInfo",
-        "Conf.EnemyInfo",
-    };
-
     public Conf.ItemInfos ItemInfos {get; }
     public Conf.AttributeInfos AttributeInfos {get; }
     public Conf.ModelInfos ModelInfos {get; }
@@ -38,7 +24,7 @@ public partial class Tables
     public Conf.EffectInfos EffectInfos {get; }
     public Conf.EnemyInfos EnemyInfos {get; }
 
-    public Tables(System.Func<string, ByteBuf> loader)
+    public Tables(System.Func<string, JsonElement> loader)
     {
         ItemInfos = new Conf.ItemInfos(loader("Conf.ItemInfo"));
         AttributeInfos = new Conf.AttributeInfos(loader("Conf.AttributeInfo"));

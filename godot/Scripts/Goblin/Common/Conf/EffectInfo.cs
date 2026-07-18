@@ -8,21 +8,22 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
 {
 public sealed partial class EffectInfo : Luban.BeanBase
 {
-    public EffectInfo(ByteBuf _buf) 
+    public EffectInfo(JsonElement _buf) 
     {
-        Id = _buf.ReadInt();
-        Name = _buf.ReadString();
-        Res = _buf.ReadString();
-        Duration = _buf.ReadInt();
+        Id = _buf.GetProperty("Id").GetInt32();
+        Name = _buf.GetProperty("Name").GetString();
+        Res = _buf.GetProperty("Res").GetString();
+        Duration = _buf.GetProperty("Duration").GetInt32();
     }
 
-    public static EffectInfo DeserializeEffectInfo(ByteBuf _buf)
+    public static EffectInfo DeserializeEffectInfo(JsonElement _buf)
     {
         return new Conf.EffectInfo(_buf);
     }

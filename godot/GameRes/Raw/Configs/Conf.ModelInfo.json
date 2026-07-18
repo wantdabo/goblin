@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 100001,
+    "Res": "Hero/Ya",
+    "Animation": "100001",
+    "Type": "glb",
+    "Mesh": "",
+    "Size": [],
+    "Color": []
+  },
+  {
+    "Id": 200001,
+    "Res": "",
+    "Animation": "",
+    "Type": "primitive",
+    "Mesh": "box",
+    "Size": [
+      800,
+      1600,
+      800
+    ],
+    "Color": [
+      255,
+      140,
+      0,
+      255
+    ]
+  },
+  {
+    "Id": 200002,
+    "Res": "Hero/CubeBlue",
+    "Animation": "",
+    "Type": "primitive",
+    "Mesh": "box",
+    "Size": [
+      800,
+      1600,
+      800
+    ],
+    "Color": [
+      50,
+      128,
+      255,
+      255
+    ]
+  }
+]

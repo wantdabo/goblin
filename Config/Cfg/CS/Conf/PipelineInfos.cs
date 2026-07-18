@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using Luban;
+using System.Text.Json;
 
 
 namespace Conf
@@ -17,15 +18,15 @@ public partial class PipelineInfos
     private readonly System.Collections.Generic.Dictionary<int, Conf.PipelineInfo> _dataMap;
     private readonly System.Collections.Generic.List<Conf.PipelineInfo> _dataList;
     
-    public PipelineInfos(ByteBuf _buf)
+    public PipelineInfos(JsonElement _buf)
     {
         _dataMap = new System.Collections.Generic.Dictionary<int, Conf.PipelineInfo>();
         _dataList = new System.Collections.Generic.List<Conf.PipelineInfo>();
         
-        for(int n = _buf.ReadSize() ; n > 0 ; --n)
+        foreach(JsonElement _ele in _buf.EnumerateArray())
         {
             Conf.PipelineInfo _v;
-            _v = Conf.PipelineInfo.DeserializePipelineInfo(_buf);
+            _v = Conf.PipelineInfo.DeserializePipelineInfo(_ele);
             _dataList.Add(_v);
             _dataMap.Add(_v.Id, _v);
         }
@@ -34,7 +35,6 @@ public partial class PipelineInfos
     public System.Collections.Generic.Dictionary<int, Conf.PipelineInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.PipelineInfo> DataList => _dataList;
 
-    public bool TryGetValue(int key, out Conf.PipelineInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.PipelineInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.PipelineInfo Get(int key) => _dataMap[key];
     public Conf.PipelineInfo this[int key] => _dataMap[key];
