@@ -163,9 +163,9 @@ Spark → ET_FLOW_HIT → foreach(target) Do(target.actor)
 
 **修法**: 记录 `lastCompletedIndex`，跳过已结束的指令。
 
-## 四、ET_FLOW_HIT — 设计矛盾与解决方案
+## 四、ET_FLOW_HIT — 设计矛盾（已修复）
 
-### 矛盾
+### 矛盾（回顾）
 
 `CheckCondition` 放在 `RunPipeline` 里——它不知道 targets 是谁。而 `ExecuteInstruct` 知道 targets（通过 `data.et`），但它是个调度器，不该管条件。
 
@@ -176,40 +176,25 @@ ExecuteInstruct:        foreach target in targets → 知道 target，但条件�
 
 ET_FLOW 和 ET_FLOW_OWNER 只有一个 target，矛盾不显现。ET_FLOW_HIT 有 N 个 target，每个 target 可能需要不同条件——比如"只伤害敌方"需要查 target 的阵营。这种 per-target 条件只能在 ExecuteInstruct 内部查，因为只有它知道 targets。
 
-所以 `// HACKER` 不是冗余代码——它是在没有更好架构的情况下，正确放置的逻辑。问题是它让 `ExecuteInstruct` 有了双重职责。
+### 修复方案（已落地，2026-07-19 确认）
 
-### 当前 CheckCondition 局限
+四步全部已实现，以下为当前实际代码签名：
 
+**Step 1** ✅ `CheckCondition` 已有 `ulong target` 参数（`Flow.cs:387`）：
 ```csharp
-bool CheckCondition(InstructData data, List<Condition> conditions, FlowInfo flowinfo)
-//                                                                    ^^^^^^^^  没有 target
+private bool CheckCondition(InstructData data, List<Condition> conditions, FlowInfo flowinfo, ulong target)
 ```
 
-`InputChecker` 读的是 `flowinfo.owner` 的 Gamepad——与 target 无关。今天 per-target 条件不存在，但设计需要支持。
-
-### 方案：CheckCondition 加 target 参数
-
+**Step 2** ✅ `Checker.Check` 已有 `ulong target` 参数（`Checker.cs:44`）：
 ```csharp
-// Step 1: CheckCondition 增加 target 参数
-private bool CheckCondition(InstructData data, List<Condition> conditions,
-    FlowInfo flowinfo, ulong target)
-{
-    foreach (var condition in conditions)
-    {
-        if (false == checkers.TryGetValue(condition.id, out var checker))
-            throw new Exception($"id : {condition.id} cannot find checker.");
-        if (false == checker.Check(condition, flowinfo, target)) return false;
-    }
-    return true;
-}
-
-// Step 2: Checker 接口加 target（默认值 0，现有 Checker 不受影响）
 public abstract class Checker
 {
-    public abstract bool Check(Condition condition, FlowInfo flowinfo, ulong target = 0);
+    public abstract bool Check(Condition condition, FlowInfo flowinfo, ulong target);
 }
+```
 
-// Step 3: ExecuteInstruct 中 ET_FLOW_HIT 改为 per-target 检查
+**Step 3** ✅ `ExecuteInstruct` 中 ET_FLOW_HIT 已 per-target 检查（`Flow.cs:439-446`）：
+```csharp
 case FLOW_DEFINE.ET_FLOW_HIT:
     if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
     foreach (var target in flowcollision.targets)
@@ -220,21 +205,9 @@ case FLOW_DEFINE.ET_FLOW_HIT:
         Do(target.actor);
     }
     break;
-
-// Step 4: RunPipeline 调用 CheckCondition 时传 flowinfo.actor（行为不变）
-if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo, flowinfo.actor))
 ```
 
-### 两阶段落地
-
-**现在**：
-- 加 `target` 参数到 `CheckCondition` 和 `Checker.Check`（默认值 0）
-- 现有 Checker 不读 target，行为不变
-- `// HACKER` 注释去掉——per-target checking 是正确的架构
-
-**以后**：
-- 实现"只伤害敌方"Condition 时，Checker.ReadCondition(target) 读 target 的阵营
-- per-target 过滤自然生效
+**Step 4** ✅ RunPipeline/Spark/InsideNotExeToExecute 三处调用均传 `flowinfo.owner`（行为不变）。
 
 ### 遗留问题
 
@@ -249,5 +222,5 @@ RunPipeline 外层也调了 `CheckCondition`（对所有 ET 类型）。ET_FLOW_
 | 条件失败→重试 | ✅ | 双缓冲正确，最多丢失一个 Tick |
 | EndPipeline 清理 | ✅ | 先拷贝再遍历，安全 |
 | Spark 跨管线 | ✅ | 再入可控，doings 净效果为零 |
-| ET_FLOW_HIT | ⚠️ | CheckCondition 缺 target 参数，加后 HACKER 变正确架构(§四) |
+| ET_FLOW_HIT | ✅ | per-target 条件检查已落地(§四) |
 | 递归保护 | ⚠️ | 无上限，实际可控 |

@@ -14,12 +14,12 @@
 ### TODO
 - Gameplay 战斗模块
   - 2026-01-01
-    - 死亡流程 ⭐
-    - 状态机重新梳理完善 ⭐
-    - Flow 支持事件执行 ⭐
-    - Flow 支持事件派发 ⭐
-    - 顿帧 ⭐
-    - 受击效果 ⭐
+    - 死亡流程 ✅
+    - 状态机重新梳理完善 ✅
+    - Flow 支持事件执行 ✅
+    - Flow 支持事件派发 ✅
+    - 顿帧 ✅
+    - 受击效果 ✅
     - 音效支持
     - Pipeline.Timeline 处理无 Model 也需要支持 TRS, 引入 Vector3/Quaternion/float
     - AddBehaviorInfo/AddBehavior 存在差一帧时序问题 ✅ 已修复
