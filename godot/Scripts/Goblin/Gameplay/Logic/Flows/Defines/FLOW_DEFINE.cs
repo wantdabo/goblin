@@ -47,4 +47,9 @@ public class FLOW_DEFINE
     /// 脚本 ID 10030 — 重击
     /// </summary>
     public const uint S10030 = 10030;
+
+    /// <summary>
+    /// 指令条件不满足重试递归上限
+    /// </summary>
+    public const int MAX_INSIDE_NOTEXE_DEPTH = 10;
 }

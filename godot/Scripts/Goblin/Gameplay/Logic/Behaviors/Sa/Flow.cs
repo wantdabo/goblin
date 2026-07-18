@@ -61,12 +61,22 @@ public class Flow : Behavior
     /// 指令执行器字典
     /// </summary>
     private Dictionary<Type, Executor> executordict { get; set; }
+    /// <summary>
+    /// 火花索引（token → pipelineid → SparkInstruct 列表）
+    /// </summary>
+    private Dictionary<string, Dictionary<uint, List<SparkInstruct>>> sparkindex { get; set; }
+    /// <summary>
+    /// 已索引的管线 ID 集合
+    /// </summary>
+    private HashSet<uint> indexedpipelines { get; set; }
 
     protected override void OnAssemble()
     {
         base.OnAssemble();
         insidenotexebacks = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
         insidenotexefronts = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
+        sparkindex = ObjectCache.Ensure<Dictionary<string, Dictionary<uint, List<SparkInstruct>>>>();
+        indexedpipelines = ObjectCache.Ensure<HashSet<uint>>();
         Checkers();
         Executors();
     }
@@ -80,6 +90,21 @@ public class Flow : Behavior
         insidenotexefronts.Clear();
         ObjectCache.Set(insidenotexefronts);
             
+        foreach (var kv in sparkindex)
+        {
+            foreach (var list in kv.Value.Values)
+            {
+                list.Clear();
+                ObjectCache.Set(list);
+            }
+            kv.Value.Clear();
+            ObjectCache.Set(kv.Value);
+        }
+        sparkindex.Clear();
+        ObjectCache.Set(sparkindex);
+        indexedpipelines.Clear();
+        ObjectCache.Set(indexedpipelines);
+
         foreach (var kv in checkers)
         {
             kv.Value.Unload();
@@ -209,26 +234,49 @@ public class Flow : Behavior
         {
             if (false == flowinfo.active) continue;
             if (false == stage.cache.Valid(flowinfo.owner)) continue;
-                
-            // TODO : 优化查找
-            foreach (var pipeline in flowinfo.pipelines)
+
+            foreach (var pipelineid in flowinfo.pipelines)
             {
-                var data = PipelineDataReader.Read(pipeline);
-                if (null == data) continue;
-                for (int i = 0; i < data.sparkinstructs.Count; i++)
+                if (false == indexedpipelines.Contains(pipelineid))
                 {
-                    var instruct = data.sparkinstructs[i];
-                    if (instruct.token != token) continue;
+                    var data = PipelineDataReader.Read(pipelineid);
+                    if (null != data) IndexPipeline(pipelineid, data);
+                    indexedpipelines.Add(pipelineid);
+                }
+                if (false == sparkindex.TryGetValue(token, out var pipelinemap)) continue;
+                if (false == pipelinemap.TryGetValue(pipelineid, out var instructs)) continue;
+
+                var curdata = PipelineDataReader.Read(pipelineid);
+                for (int i = 0; i < instructs.Count; i++)
+                {
+                    var instruct = instructs[i];
                     if (SPARK_INSTR_DEFINE.FLOW == instruct.influence && flowinfo.actor != actor) continue;
                     if (SPARK_INSTR_DEFINE.FLOW_OWNER == instruct.influence && flowinfo.owner != actor) continue;
-                        
+
                     if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo, flowinfo.owner)) continue;
-                    uint index = (uint)data.instructs.Count + (uint)i + 2;
-                    ExecuteInstruct(ExecuteInstructType.Enter, pipeline, index, instruct.data, instruct.conditions, flowinfo);
-                    ExecuteInstruct(ExecuteInstructType.Execute, pipeline, index, instruct.data, instruct.conditions,flowinfo);
-                    ExecuteInstruct(ExecuteInstructType.Exit, pipeline, index, instruct.data, instruct.conditions,flowinfo);
+                    uint index = (uint)curdata.instructs.Count + (uint)i + 2;
+                    ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
+                    ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// 索引管线的火花指令
+    /// </summary>
+    /// <param name="pipelineid">管线 ID</param>
+    /// <param name="data">管线数据</param>
+    private void IndexPipeline(uint pipelineid, PipelineData data)
+    {
+        foreach (var instruct in data.sparkinstructs)
+        {
+            if (false == sparkindex.TryGetValue(instruct.token, out var pipelinemap))
+                sparkindex.Add(instruct.token, pipelinemap = ObjectCache.Ensure<Dictionary<uint, List<SparkInstruct>>>());
+            if (false == pipelinemap.TryGetValue(pipelineid, out var list))
+                pipelinemap.Add(pipelineid, list = ObjectCache.Ensure<List<SparkInstruct>>());
+            list.Add(instruct);
         }
     }
 
@@ -259,19 +307,27 @@ public class Flow : Behavior
             // 未找到改时间线可以执行的指令
             if (null == data || 0 == data.instructs.Count) continue;
 
+            flowinfo.completedindex.TryGetValue(pipelineid, out var lastcompleted);
             uint index = 0;
             foreach (var instruct in data.instructs)
             {
                 index++;
                 if (false == flowinfo.active) continue;
+                if (index <= lastcompleted) continue;
                 if (instruct.begin > flowinfo.timeline) break;
-                    
+                if (instruct.end < flowinfo.timeline)
+                {
+                    // 仅连续推进，防止跳过仍在活跃的指令
+                    if (index == lastcompleted + 1) flowinfo.completedindex[pipelineid] = index;
+                    continue;
+                }
+
                 flowinfo.doings.TryGetValue(pipelineid, out var indexes);
                 // 管线已经进入, 正在运行中
                 var isdoing = null != indexes && indexes.Contains(index);
                 // 在时间区间内
                 var inside = instruct.begin <= flowinfo.timeline && instruct.end >= flowinfo.timeline;
-                    
+
                 // 如果不在时间区间内则退出
                 if (false == inside)
                 {
@@ -358,8 +414,9 @@ public class Flow : Behavior
     /// <summary>
     /// 处理管线内未满足条件的指令
     /// </summary>
-    private void InsideNotExeToExecute()
+    private void InsideNotExeToExecute(int depth = 0)
     {
+        if (FLOW_DEFINE.MAX_INSIDE_NOTEXE_DEPTH <= depth) return;
         (insidenotexefronts, insidenotexebacks) = (insidenotexebacks, insidenotexefronts);
         foreach (var notexe in insidenotexefronts)
         {
@@ -369,7 +426,7 @@ public class Flow : Behavior
             ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions,notexe.flowinfo);
         }
         insidenotexefronts.Clear();
-        if (0 != insidenotexebacks.Count) InsideNotExeToExecute();
+        if (0 != insidenotexebacks.Count) InsideNotExeToExecute(depth + 1);
     }
 
     /// <summary>

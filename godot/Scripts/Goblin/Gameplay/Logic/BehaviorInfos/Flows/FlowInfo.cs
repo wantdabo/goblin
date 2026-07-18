@@ -33,7 +33,12 @@ public class FlowInfo : BehaviorInfo
     /// 管线的执行中 ID 集合, 用于触发管线生命周期
     /// </summary>
     public Dictionary<uint, List<uint>> doings { get; set; }
-        
+    /// <summary>
+    /// 各管线已完成的指令索引（pipelineid → 最后一条 end ＜ timeline 的 index）
+    /// 用于 RunPipeline 跳过已过期指令，避免每帧全量扫描
+    /// </summary>
+    public Dictionary<uint, uint> completedindex { get; set; }
+
     protected override void OnReady()
     {
         active = false;
@@ -43,6 +48,7 @@ public class FlowInfo : BehaviorInfo
         framepass = 0;
         pipelines = ObjectCache.Ensure<List<uint>>();
         doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
+        completedindex = ObjectCache.Ensure<Dictionary<uint, uint>>();
     }
 
     protected override void OnReset()
@@ -61,6 +67,8 @@ public class FlowInfo : BehaviorInfo
         }
         doings.Clear();
         ObjectCache.Set(doings);
+        completedindex.Clear();
+        ObjectCache.Set(completedindex);
     }
 
     protected override BehaviorInfo OnClone()
@@ -79,6 +87,7 @@ public class FlowInfo : BehaviorInfo
             list.AddRange(doing.Value);
             clone.doings.Add(doing.Key, list);
         }
+        foreach (var kv in completedindex) clone.completedindex.Add(kv.Key, kv.Value);
 
         return clone;
     }

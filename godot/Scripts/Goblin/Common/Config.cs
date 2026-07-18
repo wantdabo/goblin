@@ -1,7 +1,5 @@
 ﻿using Goblin.Core;
 using Luban;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Goblin.Common;
 
@@ -24,24 +22,10 @@ public class Config : Comp
     /// 整型转浮点的乘法系数（1000 表示 1）
     /// </summary>
     public const float Int2Float = 0.001f;
-        
-#if GODOT_WEB
-        private Dictionary<string, byte[]> cfgbytes = new();
-        protected override async void OnCreate()
-        {
-            base.OnCreate();
-            foreach (string cfgname in Tables.tables)
-            {
-                var bytes = await engine.gameres.location.LoadConfigAsync(cfgname);
-                cfgbytes.Add(cfgname, bytes);
-            }
-            location = new Tables((cfgName) => new ByteBuf(cfgbytes.GetValueOrDefault(cfgName)));
-        }
-#else
+
     protected override void OnCreate()
     {
         base.OnCreate();
         location = new Tables((cfgName) => new ByteBuf(engine.gameres.location.LoadConfigSync(cfgName)));
     }
-#endif
 }
