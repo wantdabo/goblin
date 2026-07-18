@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
@@ -19,9 +20,7 @@ public class Magic : Behavior
 
     private void Execute(MagicInfo magic)
     {
-        if (false == stage.flow.CheckFlowActive(magic.flow))
-        {
-            stage.RmvActor(magic.actor);
-        }
+        if (stage.SeekBehaviorInfo(magic.flow, out FlowInfo flowinfo) && flowinfo.active) return;
+        stage.RmvActor(magic.actor);
     }
 }
