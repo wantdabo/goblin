@@ -4,6 +4,10 @@
     "HP": 1000,
     "MaxHP": 1000,
     "MoveSpeed": 5,
-    "Attack": 25
+    "Attack": 25,
+    "Armor": 0,
+    "MagicResist": 0,
+    "CritRate": 0,
+    "DodgeRate": 0
   }
 ]

@@ -48,7 +48,11 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MAXHP, attrbfg.MaxHP);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED, attrbfg.MoveSpeed);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK, attrbfg.Attack);
-
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.ARMOR, attrbfg.Armor);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MAGIC_RESIST, attrbfg.MagicResist);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.CRIT_RATE, attrbfg.CritRate);
+        stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.DODGE_RATE, attrbfg.DodgeRate);
+        
         var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
         spatial.position = info.spatial.position;
         spatial.euler = info.spatial.euler;

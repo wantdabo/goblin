@@ -38,7 +38,7 @@ public class RandomInfo : BehaviorInfo
     {
         a = 1664525;
         c = 1013904223;
-        m = int.MaxValue;
+        m = 4294967296; // 2^32，标准 LCG 模数
         seed = 0;
         current = 0;
     }

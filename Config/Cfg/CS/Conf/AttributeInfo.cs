@@ -22,6 +22,10 @@ public sealed partial class AttributeInfo : Luban.BeanBase
         MaxHP = _buf.GetProperty("MaxHP").GetInt32();
         MoveSpeed = _buf.GetProperty("MoveSpeed").GetInt32();
         Attack = _buf.GetProperty("Attack").GetInt32();
+        Armor = _buf.TryGetProperty("Armor", out var _armor) ? _armor.GetInt32() : 0;
+        MagicResist = _buf.TryGetProperty("MagicResist", out var _magicresist) ? _magicresist.GetInt32() : 0;
+        CritRate = _buf.TryGetProperty("CritRate", out var _critrate) ? _critrate.GetInt32() : 0;
+        DodgeRate = _buf.TryGetProperty("DodgeRate", out var _dodgerate) ? _dodgerate.GetInt32() : 0;
     }
 
     public static AttributeInfo DeserializeAttributeInfo(JsonElement _buf)
@@ -49,6 +53,22 @@ public sealed partial class AttributeInfo : Luban.BeanBase
     /// 攻击力
     /// </summary>
     public readonly int Attack;
+    /// <summary>
+    /// 护甲
+    /// </summary>
+    public readonly int Armor;
+    /// <summary>
+    /// 魔法抗性
+    /// </summary>
+    public readonly int MagicResist;
+    /// <summary>
+    /// 暴击率（千分比）
+    /// </summary>
+    public readonly int CritRate;
+    /// <summary>
+    /// 闪避率（千分比）
+    /// </summary>
+    public readonly int DodgeRate;
    
     public const int __ID__ = -1794876384;
     public override int GetTypeId() => __ID__;
@@ -65,6 +85,10 @@ public sealed partial class AttributeInfo : Luban.BeanBase
         + "MaxHP:" + MaxHP + ","
         + "MoveSpeed:" + MoveSpeed + ","
         + "Attack:" + Attack + ","
+        + "Armor:" + Armor + ","
+        + "MagicResist:" + MagicResist + ","
+        + "CritRate:" + CritRate + ","
+        + "DodgeRate:" + DodgeRate + ","
         + "}";
     }
 }

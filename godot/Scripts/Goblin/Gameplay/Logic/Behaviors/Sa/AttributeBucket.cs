@@ -16,6 +16,7 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa;
 public struct DamageInfo
 {
     public bool crit { get; set; }
+    public bool magic { get; set; }
     public int value { get; set; }
 }
 
@@ -111,16 +112,35 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
     {
         if (false == info.attributes.ContainsKey(actor)) return default;
 
+        // 暴击判定（千分比，如 200 = 20%）
+        var critrate = GetAttributeValue(actor, ATTRIBUTE_DEFINE.CRIT_RATE);
+        var crit = critrate > 0 && stage.random.Range(0, 1000) < critrate;
+
         return new DamageInfo
         {
-            crit = false,
+            crit = crit,
             value = FP.ToInt(strength * GetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK))
         };
     }
 
     public DamageInfo DischargeDamage(ulong actor, DamageInfo damage)
     {
-        // TODO 抗性计算，例如护甲、魔法、暴击、闪避
+        if (false == info.attributes.ContainsKey(actor)) return damage;
+
+        // 闪避判定（千分比，如 200 = 20%）
+        var dodgerate = GetAttributeValue(actor, ATTRIBUTE_DEFINE.DODGE_RATE);
+        if (dodgerate > 0 && stage.random.Range(0, 1000) < dodgerate)
+        {
+            damage.value = 0;
+            return damage;
+        }
+
+        // 减伤：物理用护甲，魔法用魔抗（固定值减伤）
+        var resist = damage.magic
+            ? GetAttributeValue(actor, ATTRIBUTE_DEFINE.MAGIC_RESIST)
+            : GetAttributeValue(actor, ATTRIBUTE_DEFINE.ARMOR);
+        damage.value = Math.Max(0, damage.value - resist);
+
         return damage;
     }
 
