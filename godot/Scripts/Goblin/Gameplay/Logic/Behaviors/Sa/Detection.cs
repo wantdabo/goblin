@@ -749,8 +749,7 @@ public class Detection : Behavior
     /// <param name="id">碰撞盒配置 ID</param>
     public void SetColliderInfo(ColliderInfo collider, int id)
     {
-        var collidercfg = stage.cfg.location.ColliderInfos.GetOrDefault(id);
-        if (null == collidercfg) return;
+        if (false == stage.cfg.location.ColliderInfos.TryGetValue(id, out var collidercfg)) return;
             
         switch (collidercfg.Type)
         {

@@ -35,6 +35,7 @@ public partial class PipelineInfos
     public System.Collections.Generic.Dictionary<int, Conf.PipelineInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.PipelineInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.PipelineInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.PipelineInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.PipelineInfo Get(int key) => _dataMap[key];
     public Conf.PipelineInfo this[int key] => _dataMap[key];

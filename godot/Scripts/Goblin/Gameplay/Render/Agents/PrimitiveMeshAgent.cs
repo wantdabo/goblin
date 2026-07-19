@@ -71,8 +71,7 @@ public class PrimitiveMeshAgent : Agent
 
         RecycleMesh();
         model = facademodel.model;
-        var modelinfo = world.engine.cfg.location.ModelInfos.GetOrDefault(facademodel.model);
-        if (null == modelinfo) return;
+        if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
 
         var size = ReadSize(modelinfo.Size);
         var color = ReadColor(modelinfo.Color);

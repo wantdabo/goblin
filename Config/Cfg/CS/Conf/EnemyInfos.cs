@@ -35,6 +35,7 @@ public partial class EnemyInfos
     public System.Collections.Generic.Dictionary<int, Conf.EnemyInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.EnemyInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.EnemyInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.EnemyInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.EnemyInfo Get(int key) => _dataMap[key];
     public Conf.EnemyInfo this[int key] => _dataMap[key];

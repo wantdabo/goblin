@@ -35,6 +35,7 @@ public partial class EffectInfos
     public System.Collections.Generic.Dictionary<int, Conf.EffectInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.EffectInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.EffectInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.EffectInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.EffectInfo Get(int key) => _dataMap[key];
     public Conf.EffectInfo this[int key] => _dataMap[key];

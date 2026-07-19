@@ -44,8 +44,7 @@ public class AnimationAgent : Agent
     private void RILConv2AnimData(RIL_FACADE_ANIMATION ril)
     {
         if (false == world.rilbucket.SeekRIL(ril.actor, out RIL_FACADE_MODEL facademodel) || 0 >= facademodel.model) return;
-        var modelinfo = world.engine.cfg.location.ModelInfos.GetOrDefault(facademodel.model);
-        if (null == modelinfo) return;
+        if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
 
         if (string.IsNullOrEmpty(cfgname) || !modelinfo.Animation.Equals(cfgname))
         {

@@ -31,10 +31,8 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
 
     protected override void OnProcessing(ulong actor, EnemyPrefabInfo info)
     {
-        var enemycfg = stage.cfg.location.EnemyInfos.GetOrDefault(info.enemy);
-        if (null == enemycfg) return;
-        var attrbfg = stage.cfg.location.AttributeInfos.GetOrDefault(enemycfg.Attribute);
-        if (null == attrbfg) return;
+        if (false == stage.cfg.location.EnemyInfos.TryGetValue(info.enemy, out var enemycfg)) return;
+        if (false == stage.cfg.location.AttributeInfos.TryGetValue(enemycfg.Attribute, out var attrbfg)) return;
 
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<Movement>(actor);

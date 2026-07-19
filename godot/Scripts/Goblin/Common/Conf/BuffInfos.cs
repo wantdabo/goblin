@@ -35,6 +35,7 @@ public partial class BuffInfos
     public System.Collections.Generic.Dictionary<int, Conf.BuffInfo> DataMap => _dataMap;
     public System.Collections.Generic.List<Conf.BuffInfo> DataList => _dataList;
 
+    public bool TryGetValue(int key, out Conf.BuffInfo value) => _dataMap.TryGetValue(key, out value);
     public Conf.BuffInfo GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
     public Conf.BuffInfo Get(int key) => _dataMap[key];
     public Conf.BuffInfo this[int key] => _dataMap[key];

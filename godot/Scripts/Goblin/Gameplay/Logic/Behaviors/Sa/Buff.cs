@@ -39,8 +39,7 @@ public class Buff : Behavior
     /// <param name="lifetime">Buff 生命周期</param>
     public void AddBuff(ulong owner, int buffid, int layer, FP lifetime)
     {
-        var buffcfg = stage.cfg.location.BuffInfos.GetOrDefault(buffid);
-        if (null == buffcfg) return;
+        if (false == stage.cfg.location.BuffInfos.TryGetValue(buffid, out var buffcfg)) return;
         if (false == stage.SeekBehaviorInfo(owner, out BuffBucketInfo buffbucket)) buffbucket = stage.AddBehaviorInfo<BuffBucketInfo>(owner);
             
         // 检查是否已经存在 Buff
@@ -101,7 +100,7 @@ public class Buff : Behavior
     /// <returns>Buff 信息</returns>
     public BuffInfo GetBuff(ulong owner, int buffid)
     {
-        if (null == stage.cfg.location.BuffInfos.GetOrDefault(buffid)) return default;
+        if (false == stage.cfg.location.BuffInfos.TryGetValue(buffid, out _)) return default;
 
         if (false == stage.SeekBehaviorInfo(owner, out BuffBucketInfo buffbucket)) return default;
         if (false == buffbucket.buffdict.TryGetValue(buffid, out var buff) || false == stage.SeekBehaviorInfo(buff, out BuffInfo buffinfo)) return default;
@@ -139,8 +138,7 @@ public class Buff : Behavior
     /// <param name="flag">标记 (TRUE 叠加/FALSE 移除)</param>
     private void EnchantToAttribute(ulong owner, BuffInfo buffinfo, bool flag)
     {
-        var buffcfg = stage.cfg.location.BuffInfos.GetOrDefault(buffinfo.buffid);
-        if (null == buffcfg) return;
+        if (false == stage.cfg.location.BuffInfos.TryGetValue(buffinfo.buffid, out var buffcfg)) return;
 
         for (int i = 0; i < buffcfg.EnchantMains.Count; i += 2)
         {

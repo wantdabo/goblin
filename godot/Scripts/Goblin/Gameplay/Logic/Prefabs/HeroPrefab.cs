@@ -31,10 +31,8 @@ public class HeroPrefab : Prefab<HeroPrefabInfo>
 
     protected override void OnProcessing(ulong actor, HeroPrefabInfo info)
     {
-        var herocfg = stage.cfg.location.HeroInfos.GetOrDefault(info.hero);
-        if (null == herocfg) return;
-        var attrbfg = stage.cfg.location.AttributeInfos.GetOrDefault(herocfg.Attribute);
-        if (null == attrbfg) return;
+        if (false == stage.cfg.location.HeroInfos.TryGetValue(info.hero, out var herocfg)) return;
+        if (false == stage.cfg.location.AttributeInfos.TryGetValue(herocfg.Attribute, out var attrbfg)) return;
 
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<Movement>(actor);

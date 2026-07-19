@@ -71,8 +71,7 @@ public class ModelAgent : Agent
 
         RecycleModel();
         model = facademodel.model;
-        var modelinfo = world.engine.cfg.location.ModelInfos.GetOrDefault(facademodel.model);
-        if (null == modelinfo) return;
+        if (false == world.engine.cfg.location.ModelInfos.TryGetValue(facademodel.model, out var modelinfo)) return;
         res = modelinfo.Res;
 
         node = ObjectPool.Get<Node3D>(res);

@@ -43,8 +43,7 @@ public class EffectAgent : Agent
     private void CreateEffect(EffectInfo info)
     {
         if (effects.ContainsKey(info.id)) return;
-        var effcfg = world.engine.cfg.location.EffectInfos.GetOrDefault(info.effect);
-        if (null == effcfg) return;
+        if (false == world.engine.cfg.location.EffectInfos.TryGetValue(info.effect, out var effcfg)) return;
 
         var controller = ObjectPool.Get<EffectController>(effcfg.Res);
         if (null == controller || !GodotObject.IsInstanceValid(controller.node))
@@ -69,8 +68,7 @@ public class EffectAgent : Agent
     {
         if (false == effects.TryGetValue(id, out var effect)) return;
         effects.Remove(id);
-        var effcfg = world.engine.cfg.location.EffectInfos.GetOrDefault(effect.info.effect);
-        if (null == effcfg) return;
+        if (false == world.engine.cfg.location.EffectInfos.TryGetValue(effect.info.effect, out var effcfg)) return;
         effect.controller.node.Visible = false;
         effect.controller.Reset();
         ObjectPool.Set(effect.controller, effcfg.Res);

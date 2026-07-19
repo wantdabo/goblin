@@ -15,8 +15,7 @@ public class ModelEnchant : AgentEnchant<RIL_FACADE_MODEL>
     {
         // 如果没有模型定义, 则回收全部模型代理
         if (ril.model <= 0) { RecycleAgent(ril.actor); return; }
-        var modelinfo = engine.cfg.location.ModelInfos.GetOrDefault(ril.model);
-        if (null == modelinfo) { RecycleAgent(ril.actor); return; }
+        if (false == engine.cfg.location.ModelInfos.TryGetValue(ril.model, out var modelinfo)) { RecycleAgent(ril.actor); return; }
 
         if ("primitive" == modelinfo.Type)
         {

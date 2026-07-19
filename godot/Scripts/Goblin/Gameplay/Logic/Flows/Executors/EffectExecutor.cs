@@ -32,8 +32,7 @@ public class EffectExecutor : Executor<EffectData>
                 duration = data.duration * FP.EN3;
                 break;
             case EFFECT_DEFINE.DURATION_USECFG:
-                var effectinfo = stage.cfg.location.EffectInfos.GetOrDefault(data.effect);
-                if (null != effectinfo) duration = effectinfo.Duration * FP.EN3;
+                if (stage.cfg.location.EffectInfos.TryGetValue(data.effect, out var effectinfo)) duration = effectinfo.Duration * FP.EN3;
                 break;
         }
 
