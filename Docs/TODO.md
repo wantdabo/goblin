@@ -23,9 +23,9 @@
 | 项目 | 说明 |
 |------|------|
 | ~~音效支持~~ ✅ | Sound 模块已实现（handle-based SFX API + SoundAgent + RIL 事件管线）|
-| 抗性计算 | 护甲 / 暴击 / 闪避 | `AttributeBucket.cs:123` |
+| ~~抗性计算~~ ✅ | 暴击 / 闪避 / 护甲 / 魔抗 + 伤害类型分支 | `AttributeBucket.cs` |
 | 受击动画独立状态机 | 当前耦合在 `ChangeStateExecutor` | `ChangeStateExecutor.cs:31` |
-| Pipeline.Timeline 无 Model 也支持 TRS | 引入 Vector3/Quaternion/float |
+| Godot Pipeline 可视化编辑器 | Scripting / Timeline / GraphNode 三种编辑方式并存，统一底层 Pipeline 数据结构。Scripting 手写管线，Timeline 编辑时间轴，GraphNode 编辑流程节点图 |
 
 ## 四、架构重构
 
@@ -37,7 +37,7 @@
 | RIL 合并 | 同 RIL 用最新帧号 |
 | 主观 RIL 传输 | 状态同步下缓存 + 主观推送 |
 | 穿透式目标查找规则 | 替代硬编码 ET 常量（如 ET_MAGIC_OWNER），用规则链动态解析目标，指令复用时不论上下文都能找到正确目标 |
-| CheckCondition 移入 ExecuteInstruct | 当前 CheckCondition 在 ExecuteInstruct 外部 switch 里调用，应移到 ExecuteInstruct 内部，统一目标解析后的校验入口 |
+| ~~CheckCondition 移入 ExecuteInstruct~~ ✅ | 已统一到 `ExecuteInstruct` 内部 |
 | 帧同步渲染层兼容两套 | 帧同步 / 状态同步双模式 |
 | GDScript 扩展 | Render 层脚本化（Logic 层只允许 int）|
 
