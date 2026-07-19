@@ -26,6 +26,10 @@ public class FLOW_DEFINE
     /// 执行目标 - 管线命中
     /// </summary>
     public const byte ET_FLOW_HIT = 3;
+    /// <summary>
+    /// 执行目标 - 魔法体拥有者（穿透 Magic 追溯到施法者）
+    /// </summary>
+    public const byte ET_MAGIC_OWNER = 4;
         
     /// <summary>
     /// 脚本 ID 10000 — 出生（切换到 IDLE）

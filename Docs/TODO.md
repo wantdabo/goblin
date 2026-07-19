@@ -36,7 +36,8 @@
 | Clone 自动化 | 所有 Behavior 自动深拷贝 |
 | RIL 合并 | 同 RIL 用最新帧号 |
 | 主观 RIL 传输 | 状态同步下缓存 + 主观推送 |
-| InstructData 调整 + Timeline 自适应 | 数据结构与时序适配 |
+| 穿透式目标查找规则 | 替代硬编码 ET 常量（如 ET_MAGIC_OWNER），用规则链动态解析目标，指令复用时不论上下文都能找到正确目标 |
+| CheckCondition 移入 ExecuteInstruct | 当前 CheckCondition 在 ExecuteInstruct 外部 switch 里调用，应移到 ExecuteInstruct 内部，统一目标解析后的校验入口 |
 | 帧同步渲染层兼容两套 | 帧同步 / 状态同步双模式 |
 | GDScript 扩展 | Render 层脚本化（Logic 层只允许 int）|
 

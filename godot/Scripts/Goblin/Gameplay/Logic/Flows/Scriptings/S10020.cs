@@ -29,6 +29,7 @@ public class S10020 : Scripting
 
 		Instruct(200, 500, new CollisionData
 		{
+			et = FLOW_DEFINE.ET_MAGIC_OWNER,
 			type = COLLISION_DEFINE.COLLISION_TYPE_HURT,
 			overlaptype = COLLISION_DEFINE.COLLISION_BOX,
 			count = 5,

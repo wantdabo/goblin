@@ -481,6 +481,14 @@ public class Flow : Behavior
             case FLOW_DEFINE.ET_FLOW_OWNER:
                 Do(flowinfo.owner);
                 break;
+            case FLOW_DEFINE.ET_MAGIC_OWNER:
+            {
+                var target = flowinfo.owner;
+                if (stage.SeekBehaviorInfo(target, out MagicInfo magic)) target = magic.owner;
+                if (type != ExecuteInstructType.Exit && false == CheckCondition(data, conditions, flowinfo, target)) break;
+                Do(target);
+                break;
+            }
             case FLOW_DEFINE.ET_FLOW_HIT:
                 if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
                 foreach (var target in flowcollision.targets)
