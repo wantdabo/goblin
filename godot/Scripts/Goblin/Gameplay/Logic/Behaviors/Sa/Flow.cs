@@ -241,9 +241,8 @@ public class Flow : Behavior
                     if (SPARK_INSTR_DEFINE.FLOW == instruct.influence && flowinfo.actor != actor) continue;
                     if (SPARK_INSTR_DEFINE.FLOW_OWNER == instruct.influence && flowinfo.owner != actor) continue;
 
-                    if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo, flowinfo.owner)) continue;
                     uint index = (uint)curdata.instructs.Count + (uint)i + 2;
-                    ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
+                    if (false == ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo)) continue;
                     ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                     ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                 }
@@ -330,14 +329,16 @@ public class Flow : Behavior
                 }
                     
                 // 指令进入 && 指令执行
-                if (false == CheckCondition(instruct.data, instruct.conditions, flowinfo, flowinfo.owner))
+                var entered = false;
+                if (false == isdoing) entered = ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
+
+                if (false == (entered || isdoing))
                 {
                     // 如果指令不满足条件, 则记录下来, 以便后续处理
                     insidenotexebacks.Add((pipelineid, index, instruct, flowinfo));
                     continue;
                 }
                     
-                if (false == isdoing) ExecuteInstruct(ExecuteInstructType.Enter, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
                 ExecuteInstruct(ExecuteInstructType.Execute, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
             }
         }
@@ -409,17 +410,13 @@ public class Flow : Behavior
         foreach (var notexe in insidenotexefronts)
         {
             if (false == notexe.flowinfo.active) continue;
-            if (false == CheckCondition(notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo, notexe.flowinfo.owner)) continue;
-            ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo);
-            ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions,notexe.flowinfo);
+            if (false == ExecuteInstruct(ExecuteInstructType.Enter, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo)) continue;
+            ExecuteInstruct(ExecuteInstructType.Execute, notexe.pipelineid, notexe.index, notexe.instruct.data, notexe.instruct.conditions, notexe.flowinfo);
         }
         insidenotexefronts.Clear();
         if (0 != insidenotexebacks.Count) InsideNotExeToExecute(depth + 1);
     }
 
-    /// <summary>
-    /// 检查指令条件
-    /// </summary>
     /// <summary>
     /// 检查指令条件
     /// </summary>
@@ -450,13 +447,18 @@ public class Flow : Behavior
     /// <param name="conditions">指令条件</param>
     /// <param name="flowinfo">管线信息</param>
     /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
-    private void ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, List<Condition> conditions, FlowInfo flowinfo)
+    /// <returns>是否至少有一个目标成功执行</returns>
+    private bool ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, List<Condition> conditions, FlowInfo flowinfo)
     {
         if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
         if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
 
+        var executed = false;
+
         void Do(ulong target)
         {
+            if (type != ExecuteInstructType.Exit && false == CheckCondition(data, conditions, flowinfo, target)) return;
+
             switch (type)
             {
                 case ExecuteInstructType.Enter:
@@ -471,6 +473,8 @@ public class Flow : Behavior
                     if (indexes.Contains(index)) indexes.Remove(index);
                     break;
             }
+
+            executed = true;
         }
             
         switch (data.et)
@@ -485,7 +489,6 @@ public class Flow : Behavior
             {
                 var target = flowinfo.owner;
                 if (stage.SeekBehaviorInfo(target, out MagicInfo magic)) target = magic.owner;
-                if (type != ExecuteInstructType.Exit && false == CheckCondition(data, conditions, flowinfo, target)) break;
                 Do(target);
                 break;
             }
@@ -493,11 +496,12 @@ public class Flow : Behavior
                 if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
                 foreach (var target in flowcollision.targets)
                 {
-                    if (ExecuteInstructType.Exit != type && false == CheckCondition(data, conditions, flowinfo, target.actor)) continue;
                     Do(target.actor);
                 }
                 break;
         }
+
+        return executed;
     }
 
     /// <summary>
