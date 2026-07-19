@@ -23,6 +23,7 @@ public partial class Tables
     public Conf.PipelineInfos PipelineInfos {get; }
     public Conf.EffectInfos EffectInfos {get; }
     public Conf.EnemyInfos EnemyInfos {get; }
+    public Conf.SoundInfos SoundInfos {get; }
 
     public Tables(System.Func<string, JsonElement> loader)
     {
@@ -36,6 +37,7 @@ public partial class Tables
         PipelineInfos = new Conf.PipelineInfos(loader("Conf.PipelineInfo"));
         EffectInfos = new Conf.EffectInfos(loader("Conf.EffectInfo"));
         EnemyInfos = new Conf.EnemyInfos(loader("Conf.EnemyInfo"));
+        SoundInfos = new Conf.SoundInfos(loader("Conf.SoundInfo"));
         ResolveRef();
     }
     
@@ -51,6 +53,7 @@ public partial class Tables
         PipelineInfos.ResolveRef(this);
         EffectInfos.ResolveRef(this);
         EnemyInfos.ResolveRef(this);
+        SoundInfos.ResolveRef(this);
     }
 }
 

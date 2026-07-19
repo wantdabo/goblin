@@ -3,6 +3,9 @@ using Godot;
 
 namespace Goblin.Common.Sounds;
 
+/// <summary>
+/// [已废弃] 逻辑已移入 Sound + SoundAgent
+/// </summary>
 public class SoundInfo : Comp
 {
     public string res { get; private set; }

@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1000001,
+    "Res": "roll.wav",
+    "Category": 0,
+    "DefaultVolume": 0.7
+  },
+  {
+    "Id": 1000002,
+    "Res": "heavy_attack.wav",
+    "Category": 0,
+    "DefaultVolume": 0.8
+  },
+  {
+    "Id": 2000001,
+    "Res": "bgm.wav",
+    "Category": 1,
+    "DefaultVolume": 1.0
+  }
+]

@@ -16,6 +16,11 @@ public class S10020 : Scripting
 
 	protected override void OnScript()
 	{
+		Instruct(0, 0, new SoundInstructData
+		{
+			soundid = 1000002,
+		});
+
 		ScriptMachine.Instruct(0, 600, new SpatialPositionData
 		{
 			type = SPATIAL_DEFINE.POSITION_SELF,

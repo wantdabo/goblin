@@ -65,4 +65,8 @@ public class INSTR_DEFINE
     /// 伤害结算指令
     /// </summary>
     public const ushort DAMAGE = 15;
+    /// <summary>
+    /// 音效指令
+    /// </summary>
+    public const ushort SOUND = 16;
 }

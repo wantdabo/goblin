@@ -75,6 +75,7 @@ public sealed class World : Comp
     private List<Agent> snapshotagents { get; set; }
 
     private Node3D worldroot { get; set; }
+    private Node3D soundroot { get; set; }
     private Node3D modelpool { get; set; }
     private DirectionalLight3D sunlight { get; set; }
     private WorldEnvironment worldenv { get; set; }
@@ -100,13 +101,16 @@ public sealed class World : Comp
 
         var sceneRoot = (Godot.Engine.GetMainLoop() as SceneTree)?.Root;
         worldroot = new Node3D { Name = "WorldRoot" };
+        soundroot = new Node3D { Name = "SoundRoot" };
         modelpool = new Node3D { Name = "ModelPool", Visible = false };
         sceneRoot?.AddChild(worldroot);
+        sceneRoot?.AddChild(soundroot);
         sceneRoot?.AddChild(modelpool);
         ModelAgent.SetRoot(worldroot);
         ModelAgent.SetPool(modelpool);
         PrimitiveMeshAgent.SetRoot(worldroot);
         EffectAgent.SetRoot(worldroot);
+        engine.sound.SetSFXRoot(soundroot);
 
         SetupLighting();
         SetupFloor();
@@ -146,11 +150,13 @@ public sealed class World : Comp
         worldenv?.QueueFree(); worldenv = null;
         floormesh?.QueueFree(); floormesh = null;
         worldroot?.QueueFree(); worldroot = null;
+        soundroot?.QueueFree(); soundroot = null;
         modelpool?.QueueFree(); modelpool = null;
         ModelAgent.SetRoot(null);
         ModelAgent.SetPool(null);
         PrimitiveMeshAgent.SetRoot(null);
         EffectAgent.SetRoot(null);
+        engine.sound.SetSFXRoot(null);
     }
 
     /// <summary>

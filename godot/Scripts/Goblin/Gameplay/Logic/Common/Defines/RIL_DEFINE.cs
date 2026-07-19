@@ -26,6 +26,10 @@ public class RIL_DEFINE
     /// RIL_EVENT 关卡结果
     /// </summary>
     public const ushort EVENT_STAGE_RESULT = 3;
+    /// <summary>
+    /// RIL_EVENT 音效
+    /// </summary>
+    public const ushort EVENT_SOUND = 4;
 
     /// <summary>
     /// LOSS 丢弃渲染指令

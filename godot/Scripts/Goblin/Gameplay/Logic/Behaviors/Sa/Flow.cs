@@ -535,5 +535,6 @@ public class Flow : Behavior
         Executor<BeHitExecutor>(INSTR_DEFINE.BEHIT);
         Executor<SkillBreakExecutor>(INSTR_DEFINE.SKILLBREAK);
         Executor<DamageExecutor>(INSTR_DEFINE.DAMAGE);
+        Executor<SoundExecutor>(INSTR_DEFINE.SOUND);
     }
 }

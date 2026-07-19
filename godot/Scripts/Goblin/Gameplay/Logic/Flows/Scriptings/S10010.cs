@@ -23,6 +23,11 @@ public class S10010 : Scripting
             delaybreak = 320,
         });
 
+        Instruct(0, 0, new SoundInstructData
+        {
+            soundid = 1000001,
+        });
+
         ScriptMachine.Instruct(0, 320, new SpatialPositionData
         {
             type = SPATIAL_DEFINE.POSITION_SELF,

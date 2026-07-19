@@ -17,11 +17,13 @@ public class GamingPhase : State
     {
         base.OnEnter();
         engine.gameui.Open<Sys.Lobby.View.LobbyView>();
+        engine.sound.PlayBGM(2000001);
     }
 
     public override void OnExit()
     {
         base.OnExit();
+        engine.sound.StopBGM();
         engine.gameui.Close<Sys.Lobby.View.LobbyView>();
     }
 }
