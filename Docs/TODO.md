@@ -22,7 +22,7 @@
 
 | 项目 | 说明 |
 |------|------|
-| 音效支持 | Sound 模块未实现 |
+| ~~音效支持~~ ✅ | Sound 模块已实现（handle-based SFX API + SoundAgent + RIL 事件管线）|
 | 抗性计算 | 护甲 / 暴击 / 闪避 | `AttributeBucket.cs:123` |
 | 受击动画独立状态机 | 当前耦合在 `ChangeStateExecutor` | `ChangeStateExecutor.cs:31` |
 | Pipeline.Timeline 无 Model 也支持 TRS | 引入 Vector3/Quaternion/float |
