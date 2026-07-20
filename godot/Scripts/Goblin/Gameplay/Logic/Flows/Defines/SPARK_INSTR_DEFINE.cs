@@ -18,4 +18,8 @@ public class SPARK_INSTR_DEFINE
     /// 管线生成
     /// </summary>
     public const string TOKEN_PIPELINE_GEN = "TOKEN_PIPELINE_GEN";
+    /// <summary>
+    /// 命中响应
+    /// </summary>
+    public const string TOKEN_ON_HIT = "TOKEN_ON_HIT";
 }

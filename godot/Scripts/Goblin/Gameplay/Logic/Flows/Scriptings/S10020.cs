@@ -39,11 +39,12 @@ public class S10020 : Scripting
 			spark = new SparkData
 			{
 				influence = SPARK_INSTR_DEFINE.FLOW,
-				token = SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN,
+				token = SPARK_INSTR_DEFINE.TOKEN_ON_HIT,
 			},
 		});
 
-		Instruct(200, 200, new BeHitData
+		// 命中火花指令：受击位移 + 顿帧 + 伤害结算（由碰撞 spark 触发，确保在 targets 填充后同步执行）
+		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new BeHitData
 		{
 			uselookatattacker = true,
 			usehitmotion = true,
@@ -51,7 +52,7 @@ public class S10020 : Scripting
 			hitmotion = new IntVector3(0, 0, 800),
 		});
 
-		Instruct(200, 200, new HitLagData
+		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new HitLagData
 		{
 			et = FLOW_DEFINE.ET_HIT_VICTIM,
 			type = HIT_LAG_DEFINE.TYPE_INSTANCE,
@@ -61,8 +62,7 @@ public class S10020 : Scripting
 			durationmax = 120,
 		});
 
-		// 命中时伤害结算（由碰撞 spark 触发，确保在 targets 填充后执行）
-		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_PIPELINE_GEN, new DamageData
+		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new DamageData
 		{
 			strength = 3000,
 		});
