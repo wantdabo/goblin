@@ -1,6 +1,6 @@
-# 受击动画独立状态机方案
+# 动画槽位优先级方案
 
-> 2026-07-19 | 解耦 `ChangeStateExecutor` 中 BEHIT 的 hack，建立统一的 Facade 动画优先级模型
+> 2026-07-19 初稿 | 2026-07-21 七轮迭代：泛化解耦 + 命名对齐 | 解耦 `ChangeStateExecutor` 中 HITSTUN 的 hack，建立统一的 Facade 动画优先级模型
 
 ---
 
@@ -16,7 +16,7 @@ ChangeStateData → ChangeStateExecutor
     → facade.SetAnimation(state)         // FacadeInfo.animstate = IDLE/MOVE/CASTING/DEATH
 ```
 
-生命周期：持久，直到下次状态切换。StateMachine 每次 `ChangeState` 都会写 `animstate`。
+生命周期：持久，直到下次状态切换。渲染层通过 AnimationConfig 将 `animstate (byte)` 映射为动画名（如 `3 → "idle_01"`）。
 
 ### 1.2 路径 B：AnimationData → animname（管道定时命名动画）
 
@@ -27,42 +27,36 @@ AnimationData(begin, end) → AnimationExecutor
   OnExit:   facade.SetAnimation(null, TICK_AUTOMATIC) // 清除 animname
 ```
 
-生命周期：Pipeline instruct begin→end。用于技能蓄力动画等固定时长的命名动画。
-
-`AnimationAgent` 中的解析逻辑：
-```csharp
-var animname = ril.animname ?? animcfg?.GetAnimationName(ril.animstate);
-// animname 优先 → 命名动画覆盖状态映射动画
-```
+生命周期：Pipeline instruct begin→end。name 直接传给渲染层，不走查表。
 
 ### 1.3 路径 C：BeHit → ？？？（受击动画，当前缺失）
 
 ```
 BeHitData → BeHitExecutor
   OnEnter: 仅做朝向+击退位移
-  // 没有驱动任何动画！BEHIT 状态从未被设置
+  // 没有驱动任何动画！HITSTUN 状态从未被设置
 ```
 
-### 1.4 攻击 → 受击流程（以 S10020 重击为例）
+### 1.4 攻击 → 受击流程（以 S10020 重击为例，ET 搜索已修复）
+
+> **2026-07-21 修复**：BeHitData/HitLagData/DamageData 原本为帧 200 instruct，与 Collision 同帧但 spark→Clear 后才执行，ET 搜索始终命中空集。已迁移为 spark instruct（`SPARK_INSTR_DEFINE.TOKEN_ON_HIT`）。
 
 ```
 S10020 Pipeline (t=200ms)
-├── CollisionData (碰撞检测)    → 命中目标写入 FlowCollisionHurtInfo.targets
-├── BeHitData (受击位移)        → 转身面对攻击者 + 击退位移（无动画！）
-├── HitLagData (顿帧)           → 双方暂停 frames
-└── Spark → DamageData (伤害)   → 扣血
+├── CollisionData (碰撞检测)    → 命中目标写入 flowcollision.targets
+│   └── Spark(TOKEN_ON_HIT)    → targets 存活期间同步执行命中响应链
+│       ├── BeHitData (受击位移) → 转身面对攻击者 + 击退位移（无动画！）
+│       ├── HitLagData (顿帧)    → 双方暂停 frames
+│       └── DamageData (伤害)    → 扣血
+│   └── targets.Clear()
 ```
 
 ### 1.5 问题：三路径无优先级模型
 
-目前 `FacadeAnimationTranslator` 只是机械地把 `animstate` 和 `animname` 原样写入 RIL，由 `AnimationAgent` 用 `animname ?? GetName(animstate)` 做二选一。但这只是 **animname 优先于 animstate** 的隐式约定，不是显式的优先级模型。
-
-当三条路径同时活跃时（施法中被打），无法保证正确的动画选择：
-
 | 场景 | animstate | animname | 期望 | 现状 |
 |------|-----------|----------|------|------|
-| 施法中被重击 | CASTING | "charge_loop" | BEHIT | "charge_loop"（路径 B 覆盖路径 A，路径 C 不存在） |
-| 移动中被轻击 | MOVE | null | BEHIT | MOVE（路径 C 不存在） |
+| 施法中被重击 | CASTING | "charge_loop" | HITSTUN | "charge_loop"（路径 C 不存在） |
+| 移动中被轻击 | MOVE | null | HITSTUN | MOVE（路径 C 不存在） |
 | 受击硬直中死亡 | IDLE | null | DEATH | 需额外处理 |
 
 ### 1.6 ChangeStateExecutor 中的 Hack
@@ -74,31 +68,29 @@ if (statemachine.info.current == data.state) statemachine.Break();
 statemachine.TryChangeState(data.state);
 ```
 
-非 force 路径用 `Break()`→NONE→`TryChangeState` 绕路。这暴露了问题：**系统缺少一个独立于 StateMachine 的动画覆盖通道**。
+非 force 路径用 `Break()`→NONE→`TryChangeState` 绕路。**系统缺少一个独立于 StateMachine 的动画覆盖通道**。
 
 ---
 
 ## 二、根因：缺少统一的 Facade 动画优先级模型
 
-三条动画路径各自写 Facade 的不同字段，Translator 和 AnimationAgent 靠隐式约定 (`animname ?? GetName(animstate)`) 选择最终动画。**没有显式的优先级规则**。
-
 | 问题 | 说明 |
 |------|------|
-| 无优先级定义 | 受击动画应该覆盖施法动画，但当前 animname 优先于 animstate，路径 C 缺失 |
-| StateMachine 耦合 | BEHIT 必须走 StateMachine，结束后不知道该回 IDLE 还是 MOVE |
-| 生命周期冲突 | AnimationData 是 Pipeline 计时，HitStun 是独立计时，两者无协调机制 |
-| 打断不完整 | CASTING 被 BEHIT 覆盖后，Skill 逻辑层不知道被打断 |
+| 无优先级定义 | 受击动画应该覆盖施法动画，但路径 C 缺失 |
+| StateMachine 耦合 | HITSTUN 必须走 StateMachine，结束后不知道该回 IDLE 还是 MOVE |
+| 生命周期冲突 | AnimationData 是 Pipeline 计时，HITSTUN 是独立计时，两者无协调机制 |
+| 打断不完整 | CASTING 被 HITSTUN 覆盖后，Skill 逻辑层不知道被打断 |
 | 同状态重入绕路 | `Break()`→NONE→`TryChangeState` 是 hack |
 
 ### 现有 State 体系（不变）
 
 ```
-IDLE(3)   → DEATH, MOVE, FALL, CASTING, BEHIT, ROLL
-MOVE(4)   → DEATH, IDLE, FALL, CASTING, BEHIT, ROLL
-JUMP(5)   → DEATH, FALL, CASTING, BEHIT
-FALL(6)   → DEATH, IDLE, CASTING, BEHIT
-CASTING(7)→ DEATH, BEHIT
-BEHIT(8)  → DEATH, BEHIT
+IDLE(3)   → DEATH, MOVE, FALL, CASTING, HITSTUN, ROLL
+MOVE(4)   → DEATH, IDLE, FALL, CASTING, HITSTUN, ROLL
+JUMP(5)   → DEATH, FALL, CASTING, HITSTUN
+FALL(6)   → DEATH, IDLE, CASTING, HITSTUN
+CASTING(7)→ DEATH, HITSTUN
+HITSTUN(8)→ DEATH, HITSTUN
 ROLL(9)   → DEATH, IDLE, MOVE, CASTING
 ```
 
@@ -108,57 +100,49 @@ ROLL(9)   → DEATH, IDLE, MOVE, CASTING
 
 ### 3.1 格斗游戏：统一状态机
 
-街霸、罪恶装备——逻辑和动画是一台状态机，出拳是 State，受击硬直是 HITSTUN State，每个 State 自带帧数。状态是对立的，没有"叠加"。
-
-**不适合本项目**：空间可移动的俯视角 ARPG，受击需要和移动/技能共存。
+状态对立，没有"叠加"。**不适合本项目**：空间可移动的俯视角 ARPG。
 
 ### 3.2 Souls-like / 怪猎：Layer + Slot 分层
 
-动画按优先度分 Slot，高优先度覆盖低优先度：
-
-```
-Layer 0 - Base (Full Body)     │ Layer 1 - Override (Full Body)  │ Layer 2 - Additive (Upper Body)
-IDLE / WALK / RUN              │ ATTACK / SKILL / DODGE         │ HIT_BACK / HIT_FRONT
-priority: 0                    │ priority: 1                    │ priority: 2
-```
-
-- **同层互斥**：新攻击打断旧攻击
-- **跨层叠加**：受击可与攻击动画混合（上半身后仰 + 下半身保持技能滑步）
-- **到期恢复**：受击播放完自然回到基础层，不污染逻辑状态
-
-**最适合本项目**：逻辑层确定性帧同步 + RIL 传输 + 渲染层独立消费的架构天然适配这个模型。
+高优先度覆盖低优先度，到期恢复自然回落。**最适合本项目**：逻辑层确定性帧同步 + RIL 传输天然适配。
 
 ### 3.3 UE Animation Blueprint：变量驱动
 
-逻辑层只写 `Speed=1.0`、`HitDirection=Front`，动画蓝图根据变量自选/混合动画。受击就是设 `HitReaction` 变量。
+逻辑层写变量，动画蓝图自选。**部分借鉴**：当前 AnimationConfig JSON 已有状态→动画名映射。
 
-**部分借鉴**：你的 AnimationConfig JSON 已经有"状态 → 动画名"的映射，接近这个思路。
-
-### 3.4 本项目选型：通用 AnimationSlot 优先级系统
-
-对照行业方案，结合当前架构：
+### 3.4 本项目选型：AnimationSlot 优先级 + StateMachine 复用 + 双轨保留
 
 ```
                     Goblin 架构                              业内映射
                     ────────────                             ────────
-逻辑层              StateMachine (逻辑状态)                    Souls 逻辑状态机
-                    HitStun (表现层计时器)                      Souls Slot Override
-                    [未来] FrozenEffect / Parry / ...           Souls Multi-Layer
-                    
-Facade层 ★          AnimationSlot 槽位集合
-                    ├── SLOT_STATE(pri=0)    持久基态          UE Animation Blueprint
-                    ├── SLOT_NAMED(pri=200)  管道动画           Souls Layer 1
-                    ├── SLOT_HITSTUN(pri=400) 受击硬直          Souls Layer 2
-                    └── [未来] SLOT_FROZEN(pri=700) ...         Souls Higher Layers
+逻辑层              StateMachine (逻辑状态 + 受击 duration)     Souls 逻辑状态机
+                    BeHitExecutor (直接管理槽位)                 Souls Slot Override
 
-翻译层              FacadeAnimationTranslator
-                    └── winner = MaxPriority(animSlots)         Souls Priority Resolver
+Facade层 ★          AnimationSlot 槽位集合（双字段）
+           ┌────────────────────────────────────────┐
+           │  SLOT_STATE    pri=0   state=3  name=-│  ← animstate=IDLE，渲染层查表
+           │  SLOT_NAMED    pri=200 state=0  name=+│  ← animname="charge_loop"，直传
+           │  SLOT_HITSTUN    pri=400 state=8  name=-│  ← animstate=HITSTUN，BeHitExecutor 直接管理
+           └────────────────────────────────────────┘
 
-渲染层              AnimationAgent                              Godot AnimationPlayer
-                    └── 零改动 ★
+翻译层              FacadeAnimationTranslator（双字段原样灌入 RIL）
+                    winner.animstate → ril.animstate
+                    winner.animname  → ril.animname
+
+渲染层              AnimationAgent / PrimitiveAnimAgent
+                    ril.animname ?? GetAnimationName(ril.animstate)  ← 现有逻辑零改动
 ```
 
-核心思路：**不引入新的 RIL 类型，不改造 AnimationAgent**。Facade 层维护一个 `SortedSet<AnimationSlot>`，每个动画来源注册为一个 Slot + 优先级数字。Translator 取最高优先活跃 Slot 输出一条 RIL。新增动画来源只需加一个枚举值，**零字段改动，零 Translator 改动**。渲染层完全无感。
+> **2026-07-21 决策**：受击硬直本质是 StateMachine 的 HITSTUN 状态，AnimationSlot 槽位由 BeHitExecutor 直接操作，duration 由 StateMachine 管理。零新增 Behavior。
+
+**核心思路**：
+- Slot 双字段：`animstate (byte)` 负责持久状态（IDLE/MOVE/HITSTUN），`animname (string)` 负责临时命名动画（"charge_loop"）
+- RIL 双字段不变：`{ animstate, animname, animelapsed }` 全部保留
+- state→name 映射留在 Render 层：AnimationConfig 照常工作，渲染层现有 fallback 逻辑 `animname ?? GetAnimationName(animstate)` 完美兼容
+- **Render 层零改动**：AnimationAgent、PrimitiveAnimAgent、AnimationConfig 全部不动
+- **零配置表新增**：不需要 `state2anim` 字典、不需要 `LoadStateMapping` 注入
+
+> **2026-07-21 决策**：animstate 和 animname 是两种正交语义——持久状态 vs 临时指令。双字段是正确建模，不是妥协。
 
 ---
 
@@ -166,34 +150,35 @@ Facade层 ★          AnimationSlot 槽位集合
 
 ### 4.1 设计原则
 
-不引入新 RIL 类型，不改 `AnimationAgent`。作为框架，动画来源会持续增加——不能在 `FacadeInfo` 上每来一个来源就加一个字段。
-
-**核心抽象**：任何动画来源都注册为一个 `AnimationSlot`，带优先级数字。Facade 维护一个槽位集合，Translator 取最高优先级活跃槽位解析为一条 RIL。
+- Slot 双字段：`animstate (byte)` + `animname (string)`。state 驱动写 state，name 驱动写 name
+- state→name 解析不发生在 Logic 层——Render 层 AnimationConfig 已经有这套机制，无需在 Logic 层重复
+- RIL 双字段不变，渲染层现有 fallback 逻辑不动
+- **零注入、零配置**：Facade 不需要知道 AnimationConfig 的存在
 
 ```
-新增动画来源的成本 = 注册一个 Slot + 定一个优先级数字。零字段改动，零 Translator 改动。
+新增动画来源的成本 = 注册一个 Slot + 定一个优先级数字。零 Translator + 零 Render 改动。
 ```
 
-### 4.2 AnimationSlot 设计
+### 4.2 AnimationSlot 设计（双字段）
 
 ```
 AnimationSlot
-├── key         : int          // 槽位键（唯一标识，枚举定义）
-├── priority    : int          // 优先级（越大越优先）★ 框架扩展核心
-├── animstate   : byte         // 状态映射动画（走 AnimationConfig 查表）
-├── animname    : string?      // 命名动画（不走查表，直接播放）
+├── key         : int          // 槽位键（枚举）
+├── priority    : int          // 优先级（越大越优先）
+├── animstate   : byte         // 持久状态（STATE_DEFINE.IDLE/MOVE/HITSTUN/...），SLOT_NAMED 时为 0
+├── animname    : string       // 命名动画（"charge_loop"/"hit_01"/...），SLOT_STATE/HITSTUN 时为 null
 ├── active      : bool         // 是否活跃
-├── isTransient : bool         // true=临时覆盖（到期自动废弃）, false=持久（直到主动移除）
-└── duration    : FP           // 临时槽位的剩余时间
+├── istransient : bool         // true=临时覆盖，false=持久
+└── duration    : FP           // 临时槽位剩余时间
 ```
 
-**优先级编号约定**（框架层定义，具体值由项目配置）：
+**优先级编号约定**：
 
 ```
 1000+   系统接管级     Cutscene, ScriptedSequence
 800-999 生命状态级     Death, Revive
 600-799 硬控状态级     Frozen, Petrified, Stunned
-400-599 受击反应级     HitStun, Knockdown, Launch, Grab
+400-599 受击反应级     BeHit, Knockdown, Launch, Grab
 200-399 主动动作级     Attack, Skill, Dodge, Parry
 100-199 交互动作级     Interact, Push, Climb
 0-99    基础运动级     Idle, Walk, Run, Jump, Fall
@@ -203,34 +188,55 @@ AnimationSlot
 
 ```csharp
 // FacadeInfo
-public List<AnimationSlot> animSlots { get; set; }  // 所有活跃的动画槽位
+public List<AnimationSlot> animslots { get; set; }  // 新增唯一字段
 
 // Facade
-public void AddAnimSlot(AnimationSlot slot)    // 注册槽位
-public void RemoveAnimSlot(int key)            // 移除槽位
-public void UpdateAnimSlot(AnimationSlot slot) // 更新槽位状态
+public void AddOrUpdateSlot(ANIM_SLOT_KEY key, int priority, byte state = 0, string name = null)
+public void RmvSlot(ANIM_SLOT_KEY key)
 ```
-
-Facade 内部维护一个 `SortedSet<AnimationSlot>`（按 priority 降序），`Add/Remove/Update` 时自动重排。
 
 ### 4.4 Translator 解析逻辑（通用，永不变）
 
 ```csharp
+protected override int OnCalcHashCode(FacadeInfo info)
+{
+    int hash = 17;
+    hash = hash * 31 + info.actor.GetHashCode();
+    // 取最高优先级活跃槽位的 animstate + animname
+    byte winnerstate = 0;
+    string winnername = null;
+    foreach (var slot in info.animslots)
+    {
+        if (false == slot.active) continue;
+        winnerstate = slot.animstate;
+        winnername = slot.animname;
+        break;
+    }
+    hash = hash * 31 + winnerstate.GetHashCode();
+    hash = hash * 31 + (null != winnername ? winnername.GetHashCode() : 0);
+    hash = hash * 31 + info.animelapsed.GetHashCode();
+    hash = hash * 31 + info.effectincrement.GetHashCode();
+
+    return hash;
+}
+
 protected override void OnRIL(FacadeInfo info, RIL_FACADE_ANIMATION ril)
 {
-    // 取最高优先级的活跃槽位
     AnimationSlot winner = null;
-    foreach (var slot in info.animSlots)
+    foreach (var slot in info.animslots)
     {
-        if (!slot.active) continue;
-        if (winner == null || slot.priority > winner.priority)
-            winner = slot;
+        if (false == slot.active) continue;
+        winner = slot;
+        break;
     }
 
-    if (winner != null)
+    if (null != winner)
     {
         ril.animstate = winner.animstate;
         ril.animname = winner.animname;
+        // 同步到 info，确保 Hash diff 正确
+        info.animstate = winner.animstate;
+        info.animname = winner.animname;
     }
     else
     {
@@ -242,87 +248,99 @@ protected override void OnRIL(FacadeInfo info, RIL_FACADE_ANIMATION ril)
 }
 ```
 
-**Translator 从此不需要知道有多少种动画来源**。它只做一件事：取最高优先级活跃槽位 → 写 RIL。新来源只需 `facade.AddAnimSlot(...)`。
-
 ### 4.5 各来源的槽位定义
 
 ```
-来源                  slot.key          priority   isTransient   驱动者
-──────────────────────────────────────────────────────────────────────
-StateMachine         SLOT_STATE         0          false         ChangeStateExecutor
-AnimationData        SLOT_NAMED         200        true          AnimationExecutor  
-HitStun              SLOT_HITSTUN       400        true          HitStun
-Death (via SM)       SLOT_DEATH         800        false         StateMachine (DEATH 时加入)
-[未来] Frozen         SLOT_FROZEN        700        true          StatusEffect
-[未来] Knockdown      SLOT_KNOCKDOWN    600        true          BeHitExecutor (重击)
-[未来] Parry          SLOT_PARRY        500        true          ParryExecutor
-[未来] Cutscene       SLOT_CUTSCENE     1000       true          CutsceneManager
+来源              slot.key        priority  istransient   写入方式
+─────────────────────────────────────────────────────────────────────────
+StateMachine     SLOT_STATE        0        false         SetAnimation(state) → AddOrUpdateSlot(state=state, name=null)
+AnimationData    SLOT_NAMED        200      true          SetAnimation(name) → AddOrUpdateSlot(state=0, name=name) [OnExit 移除]
+BeHit            SLOT_HITSTUN        400      false         BeHitExecutor.OnEnter → AddOrUpdateSlot(state=HITSTUN, name=null) [StateMachine 恢复时移除]
+[未来] Frozen     SLOT_FROZEN       700      true          StatusEffect → AddOrUpdateSlot(state=FROZEN)
+[未来] Cutscene   SLOT_CUTSCENE     1000     true          AddOrUpdateSlot(state=0, name="cs_intro")
 ```
+
+> **2026-07-21 决策**：受击不新建 Behavior。BeHitExecutor 直接调用 `facade.AddOrUpdateSlot(SLOT_HITSTUN, ...)` + `statemachine.ChangeState(HITSTUN, duration)`。槽位由 StateMachine 在硬直到期时移除。
 
 ### 4.6 数据流全景
 
 ```
-StateMachine          AnimationExecutor       HitStun            [未来] FrozenEffect
-     │                       │                    │                      │
-     │ AddSlot(SLOT_STATE)   │ AddSlot(SLOT_NAMED)│ AddSlot(SLOT_HITSTUN)│ AddSlot(SLOT_FROZEN)
-     ▼                       ▼                    ▼                      ▼
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                        Facade.animSlots (SortedSet<AnimationSlot>)              │
-│                         按 priority 降序自动排序                                  │
-│                                                                                │
-│  [0] SLOT_HITSTUN   pri=400 active=true   ← 当前最高优先，胜出                   │
-│  [1] SLOT_NAMED     pri=200 active=true   ← 被覆盖，休眠中                       │
-│  [2] SLOT_STATE     pri=0   active=true   ← 被覆盖，休眠中                       │
-└────────────────────────────────────────────────────────────────────────────────┘
-                                 │
-                    FacadeAnimationTranslator
-                    winner = animSlots[0]   // O(1)，已排序
-                                 │
-                                 ▼
-                     RIL_FACADE_ANIMATION (1条)
-                                 │
-                                 ▼
-                         AnimationAgent
-                     (零改动，无感知)
+StateMachine              AnimationExecutor       BeHitExecutor
+     │                          │                     │
+     │ SetAnimation(IDLE)       │ SetAnimation("chg")  │ OnEnter()
+     │ → state=3, name=null    │ → state=0, name=+    │ → state=HITSTUN, name=null
+     ▼                          ▼                     ▼
+┌────────────────────────────────────────────────────────────────┐
+│                  Facade.animslots (List<AnimationSlot>)         │
+│                  EnsureSort() 按 priority 降序                   │
+│                                                                 │
+│  [0] SLOT_HITSTUN    pri=400  state=8  name=-    ← 胜出          │
+│  [1] SLOT_NAMED    pri=200  state=0  name="chg"← 被覆盖         │
+│  [2] SLOT_STATE    pri=0    state=3  name=-    ← 被覆盖         │
+└────────────────────────────────────────────────────────────────┘
+                               │
+                  FacadeAnimationTranslator
+                  ril.animstate = 8 (HITSTUN)
+                  ril.animname  = null
+                               │
+                               ▼
+                  RIL_FACADE_ANIMATION { animstate: 8, animname: null, animelapsed: 120 }
+                               │
+                               ▼
+                  AnimationAgent (现有逻辑，零改动)：
+                  playname = ril.animname ?? animcfg.GetAnimationName(ril.animstate)
+                          = null ?? "hit_01"
+                          = "hit_01"
 ```
 
-### 4.7 v1 实际落地：只新增 1 个槽位
+### 4.7 为什么保持双字段
 
-v1 只加 `SLOT_HITSTUN`，但 Facade 槽位基础架构一次建好。现有的 `animstate` 和 `animname` 改为通过 `SLOT_STATE` 和 `SLOT_NAMED` 槽位注册：
+| 维度 | animstate (byte) | animname (string) |
+|------|------------------|-------------------|
+| 语义 | 持久状态，数量固定 ~10 | 临时指令，数量无法穷举 |
+| 生命周期 | 直到下次 SetAnimation(byte) 覆盖 | Pipeline begin→end |
+| 映射方式 | AnimationConfig 查表（Render 层现有） | 直传，不查表 |
+| 画同步 | byte 比 string 更小更稳定 | string 仅在命名动画时传 |
+
+两者正交，互不替代。强行合为单字段会导致：
+- 全用 string：Logic 层需维护 `state→name` 映射（`state2anim` 字典 + `LoadStateMapping` 注入）
+- 全用 byte：命名动画无法表示
+
+### 4.8 v1 实际落地
 
 ```
 v1 实际活跃槽位：
 
-SLOT_STATE    pri=0    persistent    ← StateMachine 驱动（等价旧 animstate）
-SLOT_NAMED    pri=200  transient     ← AnimationExecutor 驱动（等价旧 animname）
-SLOT_HITSTUN  pri=400  transient     ← HitStun 驱动（新）
+SLOT_STATE    pri=0    persistent  ← animstate=StateMachine.current, animname=null
+SLOT_NAMED    pri=200  transient   ← animstate=0, animname="charge_loop"（AnimationExecutor 控制）
+SLOT_HITSTUN    pri=400  persistent  ← animstate=HITSTUN, animname=null（BeHitExecutor 直接写入，StateMachine 恢复时移除）
 ```
 
-**向后兼容**：StateMachine 的 `SetAnimation(state)` 内部改为 `AddOrUpdateSlot(SLOT_STATE, priority=0, animstate=state)`。AnimationExecutor 同理。旧行为完全保留。
-
-### 4.8 新增结构
+### 4.9 新增结构
 
 ```
-AnimationSlot (新)
-├── key         : int          // 槽位键 (SLOT_STATE / SLOT_NAMED / SLOT_HITSTUN ...)
-├── priority    : int          // 优先级（越大越优先）
-├── animstate   : byte         // 走 AnimationConfig 映射
-├── animname    : string?      // 直接播放的命名动画
-├── active      : bool         // 是否活跃
-├── isTransient : bool         // 临时槽位
-└── duration    : FP           // 剩余时间
+AnimationSlot (新，走 ObjectCache 池化，双字段)
+├── key         : int
+├── priority    : int
+├── animstate   : byte        // 持久状态
+├── animname    : string      // 命名动画
+├── active      : bool
+├── istransient : bool
+└── duration    : FP
 
-HitStunInfo : BehaviorInfo
-├── active       : bool        
-├── duration     : FP          
-├── hitstunlevel : byte        
-└── prevstate    : byte        
+BeHitData 新增字段：
+├── hitstunduration   : FP        // 受击硬直时长
+├── hitstunlevel      : byte      // 硬直等级（预留）
+└── interruptcast   : bool      // 是否打断施法
 
-HitStun : Behavior<HitStunInfo>
-├── Apply(duration, level, interruptCast)  → facade.AddAnimSlot(SLOT_HITSTUN, ...)
-├── OnTick(tick) → 倒计时, 到点 RemoveSlot(SLOT_HITSTUN)
-└── Recover()   → facade.RemoveAnimSlot(SLOT_HITSTUN)
+StateMachine 新增：
+├── stateduration   : FP              // 当前限时状态剩余时间
+├── timerslotkey   : ANIM_SLOT_KEY   // 到期时清理哪个槽位
+├── timerfallback  : byte            // 到期后切回哪个状态
+└── ChangeState(state, duration, slotkey, fallback) → 限时切换，通用不硬编码
 ```
+
+> **2026-07-21 决策**：槽位由 BeHitExecutor 直接管理，duration 由 StateMachine 管理。改动面最小。
 
 ---
 
@@ -332,83 +350,67 @@ HitStun : Behavior<HitStunInfo>
 
 | # | 位置 | 改动 | 行数估算 |
 |---|------|------|----------|
-| 1 | 新增 `Common/AnimationSlot.cs` | **槽位数据结构定义 + 槽位键枚举** | ~60 行 |
-| 2 | 新增 `BehaviorInfos/HitStunInfo.cs` | 受击硬直数据定义 | ~35 行 |
-| 3 | 新增 `Behaviors/Sa/HitStun.cs` | 受击硬直行为（通过 Slot 操作 Facade） | ~55 行 |
-| 4 | `BehaviorInfos/FacadeInfo.cs` | 旧 `animstate`/`animname` 保留 + 新增 `animSlots` 集合 | +15 行 |
-| 5 | `Behaviors/Facade.cs` | 新增 `AddAnimSlot`/`RemoveAnimSlot`/`UpdateAnimSlot`；`SetAnimation` 内部重构 | +40 行 |
-| 6 | `Translators/FacadeAnimationTranslator.cs` | `OnRIL` 改为取最高优先级活跃槽位 | +15 行 |
-| 7 | `Instructs/BeHitData.cs` | 加 `hitstunduration`、`hitstunlevel`、`interruptcast` | +6 行 |
-| 8 | `Executors/BeHitExecutor.cs` | `OnEnter` 触发 `HitStun.Apply()` | +8 行 |
-| 9 | `Prefabs/HeroPrefab.cs` | 挂载 `HitStun` 行为 | +2 行 |
-| 10 | `Prefabs/EnemyPrefab.cs` | 挂载 `HitStun` 行为 | +2 行 |
-| 11 | 各 Scripting 管线 | `BeHitData` 补上硬直时长 | 按需 |
+| 1 | 新增 `Gameplay/Logic/Common/AnimationSlot.cs` | 槽位枚举 + 优先级常量 + AnimationSlot 类（双字段）| ~55 行 |
+| 2 | `Gameplay/Logic/BehaviorInfos/FacadeInfo.cs` | 新增 `animslots` List | +15 行 |
+| 3 | `Gameplay/Logic/Behaviors/Facade.cs` | 新增 `AddOrUpdateSlot`、`RmvSlot`、`EnsureSort`；`SetAnimation` 内部重构走槽位 | +40 行 |
+| 4 | `Gameplay/Logic/Translators/FacadeAnimationTranslator.cs` | `OnCalcHashCode` 改为取 winner 双字段 + animelapsed + effectincrement；`OnRIL` 改为取最高优先级槽位双字段 | +15/-5 行 |
+| 5 | `Gameplay/Logic/Behaviors/StateMachine.cs` | 新增 `stateduration/timerslotkey/timerfallback` + `ChangeState(state, duration, slotkey, fallback)` 重载 + OnTick 通用倒计时 | +18 行 |
+| 6 | `Gameplay/Logic/Flows/Executors/Instructs/BeHitData.cs` | 加 `hitstunduration`、`hitstunlevel`、`interruptcast` | +6 行 |
+| 7 | `Gameplay/Logic/Flows/Executors/BeHitExecutor.cs` | 加 ROLL/DEATH 守卫 + 直接操作 Facade 槽位 + 调用 StateMachine.ChangeState(HITSTUN, duration) | +10 行 |
+| 8 | `Gameplay/Logic/Flows/Executors/ChangeStateExecutor.cs` | 删除 hack 行 | -1 行 |
+| 9 | 各 Scripting 管线 | `BeHitData` 补上硬直时长 | 按需 |
 
-总计：~240 行新代码（比旧方案多 ~100 行，多出来的是槽位基础架构，一次性投资）。
+**不动的文件**（零改动）：
+- `Gameplay/Logic/RIL/RIL_FACADE_ANIMATION.cs` — 双字段不变
+- `Gameplay/Render/Agents/AnimationAgent.cs` — 现有 fallback 完美兼容
+- `Gameplay/Render/Agents/PrimitiveAnimAgent.cs` — byte switch 不动
+- `Gameplay/Render/Common/AnimationConfig.cs` — 不动
+- `Gameplay/Logic/Prefabs/HeroPrefab.cs` — 零改动
+- `Gameplay/Logic/Prefabs/EnemyPrefab.cs` — 零改动
+- `Gameplay/Logic/Common/Defines/TICK_DEFINE.cs` — 零改动（HITSTUN 走 StateMachine 现有 Tick）
+
+总计：~146 行新代码。**零新增 Behavior。零 Prefab 改动。零 TICK_DEFINE 改动。**
 
 ### 5.2 AnimationSlot.cs（框架核心，新增）
 
 ```csharp
-/// <summary>
-/// 动画槽位键枚举 — 每种动画来源一个值，新增来源只需加枚举项
-/// </summary>
 public enum ANIM_SLOT_KEY : int
 {
     STATE           = 0,    // StateMachine 基态
     NAMED           = 1,    // AnimationData 命名动画
-    HITSTUN         = 2,    // 受击硬直
-    DEATH           = 3,    // 死亡（预留，v1 可能不需要单独槽位）
-    // --- 未来扩展 ---
-    // FROZEN       = 4,    // 冰冻
-    // KNOCKDOWN    = 5,    // 击倒
-    // PARRY        = 6,    // 格挡
-    // CUTSCENE     = 7,    // 过场
+    HITSTUN           = 2,    // 受击硬直（BeHitExecutor 直接写入，StateMachine 恢复时移除）
+    DEATH           = 3,    // 死亡（预留）
 }
 
-/// <summary>
-/// 动画优先级定义 — 越大越优先
-/// </summary>
 public static class ANIM_PRIORITY
 {
-    public const int LOCOMOTION    = 0;     // IDLE/WALK/RUN/JUMP/FALL
-    public const int INTERACT      = 100;   // 开门/推箱/攀爬
-    public const int ACTION        = 200;   // 技能/攻击/闪避
-    public const int REACTION      = 400;   // 受击硬直
-    public const int COUNTER       = 500;   // 格挡/弹反
-    public const int KNOCKDOWN     = 600;   // 击倒/击飞
-    public const int HARDCROWD     = 700;   // 冰冻/石化/眩晕
-    public const int LIFESTATE     = 800;   // 死亡/复活
-    public const int SYSTEM        = 1000;  // 过场/剧情接管
+    public const int LOCOMOTION    = 0;
+    public const int INTERACT      = 100;
+    public const int ACTION        = 200;
+    public const int REACTION      = 400;
+    public const int COUNTER       = 500;
+    public const int KNOCKDOWN     = 600;
+    public const int HARDCROWD     = 700;
+    public const int LIFESTATE     = 800;
+    public const int SYSTEM        = 1000;
 }
 
-/// <summary>
-/// 动画槽位 — 任何动画来源都注册为一个 Slot
-/// </summary>
 public class AnimationSlot
 {
-    public ANIM_SLOT_KEY key;           // 唯一标识
-    public int priority;                // 优先级（越大越优先）
-    public byte animstate;              // 状态映射（走 AnimationConfig 查表）
-    public string animname;             // 命名动画（直接播放），null=走状态映射
-    public bool active;                 // 是否活跃
-    public bool isTransient;            // true=临时槽位（自动计时），false=持久槽位
-    public FP duration;                 // 临时槽位剩余时间
+    public ANIM_SLOT_KEY key;
+    public int priority;
+    public byte animstate;           // 持久状态：STATE_DEFINE 值，SLOT_NAMED 时为 0
+    public string animname;          // 命名动画：SLOT_STATE/HITSTUN 时为 null
+    public bool active;
+    public bool istransient;
+    public FP duration;
 
-    public AnimationSlot(ANIM_SLOT_KEY key, int priority)
-    {
-        this.key = key;
-        this.priority = priority;
-        active = false;
-        isTransient = false;
-        duration = FP.Zero;
-    }
-
-    public void Activate(byte state, string name = null, FP dur = default)
+    public void Activate(byte state = 0, string name = null, FP dur = default)
     {
         active = true;
         animstate = state;
         animname = name;
-        if (dur > FP.Zero) { isTransient = true; duration = dur; }
+        if (dur > FP.Zero) { istransient = true; duration = dur; }
     }
 
     public void Deactivate()
@@ -416,15 +418,8 @@ public class AnimationSlot
         active = false;
         animstate = 0;
         animname = null;
-        isTransient = false;
+        istransient = false;
         duration = FP.Zero;
-    }
-
-    public void Tick(FP delta)
-    {
-        if (!isTransient || !active) return;
-        duration -= delta;
-        if (duration <= FP.Zero) Deactivate();
     }
 }
 ```
@@ -434,123 +429,141 @@ public class AnimationSlot
 ```diff
  public class FacadeInfo : BehaviorInfo
  {
-+    // 槽位集合 — 框架级的动画优先级系统
-+    // SortedSet 按 priority 降序，animSlots[0] 始终是当前最高优先级活跃槽位
-+    public SortedSet<AnimationSlot> animSlots { get; set; }
-+
-+    // 以下两个字段保留做向后兼容，内部通过 SLOT_STATE / SLOT_NAMED 槽位实现
-     public byte animstate { get; set; }    // → 内部映射到 SLOT_STATE
-     public string animname { get; set; }   // → 内部映射到 SLOT_NAMED
++    public List<AnimationSlot> animslots { get; set; }
+
+     public byte animstate { get; set; }     // 保留，Translator 同步 winner 双字段写入
+     public string animname { get; set; }    // 保留，Translator 同步 winner 双字段写入
      public FP animelapsed { get; set; }
-     
-+    // 预分配固定数量槽位（避免每帧分配），按 ANIM_SLOT_KEY 枚举数量
-+    private AnimationSlot[] slotCache;
-+
-+    protected override void OnReady()
-+    {
-+        animSlots = new SortedSet<AnimationSlot>(new AnimSlotPriorityComparer());
-+        slotCache = new AnimationSlot[Enum.GetValues(typeof(ANIM_SLOT_KEY)).Length];
-+    }
-+}
-+
-+/// <summary>
-+/// 自定义比较器：按 priority 降序排列
-+/// </summary>
-+public class AnimSlotPriorityComparer : IComparer<AnimationSlot>
-+{
-+    public int Compare(AnimationSlot a, AnimationSlot b)
-+    {
-+        int cmp = b.priority.CompareTo(a.priority);  // 降序
-+        return cmp != 0 ? cmp : a.key.CompareTo(b.key);
-+    }
+
+     protected override void OnReady()
+     {
++        animslots = ObjectCache.Ensure<List<AnimationSlot>>();
+     }
+
+     protected override void OnReset()
+     {
++        animslots.Clear();
++        ObjectCache.Set(animslots);
+     }
+
+     protected override BehaviorInfo OnClone()
+     {
+         var clone = ObjectCache.Ensure<FacadeInfo>();
+         clone.Ready(actor);
++        foreach (var slot in animslots)
++        {
++            var s = ObjectCache.Ensure<AnimationSlot>();
++            s.key = slot.key; s.priority = slot.priority;
++            s.animstate = slot.animstate; s.animname = slot.animname;
++            s.active = slot.active; s.istransient = slot.istransient;
++            s.duration = slot.duration;
++            clone.animslots.Add(s);
++        }
+         return clone;
+     }
  }
 ```
 
 ### 5.4 Facade.cs 改动
 
 ```diff
-+// === 槽位管理 API ===
++// === 槽位管理 API（双字段） ===
 
-+/// <summary>
-+/// 注册/更新一个动画槽位（框架面向未来设计的核心接口）
-+/// </summary>
-+public void AddOrUpdateSlot(ANIM_SLOT_KEY key, int priority, byte state, string name = null, FP duration = default)
-+{
-+    var slot = EnsureSlot(key, priority);
-+    slot.Activate(state, name, duration);
-+    // SortedSet 自动重排
-+}
-
-+public void RemoveSlot(ANIM_SLOT_KEY key)
++public void AddOrUpdateSlot(ANIM_SLOT_KEY key, int priority, byte state = 0, string name = null, FP duration = default)
 +{
 +    var slot = GetSlot(key);
-+    if (slot != null)
++    if (null == slot)
 +    {
-+        animSlots.Remove(slot);
++        slot = ObjectCache.Ensure<AnimationSlot>();
++        slot.key = key;
++        info.animslots.Add(slot);
++    }
++    slot.priority = priority;
++    slot.Activate(state, name, duration);
++    EnsureSort();
++}
+
++public void RmvSlot(ANIM_SLOT_KEY key)
++{
++    var slot = GetSlot(key);
++    if (null != slot)
++    {
++        info.animslots.Remove(slot);
 +        slot.Deactivate();
++        ObjectCache.Set(slot);
 +    }
 +}
 
-+/// <summary>
-+/// Tick 所有临时槽位（由 Facade.OnTick 调用）
-+/// </summary>
-+public void TickSlots(FP delta)
++private void EnsureSort() => info.animslots.Sort((a, b) => b.priority.CompareTo(a.priority));
+
++private AnimationSlot GetSlot(ANIM_SLOT_KEY key)
 +{
-+    // 收集到期槽位（避免在遍历中修改集合）
-+    List<ANIM_SLOT_KEY> expired = null;
-+    foreach (var slot in info.animSlots)
-+    {
-+        if (!slot.isTransient) continue;
-+        slot.duration -= delta;
-+        if (slot.duration <= FP.Zero)
-+        {
-+            (expired ??= new()).Add(slot.key);
-+        }
-+    }
-+    if (expired != null)
-+        foreach (var key in expired) RemoveSlot(key);
++    foreach (var slot in info.animslots)
++        if (slot.key == key) return slot;
++    return null;
 +}
 
-+// === 向后兼容（内部走槽位） ===
++// === SetAnimation 内部走槽位 ===
 
-+public void SetAnimation(byte state)
-+{
-+    info.animstate = state;
-+    AddOrUpdateSlot(ANIM_SLOT_KEY.STATE, ANIM_PRIORITY.LOCOMOTION, state);
-+}
+ public void SetAnimation(byte state)
+ {
+     info.animstate = state;
++    AddOrUpdateSlot(ANIM_SLOT_KEY.STATE, ANIM_PRIORITY.LOCOMOTION, state: state);
+ }
 
-+public void SetAnimation(string name, byte tickmode)
-+{
-+    info.animname = name;
-+    if (name != null)
-+        AddOrUpdateSlot(ANIM_SLOT_KEY.NAMED, ANIM_PRIORITY.ACTION, 0, name);
-+    else
-+        RemoveSlot(ANIM_SLOT_KEY.NAMED);
-+    
-+    if (tickmode == TICK_MANUAL) info.tickmode = TICK_MANUAL;
-+    else info.tickmode = TICK_AUTOMATIC;
-+    info.animelapsed = 0;
-+}
+ public void SetAnimation(string name, byte tickmode)
+ {
+     info.animname = name;
+     if (null != name)
++        AddOrUpdateSlot(ANIM_SLOT_KEY.NAMED, ANIM_PRIORITY.ACTION, name: name);
+     else
+         RmvSlot(ANIM_SLOT_KEY.NAMED);
+     info.animelapsed = 0;
+     info.animticktype = tickmode;
+ }
 ```
 
 ### 5.5 FacadeAnimationTranslator.cs 改动
 
 ```csharp
+protected override int OnCalcHashCode(FacadeInfo info)
+{
+    int hash = 17;
+    hash = hash * 31 + info.actor.GetHashCode();
+    // 取最高优先级活跃槽位的双字段
+    byte winnerstate = 0;
+    string winnername = null;
+    foreach (var slot in info.animslots)
+    {
+        if (false == slot.active) continue;
+        winnerstate = slot.animstate;
+        winnername = slot.animname;
+        break;
+    }
+    hash = hash * 31 + winnerstate.GetHashCode();
+    hash = hash * 31 + (null != winnername ? winnername.GetHashCode() : 0);
+    hash = hash * 31 + info.animelapsed.GetHashCode();
+    hash = hash * 31 + info.effectincrement.GetHashCode();
+
+    return hash;
+}
+
 protected override void OnRIL(FacadeInfo info, RIL_FACADE_ANIMATION ril)
 {
-    // 取最高优先级的活跃槽位 — 框架通用逻辑，新增动画来源时此行不变
     AnimationSlot winner = null;
-    foreach (var slot in info.animSlots)
+    foreach (var slot in info.animslots)
     {
-        if (!slot.active) continue;
-        winner = slot;  // SortedSet 已按 priority 降序排列，第一个活跃的就是最高优先
+        if (false == slot.active) continue;
+        winner = slot;
         break;
     }
 
-    if (winner != null)
+    if (null != winner)
     {
         ril.animstate = winner.animstate;
         ril.animname = winner.animname;
+        info.animstate = winner.animstate;   // 同步 Hash
+        info.animname = winner.animname;
     }
     else
     {
@@ -562,115 +575,78 @@ protected override void OnRIL(FacadeInfo info, RIL_FACADE_ANIMATION ril)
 }
 ```
 
-**Translator 完全通用化**——不需要知道有多少种动画来源，不需要 switch-case，不需要 priority 常量。新增动画来源时这 15 行代码不动。
+### 5.6 StateMachine.cs 改动
 
-### 5.6 HitStunInfo.cs
+```diff
+ public class StateMachine : Behavior<StateMachineInfo>
+ {
++    /// <summary>
++    /// 状态持续时长（FP.Zero = 无限，限时状态到期自动切 fallback）
++    /// </summary>
++    public FP stateduration { get; set; }
++    public ANIM_SLOT_KEY timerslotkey { get; set; }   // duration 到期时清理的槽位
++    public byte timerfallback { get; set; }             // duration 到期后切换的目标状态
 
-```csharp
-public class HitStunInfo : BehaviorInfo
-{
-    public bool active { get; set; }
-    public FP duration { get; set; }
-    public byte hitstunlevel { get; set; }
+     public void Break()
+     {
++        stateduration = FP.Zero;
+         ChangeState(STATE_DEFINE.NONE);
+     }
++
++    /// <summary>
++    /// 切换到限时状态（duration > 0 才启用计时器）
++    /// slotkey: 状态结束时清理的槽位；fallback: 到期后切回的状态
++    /// </summary>
++    public void ChangeState(byte state, FP duration, ANIM_SLOT_KEY slotkey = ANIM_SLOT_KEY.STATE, byte fallback = STATE_DEFINE.IDLE)
++    {
++        stateduration = duration;
++        timerslotkey = slotkey;
++        timerfallback = fallback;
++        ChangeState(state);
++    }
 
-    protected override void OnReady()
-    {
-        active = false;
-        duration = FP.Zero;
-        hitstunlevel = 0;
-    }
+     public void ChangeState(byte state)
+     {
+         info.last = info.current;
+         info.current = state;
+         info.usedelaybreak = false;
+         info.delaybreak = FP.Zero;
 
-    protected override void OnReset()
-    {
-        active = false;
-        duration = FP.Zero;
-        hitstunlevel = 0;
-    }
+         if (false == stage.SeekBehavior(actor, out Facade facade)) return;
+         if (STATE_DEFINE.CASTING == info.current)
+         {
+             facade.SetAnimation(STATE_DEFINE.CASTING);
+             return;
+         }
 
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<HitStunInfo>();
-        clone.Ready(actor);
-        clone.active = active;
-        clone.duration = duration;
-        clone.hitstunlevel = hitstunlevel;
-        return clone;
-    }
-}
+         facade.SetAnimation(info.current);
+     }
+
+     protected override void OnTick(FP tick)
+     {
+         base.OnTick(tick);
++
++        // 限时状态倒计时（通用，不硬编码任何具体状态）
++        if (stateduration > FP.Zero)
++        {
++            stateduration -= tick;
++            if (stateduration <= FP.Zero)
++            {
++                stateduration = FP.Zero;
++                if (stage.SeekBehavior(actor, out Facade facade))
++                    facade.RmvSlot(timerslotkey);
++                ChangeState(timerfallback);
++            }
++        }
++
+         if (false == info.usedelaybreak) return;
+         info.delaybreak -= tick;
+         if (info.delaybreak <= FP.Zero) Break();
+     }
+ }
 ```
 
-### 5.7 HitStun.cs
-
-```csharp
-public class HitStun : Behavior<HitStunInfo>
-{
-    public void Apply(FP duration, byte level, bool interruptCast = false)
-    {
-        // combo 连击：重置计时
-        info.duration = duration;
-        info.hitstunlevel = level;
-
-        // 不能在无敌/翻滚状态下受击
-        if (stage.SeekBehavior(actor, out StateMachine sm))
-        {
-            if (sm.info.current == STATE_DEFINE.ROLL) return;
-        }
-
-        if (info.active)
-        {
-            // 已在受击中，只刷新槽位持续时间
-            if (stage.SeekBehavior(actor, out Facade facade))
-                facade.AddOrUpdateSlot(ANIM_SLOT_KEY.HITSTUN, ANIM_PRIORITY.REACTION, 
-                    STATE_DEFINE.BEHIT, null, duration);
-            return;
-        }
-
-        info.active = true;
-
-        // 打断 CASTING
-        if (interruptCast && stage.SeekBehavior(actor, out StateMachine sm2))
-        {
-            if (sm2.info.current == STATE_DEFINE.CASTING)
-                sm2.Break();
-        }
-
-        // 注册受击槽位
-        if (stage.SeekBehavior(actor, out Facade facade2))
-            facade2.AddOrUpdateSlot(ANIM_SLOT_KEY.HITSTUN, ANIM_PRIORITY.REACTION,
-                STATE_DEFINE.BEHIT, null, duration);
-    }
-
-    public void Recover()
-    {
-        if (!info.active) return;
-        info.active = false;
-        info.hitstunlevel = 0;
-
-        if (stage.SeekBehavior(actor, out Facade facade))
-            facade.RemoveSlot(ANIM_SLOT_KEY.HITSTUN);
-        // 槽位移除后，Translator 自动取下一个最高优先级活跃槽位
-    }
-
-    protected override void OnTick(FP tick)
-    {
-        base.OnTick(tick);
-        if (!info.active) return;
-
-        // Death 优先级更高 — 槽位系统自然处理，但 HitStun 仍需主动退出
-        if (stage.SeekBehavior(actor, out StateMachine sm) && 
-            sm.info.current == STATE_DEFINE.DEATH)
-        {
-            Recover();
-            return;
-        }
-
-        info.duration -= tick;
-        if (info.duration <= FP.Zero) Recover();
-    }
-}
-```
-
-### 5.8 BeHitData.cs 改动
+### 5.7 BeHitData.cs 改动
 
 ```diff
  public class BeHitData : InstructData
@@ -680,129 +656,105 @@ public class HitStun : Behavior<HitStunInfo>
      public byte hitmotiontype = BEHIT_DEFINE.MOTION_SELF_FORWARD;
      public IntVector3 hitmotion;
 +
-+    /// <summary>受击硬直时长 (ms)</summary>
 +    public FP hitstunduration = FP.Zero;
-+    /// <summary>硬直等级 (1=轻击, 2=重击)</summary>
 +    public byte hitstunlevel = 1;
-+    /// <summary>是否打断 CASTING</summary>
 +    public bool interruptcast = false;
  }
 ```
 
-### 5.9 BeHitExecutor.cs 改动
+### 5.8 BeHitExecutor.cs 改动
 
 ```diff
  protected override void OnEnter(..., ulong target)
  {
-     // ... 现有逻辑不变 (朝向 + 击退位移) ...
-
-+    // 触发受击硬直动画
-+    if (data.hitstunduration > FP.Zero && stage.SeekBehavior(target, out HitStun hitstun))
+-    if (stage.SeekBehaviorInfo(target, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
++    if (stage.SeekBehaviorInfo(target, out StateMachineInfo statemachine))
 +    {
-+        hitstun.Apply(data.hitstunduration, data.hitstunlevel, data.interruptcast);
++        if (STATE_DEFINE.DEATH == statemachine.current) return;
++        if (STATE_DEFINE.ROLL == statemachine.current) return;
 +    }
+
+     // ... 现有朝向+击退位移逻辑不变 ...
+
++    // 受击硬直动画（直接操作 Facade 槽位 + StateMachine）
++    if (data.hitstunduration > FP.Zero && stage.SeekBehavior(target, out StateMachine sm))
++    {
++        // 写入受击槽位（优先级 400，覆盖 AnimationData）
++        if (stage.SeekBehavior(target, out Facade facade))
++            facade.AddOrUpdateSlot(ANIM_SLOT_KEY.HITSTUN, ANIM_PRIORITY.REACTION,
++                state: STATE_DEFINE.HITSTUN);
++
++        // 切换限时状态（到期自动清槽位 + 切回 IDLE）
++        sm.ChangeState(STATE_DEFINE.HITSTUN, data.hitstunduration,
++            slotkey: ANIM_SLOT_KEY.HITSTUN,
++            fallback: STATE_DEFINE.IDLE);
++    }
++
++    // 打断施法管线（可选）
++    if (data.interruptcast && stage.SeekBehavior(target, out SkillBreak sb))
++        sb.Break();
  }
 ```
 
-### 5.10 StateMachine & AnimationExecutor 向后兼容
+### 5.9 Prefab 组装 — 零改动
 
-- `StateMachine.ChangeState()` 调用 `Facade.SetAnimation(state)` → 内部走 `SLOT_STATE` 槽位。
-- `AnimationExecutor` 调用 `Facade.SetAnimation(name, ...)` → 内部走 `SLOT_NAMED` 槽位。
-- 外部 API 不变，内部机制升级为槽位系统。
-- DEATH 时 StateMachine 正常写 `SLOT_STATE(pri=0, animstate=DEATH)`，但因 HitStun 主动 Recover 移除 `SLOT_HITSTUN(pri=400)`，DEATH 自然成为最高优先活跃槽位。
+HeroPrefab / EnemyPrefab 无需任何修改。HITSTUN 是 StateMachine 已有状态，槽位由 BeHitExecutor 直接操作。
+
+### 5.10 RIL_FACADE_ANIMATION.cs — 零改动
+
+双字段不变：`animstate (byte)` + `animname (string)` + `animelapsed (uint)`。
+
+### 5.11 渲染层 — 零改动
+
+| 文件 | 状态 |
+|------|------|
+| `AnimationAgent.cs` | 第 57 行 `ril.animname ?? animcfg?.GetAnimationName(ril.animstate)` 现有 fallback 完美兼容双字段 |
+| `PrimitiveAnimAgent.cs` | `switch (animstate)` 用 byte 判断，不动 |
+| `AnimationConfig.cs` | `GetAnimationName(byte state)` 不动 |
+| `AnimationConfig.json` | 不动 |
 
 ---
 
-## 六、交互规则（槽位系统下的自然语义）
+## 六、交互规则
 
 ### 6.1 状态跃迁表
 
 | 当前状态 | 事件 | 槽位变化 | 结果 |
 |---------|------|----------|------|
-| SLOT_HITSTUN 未激活 | 受击 | +SLOT_HITSTUN(pri=400) | BEHIT 动画立即覆盖 |
-| SLOT_HITSTUN 激活中 | 再次受击 | 刷新 SLOT_HITSTUN duration | combo 连击，计时重置 |
-| SLOT_HITSTUN 激活中 | duration 到期 | -SLOT_HITSTUN | 回落 SLOT_NAMED 或 SLOT_STATE |
-| SLOT_HITSTUN 激活中 | 死亡 | SM→DEATH, HitStun.Recover() 移除 SLOT_HITSTUN | DEATH 动画（SLOT_STATE 胜出） |
-| SLOT_HITSTUN 激活中 | 冰冻（未来） | +SLOT_FROZEN(pri=700) | 冻结动画覆盖受击 |
+| SLOT_HITSTUN 未激活 | 受击 | +SLOT_HITSTUN(pri=400, state=HITSTUN) | HITSTUN 覆盖 |
+| SLOT_HITSTUN 激活中 | 再次受击 | 刷新 duration | combo 连击重置 |
+| SLOT_HITSTUN 激活中 | duration 到期 | -SLOT_HITSTUN | 回落下一个优先级 |
+| SLOT_HITSTUN 激活中 | 死亡 | SM→DEATH | DEATH 胜出 |
+| SLOT_HITSTUN 激活中 | 冰冻（未来）| +SLOT_FROZEN(700) | 冻结覆盖受击 |
 
-### 6.2 Death 优先级（槽位系统自然解决）
+### 6.2 ROLL / DEATH 不可被 HITSTUN
 
-在槽位系统中，Death 不需要特殊处理：
+在 `BeHitExecutor.OnEnter()` 入口统一检查，ROLL/DEATH 时直接跳过，不写槽位不切状态。
 
-```
-HitStun.Recover() → RemoveSlot(SLOT_HITSTUN)
-                    ↓
-        活跃槽位变为 SLOT_STATE(DEATH, pri=0)
-                    ↓
-        Translator 选取 DEATH 动画
-```
-
-`HitStun.OnTick()` 检测到 DEATH 时主动 Recover，移除 `SLOT_HITSTUN(pri=400)` 后，唯一活跃的是 `SLOT_STATE(pri=0, animstate=DEATH)`，Translator 自然选它。**未来如果 Death 需要专门的死亡动画槽位（带镜头特效等），只需注册 `SLOT_DEATH(pri=800)`，HitStun 无需改动**。
-
-### 6.3 CASTING 打断
-
-| interruptcast | 行为 |
-|--------------|------|
-| `false`（默认）| 只通过槽位覆盖动画，StateMachine 保持 CASTING。技能逻辑正常完成 |
-| `true` | 调用 `StateMachine.Break()` → NONE → IDLE，技能被打断 |
-
-### 6.4 ROLL 不可被 BEHIT
-
-在 `HitStun.Apply()` 入口统一检查：
-```csharp
-if (stage.SeekBehavior(actor, out StateMachine sm) && 
-    sm.info.current == STATE_DEFINE.ROLL) return;
-```
-ROLL 时直接跳过，不注册 SLOT_HITSTUN。
-
-### 6.5 多槽位并发覆盖（槽位系统的核心威力）
-
-场景：施法中被打 → 又在硬直中被冰冻。槽位系统自动处理：
+### 6.3 多槽位并发覆盖
 
 ```
-t=0:  活跃槽位 [SLOT_NAMED "charge_loop"(200)]
-t=100: +SLOT_HITSTUN(400) → 活跃 [SLOT_HITSTUN(400), SLOT_NAMED(200)] → BEHIT 胜出
-t=200: +SLOT_FROZEN(700)  → 活跃 [SLOT_FROZEN(700), SLOT_HITSTUN(400)] → FROZEN 胜出
-t=500: SLOT_FROZEN 到期    → 活跃 [SLOT_HITSTUN(400)] → BEHIT 恢复
-t=600: SLOT_HITSTUN 到期   → 活跃 [SLOT_NAMED(200)] → 蓄力动画恢复
-t=700: SLOT_NAMED 到期     → 活跃 [SLOT_STATE(0)] → IDLE
+t=0:  活跃 [SLOT_NAMED "charge_loop"(200)]
+t=100: +SLOT_HITSTUN state=HITSTUN(400) → HITSTUN 胜出
+t=600: SLOT_HITSTUN 到期 → "charge_loop" 恢复
+t=700: SLOT_NAMED 到期 → IDLE(0) 胜出
 ```
-
-**全程无需居中协调逻辑**。每个系统只管自己的槽位注册/移除，Translator 自动解析。这就是框架化的价值。
 
 ---
 
 ## 七、管线脚本示例
 
-### 轻击（小硬直，不打断技能）
-
 ```csharp
-Instruct(200, 200, new BeHitData
+// 重击（大硬直，打断技能）
+ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new BeHitData
 {
-    et = FLOW_DEFINE.ET_FLOW_HIT,
-    uselookatattacker = true,
-    usehitmotion = true,
-    hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
-    hitmotion = new IntVector3(0, 0, 400),
-    hitstunduration = FP.FromMillis(200),  // 200ms 轻硬直
-    hitstunlevel = 1,
-    interruptcast = false,                  // 不打断施法
-});
-```
-
-### 重击（大硬直，打断技能）
-
-```csharp
-Instruct(200, 200, new BeHitData
-{
-    et = FLOW_DEFINE.ET_FLOW_HIT,
     uselookatattacker = true,
     usehitmotion = true,
     hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
     hitmotion = new IntVector3(0, 0, 1200),
-    hitstunduration = FP.FromMillis(600),  // 600ms 重硬直
+    hitstunduration = FP.FromMillis(600),
     hitstunlevel = 2,
-    interruptcast = true,                   // 打断施法
+    interruptcast = true,
 });
 ```
 
@@ -810,15 +762,11 @@ Instruct(200, 200, new BeHitData
 
 ## 八、ChangeStateExecutor 清理
 
-HitStun 上线后，`ChangeStateExecutor` 中 BEHIT 相关的 hack 代码可移除：
-
 ```diff
 - // TODO : HACKER 这里是为了做受击动画, 后续受击动画需要改成独立的动画状态机来处理
 - if (statemachine.info.current == data.state) statemachine.Break();
   statemachine.TryChangeState(data.state);
 ```
-
-`Break()` 绕路不再需要——受击动画通过 `SLOT_HITSTUN` 槽位驱动，不走 StateMachine。
 
 ---
 
@@ -826,70 +774,145 @@ HitStun 上线后，`ChangeStateExecutor` 中 BEHIT 相关的 hack 代码可移�
 
 | 不做 | 原因 |
 |------|------|
-| 新 RIL 类型 | 不需要，复用现有 `RIL_FACADE_ANIMATION` + Translator 槽位解析 |
-| AnimationAgent 多轨混合 | v1 BEHIT 是全 Anim 替换，到期回落 |
-| Avatar Mask / 上下半身分离 | 俯视角 2.5D 需求不强，且需要改 AnimationAgent/AnimationTree |
-| 方向性受击动画 (HIT_FRONT/BACK) | v1 先做单一 BEHIT 动画 |
-| hitstun decay/scaling | 后续数值系统细化 |
-| StateMachine.PASSES 规则表改动 | 不动现有状态迁移逻辑 |
+| 新增受击 Behavior | HITSTUN 是 StateMachine 已有状态，槽位由 BeHitExecutor 直接操作 |
+| 新 RIL 类型 | RIL_FACADE_ANIMATION 双字段不变 |
+| RIL 单轨化 | animstate 和 animname 是正交语义，保持双字段 |
+| state2anim 字典 / LoadStateMapping | 不需要——渲染层已有映射 |
+| AnimationAgent 改动 | 现有 `animname ?? GetAnimationName(animstate)` 完美兼容 |
+| PrimitiveAnimAgent 改动 | byte switch 不动 |
+| AnimationConfig 改动 | 不动 |
+| Prefab 改动 | 零改动 |
+| TICK_DEFINE 改动 | 零改动（HITSTUN 走 StateMachine 现有 Tick）|
+| 上下半身分离 | 2.5D 需求不强 |
+| 方向性受击动画 | v1 单一 HITSTUN |
+| hitstun decay/scaling | 后续数值细化 |
+| StateMachine.PASSES 改动 | 不动现有迁移逻辑 |
 
 ---
 
-## 十、后续扩展（槽位架构的框架价值）
+## 十、后续扩展
 
-有了槽位系统后，新增动画来源的成本极低：
-
-### 10.1 冰冻效果（示例：新增状态效果动画）
-
-```csharp
-// 1. 加枚举
-ANIM_SLOT_KEY.FROZEN = 4
-
-// 2. FrozenEffect.OnApply():
-facade.AddOrUpdateSlot(ANIM_SLOT_KEY.FROZEN, ANIM_PRIORITY.HARDCROWD,
-    STATE_DEFINE.FROZEN, null, duration);
-
-// 3. FrozenEffect.OnExpire():
-facade.RemoveSlot(ANIM_SLOT_KEY.FROZEN);
-
-// 完成。Hierarchy 自动处理：FROZEN(700) > HITSTUN(400) > NAMED(200) > STATE(0)
-```
-
-**零改动**：Translator、AnimationAgent、HitStun、StateMachine 全部不需要动。
-
-### 10.2 击倒/击飞
-
-同一模式：`SLOT_KNOCKDOWN(pri=600)`。比 HitStun 优先级高（击倒覆盖受击），比 Frozen 低（冰冻覆盖击倒）。
-
-### 10.3 过场动画接管
-
-```csharp
-facade.AddOrUpdateSlot(ANIM_SLOT_KEY.CUTSCENE, ANIM_PRIORITY.SYSTEM, 0, "cs_intro", csDuration);
-// pri=1000 覆盖一切，到期自动回落
-```
-
-### 10.4 槽位系统的扩展成本对比
+有了槽位系统后，新增动画来源成本极低：
 
 ```
-                    旧方案（加字段）              新方案（加槽位）
-新增动画来源         加 overridestate2 字段        加一个 ANIM_SLOT_KEY 枚举值
-                    FacadeInfo 加字段             Facade 零字段改动
-                    Translator 加 else if         Translator 零改动
-                    影响 4 个文件                  影响 1 个枚举文件
-                    约 20 行改动                  约 3 行改动
+冰冻效果：  +ANIM_SLOT_KEY.FROZEN → Apply() 时 facade.AddOrUpdateSlot(FROZEN, 700, state=FROZEN)
+过场接管：  facade.AddOrUpdateSlot(CUTSCENE, 1000, name="cs_intro", duration=...)
 ```
 
-### 10.5 v2：多轨混合（未来）
-
-槽位系统当前取 "winner takes all"，未来若需要"受击动画和跑步动画同时播放"：
+扩展成本对比：
 
 ```
-// Translator 改为输出 top N 而非 top 1
-winner = animSlots[0]   // 最高优先：BEHIT (上半身)
-runner = animSlots[1]   // 次高优先：MOVE  (下半身)
-// ril 扩展两个 slot 给 AnimationAgent 做 AnimationTree Blend
+                    旧方案（加字段）         新方案（加槽位）
+新增动画来源         加 overridestate2       +ANIM_SLOT_KEY 枚举值
+                    FacadeInfo 加字段        FacadeInfo 零字段改动
+                    Translator 加 else if    Translator 零改动
+                    Render 层加 switch       Render 层零改动
 ```
 
-这需要改 RIL 结构和 AnimationAgent，但槽位数据模型无需改动——仍是同一个 `SortedSet<AnimationSlot>`。
+### v2：多轨混合
+
+槽位当前 "winner takes all"，未来若需同时播放：
+
+```
+winner = animslots[0]  // 最高优先：HITSTUN (上半身)
+runner = animslots[1]  // 次高优先：MOVE  (下半身)
+// RIL 扩展两个 slot → AnimationTree Blend
+```
+
+槽位数据模型无需改动。
 
 ---
+
+## 十一、版本迭代记录
+
+### 2026-07-21 第一轮：代码级验证
+
+| # | 修正 | 原因 |
+|---|------|------|
+| 1 | `SortedSet` → `List` + `EnsureSort` | 项目无 SortedSet 先例 |
+| 2 | AnimationSlot 走 ObjectCache | 对齐项目池化模式 |
+| 3 | Translator 同步 `info.animname` | Hash diff 不丢 |
+| 4 | DEATH/ROLL 守卫 | 防御性编程 |
+| 5 | TICK_DEFINE 注册受击 Behavior（已废弃）| 本轮砍掉 |
+| 6 | 管线示例改为 spark instruct | ET 搜索已修复 |
+
+### 2026-07-21 第二轮：name 单轨化（已废弃）
+
+曾尝试 RIL 只传 `animname`，在 Logic 层完成 state→name 解析。暴露的问题：
+
+| # | 问题 | 说明 |
+|---|------|------|
+| 7 | 需要 `state2anim` 字典 + `LoadStateMapping` 注入 | 在 Logic 层重复了 Render 层已有的映射能力 |
+| 8 | 需要改 RIL 定义 | 删 `animstate` 字段 |
+| 9 | 需要改 AnimationAgent | 移除 fallback 逻辑 |
+| 10 | 需要改 PrimitiveAnimAgent | byte → string 类型迁移 |
+| 11 | 需要改 AnimationConfig | 瘦身为 name→mix |
+| 12 | Prefab 多 2 行注入代码 | 跨层引用 Render 类型 |
+
+### 2026-07-21 第三轮：双轨归正
+
+基于讨论确认 animstate 和 animname 是正交语义，保持双字段：
+
+| # | 修正 | 说明 |
+|---|------|------|
+| 13 | **RIL 双字段保留** | `animstate (byte)` + `animname (string)` 不变 |
+| 14 | **AnimationSlot 双字段** | state 驱动写 state，name 驱动写 name |
+| 15 | **删除 state2anim / LoadStateMapping** | 不需要在 Logic 层重复查表 |
+| 16 | **Render 层零改动** | AnimationAgent/PrimitiveAnimAgent/AnimationConfig 不动 |
+| 17 | **Prefab 零注入** | BeHitExecutor 直接操作 Facade 槽位 |
+| 18 | **Translator Hash 改为双字段** | winner.animstate + winner.animname + animelapsed + effectincrement |
+| 19 | **改动文件数 15→12** | 删 RIL、AnimationAgent、PrimitiveAnimAgent、AnimationConfig 改动 |
+
+### 2026-07-21 第四轮：砍受击 Behavior 复用 StateMachine
+
+| # | 修正 | 说明 |
+|---|------|------|
+| 20 | **删除受击 Behavior** | 不新增 Behavior。HITSTUN 是 StateMachine 已有状态，槽位由 BeHitExecutor 直接操作，duration 由 StateMachine 管理 |
+| 21 | BeHitExecutor 直接操作 Facade 槽位 | `facade.AddOrUpdateSlot(SLOT_HITSTUN, 400, state=HITSTUN)` 替代独立 Behavior |
+| 22 | StateMachine 新增 stateduration | `ChangeState(state, duration)` 重载 + OnTick 自动恢复 IDLE |
+| 23 | 零 Prefab / TICK_DEFINE 改动 | 无需 `AddBehavior<受击>`，无需插入 Tick 顺序 |
+| 24 | 改动文件 12→9 | 删 2 个新增文件 + 1 个 TICK_DEFINE + 2 个 Prefab，总计 ~140 行（第六轮泛化后 ~146 行）|
+
+### 2026-07-21 第五轮+第六轮：术语归位——BeHit 是指令，HitStun 是状态
+
+| # | 修正 | 说明 |
+|---|------|------|
+| 25 | 区分指令层与状态层 | BeHitData/BeHitExecutor/BEHIT_DEFINE = 受击指令；STATE_DEFINE.HITSTUN/SLOT_HITSTUN = 硬直状态 |
+| 26 | `STATE_DEFINE.BEHIT` → `HITSTUN` | 状态应该叫 HITSTUN（硬直），BEHIT 只是触发它的指令 |
+| 27 | `SLOT_HITSTUN` 保持 | 槽位代表硬直状态，用 HITSTUN 正确 |
+| 28 | `hitstunduration/hitstunlevel` 保持 | BeHitData 携带的字段描述的是"硬直多久/什么等级"，不是"受击多久" |
+
+### 2026-07-21 第七轮：解耦 + 命名对齐
+
+| # | 修正 | 说明 |
+|---|------|------|
+| 29 | StateMachine 泛化解耦 | `timerslotkey` + `timerfallback` 消除 OnTick 硬编码；Frozen 等限时状态复用同一逻辑 |
+| 30 | `ChangeState` 重载签名扩展 | `ChangeState(state, duration, ANIM_SLOT_KEY slotkey, byte fallback)` |
+| 31 | `Break()` 重置 `stateduration` | 避免 Break→NONE 后残留倒计时 |
+| 32 | `RmvSlot` 对齐命名规范 | `RemoveSlot` → `RmvSlot`（Rmv 是 Remove 的缩写） |
+
+### 涉及文件（最终）
+
+```
+新增：
+  Gameplay/Logic/Common/AnimationSlot.cs                     (~55 行)
+
+修改：
+  Gameplay/Logic/BehaviorInfos/FacadeInfo.cs                  (+15 行, +animslots List)
+  Gameplay/Logic/Behaviors/Facade.cs                          (+40 行, 槽位管理 + SetAnimation 重构)
+  Gameplay/Logic/Behaviors/StateMachine.cs                    (+18 行, stateduration + timerslotkey + timerfallback + ChangeState 重载)
+  Gameplay/Logic/Translators/FacadeAnimationTranslator.cs     (+15/-5 行, Hash + OnRIL 双字段)
+  Gameplay/Logic/Flows/Executors/Instructs/BeHitData.cs       (+6 行)
+  Gameplay/Logic/Flows/Executors/BeHitExecutor.cs             (+10 行)
+  Gameplay/Logic/Flows/Executors/ChangeStateExecutor.cs       (-1 行, 删 hack)
+  Gameplay/Logic/Flows/Scriptings/S10020.cs                   (按需)
+
+不动：
+  Gameplay/Logic/RIL/RIL_FACADE_ANIMATION.cs                  (零改动)
+  Gameplay/Render/Agents/AnimationAgent.cs                    (零改动)
+  Gameplay/Render/Agents/PrimitiveAnimAgent.cs                (零改动)
+  Gameplay/Render/Common/AnimationConfig.cs                   (零改动)
+  Gameplay/Logic/Prefabs/HeroPrefab.cs                        (零改动)
+  Gameplay/Logic/Prefabs/EnemyPrefab.cs                       (零改动)
+  Gameplay/Logic/Common/Defines/TICK_DEFINE.cs                (零改动)
+```
