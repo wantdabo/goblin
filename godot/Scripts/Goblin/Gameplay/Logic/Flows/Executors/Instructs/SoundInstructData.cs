@@ -24,4 +24,9 @@ public class SoundInstructData : InstructData
     /// 播放模式, 参考 SoundMode
     /// </summary>
     public byte mode = (byte)SoundMode.OneShot;
+
+    public SoundInstructData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

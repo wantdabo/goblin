@@ -70,4 +70,9 @@ public class EffectData : InstructData
     /// 特效缩放
     /// </summary>
     public int scale = 1000;
+
+    public EffectData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

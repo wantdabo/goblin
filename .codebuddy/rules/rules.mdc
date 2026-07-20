@@ -1,3 +1,7 @@
+---
+alwaysApply: true
+---
+
 你正在处理 Goblin 项目（Godot 4 C# 动作游戏框架）。严格遵循以下编码规范：
 
 ## 命名
@@ -31,4 +35,4 @@
 - SA（System Actor，actor=ulong.MaxValue）挂全局 Behavior
 - 注释全部中文
 
-完整风格文档见 Docs/CODING_STYLE.md，待办见 Docs/TODO.md。
+完整风格文档见 Docs/CODING_STYLE.md。

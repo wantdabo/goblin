@@ -438,6 +438,38 @@ public class Flow : Behavior
     }
         
     /// <summary>
+    /// 根据 ET 枚举搜索目标
+    /// </summary>
+    /// <param name="flowinfo">管线信息</param>
+    /// <param name="et">执行目标类型</param>
+    /// <returns>目标 ActorID，搜索失败返回 0</returns>
+    public ulong SeekETTarget(FlowInfo flowinfo, byte et)
+    {
+        switch (et)
+        {
+            case FLOW_DEFINE.ET_FLOW:       return flowinfo.actor;
+            case FLOW_DEFINE.ET_FLOW_OWNER: return flowinfo.owner;
+            case FLOW_DEFINE.ET_CASTER:
+            {
+                var current = flowinfo.owner;
+                for (var depth = 0; depth < FLOW_DEFINE.MAX_CASTER_SEARCH_DEPTH; depth++)
+                {
+                    if (stage.SeekBehavior(current, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var actortype))
+                    {
+                        if (ACTOR_DEFINE.CASTER_TYPES.Contains((byte)actortype)) return current;
+                        if (ACTOR_DEFINE.NONE == actortype || ACTOR_DEFINE.STAGE == actortype) return 0;
+                    }
+                    if (stage.SeekBehaviorInfo(current, out MagicInfo magic)) { current = magic.owner; continue; }
+                    if (stage.SeekBehaviorInfo(current, out BuffInfo buff)) { current = buff.owner; continue; }
+                    return 0;
+                }
+                return 0;
+            }
+            default: return 0;
+        }
+    }
+
+    /// <summary>
     /// 执行指令
     /// </summary>
     /// <param name="type">指令执行类型</param>
@@ -479,25 +511,13 @@ public class Flow : Behavior
             
         switch (data.et)
         {
-            case FLOW_DEFINE.ET_FLOW:
-                Do(flowinfo.actor);
-                break;
-            case FLOW_DEFINE.ET_FLOW_OWNER:
-                Do(flowinfo.owner);
-                break;
-            case FLOW_DEFINE.ET_MAGIC_OWNER:
-            {
-                var target = flowinfo.owner;
-                if (stage.SeekBehaviorInfo(target, out MagicInfo magic)) target = magic.owner;
-                Do(target);
-                break;
-            }
             case FLOW_DEFINE.ET_FLOW_HIT:
-                if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision)) break;
-                foreach (var target in flowcollision.targets)
-                {
-                    Do(target.actor);
-                }
+            case FLOW_DEFINE.ET_HIT_VICTIM:
+                if (stage.SeekBehaviorInfo(flowinfo.actor, out FlowCollisionHurtInfo flowcollision))
+                    foreach (var target in flowcollision.targets) Do(target.actor);
+                break;
+            default:
+                Do(SeekETTarget(flowinfo, data.et));
                 break;
         }
 
@@ -535,7 +555,7 @@ public class Flow : Behavior
         Executor<AnimationExecutor>(INSTR_DEFINE.ANIMATION);
         Executor<SpatialPositionExecutor>(INSTR_DEFINE.SPATIAL_POSITION);
         Executor<CreateMagicExecutor>(INSTR_DEFINE.CREATE_MAGIC);
-        Executor<MagicMotionExecutor>(INSTR_DEFINE.MAGIC_MOTION);
+
         Executor<LaunchSkillExecutor>(INSTR_DEFINE.LAUNCH_SKILL);
         Executor<EffectExecutor>(INSTR_DEFINE.EFFECT);
         Executor<CollisionExecutor>(INSTR_DEFINE.COLLISION);

@@ -18,4 +18,9 @@ public class AnimationData : InstructData
     /// 动画名称
     /// </summary>
     public string name;
+
+    public AnimationData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

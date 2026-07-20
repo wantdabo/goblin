@@ -38,4 +38,9 @@ public class CreateMagicData : InstructData
     /// 管线列表
     /// </summary>
     public List<uint> pipelines;
+
+    public CreateMagicData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

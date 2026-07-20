@@ -20,6 +20,20 @@ public bool Destroyed { get; set; }
 private Engine _engine;
 ```
 
+常量使用 SCREAMING_SNAKE_CASE，定义类以 `_DEFINE` 后缀：
+
+```csharp
+// ✅
+STATE_DEFINE.NONE
+ATTRIBUTE_DEFINE.MOVESPEED
+FLOW_DEFINE.ET_CASTER
+ACTOR_DEFINE.HERO
+
+// ❌
+StateDefine.None
+AttributeDefine.moveSpeed
+```
+
 ## 2. 条件判断：常量在前
 
 `null` 和 `false` 永远放左边，不用 `!` 取反。
@@ -95,20 +109,36 @@ Info:     OnReady → OnReset → OnClone
 Executor: OnEnter → OnExecute → OnExit
 ```
 
-## 9. 缩进与编码
+## 9. 简短卫语句单行
+
+`if + return/break/continue` 体量小时合并一行：
+
+```csharp
+// ✅
+if (null == comps) return;
+if (false == condition) break;
+if (false == stage.SeekBehaviorInfo(actor, out MagicInfo magic)) return 0;
+
+// ❌
+if (null == comps)
+    return;
+```
+
+## 10. 缩进与编码
 
 - 4 空格缩进
 - CRLF 行尾
 - UTF-8 BOM
 - 文件级命名空间（`;` 结尾）
 
-## 10. 注释
+## 11. 注释
 
 - `/// <summary>` XML 文档，中文
 - 行内注释 `//` 中文
 - 不写英文注释
+- 注释独占一行，不跟在代码后面（禁止行尾注释）
 
-## 11. 严禁事项
+## 12. 严禁事项
 
 | ❌ |
 |---|
@@ -118,3 +148,11 @@ Executor: OnEnter → OnExecute → OnExit
 | 用裸 field 代替 `{ get; set; }` 属性 |
 | 类名加前缀/后缀 |
 | 英文注释 |
+| emoji |
+| 行尾注释 — 注释独占一行 |
+
+## 13. 架构速查
+
+- Logic 层零 Godot 依赖，用自研定点数（FPVector3/FPQuaternion/FP），Render 层依赖 Godot API
+- Agent Chase 模式：Logic 推送 RIL → Render Agent 追逐状态
+- SA（System Actor，actor=ulong.MaxValue）挂全局 Behavior

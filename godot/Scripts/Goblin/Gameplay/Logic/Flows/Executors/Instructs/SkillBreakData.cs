@@ -9,4 +9,9 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 public class SkillBreakData : InstructData
 {
     public override ushort id => INSTR_DEFINE.SKILLBREAK;
+
+    public SkillBreakData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

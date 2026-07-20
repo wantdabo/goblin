@@ -35,4 +35,9 @@ public class HitLagData : InstructData
     /// 叠加因子
     /// </summary>
     public uint additivefactor;
+
+    public HitLagData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

@@ -15,4 +15,9 @@ public class TimeScaleData : InstructData
     public override ushort id => INSTR_DEFINE.TIMESCALE;
 
     public uint timescale = 1000;
+
+    public TimeScaleData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

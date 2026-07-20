@@ -1,5 +1,5 @@
-using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
+using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 
@@ -24,11 +24,7 @@ public class DamageExecutor : Executor<DamageData>
 
     private void Apply(DamageData data, FlowInfo flowinfo, ulong target)
     {
-        // 如果管线归属于 Magic Actor，施法者是 Magic 的 owner
-        var from = stage.SeekBehaviorInfo(flowinfo.owner, out MagicInfo magicinfo)
-            ? magicinfo.owner
-            : flowinfo.owner;
-
+        var from = stage.flow.SeekETTarget(flowinfo, FLOW_DEFINE.ET_CASTER);
         var damage = stage.attrb.ChargeDamage(from, data.strength * stage.cfg.int2fp);
         stage.attrb.ToDamage(from, target, damage);
     }

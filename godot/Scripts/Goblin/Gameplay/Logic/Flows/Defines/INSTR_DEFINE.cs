@@ -18,55 +18,51 @@ public class INSTR_DEFINE
     /// </summary>
     public const ushort CREATE_MAGIC = 3;
     /// <summary>
-    /// 魔法体运动指令
-    /// </summary>
-    public const ushort MAGIC_MOTION = 4;
-    /// <summary>
     /// 释放技能
     /// </summary>
-    public const ushort LAUNCH_SKILL = 5;
+    public const ushort LAUNCH_SKILL = 4;
     /// <summary>
     /// 特效指令
     /// </summary>
-    public const ushort EFFECT = 6;
+    public const ushort EFFECT = 5;
     /// <summary>
     /// 碰撞指令
     /// </summary>
-    public const ushort COLLISION = 7;
+    public const ushort COLLISION = 6;
     /// <summary>
     /// 移除 Actor 指令
     /// </summary>
-    public const ushort RMV_ACTOR = 8;
+    public const ushort RMV_ACTOR = 7;
     /// <summary>
     /// 状态变化指令
     /// </summary>
-    public const ushort CHANGE_STATE = 9;
+    public const ushort CHANGE_STATE = 8;
     /// <summary>
     /// 火花指令
     /// </summary>
-    public const ushort SPARK = 10;
+    public const ushort SPARK = 9;
     /// <summary>
     /// 顿帧指令
     /// </summary>
-    public const ushort HIT_LAG = 11;
+    public const ushort HIT_LAG = 10;
     /// <summary>
     /// 时间缩放指令
     /// </summary>
-    public const ushort TIMESCALE = 12;
+    public const ushort TIMESCALE = 11;
     /// <summary>
     /// 受击指令
     /// </summary>
-    public const ushort BEHIT = 13;
+    public const ushort BEHIT = 12;
     /// <summary>
     /// 技能打断指令
     /// </summary>
-    public const ushort SKILLBREAK = 14;
+    public const ushort SKILLBREAK = 13;
     /// <summary>
     /// 伤害结算指令
     /// </summary>
-    public const ushort DAMAGE = 15;
+    public const ushort DAMAGE = 14;
     /// <summary>
     /// 音效指令
     /// </summary>
-    public const ushort SOUND = 16;
+    public const ushort SOUND = 15;
 }

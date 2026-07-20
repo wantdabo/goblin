@@ -23,4 +23,9 @@ public class SparkData : InstructData
     /// 火花令牌
     /// </summary>
     public string token;
+
+    public SparkData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

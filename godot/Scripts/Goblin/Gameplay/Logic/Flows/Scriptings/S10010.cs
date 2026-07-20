@@ -17,7 +17,7 @@ public class S10010 : Scripting
     {
         Instruct(0, 0, new ChangeStateData
         {
-            et = FLOW_DEFINE.ET_MAGIC_OWNER,
+            et = FLOW_DEFINE.ET_CASTER,
             state = STATE_DEFINE.ROLL,
             force = true,
             usedelaybreak = true,
@@ -26,13 +26,13 @@ public class S10010 : Scripting
 
         Instruct(0, 0, new SoundInstructData
         {
-            et = FLOW_DEFINE.ET_MAGIC_OWNER,
+            et = FLOW_DEFINE.ET_CASTER,
             soundid = 1000001,
         });
 
         ScriptMachine.Instruct(0, 320, new SpatialPositionData
         {
-            et = FLOW_DEFINE.ET_MAGIC_OWNER,
+            et = FLOW_DEFINE.ET_CASTER,
             type = SPATIAL_DEFINE.POSITION_SELF,
             position = new IntVector3(0, 0, 200),
         }, checkonce: false);

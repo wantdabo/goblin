@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Goblin.Gameplay.Logic.Common.Defines;
 
 /// <summary>
@@ -33,4 +35,9 @@ public class ACTOR_DEFINE
     /// 敌人
     /// </summary>
     public const byte ENEMY = 6;
+
+    /// <summary>
+    /// 施法者 Actor 类型集合（命中即视为找到施法者）
+    /// </summary>
+    public static readonly HashSet<byte> CASTER_TYPES = new HashSet<byte> { HERO, ENEMY };
 }

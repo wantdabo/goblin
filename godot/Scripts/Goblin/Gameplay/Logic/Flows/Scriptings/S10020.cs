@@ -29,7 +29,7 @@ public class S10020 : Scripting
 
 		Instruct(200, 500, new CollisionData
 		{
-			et = FLOW_DEFINE.ET_MAGIC_OWNER,
+			et = FLOW_DEFINE.ET_CASTER,
 			type = COLLISION_DEFINE.COLLISION_TYPE_HURT,
 			overlaptype = COLLISION_DEFINE.COLLISION_BOX,
 			count = 5,
@@ -45,7 +45,6 @@ public class S10020 : Scripting
 
 		Instruct(200, 200, new BeHitData
 		{
-			et = FLOW_DEFINE.ET_FLOW_HIT,
 			uselookatattacker = true,
 			usehitmotion = true,
 			hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
@@ -54,7 +53,7 @@ public class S10020 : Scripting
 
 		Instruct(200, 200, new HitLagData
 		{
-			et = FLOW_DEFINE.ET_FLOW_HIT,
+			et = FLOW_DEFINE.ET_HIT_VICTIM,
 			type = HIT_LAG_DEFINE.TYPE_INSTANCE,
 			strength = 300,
 			strengthmax = 300,

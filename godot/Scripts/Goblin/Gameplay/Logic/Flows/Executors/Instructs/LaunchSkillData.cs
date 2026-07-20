@@ -23,4 +23,9 @@ public class LaunchSkillData : InstructData
     /// 技能 ID
     /// </summary>
     public uint skillid;
+
+    public LaunchSkillData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

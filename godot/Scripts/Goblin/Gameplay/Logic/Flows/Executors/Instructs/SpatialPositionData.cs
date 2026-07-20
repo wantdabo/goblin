@@ -18,4 +18,9 @@ public class SpatialPositionData : InstructData
     public byte type;
 
     public IntVector3 position;
+
+    public SpatialPositionData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

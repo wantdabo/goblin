@@ -19,7 +19,8 @@ public class BeHitExecutor : Executor<BeHitData>
         base.OnEnter(identity, data, flowinfo, target);
         if (stage.SeekBehaviorInfo(target, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
         stage.SeekBehaviorInfo(target, out SpatialInfo spatial);
-        stage.SeekBehaviorInfo(flowinfo.owner, out SpatialInfo atkspatial);
+        var caster = stage.flow.SeekETTarget(flowinfo, FLOW_DEFINE.ET_CASTER);
+        stage.SeekBehaviorInfo(caster, out SpatialInfo atkspatial);
             
         if (data.uselookatattacker && null != spatial && null != atkspatial)
         {

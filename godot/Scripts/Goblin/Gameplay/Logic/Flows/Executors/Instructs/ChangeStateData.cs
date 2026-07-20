@@ -38,4 +38,9 @@ public class ChangeStateData : InstructData
     /// 延迟中断时间
     /// </summary>
     public uint delaybreak = 1000;
+
+    public ChangeStateData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

@@ -13,4 +13,9 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 public class RmvActorData : InstructData
 {
     public override ushort id => INSTR_DEFINE.RMV_ACTOR;
+
+    public RmvActorData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

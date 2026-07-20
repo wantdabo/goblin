@@ -70,4 +70,9 @@ public class CollisionData : InstructData
     /// [自身]命中火花
     /// </summary>
     public SparkData spark;
+
+    public CollisionData()
+    {
+        et = FLOW_DEFINE.ET_FLOW_OWNER;
+    }
 }

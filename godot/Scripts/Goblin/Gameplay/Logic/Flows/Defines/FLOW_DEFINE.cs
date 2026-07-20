@@ -27,10 +27,19 @@ public class FLOW_DEFINE
     /// </summary>
     public const byte ET_FLOW_HIT = 3;
     /// <summary>
-    /// 执行目标 - 魔法体拥有者（穿透 Magic 追溯到施法者）
+    /// 执行目标 - 施法者（穿透搜索直到找到角色）
     /// </summary>
-    public const byte ET_MAGIC_OWNER = 4;
-        
+    public const byte ET_CASTER = 4;
+    /// <summary>
+    /// 执行目标 - 受击者（火花逐目标，回退碰撞列表）
+    /// </summary>
+    public const byte ET_HIT_VICTIM = 5;
+
+    /// <summary>
+    /// 施法者搜索最大穿透深度（防循环引用卡死）
+    /// </summary>
+    public const int MAX_CASTER_SEARCH_DEPTH = 8;
+
     /// <summary>
     /// 脚本 ID 10000 — 出生（切换到 IDLE）
     /// </summary>
