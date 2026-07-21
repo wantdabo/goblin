@@ -402,3 +402,59 @@ Blend weight 只影响视觉混合，不产生游戏态差异。命中判定走 
 ### 2026-07-22 砍 Phase 4 事件帧系统
 
 Pipeline 时序天然等价于动画帧驱动（同一确定性时钟），无需在 AnimationConfig 中耦合游戏逻辑。取消窗、命中帧、特效帧均由 Pipeline 管理，动画数据只负责播放。
+
+---
+
+## 十一、代码审查问题（2026-07-22 全链路审查）
+
+### P1 — `SetAnimation(null)` 跨层误杀命名槽位 ✅ 已修复
+
+**位置**：`Facade.SetAnimation(string)` else 分支 + `AnimationExecutor.OnExit`
+
+Phase 3 让命名动画支持多层（`AnimationData.layer`），但退出路径 `SetAnimation(null)` 调用 `RmvSlotsByType(SLOT_TYPE_NAMED)` 清掉所有层的 NAMED 槽位。上半身攻击动画先退出会连带杀掉下半身移动动画。
+
+**修复**：else 分支改用 `RmvSlot(GenKey(SLOT_TYPE_NAMED, layer))` 定向移除。
+
+### P1 — `playname` 模型切换后残留 ✅ 已修复
+
+**位置**：`AnimationAgent.EnsureModel`
+
+换模型时重置了 `animplayer/animtree/treedetected`，但没重置 `playname/curplayname/preplayname`。旧动画名残留导致 `OnChase` 对新模型播错动画。
+
+**修复**：`EnsureModel` 里同步重置三个 playname 字段。
+
+### P2 — Hash 与 RIL 的 elapsed 精度不对齐 ✅ 已修复
+
+**位置**：`FacadeAnimationTranslator.OnCalcHashCode`
+
+`OnCalcHashCode` 直接哈希 FP elapsed，但 `OnRIL` 写入的是 `(elapsed * fp2int).AsUInt()`。不同 FP 值可能产生相同 uint → hash 变了但 RIL 数据没变 → 发多余 RIL。
+
+**修复**：`OnCalcHashCode` 用与 `OnRIL` 相同的 uint 转换后哈希。
+
+### P2 — `GetAnimationName(byte state)` 线性查找 ✅ 已修复
+
+**位置**：`AnimationConfig.GetAnimationName`
+
+`BuildHashIndex` 已为 name 建了哈希字典，但 state 查找还是 O(n) 遍历。状态数量小影响微乎其微，但风格不一致。
+
+**修复**：`BuildHashIndex` 顺带建 `state2name` 字典，`GetAnimationName` 改字典查找。
+
+### P2 — `layernodenames` 硬编码 ✅ 已修复
+
+**位置**：`AnimationAgent.layernodenames`
+
+`{"Base", "Upper", "Lower"}` 硬编码在代码里，必须和 Godot AnimationTree 节点名严格匹配。策划改节点名会静默失败。
+
+**修复**：移入 `AnimationConfig.GetLayerNodeName`，数据驱动，保留默认值兜底。
+
+### 待验证 — `seek_request` 参数兼容性
+
+**位置**：`AnimationAgent.DriveTree`
+
+`animtree.Set("parameters/{nodename}/seek_request", ...)` 参数路径取决于 Godot 版本和 AnimationTree 节点配置。需在 Godot 编辑器里确认 AnimationTree 结构是否匹配。
+
+### 已知设计债务 — `info.animelapsed` 双轨追踪
+
+**位置**：`Facade.OnTick` + `AnimationExecutor.OnExecute`
+
+`info.animelapsed` 和 `slot.elapsed` 同时追踪动画进度，推进路径不同（Facade.OnTick vs AnimationExecutor.OnExecute）。`info.animelapsed` 仅在无 winner fallback 时用到，长期可考虑废弃。

@@ -51,7 +51,7 @@ public class Facade : Behavior<FacadeInfo>
         if (null != animname)
             AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
         else
-            RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_NAMED);
+            RmvSlot(ANIM_DEFINE.GenKey(ANIM_DEFINE.SLOT_TYPE_NAMED, layer));
     }
 
     /// <summary>

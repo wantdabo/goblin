@@ -26,11 +26,6 @@ public class AnimationAgent : Agent
     private float mixduration { get; set; }
 
     /// <summary>
-    /// 层索引 → AnimationTree blend node 名称
-    /// </summary>
-    private static readonly string[] layernodenames = { "Base", "Upper", "Lower" };
-
-    /// <summary>
     /// 是否已检出 AnimationTree（-1=未检出, 0=无, 1=有）
     /// </summary>
     private int treedetected { get; set; }
@@ -73,9 +68,9 @@ public class AnimationAgent : Agent
         for (int i = 0; i < ril.layercount; i++)
         {
             var entry = ril.layeranims[i];
-            if (entry.layer >= layernodenames.Length) continue;
+            var nodename = animcfg.GetLayerNodeName(entry.layer);
+            if (null == nodename) continue;
 
-            var nodename = layernodenames[entry.layer];
             var animname = ResolveAnimNameByEntry(entry);
             if (null == animname) continue;
             if (false == animplayer.HasAnimation(animname)) continue;
@@ -159,6 +154,7 @@ public class AnimationAgent : Agent
             animplayer = null;
             animtree = null;
             treedetected = -1;
+            playname = null; curplayname = null; preplayname = null;
         }
         if (null == modelagent?.node) return;
         if (null == animplayer)

@@ -10,8 +10,31 @@ public class AnimationConfig
 	public List<AnimationStateInfo> animationstates { get; set; }
 	public List<AnimationMixInfo> animationmixs { get; set; }
 
+	/// <summary>
+	/// AnimationTree 各层 blend node 名称（Base/Upper/Lower），可在配置中覆盖
+	/// </summary>
+	public List<string> layernodenames { get; set; }
+
+	/// <summary>
+	/// 默认层节点名称兜底
+	/// </summary>
+	private static readonly string[] defaultlayernodenames = { "Base", "Upper", "Lower" };
+
+	/// <summary>
+	/// 获取指定层的 blend node 名称
+	/// </summary>
+	public string GetLayerNodeName(int layer)
+	{
+		if (null != layernodenames && layer < layernodenames.Count)
+			return layernodenames[layer];
+		if (layer < defaultlayernodenames.Length)
+			return defaultlayernodenames[layer];
+		return null;
+	}
+
 	private Dictionary<uint, string> hash2name { get; set; }
 	private Dictionary<uint, AnimationMixInfo> hash2mixinfo { get; set; }
+	private Dictionary<byte, string> state2name { get; set; }
 
 	/// <summary>
 	/// 构建哈希索引（加载配置后调用一次）
@@ -21,8 +44,12 @@ public class AnimationConfig
 		if (null != animationstates)
 		{
 			hash2name = new Dictionary<uint, string>(animationstates.Count);
+			state2name = new Dictionary<byte, string>(animationstates.Count);
 			foreach (var s in animationstates)
+			{
 				hash2name[AnimHash.Hash(s.name)] = s.name;
+				state2name[s.state] = s.name;
+			}
 		}
 
 		if (null != animationmixs)
@@ -35,9 +62,9 @@ public class AnimationConfig
 
 	public string GetAnimationName(byte state)
 	{
-		foreach (var s in animationstates)
-			if (s.state == state) return s.name;
-		return null;
+		if (null == state2name) return null;
+		state2name.TryGetValue(state, out var name);
+		return name;
 	}
 
 	/// <summary>
