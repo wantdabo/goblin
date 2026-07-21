@@ -33,7 +33,7 @@ ChangeStateData → ChangeStateExecutor
 AnimationData(begin, end) → AnimationExecutor
   OnEnter:  facade.SetAnimation(name, TICK_MANUAL, layer)   // SLOT_TYPE_NAMED, priority=ACTION
   OnExecute: facade.info.animelapsed += LOGIC_TICK
-  OnExit:   facade.SetAnimation(null, TICK_AUTOMATIC)        // RmvSlotsByType(SLOT_TYPE_NAMED)
+  OnExit:   facade.SetAnimation(null, TICK_AUTOMATIC)        // RmvSlot(SLOT_TYPE_NAMED, layer)
 ```
 
 生命周期：Pipeline instruct begin→end。动画名经 `AnimHash.Hash` 转为 uint 哈希，Render 层通过 `AnimationConfig.GetAnimationNameByHash` 反查。
@@ -395,13 +395,13 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 4. StateMachine/BeHitExecutor/GameplayStateProvider 调用点适配
 5. 编码风格：MakeKey→GenKey，参数/变量全小写
 
-### 2026-07-22 砍 Phase 4 确定性混合参数
-
-Blend weight 只影响视觉混合，不产生游戏态差异。命中判定走 Pipeline，位移走 Logic，blend weight 分歧不影响帧同步。animstate 已覆盖"播哪个状态"的确定性。
-
-### 2026-07-22 砍 Phase 4 事件帧系统
+### 2026-07-22 砍 Phase 4 事件帧系统 → Pipeline 平替
 
 Pipeline 时序天然等价于动画帧驱动（同一确定性时钟），无需在 AnimationConfig 中耦合游戏逻辑。取消窗、命中帧、特效帧均由 Pipeline 管理，动画数据只负责播放。
+
+### 2026-07-22 砍 Phase 5 确定性混合参数 → blend weight 不影响游戏态
+
+Blend weight 只影响视觉混合，不产生游戏态差异。命中判定走 Pipeline，位移走 Logic，blend weight 分歧不影响帧同步。animstate 已覆盖"播哪个状态"的确定性。
 
 ---
 
