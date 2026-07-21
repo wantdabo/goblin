@@ -43,9 +43,9 @@ public class GameplayStateProvider : IStateProvider
 
     private static Dictionary<byte, string> slotkeynames { get; } = new()
     {
-        { ANIM_DEFINE.SLOT_STATE, "STATE" },
-        { ANIM_DEFINE.SLOT_NAMED, "NAMED" },
-        { ANIM_DEFINE.SLOT_OVERRIDE, "OVERRIDE" },
+        { ANIM_DEFINE.SLOT_TYPE_STATE, "STATE" },
+        { ANIM_DEFINE.SLOT_TYPE_NAMED, "NAMED" },
+        { ANIM_DEFINE.SLOT_TYPE_OVERRIDE, "OVERRIDE" },
     };
 
     private static Dictionary<byte, string> layernames { get; } = new()
@@ -221,14 +221,17 @@ public class GameplayStateProvider : IStateProvider
         JsonArray slots = new();
         foreach (var slot in info.animslots)
         {
+            var slottype = ANIM_DEFINE.GetSlotType(slot.key);
+            var keydisplay = slotkeynames.GetValueOrDefault(slottype, slottype.ToString());
             slots.Add(new JsonObject
             {
-                ["key"] = slotkeynames.GetValueOrDefault(slot.key, slot.key.ToString()),
+                ["key"] = $"{keydisplay}:L{slot.layer}",
                 ["priority"] = slot.priority,
                 ["active"] = slot.active,
                 ["animstate"] = statenames.GetValueOrDefault(slot.animstate, slot.animstate.ToString()),
                 ["animname"] = slot.animhash != 0 ? $"0x{slot.animhash:X8}" : null,
                 ["layer"] = layernames.GetValueOrDefault(slot.layer, $"L{slot.layer}"),
+                ["elapsed"] = FpToFloat(slot.elapsed),
                 ["istransient"] = slot.istransient,
                 ["duration"] = slot.istransient ? FpToFloat(slot.duration) : 0,
             });
@@ -267,6 +270,7 @@ public class GameplayStateProvider : IStateProvider
                 ["layer"] = layernames.GetValueOrDefault(l, $"L{l}"),
                 ["animstate"] = statename,
                 ["animhash"] = hashstr,
+                ["elapsed"] = FpToFloat(null != winner ? winner.elapsed : info.animelapsed),
             });
         }
         return winners;

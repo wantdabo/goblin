@@ -74,7 +74,7 @@ public class BeHitExecutor : Executor<BeHitData>
         if (0 < data.hitstunduration && stage.SeekBehavior(target, out StateMachine sm))
         {
             if (stage.SeekBehavior(target, out Facade facade))
-                facade.AddOrUpdateSlot(ANIM_DEFINE.SLOT_OVERRIDE, ANIM_DEFINE.SLOT_PRIORITY_REACTION,
+                facade.AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_OVERRIDE, ANIM_DEFINE.SLOT_PRIORITY_REACTION,
                     state: STATE_DEFINE.HITSTUN);
 
             sm.ChangeState(STATE_DEFINE.HITSTUN, data.hitstunduration * FP.EN3,

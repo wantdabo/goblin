@@ -91,7 +91,7 @@ public class StateMachine : Behavior<StateMachineInfo>
         // 离开 CASTING 时清理命名动画槽位
         if (STATE_DEFINE.CASTING == info.last)
         {
-            facade.RmvSlot(ANIM_DEFINE.SLOT_NAMED);
+            facade.RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_NAMED);
         }
 
         if (STATE_DEFINE.CASTING == info.current)

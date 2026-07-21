@@ -35,8 +35,8 @@ public class Facade : Behavior<FacadeInfo>
         var priority = STATE_DEFINE.DEATH == state || STATE_DEFINE.BORN == state
             ? ANIM_DEFINE.SLOT_PRIORITY_LIFESTATE
             : ANIM_DEFINE.SLOT_PRIORITY_LOCOMOTION;
-        AddOrUpdateSlot(ANIM_DEFINE.SLOT_STATE, priority, state: state);
-        RmvSlot(ANIM_DEFINE.SLOT_OVERRIDE);
+        AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_STATE, priority, state: state);
+        RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_OVERRIDE);
     }
         
     /// <summary>
@@ -49,16 +49,17 @@ public class Facade : Behavior<FacadeInfo>
         info.animhash = AnimHash.Hash(animname);
         info.animelapsed = 0;
         if (null != animname)
-            AddOrUpdateSlot(ANIM_DEFINE.SLOT_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
+            AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
         else
-            RmvSlot(ANIM_DEFINE.SLOT_NAMED);
+            RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_NAMED);
     }
 
     /// <summary>
     /// 添加或更新槽位
     /// </summary>
-    public void AddOrUpdateSlot(byte key, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
+    public void AddOrUpdateSlot(byte slottype, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
     {
+        var key = ANIM_DEFINE.GenKey(slottype, layer);
         var slot = GetSlot(key);
         if (null == slot)
         {
@@ -71,6 +72,7 @@ public class Facade : Behavior<FacadeInfo>
         slot.animstate = state;
         slot.animhash = namehash;
         slot.layer = layer;
+        slot.elapsed = FP.Zero;
         if (FP.Zero < duration) { slot.istransient = true; slot.duration = duration; }
         else { slot.istransient = false; slot.duration = FP.Zero; }
         EnsureSort();
@@ -79,20 +81,38 @@ public class Facade : Behavior<FacadeInfo>
     /// <summary>
     /// 移除槽位
     /// </summary>
-    public void RmvSlot(byte key)
+    public void RmvSlot(ushort key)
     {
         var slot = GetSlot(key);
-        if (null != slot)
+        if (null != slot) ReleaseSlot(slot);
+    }
+
+    /// <summary>
+    /// 按槽位类型移除所有匹配槽位
+    /// </summary>
+    public void RmvSlotsByType(byte slottype)
+    {
+        for (int i = info.animslots.Count - 1; i >= 0; i--)
         {
-            info.animslots.Remove(slot);
-            slot.active = false;
-            slot.animstate = 0;
-            slot.animhash = 0;
-            slot.layer = 0;
-            slot.istransient = false;
-            slot.duration = FP.Zero;
-            ObjectCache.Set(slot);
+            if (ANIM_DEFINE.GetSlotType(info.animslots[i].key) != slottype) continue;
+            ReleaseSlot(info.animslots[i]);
         }
+    }
+
+    /// <summary>
+    /// 内部释放槽位（移出列表 + 重置字段 + 回池）
+    /// </summary>
+    private void ReleaseSlot(AnimationSlot slot)
+    {
+        info.animslots.Remove(slot);
+        slot.active = false;
+        slot.animstate = 0;
+        slot.animhash = 0;
+        slot.layer = 0;
+        slot.istransient = false;
+        slot.duration = FP.Zero;
+        slot.elapsed = FP.Zero;
+        ObjectCache.Set(slot);
     }
 
     /// <summary>
@@ -103,7 +123,7 @@ public class Facade : Behavior<FacadeInfo>
     /// <summary>
     /// 查找槽位
     /// </summary>
-    private AnimationSlot GetSlot(byte key)
+    private AnimationSlot GetSlot(ushort key)
     {
         foreach (var slot in info.animslots)
             if (slot.key == key) return slot;
@@ -130,22 +150,17 @@ public class Facade : Behavior<FacadeInfo>
         base.OnTick(tick);
         if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
 
-        // 过期瞬时槽位
+        // 逐槽位递进 elapsed（瞬时与非瞬时均需推进动画进度）
         for (int i = info.animslots.Count - 1; i >= 0; i--)
         {
             var slot = info.animslots[i];
+            if (slot.active) slot.elapsed += tick;
+
             if (false == slot.istransient) continue;
             slot.duration -= tick;
             if (FP.Zero >= slot.duration)
             {
-                info.animslots.RemoveAt(i);
-                slot.active = false;
-                slot.animstate = 0;
-                slot.animhash = 0;
-                slot.layer = 0;
-                slot.istransient = false;
-                slot.duration = FP.Zero;
-                ObjectCache.Set(slot);
+                ReleaseSlot(slot);
             }
         }
 

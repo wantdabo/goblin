@@ -17,15 +17,30 @@ public class ANIM_DEFINE
     /// <summary>
     /// StateMachine 基态
     /// </summary>
-    public const byte SLOT_STATE = 0;
+    public const byte SLOT_TYPE_STATE = 0;
     /// <summary>
     /// AnimationData 命名动画
     /// </summary>
-    public const byte SLOT_NAMED = 1;
+    public const byte SLOT_TYPE_NAMED = 1;
     /// <summary>
     /// 行为覆盖（BeHitExecutor 等写入）
     /// </summary>
-    public const byte SLOT_OVERRIDE = 2;
+    public const byte SLOT_TYPE_OVERRIDE = 2;
+
+    /// <summary>
+    /// 构造复合槽位键（高字节=类型，低字节=层）
+    /// </summary>
+    public static ushort GenKey(byte slottype, byte layer) => (ushort)((slottype << 8) | layer);
+
+    /// <summary>
+    /// 从复合键提取槽位类型
+    /// </summary>
+    public static byte GetSlotType(ushort key) => (byte)(key >> 8);
+
+    /// <summary>
+    /// 从复合键提取层
+    /// </summary>
+    public static byte GetSlotLayer(ushort key) => (byte)(key & 0xFF);
 
     /// <summary>
     /// 优先级：基础运动

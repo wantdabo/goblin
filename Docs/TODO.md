@@ -1,6 +1,6 @@
 # Goblin 待办清单
 
-> 2026-07-22 | 更新于动画槽位优先级系统 Phase 1+2 落地
+> 2026-07-22 | 更新于 Phase 2.5（逐层 elapsed + AnimationTree）+ Phase 3（复合键）落地
 
 ---
 
@@ -27,8 +27,8 @@
 | ~~音效支持~~ ✅ | Sound 模块已实现（handle-based SFX API + SoundAgent + RIL 事件管线） |
 | ~~抗性计算~~ ✅ | 暴击 / 闪避 / 护甲 / 魔抗 + 伤害类型分支 | `AttributeBucket.cs` |
 | ~~受击动画独立状态机~~ ✅ | Phase 1+2 已落地：AnimationSlot 优先级 + 多层 RIL + StateMachine 限时状态 + BeHitExecutor HITSTUN。`ChangeStateExecutor` hack 已删。参考 `Docs/ANIMATION_PROPOSAL.md` | `Docs/ANIMATION_PROPOSAL.md` |
-| 逐层动画 elapsed + AnimationTree | Phase 2.5。当前 `info.animelapsed` 单值共享所有层，多层独立进度无法追踪。需 RIL `LayerAnimEntry` 加 elapsed + AnimationAgent 接入 AnimationTree 骨骼遮罩混合 | `RIL_FACADE_ANIMATION.cs`, `AnimationAgent.cs` |
-| 槽位 key 复合化（多命名动画共存）| Phase 3。`SLOT_NAMED` 单 key，同帧不同 layer 命名动画互斥。需复合键或新增 per-layer slot key | `Facade.cs`, `ANIM_DEFINE.cs` |
+| 逐层动画 elapsed + AnimationTree | ✅ Phase 2.5 已落地。`AnimationSlot.elapsed` 逐槽位递进、`LayerAnimEntry.elapsed` RIL 逐层传输、AnimationAgent 接入 AnimationTree 多层播放（回退兼容 AnimationPlayer） | `Facade.cs`, `RIL_FACADE_ANIMATION.cs`, `AnimationAgent.cs` |
+| ~~槽位 key 复合化（多命名动画共存）~~ ✅ | Phase 3 已落地。slot key byte→ushort 复合键 `(slotType<<8 \| layer)` + `RmvSlotsByType` 批量移除 + ANIM_DEFINE 常量改名 `SLOT_TYPE_*` | `Facade.cs`, `ANIM_DEFINE.cs` |
 | 动画事件帧系统 | Phase 4。动作游戏出伤帧 / 取消窗与动画进度解耦（当前靠 Pipeline 时间线硬编码）。需 AnimationConfig 加 event frames + Logic 层按 elapsed 回调 | `AnimationConfig.cs` |
 | 确定性混合参数 | Phase 5。帧同步下 BlendSpace 参数（速度→走/跑混合）只在 Render 层，两端可能分歧。需 RIL 扩展 blend weight | `RIL_FACADE_ANIMATION.cs` |
 | Godot Pipeline 可视化编辑器 | Scripting / Timeline / GraphNode 三种编辑方式并存，统一底层 Pipeline 数据结构 |

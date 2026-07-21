@@ -2,6 +2,7 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.RIL;
 using Goblin.Gameplay.Logic.Translators.Common;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Translators;
 
@@ -25,8 +26,10 @@ public class FacadeAnimationTranslator : Translator<FacadeInfo, RIL_FACADE_ANIMA
 
             byte ws = (null != winner) ? winner.animstate : info.animstate;
             uint wh = (null != winner) ? winner.animhash : info.animhash;
+            FP we = (null != winner) ? winner.elapsed : info.animelapsed;
             hash = hash * 31 + ws.GetHashCode();
             hash = hash * 31 + unchecked((int)wh);
+            hash = hash * 31 + we.GetHashCode();
         }
 
         hash = hash * 31 + info.animelapsed.GetHashCode();
@@ -49,11 +52,13 @@ public class FacadeAnimationTranslator : Translator<FacadeInfo, RIL_FACADE_ANIMA
             {
                 ril.layeranims[ril.layercount].animstate = winner.animstate;
                 ril.layeranims[ril.layercount].animhash = winner.animhash;
+                ril.layeranims[ril.layercount].elapsed = (winner.elapsed * stage.cfg.fp2int).AsUInt();
             }
             else
             {
                 ril.layeranims[ril.layercount].animstate = info.animstate;
                 ril.layeranims[ril.layercount].animhash = info.animhash;
+                ril.layeranims[ril.layercount].elapsed = (info.animelapsed * stage.cfg.fp2int).AsUInt();
             }
             ril.layercount++;
         }

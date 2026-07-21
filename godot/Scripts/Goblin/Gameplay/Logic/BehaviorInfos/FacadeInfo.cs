@@ -63,9 +63,9 @@ public struct EffectInfo
 public class AnimationSlot
 {
     /// <summary>
-    /// 槽位键
+    /// 复合槽位键（高字节=槽位类型，低字节=动画层）
     /// </summary>
-    public byte key { get; set; }
+    public ushort key { get; set; }
     /// <summary>
     /// 优先级（越大越优先）
     /// </summary>
@@ -94,6 +94,10 @@ public class AnimationSlot
     /// 剩余时间
     /// </summary>
     public FP duration { get; set; }
+    /// <summary>
+    /// 槽位独立流逝时间
+    /// </summary>
+    public FP elapsed { get; set; }
 }
 
 /// <summary>
@@ -195,7 +199,7 @@ public class FacadeInfo : BehaviorInfo
             s.animstate = slot.animstate; s.animhash = slot.animhash;
             s.layer = slot.layer;
             s.active = slot.active; s.istransient = slot.istransient;
-            s.duration = slot.duration;
+            s.duration = slot.duration; s.elapsed = slot.elapsed;
             clone.animslots.Add(s);
         }
             

@@ -20,6 +20,10 @@ public struct LayerAnimEntry
     /// 动画名称哈希
     /// </summary>
     public uint animhash { get; set; }
+    /// <summary>
+    /// 该层独立流逝时间
+    /// </summary>
+    public uint elapsed { get; set; }
 }
 
 /// <summary>
