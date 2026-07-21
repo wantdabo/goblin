@@ -1,6 +1,6 @@
 # 动画槽位优先级系统
 
-> 2026-07-19 初稿 | 2026-07-22 Phase 1+2 落地，更新为架构文档
+> 2026-07-19 初稿 | 2026-07-22 Phase 1+2+2.5+3 落地，更新为架构文档
 
 ---
 
@@ -22,7 +22,7 @@
 ```
 ChangeStateData → ChangeStateExecutor
   → StateMachine.ChangeState(state)
-    → facade.SetAnimation(state)           // SLOT_STATE, priority=LOCOMOTION/LIFESTATE
+    → facade.SetAnimation(state)           // SLOT_TYPE_STATE, priority=LOCOMOTION/LIFESTATE
 ```
 
 生命周期：持久，直到下次状态切换。渲染层通过 AnimationConfig 将 `animstate (byte)` 映射为动画名。
@@ -31,9 +31,9 @@ ChangeStateData → ChangeStateExecutor
 
 ```
 AnimationData(begin, end) → AnimationExecutor
-  OnEnter:  facade.SetAnimation(name, TICK_MANUAL, layer)   // SLOT_NAMED, priority=ACTION
+  OnEnter:  facade.SetAnimation(name, TICK_MANUAL, layer)   // SLOT_TYPE_NAMED, priority=ACTION
   OnExecute: facade.info.animelapsed += LOGIC_TICK
-  OnExit:   facade.SetAnimation(null, TICK_AUTOMATIC)        // RmvSlot(SLOT_NAMED)
+  OnExit:   facade.SetAnimation(null, TICK_AUTOMATIC)        // RmvSlotsByType(SLOT_TYPE_NAMED)
 ```
 
 生命周期：Pipeline instruct begin→end。动画名经 `AnimHash.Hash` 转为 uint 哈希，Render 层通过 `AnimationConfig.GetAnimationNameByHash` 反查。
@@ -42,9 +42,9 @@ AnimationData(begin, end) → AnimationExecutor
 
 ```
 BeHitData → BeHitExecutor
-  OnEnter: facade.AddOrUpdateSlot(SLOT_OVERRIDE, REACTION, state=HITSTUN)
+  OnEnter: facade.AddOrUpdateSlot(SLOT_TYPE_OVERRIDE, REACTION, state=HITSTUN)
            sm.ChangeState(HITSTUN, hitstunduration, fallback=IDLE)
-  // StateMachine 计时到期 → ChangeState(IDLE) → SetAnimation(IDLE) → RmvSlot(SLOT_OVERRIDE)
+  // StateMachine 计时到期 → ChangeState(IDLE) → SetAnimation(IDLE) → RmvSlotsByType(SLOT_TYPE_OVERRIDE)
 ```
 
 生命周期：StateMachine 限时状态驱动，到期自动回落。
@@ -54,9 +54,9 @@ BeHitData → BeHitExecutor
 ```
                     Logic 层写入                              槽位
                     ──────────                               ──────
-StateMachine     → SetAnimation(byte)          → SLOT_STATE    pri=0/800
-AnimationData    → SetAnimation(string, layer) → SLOT_NAMED    pri=200
-BeHitExecutor    → AddOrUpdateSlot(...)        → SLOT_OVERRIDE pri=400
+StateMachine     → SetAnimation(byte)          → SLOT_TYPE_STATE    pri=0/800
+AnimationData    → SetAnimation(string, layer) → SLOT_TYPE_NAMED    pri=200
+BeHitExecutor    → AddOrUpdateSlot(...)        → SLOT_TYPE_OVERRIDE pri=400
 
                     ↓ Facade.animslots 按 priority 降序
 
@@ -68,7 +68,7 @@ BeHitExecutor    → AddOrUpdateSlot(...)        → SLOT_OVERRIDE pri=400
 
                     ↓                           ↓
               AnimationAgent              PrimitiveAnimAgent
-              (AnimationPlayer)           (程序化 mesh 变形)
+              (AnimationTree/Player)      (程序化 mesh 变形)
 ```
 
 ---
@@ -77,15 +77,36 @@ BeHitExecutor    → AddOrUpdateSlot(...)        → SLOT_OVERRIDE pri=400
 
 ```
 AnimationSlot
-├── key         : byte         // 槽位键（SLOT_STATE / SLOT_NAMED / SLOT_OVERRIDE）
+├── key         : ushort       // 复合键（高字节=槽位类型，低字节=动画层）
 ├── priority    : int          // 优先级（越大越优先）
 ├── animstate   : byte         // 持久状态（STATE_DEFINE 值）
 ├── animhash    : uint         // 命名动画哈希（AnimHash.FNV-1a）
 ├── layer       : byte         // 动画层（LAYER_FULLBODY / UPPER / LOWER）
 ├── active      : bool         // 是否活跃
 ├── istransient : bool         // true=临时覆盖，到期自动回收
-└── duration    : FP           // 临时槽位剩余时间
+├── duration    : FP           // 临时槽位剩余时间
+└── elapsed     : FP           // 槽位独立流逝时间（动画进度）
 ```
+
+### 槽位类型
+
+```
+SLOT_TYPE_STATE    = 0    StateMachine 基态
+SLOT_TYPE_NAMED    = 1    AnimationData 命名动画
+SLOT_TYPE_OVERRIDE = 2    行为覆盖（BeHitExecutor 等写入）
+```
+
+### 复合键编码
+
+```
+key = (slottype << 8) | layer
+
+ANIM_DEFINE.GenKey(slottype, layer)   → ushort
+ANIM_DEFINE.GetSlotType(key)          → byte
+ANIM_DEFINE.GetSlotLayer(key)         → byte
+```
+
+同一层不同槽位类型、不同层同一槽位类型，均可独立共存。
 
 ### 优先级编号约定
 
@@ -101,7 +122,7 @@ AnimationSlot
 0       SLOT_PRIORITY_LOCOMOTION    基础运动
 ```
 
-### 动画层定义（Phase 2）
+### 动画层定义
 
 ```
 0  LAYER_FULLBODY    全身
@@ -112,20 +133,21 @@ AnimationSlot
 
 ---
 
-## 四、RIL 多层架构（Phase 2）
+## 四、RIL 多层架构
 
 ```
 RIL_FACADE_ANIMATION
 ├── animstate      : byte               // layer 0 兼容字段（镜像）
 ├── animhash       : uint               // layer 0 兼容字段（镜像）
-├── animelapsed    : uint               // 流逝时间
+├── animelapsed    : uint               // 流逝时间（layer 0 兼容）
 ├── layeranims     : LayerAnimEntry[]   // 多层动画数据（OnReady 预分配，帧内零分配）
 └── layercount     : byte               // 活跃层数
 
 LayerAnimEntry (struct)
 ├── layer      : byte
 ├── animstate  : byte
-└── animhash   : uint
+├── animhash   : uint
+└── elapsed    : uint                   // 该层独立流逝时间
 ```
 
 ### Translator 逐层仲裁
@@ -140,6 +162,7 @@ for (byte l = 0; l < LAYER_MAX; l++)
     ril.layeranims[count].layer = l;
     ril.layeranims[count].animstate = winner?.animstate ?? info.animstate;
     ril.layeranims[count].animhash  = winner?.animhash  ?? info.animhash;
+    ril.layeranims[count].elapsed   = (winner?.elapsed ?? info.animelapsed) → uint;
     count++;
 }
 // layer 0 镜像到 ril.animstate / ril.animhash（兼容旧消费者）
@@ -148,7 +171,7 @@ for (byte l = 0; l < LAYER_MAX; l++)
 ### 兼容性
 
 - `ril.animstate` / `ril.animhash` 镜像 layer 0，`PrimitiveAnimAgent` 零改动
-- `AnimationAgent` 当前只消费 layer 0，Phase 2.5 接入 AnimationTree 后消费多层
+- `AnimationAgent` 优先走 AnimationTree 多层路径，无 AnimationTree 时回退 AnimationPlayer（layer 0）
 - 所有 `AddOrUpdateSlot` 调用点默认 `layer=LAYER_FULLBODY`，零破坏
 
 ---
@@ -159,22 +182,22 @@ for (byte l = 0; l < LAYER_MAX; l++)
 写入侧                                     读取侧
 ──────                                     ──────
 StateMachine.ChangeState ──┐
-                           ├─→ Facade.SetAnimation(byte)   ──→ SLOT_STATE  (layer 0)
-                           │   Facade.SetAnimation(string)  ──→ SLOT_NAMED  (layer 可配)
-AnimationExecutor.OnEnter ─┘   AddOrUpdateSlot(...)         ──→ SLOT_OVERRIDE
-BeHitExecutor.OnEnter ────────→ AddOrUpdateSlot(SLOT_OVERRIDE, REACTION)
+                           ├─→ Facade.SetAnimation(byte)   ──→ SLOT_TYPE_STATE  (layer 0)
+                           │   Facade.SetAnimation(string)  ──→ SLOT_TYPE_NAMED  (layer 可配)
+AnimationExecutor.OnEnter ─┘   AddOrUpdateSlot(...)         ──→ SLOT_TYPE_OVERRIDE
+BeHitExecutor.OnEnter ────────→ AddOrUpdateSlot(SLOT_TYPE_OVERRIDE, REACTION)
                            │
                            ↓
                     FacadeInfo.animslots
-                    （按 priority 降序，OnTick 过期瞬时槽位）
+                    （复合键，按 priority 降序，OnTick 逐槽位递进 elapsed + 过期回收）
                            │
                            ↓
               FacadeAnimationTranslator
-              （逐层 FindLayerWinner → 填 layeranims）
+              （逐层 FindLayerWinner → 填 layeranims + 逐层 elapsed）
                            │
                            ↓
                     RIL_FACADE_ANIMATION
-                    （layeranims[0..layercount-1]）
+                    （layeranims[0..layercount-1]，每层含独立 elapsed）
                            │
                            ↓
               ┌────────────┴────────────┐
@@ -182,9 +205,8 @@ BeHitExecutor.OnEnter ────────→ AddOrUpdateSlot(SLOT_OVERRIDE,
       AnimationEnchant (路由)
               ↓                         ↓
     AnimationAgent              PrimitiveAnimAgent
-    (AnimationPlayer)           (程序化 mesh 变形)
-    layer 0 当前消费             ril.animstate 消费
-    Phase 2.5: 多层消费
+    (AnimationTree 多层 /       (程序化 mesh 变形)
+     AnimationPlayer 回退)
 ```
 
 ---
@@ -213,6 +235,14 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 切回状态动画时清 `info.animhash = 0`，防止 Translator fallback 路径泄漏旧哈希。
 
+### 6.5 逐槽位 elapsed（Phase 2.5）
+
+每个槽位独立追踪 `elapsed`，`OnTick` 统一递进（含瞬时槽位）。Translator 取 winner.elapsed 填 RIL，每层动画进度独立。elapsed（动画进度）与 duration（过期倒计时）解耦——瞬时槽位过期前动画正常推进。
+
+### 6.6 复合槽位键（Phase 3）
+
+`key = (slottype << 8) | layer`，同一槽位类型可在不同层共存（如上半身和下半身各一个 SLOT_TYPE_NAMED）。`RmvSlotsByType` 按类型批量移除，`ReleaseSlot` 统一清理回收。
+
 ---
 
 ## 七、路线图
@@ -239,25 +269,28 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 - AnimationConfigCache 死代码清理
 - Debug 输出逐层 winner 展示
 
-### Phase 2.5 — 逐层 elapsed + AnimationTree 接入
+### Phase 2.5 — 逐层 elapsed + AnimationTree 接入 ✅ 已落地
 
-**问题**：当前 `info.animelapsed` 是单值，所有层共享。多层的动画进度无法独立追踪。
+**问题**：`info.animelapsed` 是单值，所有层共享。多层的动画进度无法独立追踪。
 
 **改动**：
-- RIL `LayerAnimEntry` 加 `elapsed` 字段
-- AnimationSlot 加 `elapsed` 字段，OnTick 逐槽位递增
-- AnimationAgent 接入 Godot AnimationTree，按 layer 索引驱动 blend node
-- 上半身攻击 + 下半身走路同时播放
+- AnimationSlot 加 `elapsed` 字段，OnTick 逐槽位递进（含瞬时槽位）
+- LayerAnimEntry 加 `elapsed`，Translator 逐层填充 + Hash 纳入
+- AnimationAgent 接入 Godot AnimationTree，按 layer 索引驱动 blend node（`parameters/{nodeName}/animation` + `seek_request`）
+- 无 AnimationTree 时回退 AnimationPlayer（layer 0），零破坏
+- EnsureAnimCfg 提取共享配置加载，EnsureModel 重试 animplayer 查找
 
 **覆盖**：状态同步动作游戏
 
-### Phase 3 — 槽位 key 复合化
+### Phase 3 — 槽位 key 复合化 ✅ 已落地
 
 **问题**：`SLOT_NAMED` 是单 key，同帧两个不同 layer 的命名动画互相覆盖。
 
 **改动**：
-- key 从 byte 扩展为 `(layer, slottype)` 复合键，或新增 SLOT_NAMED_UPPER / SLOT_NAMED_LOWER
-- 支持同层多命名动画共存
+- slot key byte→ushort，编码 `(slottype << 8) | layer`
+- ANIM_DEFINE 常量改名 `SLOT_TYPE_*`，新增 `GenKey/GetSlotType/GetSlotLayer`
+- `RmvSlotsByType` 批量按类型移除，`ReleaseSlot` 统一清理回收
+- StateMachine/BeHitExecutor/GameplayStateProvider 调用点适配
 
 **覆盖**：复杂动作游戏（连招 + 多部位并行）
 
@@ -289,11 +322,11 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 | 目标 | 当前 | 需补 |
 |------|------|------|
 | 休闲小游戏 | ✅ 完全够用 | 无 |
-| 状态同步动作游戏 | ⚠️ 基本够 | 逐层 elapsed、带宽优化 |
-| 帧同步动作游戏 | ⚠️ 骨架够 | 逐层 elapsed、事件帧、确定性混合 |
-| 竞技级动作游戏 | ❌ 需扩展 | 取消窗、复合 key、逐层速度控制 |
+| 状态同步动作游戏 | ✅ 基本够 | 带宽优化 |
+| 帧同步动作游戏 | ⚠️ 骨架够 | 事件帧、确定性混合 |
+| 竞技级动作游戏 | ❌ 需扩展 | 取消窗、逐层速度控制 |
 
-架构方向正确（Slot/Priority/Layer 是行业标准抽象），无需推翻重来。当前是 v2，能撑住休闲游戏和简单动作游戏。
+架构方向正确（Slot/Priority/Layer 是行业标准抽象），无需推翻重来。当前是 v3（Phase 1+2+2.5+3），能撑住休闲游戏、状态同步动作游戏和简单帧同步动作游戏。
 
 ---
 
@@ -303,18 +336,18 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 | 文件 | 职责 |
 |------|------|
-| `Common/Defines/ANIM_DEFINE.cs` | 槽位键、优先级、层定义 |
+| `Common/Defines/ANIM_DEFINE.cs` | 槽位类型、优先级、层定义 + 复合键辅助 |
 | `Common/Defines/STATE_DEFINE.cs` | 状态枚举 + PASSES 跃迁规则 |
 | `Common/AnimHash.cs` | FNV-1a 动画名称哈希 |
-| `BehaviorInfos/FacadeInfo.cs` | FacadeInfo + AnimationSlot 定义 |
-| `Behaviors/Facade.cs` | 槽位管理 + SetAnimation + OnTick 过期 |
+| `BehaviorInfos/FacadeInfo.cs` | FacadeInfo + AnimationSlot 定义（含 elapsed） |
+| `Behaviors/Facade.cs` | 槽位管理 + SetAnimation + OnTick 递进/过期 + RmvSlotsByType |
 | `Behaviors/StateMachine.cs` | 状态切换 + 限时倒计时 + ChangeStateCore |
-| `Translators/FacadeAnimationTranslator.cs` | 逐层仲裁 + RIL 填充 |
-| `RIL/RIL_FACADE_ANIMATION.cs` | RIL + LayerAnimEntry |
+| `Translators/FacadeAnimationTranslator.cs` | 逐层仲裁 + RIL 填充（含逐层 elapsed） |
+| `RIL/RIL_FACADE_ANIMATION.cs` | RIL + LayerAnimEntry（含 elapsed） |
 | `Flows/Executors/Instructs/AnimationData.cs` | 管线动画指令（含 layer） |
 | `Flows/Executors/AnimationExecutor.cs` | 管线动画执行器 |
 | `Flows/Executors/Instructs/BeHitData.cs` | 受击指令数据 |
-| `Flows/Executors/BeHitExecutor.cs` | 受击执行器（SLOT_OVERRIDE + 限时状态） |
+| `Flows/Executors/BeHitExecutor.cs` | 受击执行器（SLOT_TYPE_OVERRIDE + 限时状态） |
 | `Flows/Executors/ChangeStateExecutor.cs` | 状态变更执行器 |
 
 ### Render 层
@@ -322,7 +355,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 | 文件 | 职责 |
 |------|------|
 | `Common/AnimationConfig.cs` | 配置加载 + 哈希索引 |
-| `Agents/AnimationAgent.cs` | AnimationPlayer 消费 RIL（layer 0） |
+| `Agents/AnimationAgent.cs` | AnimationTree 多层 / AnimationPlayer 回退 |
 | `Agents/PrimitiveAnimAgent.cs` | 程序化 mesh 变形 |
 | `Resolvers/Enchants/AnimationEnchant.cs` | 按模型类型路由 Agent |
 
@@ -330,7 +363,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 | 文件 | 职责 |
 |------|------|
-| `Debug/GameplayStateProvider.cs` | 槽位状态 + 逐层 winner JSON 导出 |
+| `Debug/GameplayStateProvider.cs` | 槽位状态 + 逐层 winner JSON 导出（含 elapsed） |
 
 ---
 
@@ -364,3 +397,21 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 10. SetAnimation(byte) 清 animhash 修复
 11. OnTick 瞬时槽位过期回收
 12. AnimationConfigCache 死代码清理
+
+### 2026-07-22 Phase 2.5 逐层 elapsed + AnimationTree
+
+1. AnimationSlot 加 elapsed 字段，OnTick 逐槽位递进
+2. LayerAnimEntry 加 elapsed，Translator 逐层填充 + Hash 纳入
+3. AnimationAgent 接入 AnimationTree 多层播放，回退兼容 AnimationPlayer
+4. EnsureAnimCfg 提取共享配置加载
+5. EnsureModel 重试 animplayer 查找，模型切换时重置
+6. Bug 修复：瞬时槽位 elapsed 不递进 → BeHit 动画卡死
+7. Bug 修复：DriveTree 路径不加载 animcfg → AnimationTree 模式无动画
+
+### 2026-07-22 Phase 3 复合槽位键
+
+1. slot key byte→ushort，编码 (slottype << 8) | layer
+2. ANIM_DEFINE 常量改名 SLOT_TYPE_*，新增 GenKey/GetSlotType/GetSlotLayer
+3. RmvSlotsByType 批量按类型移除，ReleaseSlot 统一清理回收
+4. StateMachine/BeHitExecutor/GameplayStateProvider 调用点适配
+5. 编码风格：MakeKey→GenKey，参数/变量全小写
