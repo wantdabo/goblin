@@ -1,4 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Flows.Defines;
+﻿using System;
+using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Kowtow.Math;
 using MessagePack;
@@ -8,6 +9,7 @@ namespace Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 /// <summary>
 /// 受击指令数据
 /// </summary>
+[Serializable]
 [MessagePackObject(true)]
 public class BeHitData : InstructData
 {
@@ -29,6 +31,14 @@ public class BeHitData : InstructData
     /// 受击运动
     /// </summary>
     public IntVector3 hitmotion;
+    /// <summary>
+    /// 受击硬直时长（毫秒）
+    /// </summary>
+    public uint hitstunduration;
+    /// <summary>
+    /// 是否打断施法
+    /// </summary>
+    public bool interruptcast = false;
         
     public BeHitData()
     {

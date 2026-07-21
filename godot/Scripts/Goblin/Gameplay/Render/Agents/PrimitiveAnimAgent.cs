@@ -75,7 +75,7 @@ public class PrimitiveAnimAgent : Agent
         switch (animstate)
         {
             case STATE_DEFINE.MOVE: PlayMove(); break;
-            case STATE_DEFINE.BEHIT: PlayBeHit(); break;
+            case STATE_DEFINE.HITSTUN: PlayBeHit(); break;
             case STATE_DEFINE.DEATH: PlayDeath(); break;
             case STATE_DEFINE.CASTING: PlayCasting(); break;
             case STATE_DEFINE.ROLL: PlayRoll(); break;
@@ -104,8 +104,7 @@ public class PrimitiveAnimAgent : Agent
     {
         meshagent.meshinstance.Position = basemeshpos;
         meshagent.meshinstance.Scale = Vector3.One;
-        if (elapsed < 0.1f) meshagent.material.AlbedoColor = new Color(1f, 0.2f, 0.2f, basecolor.A);
-        else meshagent.material.AlbedoColor = basecolor;
+        meshagent.material.AlbedoColor = new Color(1f, 0.2f, 0.2f, basecolor.A);
     }
 
     private void PlayDeath()

@@ -16,7 +16,7 @@ public class AnimationExecutor : Executor<AnimationData>
     {
         base.OnEnter(identity, data, flowinfo, target);
         if (false == stage.SeekBehavior(target, out Facade facade)) return;
-        facade.SetAnimation(data.name, ANIM_DEFINE.TICK_MANUAL);
+        facade.SetAnimation(data.name, ANIM_DEFINE.TICK_MANUAL, data.layer);
     }
 
     protected override void OnExit((uint pipelineid, uint index) identity, AnimationData data, FlowInfo flowinfo, ulong target)

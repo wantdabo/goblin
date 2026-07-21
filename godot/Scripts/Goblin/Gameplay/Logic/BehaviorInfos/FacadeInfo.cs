@@ -58,6 +58,45 @@ public struct EffectInfo
 }
 
 /// <summary>
+/// 动画槽位
+/// </summary>
+public class AnimationSlot
+{
+    /// <summary>
+    /// 槽位键
+    /// </summary>
+    public byte key { get; set; }
+    /// <summary>
+    /// 优先级（越大越优先）
+    /// </summary>
+    public int priority { get; set; }
+    /// <summary>
+    /// 持久状态
+    /// </summary>
+    public byte animstate { get; set; }
+    /// <summary>
+    /// 动画名称哈希
+    /// </summary>
+    public uint animhash { get; set; }
+    /// <summary>
+    /// 动画层
+    /// </summary>
+    public byte layer { get; set; }
+    /// <summary>
+    /// 是否活跃
+    /// </summary>
+    public bool active { get; set; }
+    /// <summary>
+    /// 临时覆盖
+    /// </summary>
+    public bool istransient { get; set; }
+    /// <summary>
+    /// 剩余时间
+    /// </summary>
+    public FP duration { get; set; }
+}
+
+/// <summary>
 /// 外观信息
 /// </summary>
 public class FacadeInfo : BehaviorInfo
@@ -75,9 +114,9 @@ public class FacadeInfo : BehaviorInfo
     /// </summary>
     public byte animstate { get; set; }
     /// <summary>
-    /// 动画名称
+    /// 动画名称哈希
     /// </summary>
-    public string animname { get; set; }
+    public uint animhash { get; set; }
     /// <summary>
     /// 流逝时间
     /// </summary>
@@ -98,18 +137,23 @@ public class FacadeInfo : BehaviorInfo
     /// 特效字典
     /// </summary>
     public Dictionary<uint, EffectInfo> effectdict { get; set; }
+    /// <summary>
+    /// 动画槽位列表
+    /// </summary>
+    public List<AnimationSlot> animslots { get; set; }
         
     protected override void OnReady()
     {
         model = 0;
         animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
         animstate = 0;
-        animname = null;
+        animhash = 0;
         animelapsed = FP.Zero;
         effectincrement = 0;
         rmveffects = ObjectCache.Ensure<List<uint>>();
         effects = ObjectCache.Ensure<List<uint>>();
         effectdict = ObjectCache.Ensure<Dictionary<uint, EffectInfo>>();
+        animslots = ObjectCache.Ensure<List<AnimationSlot>>();
     }
 
     protected override void OnReset()
@@ -117,7 +161,7 @@ public class FacadeInfo : BehaviorInfo
         model = 0;
         animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
         animstate = 0;
-        animname = null;
+        animhash = 0;
         animelapsed = FP.Zero;
         effectincrement = 0;
         rmveffects.Clear();
@@ -126,6 +170,9 @@ public class FacadeInfo : BehaviorInfo
         ObjectCache.Set(effects);
         effectdict.Clear();
         ObjectCache.Set(effectdict);
+        foreach (var slot in animslots) ObjectCache.Set(slot);
+        animslots.Clear();
+        ObjectCache.Set(animslots);
     }
 
     protected override BehaviorInfo OnClone()
@@ -135,12 +182,22 @@ public class FacadeInfo : BehaviorInfo
         clone.model = model;
         clone.animticktype = animticktype;
         clone.animstate = animstate;
-        clone.animname = animname;
+        clone.animhash = animhash;
         clone.animelapsed = animelapsed;
         clone.effectincrement = effectincrement;
         clone.rmveffects.AddRange(rmveffects);
         clone.effects.AddRange(effects);
         foreach (var kv in effectdict) clone.effectdict.Add(kv.Key, kv.Value);
+        foreach (var slot in animslots)
+        {
+            var s = ObjectCache.Ensure<AnimationSlot>();
+            s.key = slot.key; s.priority = slot.priority;
+            s.animstate = slot.animstate; s.animhash = slot.animhash;
+            s.layer = slot.layer;
+            s.active = slot.active; s.istransient = slot.istransient;
+            s.duration = slot.duration;
+            clone.animslots.Add(s);
+        }
             
         return clone;
     }

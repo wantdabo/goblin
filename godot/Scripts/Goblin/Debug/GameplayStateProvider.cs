@@ -48,6 +48,13 @@ public class GameplayStateProvider : IStateProvider
         { ANIM_DEFINE.SLOT_OVERRIDE, "OVERRIDE" },
     };
 
+    private static Dictionary<byte, string> layernames { get; } = new()
+    {
+        { ANIM_DEFINE.LAYER_FULLBODY, "全身" },
+        { ANIM_DEFINE.LAYER_UPPER, "上半身" },
+        { ANIM_DEFINE.LAYER_LOWER, "下半身" },
+    };
+
     private static Dictionary<ushort, string> attrnames { get; } = new()
     {
         { ATTRIBUTE_DEFINE.HP, "HP" },
@@ -206,7 +213,7 @@ public class GameplayStateProvider : IStateProvider
         JsonObject facade = new()
         {
             ["animstate"] = statenames.GetValueOrDefault(info.animstate, info.animstate.ToString()),
-            ["animname"] = info.animname,
+            ["animname"] = info.animhash != 0 ? $"0x{info.animhash:X8}" : null,
             ["animelapsed"] = FpToFloat(info.animelapsed),
             ["animticktype"] = info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC ? "AUTOMATIC" : "MANUAL",
         };
@@ -220,26 +227,49 @@ public class GameplayStateProvider : IStateProvider
                 ["priority"] = slot.priority,
                 ["active"] = slot.active,
                 ["animstate"] = statenames.GetValueOrDefault(slot.animstate, slot.animstate.ToString()),
-                ["animname"] = slot.animname,
+                ["animname"] = slot.animhash != 0 ? $"0x{slot.animhash:X8}" : null,
+                ["layer"] = layernames.GetValueOrDefault(slot.layer, $"L{slot.layer}"),
                 ["istransient"] = slot.istransient,
                 ["duration"] = slot.istransient ? FpToFloat(slot.duration) : 0,
             });
         }
         facade["animslots"] = slots;
 
-        // 预告 winner
-        AnimationSlot? winner = null;
-        foreach (var slot in info.animslots)
-        {
-            if (false == slot.active) continue;
-            winner = slot;
-            break;
-        }
-        facade["winner_animstate"] = null != winner
-            ? statenames.GetValueOrDefault(winner.animstate, winner.animstate.ToString())
-            : statenames.GetValueOrDefault(info.animstate, info.animstate.ToString()) + " (fallback)";
+        // 逐层预告 winner
+        facade["winners"] = BuildLayerWinners(info);
 
         return facade;
+    }
+
+    private static JsonArray BuildLayerWinners(FacadeInfo info)
+    {
+        JsonArray winners = new();
+        for (byte l = 0; l < ANIM_DEFINE.LAYER_MAX; l++)
+        {
+            AnimationSlot? winner = null;
+            foreach (var slot in info.animslots)
+            {
+                if (false == slot.active || slot.layer != l) continue;
+                winner = slot;
+                break;
+            }
+            if (null == winner && 0 != l) continue;
+
+            string statename = null != winner
+                ? statenames.GetValueOrDefault(winner.animstate, winner.animstate.ToString())
+                : statenames.GetValueOrDefault(info.animstate, info.animstate.ToString()) + " (fallback)";
+            string? hashstr = null != winner && 0 != winner.animhash
+                ? $"0x{winner.animhash:X8}"
+                : (0 != info.animhash ? $"0x{info.animhash:X8}" : null);
+
+            winners.Add(new JsonObject
+            {
+                ["layer"] = layernames.GetValueOrDefault(l, $"L{l}"),
+                ["animstate"] = statename,
+                ["animhash"] = hashstr,
+            });
+        }
+        return winners;
     }
 
     private static JsonObject BuildFlowJson(FlowInfo info)

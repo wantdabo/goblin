@@ -30,18 +30,84 @@ public class Facade : Behavior<FacadeInfo>
     public void SetAnimation(byte state)
     {
         info.animstate = state;
+        info.animhash = 0;
         info.animelapsed = 0;
+        var priority = STATE_DEFINE.DEATH == state || STATE_DEFINE.BORN == state
+            ? ANIM_DEFINE.SLOT_PRIORITY_LIFESTATE
+            : ANIM_DEFINE.SLOT_PRIORITY_LOCOMOTION;
+        AddOrUpdateSlot(ANIM_DEFINE.SLOT_STATE, priority, state: state);
+        RmvSlot(ANIM_DEFINE.SLOT_OVERRIDE);
     }
         
     /// <summary>
     /// 设置动画名称
     /// </summary>
     /// <param name="animname">动画名称</param>
-    public void SetAnimation(string animname, byte ticktype = ANIM_DEFINE.TICK_AUTOMATIC)
+    public void SetAnimation(string animname, byte ticktype = ANIM_DEFINE.TICK_AUTOMATIC, byte layer = ANIM_DEFINE.LAYER_FULLBODY)
     {
         info.animticktype = ticktype;
-        info.animname = animname;
+        info.animhash = AnimHash.Hash(animname);
         info.animelapsed = 0;
+        if (null != animname)
+            AddOrUpdateSlot(ANIM_DEFINE.SLOT_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
+        else
+            RmvSlot(ANIM_DEFINE.SLOT_NAMED);
+    }
+
+    /// <summary>
+    /// 添加或更新槽位
+    /// </summary>
+    public void AddOrUpdateSlot(byte key, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
+    {
+        var slot = GetSlot(key);
+        if (null == slot)
+        {
+            slot = ObjectCache.Ensure<AnimationSlot>();
+            slot.key = key;
+            info.animslots.Add(slot);
+        }
+        slot.priority = priority;
+        slot.active = true;
+        slot.animstate = state;
+        slot.animhash = namehash;
+        slot.layer = layer;
+        if (FP.Zero < duration) { slot.istransient = true; slot.duration = duration; }
+        else { slot.istransient = false; slot.duration = FP.Zero; }
+        EnsureSort();
+    }
+
+    /// <summary>
+    /// 移除槽位
+    /// </summary>
+    public void RmvSlot(byte key)
+    {
+        var slot = GetSlot(key);
+        if (null != slot)
+        {
+            info.animslots.Remove(slot);
+            slot.active = false;
+            slot.animstate = 0;
+            slot.animhash = 0;
+            slot.layer = 0;
+            slot.istransient = false;
+            slot.duration = FP.Zero;
+            ObjectCache.Set(slot);
+        }
+    }
+
+    /// <summary>
+    /// 按优先级降序排序
+    /// </summary>
+    private void EnsureSort() => info.animslots.Sort((a, b) => b.priority.CompareTo(a.priority));
+
+    /// <summary>
+    /// 查找槽位
+    /// </summary>
+    private AnimationSlot GetSlot(byte key)
+    {
+        foreach (var slot in info.animslots)
+            if (slot.key == key) return slot;
+        return null;
     }
 
     /// <summary>
@@ -63,6 +129,25 @@ public class Facade : Behavior<FacadeInfo>
     {
         base.OnTick(tick);
         if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
+
+        // 过期瞬时槽位
+        for (int i = info.animslots.Count - 1; i >= 0; i--)
+        {
+            var slot = info.animslots[i];
+            if (false == slot.istransient) continue;
+            slot.duration -= tick;
+            if (FP.Zero >= slot.duration)
+            {
+                info.animslots.RemoveAt(i);
+                slot.active = false;
+                slot.animstate = 0;
+                slot.animhash = 0;
+                slot.layer = 0;
+                slot.istransient = false;
+                slot.duration = FP.Zero;
+                ObjectCache.Set(slot);
+            }
+        }
 
         // 移除已结束的管线特效
         if (stage.SeekBehaviorInfos(out List<FlowEffectInfo> floweffects, true))

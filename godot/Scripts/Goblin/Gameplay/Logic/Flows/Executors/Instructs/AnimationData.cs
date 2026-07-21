@@ -1,4 +1,5 @@
 ﻿using System;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using MessagePack;
@@ -18,6 +19,10 @@ public class AnimationData : InstructData
     /// 动画名称
     /// </summary>
     public string name;
+    /// <summary>
+    /// 动画层（默认全身）
+    /// </summary>
+    public byte layer = ANIM_DEFINE.LAYER_FULLBODY;
 
     public AnimationData()
     {

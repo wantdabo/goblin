@@ -39,7 +39,14 @@ public class AnimationAgent : Agent
         tarduration = 0; mixduration = 0;
     }
 
-    private void OnRILStateMachine(RIL_FACADE_ANIMATION ril) => RILConv2AnimData(ril);
+    private void OnRILStateMachine(RIL_FACADE_ANIMATION ril)
+    {
+        // Phase 2: ril.layeranims 承载多层动画数据
+        // layer 0 = 全身基础动画（ril.animstate/animhash 已由 Translator 镜像）
+        // layer 1 = 上半身覆盖，layer 2 = 下半身覆盖
+        // Phase 2.5: 根据 layeranims[1..] 驱动 AnimationTree 骨骼遮罩混合
+        RILConv2AnimData(ril);
+    }
 
     private void RILConv2AnimData(RIL_FACADE_ANIMATION ril)
     {
@@ -51,10 +58,13 @@ public class AnimationAgent : Agent
             cfgname = modelinfo.Animation;
             var bytes = world.engine.gameres.LoadRawFileSync(Location.animcfgpath + cfgname + ".json");
             if (bytes != null && bytes.Length > 0)
+            {
                 animcfg = JsonSerializer.Deserialize<AnimationConfig>(bytes);
+                animcfg?.BuildHashIndex();
+            }
         }
 
-        var animname = ril.animname ?? animcfg?.GetAnimationName(ril.animstate);
+        var animname = ResolveAnimName(ril);
         if (curplayname != animname) { preplayname = curplayname; curplayname = animname; }
 
         playname = curplayname;
@@ -72,6 +82,20 @@ public class AnimationAgent : Agent
             playname = beforeInfo.name;
             mixduration = beforeInfo.mixduration;
         }
+    }
+
+    /// <summary>
+    /// 解析动画名称（哈希优先，回退状态）
+    /// </summary>
+    private string ResolveAnimName(RIL_FACADE_ANIMATION ril)
+    {
+        if (0 != ril.animhash)
+        {
+            var name = animcfg?.GetAnimationNameByHash(ril.animhash);
+            if (null != name) return name;
+        }
+
+        return animcfg?.GetAnimationName(ril.animstate);
     }
 
     protected override void OnFlash()

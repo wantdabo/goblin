@@ -43,13 +43,14 @@ public class S10020 : Scripting
 			},
 		});
 
-		// 命中火花指令：受击位移 + 顿帧 + 伤害结算（由碰撞 spark 触发，确保在 targets 填充后同步执行）
+		// 命中火花指令：受击位移 + 受击硬直 + 顿帧 + 伤害结算（由碰撞 spark 触发，确保在 targets 填充后同步执行）
 		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new BeHitData
 		{
 			uselookatattacker = true,
 			usehitmotion = true,
 			hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
 			hitmotion = new IntVector3(0, 0, 800),
+			hitstunduration = 300,  // 0.3秒（300ms，约 7-8 帧 @ 25fps）
 		});
 
 		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new HitLagData
