@@ -20,9 +20,9 @@ namespace Goblin.Debug;
 /// </summary>
 public class DebugServer : Comp
 {
-    private bool paused { get; set; }
-    private bool renderingpaused { get; set; }
-    private int stepcount { get; set; }
+    private volatile bool paused;
+    private volatile bool renderingpaused;
+    private volatile int stepcount;
     private Breakpoint? breakpoint { get; set; }
 
     /// <summary>当前游戏状态提供者（Attach 后有效，Detach 后为 null）</summary>
@@ -103,9 +103,9 @@ public class DebugServer : Comp
     /// </summary>
     public bool OnBeforeTick() => false == renderingpaused;
 
-    public void Pause() => paused = true;
+    public void Pause() { stepcount = 0; paused = true; }
     public void Resume() => paused = false;
-    public void Step(int n) { stepcount = Math.Max(1, n); if (paused) paused = false; }
+    public void Step(int n) { stepcount = Math.Max(1, n); }
     public void PauseRender() => renderingpaused = true;
     public void ResumeRender() => renderingpaused = false;
     public void SetBreakpoint(Breakpoint bp) => breakpoint = bp;
@@ -161,6 +161,12 @@ public class DebugServer : Comp
 
             stage.PushInput(input.seat, type, input.pressed,
                 new Kowtow.Math.IntVector2(input.direx, input.direy));
+
+            // 模拟 LocalDirector 的按键→技能映射
+            if (input.pressed && type == Gameplay.Logic.Common.Defines.INPUT_DEFINE.BB)
+                stage.PushSkillFrame(input.seat, 10010);
+            if (input.pressed && type == Gameplay.Logic.Common.Defines.INPUT_DEFINE.BC)
+                stage.PushSkillFrame(input.seat, 10020);
         }
     }
 }

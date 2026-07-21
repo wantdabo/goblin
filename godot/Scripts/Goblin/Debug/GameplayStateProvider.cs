@@ -16,7 +16,7 @@ public class GameplayStateProvider : IStateProvider
 {
     private Stage stage { get; set; }
 
-    private static Dictionary<byte, string> StateNames { get; } = new()
+    private static Dictionary<byte, string> statenames { get; } = new()
     {
         { STATE_DEFINE.NONE, "NONE" },
         { STATE_DEFINE.BORN, "BORN" },
@@ -26,11 +26,11 @@ public class GameplayStateProvider : IStateProvider
         { STATE_DEFINE.JUMP, "JUMP" },
         { STATE_DEFINE.FALL, "FALL" },
         { STATE_DEFINE.CASTING, "CASTING" },
-        { STATE_DEFINE.BEHIT, "BEHIT" },
+        { STATE_DEFINE.HITSTUN, "HITSTUN" },
         { STATE_DEFINE.ROLL, "ROLL" },
     };
 
-    private static Dictionary<byte, string> ActorTypeNames { get; } = new()
+    private static Dictionary<byte, string> actortypenames { get; } = new()
     {
         { ACTOR_DEFINE.NONE, "NONE" },
         { ACTOR_DEFINE.STAGE, "STAGE" },
@@ -41,7 +41,14 @@ public class GameplayStateProvider : IStateProvider
         { ACTOR_DEFINE.ENEMY, "ENEMY" },
     };
 
-    private static Dictionary<ushort, string> AttrNames { get; } = new()
+    private static Dictionary<byte, string> slotkeynames { get; } = new()
+    {
+        { ANIM_DEFINE.SLOT_STATE, "STATE" },
+        { ANIM_DEFINE.SLOT_NAMED, "NAMED" },
+        { ANIM_DEFINE.SLOT_OVERRIDE, "OVERRIDE" },
+    };
+
+    private static Dictionary<ushort, string> attrnames { get; } = new()
     {
         { ATTRIBUTE_DEFINE.HP, "HP" },
         { ATTRIBUTE_DEFINE.MAXHP, "MAXHP" },
@@ -82,12 +89,12 @@ public class GameplayStateProvider : IStateProvider
             if (stage.SeekBehaviorInfo<TagInfo>(actorid, out TagInfo taginfo) &&
                 taginfo.tags.TryGetValue(TAG_DEFINE.ACTOR_TYPE, out long actortype))
             {
-                summary["type"] = ActorTypeNames.GetValueOrDefault((byte)actortype, actortype.ToString());
+                summary["type"] = actortypenames.GetValueOrDefault((byte)actortype, actortype.ToString());
             }
 
             if (stage.SeekBehaviorInfo<StateMachineInfo>(actorid, out StateMachineInfo sminfo))
             {
-                summary["state"] = StateNames.GetValueOrDefault(sminfo.current, sminfo.current.ToString());
+                summary["state"] = statenames.GetValueOrDefault(sminfo.current, sminfo.current.ToString());
             }
 
             arr.Add(summary);
@@ -108,7 +115,7 @@ public class GameplayStateProvider : IStateProvider
             foreach (KeyValuePair<ushort, long> kv in taginfo.tags)
             {
                 if (kv.Key == TAG_DEFINE.ACTOR_TYPE)
-                    tags["ACTOR_TYPE"] = ActorTypeNames.GetValueOrDefault((byte)kv.Value, kv.Value.ToString());
+                    tags["ACTOR_TYPE"] = actortypenames.GetValueOrDefault((byte)kv.Value, kv.Value.ToString());
                 else
                     tags[kv.Key.ToString()] = kv.Value;
             }
@@ -129,8 +136,8 @@ public class GameplayStateProvider : IStateProvider
         {
             node["state_machine"] = new JsonObject
             {
-                ["current"] = StateNames.GetValueOrDefault(sminfo.current, sminfo.current.ToString()),
-                ["last"] = StateNames.GetValueOrDefault(sminfo.last, sminfo.last.ToString()),
+                ["current"] = statenames.GetValueOrDefault(sminfo.current, sminfo.current.ToString()),
+                ["last"] = statenames.GetValueOrDefault(sminfo.last, sminfo.last.ToString()),
                 ["delaybreak"] = FpToFloat(sminfo.delaybreak),
                 ["usedelaybreak"] = sminfo.usedelaybreak,
             };
@@ -144,6 +151,11 @@ public class GameplayStateProvider : IStateProvider
         if (stage.SeekBehaviorInfo<FlowInfo>(actorid, out FlowInfo flowinfo) && flowinfo.active)
         {
             node["flow"] = BuildFlowJson(flowinfo);
+        }
+
+        if (stage.SeekBehaviorInfo<FacadeInfo>(actorid, out FacadeInfo facadeinfo))
+        {
+            node["facade"] = BuildFacadeJson(facadeinfo);
         }
 
         return node;
@@ -166,9 +178,9 @@ public class GameplayStateProvider : IStateProvider
             arr.Add(new JsonObject
             {
                 ["id"] = actorid,
-                ["type"] = ActorTypeNames.GetValueOrDefault((byte)actortype, actortype.ToString()),
-                ["current"] = StateNames.GetValueOrDefault(sminfo.current, sminfo.current.ToString()),
-                ["last"] = StateNames.GetValueOrDefault(sminfo.last, sminfo.last.ToString()),
+                ["type"] = actortypenames.GetValueOrDefault((byte)actortype, actortype.ToString()),
+                ["current"] = statenames.GetValueOrDefault(sminfo.current, sminfo.current.ToString()),
+                ["last"] = statenames.GetValueOrDefault(sminfo.last, sminfo.last.ToString()),
             });
         }
         return arr;
@@ -188,6 +200,47 @@ public class GameplayStateProvider : IStateProvider
     }
 
     // ---- helpers ----
+
+    private static JsonObject BuildFacadeJson(FacadeInfo info)
+    {
+        JsonObject facade = new()
+        {
+            ["animstate"] = statenames.GetValueOrDefault(info.animstate, info.animstate.ToString()),
+            ["animname"] = info.animname,
+            ["animelapsed"] = FpToFloat(info.animelapsed),
+            ["animticktype"] = info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC ? "AUTOMATIC" : "MANUAL",
+        };
+
+        JsonArray slots = new();
+        foreach (var slot in info.animslots)
+        {
+            slots.Add(new JsonObject
+            {
+                ["key"] = slotkeynames.GetValueOrDefault(slot.key, slot.key.ToString()),
+                ["priority"] = slot.priority,
+                ["active"] = slot.active,
+                ["animstate"] = statenames.GetValueOrDefault(slot.animstate, slot.animstate.ToString()),
+                ["animname"] = slot.animname,
+                ["istransient"] = slot.istransient,
+                ["duration"] = slot.istransient ? FpToFloat(slot.duration) : 0,
+            });
+        }
+        facade["animslots"] = slots;
+
+        // 预告 winner
+        AnimationSlot? winner = null;
+        foreach (var slot in info.animslots)
+        {
+            if (false == slot.active) continue;
+            winner = slot;
+            break;
+        }
+        facade["winner_animstate"] = null != winner
+            ? statenames.GetValueOrDefault(winner.animstate, winner.animstate.ToString())
+            : statenames.GetValueOrDefault(info.animstate, info.animstate.ToString()) + " (fallback)";
+
+        return facade;
+    }
 
     private static JsonObject BuildFlowJson(FlowInfo info)
     {
@@ -219,7 +272,7 @@ public class GameplayStateProvider : IStateProvider
             if (1 == kv.Key % 2)
             {
                 ushort basekey = (ushort)((kv.Key - 1) / 2);
-                string name = AttrNames.GetValueOrDefault(basekey, $"attr_{basekey}");
+                string name = attrnames.GetValueOrDefault(basekey, $"attr_{basekey}");
                 int value = kv.Value;
                 ushort scalekey = (ushort)(kv.Key + 1);
 

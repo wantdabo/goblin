@@ -75,6 +75,7 @@ public abstract class GameplayDirector : Comp
                 while (true)
                 {
                     sw.Restart();
+                    if (onbeforestep?.Invoke() == false) { Thread.Sleep(1); continue; }
                     OnStep();
                     stepms = (int)sw.ElapsedMilliseconds;
                     if (stepms < logicms) Thread.Sleep(logicms - stepms);
