@@ -294,18 +294,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 **覆盖**：复杂动作游戏（连招 + 多部位并行）
 
-### Phase 4 — 动画事件帧系统
-
-**问题**：动作游戏需要"第 15 帧出伤害、第 8-12 帧可取消"。当前靠 Pipeline 时间线硬编码，与动画实际进度解耦。
-
-**改动**：
-- AnimationConfig 加 event frames 定义
-- Logic 层按 elapsed 触发事件回调
-- 取消窗、命中帧、特效帧与动画进度耦合
-
-**覆盖**：竞技级帧同步动作游戏
-
-### Phase 5 — 确定性混合参数
+### Phase 4 — 确定性混合参数
 
 **问题**：1D/2D BlendSpace（速度→走/跑混合）只在 Render 层。帧同步两端可能分歧。
 
@@ -323,8 +312,8 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 |------|------|------|
 | 休闲小游戏 | ✅ 完全够用 | 无 |
 | 状态同步动作游戏 | ✅ 基本够 | 带宽优化 |
-| 帧同步动作游戏 | ⚠️ 骨架够 | 事件帧、确定性混合 |
-| 竞技级动作游戏 | ❌ 需扩展 | 取消窗、逐层速度控制 |
+| 帧同步动作游戏 | ⚠️ 骨架够 | 确定性混合 |
+| 竞技级动作游戏 | ⚠️ 骨架够 | Pipeline 管取消窗、命中帧；缺逐层速度控制 |
 
 架构方向正确（Slot/Priority/Layer 是行业标准抽象），无需推翻重来。当前是 v3（Phase 1+2+2.5+3），能撑住休闲游戏、状态同步动作游戏和简单帧同步动作游戏。
 
@@ -415,3 +404,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 3. RmvSlotsByType 批量按类型移除，ReleaseSlot 统一清理回收
 4. StateMachine/BeHitExecutor/GameplayStateProvider 调用点适配
 5. 编码风格：MakeKey→GenKey，参数/变量全小写
+
+### 2026-07-22 砍 Phase 4 事件帧系统
+
+Pipeline 时序天然等价于动画帧驱动（同一确定性时钟），无需在 AnimationConfig 中耦合游戏逻辑。取消窗、命中帧、特效帧均由 Pipeline 管理，动画数据只负责播放。
