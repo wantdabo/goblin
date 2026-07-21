@@ -294,16 +294,6 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 **覆盖**：复杂动作游戏（连招 + 多部位并行）
 
-### Phase 4 — 确定性混合参数
-
-**问题**：1D/2D BlendSpace（速度→走/跑混合）只在 Render 层。帧同步两端可能分歧。
-
-**改动**：
-- RIL 扩展 blend weight 字段
-- Logic 层算混合参数，Render 层只执行
-
-**覆盖**：帧同步 + 程序化动画
-
 ---
 
 ## 八、能力边界评估
@@ -312,8 +302,8 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 |------|------|------|
 | 休闲小游戏 | ✅ 完全够用 | 无 |
 | 状态同步动作游戏 | ✅ 基本够 | 带宽优化 |
-| 帧同步动作游戏 | ⚠️ 骨架够 | 确定性混合 |
-| 竞技级动作游戏 | ⚠️ 骨架够 | Pipeline 管取消窗、命中帧；缺逐层速度控制 |
+| 帧同步动作游戏 | ✅ 基本够 | Pipeline 管取消窗/命中帧；blend weight 分歧不影响游戏态 |
+| 竞技级动作游戏 | ⚠️ 骨架够 | 缺逐层速度控制 |
 
 架构方向正确（Slot/Priority/Layer 是行业标准抽象），无需推翻重来。当前是 v3（Phase 1+2+2.5+3），能撑住休闲游戏、状态同步动作游戏和简单帧同步动作游戏。
 
@@ -404,6 +394,10 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 3. RmvSlotsByType 批量按类型移除，ReleaseSlot 统一清理回收
 4. StateMachine/BeHitExecutor/GameplayStateProvider 调用点适配
 5. 编码风格：MakeKey→GenKey，参数/变量全小写
+
+### 2026-07-22 砍 Phase 4 确定性混合参数
+
+Blend weight 只影响视觉混合，不产生游戏态差异。命中判定走 Pipeline，位移走 Logic，blend weight 分歧不影响帧同步。animstate 已覆盖"播哪个状态"的确定性。
 
 ### 2026-07-22 砍 Phase 4 事件帧系统
 
