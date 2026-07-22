@@ -1,0 +1,14 @@
+# Godot 项目文件统一使用 LF
+*.import text eol=lf
+*.godot text eol=lf
+*.tscn text eol=lf
+*.tres text eol=lf
+
+# C# 源文件使用 LF
+*.cs text eol=lf
+
+# 二进制资源不转换
+*.png binary
+*.wav binary
+*.ttf binary
+*.svg binary
