@@ -2,37 +2,137 @@
 alwaysApply: true
 ---
 
-你正在处理 Goblin 项目（Godot 4 C# 动作游戏框架）。严格遵循以下编码规范：
+你正在处理 Goblin 项目（Godot 4 C# 动作游戏框架）。**每次代码修改必须严格遵循以下规范，违反即为错误。**
 
 ## 命名
+
 - 属性一律全小写：`public bool destroyed { get; set; }`，不用 PascalCase，不用 `_` 前缀
 - 类/方法 PascalCase，虚方法钩子 `On` 前缀（`OnCreate`, `OnTick`, `OnEnter`）
 - 常量 SCREAMING_SNAKE_CASE：`STATE_DEFINE.NONE`, `ATTRIBUTE_DEFINE.MOVESPEED`
-- 动词用缩写：`Rmv`（Remove）、`Gen`（Generate）、`Seek`（Find）、`Tell`（Dispatch）
 - 定义类以 `_DEFINE` 后缀
+- 动词用缩写：`Rmv`（Remove）、`Gen`（Generate）、`Seek`（Find）、`Tell`（Dispatch）
+
+```csharp
+// ✅ 正确
+public bool destroyed { get; private set; }
+STATE_DEFINE.NONE
+ATTRIBUTE_DEFINE.MOVESPEED
+
+// ❌ 错误
+public bool Destroyed { get; set; }       // 属性 PascalCase
+private bool _destroyed;                  // _ 前缀
+StateDefine.None                          // 常量不用 PascalCase
+```
 
 ## 条件判断
+
 - 常量永远在左：`if (null == x)` 不是 `if (x == null)`
 - 不用 `!`：`if (false == condition)` 不是 `if (!condition)`
 
-## 模式
-- `SeekXxx` 返回 bool，数据走 out：`if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial))`
-- Behavior 必须绑定泛型 Info：`class Movement : Behavior<MovementInfo>`
-- Info 纯数据，属性全 `{ get; set; }`，有 `OnReady/OnReset/OnClone`
-- Executor OnEnter/OnExecute/OnExit 首参为 `(uint pipelineid, uint index)`
+```csharp
+// ✅ 正确
+if (null == comps) return;
+if (false == stage.SeekBehavior(actor, out StateMachine machine)) return;
 
-## 严禁
-- 属性用 PascalCase 或 `_` 前缀
-- `if (x == null)` 或 `if (!condition)`
-- 用裸 field 代替属性
-- 类名加前缀/后缀
-- 英文注释
-- emoji
+// ❌ 错误
+if (comps == null) return;          // null 在右
+if (!dict.TryGetValue(...))         // 用了 !
+```
+
+## 卫语句单行
+
+`if + return/break/continue` 体量小时必须合并一行：
+
+```csharp
+// ✅ 正确
+if (null == comps) return;
+if (false == condition) break;
+
+// ❌ 错误
+if (null == comps)
+    return;
+```
+
+## 注释规范（极其重要）
+
+- **注释独占一行**，禁止行尾注释
+- `/// <summary>` XML 文档注释，中文
+- 行内注释 `//` 中文
+- 不写英文注释
+
+```csharp
+// ✅ 正确
+/// <summary>
+/// 执行移动计算
+/// </summary>
+// 检查是否有速度属性
+if (false == stage.SeekBehaviorInfo(actor, out MovementInfo info)) return;
+
+// ❌ 错误
+public void Tick() {  // 每帧调用               ← 行尾注释，禁止！
+// Check if actor has speed attribute          ← 英文注释，禁止！
+```
+
+## 缩进与编码
+
+- 4 空格缩进（不用 Tab）
+- 文件级命名空间（末尾 `;`）
+- 不要在代码行后加注释
+
+## SeekXxx 模式
+
+返回 `bool`，数据走 `out`：
+
+```csharp
+if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial))
+if (false == stage.SeekBehavior(actor, out StateMachine machine))
+```
+
+## Behavior / BehaviorInfo 模式
+
+```csharp
+// Info：纯数据，OnReady/OnReset/OnClone 三生命周期
+public class MovementInfo : BehaviorInfo
+{
+    public bool turnmotion { get; set; }
+}
+
+// Behavior：逻辑，绑定泛型 Info
+public class Movement : Behavior<MovementInfo> { }
+```
+
+## Executor 签名
+
+OnEnter/OnExecute/OnExit 首参为 `(uint pipelineid, uint index)`：
+
+```csharp
+protected override void OnEnter((uint pipelineid, uint index) identity, 
+    DamageData data, FlowInfo flowinfo, ulong target)
+```
+
+## 严禁事项（检查清单）
+
+每次修改代码前对照此清单：
+
+| ❌ 禁止 | ✅ 正确 |
+|---------|--------|
+| 属性 PascalCase（`Destroyed`） | `destroyed` |
+| 属性 `_` 前缀（`_engine`） | `engine` |
+| `if (x == null)` | `if (null == x)` |
+| `if (!condition)` | `if (false == condition)` |
+| 裸 field 代替属性 | `{ get; set; }` 属性 |
+| 类名加前缀/后缀 | 短名 |
+| 行尾注释 `foo; // 注释` | 注释独占上一行 |
+| 英文注释 | 中文注释 |
+| emoji | 无 |
+| Tab 缩进 | 4 空格 |
+| `if + return` 拆两行 | 合并一行 |
 
 ## 架构速查
+
 - Logic 层零 Godot 依赖，用自研定点数（FPVector3/FPQuaternion/FP），Render 层依赖 Godot API
 - Agent Chase 模式：Logic 推送 RIL → Render Agent 追逐状态
 - SA（System Actor，actor=ulong.MaxValue）挂全局 Behavior
-- 注释全部中文
+- 生命周期：Comp → OnCreate/OnDestroy，Behavior → OnAssemble/OnTick/OnEndTick/OnDisassemble，Info → OnReady/OnReset/OnClone，Executor → OnEnter/OnExecute/OnExit
 
 完整风格文档见 Docs/CODING_STYLE.md。

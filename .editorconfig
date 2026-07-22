@@ -1,0 +1,25 @@
+root = true
+
+# 统一使用 LF，与 .gitattributes 保持一致
+[*]
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+charset = utf-8-bom
+
+# Godot 资源文件
+[*.tscn]
+indent_style = space
+indent_size = 4
+
+[*.tres]
+indent_style = space
+indent_size = 4
+
+[*.godot]
+indent_style = space
+indent_size = 4
