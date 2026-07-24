@@ -94,21 +94,33 @@ public class LifecycleIntegrationTests
     }
 
     /// <summary>
-    /// ProjectFieldInfo Reset → 断言 projectdirtymask 归零
-    /// （当前 SG 只生成空 partial，脏标记尚未自动写入）
+    /// ProjectFieldInfo 脏标记验证
+    /// SG 生成 position/scale 属性后，setter 自动写 projectdirtymask
     /// </summary>
     [Fact]
     public void ProjectFieldInfo_Reset_ClearsDirtyMask()
     {
         var info = new ProjectFieldInfo();
         info.Ready(1);
+
+        // 初始脏标记为 0
+        Assert.Equal(0ul, info.projectdirtymask);
+
+        // 设置 position（index 0）→ mask 位 0 置 1
         info.position = new FPVector3(1, 2, 3);
+        Assert.Equal(1ul << 0, info.projectdirtymask);
+
+        // 设置 scale（index 1）→ mask 位 1 置 1
         info.scale = new FP(2);
-        info.name = "test";
+        Assert.Equal((1ul << 0) | (1ul << 1), info.projectdirtymask);
 
-        info.Reset();
+        // TakeProjectValues 只取脏字段
+        var values = info.TakeProjectValues(info.projectdirtymask);
+        Assert.Equal(2, values.Length);
 
-        // projectdirtymask 待 SG 生成后应归零
+        // ClearProjectDirty 清零
+        info.ClearProjectDirty();
+        Assert.Equal(0ul, info.projectdirtymask);
     }
 
     /// <summary>

@@ -267,29 +267,29 @@ partial class ProjectFieldInfo
 
 ### T1.3 属性 + 脏标记生成（1.5 天）
 
-#### T1.3a ProjectorAttribute 升级为类级（0.3 天）
+#### T1.3a ProjectorAttribute 升级为类级（0.3 天）✅
 
-- [ ] `ProjectorAttribute` 改为 `AttributeTargets.Class`，`AllowMultiple = true`
-- [ ] 参数：`string name`（属性名）、`System.Type type`（C# 类型）、`int index`（位索引）、`int defaultvalue = 0`（Reset 时的缺省值）
-- [ ] 更新 `ProjectorAttribute.cs`，删 `index` 只读属性，改用构造函数参数 + `defaultvalue` 全小写
-- [ ] 更新 `ProjectFieldInfo` 测试桩为新格式（类级注解）
+- [x] `ProjectorAttribute` 改为 `AttributeTargets.Class`，`AllowMultiple = true`
+- [x] 参数：`string name`（属性名）、`System.Type type`（C# 类型）、`int index`（位索引）、`int defaultvalue = 0`（Reset 时的缺省值）
+- [x] 更新 `ProjectorAttribute.cs`，删 `index` 只读属性，改用构造函数参数 + `defaultvalue` 全小写
+- [x] 更新 `ProjectFieldInfo` 测试桩为新格式（类级注解）
 
-#### T1.3b SG 扫描 [Projector] + 生成 backing field（0.4 天）
+#### T1.3b SG 扫描 [Projector] + 生成 backing field（0.4 天）✅
 
-- [ ] SG 入口从扫描 `partial class + IGBL` 扩展为同时扫描 `[Projector]` 注解
-- [ ] 为每个 `[Projector]` 生成 backing field：`private T {类名小写}_{name} { get; set; }`
+- [x] SG 入口从扫描 `partial class + IGBL` 扩展为同时扫描 `[Projector]` 注解
+- [x] 为每个 `[Projector]` 生成 backing field：`private T {类名小写}_{name} { get; set; }`
   - 例：`SpatialInfo` + `position` → `private FPVector3 spatialinfo_position { get; set; }`
-- [ ] 扫描类上 `//` 注释，匹配到 `[Projector]` 即生成 `/// <summary>` XML 文档注释
+- [x] 扫描类上 `//` 注释，匹配到 `[Projector]` 即生成 `/// <summary>` XML 文档注释
   - 取最近的上一行 `//` 前缀注释
 
-#### T1.3c SG 生成脏标记属性（0.5 天）
+#### T1.3c SG 生成脏标记属性（0.5 天）✅
 
-- [ ] 生成 `public T name { get => backing; set { ... } }`：
+- [x] 生成 `public T name { get => backing; set { ... } }`：
   - setter 值变检测：`if (backing != value)` → 写 backing + `projectdirtymask |= (1ul << index)`
   - FPVector3/FP 等值类型比较依赖 `!=` 重载（无重载时 SG 生成 `!(a == b)`）
-- [ ] 生成 `public object[] TakeProjectValues(ulong mask)` — 按 mask 位取脏字段值装箱
-- [ ] 生成 `public void ClearProjectDirty()` — `projectdirtymask = 0`
-- [ ] FP 类型序列化：`new FP(backing.rawValue)` 避免装箱，object[] 中用 FP 实例
+- [x] 生成 `public object[] TakeProjectValues(ulong mask)` — 按 mask 位取脏字段值装箱
+- [x] 生成 `public void ClearProjectDirty()` — `projectdirtymask = 0`
+- [x] FP 类型序列化：`new FP(backing.rawValue)` 避免装箱，object[] 中用 FP 实例
 
 #### T1.3d 值类型序列化（0.3 天）
 

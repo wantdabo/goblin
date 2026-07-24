@@ -21,7 +21,7 @@ public abstract class BehaviorInfo : IGBL
     /// 投影脏标记，位图对应 [Projector(index)] 字段
     /// Source Generator 生成的属性 setter 自动写入
     /// </summary>
-    internal ulong projectdirtymask { get; set; }
+    public ulong projectdirtymask { get; set; }
 
     /// <summary>
     /// 初始化
