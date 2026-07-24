@@ -1,6 +1,6 @@
 # Goblin 待办清单
 
-> 2026-07-22 | 更新于全链路审查修复 + Phase 4/5 砍除
+> 2026-07-25 | 更新于 Property Sync 体系设计落地 + Lifecycle 自动化方案
 
 ---
 
@@ -37,15 +37,16 @@
 
 | 项目 | 说明 |
 |------|------|
-| ~~Skill 转为 Actor~~ ✅ | 已通过 `Magic` Actor 体系完成（`MagicPrefab` + `MagicInfo` + `Sa/Magic.cs`） |
-| 穿透式目标查找规则 | ~~✅ 已完成。`ET_MAGIC_OWNER` 已移除，统一用 `ET_CASTER` + 规则链动态解析~~ | `Docs/PENETRATING_TARGET_RESOLUTION.md` |
+| ~~Skill 转为 Actor~~ ✅ | 已通过 `Magic` Actor 体系完成 |
+| ~~穿透式目标查找规则~~ ✅ | 统一用 `ET_CASTER` + 规则链动态解析 |
 | ~~CheckCondition 移入 ExecuteInstruct~~ ✅ | 已统一到 `ExecuteInstruct` 内部 |
-| Info 转 RIL 自动化 | 减少手写同步代码 |
-| Clone 自动化 | 所有 Behavior 自动深拷贝 |
-| RIL 合并 | 同 RIL 用最新帧号 |
-| 主观 RIL 传输 | 状态同步下缓存 + 主观推送 |
-| 帧同步渲染层兼容两套 | 帧同步 / 状态同步双模式 |
-| GDScript 扩展 | Render 层脚本化（Logic 层只允许 int）。当前 `.gd` 文件 0 个，尚未起步 |
+| ~~Info 转 RIL 自动化~~ | 被 Property Sync 体系替代（删 RIL，标 Project） |
+| ~~Clone 自动化~~ | 被 `[Lifecycle]` + Source Generator 替代 |
+| ~~RIL 合并~~ | 被 Property Sync 体系替代（删 RIL） |
+| ~~主观 RIL 传输~~ | 被 ProjectorSystem + Crop 规则链替代 |
+| ~~帧同步渲染层兼容两套~~ | 被统一 Property Sync 管线替代 |
+| **Property Sync 体系实施** | `Docs/DualMode/IMPLEMENTATION_PLAN.md`（5 阶段，~21 天）。详见 `CORE.md` / `PROPERTY_SYNC_DESIGN.md` / `BEHAVIORINFO_LIFECYCLE_REPORT.md` |
+| GDScript 扩展 | Render 层脚本化（Logic 层只允许 int）。尚未起步 |
 
 ## 五、UI
 
