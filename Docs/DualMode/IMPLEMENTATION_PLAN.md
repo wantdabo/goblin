@@ -172,7 +172,7 @@ public partial class SimpleInfo : BehaviorInfo  // BehaviorInfo : IGBL → SG �
 public partial class ContainerInfo : BehaviorInfo
 {
     public GBLList<uint> ids;
-    public GBLDictionary<int, ulong> dict;
+    public GBLDict<int, ulong> dict;
 }
 // SG 生成：override Reset() → ids.Reset(), dict.Reset(), base.Reset()
 // 测试：Add 数据 → Reset → 断言 Count==0、容器引用未变
@@ -313,7 +313,7 @@ partial class ProjectFieldInfo
 
 - [x] `partial class + IGBL` 生成 `public override void Reset()`：
   - 值类型 → default 值（尊重 `[Projector(default: x)]`）
-  - GBLDictionary/GBLList → 调 `container.Reset()`（清数据不还池）
+  - GBLDict/GBLList → 调 `container.Reset()`（清数据不还池）
   - `IGBL` 引用类型 → `foreach Reset + ObjectCache.Set → null`（还池）
   - 非 IGBL 引用类型 → `null`
   - `projectdirtymask = 0`
@@ -338,15 +338,16 @@ partial class ProjectFieldInfo
 
 ---
 
-### T1.5 GBLDictionary / GBLList（1 天）
+### T1.5 GBLDict / GBLList 体系（含脏追踪变体）（1 天）✅
 
-- [ ] `GBLDictionary<K,V>`：自追踪（addedKeys/removedKeys/changedKeys）、`CollectDiff()`、`Reset()`、`Clone()`
-- [ ] `GBLList<T>`：同理，跟踪 addedIndices/removedIndices
-- [ ] 写入即记账：新增/修改/删除自动记录，增删同一 key 自动抵消
-- [ ] `Reset()` 识别 `IGBL` 元素 → `foreach Reset + ObjectCache.Set`，值类型元素仅清空
+- [x] `GBLDict<K,V>`：池感知字典基类，`Reset()` 回收 `IGBL` 元素 + 值类型清空，`Clone()` 深拷贝数据、不拷贝脏状态
+- [x] `TGBLDict<K,V>`（继承 `GBLDict`）：脏追踪字典 — 写入即记账（`addedkeys`/`removedkeys`/`changedkeys`），`CollectDiff()` 消费差量后归零追踪，增删同一 key 自动抵消
+- [x] `GBLList<T>`：池感知列表基类，`Reset()` 回收 `IGBL` 元素，`Clone()` 深拷贝
+- [x] `TGBLList<T>`（继承 `GBLList`）：脏追踪列表 — 写入即记账（`addedindices`/`removedindices`），`CollectDiff()` 消费后归零，增删同一索引自动抵消
+- [x] `dotnet test` 通过 — 59/59 全绿（+56 GBL 测试，含 TGBLDict/TGBLList 脏追踪）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.3
-**产出**：`GBLDictionary.cs` / `GBLList.cs`
+**产出**：`GBLDict.cs` / `GBLList.cs` / `TGBLDict.cs` / `TGBLList.cs`
 
 ---
 
@@ -354,7 +355,7 @@ partial class ProjectFieldInfo
 
 - [ ] 全局脏集 `HashSet<BehaviorInfo> dirtyInfos`
 - [ ] `Tick()`：遍历脏集 → 读 `projectdirtymask` → `TakeProjectValues` → 产出 `ProjectorPacket[]` → 清脏
-- [ ] 集合 Diff 收集：对有 GBLDictionary/List 字段且 mask 位为 1 的，调 `CollectDiff()`
+- [ ] 集合 Diff 收集：对有 GBLDict/List 字段且 mask 位为 1 的，调 `CollectDiff()`
 - [ ] 快照管理（预留 Phase 4）：`TakeSnapshot` / `CloneSnapshot`
 - [ ] Actor 移除：`RmvActor(actor)` 清理快照
 - [ ] `Stage.RegisterDirty(BehaviorInfo)` — 属性 setter 自动调用
@@ -463,7 +464,7 @@ T1.0（测试基础设施）
       │     │     │     │                 │
       │     │     │     │                 └── T1.10（删 RIL + 重接 Director）
       │     │     │     │
-      │     │     │     └── T1.5（GBLDictionary/List）
+      │     │     │     └── T1.5（GBLDict/List）
       │     │     │
       │     │     └── T1.4（生命周期生成）
       │     │

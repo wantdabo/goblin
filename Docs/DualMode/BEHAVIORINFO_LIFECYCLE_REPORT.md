@@ -148,7 +148,7 @@ protected override void OnReady()
 
 ```
 IGBL                 接口 — Common 接口，提供 Reset() / IGBL Clone() 多态契约
-[Projector(index)]   字段 — 此字段参与投影同步（与 IGBL 正交）
+[Projector(name, typeof(T), index)]   类级 Attribute（AllowMultiple）— 映射 name 字段参与投影同步（与 IGBL 正交）
 ```
 
 **触发规则**：SG 扫描 `partial class + IGBL`，直接生成 `override Reset()` 和 `override IGBL Clone()`。不加 `partial` 则全手写。没有逐字段排除——一个字段如果不需要 Reset，说明它不属于 BehaviorInfo 状态。
@@ -167,13 +167,13 @@ OnReset()
 }
 OnReady()
 {
-    effectdict = ObjectCache.Ensure<GBLDictionary<...>>();  // 重新拿
+    effectdict = ObjectCache.Ensure<GBLDict<...>>();  // 重新拿
 }
 
 // ✅ 新：容器只清不还 — Source Generator 生成
 public override void Reset()
 {
-    effectdict.Reset();  // 清数据，GBLDictionary 对象不动
+    effectdict.Reset();  // 清数据，TGBLDict 对象不动（继承 GBLDict.Reset）
     base.Reset();
 }
 ```
@@ -233,11 +233,11 @@ info.Reset()（SG override）
 ### 场景 1：`partial class + IGBL` — 全自动
 
 ```csharp
+[Projector("position", typeof(FPVector3), 0)]
+[Projector("euler", typeof(FPVector3), 1)]
+[Projector("scale", typeof(FP), 2)]
 public partial class SpatialInfo : BehaviorInfo  // BehaviorInfo : IGBL → SG 接管
 {
-    [Projector(index: 0)] public FPVector3 position;
-    [Projector(index: 1)] public FPVector3 euler;
-    [Projector(index: 2)] public FP scale;
     public SpatialInfo preframe;
 }
 
@@ -294,10 +294,10 @@ public class CareerInfo : BehaviorInfo
 SG 为 `partial class + IGBL` 生成 `override IGBL Clone()`：
 
 ```csharp
+[Projector("model", typeof(uint), 0)]
+[Projector("effectdict", typeof(TGBLDict<uint, EffectInfo>), 1)]
 public partial class FacadeInfo : BehaviorInfo
 {
-    [Projector(index: 0)] public uint model;
-    [Projector(index: 1)] public GBLDictionary<uint, EffectInfo> effectdict;
     public List<AnimationSlot> animslots;
 }
 
@@ -308,7 +308,7 @@ partial class FacadeInfo
     {
         var c = ObjectCache.Ensure<FacadeInfo>();
         c._model = _model;
-        c._effectdict = _effectdict.Clone();  // GBLDictionary.Clone()
+        c._effectdict = _effectdict.Clone();  // TGBLDict.Clone()（继承 GBLDict）
         // animslots：IGBL 元素多态深拷贝
         c.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
         foreach (var slot in animslots)
@@ -324,7 +324,7 @@ partial class FacadeInfo
 
 ## 8. 迁移策略
 
-### Phase 1：Source Generator 接管 `[Projector]` 字段
+### Phase 1：Source Generator 接管 `[Projector]` 类级注解
 
 1. 实现基础框架：属性注入 + 脏标记 + override Reset()/Clone()
 2. `partial class + IGBL` 接管全部字段的 Reset/Clone

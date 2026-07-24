@@ -9,6 +9,7 @@ namespace Goblin.Logic.Tests;
 /// T1.2 生命周期集成测试
 /// 验证 SG 生成的 Reset/Clone 与 BehaviorInfo 基类钩子链协同
 /// </summary>
+[Collection("GBL")]
 public class LifecycleIntegrationTests
 {
     /// <summary>

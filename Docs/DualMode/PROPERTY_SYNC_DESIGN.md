@@ -66,19 +66,18 @@ RIL 体系的核心假设是"Logic 和 Render 之间通过类型化消息通信"
 
 ```csharp
 // partial class + IGBL → SG 自动生成 Reset / Clone
+[Projector("position", typeof(FPVector3), 0)]
+[Projector("euler", typeof(FPVector3), 1)]
+[Projector("scale", typeof(FP), 2)]
 public partial class SpatialInfo : BehaviorInfo
 {
-    [Projector(index: 0)] public FPVector3 position;
-    [Projector(index: 1)] public FPVector3 euler;
-    [Projector(index: 2)] public FP scale;
-
     // 非 [Projector]，但 partial class + IGBL 仍自动接管 Reset/Clone
     public SpatialInfo preframe;
 }
 
+[Projector("attributes", typeof(GBLDict<ulong, GBLDict<ushort, int>>), 0)]
 public partial class AttributeBucketInfo : BehaviorInfo
 {
-    [Projector(index: 0)] public GBLDictionary<ulong, Dictionary<ushort, int>> attributes;
 }
 ```
 
@@ -87,9 +86,9 @@ public partial class AttributeBucketInfo : BehaviorInfo
 | 注解/接口 | 级别 | 职责 |
 |------|------|------|
 | `IGBL` | **接口级** | Common 层统一接口，`Reset()` + `IGBL Clone()` 多态契约。SG 扫描 `partial class + IGBL` 自动生成 `override Reset()` + `override IGBL Clone()`。BehaviorInfo 和池化类型（PooledItem、AnimationSlot）均实现 |
-| `[Projector(index)]` | **字段级** | 此字段参与投影同步 → Source Generator 生成脏标记属性 + TakeProjectValues + 序列化 |
+| `[Projector(name, typeof(T), index)]` | **类级** | 类级 Attribute，`AllowMultiple`。通过 `name` 映射字段，`index` 对应 fieldmask 位。SG 生成 backing field + 脏标记属性 + TakeProjectValues + 序列化 |
 
-- **`[Projector(index)]` 参数**：`index` 在同一个 BehaviorInfo 类型内唯一，对应 fieldmask 的位。可选 `default` 指定 Reset 时的非零缺省值
+- **`[Projector(name, typeof(T), index)]` 参数**：`name` 为属性名字符串，`typeof(T)` 指定 C# 类型，`index` 类内唯一，对应 fieldmask 的位。可选 `defaultvalue` 指定 Reset 时的非零缺省值
 - **`partial` 作为触发器**：类标记 `partial` 即选择自动生成，不标记则全手写。没有逐字段排除
 - **容器所有权**：`partial class + IGBL` 类中容器归 BehaviorInfo 所有，不独立还池。Reset 只清数据（`container.Reset()`）
 - **Logic 代码不变**：字段读写走生成属性，但赋值语法与原生字段一致
@@ -108,104 +107,105 @@ public partial class AttributeBucketInfo : BehaviorInfo
 
 | 集合类型 | 传输方式 | 变更追踪 |
 |---------|---------|------|
-| `GBLDictionary<K, V>` | 整包序列化（K,V 为值类型） | **自追踪**：写入即记账，`CollectDiff()` 返回 added/removed/changed |
-| `GBLList<T>` | 整包序列化（T 为值类型） | 同上 |
+| `GBLDict<K, V>` | 整包序列化（K,V 为值类型） | 无追踪。池感知基类：`Reset()` / `Clone()` |
+| `TGBLDict<K, V>` | 继承 `GBLDict`，序列化同 | **自追踪**：写入即记账，`CollectDiff()` 返回 added/removed/changed |
+| `GBLList<T>` | 整包序列化（T 为值类型） | 无追踪。池感知基类：`Reset()` / `Clone()` |
+| `TGBLList<T>` | 继承 `GBLList`，序列化同 | **自追踪**：写入即记账，`CollectDiff()` 返回 added/removed |
 
 | 对象类型 | 当前策略 |
 |---------|---------|
 | 嵌套 class/struct | **Phase 1 不支持**。后续通过 `[ProjectNested]` 扩展 |
 
-### 2.3 集合容器的自追踪机制
+### 2.3 集合容器的分层设计
 
-集合字段不使用原生 `Dictionary<K,V>` / `List<T>`，而是使用带变更追踪的包装容器。
+集合字段不使用原生 `Dictionary<K,V>` / `List<T>`，而是使用池感知包装容器。设计分两层：
+
+- **基类 `GBLDict<K,V>` / `GBLList<T>`**：提供池感知操作（`Reset` 回收 IGBL 元素、`Clone` 深拷贝），**无脏追踪**。适合只需快照存储、不需要 Diff 的场景。
+- **子类 `TGBLDict<K,V>` / `TGBLList<T>`**：继承基类，增加**写入即记账**的脏追踪能力。适合需要增量同步的场景（如 `FacadeInfo.effectdict`）。
 
 **设计理由**：快照方案需要每帧 Clone 整个集合 + 遍历全部 key 比较。1000 个特效条目 → 1000 次分配 + 1000 次 Equals。自追踪容器写入时记账，零快照、零遍历。
 
-**GBLDictionary**：
+**GBLDict 基类**（池感知，无追踪）：
 
 ```csharp
-public class GBLDictionary<K, V> : IEnumerable<KeyValuePair<K, V>>
+public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
 {
     private Dictionary<K, V> data;
 
+    // Reset：IGBL 元素 → foreach Reset + ObjectCache.Set；值类型 → 只清空
+    // Clone：ObjectCache.Ensure → 浅拷贝键值对，不拷贝脏状态
+}
+```
+
+**TGBLDict 子类**（继承 GBLDict，增加脏追踪）：
+
+```csharp
+public class TGBLDict<K, V> : GBLDict<K, V>
+{
     // 本帧变更记录
     private HashSet<K> addedKeys;
     private HashSet<K> removedKeys;
     private HashSet<K> changedKeys;
 
-    public V this[K key]
+    public override V this[K key]
     {
-        get => data[key];
         set
         {
             if (data.TryGetValue(key, out var old))
             {
                 if (false == Equals(old, value))
                 {
-                    data[key] = value;
+                    base[key] = value;
                     if (false == addedKeys.Contains(key))
                         changedKeys.Add(key);
                 }
             }
             else
             {
-                data[key] = value;
+                base[key] = value;
                 addedKeys.Add(key);
                 removedKeys.Remove(key);  // 刚删又加 → 抵消
             }
         }
     }
 
-    public bool Remove(K key)
+    public override bool Remove(K key)
     {
-        if (false == data.Remove(key)) return false;
+        if (false == base.Remove(key)) return false;
         if (addedKeys.Remove(key)) return true;  // 刚加又删 → 抵消
         changedKeys.Remove(key);
         removedKeys.Add(key);
         return true;
     }
 
-    // ... TryGetValue / ContainsKey / Count / GetEnumerator 透传 ...
+    // Add 同理：removedKeys 中移入 changedKeys（"删后重加"计为修改）
+    // Clear：所有非 addedKeys 的 key 记入 removedKeys
 
     /// <summary>
     /// 收集本帧变更，返回后清空跟踪状态
     /// </summary>
-    public DiffResult CollectDiff()
+    public DiffResult<K> CollectDiff()
     {
-        var r = new DiffResult(addedKeys, removedKeys, changedKeys);
+        var r = new DiffResult<K>(addedKeys, removedKeys, changedKeys);
         addedKeys = ObjectPool.Ensure<HashSet<K>>();
         removedKeys = ObjectPool.Ensure<HashSet<K>>();
         changedKeys = ObjectPool.Ensure<HashSet<K>>();
         return r;
     }
+}
 
-    /// <summary>
-    /// 清空数据与脏追踪。容器本身不还池（归 BehaviorInfo 所有）。
-    /// </summary>
-    public void Reset()
-    {
-        data.Clear();
-        addedKeys.Clear();
-        removedKeys.Clear();
-        changedKeys.Clear();
-    }
-
-    /// <summary>
-    /// 深拷贝数据，不拷贝脏追踪状态。
-    /// </summary>
-    public GBLDictionary<K, V> Clone()
-    {
-        var c = ObjectCache.Ensure<GBLDictionary<K, V>>();
-        foreach (var kv in data)
-            c.data[kv.Key] = kv.Value;
-        return c;
-    }
+public struct DiffResult<K>
+{
+    public List<K> addedkeys;
+    public List<K> removedkeys;
+    public List<K> changedkeys;
+    public bool isempty => addedkeys.Count == 0 && removedkeys.Count == 0 && changedkeys.Count == 0;
 }
 ```
 
-**GBLList**：同理，跟踪 `addedIndices` / `removedIndices`。
+**TGBLList**：同理，继承 `GBLList<T>`，跟踪 `addedIndices` / `removedIndices`。列表"修改"索引直接算作"新增"，不设 `changedIndices`。`CollectDiff()` 返回 `ListDiffResult`（`addedindices`/`removedindices` 两个 `List<int>`）。
 
-**对 BehaviorInfo 的影响**：`FacadeInfo.effectdict` 字段类型从 `Dictionary<uint, EffectInfo>` 改为 `GBLDictionary<uint, EffectInfo>`。Logic 层读写代码不变（`dict[key] = value`），只是类型名不同。如果没有变更操作（集合未被修改），`CollectDiff()` 返回三空集合，mask 位为 0。
+**对 BehaviorInfo 的影响**：`FacadeInfo.effectdict` 字段类型从 `Dictionary<uint, EffectInfo>` 改为 `TGBLDict<uint, EffectInfo>`。Logic 层读写代码不变（`dict[key] = value`），只是类型名不同。如果没有变更操作（集合未被修改），`CollectDiff()` 返回三空集合，mask 位为 0。
 
 ### 2.4 Source Generator 生成
 
@@ -269,11 +269,11 @@ public abstract class BehaviorInfo : IGBL
 ```csharp
 // ── 用户手写 ──
 // partial class + IGBL → SG 自动生成 Reset / Clone
+[Projector("position", typeof(FPVector3), 0)]
+[Projector("euler", typeof(FPVector3), 1)]
+[Projector("scale", typeof(FP), 2, defaultvalue = 1)]
 public partial class SpatialInfo : BehaviorInfo
 {
-    [Projector(index: 0, default: 0)] public FPVector3 position;
-    [Projector(index: 1)] public FPVector3 euler;
-    [Projector(index: 2, default: 1)] public FP scale;
     public SpatialInfo preframe;                     // 不参与同步，但 SG 接管
 }
 
@@ -334,10 +334,10 @@ public partial class SpatialInfo
 
 ```csharp
 // ── 用户手写 ──
+[Projector("model", typeof(uint), 0)]
+[Projector("effectdict", typeof(TGBLDict<uint, EffectInfo>), 1)]
 public partial class FacadeInfo : BehaviorInfo
 {
-    [Projector(index: 0)] public uint model;
-    [Projector(index: 1)] public GBLDictionary<uint, EffectInfo> effectdict;
     public List<AnimationSlot> animslots;
 }
 
@@ -382,7 +382,7 @@ public partial class FacadeInfo
 ```csharp
 // ❌ 旧：容器独立还池 — 反模式（OnReset 还 → OnReady 取，往返浪费）
 OnReset() { effectdict.Clear(); ObjectCache.Set(effectdict); }
-OnReady() { effectdict = ObjectCache.Ensure<GBLDictionary<...>>(); }
+OnReady() { effectdict = ObjectCache.Ensure<GBLDict<...>>(); }
 
 // ✅ 新：只清不还 — Source Generator 生成
 Reset() { effectdict.Reset(); }  // 清数据，对象不动
@@ -390,7 +390,7 @@ Reset() { effectdict.Reset(); }  // 清数据，对象不动
 
 嵌套深度 3 层的容器全部遵守此规则。
 
-> **default 值**：用户可在注解中声明非零缺省值 `[Projector(index: 2, default: 1)]`，SG 生成时在 `Reset()` 中用此值。未声明则值类型用 `default`，GBLDictionary 调 `Reset()`。
+> **default 值**：用户可在注解中声明非零缺省值 `[Projector(index: 2, default: 1)]`，SG 生成时在 `Reset()` 中用此值。未声明则值类型用 `default`，GBLDict 调 `Reset()`。
 >
 > **Clone 不触发脏标记**：直接写 backing field（`_position`）而非走属性 `set`，确保新实例不会误注册到脏集中。
 
@@ -424,7 +424,7 @@ ProjectorSystem.Tick()                    ← 全局一次
     │    ├─ values = info.TakeProjectValues(mask) ← 只读脏字段
     │    │
     │    ├─ 集合字段 → info.CollectCollectionDiffs()
-    │    │    （GBLDictionary/GBLList 写入时已记账，CollectDiff 仅归集）
+    │    │    （GBLDict/GBLList 写入时已记账，CollectDiff 仅归集）
     │    │    → 填入 packet.addedkeys / packet.removedkeys
     │    │
     │    ├─ 产出 ProjectorPacket
@@ -1248,7 +1248,7 @@ RenderWorld.RmvEntity(actor)
 | 项目 | 数值 |
 |------|------|
 | 删除类/接口 | ~72（RIL ~40 + Render ~32） |
-| 新增类/接口 | ~18（ProjectorSystem / Crop / IProjectionRule / Rule × 5 / IPropertyTransport / Transport × 2 / Entity / Component / RenderWorld / ProjectorPacket / ObserverPacket / DiffResult / BehaviorInfoSnapshot） |
+| 新增类/接口 | ~22（ProjectorSystem / Crop / IProjectionRule / Rule × 5 / IPropertyTransport / Transport × 2 / Entity / Component / RenderWorld / ProjectorPacket / ObserverPacket / DiffResult / ListDiffResult / BehaviorInfoSnapshot / GBLDict / GBLList / TGBLDict / TGBLList） |
 | [Projector] 注解手写量 | 每个 BehaviorInfo 3-15 个字段 |
 | `partial class` 数量 | 24 个类逐步标 |
 | 手写生命周期方法 | 72 个 → 0 |

@@ -25,6 +25,10 @@
 
         <!-- Logic Common 层 -->
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\ObjectCache.cs" Link="Logic\Common\ObjectCache.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLDict.cs" Link="Logic\Common\GBLDict.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLList.cs" Link="Logic\Common\GBLList.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLDict.cs" Link="Logic\Common\TGBLDict.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLList.cs" Link="Logic\Common\TGBLList.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\AnimHash.cs" Link="Logic\Common\AnimHash.cs" />
 
         <!-- Defines -->
