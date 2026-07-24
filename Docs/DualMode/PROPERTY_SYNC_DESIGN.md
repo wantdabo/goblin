@@ -1,6 +1,6 @@
 # Property Sync 体系设计
 
-> **删 RIL，标 Project，Entity/Component 镜像。** Logic 几乎不动。
+> **删 RIL，标 Projector，Entity/Component 镜像。** Logic 几乎不动。
 
 ---
 
@@ -22,12 +22,12 @@ RIL 体系的核心假设是"Logic 和 Render 之间通过类型化消息通信"
 
 ```
 旧：BehaviorInfo → Translator → RIL → RILSync → RILBucket → Agent
-新：BehaviorInfo → [Project] → ProjectorSystem → 裁剪修饰 → Transport → Entity.Component
+新：BehaviorInfo → [Projector] → ProjectorSystem → 裁剪修饰 → Transport → Entity.Component
 ```
 
 | | 旧（RIL） | 新（Property Sync） |
 |---|---|---|
-| Logic 改动 | 写 Translator 填 RIL | BehaviorInfo 字段加 `[Project(index)]` |
+| Logic 改动 | 写 Translator 填 RIL | BehaviorInfo 字段加 `[Projector(index)]` |
 | 中间层 | ~10 个 RIL 类 + ~10 个 Translator + ~10 个 Cross | **无中间层** |
 | Render 单元 | Agent（生命周期散落 Enchant） | Entity + Component（1:1 映射） |
 | Diff | 手写 RIL.Diff(snapshot) | 脏标记（字段写入时记账，无需 Diff） |
@@ -54,46 +54,44 @@ RIL 体系的核心假设是"Logic 和 Render 之间通过类型化消息通信"
             (Render Entity/Component)
 ```
 
-- **Simulation**：不动。BehaviorInfo 加 `[Project]` 注解。
+- **Simulation**：不动。BehaviorInfo 加 `[Projector(index)]` 注解。
 - **Sync Projection**：新增。脏标记 → 规则链裁剪 → 传输。
 - **Presentation**：重写。删 Agent/Enchant/RILBucket，换 Entity/Component。
 
 ---
 
-## 2. Logic 层：`[Project]` 注解
+## 2. Logic 层：`[Projector]` 注解
 
 ### 2.1 注解体系
 
 ```csharp
-[Lifecycle]                                 // 类级：接管全部字段的 Reset/Clone
+// partial class + IGBL → SG 自动生成 Reset / Clone
 public partial class SpatialInfo : BehaviorInfo
 {
-    [Project(index: 0)] public FPVector3 position;
-    [Project(index: 1)] public FPVector3 euler;
-    [Project(index: 2)] public FP scale;
+    [Projector(index: 0)] public FPVector3 position;
+    [Projector(index: 1)] public FPVector3 euler;
+    [Projector(index: 2)] public FP scale;
 
-    // 非 [Project]，但 [Lifecycle] 仍自动接管 Reset/Clone
+    // 非 [Projector]，但 partial class + IGBL 仍自动接管 Reset/Clone
     public SpatialInfo preframe;
 }
 
-[Lifecycle]
 public partial class AttributeBucketInfo : BehaviorInfo
 {
-    [Project(index: 0)] public ProjectorDict<ulong, Dictionary<ushort, int>> attributes;
+    [Projector(index: 0)] public GBLDictionary<ulong, Dictionary<ushort, int>> attributes;
 }
 ```
 
-两个注解正交：
+注解体系仅含两项：
 
-| 注解 | 级别 | 职责 |
+| 注解/接口 | 级别 | 职责 |
 |------|------|------|
-| `[Project(index)]` | **字段级** | 此字段参与投影同步 → Source Generator 生成脏标记属性 + TakeProjectValues + 序列化 |
-| `[Lifecycle]` | **类级** | 当前类全部字段纳入自动池生命周期 → Source Generator 生成 `ResetFields()` + `CloneFields()` |
+| `IGBL` | **接口级** | Common 层统一接口，`Reset()` + `IGBL Clone()` 多态契约。SG 扫描 `partial class + IGBL` 自动生成 `override Reset()` + `override IGBL Clone()`。BehaviorInfo 和池化类型（PooledItem、AnimationSlot）均实现 |
+| `[Projector(index)]` | **字段级** | 此字段参与投影同步 → Source Generator 生成脏标记属性 + TakeProjectValues + 序列化 |
 
-- **`[Project(index)]` 参数**：`index` 在同一个 BehaviorInfo 类型内唯一，对应 fieldmask 的位。可选 `default` 指定 Reset 时的非零缺省值
-- **`[Lifecycle]` 不继承**：每个类自决。父类字段父类负责，子类字段子类负责
-- **全有或全无**：标了 `[Lifecycle]` 则全部字段自动接管；不标则全手写。没有逐字段排除
-- **容器所有权**：标 `[Lifecycle]` 后容器归 BehaviorInfo 所有，不独立还池。Reset 只清数据（`container.Reset()`）
+- **`[Projector(index)]` 参数**：`index` 在同一个 BehaviorInfo 类型内唯一，对应 fieldmask 的位。可选 `default` 指定 Reset 时的非零缺省值
+- **`partial` 作为触发器**：类标记 `partial` 即选择自动生成，不标记则全手写。没有逐字段排除
+- **容器所有权**：`partial class + IGBL` 类中容器归 BehaviorInfo 所有，不独立还池。Reset 只清数据（`container.Reset()`）
 - **Logic 代码不变**：字段读写走生成属性，但赋值语法与原生字段一致
 
 ### 2.2 字段类型
@@ -110,8 +108,8 @@ public partial class AttributeBucketInfo : BehaviorInfo
 
 | 集合类型 | 传输方式 | 变更追踪 |
 |---------|---------|------|
-| `ProjectorDict<K, V>` | 整包序列化（K,V 为值类型） | **自追踪**：写入即记账，`CollectDiff()` 返回 added/removed/changed |
-| `ProjectorList<T>` | 整包序列化（T 为值类型） | 同上 |
+| `GBLDictionary<K, V>` | 整包序列化（K,V 为值类型） | **自追踪**：写入即记账，`CollectDiff()` 返回 added/removed/changed |
+| `GBLList<T>` | 整包序列化（T 为值类型） | 同上 |
 
 | 对象类型 | 当前策略 |
 |---------|---------|
@@ -123,10 +121,10 @@ public partial class AttributeBucketInfo : BehaviorInfo
 
 **设计理由**：快照方案需要每帧 Clone 整个集合 + 遍历全部 key 比较。1000 个特效条目 → 1000 次分配 + 1000 次 Equals。自追踪容器写入时记账，零快照、零遍历。
 
-**ProjectorDict**：
+**GBLDictionary**：
 
 ```csharp
-public class ProjectorDict<K, V> : IEnumerable<KeyValuePair<K, V>>
+public class GBLDictionary<K, V> : IEnumerable<KeyValuePair<K, V>>
 {
     private Dictionary<K, V> data;
 
@@ -195,9 +193,9 @@ public class ProjectorDict<K, V> : IEnumerable<KeyValuePair<K, V>>
     /// <summary>
     /// 深拷贝数据，不拷贝脏追踪状态。
     /// </summary>
-    public ProjectorDict<K, V> Clone()
+    public GBLDictionary<K, V> Clone()
     {
-        var c = ObjectCache.Ensure<ProjectorDict<K, V>>();
+        var c = ObjectCache.Ensure<GBLDictionary<K, V>>();
         foreach (var kv in data)
             c.data[kv.Key] = kv.Value;
         return c;
@@ -205,9 +203,9 @@ public class ProjectorDict<K, V> : IEnumerable<KeyValuePair<K, V>>
 }
 ```
 
-**ProjectorList**：同理，跟踪 `addedIndices` / `removedIndices`。
+**GBLList**：同理，跟踪 `addedIndices` / `removedIndices`。
 
-**对 BehaviorInfo 的影响**：`FacadeInfo.effectdict` 字段类型从 `Dictionary<uint, EffectInfo>` 改为 `ProjectorDict<uint, EffectInfo>`。Logic 层读写代码不变（`dict[key] = value`），只是类型名不同。如果没有变更操作（集合未被修改），`CollectDiff()` 返回三空集合，mask 位为 0。
+**对 BehaviorInfo 的影响**：`FacadeInfo.effectdict` 字段类型从 `Dictionary<uint, EffectInfo>` 改为 `GBLDictionary<uint, EffectInfo>`。Logic 层读写代码不变（`dict[key] = value`），只是类型名不同。如果没有变更操作（集合未被修改），`CollectDiff()` 返回三空集合，mask 位为 0。
 
 ### 2.4 Source Generator 生成
 
@@ -215,54 +213,68 @@ Source Generator 按注解组合生成不同内容：
 
 | 注解组合 | 生成内容 |
 |---------|---------|
-| 仅有 `[Project]` | 属性 + 脏标记 + TakeProjectValues + 序列化 + Render 映射 |
-| 仅有 `[Lifecycle]` | `ResetFields()` + `CloneFields()`（接管全部字段） |
-| `[Project]` + `[Lifecycle]` | 以上全部 |
+| 仅有 `[Projector]` | 属性 + 脏标记 + TakeProjectValues + 序列化 + Render 映射 |
+| `partial class + IGBL` | `override Reset()` + `override IGBL Clone()`（接管全部字段） |
+| `[Projector]` + `partial class + IGBL` | 以上全部 |
 
-**`[Lifecycle]` 不继承**：Source Generator 只扫当前类的直接字段。父类字段由父类自己的 `ResetFields`/`OnReset` 处理。互不侵入。
+SG 只扫当前类的直接字段。父类字段由父类自己的 `Reset`/`Clone` 通过 `base.Reset()`/`base.Clone()` 处理。互不侵入。
 
 #### 2.4.1 基类钩子
 
 ```csharp
-public abstract class BehaviorInfo
+public abstract class BehaviorInfo : IGBL
 {
     public ulong actor { get; private set; }
     public bool active { get; set; }
 
-    public void Reset()
+    /// <summary>
+    /// virtual — SG 为 partial class + IGBL 类生成 override。
+    /// 非 partial 类走基类默认空实现。
+    /// </summary>
+    public virtual void Reset()
     {
-        ResetFields();         // internal virtual — Source Generator 填，用户不动
-        OnReset();             // protected virtual — 用户覆写（非 [Lifecycle] 类的字段手动处理）
+        OnReset();
         actor = 0;
         active = false;
     }
 
     /// <summary>
-    /// Source Generator 为 [Lifecycle] 类生成 override。
-    /// 非 [Lifecycle] 类保持空实现。
+    /// virtual — SG 为 partial class + IGBL 类生成 override。
     /// </summary>
-    internal virtual void ResetFields() { }
+    public virtual IGBL Clone()
+    {
+        var cloned = (BehaviorInfo)MemberwiseClone();
+        cloned.OnClone();
+        cloned.actor = 0;
+        cloned.active = false;
+        return cloned;
+    }
 
     /// <summary>
-    /// 用户覆写。非 [Lifecycle] 类的字段手动处理。
+    /// 用户覆写。非 partial 类的字段手动处理。
     /// </summary>
     protected virtual void OnReset() { }
+
+    /// <summary>
+    /// 用户覆写。Clone 后的自定义逻辑。
+    /// </summary>
+    protected virtual void OnClone() { }
 }
 ```
 
-调用链：`Stage.Recycle → info.Reset() → ResetFields()（生成）→ OnReset()（用户）→ actor/active 归零`
+调用链：`Stage.Recycle → info.Reset()（SG override → base.Reset() 尾调）→ OnReset()（用户）→ actor/active 归零`
 
-#### 2.4.2 `[Lifecycle]` 类生成模板
+#### 2.4.2 `partial class + IGBL` 生成模板
 
 ```csharp
 // ── 用户手写 ──
-[Lifecycle]
+// partial class + IGBL → SG 自动生成 Reset / Clone
 public partial class SpatialInfo : BehaviorInfo
 {
-    [Project(index: 0, default: 0)] public FPVector3 position;
-    [Project(index: 1)] public FPVector3 euler;
-    [Project(index: 2, default: 1)] public FP scale;
-    public SpatialInfo preframe;                     // 不参与同步，但 Lifecycle 接管
+    [Projector(index: 0, default: 0)] public FPVector3 position;
+    [Projector(index: 1)] public FPVector3 euler;
+    [Projector(index: 2, default: 1)] public FP scale;
+    public SpatialInfo preframe;                     // 不参与同步，但 SG 接管
 }
 
 // ── Source Generator 生成 ──
@@ -288,22 +300,29 @@ public partial class SpatialInfo
     // euler → index 1, scale → index 2（同 pattern）
 
     // ═══════════════════════ 生命周期 ═══════════════════════
-    internal override void ResetFields()
+    public override void Reset()
     {
         _position = FPVector3.Zero;
         _euler = FPVector3.Zero;
         _scale = FP.One;
         preframe = null;
         projectDirtyMask = 0;
+        base.Reset();                    // 尾调：OnReset() → actor=0, active=false
     }
 
-    internal void CloneFields(SpatialInfo src)
+    public override IGBL Clone()
     {
-        _position = src._position;
-        _euler = src._euler;
-        _scale = src._scale;
-        preframe = src.preframe;         // 对象引用直接拷贝
-        projectDirtyMask = 0;
+        var src = this;
+        var cloned = (SpatialInfo)MemberwiseClone();
+        cloned._position = src._position;
+        cloned._euler = src._euler;
+        cloned._scale = src._scale;
+        cloned.preframe = src.preframe;
+        cloned.projectDirtyMask = 0;
+        cloned.OnClone();
+        cloned.actor = 0;
+        cloned.active = false;
+        return cloned;
     }
 
     // ═══════════════════════ 同步 ═══════════════════════
@@ -311,15 +330,14 @@ public partial class SpatialInfo
 }
 ```
 
-#### 2.4.3 `[Lifecycle]` + 容器字段
+#### 2.4.3 `partial class + IGBL` + 容器字段
 
 ```csharp
 // ── 用户手写 ──
-[Lifecycle]
 public partial class FacadeInfo : BehaviorInfo
 {
-    [Project(index: 0)] public uint model;
-    [Project(index: 1)] public ProjectorDict<uint, EffectInfo> effectdict;
+    [Projector(index: 0)] public uint model;
+    [Projector(index: 1)] public GBLDictionary<uint, EffectInfo> effectdict;
     public List<AnimationSlot> animslots;
 }
 
@@ -328,46 +346,53 @@ public partial class FacadeInfo
 {
     // 属性 + 脏标记（略）
 
-    internal override void ResetFields()
+    public override void Reset()
     {
         model = default;
         effectdict.Reset();              // 清数据，不还池
         foreach (var slot in animslots)
-            slot.Reset();                // 元素原地 Reset
+            slot.Reset();                // IGBL 元素多态 Reset
         animslots.Clear();              // 清列表，不还池
         projectDirtyMask = 0;
+        base.Reset();                    // 尾调：OnReset() → actor=0, active=false
     }
 
-    internal void CloneFields(FacadeInfo src)
+    public override IGBL Clone()
     {
-        model = src.model;
-        effectdict = src.effectdict.Clone();
-        animslots = ObjectCache.Ensure<List<AnimationSlot>>();
+        var src = this;
+        var cloned = (FacadeInfo)MemberwiseClone();
+        cloned.model = src.model;
+        cloned.effectdict = src.effectdict.Clone();
+        cloned.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
         foreach (var slot in src.animslots)
-            animslots.Add(slot.Clone());
-        projectDirtyMask = 0;
+            cloned.animslots.Add((AnimationSlot)slot.Clone());  // IGBL Clone 多态深拷贝
+        cloned.projectDirtyMask = 0;
+        cloned.OnClone();
+        cloned.actor = 0;
+        cloned.active = false;
+        return cloned;
     }
 }
 ```
 
 #### 2.4.4 容器所有权规则
 
-`[Lifecycle]` 类中的容器字段**不独立还池**。整个池生命周期中容器始终挂在 BehaviorInfo 实例上：
+`partial class + IGBL` 类中的容器字段**不独立还池**。整个池生命周期中容器始终挂在 BehaviorInfo 实例上：
 
 ```csharp
 // ❌ 旧：容器独立还池 — 反模式（OnReset 还 → OnReady 取，往返浪费）
 OnReset() { effectdict.Clear(); ObjectCache.Set(effectdict); }
-OnReady() { effectdict = ObjectCache.Ensure<ProjectorDict<...>>(); }
+OnReady() { effectdict = ObjectCache.Ensure<GBLDictionary<...>>(); }
 
 // ✅ 新：只清不还 — Source Generator 生成
-ResetFields() { effectdict.Reset(); }  // 清数据，对象不动
+Reset() { effectdict.Reset(); }  // 清数据，对象不动
 ```
 
 嵌套深度 3 层的容器全部遵守此规则。
 
-> **default 值**：用户可在注解中声明非零缺省值 `[Project(index: 2, default: 1)]`，ResetFields 时用此值。未声明则值类型用 `default`，ProjectorDict 调 `Reset()`。
+> **default 值**：用户可在注解中声明非零缺省值 `[Projector(index: 2, default: 1)]`，SG 生成时在 `Reset()` 中用此值。未声明则值类型用 `default`，GBLDictionary 调 `Reset()`。
 >
-> **CloneFields 不触发脏标记**：直接写 backing field（`_position`）而非走属性 `set`，确保新实例不会误注册到脏集中。
+> **Clone 不触发脏标记**：直接写 backing field（`_position`）而非走属性 `set`，确保新实例不会误注册到脏集中。
 
 ---
 
@@ -399,7 +424,7 @@ ProjectorSystem.Tick()                    ← 全局一次
     │    ├─ values = info.TakeProjectValues(mask) ← 只读脏字段
     │    │
     │    ├─ 集合字段 → info.CollectCollectionDiffs()
-    │    │    （ProjectorDict/ProjectorList 写入时已记账，CollectDiff 仅归集）
+    │    │    （GBLDictionary/GBLList 写入时已记账，CollectDiff 仅归集）
     │    │    → 填入 packet.addedkeys / packet.removedkeys
     │    │
     │    ├─ 产出 ProjectorPacket
@@ -448,7 +473,7 @@ public class ProjectorPacket
     /// Render 层据此调整插值缓冲窗大小和预测步长。
     /// </summary>
     public int latency;
-    public object[] values;       // values[i] = 对应 [Project(index: i)] 的当前值
+    public object[] values;       // values[i] = 对应 [Projector(index: i)] 的当前值
     public List<uint> addedkeys;   // 集合类型：新增的 key
     public List<uint> removedkeys; // 集合类型：移除的 key
 }
@@ -468,7 +493,7 @@ public class ProjectorSystem
 ```
 
 - **脏集**：BehaviorInfo 属性 setter（Source Generator 注入）自动调用 `Stage.RegisterDirty(this)`。ProjectorSystem Tick 消费后清空。不需要遍历全量 BehaviorInfo
-- **快照**：Phase 1 仅用于回滚恢复，不参与字段 Diff。Source Generator 生成 `TakeSnapshot` / `CloneSnapshot`，只拷贝 `[Project]` 字段
+- **快照**：Phase 1 仅用于回滚恢复，不参与字段 Diff。Source Generator 生成 `TakeSnapshot` / `CloneSnapshot`，只拷贝 `[Projector]` 字段
 - **Actor 移除时**：`ProjectorSystem.RmvActor(actor)` 清理对应快照条目
 
 ---
@@ -685,7 +710,7 @@ public abstract class Component
 }
 ```
 
-Source Generator 为含 `[Project]` 注解的字段生成带时间戳的历史缓冲区（ring buffer，容量 2-4 帧），`OnExpress` 内部根据 `frame` 和 `latency` 自动计算插值/预测/矫正。
+Source Generator 为含 `[Projector]` 注解的字段生成带时间戳的历史缓冲区（ring buffer，容量 2-4 帧），`OnExpress` 内部根据 `frame` 和 `latency` 自动计算插值/预测/矫正。
 
 ### 5.6 关键点
 
@@ -806,7 +831,7 @@ public class NetworkTransport : IPropertyTransport
 
 ### 6.4 双模共享
 
-帧同步和状态同步**共享同一份** `[Project]` 注解、同一份属性索引、同一份脏标记路径、同一套投影策略。差异只在 Transport 实现：
+帧同步和状态同步**共享同一份** `[Projector]` 注解、同一份属性索引、同一份脏标记路径、同一套投影策略。差异只在 Transport 实现：
 
 ```
 帧同步：  ProjectorSystem → 裁剪修饰 → LocalTransport → RenderWorld
@@ -825,7 +850,7 @@ public class NetworkTransport : IPropertyTransport
 
 > 数据到达 Component，携带时间元信息。**不表达、不插值、不处理回滚。**
 
-Phase 1 唯一目标：Logic 改了 `[Project]` 字段 → 对应 Component 字段自动更新。
+Phase 1 唯一目标：Logic 改了 `[Projector]` 字段 → 对应 Component 字段自动更新。
 
 Phase 1 已经携带但暂不消费的元信息：
 
@@ -950,7 +975,7 @@ public abstract class Component
 
 ### 7.5 BehaviorInfo → Component 映射
 
-Source Generator 根据 `[Project]` 注解的位置生成映射表：
+Source Generator 根据 `[Projector]` 注解的位置生成映射表：
 
 ```
 SpatialInfo     [Project(0)] position  ──→  SpatialComponent.position
@@ -1156,10 +1181,10 @@ RenderWorld.RmvEntity(actor)
 
 | 指标 | RIL 体系 | Property Sync |
 |------|---------|---------------|
-| BehaviorInfo 改动 | 写 Translator 类 | 加 `[Project]` 注解 |
+| BehaviorInfo 改动 | 写 Translator 类 | 加 `[Projector]` 注解 |
 | 中间类数量 | ~10 RIL + ~10 Translator + ~10 Cross | 0（Source Generator 生成） |
 | Render 类数量 | ~32（Agent/Enchant/Invoker/Chase） | 3（Entity/Component/RenderWorld） |
-| 新增同步字段 | 改 RIL 类 + Translator + Diff + Merge（3-5 文件） | 加一个 `[Project(index)]` |
+| 新增同步字段 | 改 RIL 类 + Translator + Diff + Merge（3-5 文件） | 加一个 `[Projector(index)]` |
 | Diff 漏字段 | 静默 Bug（不同步，不报错） | Source Generator 生成，不遗漏 |
 | 裁剪 | 无接入点 | 裁剪修饰规则链原生支持 |
 | 传输 | RILCache + rilqueue | 属性值数组 + fieldmask |
@@ -1171,8 +1196,8 @@ RenderWorld.RmvEntity(actor)
 
 ### Phase 1（~7 天）：基础管线 + Entity/Component
 
-1. **`[Project]` + `[Lifecycle]` Attribute** 定义 + Source Generator 框架
-2. **BehaviorInfo 基类钩子**：`ResetFields()`（internal virtual）+ `OnReset()`（protected virtual）
+1. **`[Projector]` Attribute** 定义 + Source Generator 框架
+2. **BehaviorInfo 基类钩子**：`Reset()`（virtual）+ `OnReset()`（protected virtual）+ `Clone()`（virtual）
 3. **ProjectorSystem**：脏标记 → ProjectorPacket 产出（含 `frame`）
 4. **Crop**：接口 + GodRule（Phase 1 零裁剪）
 5. **IPropertyTransport** + LocalTransport
@@ -1182,9 +1207,9 @@ RenderWorld.RmvEntity(actor)
    - Source Generator 生成 `Apply` 方法
    - Component 加 `PushHistory`（ring buffer，容量 2 帧，留作 Phase 2 插值用）
 7. **删除 RIL 体系**：`IRIL` 及所有子类 / `Translator` 及所有子类 / `RILSync` / `RIL_DEFINE` / `RILCache` / `RILCross` / `IRIL_DIFF`
-8. **`[Lifecycle]` 类迁移**：按 4 批次逐步标 `[Lifecycle]`，Source Generator 接管 Reset/Clone
+8. **`partial class` 迁移**：按 4 批次逐步标 `partial class + IGBL`，Source Generator 接管 Reset/Clone
 
-**验收**：Logic 改 `SpatialInfo.position`，下一帧 `SpatialComponent.position` 自动更新。`[Lifecycle]` 类的 Reset 方法零手写。
+**验收**：Logic 改 `SpatialInfo.position`，下一帧 `SpatialComponent.position` 自动更新。`partial class + IGBL` 类的 Reset 方法零手写。
 
 ### Phase 2（~5 天）：统一投影策略 + 表现层
 
@@ -1210,7 +1235,7 @@ RenderWorld.RmvEntity(actor)
 
 ### Phase 5（~2 天，可选）
 
-1. `ProjectState` 扁平 struct：将 `[Project]` 字段打包为 struct，快照/序列化 memcpy 量级
+1. `ProjectState` 扁平 struct：将 `[Projector]` 字段打包为 struct，快照/序列化 memcpy 量级
 2. 嵌套对象支持 `[ProjectNested]`
 3. 性能验证与边缘 case 覆盖
 
@@ -1224,8 +1249,8 @@ RenderWorld.RmvEntity(actor)
 |------|------|
 | 删除类/接口 | ~72（RIL ~40 + Render ~32） |
 | 新增类/接口 | ~18（ProjectorSystem / Crop / IProjectionRule / Rule × 5 / IPropertyTransport / Transport × 2 / Entity / Component / RenderWorld / ProjectorPacket / ObserverPacket / DiffResult / BehaviorInfoSnapshot） |
-| [Project] 注解手写量 | 每个 BehaviorInfo 3-15 个字段 |
-| [Lifecycle] 注解 | 类级一个（24 个类逐步标） |
+| [Projector] 注解手写量 | 每个 BehaviorInfo 3-15 个字段 |
+| `partial class` 数量 | 24 个类逐步标 |
 | 手写生命周期方法 | 72 个 → 0 |
 | Logic 层改动量 | 仅加注解，不动逻辑 |
 | Phase 1 天数 | ~7 天 |
@@ -1237,7 +1262,7 @@ RenderWorld.RmvEntity(actor)
 | 模块 | 说明 |
 |------|------|
 | Behavior 生命周期 | 照旧：OnAssemble/OnTick/OnEndTick/OnDisassemble |
-| BehaviorInfo 生命周期 | **自动化**：`[Lifecycle]` 类由 Source Generator 接管 Reset/Clone |
+| BehaviorInfo 生命周期 | **自动化**：`partial class + IGBL` 类由 Source Generator 接管 Reset/Clone |
 | Stage / World / Cache | 照旧 |
 | Actor 管理 | 照旧 |
 | 定点数 FP / FPVector3 / FPQuaternion | 照旧 |

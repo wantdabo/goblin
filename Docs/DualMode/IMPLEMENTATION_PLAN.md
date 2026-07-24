@@ -11,7 +11,7 @@
 
 ## 1. 总体目标
 
-**删 RIL，标 Project，Entity/Component 镜像。Logic 几乎不动。**
+**删 RIL，标 Projector，Entity/Component 镜像。Logic 几乎不动。**
 
 | 指标 | 当前 | 目标 |
 |------|------|------|
@@ -30,7 +30,7 @@
 
 ```
 Simulation（不动）
-    Logic BehaviorInfo + [Project] 注解 + [Lifecycle] 注解
+    Logic BehaviorInfo + [Projector] 注解
                 │
                 ▼
 Sync Projection（新增）
@@ -59,76 +59,244 @@ Presentation（重写）
 
 ---
 
-## 4. Phase 1：基础管线（~7 天）
+## 4. Phase 1：基础管线（~8 天）
 
-> 验收：Logic 改 `SpatialInfo.position`，下一帧 `SpatialComponent.position` 自动更新。`[Lifecycle]` 类的 Reset 零手写。
+> 验收：`dotnet test` 全绿。Logic 改 `SpatialInfo.position`，下一帧 `SpatialComponent.position` 自动更新。`partial class + IGBL` 的 Reset 零手写。
+
+### 4.0 测试策略
+
+主项目（`goblin.csproj`）使用 `Godot.NET.Sdk/4.6.2`，`LobbyView → Director → Render` 流程已断，**Phase 1 不能靠跑游戏测试**。
+
+Phase 1 测试分为两层：
+
+| 层 | 项目 | 测试什么 | 框架 |
+|----|------|---------|------|
+| **SG 快照测试** | `Tests/Goblin.SourceGenerators.Tests` | 生成代码语法 + 文本一致性 | Roslyn CSharpSourceGeneratorTest |
+| **生命周期集成测试** | `Tests/Goblin.Logic.Tests` | 真实实例化 BehaviorInfo → Reset/Clone → 断言 ObjectCache 行为 | xUnit |
+
+**关键设计**：集成测试需要一个能引用 BehaviorInfo + ObjectCache + Kowtow.Math 的测试项目。`Godot.NET.Sdk` 项目无法被标准测试项目引用。
+
+**解决方案**：创建 `Tests/Goblin.Logic.Standalone`（`Microsoft.NET.Sdk`，net8.0），通过**文件链接**（`<Compile Link="...">`）引入主项目中的纯 C# 文件：
+
+```
+Tests/Goblin.Logic.Standalone/
+  ├── (linked) ../../godot/Scripts/Goblin/Gameplay/Logic/Common/
+  │     ObjectCache.cs         ← 对象池（依赖 CAPACITY_DEFINE）
+  │     Defines/CAPACITY_DEFINE.cs
+  │     Defines/ANIM_DEFINE.cs
+  │     Defines/STATE_DEFINE.cs
+  │     Defines/ATTRIBUTE_DEFINE.cs
+  │     Math/FP.cs              ← 定点数
+  │     Math/FPVector3.cs
+  │     Math/FPVector2.cs
+  │     Math/FPQuaternion.cs
+  │     Math/IntVector2.cs
+  │     Math/IntVector3.cs
+  │     Math/FPMath.cs
+  │     Math/FPMatrix.cs
+  │     Math/FPMatrix4x4.cs
+  │     Math/FPRandom.cs
+  │     Math/FPF.cs
+  │     Math/FPAcosLut.cs
+  │     Math/FPSinLut.cs
+  │     Math/FPTanLut.cs
+  │     Math/FPVector4.cs
+  │     Extensions/FPExtension.cs
+  ├── (linked) ../../godot/Scripts/Goblin/Gameplay/Logic/Core/
+  │     BehaviorInfo.cs         ← 基类
+  ├── (linked) ../../godot/Scripts/Goblin/Common/
+  │     ObjectPool.cs
+  │     IGBL.cs                  ← 池化对象接口
+  └── TestFixtures/
+        SimpleInfo.cs           ← 测试桩：纯值类型
+        ContainerInfo.cs         ← 测试桩：List<T> 容器
+        NestedPoolInfo.cs        ← 测试桩：嵌套池化对象
+        ProjectFieldInfo.cs      ← 测试桩：含 [Projector] 字段
+```
+
+这些文件的全部依赖仅 `System.*` 命名空间 + `CAPACITY_DEFINE` 常量，**零 Godot API 调用**。
+
+文件链接机制：改主项目源文件自动反映到测试项目，不需要维护副本。
+
+### T1.0 测试基础设施（1 天）
+
+#### T1.0a 创建 `Tests/Goblin.Logic.Standalone` 项目（0.3 天）
+
+- [ ] 新建 `Tests/Goblin.Logic.Standalone/Goblin.Logic.Standalone.csproj`（`Microsoft.NET.Sdk`，net8.0，nullable enable）
+- [ ] 链接 ObjectCache.cs / ObjectPool.cs / IGBL.cs / CAPACITY_DEFINE / ANIM_DEFINE / STATE_DEFINE
+- [ ] 链接 Kowtow.Math 全部源文件（FP / FPVector2 / FPVector3 / FPQuaternion / IntVector2 / IntVector3 / FPMath / FPMatrix / FPMatrix4x4 / FPRandom / FPF / FPExtension + 3 个 Lut 文件）
+- [ ] 链接 BehaviorInfo.cs 基类
+- [ ] 创建 4 个测试桩（SimpleInfo / ContainerInfo / NestedPoolInfo / ProjectFieldInfo），覆盖三种对象池模式（见 §4.1）
+- [ ] `dotnet build` 通过
+
+#### T1.0b 创建 `Tests/Goblin.SourceGenerators.Tests` 项目（0.3 天）
+
+- [ ] 新建项目，引用 `Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing` + xUnit
+- [ ] 引用 `Goblin.SourceGenerators`（T1.1 产物）
+- [ ] 编写首个空 SG 快照测试（验证框架正确）
+- [ ] `dotnet test` 通过（含跳过或占位断言）
+
+#### T1.0c 创建 `Tests/Goblin.Logic.Tests` 项目（0.4 天）
+
+- [ ] 新建项目（xUnit），引用 `Goblin.Logic.Standalone` + `Goblin.SourceGenerators`
+- [ ] 编写首个生命周期集成测试：实例化 SimpleInfo → 设值 → Reset() → 断言字段归零
+- [ ] 验证 SG 生成的 Reset() 被正确调用
+- [ ] `dotnet test` 通过
+
+**产出**：3 个测试项目 + 4 个测试桩 BehaviorInfo + 首个集成测试
+
+**从 T1.0 开始，每个后续任务都追加对应测试，不允许"先写完再补测试"。**
+
+---
+
+### 4.1 ObjectCache 三种模式的测试桩
+
+> 测试桩放在 `Goblin.Logic.Standalone/TestFixtures/`，覆盖 SG 必须处理的全部对象池模式。
+
+#### 模式 1：值类型字段（SimpleInfo）
+
+```csharp
+public partial class SimpleInfo : BehaviorInfo  // BehaviorInfo : IGBL → SG 自动生成
+{
+    public int value;
+    public FP speed;
+    public bool active;
+}
+// SG 生成：override Reset() → value=0, speed=FP.Zero, active=false, base.Reset()
+// 测试：SetObj → Reset → 断言归零
+```
+
+#### 模式 2：容器字段 — 值类型元素（ContainerInfo）
+
+```csharp
+public partial class ContainerInfo : BehaviorInfo
+{
+    public GBLList<uint> ids;
+    public GBLDictionary<int, ulong> dict;
+}
+// SG 生成：override Reset() → ids.Reset(), dict.Reset(), base.Reset()
+// 测试：Add 数据 → Reset → 断言 Count==0、容器引用未变
+```
+
+#### 模式 3：嵌套池化对象（NestedPoolInfo）
+
+```csharp
+public class PooledItem : IGBL
+{
+    public int x;
+    public int y;
+    public void Reset() { x = 0; y = 0; }
+    public IGBL Clone() => ObjectCache.Ensure<PooledItem>().Assign(x, y);
+}
+
+public partial class NestedPoolInfo : BehaviorInfo
+{
+    public GBLList<PooledItem> items;
+}
+// SG 生成：IGBL 元素 → foreach item.Reset() + ObjectCache.Set + items.Reset()
+//        override Clone() → foreach Add((PooledItem)src[i].Clone())
+// 测试：Reset 后 Count==0、元素已还池、容器引用未变
+```
+
+#### 模式 4：含 [Projector] 字段（ProjectFieldInfo）
+
+```csharp
+public partial class ProjectFieldInfo : BehaviorInfo
+{
+    [Projector(index: 0)] public FPVector3 position;
+    [Projector(index: 1, default: 1)] public FP scale;
+    public string name;
+}
+// SG 生成：property position/scale + dirty mask + override Reset()（尊重 default 值）
+// 测试：SetObj → Reset → scale==FP.One（非 FP.Zero）、projectDirtyMask==0
+```
+
+---
 
 ### T1.1 注解定义 + Source Generator 框架（1 天）
 
-- [ ] 定义 `[Project(index, default)]` 字段级 Attribute
-- [ ] 定义 `[Lifecycle]` 类级 Attribute
-- [ ] 搭建 `Goblin.SourceGenerator` 项目
-- [ ] 实现 Generator 入口：扫描 partial class + Attribute → 产出 `.g.cs`
+- [ ] 创建 `SourceGenerators/Goblin.SourceGenerators/Goblin.SourceGenerators.csproj`（`Microsoft.NET.Sdk`，netstandard2.0，引用 `Microsoft.CodeAnalysis.CSharp`）
+- [ ] 在 Common 层定义 `IGBL` 接口（`Reset()` + `IGBL Clone()`，`godot/Scripts/Goblin/Common/IGBL.cs`）
+- [ ] 定义 `[Projector(index, default)]` 字段级 Attribute：`ProjectorAttribute.cs`
+- [ ] 实现 `GoblinSourceGenerator : IIncrementalGenerator` 入口：扫描 `partial class + IGBL` → 产出空 `.g.cs`（验证管线）
+- [ ] 主项目 `goblin.csproj` 引用此 SG：`<ProjectReference Include="..." OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>`
+- [ ] 更新 `goblin.sln`，添加 3 个测试项目 + SG 项目 + Standalone
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.1，`BEHAVIORINFO_LIFECYCLE_REPORT.md` §4
-**产出**：`ProjectAttribute.cs` / `LifecycleAttribute.cs` / `GoblinSourceGenerator.cs`
+**产出**：`IGBL.cs` / `ProjectorAttribute.cs` / `GoblinSourceGenerator.cs` + SG 空管线验证
+
+**追加测试**：T1.0b SG 测试 → 标记 `partial class + IGBL` 的空 class → 断言 SG 产出了 `.g.cs` 文件
 
 ---
 
 ### T1.2 BehaviorInfo 基类钩子（0.5 天）
 
-- [ ] 新增 `Reset()` 方法：`ResetFields()` → `OnReset()` → `actor=0; active=false`
-- [ ] 新增 `ResetFields()` — `internal virtual`，空实现，Source Generator 填
-- [ ] 新增 `OnReset()` — `protected virtual`，空实现，用户覆写
+- [ ] `BehaviorInfo` 实现 `IGBL` 接口
+- [ ] `Reset()` 改为 `virtual`：`OnReset()` → `actor=0; active=false`
+- [ ] `OnReset()` — `protected virtual`，空实现，用户覆写
+- [ ] 新增 `Clone()` — `virtual`，空实现，SG 为 `partial class + IGBL` 类生成 `override`
 - [ ] 新增 `projectDirtyMask`（`internal ulong`）
 - [ ] 现有手写 `OnReset/OnReady/OnClone` 暂时保留，T1.11 才替换
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.1，`BEHAVIORINFO_LIFECYCLE_REPORT.md` §5
 **产出**：`BehaviorInfo.cs`（修改）
 
+**追加测试**：SimpleInfo `partial class` → Reset() → 断言基类 `OnReset` 被调用（SG 尚为空实现，验证钩子链正确）
+
 ---
 
 ### T1.3 属性 + 脏标记生成（1 天）
 
-- [ ] 为 `[Project(index)]` 字段生成 backing field + 属性 getter/setter
+- [ ] 为 `[Projector(index)]` 字段生成 backing field + 属性 getter/setter
 - [ ] setter 注入脏标记：值变 → `projectDirtyMask |= (1ul << index)` → `Stage.RegisterDirty(this)`
 - [ ] 生成 `TakeProjectValues(mask)` — 只取 mask 标记的字段到 `object[]`
 - [ ] 生成 `ClearProjectDirty()` — `projectDirtyMask = 0`
-- [ ] 处理 `default` 值（`[Project(index: 2, default: 1)]`）
+- [ ] 处理 `default` 值（`[Projector(index: 2, default: 1)]`）
 - [ ] 值类型序列化：FPVector3 → 3×long，FP → long，bool → byte，enum → int
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.2
 **产出**：Source Generator 属性生成逻辑
 
+**追加测试**：ProjectFieldInfo → SetObj → 断言 projectDirtyMask 位正确、TakeProjectValues 只取脏字段
+
 ---
 
 ### T1.4 生命周期生成（1.5 天）
 
-- [ ] `[Lifecycle]` 类生成 `internal override void ResetFields()`：
-  - 值类型 → default 值（尊重 `[Project(default: x)]`）
-  - ProjectorDict/ProjectorList → 调 `container.Reset()`（清数据不还池）
-  - 裸容器 → 遍历元素 Reset → Clear（不还池）
-  - 引用类型 → `null`
+- [ ] `partial class + IGBL` 生成 `public override void Reset()`：
+  - 值类型 → default 值（尊重 `[Projector(default: x)]`）
+  - GBLDictionary/GBLList → 调 `container.Reset()`（清数据不还池）
+  - `IGBL` 引用类型 → `foreach Reset + ObjectCache.Set → null`（还池）
+  - 非 IGBL 引用类型 → `null`
   - `projectDirtyMask = 0`
-- [ ] 生成 `internal void CloneFields(T src)`：
-  - 值类型 → 直接赋值；容器 → `Clone()`
-  - 直接写 backing field，不触发脏标记
-- [ ] 生成 `public override BehaviorInfo Clone()`：`Ensure<T>()` → `CloneFields` → `Ready(actor)`
-- [ ] 非 `[Lifecycle]` 类：不生成，`ResetFields()` 保持空实现
+  - 尾调 `base.Reset()` → 触发 `OnReset()` + `actor/active` 归零
+- [ ] 生成 `public override IGBL Clone()`：
+  - 值类型 → 直接赋值（写 backing field，不触发脏标记）
+  - GBLDictionary/GBLList → `Clone()`
+  - `IGBL` 引用类型 → `src.field?.Clone()`
+  - `Ensure<T>()` → 字段拷贝 → `Ready(actor)` → 返回 `this`
+- [ ] SG 入口：`partial class + IGBL`（不限于 BehaviorInfo 子类）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.2-2.4.3，`BEHAVIORINFO_LIFECYCLE_REPORT.md` §5-6
-**产出**：Source Generator ResetFields/CloneFields/Clone 生成逻辑
+**产出**：Source Generator Reset/Clone 生成逻辑
+
+**追加测试**：
+- SimpleInfo Reset → 断言 value==0, speed==FP.Zero, active==false
+- ContainerInfo Reset → 断言 ids.Count==0, dict.Count==0, 容器引用未变
+- NestedPoolInfo Reset → 断言 items 内元素 Reset 被调用, 列表 Clear 但对象未还池
+- NestedPoolInfo Clone → 断言新对象通过 ObjectCache.Ensure 获取, 嵌套元素深拷贝
 
 ---
 
-### T1.5 ProjectorDict / ProjectorList（1 天）
+### T1.5 GBLDictionary / GBLList（1 天）
 
-- [ ] `ProjectorDict<K,V>`：自追踪（addedKeys/removedKeys/changedKeys）、`CollectDiff()`、`Reset()`、`Clone()`
-- [ ] `ProjectorList<T>`：同理，跟踪 addedIndices/removedIndices
+- [ ] `GBLDictionary<K,V>`：自追踪（addedKeys/removedKeys/changedKeys）、`CollectDiff()`、`Reset()`、`Clone()`
+- [ ] `GBLList<T>`：同理，跟踪 addedIndices/removedIndices
 - [ ] 写入即记账：新增/修改/删除自动记录，增删同一 key 自动抵消
+- [ ] `Reset()` 识别 `IGBL` 元素 → `foreach Reset + ObjectCache.Set`，值类型元素仅清空
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.3
-**产出**：`ProjectorDict.cs` / `ProjectorList.cs`
+**产出**：`GBLDictionary.cs` / `GBLList.cs`
 
 ---
 
@@ -136,7 +304,7 @@ Presentation（重写）
 
 - [ ] 全局脏集 `HashSet<BehaviorInfo> dirtyInfos`
 - [ ] `Tick()`：遍历脏集 → 读 `projectDirtyMask` → `TakeProjectValues` → 产出 `ProjectorPacket[]` → 清脏
-- [ ] 集合 Diff 收集：对有 ProjectorDict/List 字段且 mask 位为 1 的，调 `CollectDiff()`
+- [ ] 集合 Diff 收集：对有 GBLDictionary/List 字段且 mask 位为 1 的，调 `CollectDiff()`
 - [ ] 快照管理（预留 Phase 4）：`TakeSnapshot` / `CloneSnapshot`
 - [ ] Actor 移除：`RmvActor(actor)` 清理快照
 - [ ] `Stage.RegisterDirty(BehaviorInfo)` — 属性 setter 自动调用
@@ -182,20 +350,20 @@ Presentation（重写）
 
 ---
 
-### T1.10 删除 RIL 体系 + Agent/Enchant/Invoker/Chase（0.5 天）
+### T1.10 删 RIL + Agent 体系 + Director 重接（0.5 天）
 
 > ⚠️ **确认 T1.9 链路跑通后再删。**
 
 - [ ] 删 RIL 体系（~40 类）：IRIL 及子类、Translator 及子类、RILSync/RILDispatch/RILCache/RILCross/IRIL_DIFF/RIL_DEFINE/RILSalute/Salute
-- [ ] 删 Render 层（~32 类）：Agent 体系 / Enchant 体系 / Invoker 体系 / Chase 体系 / Batch/Bucket 体系
-- [ ] 清理 Behavior/Render 层残留引用
+- [ ] 重写 Director：GameplayDirector + LocalDirector（旧版已归档，按新 ProjectorSystem → Transport → RenderWorld 流程重建）
+- [ ] 清理 Sys/ 层对旧 Director 的引用，恢复 LobbyView → CreateGame 流程
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §7.2/§9
-**产出**：删除 ~72 文件/类
+**产出**：删除 ~40 文件/类 + 新 Director 2 文件
 
 ---
 
-### T1.11 `[Lifecycle]` 类迁移（0.5 天）
+### T1.11 `partial class` 迁移（0.5 天）
 
 按复杂度分 4 批迁移 24 个 BehaviorInfo 子类：
 
@@ -206,46 +374,56 @@ Presentation（重写）
 | 3 | TagInfo, GamepadInfo | 1-2 层容器 | 中 |
 | 4 | FacadeInfo, StageInfo, FlowCollisionInfo 系列 | 深层嵌套容器 | 高 |
 
-每批操作：类加 `[Lifecycle]` + `partial` → 删手写 OnReady/OnReset/OnClone → 验证 Reset/Clone 正确。
+每批操作：类加 `partial` → SG 识别 `IGBL` 自动生成 Reset/Clone → 删手写 OnReady/OnReset/OnClone → `dotnet test` 全绿再进下一批。
 
 随批次 4 自然修复 3 个已知 Bug：
 - FlowCollisionInfo.OnClone 硬编码子类类型 → SG 用 `Ensure<实际类型>()`
-- FlowCollisionHurtInfo 子类字段未 Reset → `[Lifecycle]` 接管全部字段
+- FlowCollisionHurtInfo 子类字段未 Reset → `partial + IGBL` 接管全部字段
 - OnReady 调 OnReset 反模式 → 容器不还池
 
 **输入**：`BEHAVIORINFO_LIFECYCLE_REPORT.md` §2/§8
 **产出**：24 个 BehaviorInfo 子类迁移完成，72 个手写方法归零
+
+**每批迁移都通过 `Goblin.Logic.Tests` 的集成测试验证。用真实 BehaviorInfo 子类实例跑 Reset/Clone 断言。**
 
 ---
 
 ### Phase 1 任务依赖
 
 ```
-T1.1（注解 + SG 框架）
+T1.0（测试基础设施）
  │
- ├── T1.2（基类钩子）
- │     │
- │     ├── T1.3（属性 + 脏标记生成）
- │     │     │
- │     │     ├── T1.6（ProjectorSystem）
- │     │     │     │
- │     │     │     ├── T1.7（Crop + GodRule）
- │     │     │     │     │
- │     │     │     │     └── T1.8（Transport）
- │     │     │     │           │
- │     │     │     │           └── T1.9（Entity/Component/RenderWorld）
- │     │     │     │                 │
- │     │     │     │                 └── T1.10（删除 RIL + Agent）
- │     │     │     │
- │     │     │     └── T1.5（ProjectorDict/List）
- │     │     │
- │     │     └── T1.4（生命周期生成）
- │     │
- │     └── T1.11（[Lifecycle] 类迁移）
+ ├── T1.0a（Standalone 项目）
+ ├── T1.0b（SG 测试项目）
+ └── T1.0c（Logic 集成测试）
+ │
+ └── T1.1（注解 + SG 框架）
+      │
+      ├── T1.2（基类钩子）
+      │     │
+      │     ├── T1.3（属性 + 脏标记生成）
+      │     │     │
+      │     │     ├── T1.6（ProjectorSystem）
+      │     │     │     │
+      │     │     │     ├── T1.7（Crop + GodRule）
+      │     │     │     │     │
+      │     │     │     │     └── T1.8（Transport）
+      │     │     │     │           │
+      │     │     │     │           └── T1.9（Entity/Component/RenderWorld）
+      │     │     │     │                 │
+      │     │     │     │                 └── T1.10（删 RIL + 重接 Director）
+      │     │     │     │
+      │     │     │     └── T1.5（GBLDictionary/List）
+      │     │     │
+      │     │     └── T1.4（生命周期生成）
+      │     │
+      │     └── T1.11（partial class 迁移）
 ```
 
-**关键路径**：T1.1 → T1.2 → T1.3 → T1.6 → T1.7 → T1.8 → T1.9 → T1.10（8 步，~6 天）
+**关键路径**：T1.0 → T1.1 → T1.2 → T1.3 → T1.6 → T1.7 → T1.8 → T1.9 → T1.10（9 步，~7 天）
 **可并行**：T1.4 与 T1.5 在 T1.3 之后并行推进
+
+**测试纪律**：每个 T1.x 完成时，对应测试必须通过。T1.11 每批次迁移后 `dotnet test` 全绿再进下一批。
 
 ---
 
@@ -359,7 +537,7 @@ T1.1（注解 + SG 框架）
 
 ### T4.1 ProjectorSystem 快照回滚（1 天）
 
-- [ ] `TakeSnapshot` / `CloneSnapshot` — 仅 `[Project]` 字段
+- [ ] `TakeSnapshot` / `CloneSnapshot` — 仅 `[Projector]` 字段
 - [ ] 回滚时取出目标帧快照 → 恢复 BehaviorInfo → 重新 Tick
 - [ ] 清理超出回滚窗口的快照
 
@@ -390,7 +568,7 @@ T1.1（注解 + SG 框架）
 
 ### T5.1 ProjectState 扁平 struct（1 天）
 
-- [ ] 将 `[Project]` 字段打包为 struct
+- [ ] 将 `[Projector]` 字段打包为 struct
 - [ ] 快照/序列化 memcpy 量级，消除 object[] 装箱
 
 **产出**：`ProjectState` struct + SG 生成逻辑修改

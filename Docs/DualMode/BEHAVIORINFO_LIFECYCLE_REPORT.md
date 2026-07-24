@@ -132,25 +132,28 @@ protected override void OnReady()
 
 ---
 
-## 4. 解决方案：`[Lifecycle]` 类级注解 + Source Generator
+## 4. 解决方案：`IGBL` 接口 + Source Generator
 
 ### 4.1 设计决策
 
 | 决策 | 理由 |
 |------|------|
-| **类级注解** | 一个 BehaviorInfo 的所有字段（包括容器嵌套）统一接管，观感干净；不需要字段级 `[Lifecycle]` |
-| **不继承** | 每个类自决是否标 `[Lifecycle]`；父类字段父类负责，子类字段子类负责，互不侵入 |
-| **对象池保留** | BehaviorInfo 和内部容器都走池；容器不独立还池，始终跟随 BehaviorInfo 实例 |
+| **IGBL 接口** | Common 层统一接口 `Reset()` + `IGBL Clone()`，Logic 和 Render 均可多态复用。SG 扫描 `partial class + IGBL` 自动生成 Reset/Clone |
+| **全字段接管** | 一个 `partial class + IGBL` 的所有字段（包括容器嵌套）统一接管，观感干净 |
+| **不继承** | 每个类自决是否加 `partial`；父类字段父类负责，子类字段子类负责，互不侵入 |
+| **对象池保留** | IGBL 实例和内部容器都走池；容器不独立还池，始终跟随实例 |
 | **Reset 只清不还** | 容器 `.Reset()` 清数据，不调 `ObjectCache.Set()`；取消容器到池的往返 |
 
 ### 4.2 注解体系
 
 ```
-[Lifecycle]      类级 — 接管当前类全部字段的 Reset/Clone
-[Project(index)] 字段级 — 此字段参与投影同步（与 Lifecycle 正交）
+IGBL                 接口 — Common 接口，提供 Reset() / IGBL Clone() 多态契约
+[Projector(index)]   字段 — 此字段参与投影同步（与 IGBL 正交）
 ```
 
-**全有或全无**：标了 `[Lifecycle]` 则全部字段自动接管；不标则全手写。没有逐字段排除——一个字段如果不需要 Reset，说明它不属于 BehaviorInfo 状态。
+**触发规则**：SG 扫描 `partial class + IGBL`，直接生成 `override Reset()` 和 `override IGBL Clone()`。不加 `partial` 则全手写。没有逐字段排除——一个字段如果不需要 Reset，说明它不属于 BehaviorInfo 状态。
+
+**适用范围**：不限于 BehaviorInfo。`PooledItem`、`AnimationSlot`、`EffectInfo` 等任何 `partial class + IGBL` 都被 SG 接管。
 
 ### 4.3 容器所有权规则
 
@@ -164,13 +167,14 @@ OnReset()
 }
 OnReady()
 {
-    effectdict = ObjectCache.Ensure<ProjectorDict<...>>();  // 重新拿
+    effectdict = ObjectCache.Ensure<GBLDictionary<...>>();  // 重新拿
 }
 
 // ✅ 新：容器只清不还 — Source Generator 生成
-internal override void ResetFields()
+public override void Reset()
 {
-    effectdict.Reset();  // 清数据，ProjectorDict 对象不动
+    effectdict.Reset();  // 清数据，GBLDictionary 对象不动
+    base.Reset();
 }
 ```
 
@@ -180,30 +184,31 @@ internal override void ResetFields()
 
 ## 5. 基类钩子设计
 
-`BehaviorInfo.Reset()` 拆两个钩子，避免 Source Generator 与用户 override 冲突：
+`BehaviorInfo.Reset()` / `Clone()` 为 `virtual`，`partial class + IGBL` 的 SG 生成 `override`。
 
 ```csharp
-public abstract class BehaviorInfo
+public abstract class BehaviorInfo : IGBL
 {
     public ulong actor { get; private set; }
     public bool active { get; set; }
 
-    public void Reset()
+    /// <summary>
+    /// virtual — SG 为 partial class + IGBL 子类生成 override
+    /// </summary>
+    public virtual void Reset()
     {
-        ResetFields();         // internal virtual — Source Generator 填，用户不动
-        OnReset();             // protected virtual — 用户覆写（可选）
+        OnReset();             // 用户覆写（可选）
         actor = 0;
         active = false;
     }
 
     /// <summary>
-    /// Source Generator 为 [Lifecycle] 类生成 override。
-    /// 非 [Lifecycle] 类保持空实现。
+    /// virtual — SG 生成 override
     /// </summary>
-    internal virtual void ResetFields() { }
+    public virtual IGBL Clone() { return null; }
 
     /// <summary>
-    /// 用户覆写。非 [Lifecycle] 类的字段手动处理。
+    /// 用户覆写。非 partial 类的字段手动处理。
     /// </summary>
     protected virtual void OnReset() { }
 }
@@ -212,59 +217,67 @@ public abstract class BehaviorInfo
 调用链（`Stage.Recycle` 触发）：
 
 ```
-info.Reset()
+info.Reset()（SG override）
     │
-    ├─ ResetFields()    ← 生成（[Lifecycle] 类）或空（非 [Lifecycle] 类）
+    ├─ 字段清理（值归零/容器 Reset/IGBL 引用还池）
     │
-    ├─ OnReset()        ← 用户覆写（非 [Lifecycle] 类的字段手动处理）
-    │
-    └─ actor = 0; active = false
+    ├─ base.Reset()
+    │     ├─ OnReset()        ← 用户覆写
+    │     └─ actor = 0; active = false
 ```
 
 ---
 
 ## 6. 两个场景
 
-### 场景 1：`[Lifecycle]` — 全自动
+### 场景 1：`partial class + IGBL` — 全自动
 
 ```csharp
-[Lifecycle]
-public partial class SpatialInfo : BehaviorInfo
+public partial class SpatialInfo : BehaviorInfo  // BehaviorInfo : IGBL → SG 接管
 {
-    [Project(index: 0)] public FPVector3 position;
-    [Project(index: 1)] public FPVector3 euler;
-    [Project(index: 2)] public FP scale;
+    [Projector(index: 0)] public FPVector3 position;
+    [Projector(index: 1)] public FPVector3 euler;
+    [Projector(index: 2)] public FP scale;
     public SpatialInfo preframe;
 }
 
 // Source Generator 生成：
 partial class SpatialInfo
 {
-    internal override void ResetFields()
+    public override void Reset()
     {
         _position = FPVector3.Zero;
         _euler = FPVector3.Zero;
         _scale = FP.One;
         preframe = null;
         projectDirtyMask = 0;
+        base.Reset();   // → OnReset() + actor/active 归零
     }
-    // 不生成 OnReset
+
+    public override IGBL Clone()
+    {
+        var c = ObjectCache.Ensure<SpatialInfo>();
+        c._position = _position;
+        c._euler = _euler;
+        c._scale = _scale;
+        c.preframe = preframe;
+        c.projectDirtyMask = 0;
+        c.Ready(actor);
+        return c;
+    }
 }
 ```
 
 用户零代码。容器字段同规则——嵌套 3 层全自动。
 
-### 场景 2：非 `[Lifecycle]` — 全手写
+### 场景 2：非 `partial` — 全手写
 
 ```csharp
 public class CareerInfo : BehaviorInfo
 {
     public uint career;
-}
 
-// 用户手写：
-partial class CareerInfo
-{
+    // 用户手写
     protected override void OnReset()
     {
         career = 0;
@@ -272,45 +285,37 @@ partial class CareerInfo
 }
 ```
 
-`ResetFields()` 保持基类空实现。
+不加 `partial`，SG 不生成。走基类 `Reset()` 虚方法。
 
 ---
 
 ## 7. Clone 自动化
 
-Source Generator 同时为 `[Lifecycle]` 类生成 Clone 方法，与 Reset 对应：
+SG 为 `partial class + IGBL` 生成 `override IGBL Clone()`：
 
 ```csharp
-[Lifecycle]
 public partial class FacadeInfo : BehaviorInfo
 {
-    [Project(index: 0)] public uint model;
-    [Project(index: 1)] public ProjectorDict<uint, EffectInfo> effectdict;
+    [Projector(index: 0)] public uint model;
+    [Projector(index: 1)] public GBLDictionary<uint, EffectInfo> effectdict;
     public List<AnimationSlot> animslots;
 }
 
 // Source Generator 生成（直接写 backing field，不触发脏标记）：
 partial class FacadeInfo
 {
-    internal FacadeInfo CloneFields(FacadeInfo src)
+    public override IGBL Clone()
     {
-        _model = src._model;
-        _effectdict = src._effectdict.Clone();  // ProjectorDict.Clone()
-        // animslots：李深拷贝元素
-        animslots = ObjectCache.Ensure<List<AnimationSlot>>();
-        foreach (var slot in src.animslots)
-            animslots.Add(slot.Clone());
-        projectDirtyMask = 0;
-        return this;
-    }
-
-    // Clone 入口（基类提供框架）：
-    public override BehaviorInfo Clone()
-    {
-        var clone = ObjectCache.Ensure<FacadeInfo>();
-        clone.CloneFields(this);
-        clone.Ready(actor);
-        return clone;
+        var c = ObjectCache.Ensure<FacadeInfo>();
+        c._model = _model;
+        c._effectdict = _effectdict.Clone();  // GBLDictionary.Clone()
+        // animslots：IGBL 元素多态深拷贝
+        c.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
+        foreach (var slot in animslots)
+            c.animslots.Add((AnimationSlot)slot.Clone());
+        c.projectDirtyMask = 0;
+        c.Ready(actor);
+        return c;
     }
 }
 ```
@@ -319,17 +324,16 @@ partial class FacadeInfo
 
 ## 8. 迁移策略
 
-### Phase 1：Source Generator 支持 `[Project]` 字段
+### Phase 1：Source Generator 接管 `[Projector]` 字段
 
-1. 实现基础框架：属性注入 + 脏标记 + `ResetFields` + `CloneFields`
-2. `[Lifecycle]` 只生成 Project 字段的 Reset/Clone（此时非 Project 字段仍需手写）
-3. 非 `[Lifecycle]` 类全部手写照旧
+1. 实现基础框架：属性注入 + 脏标记 + override Reset()/Clone()
+2. `partial class + IGBL` 接管全部字段的 Reset/Clone
+3. 非 `partial` 类全部手写照旧
 
-### Phase 2：`[Lifecycle]` 注解扩展
+### Phase 2：批量迁移
 
-1. 支持类级 `[Lifecycle]`
-2. Source Generator 扩展 `ResetFields` / `CloneFields` 覆盖全部字段
-3. 批量迁移 24 个 BehaviorInfo 子类
+1. 24 个 BehaviorInfo 子类逐步加 `partial`
+2. 删掉手写 OnReset/OnReady/OnClone
 
 按复杂度从低到高：
 
@@ -348,8 +352,8 @@ partial class FacadeInfo
 
 | Bug | 如何修复 |
 |-----|---------|
-| FlowCollisionInfo.OnClone 硬编码子类类型 | Source Generator 按实际类型生成 `CloneFields`，用 `ObjectCache.Ensure<实际类型>()` |
-| FlowCollisionHurtInfo 子类字段遗漏 | `[Lifecycle]` 接管当前类全部字段，不依赖父类 OnReset |
+| FlowCollisionInfo.OnClone 硬编码子类类型 | SG 按实际类型生成 `Clone()`，用 `ObjectCache.Ensure<实际类型>()` |
+| FlowCollisionHurtInfo 子类字段遗漏 | `partial + IGBL` 接管当前类全部字段，不依赖父类 OnReset |
 | OnReady 调 OnReset 反模式 | 容器不还池（只 `Reset()`），无往返 |
 
 ---
