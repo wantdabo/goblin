@@ -15,7 +15,7 @@ public class LifecycleIntegrationTests
     /// SimpleInfo Reset → 断言值类型字段归零
     /// T1.4 SG 生成 override Reset() 后启用
     /// </summary>
-    [Fact(Skip = "T1.4: SG 生成字段 Reset 逻辑后启用")]
+    [Fact]
     public void SimpleInfo_Reset_ClearsAllFields()
     {
         var info = new SimpleInfo();
@@ -52,7 +52,7 @@ public class LifecycleIntegrationTests
     /// ContainerInfo Reset → 断言容器字段清空
     /// T1.4 SG 生成容器 Reset 逻辑后启用
     /// </summary>
-    [Fact(Skip = "T1.4: SG 生成容器 Reset 逻辑后启用")]
+    [Fact]
     public void ContainerInfo_Reset_ClearsContainers()
     {
         var info = new ContainerInfo();
@@ -76,7 +76,7 @@ public class LifecycleIntegrationTests
     /// NestedPoolInfo Reset → 断言嵌套池化对象元素被清理
     /// T1.4 SG 生成嵌套 IGBL Reset 逻辑后启用
     /// </summary>
-    [Fact(Skip = "T1.4: SG 生成嵌套 IGBL Reset 逻辑后启用")]
+    [Fact]
     public void NestedPoolInfo_Reset_ClearsNestedPooledItems()
     {
         var info = new NestedPoolInfo();

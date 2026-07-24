@@ -47,9 +47,9 @@ public abstract class BehaviorInfo : IGBL
 
     /// <summary>
     /// 克隆，返回 BehaviorInfo（遗留兼容）
-    /// 新代码应使用 IGBL.Clone()
+    /// virtual — SG 为 partial class + IGBL 类生成 override
     /// </summary>
-    public BehaviorInfo Clone()
+    public virtual BehaviorInfo Clone()
     {
         return OnClone();
     }

@@ -309,21 +309,23 @@ partial class ProjectFieldInfo
 
 ---
 
-### T1.4 生命周期生成（1.5 天）
+### T1.4 生命周期生成（1.5 天）✅
 
-- [ ] `partial class + IGBL` 生成 `public override void Reset()`：
+- [x] `partial class + IGBL` 生成 `public override void Reset()`：
   - 值类型 → default 值（尊重 `[Projector(default: x)]`）
   - GBLDictionary/GBLList → 调 `container.Reset()`（清数据不还池）
   - `IGBL` 引用类型 → `foreach Reset + ObjectCache.Set → null`（还池）
   - 非 IGBL 引用类型 → `null`
   - `projectdirtymask = 0`
   - 尾调 `base.Reset()` → 触发 `OnReset()` + `actor/active` 归零
-- [ ] 生成 `public override IGBL Clone()`：
-  - 值类型 → 直接赋值（写 backing field，不触发脏标记）
-  - GBLDictionary/GBLList → `Clone()`
+- [x] 生成 `public override BehaviorInfo Clone()`：
+  - 值类型 → 直接赋值
+  - 容器值类型 → `new T(field)` 拷贝构造
+  - 容器 IGBL → `new T(field.Count) + foreach Clone()`
   - `IGBL` 引用类型 → `src.field?.Clone()`
   - `Ensure<T>()` → 字段拷贝 → `Ready(actor)` → 返回 `this`
-- [ ] SG 入口：`partial class + IGBL`（不限于 BehaviorInfo 子类）
+- [x] SG 入口：`partial class + IGBL`（不限于 BehaviorInfo 子类）
+- [x] `dotnet test` 通过 — 7/7 全绿
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.2-2.4.3，`BEHAVIORINFO_LIFECYCLE_REPORT.md` §5-6
 **产出**：Source Generator Reset/Clone 生成逻辑
