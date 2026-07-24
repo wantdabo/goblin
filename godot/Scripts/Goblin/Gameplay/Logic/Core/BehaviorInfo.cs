@@ -1,9 +1,12 @@
+using Goblin.Common;
+
 namespace Goblin.Gameplay.Logic.Core;
 
 /// <summary>
-/// 行为信息, 类似 ECS 中的 Component
+/// 行为信息，类似 ECS 中的 Component
+/// 实现 IGBL 接口，Source Generator 扫描 partial class + IGBL 自动生成 override Reset / Clone
 /// </summary>
-public abstract class BehaviorInfo
+public abstract class BehaviorInfo : IGBL
 {
     /// <summary>
     /// ActorID
@@ -13,6 +16,12 @@ public abstract class BehaviorInfo
     /// 是否激活
     /// </summary>
     public bool active { get; set; }
+
+    /// <summary>
+    /// 投影脏标记，位图对应 [Projector(index)] 字段
+    /// Source Generator 生成的属性 setter 自动写入
+    /// </summary>
+    internal ulong projectdirtymask { get; set; }
 
     /// <summary>
     /// 初始化
@@ -26,9 +35,10 @@ public abstract class BehaviorInfo
     }
 
     /// <summary>
-    /// 重置
+    /// 重置，virtual — SG 为 partial class + IGBL 类生成 override
+    /// override 中清理字段后尾调 base.Reset()
     /// </summary>
-    public void Reset()
+    public virtual void Reset()
     {
         OnReset();
         this.actor = 0;
@@ -36,25 +46,39 @@ public abstract class BehaviorInfo
     }
 
     /// <summary>
-    /// 克隆
+    /// 克隆，返回 BehaviorInfo（遗留兼容）
+    /// 新代码应使用 IGBL.Clone()
     /// </summary>
-    /// <returns>BehaviorInfo</returns>
     public BehaviorInfo Clone()
     {
         return OnClone();
     }
 
     /// <summary>
-    /// 初始化, 当 BehaviorInfo 从对象池中取出, 在这个回调中初始化数据
+    /// IGBL 接口 Clone，T1.11 替换遗留 Clone 后统一使用
+    /// </summary>
+    IGBL IGBL.Clone()
+    {
+        return Clone();
+    }
+
+    /// <summary>
+    /// 初始化，当 BehaviorInfo 从对象池中取出，在这个回调中初始化数据
     /// </summary>
     protected abstract void OnReady();
     /// <summary>
-    /// 重置, 当 BehaviorInfo 回收, 重新回到对象池, 在这个回调中清理数据
+    /// 重置，当 BehaviorInfo 回收，重新回到对象池，在这个回调中清理数据
+    /// virtual 空实现 — 已有子类继续 override，新 partial 类由 SG 接管 Reset
     /// </summary>
-    protected abstract void OnReset();
+    protected virtual void OnReset()
+    {
+    }
     /// <summary>
-    /// 克隆, 克隆一个新的 BehaviorInfo
+    /// 克隆，克隆一个新的 BehaviorInfo
+    /// virtual 空实现 — 已有子类继续 override，新 partial 类由 SG 接管 Clone
     /// </summary>
-    /// <returns>BehaviorInfo</returns>
-    protected abstract BehaviorInfo OnClone();
+    protected virtual BehaviorInfo OnClone()
+    {
+        return this;
+    }
 }

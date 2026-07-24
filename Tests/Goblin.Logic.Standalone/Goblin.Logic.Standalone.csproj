@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <RootNamespace>Goblin.Logic.Standalone</RootNamespace>
+        <IsTestProject>false</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MessagePack" Version="2.5.187" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\SourceGenerators\Goblin.SourceGenerators\Goblin.SourceGenerators.csproj"
+                          OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Common 层 -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Common\IGBL.cs" Link="Common\IGBL.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Common\ProjectorAttribute.cs" Link="Common\ProjectorAttribute.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Common\ObjectPool.cs" Link="Common\ObjectPool.cs" />
+
+        <!-- Logic Common 层 -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\ObjectCache.cs" Link="Logic\Common\ObjectCache.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\AnimHash.cs" Link="Logic\Common\AnimHash.cs" />
+
+        <!-- Defines -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Defines\CAPACITY_DEFINE.cs" Link="Logic\Defines\CAPACITY_DEFINE.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Defines\ANIM_DEFINE.cs" Link="Logic\Defines\ANIM_DEFINE.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Defines\STATE_DEFINE.cs" Link="Logic\Defines\STATE_DEFINE.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Defines\ATTRIBUTE_DEFINE.cs" Link="Logic\Defines\ATTRIBUTE_DEFINE.cs" />
+
+        <!-- Extensions -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Extensions\FPExtension.cs" Link="Logic\Extensions\FPExtension.cs" />
+
+        <!-- Math 库 -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FP.cs" Link="Logic\Math\FP.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPVector3.cs" Link="Logic\Math\FPVector3.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPVector2.cs" Link="Logic\Math\FPVector2.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPVector4.cs" Link="Logic\Math\FPVector4.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPQuaternion.cs" Link="Logic\Math\FPQuaternion.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\IntVector2.cs" Link="Logic\Math\IntVector2.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\IntVector3.cs" Link="Logic\Math\IntVector3.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPMath.cs" Link="Logic\Math\FPMath.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPMatrix.cs" Link="Logic\Math\FPMatrix.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPMatrix4x4.cs" Link="Logic\Math\FPMatrix4x4.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPRandom.cs" Link="Logic\Math\FPRandom.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPF.cs" Link="Logic\Math\FPF.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPAcosLut.cs" Link="Logic\Math\FPAcosLut.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPSinLut.cs" Link="Logic\Math\FPSinLut.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\Math\FPTanLut.cs" Link="Logic\Math\FPTanLut.cs" />
+
+        <!-- Logic Core 层 -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Core\BehaviorInfo.cs" Link="Logic\Core\BehaviorInfo.cs" />
+    </ItemGroup>
+
+</Project>

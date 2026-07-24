@@ -13,3 +13,24 @@
 /godot/.mono/
 /godot/goblin.csproj.old
 *.lscache
+
+# .NET 构建产物
+bin/
+obj/
+*.suo
+*.useros
+*.sln.docstates
+*.userprefs
+
+# NuGet
+*.nupkg
+**/packages/
+
+# 测试结果
+TestResults/
+*.trx
+
+# IDE
+.vscode/
+*.swp
+*~
