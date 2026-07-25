@@ -213,7 +213,7 @@ Source Generator 按注解组合生成不同内容：
 
 | 注解组合 | 生成内容 |
 |---------|---------|
-| 仅有 `[Projector]` | 属性 + 脏标记 + TakeProjectValues + 序列化 + Render 映射 |
+| 仅有 `[Projector]` | 属性 + 脏标记 + `IProjectable` 实现（`projectdirtymask` + `TakeProjectValues`）+ 序列化 + Render 映射 |
 | `partial class + IGBL` | `override Reset()` + `override IGBL Clone()`（接管全部字段） |
 | `[Projector]` + `partial class + IGBL` | 以上全部 |
 
@@ -240,15 +240,14 @@ public abstract class BehaviorInfo : IGBL
 
     /// <summary>
     /// virtual — SG 为 partial class + IGBL 类生成 override。
+    /// 基类默认返回自身（占位），SG override 走 ObjectCache.Ensure + 逐字段拷贝。
     /// </summary>
-    public virtual IGBL Clone()
+    public virtual BehaviorInfo Clone()
     {
-        var cloned = (BehaviorInfo)MemberwiseClone();
-        cloned.OnClone();
-        cloned.actor = 0;
-        cloned.active = false;
-        return cloned;
+        return OnClone();
     }
+
+    IGBL IGBL.Clone() => Clone();
 
     /// <summary>
     /// 用户覆写。非 partial 类的字段手动处理。
@@ -258,9 +257,11 @@ public abstract class BehaviorInfo : IGBL
     /// <summary>
     /// 用户覆写。Clone 后的自定义逻辑。
     /// </summary>
-    protected virtual void OnClone() { }
+    protected virtual BehaviorInfo OnClone() { return this; }
 }
 ```
+
+> **投影职责剥离**：`projectdirtymask` / `TakeProjectValues` 不在 `BehaviorInfo` 基类。含 `[Projector]` 注解的类由 SG 生成 `IProjectable` 接口实现，`ProjectorSystem` 通过 `is IProjectable` 过滤。逻辑层数据类不耦合投影概念。
 
 调用链：`Stage.Recycle → info.Reset()（SG override → base.Reset() 尾调）→ OnReset()（用户）→ actor/active 归零`
 
@@ -278,55 +279,56 @@ public partial class SpatialInfo : BehaviorInfo
 }
 
 // ── Source Generator 生成 ──
-public partial class SpatialInfo
+public partial class SpatialInfo : IProjectable
 {
     // ═══════════════════════ 属性 + 脏标记 ═══════════════════════
-    private FPVector3 _position;
-    private FPVector3 _euler;
-    private FP _scale;
-    internal ulong projectDirtyMask { get; set; }
+    private FPVector3 spatialinfo_position { get; set; }
+    private FPVector3 spatialinfo_euler { get; set; }
+    private FP spatialinfo_scale { get; set; }
+
+    // IProjectable 实现：投影脏标记（仅含 [Projector] 的类生成）
+    public ulong projectdirtymask { get; set; }
 
     public FPVector3 position
     {
-        get => _position;
+        get => spatialinfo_position;
         set
         {
-            if (_position == value) return;
-            _position = value;
-            projectDirtyMask |= (1ul << 0);
-            Stage.RegisterDirty(this);
+            if (spatialinfo_position != value)
+            {
+                spatialinfo_position = value;
+                projectdirtymask |= 1ul << 0;
+            }
         }
     }
-    // euler → index 1, scale → index 2（同 pattern）
+    // euler → index 1, scale → index 2（同 pattern，setter 只写位标记，无回调）
 
     // ═══════════════════════ 生命周期 ═══════════════════════
     public override void Reset()
     {
-        _position = FPVector3.Zero;
-        _euler = FPVector3.Zero;
-        _scale = FP.One;
+        spatialinfo_position = FPVector3.Zero;
+        spatialinfo_euler = FPVector3.Zero;
+        spatialinfo_scale = FP.One;
         preframe = null;
-        projectDirtyMask = 0;
+        projectdirtymask = 0;
         base.Reset();                    // 尾调：OnReset() → actor=0, active=false
     }
 
-    public override IGBL Clone()
+    public override BehaviorInfo Clone()
     {
-        var src = this;
-        var cloned = (SpatialInfo)MemberwiseClone();
-        cloned._position = src._position;
-        cloned._euler = src._euler;
-        cloned._scale = src._scale;
-        cloned.preframe = src.preframe;
-        cloned.projectDirtyMask = 0;
-        cloned.OnClone();
-        cloned.actor = 0;
-        cloned.active = false;
-        return cloned;
+        var c = ObjectCache.Ensure<SpatialInfo>();
+        c.spatialinfo_position = spatialinfo_position;
+        c.spatialinfo_euler = spatialinfo_euler;
+        c.spatialinfo_scale = spatialinfo_scale;
+        c.preframe = preframe;
+        c.projectdirtymask = 0;
+        c.Ready(actor);
+        return c;
     }
 
     // ═══════════════════════ 同步 ═══════════════════════
-    // TakeProjectValues / Serialize / Deserialize / TakeSnapshot / CloneSnapshot
+    // TakeProjectValues（IProjectable 实现，按 mask 位取脏字段值装箱）
+    // Serialize / Deserialize / TakeSnapshot / CloneSnapshot
 }
 ```
 
@@ -353,24 +355,21 @@ public partial class FacadeInfo
         foreach (var slot in animslots)
             slot.Reset();                // IGBL 元素多态 Reset
         animslots.Clear();              // 清列表，不还池
-        projectDirtyMask = 0;
+        projectdirtymask = 0;
         base.Reset();                    // 尾调：OnReset() → actor=0, active=false
     }
 
-    public override IGBL Clone()
+    public override BehaviorInfo Clone()
     {
-        var src = this;
-        var cloned = (FacadeInfo)MemberwiseClone();
-        cloned.model = src.model;
-        cloned.effectdict = src.effectdict.Clone();
-        cloned.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
-        foreach (var slot in src.animslots)
-            cloned.animslots.Add((AnimationSlot)slot.Clone());  // IGBL Clone 多态深拷贝
-        cloned.projectDirtyMask = 0;
-        cloned.OnClone();
-        cloned.actor = 0;
-        cloned.active = false;
-        return cloned;
+        var c = ObjectCache.Ensure<FacadeInfo>();
+        c.model = model;
+        c.effectdict = effectdict.Clone();
+        c.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
+        foreach (var slot in animslots)
+            c.animslots.Add((AnimationSlot)slot.Clone());  // IGBL Clone 多态深拷贝
+        c.projectdirtymask = 0;
+        c.Ready(actor);
+        return c;
     }
 }
 ```
@@ -408,20 +407,21 @@ Logic Tick 期间
     ├─ Behavior 修改 BehaviorInfo 字段
     │    │
     │    └─ 属性 setter 自动（Source Generator 注入）：
-    │         projectDirtyMask |= (1ul << index)
-    │         Stage.RegisterDirty(this)          ← 注册到全局脏集
+    │         projectdirtymask |= (1ul << index)   ← 仅写位标记，无回调
     │
     ▼
 Logic Tick 结束
     │
     ▼
-ProjectorSystem.Tick()                    ← 全局一次
+ProjectorSystem.OnEndTick()               ← 全局一次
     │
-    ├─ 遍历脏 BehaviorInfo（每帧 5-10 个，非 500）
+    ├─ 自检遍历 stage.cache.behaviorinfodict
     │    │
-    │    ├─ fieldmask = info.projectDirtyMask    ← 直接读，零 Diff
+    │    ├─ 仅 IProjectable 实例参与（含 [Projector] 的类）
     │    │
-    │    ├─ values = info.TakeProjectValues(mask) ← 只读脏字段
+    │    ├─ fieldmask = proj.projectdirtymask    ← 直接读，零 Diff
+    │    │
+    │    ├─ values = proj.TakeProjectValues(mask) ← 只读脏字段
     │    │
     │    ├─ 集合字段 → info.CollectCollectionDiffs()
     │    │    （GBLDict/GBLList 写入时已记账，CollectDiff 仅归集）
@@ -430,8 +430,8 @@ ProjectorSystem.Tick()                    ← 全局一次
     │    ├─ 产出 ProjectorPacket
     │    │    (actor, behaviorType, frame, fieldmask, values)
     │    │
-    │    └─ info.ClearProjectDirty()
-    │         （projectDirtyMask = 0，脏集移出）
+    │    └─ proj.projectdirtymask = 0
+    │         （消费后清零，下次自检跳过）
     │
     └─ 产出 List<ProjectorPacket>        ← 全量，未裁剪
     │
@@ -448,11 +448,11 @@ ProjectorSystem.Tick()                    ← 全局一次
 
 | 条目 | 规模 | 操作 | 代价 |
 |------|------|------|------|
-| 脏标记注册 | 每次字段写入 | 位运算 + HashSet.Add | O(1)，内联于 setter |
-| 脏集遍历 | 每帧 5-10 实例（通常） | 读 mask + TakeValues | 可忽略 |
+| 脏标记写入 | 每次字段写入 | 位运算 | O(1)，内联于 setter |
+| 自检遍历 | 每帧遍历全量 BehaviorInfo | is IProjectable + 读 mask | 可忽略（99% mask==0 跳过） |
 | 集合 Diff | 变动时才发生 | 写入时记账，CollectDiff 仅归集 | O(变动 key 数) |
 
-> 值字段不 Diff、不全遍历、无快照比较。99% 的 BehaviorInfo 本帧不变，零开销。**瓶颈在网络带宽。**
+> 值字段不 Diff、自检遍历零开销（99% mask==0 跳过）、无快照比较。99% 的 BehaviorInfo 本帧不变，零开销。**瓶颈在网络带宽。**
 
 ### 3.2 ProjectorPacket
 
@@ -482,19 +482,16 @@ public class ProjectorPacket
 ### 3.3 快照与脏集管理
 
 ```csharp
-public class ProjectorSystem
+public class ProjectorSystem : Behavior
 {
-    // 脏集：本帧修改过的 BehaviorInfo。属性 setter 自动注册，ProjectorSystem 消费后清空
-    private HashSet<BehaviorInfo> dirtyInfos { get; set; }
-
-    // (actor, behaviorType) → 上帧快照（仅用于 Phase 4 回滚恢复，不用于 Diff）
-    private Dictionary<(ulong, Type), BehaviorInfoSnapshot> snapshots { get; set; }
+    // 本帧产出的原始投影包（未裁剪）
+    public ProjectorPacket[] packets { get; private set; }
 }
 ```
 
-- **脏集**：BehaviorInfo 属性 setter（Source Generator 注入）自动调用 `Stage.RegisterDirty(this)`。ProjectorSystem Tick 消费后清空。不需要遍历全量 BehaviorInfo
-- **快照**：Phase 1 仅用于回滚恢复，不参与字段 Diff。Source Generator 生成 `TakeSnapshot` / `CloneSnapshot`，只拷贝 `[Projector]` 字段
-- **Actor 移除时**：`ProjectorSystem.RmvActor(actor)` 清理对应快照条目
+- **自检遍历**：ProjectorSystem.OnEndTick 遍历 `stage.cache.behaviorinfodict`，通过 `is IProjectable` 过滤含 `[Projector]` 的类，读 `projectdirtymask` 出包。无需脏集注册，属性 setter 只写位标记，无回调开销
+- **快照**：Phase 4 回滚恢复用，Phase 1 不实现
+- **Actor 移除**：Stage 回收时 `behaviorinfodict` 自动清理，ProjectorSystem 自然遍历不到，无需 `RmvActor`
 
 ---
 
@@ -1101,10 +1098,10 @@ Logic Tick
     ├─ Behavior 更新 BehaviorInfo 字段
     │
     ▼
-ProjectorSystem.Tick()
+ProjectorSystem.OnEndTick()
     │
-    ├─ 遍历脏 BehaviorInfo（全局脏集，每帧 5-10 个）
-    ├─ 读 projectDirtyMask → fieldmask（零 Diff）
+    ├─ 自检遍历 behaviorinfodict（is IProjectable 过滤）
+    ├─ 读 projectdirtymask → fieldmask（零 Diff）
     ├─ 产出 ProjectorPacket[]（含 frame）
     │
     ▼
@@ -1145,9 +1142,9 @@ Logic: Actor 出生
     ├─ Stage 创建 BehaviorInfo 实例
     │
     ▼
-ProjectorSystem.Tick()
-    ├─ 新 BehaviorInfo → 首次注册时 projectDirtyMask 置为全 1 ← 全量同步
-    │   （Source Generator 生成的 Init 方法在构造后自动调用）
+ProjectorSystem.OnEndTick()
+    ├─ 新 BehaviorInfo 首帧 projectdirtymask = MarkAllDirty 全量位
+    │   （Stage.AddBehaviorInfo 时注入，IProjectable.MarkAllDirty 由 SG 生成）
     ├─ 产出 ProjectorPacket（全量）
     │
     ▼
@@ -1162,12 +1159,11 @@ RenderWorld.Apply()
 
 Logic: Actor 死亡
     │
-    ├─ Stage 移除 BehaviorInfo
+    ├─ Stage 移除 BehaviorInfo（behaviorinfodict 自动清理）
     │
     ▼
-ProjectorSystem.RmvActor(actor)
-    ├─ 清理快照
-    ├─ 产出 RemovalPacket
+ProjectorSystem.OnEndTick()
+    ├─ 自检遍历自然不再包含已移除 Actor
     │
     ▼
 RenderWorld.RmvEntity(actor)

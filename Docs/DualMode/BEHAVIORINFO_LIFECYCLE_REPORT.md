@@ -203,9 +203,11 @@ public abstract class BehaviorInfo : IGBL
     }
 
     /// <summary>
-    /// virtual — SG 生成 override
+    /// virtual — SG 生成 override，走 ObjectCache.Ensure + 逐字段拷贝
     /// </summary>
-    public virtual IGBL Clone() { return null; }
+    public virtual BehaviorInfo Clone() { return OnClone(); }
+
+    IGBL IGBL.Clone() => Clone();
 
     /// <summary>
     /// 用户覆写。非 partial 类的字段手动处理。
@@ -250,7 +252,7 @@ partial class SpatialInfo
         _euler = FPVector3.Zero;
         _scale = FP.One;
         preframe = null;
-        projectDirtyMask = 0;
+        projectdirtymask = 0;
         base.Reset();   // → OnReset() + actor/active 归零
     }
 
@@ -261,7 +263,7 @@ partial class SpatialInfo
         c._euler = _euler;
         c._scale = _scale;
         c.preframe = preframe;
-        c.projectDirtyMask = 0;
+        c.projectdirtymask = 0;
         c.Ready(actor);
         return c;
     }
@@ -313,7 +315,7 @@ partial class FacadeInfo
         c.animslots = ObjectCache.Ensure<List<AnimationSlot>>();
         foreach (var slot in animslots)
             c.animslots.Add((AnimationSlot)slot.Clone());
-        c.projectDirtyMask = 0;
+        c.projectdirtymask = 0;
         c.Ready(actor);
         return c;
     }

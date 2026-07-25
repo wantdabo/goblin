@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 碰撞盒
 /// </summary>
-public class ColliderInfo : BehaviorInfo
+public partial class ColliderInfo : BehaviorInfo
 {
     /// <summary>
     /// 碰撞层
@@ -26,29 +26,15 @@ public class ColliderInfo : BehaviorInfo
     /// 球体
     /// </summary>
     public Sphere sphere { get; set; }
-        
+
     protected override void OnReady()
     {
         OnReset();
     }
 
+    // layer Reset 值为 LAYER_DEFAULT（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {
         layer = COLLISION_DEFINE.LAYER_DEFAULT;
-        shape = 0;
-        box = default;
-        sphere = default;
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<ColliderInfo>();
-        clone.Ready(actor);
-        clone.layer = layer;
-        clone.shape = shape;
-        clone.box = box;
-        clone.sphere = sphere;
-
-        return clone;
     }
 }

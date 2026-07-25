@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 /// <summary>
 /// 生与死信息
 /// </summary>
-public class SilentMercyInfo : BehaviorInfo
+public partial class SilentMercyInfo : BehaviorInfo
 {
     /// <summary>
     /// 出生列表
@@ -25,53 +25,13 @@ public class SilentMercyInfo : BehaviorInfo
     /// 受害者关系, 键为被杀者, 值为杀手
     /// </summary>
     public Dictionary<ulong, ulong> victimrelations { get; set; }
-        
+
     protected override void OnReady()
     {
-        borns = ObjectCache.Ensure<List<(ulong, ulong)>>();            
-        deadths = ObjectCache.Ensure<List<(ulong, ulong)>>();
-        killrelations = ObjectCache.Ensure<Dictionary<ulong, List<ulong>>>();
-        victimrelations = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
-    }
-
-    protected override void OnReset()
-    {
-        borns.Clear();
-        ObjectCache.Set(borns);
-            
-        deadths.Clear();
-        ObjectCache.Set(deadths);
-            
-        foreach (var kv in killrelations)
-        {
-            kv.Value.Clear();
-            ObjectCache.Set(kv.Value);
-        }
-        killrelations.Clear();
-        ObjectCache.Set(killrelations);
-            
-        victimrelations.Clear();
-        ObjectCache.Set(victimrelations);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<SilentMercyInfo>();
-        clone.Ready(actor);
-        clone.borns.AddRange(borns);
-        clone.deadths.AddRange(deadths);
-        foreach (var kv in killrelations)
-        {
-            var victims = ObjectCache.Ensure<List<ulong>>();
-            victims.AddRange(kv.Value);
-            clone.killrelations.Add(kv.Key, victims);
-        }
-            
-        foreach (var kv in victimrelations)
-        {
-            clone.victimrelations.Add(kv.Key, kv.Value);
-        }
-            
-        return clone;
+        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
+        if (null == borns) borns = ObjectCache.Ensure<List<(ulong actor, ulong flow)>>();
+        if (null == deadths) deadths = ObjectCache.Ensure<List<(ulong actor, ulong flow)>>();
+        if (null == killrelations) killrelations = ObjectCache.Ensure<Dictionary<ulong, List<ulong>>>();
+        if (null == victimrelations) victimrelations = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
     }
 }

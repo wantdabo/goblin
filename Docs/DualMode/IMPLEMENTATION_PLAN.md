@@ -255,7 +255,7 @@ partial class ProjectFieldInfo
 - [x] `OnReset()` — `protected virtual`，空实现，用户覆写
 - [x] 新增 `Clone()` — `virtual`，空实现，SG 为 `partial class + IGBL` 类生成 `override`
 - [x] `IGBL.Clone()` 显式接口实现，委托 `Clone()`
-- [x] 新增 `projectdirtymask`（`internal ulong`）
+- [x] 投影职责剥离到 `IProjectable` 接口（`projectdirtymask` + `TakeProjectValues`），不在 BehaviorInfo 基类
 - [x] 现有手写 `OnReset/OnReady/OnClone` 暂时保留，T1.11 才替换
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.1，`BEHAVIORINFO_LIFECYCLE_REPORT.md` §5
@@ -287,7 +287,7 @@ partial class ProjectFieldInfo
 - [x] 生成 `public T name { get => backing; set { ... } }`：
   - setter 值变检测：`if (backing != value)` → 写 backing + `projectdirtymask |= (1ul << index)`
   - FPVector3/FP 等值类型比较依赖 `!=` 重载（无重载时 SG 生成 `!(a == b)`）
-- [x] 生成 `public object[] TakeProjectValues(ulong mask)` — 按 mask 位取脏字段值装箱
+- [x] 生成 `public object[] TakeProjectValues(ulong mask)` — `IProjectable` 接口实现，按 mask 位取脏字段值装箱
 - [x] 生成 `public void ClearProjectDirty()` — `projectdirtymask = 0`
 - [x] FP 类型序列化：`new FP(backing.rawValue)` 避免装箱，object[] 中用 FP 实例
 
@@ -351,50 +351,55 @@ partial class ProjectFieldInfo
 
 ---
 
-### T1.6 ProjectorSystem（1 天）
+### T1.6 ProjectorSystem（1 天）✅
 
-- [ ] 全局脏集 `HashSet<BehaviorInfo> dirtyInfos`
-- [ ] `Tick()`：遍历脏集 → 读 `projectdirtymask` → `TakeProjectValues` → 产出 `ProjectorPacket[]` → 清脏
-- [ ] 集合 Diff 收集：对有 GBLDict/List 字段且 mask 位为 1 的，调 `CollectDiff()`
+- [x] 自检遍历 `stage.cache.behaviorinfodict`，`is IProjectable` 过滤含 `[Projector]` 的类
+- [x] `OnEndTick()`：读 `projectdirtymask` → `TakeProjectValues` → 产出 `ProjectorPacket[]` → 清零
+- [x] 全量同步：`IProjectable.MarkAllDirty()`（SG 生成）+ `Stage.AddBehaviorInfo` 注入，新对象首帧全量投影
+- [x] `OnEndTick` 零分配：无脏数据不分配，有脏时 `List` 池化归还
+- [ ] 集合 Diff 收集：对有 GBLDict/List 字段且 mask 位为 1 的，调 `CollectDiff()`（依赖 SG 生成字段映射，Phase 1 占位）
 - [ ] 快照管理（预留 Phase 4）：`TakeSnapshot` / `CloneSnapshot`
-- [ ] Actor 移除：`RmvActor(actor)` 清理快照
-- [ ] `Stage.RegisterDirty(BehaviorInfo)` — 属性 setter 自动调用
+- [x] Actor 移除：Stage 回收时 behaviorinfodict 自动清理，无需 RmvActor
+- [x] 属性 setter 只写 `projectdirtymask` 位标记，无回调（自检模式，非脏集注册）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §3
 **产出**：`ProjectorSystem.cs` / `ProjectorPacket.cs`
 
 ---
 
-### T1.7 Crop 接口 + GodRule（0.5 天）
+### T1.7 Crop 接口 + GodRule（0.5 天）✅
 
-- [ ] `IProjectionRule`：`ulong Filter(ProjectorPacket, Observer, ulong currentMask)`
-- [ ] `Crop`：规则链串联，mask == 0 丢弃
-- [ ] `GodRule`：全通过（零裁剪，Phase 1 所有 Observer 挂此）
-- [ ] `Observer` + `ObserverType` 枚举（Player/Spectator/GM/Replay/AI/Editor）
+- [x] `IProjectionRule`：`ulong Filter(ProjectorPacket, Observer, ulong currentmask)`
+- [x] `Crop`：规则链串联，mask == 0 丢弃；`Crop.Process` 批量产出 `ObserverPacket[]`
+- [x] `GodRule`：全通过（零裁剪，Phase 1 所有 Observer 挂此）
+- [x] `Observer` + `ObserverType` 枚举（Player/Spectator/GM/Replay/AI/Editor）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §4
 **产出**：`IProjectionRule.cs` / `Crop.cs` / `Observer.cs` / `ObserverPacket.cs`
 
 ---
 
-### T1.8 Transport 接口 + LocalTransport（0.5 天）
+### T1.8 Transport 接口 + LocalTransport（0.5 天）✅
 
-- [ ] `IPropertyTransport`：`void Send(List<ObserverPacket>)`
-- [ ] `LocalTransport`：直接调 `RenderWorld.Apply()`
-- [ ] 计算 `latency`（帧同步恒 0~1）
+- [x] `IPropertyTransport`：`void Send(ObserverPacket[])`
+- [x] `LocalTransport`：通过 `onsend` 事件暴露数据流（T1.9 接入 RenderWorld）
+- [x] `ProjectionPipeline`：串联 ProjectorSystem → Crop → Transport
+- [x] 计算 `latency`（帧同步恒 0，Phase 1 ProjectorPacket.latency = 0）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §6
 **产出**：`IPropertyTransport.cs` / `LocalTransport.cs`
 
 ---
 
-### T1.9 Entity + Component + RenderWorld（1 天）
+### T1.9 Entity + Component + RenderWorld（1 天）✅
 
-- [ ] `Entity`：actor/comps 字典/GetComp/AddComp/RmvComp/Destroy
-- [ ] `Component` 基类：entity/actor 属性；`abstract Apply(mask, values)`；`OnCreate/OnDestroy`；`PushHistory`（ring buffer 2 帧）
-- [ ] `RenderWorld`：entities 字典 + behaviorToComp 映射表；`Apply()` — Ensure Entity → Ensure Component → PushHistory；`RmvEntity()`；事件钩子
-- [ ] 用户手写首批 Component：`SpatialComponent`、`TickerComponent`
-- [ ] Source Generator 生成 `Apply` 方法：按 mask 位将 values 写入 Component 字段
+- [x] `Entity`：actor/comps 字典/GetComp/AddComp/RmvComp/Destroy
+- [x] `Component` 基类：entity/actor 属性；`abstract Apply(mask, values)`；`OnCreate/OnDestroy`（protected internal）；`PushHistory`（Phase 1 直接 Apply，Phase 2 扩 ring buffer）
+- [x] `RenderWorld`：entities 字典 + behaviortocomp 映射表；`Apply()` — Ensure Entity → Ensure Component → PushHistory；`ApplyPackets()` 供 Transport 调用；`RmvEntity()`；事件钩子
+- [x] `LocalTransport` 接入 RenderWorld（Send → ApplyPackets）
+- [x] 端到端链路验证：ProjectorSystem → ProjectionPipeline → LocalTransport → RenderWorld → Component.Apply（7 测试全绿）
+- [ ] 用户手写首批 Component：`SpatialComponent`、`TickerComponent`（Godot 依赖，主项目落地）
+- [ ] Source Generator 生成 `Apply` 方法（依赖 BehaviorInfo→Component 映射机制，后续）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §7
 **产出**：`Entity.cs` / `Component.cs` / `RenderWorld.cs` / `SpatialComponent.cs` / `TickerComponent.cs`
@@ -416,14 +421,33 @@ partial class ProjectFieldInfo
 
 ### T1.11 `partial class` 迁移（0.5 天）
 
-按复杂度分 4 批迁移 24 个 BehaviorInfo 子类：
+按复杂度分 4 批迁移 26 个 BehaviorInfo 子类（23/26 已完成，剩余 FlowCollisionInfo 系列 3 个）：
 
-| 批次 | 类 | 特征 | 风险 |
-|------|-----|------|------|
-| 1 | TickerInfo, MovementInfo, MagicInfo | 纯值类型，1-2 字段 | 零 |
-| 2 | SpatialInfo, StateMachineInfo, SkillLauncherInfo 等 | 值类型 + struct | 低 |
-| 3 | TagInfo, GamepadInfo | 1-2 层容器 | 中 |
-| 4 | FacadeInfo, StageInfo, FlowCollisionInfo 系列 | 深层嵌套容器 | 高 |
+| 批次 | 类 | 特征 | 风险 | 状态 |
+|------|-----|------|------|------|
+| 1 | TickerInfo, MovementInfo, MagicInfo | 纯值类型，1-2 字段 | 零 | ✅ |
+| 2 | SpatialInfo, StateMachineInfo, SkillLauncherInfo, ColliderInfo, HitLagInfo, SkillCooldownInfo, CareerInfo, BuffInfo, RandomInfo, SeatInfo, EventorInfo | 值类型 + struct + 单层容器 | 低 | ✅ |
+| 3 | TagInfo, BuffBucketInfo, FlowEffectInfo, GamepadInfo | 单层容器 | 中 | ✅ |
+| 4 | FacadeInfo, StageInfo, FlowCollisionInfo 系列, AttributeBucketInfo, FlowInfo, SilentMercyInfo | 深层嵌套容器 | 高 | ✅ 23/26 |
+
+> **批次1-3 完成（18 个类）**：标 partial + 删 OnClone（SG 接管）；OnReset 仅保留非 default 值字段（TickerInfo.timescale / ColliderInfo.layer / RandomInfo.a,c,m）；容器类 OnReady null 检查 Ensure（只清不还）。
+>
+> **批次4 完成 5 个（SG 嵌套容器深拷贝扩展 + 非 BehaviorInfo IGBL 支持）**：AttributeBucketInfo / FlowInfo / SilentMercyInfo / StageInfo / FacadeInfo。
+>
+> **SG 新增**：
+> - `ContainerNestedValue`/`ContainerNestedIGBL` 类别，识别 `Dictionary<K, List<V>>` / `Dictionary<K, Dictionary<K2,V>>` / `Dictionary<K, List<IGBL>>` 嵌套模式，Clone 递归深拷贝内层，Reset 外层+内层 Clear
+> - **非 BehaviorInfo IGBL 支持**：SG 通过 `isBehaviorInfo` 标志区分 `override Reset/Clone`（BehaviorInfo 子类）与接口实现 `void Reset() / IGBL Clone()`（纯 IGBL 类如 AnimationSlot）
+>
+> **SG 修复**：
+> - Clone `Ready` 移到字段拷贝前（避免 OnReady/OnReset 覆盖拷贝值）
+> - Clone 源字段加 `this.` 前缀（避免变量名 `c` 与属性 `c` 冲突，如 RandomInfo）
+> - 嵌套容器深拷贝（ContainerNestedValue/ContainerNestedIGBL）
+> - 非 BehaviorInfo IGBL 类：Clone 不调用 `c.Ready(actor)`，返回 `IGBL` 而非 `BehaviorInfo`
+>
+> **AnimationSlot IGBL 化**：`AnimationSlot` 标 `partial` + `: IGBL`，SG 生成 Reset（default 所有字段）和 Clone（Ensure + 拷贝），FacadeInfo 的 `List<AnimationSlot>` 自动识别为 `ContainerIGBL` 深拷贝。
+>
+> **批次4 未迁移 3 个**：
+> - `FlowCollisionInfo` 系列（3 个）：abstract 类 SG `Ensure<T>` 失败 + 继承 Clone 父类字段不拷贝，保留手写
 
 每批操作：类加 `partial` → SG 识别 `IGBL` 自动生成 Reset/Clone → 删手写 OnReady/OnReset/OnClone → `dotnet test` 全绿再进下一批。
 

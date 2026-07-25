@@ -1,26 +1,21 @@
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos;
 
+// 位置
+[Projector("position", typeof(FPVector3), 0)]
+// 旋转
+[Projector("euler", typeof(FPVector3), 1)]
+// 缩放（Reset 时归 FP.One）
+[Projector("scale", typeof(FP), 2, defaultvalue = 1)]
 /// <summary>
 /// 空间信息
 /// </summary>
-public class SpatialInfo : BehaviorInfo
+public partial class SpatialInfo : BehaviorInfo
 {
-    /// <summary>
-    /// 位置
-    /// </summary>
-    public FPVector3 position { get; set; }
-    /// <summary>
-    /// 旋转
-    /// </summary>
-    public FPVector3 euler { get; set; }
-    /// <summary>
-    /// 缩放
-    /// </summary>
-    public FP scale { get; set; }
     /// <summary>
     /// 上一帧位置, 旋转, 缩放
     /// </summary>
@@ -33,21 +28,7 @@ public class SpatialInfo : BehaviorInfo
 
     protected override void OnReset()
     {
-        position = FPVector3.zero;
-        euler = FPVector3.zero;
-        scale = FP.One;
+        // position/euler/scale 由 SG 生成的 Reset 接管，此处仅重置非投影字段
         preframe = (FPVector3.zero, FPVector3.zero, FP.One);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<SpatialInfo>();
-        clone.Ready(actor);
-        clone.position = position;
-        clone.euler = euler;
-        clone.scale = scale;
-        clone.preframe = preframe;
-            
-        return clone;
     }
 }

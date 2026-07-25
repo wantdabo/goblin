@@ -18,12 +18,6 @@ public abstract class BehaviorInfo : IGBL
     public bool active { get; set; }
 
     /// <summary>
-    /// 投影脏标记，位图对应 [Projector(index)] 字段
-    /// Source Generator 生成的属性 setter 自动写入
-    /// </summary>
-    public ulong projectdirtymask { get; set; }
-
-    /// <summary>
     /// 初始化
     /// </summary>
     /// <param name="actor">ActorID</param>

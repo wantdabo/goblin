@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 /// <summary>
 /// 管线信息
 /// </summary>
-public class FlowInfo : BehaviorInfo
+public partial class FlowInfo : BehaviorInfo
 {
     /// <summary>
     /// 管线的拥有者
@@ -41,54 +41,11 @@ public class FlowInfo : BehaviorInfo
 
     protected override void OnReady()
     {
+        // FlowInfo 默认不激活，由 Flow 显式激活
         active = false;
-        owner = 0;
-        length = 0;
-        timeline = 0;
-        framepass = 0;
-        pipelines = ObjectCache.Ensure<List<uint>>();
-        doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
-        completedindex = ObjectCache.Ensure<Dictionary<uint, uint>>();
-    }
-
-    protected override void OnReset()
-    {
-        active = false;
-        owner = 0;
-        length = 0;
-        timeline = 0;
-        framepass = 0;
-        pipelines.Clear();
-        ObjectCache.Set(pipelines);
-        foreach (var doing in doings)
-        {
-            doing.Value.Clear();
-            ObjectCache.Set(doing.Value);
-        }
-        doings.Clear();
-        ObjectCache.Set(doings);
-        completedindex.Clear();
-        ObjectCache.Set(completedindex);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<FlowInfo>();
-        clone.Ready(actor);
-        clone.active = active;
-        clone.owner = owner;
-        clone.length = length;
-        clone.timeline = timeline;
-        clone.framepass = framepass;
-        foreach (var pipeline in pipelines) clone.pipelines.Add(pipeline);
-        foreach (var doing in doings)
-        {
-            var list = ObjectCache.Ensure<List<uint>>();
-            list.AddRange(doing.Value);
-            clone.doings.Add(doing.Key, list);
-        }
-        foreach (var kv in completedindex) clone.completedindex.Add(kv.Key, kv.Value);
-
-        return clone;
+        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
+        if (null == pipelines) pipelines = ObjectCache.Ensure<List<uint>>();
+        if (null == doings) doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
+        if (null == completedindex) completedindex = ObjectCache.Ensure<Dictionary<uint, uint>>();
     }
 }

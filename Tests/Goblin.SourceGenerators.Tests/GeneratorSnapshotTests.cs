@@ -80,7 +80,7 @@ public partial class TestInfo : Goblin.Common.IGBL
 
         var generatedFiles = RunGenerator(source);
 
-        Assert.Contains(generatedFiles, (string f) => f.Contains("TestInfo.g.cs"));
+        Assert.Contains(generatedFiles, (string f) => f.Contains("TestInfo.lifecycle.g.cs"));
     }
 
     /// <summary>
@@ -192,6 +192,6 @@ public partial class DerivedInfo : BaseNs.BaseInfo
 
         var generatedFiles = RunGenerator(source);
 
-        Assert.Contains(generatedFiles, (string f) => f.Contains("DerivedInfo.g.cs"));
+        Assert.Contains(generatedFiles, (string f) => f.Contains("DerivedInfo.lifecycle.g.cs"));
     }
 }

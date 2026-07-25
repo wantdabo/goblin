@@ -1,4 +1,3 @@
-using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa;
@@ -6,7 +5,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 /// <summary>
 /// 随机信息
 /// </summary>
-public class RandomInfo : BehaviorInfo
+public partial class RandomInfo : BehaviorInfo
 {
     /// <summary>
     /// 乘数
@@ -34,22 +33,13 @@ public class RandomInfo : BehaviorInfo
         OnReset();
     }
 
+    // a/c/m Reset 值非 default（LCG 常量），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {
         a = 1664525;
         c = 1013904223;
-        m = 4294967296; // 2^32，标准 LCG 模数
+        m = 4294967296;
         seed = 0;
         current = 0;
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<RandomInfo>();
-        clone.Ready(actor);
-        clone.seed = seed;
-        clone.current = current;
-            
-        return clone;
     }
 }

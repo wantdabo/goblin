@@ -7,7 +7,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 /// <summary>
 /// 座位信息
 /// </summary>
-public class SeatInfo : BehaviorInfo
+public partial class SeatInfo : BehaviorInfo
 {
     /// <summary>
     /// 座位字典, 键为座位 ID, 值为 ActorID
@@ -17,29 +17,11 @@ public class SeatInfo : BehaviorInfo
     /// 座位字典, 键为 ActorID, 值为座位 ID
     /// </summary>
     public Dictionary<ulong, ulong> asdict { get; set; }
-        
+
     protected override void OnReady()
     {
-        sadict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
-        asdict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
-    }
-
-    protected override void OnReset()
-    {
-        sadict.Clear();
-        ObjectCache.Set(sadict);
-            
-        asdict.Clear();
-        ObjectCache.Set(asdict);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<SeatInfo>();
-        clone.Ready(actor);
-        foreach (var kv in sadict) clone.sadict.Add(kv.Key, kv.Value);
-        foreach (var kv in asdict) clone.asdict.Add(kv.Key, kv.Value);
-
-        return clone;
+        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
+        if (null == sadict) sadict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
+        if (null == asdict) asdict = ObjectCache.Ensure<Dictionary<ulong, ulong>>();
     }
 }

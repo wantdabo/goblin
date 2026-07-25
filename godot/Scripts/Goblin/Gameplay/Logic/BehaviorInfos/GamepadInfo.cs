@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 输入中枢信息 — 按类型分槽存储本帧指令，OnEndTick 清空
 /// </summary>
-public class GamepadInfo : BehaviorInfo
+public partial class GamepadInfo : BehaviorInfo
 {
     /// <summary>
     /// 移动指令（每帧最多一个）
@@ -25,23 +25,8 @@ public class GamepadInfo : BehaviorInfo
 
     protected override void OnReady()
     {
-        keys = ObjectCache.Ensure<List<KeyFrame>>();
-        skills = ObjectCache.Ensure<List<SkillFrame>>();
-    }
-
-    protected override void OnReset()
-    {
-        move = null;
-        keys.Clear();
-        ObjectCache.Set(keys);
-        skills.Clear();
-        ObjectCache.Set(skills);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<GamepadInfo>();
-        clone.Ready(actor);
-        return clone;
+        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
+        if (null == keys) keys = ObjectCache.Ensure<List<KeyFrame>>();
+        if (null == skills) skills = ObjectCache.Ensure<List<SkillFrame>>();
     }
 }

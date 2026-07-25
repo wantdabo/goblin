@@ -17,7 +17,7 @@ public abstract class FlowCollisionInfo : BehaviorInfo
     /// 碰撞的 ActorID 列表
     /// </summary>
     public List<(ulong actor, (uint pipeline, uint index) identity)> targets { get; set; }
-        
+
     protected override void OnReady()
     {
         records = ObjectCache.Ensure<Dictionary<(uint pipeline, uint index), Dictionary<ulong, uint>>>();
@@ -33,7 +33,7 @@ public abstract class FlowCollisionInfo : BehaviorInfo
         }
         records.Clear();
         ObjectCache.Set(records);
-            
+
         targets.Clear();
         ObjectCache.Set(targets);
     }
@@ -52,9 +52,9 @@ public abstract class FlowCollisionInfo : BehaviorInfo
             }
             clone.records.Add(kv.Key, record);
         }
-            
+
         clone.targets.AddRange(targets);
-            
+
         return clone;
     }
 }

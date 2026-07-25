@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Common;
-using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos;
@@ -8,7 +7,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 标签信息, Actor 上的标签信息，用于标记 Actor 各种颗粒度细的信息
 /// </summary>
-public class TagInfo : BehaviorInfo
+public partial class TagInfo : BehaviorInfo
 {
     /// <summary>
     /// 标签的数据集合, 键为 TAG_DEFINE, 值为 Int32
@@ -17,24 +16,7 @@ public class TagInfo : BehaviorInfo
 
     protected override void OnReady()
     {
-        tags = ObjectCache.Ensure<Dictionary<ushort, long>>();
-    }
-
-    protected override void OnReset()
-    {
-        tags.Clear();
-        ObjectCache.Set(tags);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<TagInfo>();
-        clone.Ready(actor);
-        foreach (var kv in tags)
-        {
-            clone.tags.Add(kv.Key, kv.Value);
-        }
-            
-        return clone;
+        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
+        if (null == tags) tags = ObjectCache.Ensure<Dictionary<ushort, long>>();
     }
 }

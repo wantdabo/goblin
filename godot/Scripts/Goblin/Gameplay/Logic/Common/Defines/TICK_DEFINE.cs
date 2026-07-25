@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
+using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.Common.Defines;
 
@@ -30,5 +31,6 @@ public class TICK_DEFINE
         typeof(StepEnd),
         typeof(RILSync),
         typeof(StageSequence),
+        typeof(ProjectorSystem),
     };
 }

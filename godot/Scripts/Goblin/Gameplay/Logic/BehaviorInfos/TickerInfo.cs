@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 驱动信息
 /// </summary>
-public class TickerInfo : BehaviorInfo
+public partial class TickerInfo : BehaviorInfo
 {
     private FP mtimescale = FP.One;
     /// <summary>
@@ -30,17 +30,9 @@ public class TickerInfo : BehaviorInfo
         OnReset();
     }
 
+    // timescale Reset 值为 FP.One（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {
         timescale = FP.One;
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<TickerInfo>();
-        clone.Ready(actor);
-        clone.timescale = timescale;
-            
-        return clone;
     }
 }

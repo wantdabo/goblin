@@ -18,6 +18,7 @@ using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Logic.RIL.Common;
 using Goblin.Gameplay.Logic.RIL.DIFF;
 using Goblin.Gameplay.Logic.RIL.EVENT;
+using Goblin.Gameplay.Projection;
 using Kowtow.Math;
 using Config = Goblin.Gameplay.Logic.Behaviors.Sa.Config;
 using Random = Goblin.Gameplay.Logic.Behaviors.Sa.Random;
@@ -154,6 +155,14 @@ public sealed class Stage
 	/// </summary>
 	public Dictionary<Type, Prefab> prefabs { get; set; }
 	/// <summary>
+	/// 投影系统
+	/// </summary>
+	public ProjectorSystem projector => GetBehavior<ProjectorSystem>(sa, true);
+	/// <summary>
+	/// 投影管线，裁剪 ProjectorSystem 产出的原始包并分发给 Transport
+	/// </summary>
+	public ProjectionPipeline projectorpipeline { get; private set; }
+	/// <summary>
 	/// 对外暴露抛出 RIL 的事件
 	/// </summary>
 	public Action<IRIL> onril { get; set; }
@@ -244,6 +253,13 @@ public sealed class Stage
 		AddBehavior<Buff>(sa);
 		AddBehavior<StepEnd>(sa);
 		AddBehavior<RILSync>(sa);
+		AddBehavior<ProjectorSystem>(sa);
+
+		// 投影管线初始化：默认单 Player Observer + GodRule 零裁剪 + LocalTransport
+		projectorpipeline = new ProjectionPipeline();
+		projectorpipeline.observers.Add(new Observer { type = ObserverType.Player });
+		projectorpipeline.crop.AddRule(new GodRule());
+		projectorpipeline.transport = new LocalTransport();
 	}
 
 	/// <summary>
@@ -492,6 +508,9 @@ public sealed class Stage
 				behavior.EndTick();
 			}
 		}
+
+		// 投影管线驱动：ProjectorSystem 出包 → Crop 裁剪 → Transport 发送
+		projectorpipeline.Process(projector.packets);
 			
 		Recycle();
 	}
@@ -742,7 +761,7 @@ public sealed class Stage
 		// 检查 BehaviorInfo 是否已经存在容器中
 		if (dict.TryGetValue(typeof(T), out var existing))
 		{
-			if (cache.rmvbehaviorinfos.Remove(existing)) { existing.Reset(); existing.Ready(id); return (T)existing; }
+			if (cache.rmvbehaviorinfos.Remove(existing)) { existing.Reset(); existing.Ready(id); MarkProjectableDirty(existing); return (T)existing; }
 			throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 		}
 		// 初始化 BehaviorInfos
@@ -752,8 +771,18 @@ public sealed class Stage
 		dict.Add(typeof(T), behaviorinfo);
 		list.Add(behaviorinfo);
 		behaviorinfo.Ready(id);
+		MarkProjectableDirty(behaviorinfo);
 			
 		return behaviorinfo;
+	}
+
+	/// <summary>
+	/// 新建 BehaviorInfo 标记全量投影脏（首帧全量同步）
+	/// </summary>
+	/// <param name="info">BehaviorInfo</param>
+	private void MarkProjectableDirty(BehaviorInfo info)
+	{
+		if (info is IProjectable proj) proj.MarkAllDirty();
 	}
 
 	/// <summary>

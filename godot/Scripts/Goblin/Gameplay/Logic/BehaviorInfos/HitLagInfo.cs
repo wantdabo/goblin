@@ -1,5 +1,4 @@
-﻿using Goblin.Gameplay.Logic.Common;
-using Goblin.Gameplay.Logic.Core;
+﻿using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos;
@@ -7,7 +6,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 顿帧信息
 /// </summary>
-public class HitLagInfo : BehaviorInfo
+public partial class HitLagInfo : BehaviorInfo
 {
     /// <summary>
     /// 修改前的时间缩放
@@ -32,32 +31,5 @@ public class HitLagInfo : BehaviorInfo
 
     protected override void OnReady()
     {
-        timescale = FP.Zero;
-        strength = FP.Zero;
-        duration = FP.Zero;
-        elapsed = FP.Zero;
-        count = 0;
-    }
-
-    protected override void OnReset()
-    {
-        timescale = FP.Zero;
-        strength = FP.Zero;
-        duration = FP.Zero;
-        elapsed = FP.Zero;
-        count = 0;
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<HitLagInfo>();
-        clone.Ready(actor);
-        clone.timescale = timescale;
-        clone.strength = strength;
-        clone.duration = duration;
-        clone.elapsed = elapsed;
-        clone.count = count;
-
-        return clone;
     }
 }

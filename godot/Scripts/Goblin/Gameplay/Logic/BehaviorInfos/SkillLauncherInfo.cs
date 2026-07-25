@@ -1,4 +1,3 @@
-using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
 namespace Goblin.Gameplay.Logic.BehaviorInfos;
@@ -6,7 +5,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// <summary>
 /// 技能释放器信息
 /// </summary>
-public class SkillLauncherInfo : BehaviorInfo
+public partial class SkillLauncherInfo : BehaviorInfo
 {
     /// <summary>
     /// 正在进行的技能 ID
@@ -23,25 +22,5 @@ public class SkillLauncherInfo : BehaviorInfo
 
     protected override void OnReady()
     {
-        skill = 0;
-        magicid = 0;
-        casting = false;
-    }
-
-    protected override void OnReset()
-    {
-        skill = 0;
-        magicid = 0;
-        casting = false;
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<SkillLauncherInfo>();
-        clone.Ready(actor);
-        clone.skill = skill;
-        clone.magicid = magicid;
-        clone.casting = casting;
-        return clone;
     }
 }

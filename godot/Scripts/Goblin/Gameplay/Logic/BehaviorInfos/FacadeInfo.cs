@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -60,7 +61,7 @@ public struct EffectInfo
 /// <summary>
 /// 动画槽位
 /// </summary>
-public class AnimationSlot
+public partial class AnimationSlot : IGBL
 {
     /// <summary>
     /// 复合槽位键（高字节=槽位类型，低字节=动画层）
@@ -103,7 +104,7 @@ public class AnimationSlot
 /// <summary>
 /// 外观信息
 /// </summary>
-public class FacadeInfo : BehaviorInfo
+public partial class FacadeInfo : BehaviorInfo
 {
     /// <summary>
     /// 模型 ID
@@ -145,7 +146,7 @@ public class FacadeInfo : BehaviorInfo
     /// 动画槽位列表
     /// </summary>
     public List<AnimationSlot> animslots { get; set; }
-        
+
     protected override void OnReady()
     {
         model = 0;
@@ -154,55 +155,10 @@ public class FacadeInfo : BehaviorInfo
         animhash = 0;
         animelapsed = FP.Zero;
         effectincrement = 0;
-        rmveffects = ObjectCache.Ensure<List<uint>>();
-        effects = ObjectCache.Ensure<List<uint>>();
-        effectdict = ObjectCache.Ensure<Dictionary<uint, EffectInfo>>();
-        animslots = ObjectCache.Ensure<List<AnimationSlot>>();
-    }
-
-    protected override void OnReset()
-    {
-        model = 0;
-        animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
-        animstate = 0;
-        animhash = 0;
-        animelapsed = FP.Zero;
-        effectincrement = 0;
-        rmveffects.Clear();
-        ObjectCache.Set(rmveffects);
-        effects.Clear();
-        ObjectCache.Set(effects);
-        effectdict.Clear();
-        ObjectCache.Set(effectdict);
-        foreach (var slot in animslots) ObjectCache.Set(slot);
-        animslots.Clear();
-        ObjectCache.Set(animslots);
-    }
-
-    protected override BehaviorInfo OnClone()
-    {
-        var clone = ObjectCache.Ensure<FacadeInfo>();
-        clone.Ready(actor);
-        clone.model = model;
-        clone.animticktype = animticktype;
-        clone.animstate = animstate;
-        clone.animhash = animhash;
-        clone.animelapsed = animelapsed;
-        clone.effectincrement = effectincrement;
-        clone.rmveffects.AddRange(rmveffects);
-        clone.effects.AddRange(effects);
-        foreach (var kv in effectdict) clone.effectdict.Add(kv.Key, kv.Value);
-        foreach (var slot in animslots)
-        {
-            var s = ObjectCache.Ensure<AnimationSlot>();
-            s.key = slot.key; s.priority = slot.priority;
-            s.animstate = slot.animstate; s.animhash = slot.animhash;
-            s.layer = slot.layer;
-            s.active = slot.active; s.istransient = slot.istransient;
-            s.duration = slot.duration; s.elapsed = slot.elapsed;
-            clone.animslots.Add(s);
-        }
-            
-        return clone;
+        // 容器字段：空检查 Ensure，遵循容器不还池规则
+        rmveffects ??= ObjectCache.Ensure<List<uint>>();
+        effects ??= ObjectCache.Ensure<List<uint>>();
+        effectdict ??= ObjectCache.Ensure<Dictionary<uint, EffectInfo>>();
+        animslots ??= ObjectCache.Ensure<List<AnimationSlot>>();
     }
 }
