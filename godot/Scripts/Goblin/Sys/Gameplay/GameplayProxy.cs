@@ -7,6 +7,7 @@ using Goblin.Debug;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Render;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Sys.Common;
 using Kowtow.Math;

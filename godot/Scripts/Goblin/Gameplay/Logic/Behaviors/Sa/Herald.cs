@@ -20,7 +20,7 @@ public class Herald : Behavior
     /// <summary>
     /// 输入指令执行器列表
     /// </summary>
-    private Dictionary<ushort, Solider> soliderdict { get; set; }
+    private GBLDict<ushort, Solider> soliderdict { get; set; }
 
     protected override void OnAssemble()
     {
@@ -29,7 +29,7 @@ public class Herald : Behavior
         cmdqueue = ObjectCache.Ensure<Queue<Command>>();
             
         // 注册输入指令执行器
-        soliderdict = ObjectCache.Ensure<Dictionary<ushort, Solider>>();
+        soliderdict = ObjectCache.Ensure<GBLDict<ushort, Solider>>();
         void Solider<T>(ushort id) where T : Solider, new()
         {
             var solider = ObjectCache.Ensure<T>();

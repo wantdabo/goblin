@@ -1,0 +1,8 @@
+  Goblin.SourceGenerators -> c:\Users\Administrator\Documents\GitHub\goblin\SourceGenerators\Goblin.SourceGenerators\bin\Debug\netstandard2.0\Goblin.SourceGenerators.dll
+  goblin -> c:\Users\Administrator\Documents\GitHub\goblin\godot\.godot\mono\temp\bin\Debug\goblin.dll
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:00.40

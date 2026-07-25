@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
@@ -17,12 +16,12 @@ public interface IEvent { }
 /// </summary>
 public class Eventor : Behavior<EventorInfo>
 {
-    private Dictionary<Type, List<(uint index, Behavior behavior, Delegate action)>> eventdict { get; set; }
+    private GBLDict<Type, GBLList<(uint index, Behavior behavior, Delegate action)>> eventdict { get; set; }
         
     protected override void OnAssemble()
     {
         base.OnAssemble();
-        eventdict = ObjectCache.Ensure<Dictionary<Type, List<(uint index, Behavior behavior, Delegate)>>>();
+        eventdict = ObjectCache.Ensure<GBLDict<Type, GBLList<(uint index, Behavior behavior, Delegate)>>>();
     }
 
     protected override void OnDisassemble()
@@ -61,7 +60,7 @@ public class Eventor : Behavior<EventorInfo>
     {
         if (false == eventdict.TryGetValue(typeof(T), out var funcs))
         {
-            funcs = ObjectCache.Ensure<List<(uint index, Behavior behavior, Delegate)>>();
+            funcs = ObjectCache.Ensure<GBLList<(uint index, Behavior behavior, Delegate)>>();
             eventdict.Add(typeof(T), funcs);
         }
 

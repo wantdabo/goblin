@@ -15,11 +15,11 @@ public static class PipelineDataReader
     /// <summary>
     /// 管线数据字典, 键为管线 ID, 值为管线数据
     /// </summary>
-    private static Dictionary<uint, PipelineData> datas { get; set; } = new();
+    private static GBLDict<uint, PipelineData> datas { get; set; } = new();
     /// <summary>
     /// 脚本数据字典, 键为脚本 ID, 值为脚本处理器
     /// </summary>
-    private static Dictionary<uint, Scripting> scriptings { get; set; } = new();
+    private static GBLDict<uint, Scripting> scriptings { get; set; } = new();
 
     /// <summary>
     /// 静态构造函数

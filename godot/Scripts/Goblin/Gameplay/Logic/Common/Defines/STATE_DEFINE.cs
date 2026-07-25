@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Logic.Common.Defines;
 
@@ -51,16 +51,16 @@ public class STATE_DEFINE
     /// <summary>
     /// 状态切换规则
     /// </summary>
-    public static Dictionary<byte, List<byte>> PASSES { get; private set; } = new()
+    public static GBLDict<byte, GBLList<byte>> PASSES { get; private set; } = new()
     {
-        { BORN, new List<byte>() { } },
-        { DEATH, new List<byte>() { } },
-        { IDLE, new List<byte>() { DEATH, MOVE, FALL, CASTING, HITSTUN, ROLL } },
-        { MOVE, new List<byte>() { DEATH, IDLE, FALL, CASTING, HITSTUN, ROLL } },
-        { JUMP, new List<byte>() { DEATH, FALL, CASTING, HITSTUN } },
-        { FALL, new List<byte>() { DEATH, IDLE, CASTING, HITSTUN } },
-        { CASTING, new List<byte>() { DEATH, HITSTUN } },
-        { HITSTUN, new List<byte>() { DEATH, HITSTUN } },
-        { ROLL, new List<byte>() { DEATH, IDLE, MOVE, CASTING } },
+        { BORN, new GBLList<byte>() { } },
+        { DEATH, new GBLList<byte>() { } },
+        { IDLE, new GBLList<byte>() { DEATH, MOVE, FALL, CASTING, HITSTUN, ROLL } },
+        { MOVE, new GBLList<byte>() { DEATH, IDLE, FALL, CASTING, HITSTUN, ROLL } },
+        { JUMP, new GBLList<byte>() { DEATH, FALL, CASTING, HITSTUN } },
+        { FALL, new GBLList<byte>() { DEATH, IDLE, CASTING, HITSTUN } },
+        { CASTING, new GBLList<byte>() { DEATH, HITSTUN } },
+        { HITSTUN, new GBLList<byte>() { DEATH, HITSTUN } },
+        { ROLL, new GBLList<byte>() { DEATH, IDLE, MOVE, CASTING } },
     };
 }

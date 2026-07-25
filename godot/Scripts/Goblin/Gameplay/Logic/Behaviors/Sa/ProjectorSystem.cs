@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
@@ -65,7 +64,7 @@ public class ProjectorSystem : Behavior
         // 回收上帧投影包，归还对象池
         RecyclePackets();
 
-        List<ProjectorPacket> list = null;
+        GBLList<ProjectorPacket> list = null;
 
         // 自检所有 BehaviorInfo 的脏标记
         foreach (var actordict in stage.cache.behaviorinfodict.Values)
@@ -80,7 +79,7 @@ public class ProjectorSystem : Behavior
                 if (0 == mask) continue;
 
                 // 懒初始化，无脏数据时零分配
-                if (null == list) list = ObjectCache.Ensure<List<ProjectorPacket>>();
+                if (null == list) list = ObjectCache.Ensure<GBLList<ProjectorPacket>>();
 
                 var packet = ObjectCache.Ensure<ProjectorPacket>();
                 packet.actor = info.actor;
@@ -155,7 +154,7 @@ public class ProjectorSystem : Behavior
         var snapshot = ObjectCache.Ensure<ProjectorSnapshot>();
         snapshot.frame = current;
 
-        var dict = ObjectCache.Ensure<Dictionary<(ulong actor, Type type), object[]>>();
+        var dict = ObjectCache.Ensure<GBLDict<(ulong actor, Type type), object[]>>();
         foreach (var actordict in stage.cache.behaviorinfodict.Values)
         {
             foreach (var info in actordict.Values)
@@ -261,7 +260,7 @@ public sealed class ProjectorSnapshot : IGBL
     /// <summary>
     /// (actor, BehaviorInfoType) → 投影字段值数组
     /// </summary>
-    public Dictionary<(ulong actor, Type type), object[]>? data { get; set; }
+    public GBLDict<(ulong actor, Type type), object[]>? data { get; set; }
 
     public void Reset()
     {
@@ -285,7 +284,7 @@ public sealed class ProjectorSnapshot : IGBL
         c.frame = frame;
         if (null != data)
         {
-            c.data = ObjectCache.Ensure<Dictionary<(ulong actor, Type type), object[]>>();
+            c.data = ObjectCache.Ensure<GBLDict<(ulong actor, Type type), object[]>>();
             foreach (var kv in data)
             {
                 var copy = new object[kv.Value.Length];

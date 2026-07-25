@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Defines;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Kowtow.Math;
@@ -37,7 +37,7 @@ public class CreateMagicData : InstructData
     /// <summary>
     /// 管线列表
     /// </summary>
-    public List<uint> pipelines;
+    public GBLList<uint> pipelines;
 
     public CreateMagicData()
     {

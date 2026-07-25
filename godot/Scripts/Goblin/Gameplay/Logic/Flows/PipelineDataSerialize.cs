@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 using Goblin.Gameplay.Logic.Flows.Defines;
@@ -88,8 +88,8 @@ public static class PipelineDataSerialize
         var data = new PipelineData
         {
             length = rawdata.length,
-            instructs = new List<Instruct>(),
-            sparkinstructs = new List<SparkInstruct>(),
+            instructs = new GBLList<Instruct>(),
+            sparkinstructs = new GBLList<SparkInstruct>(),
         };
 
         if (null != rawdata.instrtypes)
@@ -102,7 +102,7 @@ public static class PipelineDataSerialize
                     begin = rawdata.begin[i],
                     end = rawdata.end[i],
                     checkonce = rawdata.checkonce[i],
-                    conditions = new List<Condition>()
+                    conditions = new GBLList<Condition>()
                 };
 
                 instruct.data = BytesToInstructData(instrtype, rawdata.instrdata[i]);
@@ -127,11 +127,11 @@ public static class PipelineDataSerialize
                 {
                     influence = rawdata.sparkinfluences[i],
                     token = rawdata.sparktoken[i],
-                    conditions = new List<Condition>(),
+                    conditions = new GBLList<Condition>(),
                 };
 
                 sparkinstruct.data = BytesToInstructData(instrtype, rawdata.sparkinstrdata[i]);
-                sparkinstruct.conditions = new List<Condition>();
+                sparkinstruct.conditions = new GBLList<Condition>();
                 for (int j = 0; j < rawdata.sparkconditiontypes[i].Length; j++)
                 {
                     var conditiontype = rawdata.sparkconditiontypes[i][j];

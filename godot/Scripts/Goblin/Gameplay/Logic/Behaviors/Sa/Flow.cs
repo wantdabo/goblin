@@ -44,39 +44,39 @@ public class Flow : Behavior
     /// <summary>
     /// 管线内未满足条件的指令列表 - 后台
     /// </summary>
-    private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexebacks { get; set; }
+    private GBLList<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexebacks { get; set; }
     /// <summary>
     /// 管线内未满足条件的指令列表 - 前台
     /// </summary>
-    private List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexefronts { get; set; }
+    private GBLList<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)> insidenotexefronts { get; set; }
     /// <summary>
     /// 指令条件检查器列表
     /// </summary>
-    private Dictionary<ushort, Checker> checkers { get; set; }
+    private GBLDict<ushort, Checker> checkers { get; set; }
     /// <summary>
     /// 指令执行器列表
     /// </summary>
-    private Dictionary<ushort, Executor> executors { get; set; }
+    private GBLDict<ushort, Executor> executors { get; set; }
     /// <summary>
     /// 指令执行器字典
     /// </summary>
-    private Dictionary<Type, Executor> executordict { get; set; }
+    private GBLDict<Type, Executor> executordict { get; set; }
     /// <summary>
     /// 火花索引（token → pipelineid → SparkInstruct 列表）
     /// </summary>
-    private Dictionary<string, Dictionary<uint, List<SparkInstruct>>> sparkindex { get; set; }
+    private GBLDict<string, GBLDict<uint, GBLList<SparkInstruct>>> sparkindex { get; set; }
     /// <summary>
     /// 已索引的管线 ID 集合
     /// </summary>
-    private HashSet<uint> indexedpipelines { get; set; }
+    private GBLHashSet<uint> indexedpipelines { get; set; }
 
     protected override void OnAssemble()
     {
         base.OnAssemble();
-        insidenotexebacks = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
-        insidenotexefronts = ObjectCache.Ensure<List<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
-        sparkindex = ObjectCache.Ensure<Dictionary<string, Dictionary<uint, List<SparkInstruct>>>>();
-        indexedpipelines = ObjectCache.Ensure<HashSet<uint>>();
+        insidenotexebacks = ObjectCache.Ensure<GBLList<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
+        insidenotexefronts = ObjectCache.Ensure<GBLList<(uint pipelineid, uint index, Instruct instruct, FlowInfo flowinfo)>>();
+        sparkindex = ObjectCache.Ensure<GBLDict<string, GBLDict<uint, GBLList<SparkInstruct>>>>();
+        indexedpipelines = ObjectCache.Ensure<GBLHashSet<uint>>();
         Checkers();
         Executors();
     }
@@ -177,7 +177,7 @@ public class Flow : Behavior
         {
             var data = PipelineDataReader.Read(pipelineid);
             if (false == flowinfo.doings.TryGetValue(pipelineid, out var list)) continue;
-            List<uint> indexes = ObjectCache.Ensure<List<uint>>();
+            GBLList<uint> indexes = ObjectCache.Ensure<GBLList<uint>>();
             indexes.AddRange(list);
             foreach (var index in indexes)
             {
@@ -260,9 +260,9 @@ public class Flow : Behavior
         foreach (var instruct in data.sparkinstructs)
         {
             if (false == sparkindex.TryGetValue(instruct.token, out var pipelinemap))
-                sparkindex.Add(instruct.token, pipelinemap = ObjectCache.Ensure<Dictionary<uint, List<SparkInstruct>>>());
+                sparkindex.Add(instruct.token, pipelinemap = ObjectCache.Ensure<GBLDict<uint, GBLList<SparkInstruct>>>());
             if (false == pipelinemap.TryGetValue(pipelineid, out var list))
-                pipelinemap.Add(pipelineid, list = ObjectCache.Ensure<List<SparkInstruct>>());
+                pipelinemap.Add(pipelineid, list = ObjectCache.Ensure<GBLList<SparkInstruct>>());
             list.Add(instruct);
         }
     }
@@ -426,7 +426,7 @@ public class Flow : Behavior
     /// <param name="target">执行目标</param>
     /// <returns>YES/NO</returns>
     /// <exception cref="Exception">未能找到相对应处理的指令执行条件检查器</exception>
-    private bool CheckCondition(InstructData data, List<Condition> conditions, FlowInfo flowinfo, ulong target)
+    private bool CheckCondition(InstructData data, GBLList<Condition> conditions, FlowInfo flowinfo, ulong target)
     {
         foreach (var condition in conditions)
         {
@@ -480,7 +480,7 @@ public class Flow : Behavior
     /// <param name="flowinfo">管线信息</param>
     /// <exception cref="Exception">未能找到相对应处理的指令执行器</exception>
     /// <returns>是否至少有一个目标成功执行</returns>
-    private bool ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, List<Condition> conditions, FlowInfo flowinfo)
+    private bool ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, GBLList<Condition> conditions, FlowInfo flowinfo)
     {
         if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
         if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<GBLList<uint>>());
@@ -529,7 +529,7 @@ public class Flow : Behavior
     /// </summary>
     private void Checkers()
     {
-        checkers = ObjectCache.Ensure<Dictionary<ushort, Checker>>();
+        checkers = ObjectCache.Ensure<GBLDict<ushort, Checker>>();
         void Checker<T>(ushort id) where T : Checker, new()
         {
             checkers.Add(id, ObjectCache.Ensure<T>().Load(stage));
@@ -543,8 +543,8 @@ public class Flow : Behavior
     /// </summary>
     private void Executors()
     {
-        executors = ObjectCache.Ensure<Dictionary<ushort, Executor>>();
-        executordict = ObjectCache.Ensure<Dictionary<Type, Executor>>();
+        executors = ObjectCache.Ensure<GBLDict<ushort, Executor>>();
+        executordict = ObjectCache.Ensure<GBLDict<Type, Executor>>();
         void Executor<T>(ushort id) where T : Executor, new()
         {
             var executor = ObjectCache.Ensure<T>().Load(stage);

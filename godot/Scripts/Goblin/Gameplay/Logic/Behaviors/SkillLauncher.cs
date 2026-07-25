@@ -38,7 +38,7 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
         if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 
-        var pipelines = ObjectCache.Ensure<List<uint>>();
+        var pipelines = ObjectCache.Ensure<GBLList<uint>>();
         foreach (var p in skillcfg.Pipelines) pipelines.Add((uint)p);
 
         info.skill = skill;

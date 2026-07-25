@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Logic.Common.Defines;
 
@@ -58,7 +58,7 @@ public class COLLISION_DEFINE
     /// <summary>
     /// 物理层检测掩码
     /// </summary>
-    private static Dictionary<int, int> maskdict = new()
+    private static GBLDict<int, int> maskdict = new()
     {
         { LAYER_DEFAULT, LAYER_DEFAULT | LAYER_GROUND | LAYER_PLAYER },
         { LAYER_GROUND, LAYER_DEFAULT | LAYER_PLAYER },

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Logic.Common.Defines;
 
@@ -39,5 +39,5 @@ public class ACTOR_DEFINE
     /// <summary>
     /// 施法者 Actor 类型集合（命中即视为找到施法者）
     /// </summary>
-    public static readonly HashSet<byte> CASTER_TYPES = new HashSet<byte> { HERO, ENEMY };
+    public static readonly GBLHashSet<byte> CASTER_TYPES = new() { HERO, ENEMY };
 }

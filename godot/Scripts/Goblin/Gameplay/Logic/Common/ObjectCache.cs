@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
@@ -58,7 +60,14 @@ public static class ObjectCache
     public static T Ensure<T, TValue>(int capacity) where T : new()
     {
         var queue = QueryCapacity<T>(capacity);
-        if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
+        if (0 != queue.Count)
+        {
+            if (queue.TryDequeue(out var obj))
+            {
+                if (obj is IList list) list.Clear();
+                return (T)obj;
+            }
+        }
         object ins = default;
         var type = typeof(T);
         if (type == typeof(List<TValue>)) ins = new List<TValue>(capacity);
@@ -83,7 +92,14 @@ public static class ObjectCache
     public static T Ensure<T, TKey, TValue>(int capacity) where T : new()
     {
         var queue = QueryCapacity<T>(capacity);
-        if (0 != queue.Count) if (queue.TryDequeue(out var obj)) return (T)obj;
+        if (0 != queue.Count)
+        {
+            if (queue.TryDequeue(out var obj))
+            {
+                if (obj is IDictionary dict) dict.Clear();
+                return (T)obj;
+            }
+        }
         object ins = default;
         var type = typeof(T);
         if (type == typeof(Dictionary<TKey, TValue>)) ins = new Dictionary<TKey, TValue>(capacity);
@@ -104,7 +120,11 @@ public static class ObjectCache
         var type = typeof(T);
         if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
         {
-            if (queue.TryDequeue(out var obj)) return (T)obj;
+            if (queue.TryDequeue(out var obj))
+            {
+                if (obj is IGBL gbl) gbl.Reset();
+                return (T)obj;
+            }
         }
             
         return new T();
@@ -120,7 +140,11 @@ public static class ObjectCache
     {
         if (pool.TryGetValue(type, out var dict) && dict.TryGetValue(key, out var queue) && queue.Count > 0)
         {
-            if (queue.TryDequeue(out var obj)) return obj;
+            if (queue.TryDequeue(out var obj))
+            {
+                if (obj is IGBL gbl) gbl.Reset();
+                return obj;
+            }
         }
 
         return Activator.CreateInstance(type);

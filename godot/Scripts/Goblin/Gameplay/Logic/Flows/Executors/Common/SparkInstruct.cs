@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using MessagePack;
 
@@ -20,7 +20,7 @@ public sealed class SparkInstruct
     /// <summary>
     /// 执行条件列表
     /// </summary>
-    public List<Condition> conditions { get; set; }
+    public GBLList<Condition> conditions { get; set; }
     /// <summary>
     /// 指令数据
     /// </summary>

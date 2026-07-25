@@ -55,6 +55,8 @@ public class GBLList<T> : IEnumerable<T>, IGBL
 
     public void Sort(Comparison<T> comparison) => data.Sort(comparison);
 
+    public T[] ToArray() => data.ToArray();
+
     public virtual void AddRange(IEnumerable<T> items)
     {
         foreach (var item in items)

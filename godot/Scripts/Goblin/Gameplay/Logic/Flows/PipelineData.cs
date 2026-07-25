@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
-using MessagePack;
 
 namespace Goblin.Gameplay.Logic.Flows;
 
@@ -16,9 +15,21 @@ public sealed class PipelineData
     /// <summary>
     /// 指令列表
     /// </summary>
-    public List<Instruct> instructs { get; set; }
+    public GBLList<Instruct> instructs { get; set; }
     /// <summary>
     /// 火花指令列表
     /// </summary>
-    public List<SparkInstruct> sparkinstructs { get; set; }
+    public GBLList<SparkInstruct> sparkinstructs { get; set; }
+    /// <summary>
+    /// 管线索引（管线可能包含多个 PipelineData，需要索引区分）
+    /// </summary>
+    public uint index { get; set; }
+
+    /// <summary>
+    /// 格式化管线数据
+    /// </summary>
+    public void Format()
+    {
+        instructs.Sort((a, b) => a.begin.CompareTo(b.begin));
+    }
 }

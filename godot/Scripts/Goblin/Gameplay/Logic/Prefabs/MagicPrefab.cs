@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -24,7 +23,7 @@ public struct MagicPrefabInfo : IPrefabInfo
     /// <summary>
     /// 管线列表
     /// </summary>
-    public List<uint> pipelines { get; set; }
+    public GBLList<uint> pipelines { get; set; }
 }
 
 /// <summary>
@@ -44,7 +43,7 @@ public class MagicPrefab : Prefab<MagicPrefabInfo>
         spatial.euler = info.spatial.euler;
         spatial.scale = info.spatial.scale;
 
-        var pipelines = ObjectCache.Ensure<List<uint>>();
+        var pipelines = ObjectCache.Ensure<GBLList<uint>>();
         pipelines.AddRange(info.pipelines);
         magic.flow = stage.flow.GenPipeline(actor, pipelines);
     }
