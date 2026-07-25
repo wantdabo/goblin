@@ -49,6 +49,18 @@ public class GBLList<T> : IEnumerable<T>, IGBL
         return true;
     }
 
+    /// <summary>
+    /// 静默移除 — 仅从列表中删除，不触发 IGBL 元素的 Reset + 还池
+    /// 用于对象同时存在于多个容器、仅需单次回池的场景
+    /// </summary>
+    public bool RemoveSilent(T item)
+    {
+        var idx = data.IndexOf(item);
+        if (idx < 0) return false;
+        data.RemoveAt(idx);
+        return true;
+    }
+
     public bool Contains(T item) => data.Contains(item);
 
     public int IndexOf(T item) => data.IndexOf(item);

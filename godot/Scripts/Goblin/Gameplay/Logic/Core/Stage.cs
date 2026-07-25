@@ -514,36 +514,25 @@ public sealed class Stage
 		// 重置 BehaviorInfo
 		foreach (var rmvbehaviorinfo in cache.rmvbehaviorinfos)
 		{
+			// behaviorinfodict.Remove 会对 IGBL 值自动 Reset + Set（唯一回池点）
 			if (cache.behaviorinfodict.TryGetValue(rmvbehaviorinfo.actor, out var behaviorinfodict))
 			{
 				behaviorinfodict.Remove(rmvbehaviorinfo.GetType());
 			}
-				
+
+			// behaviorinfos 用静默移除，避免重复回池
 			if (info.behaviorinfos.TryGetValue(rmvbehaviorinfo.GetType(), out var behaviorinfos))
 			{
-				behaviorinfos.Remove(rmvbehaviorinfo);
+				behaviorinfos.RemoveSilent(rmvbehaviorinfo);
 			}
-				
-			rmvbehaviorinfo.Reset();
-			ObjectCache.Set(rmvbehaviorinfo);
 		}
 			
 		// 回收清理
 		foreach (var rmvactor in cache.rmvactorset)
 		{
-			if (cache.behaviordict.TryGetValue(rmvactor, out var behaviordict))
-			{
-				behaviordict.Clear();
-				ObjectCache.Set(behaviordict);
-				cache.behaviordict.Remove(rmvactor);
-			}
-				
-			if (cache.behaviorinfodict.TryGetValue(rmvactor, out var behaviorinfodict))
-			{
-				behaviorinfodict.Clear();
-				ObjectCache.Set(behaviorinfodict);
-				cache.behaviorinfodict.Remove(rmvactor);
-			}
+			// Remove 会对 IGBL 值自动 Reset + Set，无需手动 Clear/Set
+			cache.behaviordict.Remove(rmvactor);
+			cache.behaviorinfodict.Remove(rmvactor);
 
 			info.actors.Remove(rmvactor);
 		}

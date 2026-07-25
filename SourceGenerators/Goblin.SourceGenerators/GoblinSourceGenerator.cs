@@ -636,7 +636,10 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         // Projector backing field 重置
         foreach (var pf in data.projectorFields)
-            sb.AppendLine($"        {data.classNameLower}_{pf.name} = default;");
+        {
+            var resetValue = NeedsInit(pf.typeText) ? $"new {pf.typeText}()" : "default";
+            sb.AppendLine($"        {data.classNameLower}_{pf.name} = {resetValue};");
+        }
 
         // 脏标记清零
         if (0 < data.projectorFields.Count)
@@ -748,7 +751,10 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         // ---- Projector backing field 拷贝 ----
         foreach (var pf in data.projectorFields)
         {
-            sb.AppendLine($"        c.{data.classNameLower}_{pf.name} = this.{data.classNameLower}_{pf.name};");
+            if (NeedsInit(pf.typeText))
+                sb.AppendLine($"        c.{data.classNameLower}_{pf.name} = new {pf.typeText}();");
+            else
+                sb.AppendLine($"        c.{data.classNameLower}_{pf.name} = this.{data.classNameLower}_{pf.name};");
         }
 
         // 脏标记拷贝
@@ -884,7 +890,8 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         var classNameLower = data.className.ToLowerInvariant();
         foreach (var field in data.fields)
         {
-            sb.AppendLine($"    private {field.typeText} {classNameLower}_{field.name} {{ get; set; }}");
+            var init = NeedsInit(field.typeText) ? $" = new {field.typeText}();" : "";
+            sb.AppendLine($"    private {field.typeText} {classNameLower}_{field.name} {{ get; set; }}{init}");
         }
 
         sb.AppendLine();
@@ -1086,6 +1093,14 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 return val;
         }
         return null;
+    }
+
+    /// <summary>
+    /// 判断类型是否需要 new() 初始化（class 类型如 GBLList、GBLDict）
+    /// </summary>
+    private static bool NeedsInit(string typeText)
+    {
+        return typeText.StartsWith("GBLList<") || typeText.StartsWith("GBLDict<");
     }
 
     private static string? ExtractLeadingComment(AttributeListSyntax attrList)
