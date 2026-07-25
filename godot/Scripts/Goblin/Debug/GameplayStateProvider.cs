@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
@@ -298,7 +300,7 @@ public class GameplayStateProvider : IStateProvider
         JsonObject attrnode = new();
 
         AttributeBucketInfo attrinfo = stage.GetBehaviorInfo<AttributeBucketInfo>(stage.sa);
-        if (null == attrinfo || false == attrinfo.attributes.TryGetValue(actorid, out Dictionary<ushort, int> attrs))
+        if (null == attrinfo || false == attrinfo.attributes.TryGetValue(actorid, out GBLDict<ushort, int> attrs))
             return attrnode;
 
         foreach (KeyValuePair<ushort, int> kv in attrs)

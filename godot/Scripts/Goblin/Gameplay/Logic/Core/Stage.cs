@@ -756,7 +756,7 @@ public sealed class Stage
 			if (cache.rmvbehaviors.Remove(existing)) { existing.active = true; existing.AddBindingInfo(); return existing; }
 			throw new Exception($"behavior {type} is exist.");
 		}
-		if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Ensure<List<Type>>());
+		if (false == info.behaviortypes.TryGetValue(id, out var types)) info.behaviortypes.Add(id, types = ObjectCache.Ensure<GBLList<Type>>());
 			
 		var behavior = ObjectCache.Ensure(type) as Behavior;
 		if (false == types.Contains(type)) types.Add(type);
@@ -791,7 +791,7 @@ public sealed class Stage
 			throw new Exception($"behaviorinfo {typeof(T)} is exist.");
 		}
 		// 初始化 BehaviorInfos
-		if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Ensure<List<BehaviorInfo>>());
+		if (false == info.behaviorinfos.TryGetValue(typeof(T), out var list)) info.behaviorinfos.Add(typeof(T), list = ObjectCache.Ensure<GBLList<BehaviorInfo>>());
 
 		var behaviorinfo = ObjectCache.Ensure<T>();
 		dict.Add(typeof(T), behaviorinfo);

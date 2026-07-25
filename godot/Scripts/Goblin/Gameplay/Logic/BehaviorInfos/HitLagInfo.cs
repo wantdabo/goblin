@@ -28,8 +28,4 @@ public partial class HitLagInfo : BehaviorInfo
     /// 引用计数，保证 timescale 只被保存/恢复一次
     /// </summary>
     public int count { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

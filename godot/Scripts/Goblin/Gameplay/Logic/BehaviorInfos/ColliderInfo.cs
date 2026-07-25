@@ -27,11 +27,6 @@ public partial class ColliderInfo : BehaviorInfo
     /// </summary>
     public Sphere sphere { get; set; }
 
-    protected override void OnReady()
-    {
-        OnReset();
-    }
-
     // layer Reset 值为 LAYER_DEFAULT（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {

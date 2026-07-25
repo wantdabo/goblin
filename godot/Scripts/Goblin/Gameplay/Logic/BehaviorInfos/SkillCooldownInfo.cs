@@ -7,7 +7,4 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos;
 /// </summary>
 public partial class SkillCooldownInfo : BehaviorInfo
 {
-    protected override void OnReady()
-    {
-    }
 }

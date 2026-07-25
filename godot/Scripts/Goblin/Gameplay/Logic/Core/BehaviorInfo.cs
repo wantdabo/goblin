@@ -25,8 +25,14 @@ public abstract class BehaviorInfo : IGBL
     {
         this.actor = actor;
         this.active = true;
+        OnInitContainers();
         OnReady();
     }
+
+    /// <summary>
+    /// 容器字段初始化（SG 为含 GBL 容器的 BehaviorInfo 子类生成 override）
+    /// </summary>
+    protected virtual void OnInitContainers() { }
 
     /// <summary>
     /// 重置，virtual — SG 为 partial class + IGBL 类生成 override
@@ -59,7 +65,7 @@ public abstract class BehaviorInfo : IGBL
     /// <summary>
     /// 初始化，当 BehaviorInfo 从对象池中取出，在这个回调中初始化数据
     /// </summary>
-    protected abstract void OnReady();
+    protected virtual void OnReady() { }
     /// <summary>
     /// 重置，当 BehaviorInfo 回收，重新回到对象池，在这个回调中清理数据
     /// virtual 空实现 — 已有子类继续 override，新 partial 类由 SG 接管 Reset

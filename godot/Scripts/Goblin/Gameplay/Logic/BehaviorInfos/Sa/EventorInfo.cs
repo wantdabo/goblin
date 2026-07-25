@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
@@ -17,11 +17,5 @@ public partial class EventorInfo : BehaviorInfo
     /// <summary>
     /// 事件索引字典, 用于存储事件的索引 (用作排序)
     /// </summary>
-    public Dictionary<(int, ulong actor), uint> indexes { get; set; }
-
-    protected override void OnReady()
-    {
-        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
-        if (null == indexes) indexes = ObjectCache.Ensure<Dictionary<(int, ulong), uint>>();
-    }
+    public GBLDict<(int, ulong actor), uint> indexes { get; set; }
 }

@@ -21,11 +21,6 @@ public partial class SpatialInfo : BehaviorInfo
     /// </summary>
     public (FPVector3 position, FPVector3 euler, FP scale) preframe { get; set; }
 
-    protected override void OnReady()
-    {
-        OnReset();
-    }
-
     protected override void OnReset()
     {
         // position/euler/scale 由 SG 生成的 Reset 接管，此处仅重置非投影字段

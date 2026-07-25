@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -66,23 +66,15 @@ public partial class StageInfo : BehaviorInfo
     /// <summary>
     /// Actor 列表
     /// </summary>
-    public List<ulong> actors { get; set; }
+    public GBLList<ulong> actors { get; set; }
     /// <summary>
     /// 行为类型列表, 键为 ActorID, 值为该 Actor 上的所有行为类型
     /// </summary>
-    public Dictionary<ulong, List<Type>> behaviortypes { get; set; }
+    public GBLDict<ulong, GBLList<Type>> behaviortypes { get; set; }
     /// <summary>
     /// 行为信息列表, 键为行为类型, 值为该行为类型的所有 BehaviorInfo 列表
     /// </summary>
-    public Dictionary<Type, List<BehaviorInfo>> behaviorinfos { get; set; }
-
-    protected override void OnReady()
-    {
-        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
-        if (null == actors) actors = ObjectCache.Ensure<List<ulong>>();
-        if (null == behaviortypes) behaviortypes = ObjectCache.Ensure<Dictionary<ulong, List<Type>>>();
-        if (null == behaviorinfos) behaviorinfos = ObjectCache.Ensure<Dictionary<Type, List<BehaviorInfo>>>();
-    }
+    public GBLDict<Type, GBLList<BehaviorInfo>> behaviorinfos { get; set; }
 
     // timescale Reset 值为 FP.One（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()

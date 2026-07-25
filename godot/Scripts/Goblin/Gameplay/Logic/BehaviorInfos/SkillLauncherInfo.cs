@@ -19,8 +19,4 @@ public partial class SkillLauncherInfo : BehaviorInfo
     /// 是否有技能在释放中
     /// </summary>
     public bool casting { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

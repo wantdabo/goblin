@@ -23,7 +23,7 @@ public struct FlowPrefabInfo : IPrefabInfo
     /// <summary>
     /// 管线的 ID 列表, 用于指向管线数据
     /// </summary>
-    public List<uint> pipelines { get; set; }
+    public IEnumerable<uint> pipelines { get; set; }
 }
 
 /// <summary>

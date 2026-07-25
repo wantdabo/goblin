@@ -32,8 +32,4 @@ public partial class BuffInfo : BehaviorInfo
     /// Buff 是否附魔
     /// </summary>
     public bool enchanted { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

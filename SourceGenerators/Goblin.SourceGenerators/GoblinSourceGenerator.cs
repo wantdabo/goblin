@@ -392,6 +392,30 @@ public class GoblinSourceGenerator : IIncrementalGenerator
     }
 
     /// <summary>
+    /// 判断类型名是否为 GBL 容器（GBLList, GBLDict, TGBLList, TGBLDict）
+    /// </summary>
+    private static bool IsGBLContainerTypeName(string typeName)
+    {
+        return typeName.Contains("GBLList<")
+            || typeName.Contains("GBLDict<")
+            || typeName.Contains("TGBLList<")
+            || typeName.Contains("TGBLDict<");
+    }
+
+    /// <summary>
+    /// 从全限定类型名中提取短名（去掉命名空间），例如 Goblin.Common.GBLList<int> → GBLList<int>
+    /// </summary>
+    private static string GetShortTypeName(string fullName)
+    {
+        // 找到最后一个 . 在第一个 < 之前
+        var angleIdx = fullName.IndexOf('<');
+        var searchEnd = angleIdx >= 0 ? angleIdx : fullName.Length;
+        var lastDot = fullName.LastIndexOf('.', searchEnd - 1);
+        if (lastDot >= 0) return fullName.Substring(lastDot + 1);
+        return fullName;
+    }
+
+    /// <summary>
     /// 获取容器元素类型名（取最后一个类型参数，适用于单值容器和 Dictionary）
     /// </summary>
     private static string? GetContainerElementType(ITypeSymbol type)
@@ -499,6 +523,9 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine($"partial class {className}");
         sb.AppendLine("{");
 
+        // ---- OnReady()（仅 BehaviorInfo 子类）----
+        EmitOnReady(sb, data);
+
         // ---- Reset() ----
         EmitReset(sb, data);
 
@@ -509,6 +536,41 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         var hintName = $"{ns}.{className}.lifecycle.g.cs";
         context.AddSource(hintName, sb.ToString());
+    }
+
+    private static void EmitOnReady(System.Text.StringBuilder sb, LifecycleClassData data)
+    {
+        // 仅 BehaviorInfo 子类生成 OnInitContainers 容器初始化
+        if (false == data.isBehaviorInfo) return;
+
+        var hasGBLContainers = false;
+        foreach (var field in data.fields)
+        {
+            if (IsGBLContainerTypeName(field.typeName))
+            {
+                hasGBLContainers = true;
+                break;
+            }
+        }
+        // 无 GBL 容器字段则不生成
+        if (false == hasGBLContainers) return;
+
+        sb.AppendLine("    /// <summary>");
+        sb.AppendLine("    /// 初始化 GBL 容器字段");
+        sb.AppendLine("    /// </summary>");
+        sb.AppendLine("    protected override void OnInitContainers()");
+        sb.AppendLine("    {");
+
+        foreach (var field in data.fields)
+        {
+            if (false == IsGBLContainerTypeName(field.typeName)) continue;
+            var shortName = GetShortTypeName(field.typeName);
+            sb.AppendLine($"        if (null == {field.name}) {field.name} = ObjectCache.Ensure<{shortName}>();");
+        }
+
+        sb.AppendLine("        base.OnInitContainers();");
+        sb.AppendLine("    }");
+        sb.AppendLine();
     }
 
     private static void EmitReset(System.Text.StringBuilder sb, LifecycleClassData data)
@@ -691,6 +753,18 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         {
             if (field.category != FieldCategory.IGBL) continue;
             sb.AppendLine($"        c.{field.name} = ({field.typeName})this.{field.name}?.Clone();");
+        }
+
+        // ---- Projector backing field 拷贝 ----
+        foreach (var pf in data.projectorFields)
+        {
+            sb.AppendLine($"        c.{data.classNameLower}_{pf.name} = this.{data.classNameLower}_{pf.name};");
+        }
+
+        // 脏标记拷贝
+        if (0 < data.projectorFields.Count)
+        {
+            sb.AppendLine("        c.projectdirtymask = this.projectdirtymask;");
         }
 
         // ---- 父类字段（用于继承链中非 BehaviorInfo 父类的字段拷贝） ----

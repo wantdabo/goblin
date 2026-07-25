@@ -133,32 +133,17 @@ public partial class FacadeInfo : BehaviorInfo
     /// <summary>
     /// 移除特效列表
     /// </summary>
-    public List<uint> rmveffects { get; set; }
+    public GBLList<uint> rmveffects { get; set; }
     /// <summary>
     /// 特效列表
     /// </summary>
-    public List<uint> effects { get; set; }
+    public GBLList<uint> effects { get; set; }
     /// <summary>
     /// 特效字典
     /// </summary>
-    public Dictionary<uint, EffectInfo> effectdict { get; set; }
+    public GBLDict<uint, EffectInfo> effectdict { get; set; }
     /// <summary>
     /// 动画槽位列表
     /// </summary>
-    public List<AnimationSlot> animslots { get; set; }
-
-    protected override void OnReady()
-    {
-        model = 0;
-        animticktype = ANIM_DEFINE.TICK_AUTOMATIC;
-        animstate = 0;
-        animhash = 0;
-        animelapsed = FP.Zero;
-        effectincrement = 0;
-        // 容器字段：空检查 Ensure，遵循容器不还池规则
-        rmveffects ??= ObjectCache.Ensure<List<uint>>();
-        effects ??= ObjectCache.Ensure<List<uint>>();
-        effectdict ??= ObjectCache.Ensure<Dictionary<uint, EffectInfo>>();
-        animslots ??= ObjectCache.Ensure<List<AnimationSlot>>();
-    }
+    public GBLList<AnimationSlot> animslots { get; set; }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
@@ -42,7 +43,7 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
     public void Attach(ulong actor)
     {
         if (info.attributes.ContainsKey(actor)) return;
-        info.attributes.Add(actor, ObjectCache.Ensure<Dictionary<ushort, int>>());
+        info.attributes.Add(actor, ObjectCache.Ensure<GBLDict<ushort, int>>());
     }
 
     private (ushort mainkey, ushort scalekey) ConvKey(ushort key)

@@ -28,11 +28,6 @@ public partial class RandomInfo : BehaviorInfo
     /// </summary>
     public long current { get; set; }
 
-    protected override void OnReady()
-    {
-        OnReset();
-    }
-
     // a/c/m Reset 值非 default（LCG 常量），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {

@@ -26,10 +26,4 @@ public partial class StateMachineInfo : BehaviorInfo
     /// 延迟中断时间
     /// </summary>
     public FP delaybreak { get; set; }
-
-    protected override void OnReady()
-    {
-        current = STATE_DEFINE.NONE;
-        last = STATE_DEFINE.NONE;
-    }
 }

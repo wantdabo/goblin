@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
@@ -17,16 +17,9 @@ public partial class GamepadInfo : BehaviorInfo
     /// <summary>
     /// 按键指令列表
     /// </summary>
-    public List<KeyFrame> keys { get; set; }
+    public GBLList<KeyFrame> keys { get; set; }
     /// <summary>
     /// 技能指令列表
     /// </summary>
-    public List<SkillFrame> skills { get; set; }
-
-    protected override void OnReady()
-    {
-        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
-        if (null == keys) keys = ObjectCache.Ensure<List<KeyFrame>>();
-        if (null == skills) skills = ObjectCache.Ensure<List<SkillFrame>>();
-    }
+    public GBLList<SkillFrame> skills { get; set; }
 }

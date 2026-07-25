@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 
@@ -28,24 +28,21 @@ public partial class FlowInfo : BehaviorInfo
     /// <summary>
     /// 管线的 ID 列表, 用于指向管线数据
     /// </summary>
-    public List<uint> pipelines { get; set; }
+    public GBLList<uint> pipelines { get; set; }
     /// <summary>
     /// 管线的执行中 ID 集合, 用于触发管线生命周期
     /// </summary>
-    public Dictionary<uint, List<uint>> doings { get; set; }
+    public GBLDict<uint, GBLList<uint>> doings { get; set; }
     /// <summary>
     /// 各管线已完成的指令索引（pipelineid → 最后一条 end ＜ timeline 的 index）
     /// 用于 RunPipeline 跳过已过期指令，避免每帧全量扫描
     /// </summary>
-    public Dictionary<uint, uint> completedindex { get; set; }
+    public GBLDict<uint, uint> completedindex { get; set; }
 
     protected override void OnReady()
     {
         // FlowInfo 默认不激活，由 Flow 显式激活
         active = false;
-        // 容器只清不还，首次 Ensure，复用时 Reset 已 Clear
-        if (null == pipelines) pipelines = ObjectCache.Ensure<List<uint>>();
-        if (null == doings) doings = ObjectCache.Ensure<Dictionary<uint, List<uint>>>();
-        if (null == completedindex) completedindex = ObjectCache.Ensure<Dictionary<uint, uint>>();
+        base.OnReady();
     }
 }

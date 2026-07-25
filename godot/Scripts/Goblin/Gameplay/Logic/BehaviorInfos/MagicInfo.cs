@@ -15,8 +15,4 @@ public partial class MagicInfo : BehaviorInfo
     /// 魔法体管线
     /// </summary>
     public ulong flow { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

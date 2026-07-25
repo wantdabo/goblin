@@ -68,7 +68,7 @@ public class CollisionExecutor : Executor<CollisionData>
     private void OnCollision<T>(HitResult result, (uint pipelineid, uint index) identity, CollisionData data, FlowInfo flowinfo, ulong target) where T : FlowCollisionInfo, new()
     {
         if (false == stage.SeekBehaviorInfo(flowinfo.actor, out T flowcollision)) flowcollision = stage.AddBehaviorInfo<T>(flowinfo.actor);
-        if (false == flowcollision.records.TryGetValue(identity, out var record)) flowcollision.records.Add(identity, record = ObjectCache.Ensure<Dictionary<ulong, uint>>());
+        if (false == flowcollision.records.TryGetValue(identity, out var record)) flowcollision.records.Add(identity, record = ObjectCache.Ensure<GBLDict<ulong, uint>>());
         foreach (var collider in result.colliders)
         {
             if (false == data.includetarget && collider.actor == target) continue;

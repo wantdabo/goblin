@@ -131,7 +131,7 @@ public class Flow : Behavior
     /// <param name="pipelines">管线的 ID 列表, 用于指向管线数据</param>
     /// <param name="gen2run">生成并运行管线</param>
     /// <returns>Actor</returns>
-    public ulong GenPipeline(ulong owner, List<uint> pipelines, bool gen2run = true)
+    public ulong GenPipeline(ulong owner, IEnumerable<uint> pipelines, bool gen2run = true)
     {
         var actor = stage.Spawn(new FlowPrefabInfo
         {
@@ -483,7 +483,7 @@ public class Flow : Behavior
     private bool ExecuteInstruct(ExecuteInstructType type, uint pipelineid, uint index, InstructData data, List<Condition> conditions, FlowInfo flowinfo)
     {
         if (false == executors.TryGetValue(data.id, out var executor)) throw new Exception($"id : {data.id} cannot find executor.");
-        if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<List<uint>>());
+        if (false == flowinfo.doings.TryGetValue(pipelineid, out var indexes)) flowinfo.doings.Add(pipelineid, indexes = ObjectCache.Ensure<GBLList<uint>>());
 
         var executed = false;
 

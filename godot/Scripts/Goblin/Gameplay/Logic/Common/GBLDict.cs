@@ -44,7 +44,28 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
 
     public bool TryGetValue(K key, out V value) => data.TryGetValue(key, out value);
 
+    /// <summary>
+    /// 尝试获取值，不存在则返回默认值
+    /// </summary>
+    public V GetValueOrDefault(K key, V defaultValue = default)
+    {
+        if (data.TryGetValue(key, out var value)) return value;
+        return defaultValue;
+    }
+
     public bool ContainsKey(K key) => data.ContainsKey(key);
+
+    /// <summary>
+    /// 按插入顺序返回所有值
+    /// </summary>
+    public IEnumerable<V> Values
+    {
+        get
+        {
+            foreach (var key in order)
+                yield return data[key];
+        }
+    }
 
     public virtual bool Remove(K key)
     {

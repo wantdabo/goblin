@@ -49,6 +49,18 @@ public class GBLList<T> : IEnumerable<T>, IGBL
         return true;
     }
 
+    public bool Contains(T item) => data.Contains(item);
+
+    public int IndexOf(T item) => data.IndexOf(item);
+
+    public void Sort(Comparison<T> comparison) => data.Sort(comparison);
+
+    public virtual void AddRange(IEnumerable<T> items)
+    {
+        foreach (var item in items)
+            Add(item);
+    }
+
     public virtual void RemoveAt(int index)
     {
         if (iselementigbl)

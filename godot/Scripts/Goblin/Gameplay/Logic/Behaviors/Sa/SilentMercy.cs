@@ -49,7 +49,7 @@ public class SilentMercy : Behavior<SilentMercyInfo>
         if (stage.SeekBehaviorInfo(victim, out StateMachineInfo statemachine) && STATE_DEFINE.DEATH == statemachine.current) return;
 
         if (info.victimrelations.ContainsKey(victim)) return;
-        if (false == info.killrelations.TryGetValue(killer, out var victims)) info.killrelations.Add(killer, victims = ObjectCache.Ensure<List<ulong>>());
+        if (false == info.killrelations.TryGetValue(killer, out var victims)) info.killrelations.Add(killer, victims = ObjectCache.Ensure<GBLList<ulong>>());
         victims.Add(victim);
         info.victimrelations.Add(victim, killer);
             
@@ -62,7 +62,7 @@ public class SilentMercy : Behavior<SilentMercyInfo>
     /// <param name="killer">杀手 ID</param>
     /// <param name="victims">被杀者列表</param>
     /// <returns>YES/NO</returns>
-    public bool AskKiller(ulong killer, out List<ulong> victims)
+    public bool AskKiller(ulong killer, out GBLList<ulong> victims)
     {
         victims = default;
         if (false == info.killrelations.TryGetValue(killer, out victims)) return false;

@@ -22,8 +22,8 @@ public class Gamepad : Behavior<GamepadInfo>
     }
 
     public MoveFrame move => info.move;
-    public List<KeyFrame> keys => info.keys;
-    public List<SkillFrame> skills => info.skills;
+    public GBLList<KeyFrame> keys => info.keys;
+    public GBLList<SkillFrame> skills => info.skills;
 
     protected override void OnEndTick()
     {
