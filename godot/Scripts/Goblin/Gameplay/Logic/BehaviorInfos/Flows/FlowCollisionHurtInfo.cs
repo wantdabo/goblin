@@ -8,7 +8,7 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 /// <summary>
 /// Flow 碰撞 - 攻击盒信息
 /// </summary>
-public class FlowCollisionHurtInfo : FlowCollisionInfo
+public partial class FlowCollisionHurtInfo : FlowCollisionInfo
 {
     /// <summary>
     /// 使用[自身]命中火花

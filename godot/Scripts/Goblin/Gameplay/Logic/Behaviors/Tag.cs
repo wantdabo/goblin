@@ -2,7 +2,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.RIL.DIFF;
 
 namespace Goblin.Gameplay.Logic.Behaviors;
 

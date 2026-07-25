@@ -6,6 +6,6 @@ namespace Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 /// <summary>
 /// Flow 碰撞 - 嗅探器信息
 /// </summary>
-public class FlowCollisionSensorInfo : FlowCollisionInfo
+public partial class FlowCollisionSensorInfo : FlowCollisionInfo
 {
 }

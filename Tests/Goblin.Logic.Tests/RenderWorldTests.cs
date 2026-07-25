@@ -25,7 +25,7 @@ public class RenderWorldTests
         var world = new RenderWorld();
         world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
 
-        world.Apply(1, typeof(ProjectFieldInfo), 0, 0, 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
+        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
 
         var entity = world.GetEntity(1);
         Assert.NotNull(entity);
@@ -43,7 +43,7 @@ public class RenderWorldTests
     {
         var world = new RenderWorld();
 
-        world.Apply(1, typeof(ProjectFieldInfo), 0, 0, 3, new object[] { new FPVector3(1, 2, 3), FP.One });
+        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), FP.One });
 
         var entity = world.GetEntity(1);
         Assert.NotNull(entity);
@@ -58,7 +58,7 @@ public class RenderWorldTests
     {
         var world = new RenderWorld();
         world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
-        world.Apply(1, typeof(ProjectFieldInfo), 0, 0, 3, new object[] { new FPVector3(1, 2, 3), FP.One });
+        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), FP.One });
 
         world.RmvEntity(1);
 
@@ -73,10 +73,10 @@ public class RenderWorldTests
     {
         var world = new RenderWorld();
         world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
-        world.Apply(1, typeof(ProjectFieldInfo), 0, 0, 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
+        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
 
         // 只更新 position（位 0）
-        world.Apply(1, typeof(ProjectFieldInfo), 0, 0, 1, new object[] { new FPVector3(9, 8, 7) });
+        world.Apply(1, typeof(ProjectFieldInfo), 1, new object[] { new FPVector3(9, 8, 7) });
 
         var comp = world.GetEntity(1).GetComp<TestSpatialComponent>();
         Assert.Equal(new FPVector3(9, 8, 7), comp.position);
@@ -182,6 +182,7 @@ public class RenderWorldTests
 
 /// <summary>
 /// 测试用 Component — 对应 ProjectFieldInfo（position index 0, scale index 1）
+/// Phase 1：纯数据，Apply 直接写入
 /// </summary>
 public class TestSpatialComponent : Component
 {

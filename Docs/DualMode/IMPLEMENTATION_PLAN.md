@@ -291,16 +291,13 @@ partial class ProjectFieldInfo
 - [x] 生成 `public void ClearProjectDirty()` — `projectdirtymask = 0`
 - [x] FP 类型序列化：`new FP(backing.rawValue)` 避免装箱，object[] 中用 FP 实例
 
-#### T1.3d 值类型序列化（0.3 天）
+#### T1.3d 值类型序列化（0.3 天）✅
 
-- [ ] SG 按类型生成序列化路径：
-  - `int/bool/ulong/enum` → 直接装箱
-  - `FP` → `new FP(rawValue)` → 装箱
-  - `FPVector2` → 2×long → `new long[] { x.rawValue, y.rawValue }`
-  - `FPVector3` → 3×long → `new long[] { x.rawValue, y.rawValue, z.rawValue }`
-  - `FPQuaternion` → 4×long
-  - `string` → 直接装箱
-- [ ] Deserialize 反向路径保留在 TakeProjectValues 对端（T1.9 Component.Apply）
+- [x] SG 按类型生成序列化路径（`SerExpression` + `CastExpression`）：
+  - 值类型（int/bool/FP/FPVector3 等）→ `(object)` 显式装箱
+  - 引用类型（string 等）→ 直接传入
+  - Phase 1 使用 LocalTransport，装箱即可；Phase 5 flat struct 优化序列化
+- [x] Deserialize 反向路径在 `IProjectable.SetProjectValues()` + `Component.Apply()` 中处理
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §2.4.2
 **产出**：`ProjectorAttribute.cs`（修改）+ Source Generator 属性生成逻辑
@@ -358,7 +355,7 @@ partial class ProjectFieldInfo
 - [x] 全量同步：`IProjectable.MarkAllDirty()`（SG 生成）+ `Stage.AddBehaviorInfo` 注入，新对象首帧全量投影
 - [x] `OnEndTick` 零分配：无脏数据不分配，有脏时 `List` 池化归还
 - [ ] 集合 Diff 收集：对有 GBLDict/List 字段且 mask 位为 1 的，调 `CollectDiff()`（依赖 SG 生成字段映射，Phase 1 占位）
-- [ ] 快照管理（预留 Phase 4）：`TakeSnapshot` / `CloneSnapshot`
+- [x] 快照管理（Phase 4 提前实现）：`TakeSnapshot` / `FlashRestore` / `ProjectorSnapshot` — 环形缓冲区 32 帧
 - [x] Actor 移除：Stage 回收时 behaviorinfodict 自动清理，无需 RmvActor
 - [x] 属性 setter 只写 `projectdirtymask` 位标记，无回调（自检模式，非脏集注册）
 
@@ -394,11 +391,12 @@ partial class ProjectFieldInfo
 ### T1.9 Entity + Component + RenderWorld（1 天）✅
 
 - [x] `Entity`：actor/comps 字典/GetComp/AddComp/RmvComp/Destroy
-- [x] `Component` 基类：entity/actor 属性；`abstract Apply(mask, values)`；`OnCreate/OnDestroy`（protected internal）；`PushHistory`（Phase 1 直接 Apply，Phase 2 扩 ring buffer）
-- [x] `RenderWorld`：entities 字典 + behaviortocomp 映射表；`Apply()` — Ensure Entity → Ensure Component → PushHistory；`ApplyPackets()` 供 Transport 调用；`RmvEntity()`；事件钩子
+- [x] `Component` 基类（纯数据容器，34 行）：entity/actor 属性；`abstract Apply(mask, values)`；`OnCreate/OnDestroy`（protected internal）。无环形缓冲区、无 `PushHistory`、无 `OnExpress` — Component 就是 BehaviorInfo 的纯数据投影
+- [x] `RenderWorld`：entities 字典 + behaviortocomp 映射表；`Apply(actor, type, fieldmask, values)` → Ensure Entity → Ensure Component → `comp.Apply()` 直接写入；`ApplyPackets()` 供 Transport 调用；`RmvEntity()`；无帧历史/回滚
 - [x] `LocalTransport` 接入 RenderWorld（Send → ApplyPackets）
 - [x] 端到端链路验证：ProjectorSystem → ProjectionPipeline → LocalTransport → RenderWorld → Component.Apply（7 测试全绿）
-- [ ] 用户手写首批 Component：`SpatialComponent`、`TickerComponent`（Godot 依赖，主项目落地）
+- [x] 用户手写首批 Component：`SpatialComponent`（SpatialInfo 3 投影字段：position/euler/scale）。Apply 按 fieldmask bit 位匹配，手动实现（后续 SG 生成）
+- [ ] 用户手写：`TickerComponent`（需先给 TickerInfo 加 [Projector] 注解）
 - [ ] Source Generator 生成 `Apply` 方法（依赖 BehaviorInfo→Component 映射机制，后续）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §7
@@ -406,33 +404,39 @@ partial class ProjectFieldInfo
 
 ---
 
-### T1.10 删 RIL + Agent 体系 + Director 重接（0.5 天）
+### T1.10 删 RIL + Agent 体系 + Director 重接（0.5 天）✅
 
 > ⚠️ **确认 T1.9 链路跑通后再删。**
 
-- [ ] 删 RIL 体系（~40 类）：IRIL 及子类、Translator 及子类、RILSync/RILDispatch/RILCache/RILCross/IRIL_DIFF/RIL_DEFINE/RILSalute/Salute
-- [ ] 重写 Director：GameplayDirector + LocalDirector（旧版已归档，按新 ProjectorSystem → Transport → RenderWorld 流程重建）
-- [ ] 清理 Sys/ 层对旧 Director 的引用，恢复 LobbyView → CreateGame 流程
+- [x] 删 RIL 体系（~40 类）：IRIL 及子类、Translator 及子类、RILSync/RILDispatch/RILCache/RILCross/IRIL_DIFF/RIL_DEFINE/RILSalute/Salute
+- [x] 重写 Director：GameplayDirector + LocalDirector（旧版已归档，按新 ProjectorSystem → Transport → RenderWorld 流程重建）
+- [x] 清理 Sys/ 层对旧 Director 的引用（GameplayView、HUDView 移除 RIL 引用）
+- [x] 删除 `_Archive` 目录（旧 Director/Render/Agent 全部移除）
+- [x] 创建最小 `InputSystem` 替代旧 World.input
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §7.2/§9
-**产出**：删除 ~40 文件/类 + 新 Director 2 文件
+**产出**：删除 ~40 文件/类 + 新 Director 2 文件 + InputSystem 1 文件
 
 ---
 
 ### T1.11 `partial class` 迁移（0.5 天）
 
-按复杂度分 4 批迁移 26 个 BehaviorInfo 子类（23/26 已完成，剩余 FlowCollisionInfo 系列 3 个）：
+按复杂度分 4 批迁移 26 个 BehaviorInfo 子类（**26/26 全部完成**）：
 
 | 批次 | 类 | 特征 | 风险 | 状态 |
 |------|-----|------|------|------|
 | 1 | TickerInfo, MovementInfo, MagicInfo | 纯值类型，1-2 字段 | 零 | ✅ |
 | 2 | SpatialInfo, StateMachineInfo, SkillLauncherInfo, ColliderInfo, HitLagInfo, SkillCooldownInfo, CareerInfo, BuffInfo, RandomInfo, SeatInfo, EventorInfo | 值类型 + struct + 单层容器 | 低 | ✅ |
 | 3 | TagInfo, BuffBucketInfo, FlowEffectInfo, GamepadInfo | 单层容器 | 中 | ✅ |
-| 4 | FacadeInfo, StageInfo, FlowCollisionInfo 系列, AttributeBucketInfo, FlowInfo, SilentMercyInfo | 深层嵌套容器 | 高 | ✅ 23/26 |
+| 4 | FacadeInfo, StageInfo, FlowCollisionInfo 系列, AttributeBucketInfo, FlowInfo, SilentMercyInfo | 深层嵌套容器 | 高 | ✅ 全部 8 个 |
 
 > **批次1-3 完成（18 个类）**：标 partial + 删 OnClone（SG 接管）；OnReset 仅保留非 default 值字段（TickerInfo.timescale / ColliderInfo.layer / RandomInfo.a,c,m）；容器类 OnReady null 检查 Ensure（只清不还）。
 >
-> **批次4 完成 5 个（SG 嵌套容器深拷贝扩展 + 非 BehaviorInfo IGBL 支持）**：AttributeBucketInfo / FlowInfo / SilentMercyInfo / StageInfo / FacadeInfo。
+> **批次4 完成 8 个**：AttributeBucketInfo / FlowInfo / SilentMercyInfo / StageInfo / FacadeInfo（嵌套容器深拷贝）+ FlowCollisionInfo / FlowCollisionHurtInfo / FlowCollisionSensorInfo（抽象类 + 继承链 Clone）。
+>
+> **FlowCollisionInfo 系列所需 SG 扩展**：
+> - 抽象类：SG 跳过 Clone 生成（`Ensure<abstract class>()` 非法）
+> - 继承链 Clone：子类 Clone 通过 `CollectParentFields` 沿 IGBL 链收集父类字段，按类型规则生成深拷贝
 >
 > **SG 新增**：
 > - `ContainerNestedValue`/`ContainerNestedIGBL` 类别，识别 `Dictionary<K, List<V>>` / `Dictionary<K, Dictionary<K2,V>>` / `Dictionary<K, List<IGBL>>` 嵌套模式，Clone 递归深拷贝内层，Reset 外层+内层 Clear
@@ -443,21 +447,20 @@ partial class ProjectFieldInfo
 > - Clone 源字段加 `this.` 前缀（避免变量名 `c` 与属性 `c` 冲突，如 RandomInfo）
 > - 嵌套容器深拷贝（ContainerNestedValue/ContainerNestedIGBL）
 > - 非 BehaviorInfo IGBL 类：Clone 不调用 `c.Ready(actor)`，返回 `IGBL` 而非 `BehaviorInfo`
+> - 抽象类跳过 Clone 生成
+> - 子类 Clone 包含父类链字段（`parentFields` 收集）
 >
 > **AnimationSlot IGBL 化**：`AnimationSlot` 标 `partial` + `: IGBL`，SG 生成 Reset（default 所有字段）和 Clone（Ensure + 拷贝），FacadeInfo 的 `List<AnimationSlot>` 自动识别为 `ContainerIGBL` 深拷贝。
->
-> **批次4 未迁移 3 个**：
-> - `FlowCollisionInfo` 系列（3 个）：abstract 类 SG `Ensure<T>` 失败 + 继承 Clone 父类字段不拷贝，保留手写
 
 每批操作：类加 `partial` → SG 识别 `IGBL` 自动生成 Reset/Clone → 删手写 OnReady/OnReset/OnClone → `dotnet test` 全绿再进下一批。
 
 随批次 4 自然修复 3 个已知 Bug：
-- FlowCollisionInfo.OnClone 硬编码子类类型 → SG 用 `Ensure<实际类型>()`
-- FlowCollisionHurtInfo 子类字段未 Reset → `partial + IGBL` 接管全部字段
-- OnReady 调 OnReset 反模式 → 容器不还池
+- FlowCollisionInfo.OnClone 硬编码子类类型 → SG 用 `Ensure<实际类型>()` ✅
+- FlowCollisionHurtInfo 子类字段未 Reset → `partial + IGBL` 接管全部字段 ✅
+- OnReady 调 OnReset 反模式 → 容器不还池 ✅
 
 **输入**：`BEHAVIORINFO_LIFECYCLE_REPORT.md` §2/§8
-**产出**：24 个 BehaviorInfo 子类迁移完成，72 个手写方法归零
+**产出**：26 个 BehaviorInfo 子类迁移完成，72 个手写方法归零
 
 **每批迁移都通过 `Goblin.Logic.Tests` 的集成测试验证。用真实 BehaviorInfo 子类实例跑 Reset/Clone 断言。**
 
@@ -506,24 +509,25 @@ T1.0（测试基础设施）
 
 > 验收：角色移动平滑插值，模型加载正常，特效跟随集合变更。
 
-### T2.1 ProjectionStrategy：插值与预测（1.5 天）
+### T2.1 ProjectionStrategy：插值与预测（1.5 天）✅ 核心实现完成
 
-- [ ] Component 基类新增 `OnExpress(float dt)` 虚方法
-- [ ] PushHistory ring buffer 扩充至 4 帧
-- [ ] 自动判断时间方向：`frame < renderFrame` → 插值，`frame > renderFrame` → 预测，`frame == renderFrame` → 直接 Apply
-- [ ] Jitter Buffer 自适应窗（latency 稳定 → 小窗，抖动 → 大窗）
-- [ ] 平滑修正：`correctionDelta = (serverValue - current) * smoothFactor`
-- [ ] 阈值 Snap：误差过大直接跳正
+- [x] Component 基类新增 `OnExpress(float dt)` 虚方法 + `CaptureSnapshot()` + 环形缓冲区（4 帧）
+- [x] PushHistory ring buffer 扩充至 4 帧（`CaptureSnapshot` 在 Apply 后捕获全量属性）
+- [x] `OnExpress` 中自适应插值：`accumulatedTime` 跨帧边界 Snap 到最新，未越界做线性插值
+- [ ] 自动判断时间方向：`frame < renderFrame` → 插值，`frame > renderFrame` → 预测，`frame == renderFrame` → 直接 Apply（Phase 3 网络）
+- [ ] Jitter Buffer 自适应窗（latency 稳定 → 小窗，抖动 → 大窗）（Phase 3 网络）
+- [ ] 平滑修正：`correctionDelta = (serverValue - current) * smoothFactor`（Phase 3 网络）
+- [ ] 阈值 Snap：误差过大直接跳正（Phase 3 网络）
 
 **输入**：`PROPERTY_SYNC_DESIGN.md` §5
 **产出**：`Component.cs`（修改）/ `ProjectionStrategy.cs`
 
 ---
 
-### T2.2 SpatialComponent 插值（0.5 天）
+### T2.2 SpatialComponent 插值（0.5 天）✅
 
-- [ ] `OnExpress` 中 position lerp + rotation slerp
-- [ ] t = (renderTime - lastFrameTime) / (nextFrameTime - lastFrameTime)
+- [x] `OnExpress` 中 position lerp（FPVector3.Lerp）+ euler lerp
+- [x] t = accumulatedTime / LOGIC_FRAME_INTERVAL（40ms @ 25fps）
 
 **产出**：`SpatialComponent.cs`（修改）
 

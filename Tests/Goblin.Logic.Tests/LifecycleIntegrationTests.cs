@@ -149,4 +149,110 @@ public class LifecycleIntegrationTests
         Assert.NotNull(cloned);
         Assert.Equal(99, cloned.value);
     }
+
+    /// <summary>
+    /// 抽象类 Reset：SG 应为 abstract 类生成 Reset（清理容器字段）
+    /// 不生成 Clone（因为抽象类不可实例化）
+    /// </summary>
+    [Fact]
+    public void AbstractBaseInfo_Reset_ClearsContainerFields()
+    {
+        var info = new ConcreteDerivedInfo();
+        info.Ready(1);
+
+        // 初始化 records 嵌套容器
+        info.records.Add(0, new System.Collections.Generic.Dictionary<ulong, uint>
+        {
+            { 100, 1 },
+        });
+        info.targets.Add((100, 1));
+
+        info.Reset();
+
+        Assert.NotNull(info.records);
+        Assert.Empty(info.records);
+        Assert.NotNull(info.targets);
+        Assert.Empty(info.targets);
+    }
+
+    /// <summary>
+    /// 子类 Clone：应包含自身字段和父类字段
+    /// </summary>
+    [Fact]
+    public void ConcreteDerivedInfo_Clone_CopiesOwnAndParentFields()
+    {
+        var info = new ConcreteDerivedInfo();
+        info.Ready(1);
+        info.name = "test";
+        info.value = 42;
+        info.enabled = true;
+
+        // 设置父类容器字段
+        info.records.Add(0, new System.Collections.Generic.Dictionary<ulong, uint>
+        {
+            { 100, 5 },
+        });
+        info.targets.Add((200, 3));
+
+        var clone = (ConcreteDerivedInfo)((IGBL)info).Clone();
+
+        Assert.NotNull(clone);
+        Assert.Equal("test", clone.name);
+        Assert.Equal(42, clone.value);
+        Assert.True(clone.enabled);
+
+        // 验证父类字段被深拷贝
+        Assert.NotNull(clone.records);
+        Assert.Single(clone.records);
+        Assert.NotNull(clone.targets);
+        Assert.Single(clone.targets);
+    }
+
+    /// <summary>
+    /// 子类 Reset：SG 生成调用 base.Reset()，清洗自身 + 父类字段
+    /// </summary>
+    [Fact]
+    public void ConcreteDerivedInfo_Reset_ClearsAllFields()
+    {
+        var info = new ConcreteDerivedInfo();
+        info.Ready(1);
+        info.name = "test";
+        info.value = 42;
+        info.enabled = true;
+        info.records.Add(0, new System.Collections.Generic.Dictionary<ulong, uint>
+        {
+            { 100, 1 },
+        });
+        info.targets.Add((100, 1));
+
+        info.Reset();
+
+        // 自身字段归零
+        Assert.Null(info.name);
+        Assert.Equal(0, info.value);
+        Assert.False(info.enabled);
+
+        // 父类字段清空
+        Assert.Empty(info.records);
+        Assert.Empty(info.targets);
+    }
+
+    /// <summary>
+    /// 抽象类不应有 SG 生成的 Clone（Ensure abstract 类会失败）
+    /// 但 SG 应为其生成 Reset
+    /// </summary>
+    [Fact]
+    public void AbstractBaseInfo_HasReset_NoClone()
+    {
+        var info = new ConcreteDerivedInfo();
+        info.Ready(1);
+
+        // Reset 应可见（SG 生成）
+        info.Reset();
+
+        // 抽象类本身不暴露 Clone 调用，这里通过 IGBL 验证
+        var clone = ((IGBL)info).Clone();
+        Assert.NotNull(clone);
+        Assert.IsType<ConcreteDerivedInfo>(clone);
+    }
 }

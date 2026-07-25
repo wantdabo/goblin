@@ -1,50 +1,36 @@
 namespace Goblin.Gameplay.Projection;
 
 /// <summary>
-/// 表现组件 — 纯数据容器，接收投影数据
-/// Phase 1 不做表达，仅 Apply 写入字段
-/// SG 为含 [Projector] 映射的子类生成 Apply override（T1.9 后续）
+/// 表现层数据组件 — BehaviorInfo 的纯数据投影
+/// 每个 Component 对应一个 Logic 层的 BehaviorInfo 类型，
+/// Component 仅持有数据字段，Apply 时直接写入值，不包含任何渲染/插值/平滑逻辑。
 /// </summary>
 public abstract class Component
 {
     /// <summary>
-    /// 所属实体
+    /// 所属 Entity
     /// </summary>
     public Entity entity { get; internal set; }
+
     /// <summary>
-    /// ActorID
+    /// 对应的 Logic ActorID
     /// </summary>
     public ulong actor => entity.actor;
 
     /// <summary>
-    /// 按 fieldmask 将 values[] 写入组件字段
-    /// values 按 mask 位从低到高排列，SG 生成的 override 按字段 index 顺序消费
+    /// 应用脏字段数据
     /// </summary>
-    /// <param name="fieldmask">脏字段掩码</param>
-    /// <param name="values">脏字段值数组</param>
+    /// <param name="fieldmask">位掩码，每位对应一个字段</param>
+    /// <param name="values">字段值数组，按 fieldmask 顺序排列</param>
     public abstract void Apply(ulong fieldmask, object[] values);
 
     /// <summary>
-    /// 推入历史缓冲区
-    /// Phase 1 直接 Apply，不缓冲（Phase 2 扩充 ring buffer 做插值）
-    /// </summary>
-    /// <param name="frame">Logic 帧号</param>
-    /// <param name="latency">滞后帧数</param>
-    /// <param name="fieldmask">脏字段掩码</param>
-    /// <param name="values">脏字段值数组</param>
-    internal void PushHistory(long frame, int latency, ulong fieldmask, object[] values)
-    {
-        // Phase 1：直接应用，不缓冲
-        Apply(fieldmask, values);
-    }
-
-    /// <summary>
-    /// 创建时调用（Entity.AddComp 触发）
+    /// 组件创建
     /// </summary>
     protected internal virtual void OnCreate() { }
 
     /// <summary>
-    /// 销毁时调用
+    /// 组件销毁
     /// </summary>
     protected internal virtual void OnDestroy() { }
 }

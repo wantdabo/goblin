@@ -21,6 +21,13 @@ public interface IProjectable
     object[] TakeProjectValues(ulong mask);
 
     /// <summary>
+    /// 从 object[] 设置 backing field 值（不触发脏标记）
+    /// Phase 4 快照回滚时使用
+    /// </summary>
+    /// <param name="values">全量字段值数组，索引对应 [Projector(index)]</param>
+    void SetProjectValues(object[] values);
+
+    /// <summary>
     /// 标记全部投影字段为脏（新对象首帧全量同步）
     /// </summary>
     void MarkAllDirty();

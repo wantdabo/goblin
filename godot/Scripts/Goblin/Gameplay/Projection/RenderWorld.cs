@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Projection;
 
@@ -20,7 +21,7 @@ public class RenderWorld
     private Dictionary<Type, Type> behaviortocomp { get; set; }
 
     /// <summary>
-    /// 实体创建事件（Phase 2+ 表现层订阅）
+    /// 实体创建事件
     /// </summary>
     public event Action<Entity> OnEntityCreated;
     /// <summary>
@@ -49,11 +50,9 @@ public class RenderWorld
     /// </summary>
     /// <param name="actor">ActorID</param>
     /// <param name="behaviorinfotype">BehaviorInfo 类型</param>
-    /// <param name="frame">Logic 帧号</param>
-    /// <param name="latency">滞后帧数</param>
     /// <param name="fieldmask">脏字段掩码</param>
     /// <param name="values">脏字段值数组</param>
-    public void Apply(ulong actor, Type behaviorinfotype, long frame, int latency, ulong fieldmask, object[] values)
+    public void Apply(ulong actor, Type behaviorinfotype, ulong fieldmask, object[] values)
     {
         // 确保 Entity 存在
         if (false == entities.TryGetValue(actor, out var entity))
@@ -74,8 +73,8 @@ public class RenderWorld
             entity.AddComp(comp);
         }
 
-        // 推入历史缓冲（Phase 1 直接 Apply）
-        comp.PushHistory(frame, latency, fieldmask, values);
+        // 直接写入数据
+        comp.Apply(fieldmask, values);
     }
 
     /// <summary>
@@ -87,8 +86,7 @@ public class RenderWorld
         if (null == packets) return;
         foreach (var p in packets)
         {
-            // Phase 1 latency 恒 0（ObserverPacket 不携带 latency）
-            Apply(p.actor, p.behaviorinfotype, p.frame, 0, p.fieldmask, p.values);
+            Apply(p.actor, p.behaviorinfotype, p.fieldmask, p.values);
         }
     }
 

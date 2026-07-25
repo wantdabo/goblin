@@ -29,7 +29,6 @@ public class TICK_DEFINE
         typeof(SilentMercy),
         typeof(Facade),
         typeof(StepEnd),
-        typeof(RILSync),
         typeof(StageSequence),
         typeof(ProjectorSystem),
     };

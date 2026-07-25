@@ -3,7 +3,6 @@ using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.RIL.EVENT;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Sa;
 
@@ -59,8 +58,5 @@ public class StageSequence : Behavior
     private void Finish(bool win)
     {
         finished = true;
-        var e = ObjectCache.Ensure<RIL_EVENT_STAGE_RESULT>();
-        e.win = win;
-        stage.rilsync.Send(e);
     }
 }

@@ -5,7 +5,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.RIL.EVENT;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Sa;
@@ -151,13 +150,6 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
 
         var disdamage = DischargeDamage(to, damage);
         var result = ChangeAttributeValue(to, ATTRIBUTE_DEFINE.HP, -disdamage.value, true, 0, GetAttributeValue(to, ATTRIBUTE_DEFINE.MAXHP));
-
-        var eventdamage = ObjectCache.Ensure<RIL_EVENT_DAMAGE>();
-        eventdamage.from = from;
-        eventdamage.to = to;
-        eventdamage.crit = disdamage.crit;
-        eventdamage.damage = result.before - result.after;
-        stage.rilsync.Send(eventdamage);
 
         if (result.after > 0) return;
         stage.silentmercy.Kill(from, to);

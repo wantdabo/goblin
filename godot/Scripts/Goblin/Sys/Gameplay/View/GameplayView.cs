@@ -1,9 +1,7 @@
 using Goblin.Common;
 using Goblin.Gameplay.Director;
+using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.Commands;
-using Goblin.Gameplay.Logic.RIL;
-using Goblin.Gameplay.Render.Agents;
-using Goblin.Gameplay.Render.Common.Extensions;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Godot;
@@ -133,83 +131,15 @@ public class GameplayView : UIBaseView
         }
         else mlmbprev = false;
 
-        var local = engine.proxy.gameplay.director as LocalDirector;
-        if (null == local) return;
+        var director = engine.proxy.gameplay.director;
+        if (null == director) return;
 
-        var spatial = local.world.rilbucket.GetRIL<RIL_SPATIAL>(local.world.self);
-        if (null != spatial && selfSeatPoint != null)
-        {
-            var cam = local.world.eyes.camera;
-            var worldPos = spatial.position.ToVector3() + new Vector3(0, 2f, 0);
-            var screenPos = cam.UnprojectPosition(worldPos);
-            var localPos = selfSeatPoint.GetParent<Control>().GetGlobalTransformWithCanvas().AffineInverse() * screenPos;
-            selfSeatPoint.Position = selfSeatPoint.Position.Lerp(localPos, 0.1f);
-        }
+        // Phase 2+：在此从 renderworld.Entity.Component 读取数据绘制 HUD
+        // Phase 1：仅展示 synopsis 基本帧信息
 
-        foreach (var item in infoItems) if (item.Visible) item.Visible = false;
-        if (engine.proxy.gameplay.showinfo && infoContent != null && infoOrg != null)
-        {
-            var rilactors = local.world.rilbucket.GetRIL<RIL_ACTOR>(local.world.sa);
-            var cam = local.world.eyes.camera;
-            int index = 0;
-            if (null == rilactors) goto synopsis;
-            foreach (var actor in rilactors.actors)
-            {
-                var rilspatial = local.world.rilbucket.GetRIL<RIL_SPATIAL>(actor);
-                if (null == rilspatial) continue;
-                var spatialagent = local.world.GetAgent<SpatialAgent>(actor);
-                var worldPos = spatialagent != null ? spatialagent.position : rilspatial.position.ToVector3();
-                if (cam.IsPositionBehind(worldPos)) continue;
-                var sp = cam.UnprojectPosition(worldPos);
-                var vp = sp / cam.GetViewport().GetVisibleRect().Size;
-                if (vp.X < 0 || vp.X > 1 || vp.Y < 0 || vp.Y > 1) continue;
-
-                var rilsm = local.world.rilbucket.GetRIL<RIL_STATE_MACHINE>(actor);
-                var rilticker = local.world.rilbucket.GetRIL<RIL_TICKER>(actor);
-                var rilattr = local.world.rilbucket.GetRIL<RIL_ATTRIBUTE>(actor);
-                var color = local.world.self == actor ? "#D2FF00" : "#B90000";
-                string info = $"[color={color}]ACTOR : {actor}\n";
-                if (null != rilsm) { info += $"当前状态 : {rilsm.current}\n"; info += $"之前状态 : {rilsm.last}\n"; }
-                if (null != rilticker) info += $"TIMESCALE : {rilticker.timescale}\n";
-                if (null != rilattr) { info += $"当前生命值 : {rilattr.hp}\n最大生命值 : {rilattr.maxhp}\n移动速度 : {rilattr.movespeed}\n攻击力 : {rilattr.attack}\n"; }
-                info += "[/color]";
-
-                if (index >= infoItems.Count)
-                {
-                    var newItem = (Control)infoOrg.Duplicate();
-                    infoContent.AddChild(newItem);
-                    infoItems.Add(newItem);
-                }
-                var infoItem = infoItems[index];
-                infoItem.Visible = true;
-                if (infoItem.GetChildCount() > 0 && infoItem.GetChild(0) is RichTextLabel rtl) rtl.Text = info;
-                else if (infoItem is RichTextLabel selfRtl) selfRtl.Text = info;
-
-                var infoWorldPos = rilspatial.position.ToVector3() + new Vector3(0, 1f, 0);
-                float dist = cam.GlobalPosition.DistanceTo(infoWorldPos);
-                float s = Mathf.Clamp(8f / (dist + 1f), 0.4f, 2f);
-                infoItem.Scale = Vector2.One * s;
-                var uiPos = infoContent.GetGlobalTransformWithCanvas().AffineInverse() * cam.UnprojectPosition(infoWorldPos);
-                // 居中：偏移半个 item 尺寸（乘以 scale 后）
-                uiPos -= infoItem.Size * s * 0.5f;
-                infoItem.Position = uiPos;
-                index++;
-            }
-        }
-
-        synopsis:
-        var rilstage = local.world.rilbucket.GetRIL<RIL_STAGE>(local.world.sa);
-        if (null == rilstage || synopsisText == null) return;
-        synopsisText.Text =
-            $"帧号 : {rilstage.frame}\n" +
-            $"逻辑耗时 (毫秒) : {local.stepms}\n" +
-            $"Actor : {rilstage.actorcnt}\n" +
-            $"Behavior : {rilstage.behaviorcnt}\n" +
-            $"BehaviorInfo : {rilstage.behaviorinfocnt}\n" +
-            "存在快照 : " + (rilstage.hassnapshot ? "是\n" : "否\n") +
-            (rilstage.hassnapshot ? $"快照帧号 : {rilstage.snapshotframe}" : "");
-        if (!rilstage.hassnapshot || rilstage.frame - rilstage.snapshotframe > 1) return;
-        if (gameSpeedSlider != null) gameSpeedSlider.Value = local.timescale;
-        if (gameSpeedDescText != null) gameSpeedDescText.Text = local.timescale.ToString();
+        if (null != synopsisText)
+            synopsisText.Text =
+                $"单步耗时 (毫秒) : {director.stepms}\n" +
+                $"时间缩放 : {director.timescale}";
     }
 }

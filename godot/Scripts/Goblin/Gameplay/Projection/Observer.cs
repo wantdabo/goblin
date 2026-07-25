@@ -1,3 +1,5 @@
+using Kowtow.Math;
+
 namespace Goblin.Gameplay.Projection;
 
 /// <summary>
@@ -50,4 +52,14 @@ public class Observer
     /// 观察者 ID（玩家对应 playerid，GM 对应 0，Replay 对应 replay 实例 ID）
     /// </summary>
     public ulong id { get; set; }
+
+    /// <summary>
+    /// AOI 半径（仅 Player/Spectator 有效，GM/Editor 不裁剪）
+    /// </summary>
+    public FP radius { get; set; } = FP.One * 30;
+
+    /// <summary>
+    /// 观察者跟随的 Actor（AOI 中心），null 表示无 AOI 限制
+    /// </summary>
+    public ulong? observedActor { get; set; }
 }

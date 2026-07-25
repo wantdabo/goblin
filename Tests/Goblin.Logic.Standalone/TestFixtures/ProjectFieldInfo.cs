@@ -1,5 +1,6 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Core;
+using Kowtow.Math;
 
 namespace Goblin.Logic.Standalone.TestFixtures;
 

@@ -4,7 +4,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Logic.RIL.DIFF;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Logic.Behaviors;
@@ -177,7 +176,7 @@ public class Facade : Behavior<FacadeInfo>
         // 移除过期的特效
         foreach (var rmveffect in info.rmveffects)
         {
-            if (info.effectdict.TryGetValue(rmveffect, out var effect)) DiffFacadeEffect(effect, RIL_DEFINE.DIFF_DEL);
+            info.effectdict.TryGetValue(rmveffect, out _);
 
             info.effects.Remove(rmveffect);
             info.effectdict.Remove(rmveffect);
@@ -192,22 +191,6 @@ public class Facade : Behavior<FacadeInfo>
             info.effectdict.Remove(id);
             info.effectdict.Add(id, effect);
             if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
-                
-            DiffFacadeEffect(effect, RIL_DEFINE.DIFF_NEW);
         }
-    }
-
-    /// <summary>
-    /// 外观特效差异
-    /// </summary>
-    /// <param name="effect">特效信息</param>
-    /// <param name="token">RIL 差异标记</param>
-    private void DiffFacadeEffect(EffectInfo effect, byte token)
-    {
-        var diff = ObjectCache.Ensure<RIL_DIFF_FACADE_EFFECT>();
-        diff.Ready(actor, token);
-        diff.effect = effect;
-            
-        stage.Diff(diff);
     }
 }

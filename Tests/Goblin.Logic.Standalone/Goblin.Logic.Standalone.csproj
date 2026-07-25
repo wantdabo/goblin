@@ -75,6 +75,13 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Entity.cs" Link="Projection\Entity.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Component.cs" Link="Projection\Component.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\RenderWorld.cs" Link="Projection\RenderWorld.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\AOIRule.cs" Link="Projection\AOIRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\PermissionRule.cs" Link="Projection\PermissionRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\VisibilityRule.cs" Link="Projection\VisibilityRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\FrequencyRule.cs" Link="Projection\FrequencyRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ObserverFactory.cs" Link="Projection\ObserverFactory.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\NetworkTransport.cs" Link="Projection\NetworkTransport.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\SpatialComponent.cs" Link="Projection\SpatialComponent.cs" />
     </ItemGroup>
 
 </Project>

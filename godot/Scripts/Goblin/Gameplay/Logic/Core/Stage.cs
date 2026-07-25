@@ -15,9 +15,6 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
-using Goblin.Gameplay.Logic.RIL.Common;
-using Goblin.Gameplay.Logic.RIL.DIFF;
-using Goblin.Gameplay.Logic.RIL.EVENT;
 using Goblin.Gameplay.Projection;
 using Kowtow.Math;
 using Config = Goblin.Gameplay.Logic.Behaviors.Sa.Config;
@@ -147,33 +144,22 @@ public sealed class Stage
 	/// </summary>
 	public SilentMercy silentmercy => GetBehavior<SilentMercy>(sa, true);
 	/// <summary>
-	/// 渲染指令同步
-	/// </summary>
-	public RILSync rilsync => GetBehavior<RILSync>(sa, true);
-	/// <summary>
 	/// 预制创建器集合
 	/// </summary>
 	public Dictionary<Type, Prefab> prefabs { get; set; }
-	/// <summary>
-	/// 投影系统
-	/// </summary>
-	public ProjectorSystem projector => GetBehavior<ProjectorSystem>(sa, true);
-	/// <summary>
-	/// 投影管线，裁剪 ProjectorSystem 产出的原始包并分发给 Transport
-	/// </summary>
-	public ProjectionPipeline projectorpipeline { get; private set; }
-	/// <summary>
-	/// 对外暴露抛出 RIL 的事件
-	/// </summary>
-	public Action<IRIL> onril { get; set; }
-	/// <summary>
-	/// 对外暴露抛出 RIL_DIFF 的事件
-	/// </summary>
-	public Action<IRIL_DIFF> ondiff { get; set; }
-	/// <summary>
-	/// 对外暴露抛出 RIL_EVENT 的事件
-	/// </summary>
-	public Action<IRIL_EVENT> onevent { get; set; }
+    /// <summary>
+    /// 投影系统
+    /// </summary>
+    public ProjectorSystem projector => GetBehavior<ProjectorSystem>(sa, true);
+    /// <summary>
+    /// 投影管线，裁剪 ProjectorSystem 产出的原始包并分发给 Transport
+    /// </summary>
+    public ProjectionPipeline projectorpipeline { get; private set; }
+    /// <summary>
+    /// 事件已处理帧缓存 — Phase 4 事件幂等
+    /// Key: Event 类型全名 + Event 内容 HashCode，Value: 上次处理帧号
+    /// </summary>
+    private Dictionary<string, uint> eventframecache { get; set; }
 
 	/// <summary>
 	/// 初始化 Stage
@@ -225,42 +211,48 @@ public sealed class Stage
 		prefabs.Clear();
 		ObjectCache.Set(prefabs);
 			
-		// StageInfo 回收
-		info.Reset();
-		ObjectCache.Set(info);
+        // StageInfo 回收
+        info.Reset();
+        ObjectCache.Set(info);
 
-		// StageCache 回收
-		cache.Dispose();
-	}
+        // 事件幂等缓存回收
+        eventframecache.Clear();
+        ObjectCache.Set(eventframecache);
+
+        // StageCache 回收
+        cache.Dispose();
+    }
 		
-	/// <summary>
-	/// 初始化 Stage 的 Behaviors
-	/// </summary>
-	private void Behaviors()
-	{
-		GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
-		AddBehavior<Config>(sa);
-		AddBehavior<Eventor>(sa);
-		AddBehavior<Seat>(sa);
-		AddBehavior<Random>(sa).Initialze(data.seed);
-		AddBehavior<AttributeBucket>(sa);
-		AddBehavior<Detection>(sa);
-		AddBehavior<Herald>(sa);
-		AddBehavior<SilentMercy>(sa);
-		AddBehavior<Flow>(sa);
-		AddBehavior<HitEffect>(sa);
-		AddBehavior<Magic>(sa);
-		AddBehavior<Buff>(sa);
-		AddBehavior<StepEnd>(sa);
-		AddBehavior<RILSync>(sa);
-		AddBehavior<ProjectorSystem>(sa);
+    /// <summary>
+    /// 初始化 Stage 的 Behaviors
+    /// </summary>
+    private void Behaviors()
+    {
+        GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
+        AddBehavior<Config>(sa);
+        AddBehavior<Eventor>(sa);
+        AddBehavior<Seat>(sa);
+        AddBehavior<Random>(sa).Initialze(data.seed);
+        AddBehavior<AttributeBucket>(sa);
+        AddBehavior<Detection>(sa);
+        AddBehavior<Herald>(sa);
+        AddBehavior<SilentMercy>(sa);
+        AddBehavior<Flow>(sa);
+        AddBehavior<HitEffect>(sa);
+        AddBehavior<Magic>(sa);
+        AddBehavior<Buff>(sa);
+        AddBehavior<StepEnd>(sa);
+        AddBehavior<ProjectorSystem>(sa);
 
-		// 投影管线初始化：默认单 Player Observer + GodRule 零裁剪 + LocalTransport
-		projectorpipeline = new ProjectionPipeline();
-		projectorpipeline.observers.Add(new Observer { type = ObserverType.Player });
-		projectorpipeline.crop.AddRule(new GodRule());
-		projectorpipeline.transport = new LocalTransport();
-	}
+        // 投影管线初始化：默认单 Player Observer + GodRule 零裁剪 + LocalTransport
+        projectorpipeline = new ProjectionPipeline();
+        projectorpipeline.observers.Add(new Observer { type = ObserverType.Player });
+        projectorpipeline.crop.AddRule(new GodRule());
+        projectorpipeline.transport = new LocalTransport();
+
+        // Phase 4：事件幂等缓存初始化
+        eventframecache = ObjectCache.Ensure<Dictionary<string, uint>>();
+    }
 
 	/// <summary>
 	/// 添加预制创建器
@@ -334,44 +326,91 @@ public sealed class Stage
 		snapshot = info.Clone() as StageInfo;
 	}
 		
-	/// <summary>
-	/// 恢复
-	/// </summary>
-	public void Restore()
-	{
-		if (null == snapshot) return;
-		if (snapshot.frame == info.frame) return;
-		cache.rmvactors.Clear();
-		cache.rmvactorset.Clear();
-		cache.rmvactors.AddRange(info.actors);
-		foreach (var actor in info.actors) ActorToRecycle(actor);
-		Recycle();
+    /// <summary>
+    /// 恢复
+    /// </summary>
+    public void Restore()
+    {
+        if (null == snapshot) return;
+        if (snapshot.frame == info.frame) return;
+        cache.rmvactors.Clear();
+        cache.rmvactorset.Clear();
+        cache.rmvactors.AddRange(info.actors);
+        foreach (var actor in info.actors) ActorToRecycle(actor);
+        Recycle();
 			
-		info.Reset();
-		ObjectCache.Set(info);
-		info = snapshot.Clone() as StageInfo;
+        info.Reset();
+        ObjectCache.Set(info);
+        info = snapshot.Clone() as StageInfo;
 			
-		foreach (var behaviorinfos in info.behaviorinfos.Values)
-		{
-			foreach (var behaviorinfo in behaviorinfos)
-			{
-				if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.actor, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.actor, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
-				dict.Add(behaviorinfo.GetType(), behaviorinfo);
-			}
-		}
+        foreach (var behaviorinfos in info.behaviorinfos.Values)
+        {
+            foreach (var behaviorinfo in behaviorinfos)
+            {
+                if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.actor, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.actor, dict = ObjectCache.Ensure<Dictionary<Type, BehaviorInfo>>());
+                dict.Add(behaviorinfo.GetType(), behaviorinfo);
+            }
+        }
 			
-		foreach (var actor in info.actors)
-		{
-			if (false == info.behaviortypes.TryGetValue(actor, out var types)) continue;
-			foreach (var type in types)
-			{
-				if (SeekBehavior(actor, type, out _)) continue;
-				AddBehavior(actor, type);
-			}
-		}
-			
-		rilsync.Translate();
-	}
+        foreach (var actor in info.actors)
+        {
+            if (false == info.behaviortypes.TryGetValue(actor, out var types)) continue;
+            foreach (var type in types)
+            {
+                if (SeekBehavior(actor, type, out _)) continue;
+                AddBehavior(actor, type);
+            }
+        }
+
+        // Phase 4：恢复后从 ProjectorSystem 快照恢复投影字段值
+        projector.FlashRestore(snapshot.frame);
+    }
+
+    /// <summary>
+    /// 快照回滚 — 结合 ProjectorSystem 快照恢复投影字段值并重新同步
+    /// 比 Stage.Restore 轻量，仅恢复 Projector 字段，保持 Actor/Behavior 结构不变
+    /// </summary>
+    public void FlashRestore(uint targetframe)
+    {
+        if (false == projector.FlashRestore(targetframe)) return;
+
+        // 将帧号回退到目标帧
+        info.frame = targetframe;
+
+        // 清除事件帧缓存中大于目标帧的条目
+        var removekeys = ObjectCache.Ensure<List<string>>();
+        foreach (var kv in eventframecache)
+        {
+            if (kv.Value > targetframe) removekeys.Add(kv.Key);
+        }
+        foreach (var key in removekeys) eventframecache.Remove(key);
+        removekeys.Clear();
+        ObjectCache.Set(removekeys);
+    }
+
+    /// <summary>
+    /// 检查事件是否已处理过（Phase 4 事件幂等）
+    /// 同一事件类型 + 同一内容在超过当前帧时视为已处理
+    /// </summary>
+    /// <param name="eventkey">事件标识（类型名 + HashCode 组合）</param>
+    /// <returns>已处理</returns>
+    public bool IsEventProcessed(string eventkey)
+    {
+        if (eventframecache.TryGetValue(eventkey, out var lastframe))
+        {
+            return lastframe >= frame;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 标记事件已处理（Phase 4 事件幂等）
+    /// </summary>
+    /// <param name="eventkey">事件标识</param>
+    public void MarkEventProcessed(string eventkey)
+    {
+        eventframecache[eventkey] = frame;
+    }
 
 	/// <summary>
 	/// 开始
@@ -407,17 +446,6 @@ public sealed class Stage
 	{
 		if (StageState.Stopped == info.state) return;
 		info.state = StageState.Stopped;
-	}
-
-	/// <summary>
-	/// 发送差异渲染指令
-	/// </summary>
-	/// <param name="diff">差异渲染指令</param>
-	public void Diff(IRIL_DIFF diff)
-	{
-		if (0 == info.frame || 1 == frame) return;
-		if (null == rilsync) return;
-		rilsync.Send(diff);
 	}
 
 	/// <summary>
@@ -644,7 +672,6 @@ public sealed class Stage
 		if (false == ActorToRecycle(actor)) return;
 			
 		eventor.Tell(new ActorRmvEvent { actor = actor });
-		DiffActor(actor, RIL_DEFINE.DIFF_DEL);
 	}
 
 	/// <summary>
@@ -682,8 +709,7 @@ public sealed class Stage
 		var actor = ++info.increment;
 		AddActor(actor);
 		eventor.Tell(new ActorBornEvent { actor = actor });
-		DiffActor(actor, RIL_DEFINE.DIFF_NEW);
-			
+
 		return actor;
 	}
 
@@ -1082,19 +1108,6 @@ public sealed class Stage
 		if (false == force && false == behaviorinfo.active) return default;
 
 		return (T)behaviorinfo;
-	}
-		
-	/// <summary>
-	/// Actor 差异
-	/// </summary>
-	/// <param name="actor">ActorID</param>
-	/// <param name="token">RIL 差异标记</param>
-	private void DiffActor(ulong actor, byte token)
-	{
-		var diff = ObjectCache.Ensure<RIL_DIFF_ACTOR>();
-		diff.Ready(sa, token);
-		diff.target = actor;
-		Diff(diff);
 	}
 		
 	/// <summary>
