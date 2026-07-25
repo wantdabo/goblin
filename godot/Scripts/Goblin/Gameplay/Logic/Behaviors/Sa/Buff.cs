@@ -26,7 +26,6 @@ public class Buff : Behavior
         if (buffinfo.enchanted) EraseEnchant(buffinfo);
         // 移除 Buff
         buffbucket.buffdict.Remove(buffid);
-        buffbucket.buffs.Remove(buffinfo.actor);
         stage.RmvActor(buffinfo.actor);
     }
 
@@ -66,8 +65,7 @@ public class Buff : Behavior
                 ObjectCache.Set(pipelines);
             }
                 
-            buffbucket.buffs.Add(buff);
-            buffbucket.buffdict.Add(buffid, buff);
+        buffbucket.buffdict.Add(buffid, buff);
             buffinfo = GetBuff(owner, buffid);
         }
             
@@ -166,9 +164,10 @@ public class Buff : Behavior
             var bufftick = tick;
             if (stage.SeekBehaviorInfo(buffbucket.actor, out TickerInfo ticker)) bufftick *= ticker.timescale;
                 
-            var buffs = ObjectCache.Ensure<List<ulong>>();
-            buffs.AddRange(buffbucket.buffs);
-            foreach (var buff in buffs)
+        // 从 buffdict 收集所有 Buff ActorID，避免遍历时修改字典
+        var buffs = ObjectCache.Ensure<List<ulong>>();
+        foreach (var kv in buffbucket.buffdict) buffs.Add(kv.Value);
+        foreach (var buff in buffs)
             {
                 if (false == stage.SeekBehaviorInfo(buff, out BuffInfo buffinfo)) continue;
                 SetBuff(buffinfo, buffinfo.layer, buffinfo.lifetime - bufftick);

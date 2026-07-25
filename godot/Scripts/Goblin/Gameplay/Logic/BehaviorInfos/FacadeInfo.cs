@@ -135,11 +135,8 @@ public partial class FacadeInfo : BehaviorInfo
     /// </summary>
     public GBLList<uint> rmveffects { get; set; }
     /// <summary>
-    /// 特效列表
-    /// </summary>
-    public GBLList<uint> effects { get; set; }
-    /// <summary>
     /// 特效字典
+    /// GBLDict 内部维护插入顺序，可直接有序遍历
     /// </summary>
     public GBLDict<uint, EffectInfo> effectdict { get; set; }
     /// <summary>

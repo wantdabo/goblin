@@ -191,9 +191,7 @@ public sealed class Stage
 		info.state = StageState.Disposed;
 			
 		// 回收 Actor
-		cache.rmvactors.Clear();
 		cache.rmvactorset.Clear();
-		cache.rmvactors.AddRange(info.actors);
 		foreach (var actor in info.actors) ActorToRecycle(actor);
 		Recycle();
 			
@@ -311,9 +309,7 @@ public sealed class Stage
 	{
 		if (null == snapshot) return;
 		if (snapshot.frame == info.frame) return;
-		cache.rmvactors.Clear();
 		cache.rmvactorset.Clear();
-		cache.rmvactors.AddRange(info.actors);
 		foreach (var actor in info.actors) ActorToRecycle(actor);
 		Recycle();
 			
@@ -533,7 +529,7 @@ public sealed class Stage
 		}
 			
 		// 回收清理
-		foreach (var rmvactor in cache.rmvactors)
+		foreach (var rmvactor in cache.rmvactorset)
 		{
 			if (cache.behaviordict.TryGetValue(rmvactor, out var behaviordict))
 			{
@@ -552,7 +548,6 @@ public sealed class Stage
 			info.actors.Remove(rmvactor);
 		}
 			
-		cache.rmvactors.Clear();
 		cache.rmvactorset.Clear();
 		cache.rmvbehaviors.Clear();
 		cache.rmvbehaviorinfos.Clear();
@@ -574,7 +569,6 @@ public sealed class Stage
 	private bool ActorToRecycle(ulong actor)
 	{
 		if (false == cache.Valid(actor)) return false;
-		cache.rmvactors.Add(actor);
 		cache.rmvactorset.Add(actor);
 
 		if (SeekBehaviors(actor, out var behaviors)) foreach (var behavior in behaviors) RmvBehavior(behavior);
@@ -605,7 +599,7 @@ public sealed class Stage
 
 	/// <summary>
 	/// 移除 Actor
-	/// 不是立即执行, 而是添加入移除列表, 等待帧末执行回收 (Cache.RmvActors)
+	/// 不是立即执行, 而是添加入 rmvactorset, 等待帧末执行回收
 	/// </summary>
 	/// <param name="actor">ActorID</param>
 	public void RmvActor(ulong actor)
@@ -1069,10 +1063,6 @@ public sealed class Stage
 		/// </summary>
 		public GBLDict<ulong, GBLDict<Type, BehaviorInfo>> behaviorinfodict { get; set; }
 		/// <summary>
-		/// Rmv Actor 列表
-		/// </summary>
-		public GBLList<ulong> rmvactors { get; set; }
-		/// <summary>
 		/// Rmv Actor 集合, 用于快速验证 Actor 是否有效
 		/// </summary>
 		public GBLHashSet<ulong> rmvactorset { get; set; }
@@ -1098,7 +1088,6 @@ public sealed class Stage
 			behaviordict = ObjectCache.Ensure<GBLDict<ulong, GBLDict<Type, Behavior>>>();
 			behaviors = ObjectCache.Ensure<GBLDict<Type, GBLList<Behavior>>>();
 			behaviorinfodict = ObjectCache.Ensure<GBLDict<ulong, GBLDict<Type, BehaviorInfo>>>();
-			rmvactors = ObjectCache.Ensure<GBLList<ulong>>();
 			rmvactorset = ObjectCache.Ensure<GBLHashSet<ulong>>();
 			rmvbehaviors = ObjectCache.Ensure<GBLList<Behavior>>();
 			rmvbehaviorinfos = ObjectCache.Ensure<GBLList<BehaviorInfo>>();
@@ -1141,9 +1130,6 @@ public sealed class Stage
 			behaviorinfodict.Clear();
 			ObjectCache.Set(behaviorinfodict);
 			
-			rmvactors.Clear();
-			ObjectCache.Set(rmvactors);
-				
 			rmvactorset.Clear();
 			ObjectCache.Set(rmvactorset);
 				

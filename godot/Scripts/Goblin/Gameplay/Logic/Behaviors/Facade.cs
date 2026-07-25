@@ -138,7 +138,6 @@ public class Facade : Behavior<FacadeInfo>
         var increment = info.effectincrement++;
         effect.id = increment;
         effect.elapsed = 0;
-        info.effects.Add(effect.id);
         info.effectdict.Add(effect.id, effect);
             
         return increment;
@@ -176,21 +175,22 @@ public class Facade : Behavior<FacadeInfo>
         // 移除过期的特效
         foreach (var rmveffect in info.rmveffects)
         {
-            info.effectdict.TryGetValue(rmveffect, out _);
-
-            info.effects.Remove(rmveffect);
             info.effectdict.Remove(rmveffect);
         }
         info.rmveffects.Clear();
 
         // 更新特效时间流逝
-        foreach (var id in info.effects)
+        // 复制键列表，避免在遍历时修改 effectdict
+        var effectKeys = ObjectCache.Ensure<List<uint>>();
+        foreach (var kv in info.effectdict) effectKeys.Add(kv.Key);
+        foreach (var id in effectKeys)
         {
             if (false == info.effectdict.TryGetValue(id, out var effect)) continue;
             effect.elapsed += tick;
-            info.effectdict.Remove(id);
-            info.effectdict.Add(id, effect);
+            info.effectdict[id] = effect;
             if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
         }
+        effectKeys.Clear();
+        ObjectCache.Set(effectKeys);
     }
 }
