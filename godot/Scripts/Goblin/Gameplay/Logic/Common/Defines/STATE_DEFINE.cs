@@ -1,4 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Common;
+﻿using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Logic.Common.Defines;
 

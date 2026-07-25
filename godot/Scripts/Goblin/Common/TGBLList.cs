@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Gameplay.Logic.Common;
+namespace Goblin.Common;
 
 /// <summary>
 /// 脏追踪列表 — 继承 GBLList，增加增删改差量收集
@@ -76,7 +76,7 @@ public class TGBLList<T> : GBLList<T>
             {
                 var igbl = (IGBL)item;
                 igbl.Reset();
-                ObjectCache.Set(igbl);
+                ObjectPool.Set(igbl);
             }
         }
         data.Clear();
@@ -114,7 +114,7 @@ public class TGBLList<T> : GBLList<T>
 
     public override IGBL Clone()
     {
-        var c = ObjectCache.Ensure<TGBLList<T>>();
+        var c = ObjectPool.Ensure<TGBLList<T>>();
         foreach (var item in data)
         {
             if (item is IGBL igblelem)

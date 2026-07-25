@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Gameplay.Logic.Common;
+namespace Goblin.Common;
 
 /// <summary>
 /// 池感知字典 — 增删元素时自动处理 IGBL 元素的 Reset + 还池
@@ -74,7 +74,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
         {
             var igbl = (IGBL)val;
             igbl.Reset();
-            ObjectCache.Set(igbl);
+            ObjectPool.Set(igbl);
         }
         data.Remove(key);
         order.Remove(key);
@@ -95,7 +95,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
             {
                 var igbl = (IGBL)kv.Value;
                 igbl.Reset();
-                ObjectCache.Set(igbl);
+                ObjectPool.Set(igbl);
             }
         }
         data.Clear();
@@ -114,7 +114,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
             {
                 var igbl = (IGBL)kv.Value;
                 igbl.Reset();
-                ObjectCache.Set(igbl);
+                ObjectPool.Set(igbl);
             }
         }
         data.Clear();
@@ -123,7 +123,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
 
     public virtual IGBL Clone()
     {
-        var c = ObjectCache.Ensure<GBLDict<K, V>>();
+        var c = ObjectPool.Ensure<GBLDict<K, V>>();
         foreach (var key in order)
         {
             var val = data[key];

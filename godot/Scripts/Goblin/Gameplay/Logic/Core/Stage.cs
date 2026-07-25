@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
+using SaEventor = Goblin.Gameplay.Logic.Behaviors.Sa.Eventor;
+using SaIEvent = Goblin.Gameplay.Logic.Behaviors.Sa.IEvent;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Input;
@@ -25,7 +28,7 @@ namespace Goblin.Gameplay.Logic.Core;
 /// <summary>
 /// Actor 出生事件
 /// </summary>
-public struct ActorBornEvent : IEvent
+public struct ActorBornEvent : SaIEvent
 {
 	/// <summary>
 	/// ActorID
@@ -36,7 +39,7 @@ public struct ActorBornEvent : IEvent
 /// <summary>
 /// Actor 移除事件
 /// </summary>
-public struct ActorRmvEvent : IEvent
+public struct ActorRmvEvent : SaIEvent
 {
 	/// <summary>
 	/// ActorID
@@ -106,7 +109,7 @@ public sealed class Stage
 	/// <summary>
 	/// 事件订阅派发者
 	/// </summary>
-	public Eventor eventor => GetBehavior<Eventor>(sa, true);
+	public SaEventor eventor => GetBehavior<SaEventor>(sa, true);
 	/// <summary>
 	/// 座位
 	/// </summary>
@@ -215,7 +218,7 @@ public sealed class Stage
 	{
 		GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
 		AddBehavior<Config>(sa);
-		AddBehavior<Eventor>(sa);
+		AddBehavior<SaEventor>(sa);
 		AddBehavior<Seat>(sa);
 		AddBehavior<Random>(sa).Initialze(data.seed);
 		AddBehavior<AttributeBucket>(sa);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Gameplay.Logic.Common;
+namespace Goblin.Common;
 
 /// <summary>
 /// 池感知 HashSet，遵循 IGBL 生命周期
@@ -21,12 +21,12 @@ public class GBLHashSet<T> : IGBL, IEnumerable<T>
 
 	public GBLHashSet()
 	{
-		inner = ObjectCache.Ensure<HashSet<T>>();
+		inner = ObjectPool.Ensure<HashSet<T>>();
 	}
 
 	public GBLHashSet(int capacity)
 	{
-		inner = ObjectCache.Ensure<HashSet<T>>();
+		inner = ObjectPool.Ensure<HashSet<T>>();
 		inner.EnsureCapacity(capacity);
 	}
 
@@ -47,8 +47,8 @@ public class GBLHashSet<T> : IGBL, IEnumerable<T>
 	public void Reset()
 	{
 		inner.Clear();
-		ObjectCache.Set(inner);
-		inner = ObjectCache.Ensure<HashSet<T>>();
+		ObjectPool.Set(inner);
+		inner = ObjectPool.Ensure<HashSet<T>>();
 	}
 
 	public IGBL Clone()

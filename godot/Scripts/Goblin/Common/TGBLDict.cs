@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Gameplay.Logic.Common;
+namespace Goblin.Common;
 
 /// <summary>
 /// 脏追踪字典 — 继承 GBLDict，增加增删改差量收集
@@ -85,7 +85,7 @@ public class TGBLDict<K, V> : GBLDict<K, V>
             {
                 var igbl = (IGBL)kv.Value;
                 igbl.Reset();
-                ObjectCache.Set(igbl);
+                ObjectPool.Set(igbl);
             }
             if (false == addedkeys.Contains(kv.Key))
                 removedkeys.Add(kv.Key);
@@ -132,7 +132,7 @@ public class TGBLDict<K, V> : GBLDict<K, V>
 
     public override IGBL Clone()
     {
-        var c = ObjectCache.Ensure<TGBLDict<K, V>>();
+        var c = ObjectPool.Ensure<TGBLDict<K, V>>();
         foreach (var key in order)
         {
             var val = data[key];

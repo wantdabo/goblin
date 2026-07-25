@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Scriptings;

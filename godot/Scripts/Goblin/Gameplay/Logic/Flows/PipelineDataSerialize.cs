@@ -1,4 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Common;
+﻿using Goblin.Common;
+using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Common;
 using Goblin.Gameplay.Logic.Flows.Checkers.Conditions;
 using Goblin.Gameplay.Logic.Flows.Defines;

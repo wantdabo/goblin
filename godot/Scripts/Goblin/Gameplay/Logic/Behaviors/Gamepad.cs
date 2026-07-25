@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
