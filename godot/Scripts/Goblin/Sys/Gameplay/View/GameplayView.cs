@@ -1,5 +1,6 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands;
+using Goblin.Gameplay.Render.Components;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Godot;
@@ -131,9 +132,23 @@ public class GameplayView : UIBaseView
         var proxy = engine.proxy.gameplay;
         if (null == proxy.stage) return;
 
+        // 主线程应用投影管线产出的观察者包
+        proxy.ApplyProjection();
+
         if (null != synopsisText)
+        {
+            var hudText = "";
+            var hero = proxy.stage.seat.GetActor(proxy.selfseat);
+            var hud = proxy.mirror?.GetComp<HUDComponent>(hero);
+            if (null != hud)
+            {
+                hudText = $"HP: {hud.hp}/{hud.maxhp}  Atk: {hud.attack}  Spd: {hud.movespeed}\n";
+            }
+
             synopsisText.Text =
                 $"单步耗时 (毫秒) : {proxy.stepms}\n" +
-                $"时间缩放 : {proxy.timescale}";
+                $"时间缩放 : {proxy.timescale}\n" +
+                hudText;
+        }
     }
 }

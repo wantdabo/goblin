@@ -1,3 +1,6 @@
+using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Rules;
+
 namespace Goblin.Gameplay.Projection;
 
 /// <summary>

@@ -28,8 +28,9 @@ public class TICK_DEFINE
         typeof(Buff),
         typeof(SilentMercy),
         typeof(Facade),
-        typeof(StepEnd),
         typeof(StageSequence),
+        typeof(HUD),
+        typeof(StepEnd),
         typeof(ProjectorSystem),
     };
 }

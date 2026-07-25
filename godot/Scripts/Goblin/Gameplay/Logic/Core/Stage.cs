@@ -15,7 +15,7 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
-using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
 using Kowtow.Math;
 using Config = Goblin.Gameplay.Logic.Behaviors.Sa.Config;
 using Random = Goblin.Gameplay.Logic.Behaviors.Sa.Random;

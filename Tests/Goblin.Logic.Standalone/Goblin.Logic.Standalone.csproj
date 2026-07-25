@@ -21,7 +21,7 @@
         <!-- Common 层 -->
         <Compile Include="..\..\godot\Scripts\Goblin\Common\IGBL.cs" Link="Common\IGBL.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Common\ProjectorAttribute.cs" Link="Common\ProjectorAttribute.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\IProjectable.cs" Link="Projection\IProjectable.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\IProjectable.cs" Link="Projection\Core\IProjectable.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Common\ObjectPool.cs" Link="Common\ObjectPool.cs" />
 
         <!-- Logic Common 层 -->
@@ -61,27 +61,27 @@
         <!-- Logic Core 层 -->
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Core\Behavior.cs" Link="Logic\Core\Behavior.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Core\BehaviorInfo.cs" Link="Logic\Core\BehaviorInfo.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ProjectorPacket.cs" Link="Projection\ProjectorPacket.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\ProjectorPacket.cs" Link="Projection\Core\ProjectorPacket.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Behaviors\Sa\ProjectorSystem.cs" Link="Logic\Behaviors\Sa\ProjectorSystem.cs" />
 
         <!-- Projection 层 -->
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Crop.cs" Link="Projection\Crop.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\IProjectionRule.cs" Link="Projection\IProjectionRule.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\IPropertyTransport.cs" Link="Projection\IPropertyTransport.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\LocalTransport.cs" Link="Projection\LocalTransport.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Observer.cs" Link="Projection\Observer.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ObserverPacket.cs" Link="Projection\ObserverPacket.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\Crop.cs" Link="Projection\Rules\Crop.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\IProjectionRule.cs" Link="Projection\Core\IProjectionRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\IPropertyTransport.cs" Link="Projection\Transport\IPropertyTransport.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\LocalTransport.cs" Link="Projection\Transport\LocalTransport.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\Observer.cs" Link="Projection\Core\Observer.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\ObserverPacket.cs" Link="Projection\Core\ObserverPacket.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ProjectionPipeline.cs" Link="Projection\ProjectionPipeline.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Entity.cs" Link="Projection\Entity.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Component.cs" Link="Projection\Component.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\RenderWorld.cs" Link="Projection\RenderWorld.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\AOIRule.cs" Link="Projection\AOIRule.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\PermissionRule.cs" Link="Projection\PermissionRule.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\VisibilityRule.cs" Link="Projection\VisibilityRule.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\FrequencyRule.cs" Link="Projection\FrequencyRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Core\Mirror.cs" Link="Render\Core\Mirror.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\Component.cs" Link="Render\Components\Component.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\HUDComponent.cs" Link="Render\Components\HUDComponent.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\AOIRule.cs" Link="Projection\Rules\AOIRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\PermissionRule.cs" Link="Projection\Rules\PermissionRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\VisibilityRule.cs" Link="Projection\Rules\VisibilityRule.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\FrequencyRule.cs" Link="Projection\Rules\FrequencyRule.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ObserverFactory.cs" Link="Projection\ObserverFactory.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\NetworkTransport.cs" Link="Projection\NetworkTransport.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\SpatialComponent.cs" Link="Projection\SpatialComponent.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\NetworkTransport.cs" Link="Projection\Transport\NetworkTransport.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\SpatialComponent.cs" Link="Render\Components\SpatialComponent.cs" />
     </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@ using System;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
 
 namespace Goblin.Gameplay.Logic.Behaviors.Sa;
 
@@ -206,7 +206,7 @@ public class ProjectorSystem : Behavior
             // 直接设置 backing field 值，不触发脏标记
             proj.SetProjectValues(kv.Value);
 
-            // 全量标记脏：回滚后需重新同步到 RenderWorld
+            // 全量标记脏：回滚后需重新同步到 Mirror
             proj.MarkAllDirty();
         }
 

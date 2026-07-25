@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Rules;
 
 namespace Goblin.Logic.Tests;
 

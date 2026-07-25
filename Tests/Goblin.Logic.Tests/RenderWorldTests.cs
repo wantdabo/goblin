@@ -1,68 +1,95 @@
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Transport;
+using Goblin.Gameplay.Render.Components;
+using Goblin.Gameplay.Render.Core;
 using Goblin.Logic.Standalone.TestFixtures;
 using Kowtow.Math;
 
 namespace Goblin.Logic.Tests;
 
 /// <summary>
-/// T1.9 RenderWorld / Entity / Component 测试 + 端到端投影链路
+/// T1.9 Mirror / Component 测试 + 端到端投影链路
 /// </summary>
 [Collection("GBL")]
 public class RenderWorldTests
 {
     // ============================================================
-    // RenderWorld / Entity / Component
+    // Mirror / Component
     // ============================================================
 
     /// <summary>
-    /// Apply 创建 Entity + Component，写入字段
+    /// ApplyPackets 创建 Component，写入字段
     /// </summary>
     [Fact]
-    public void Apply_CreatesEntityAndComponent()
+    public void Apply_CreatesComponent()
     {
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
+        var mirror = new Mirror();
+        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
 
-        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
+        mirror.ApplyPackets(new ObserverPacket[]
+        {
+            new ObserverPacket
+            {
+                actor = 1,
+                behaviorinfotype = typeof(ProjectFieldInfo),
+                fieldmask = 3,
+                values = new object[] { new FPVector3(1, 2, 3), new FP(5) }
+            }
+        });
 
-        var entity = world.GetEntity(1);
-        Assert.NotNull(entity);
-        var comp = entity.GetComp<TestSpatialComponent>();
+        var comp = mirror.GetComp<TestSpatialComponent>(1);
         Assert.NotNull(comp);
         Assert.Equal(new FPVector3(1, 2, 3), comp.position);
         Assert.Equal(new FP(5), comp.scale);
     }
 
     /// <summary>
-    /// 无映射的 BehaviorInfo 不创建 Component（但创建 Entity）
+    /// 无映射的 BehaviorInfo 不创建 Component
     /// </summary>
     [Fact]
     public void Apply_NoMapping_NoComponent()
     {
-        var world = new RenderWorld();
+        var mirror = new Mirror();
 
-        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), FP.One });
+        mirror.ApplyPackets(new ObserverPacket[]
+        {
+            new ObserverPacket
+            {
+                actor = 1,
+                behaviorinfotype = typeof(ProjectFieldInfo),
+                fieldmask = 3,
+                values = new object[] { new FPVector3(1, 2, 3), FP.One }
+            }
+        });
 
-        var entity = world.GetEntity(1);
-        Assert.NotNull(entity);
-        Assert.Null(entity.GetComp<TestSpatialComponent>());
+        Assert.Null(mirror.GetComp<TestSpatialComponent>(1));
     }
 
     /// <summary>
-    /// RmvEntity 销毁实体
+    /// RmvActor 移除 Actor 数据
     /// </summary>
     [Fact]
-    public void RmvEntity_RemovesEntity()
+    public void RmvActor_RemovesData()
     {
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
-        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), FP.One });
+        var mirror = new Mirror();
+        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
+        mirror.ApplyPackets(new ObserverPacket[]
+        {
+            new ObserverPacket
+            {
+                actor = 1,
+                behaviorinfotype = typeof(ProjectFieldInfo),
+                fieldmask = 3,
+                values = new object[] { new FPVector3(1, 2, 3), FP.One }
+            }
+        });
 
-        world.RmvEntity(1);
+        mirror.RmvActor(1);
 
-        Assert.Null(world.GetEntity(1));
+        Assert.Null(mirror.GetComp<TestSpatialComponent>(1));
     }
 
     /// <summary>
@@ -71,20 +98,38 @@ public class RenderWorldTests
     [Fact]
     public void Apply_PartialMask_UpdatesPartial()
     {
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
-        world.Apply(1, typeof(ProjectFieldInfo), 3, new object[] { new FPVector3(1, 2, 3), new FP(5) });
+        var mirror = new Mirror();
+        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
+        mirror.ApplyPackets(new ObserverPacket[]
+        {
+            new ObserverPacket
+            {
+                actor = 1,
+                behaviorinfotype = typeof(ProjectFieldInfo),
+                fieldmask = 3,
+                values = new object[] { new FPVector3(1, 2, 3), new FP(5) }
+            }
+        });
 
         // 只更新 position（位 0）
-        world.Apply(1, typeof(ProjectFieldInfo), 1, new object[] { new FPVector3(9, 8, 7) });
+        mirror.ApplyPackets(new ObserverPacket[]
+        {
+            new ObserverPacket
+            {
+                actor = 1,
+                behaviorinfotype = typeof(ProjectFieldInfo),
+                fieldmask = 1,
+                values = new object[] { new FPVector3(9, 8, 7) }
+            }
+        });
 
-        var comp = world.GetEntity(1).GetComp<TestSpatialComponent>();
+        var comp = mirror.GetComp<TestSpatialComponent>(1);
         Assert.Equal(new FPVector3(9, 8, 7), comp.position);
         Assert.Equal(new FP(5), comp.scale);
     }
 
     // ============================================================
-    // 端到端：ProjectorSystem → Pipeline → Transport → RenderWorld
+    // 端到端：ProjectorSystem → Pipeline → Transport → Mirror
     // ============================================================
 
     /// <summary>
@@ -97,12 +142,12 @@ public class RenderWorldTests
         var projector = new ProjectorSystem();
         projector.Assemble(stage, stage.sa);
 
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
+        var mirror = new Mirror();
+        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
 
         var pipeline = new ProjectionPipeline();
         pipeline.observers.Add(new Observer { type = ObserverType.Player });
-        pipeline.transport = new LocalTransport { renderworld = world };
+        pipeline.transport = new LocalTransport { mirror = mirror };
 
         var info = stage.AddBehaviorInfo<ProjectFieldInfo>(1);
         info.position = new FPVector3(1, 2, 3);
@@ -110,7 +155,7 @@ public class RenderWorldTests
         projector.EndTick();
         pipeline.Process(projector.packets);
 
-        var comp = world.GetEntity(1).GetComp<TestSpatialComponent>();
+        var comp = mirror.GetComp<TestSpatialComponent>(1);
         Assert.NotNull(comp);
         Assert.Equal(new FPVector3(1, 2, 3), comp.position);
     }
@@ -125,18 +170,18 @@ public class RenderWorldTests
         var projector = new ProjectorSystem();
         projector.Assemble(stage, stage.sa);
 
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
+        var mirror = new Mirror();
+        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
 
         var pipeline = new ProjectionPipeline();
         pipeline.observers.Add(new Observer { type = ObserverType.Player });
-        pipeline.transport = new LocalTransport { renderworld = world };
+        pipeline.transport = new LocalTransport { mirror = mirror };
 
         var info = stage.AddBehaviorInfo<ProjectFieldInfo>(1);
         // 首帧全量
         projector.EndTick();
         pipeline.Process(projector.packets);
-        var comp = world.GetEntity(1).GetComp<TestSpatialComponent>();
+        var comp = mirror.GetComp<TestSpatialComponent>(1);
         Assert.NotNull(comp);
 
         // 第二帧无脏
@@ -150,39 +195,10 @@ public class RenderWorldTests
 
         Assert.Equal(new FP(7), comp.scale);
     }
-
-    /// <summary>
-    /// 端到端：OnEntityCreated 事件触发
-    /// </summary>
-    [Fact]
-    public void EndToEnd_OnEntityCreated_Fires()
-    {
-        var stage = new Stage();
-        var projector = new ProjectorSystem();
-        projector.Assemble(stage, stage.sa);
-
-        var world = new RenderWorld();
-        world.RegisterMapping<ProjectFieldInfo, TestSpatialComponent>();
-
-        Entity created = null;
-        world.OnEntityCreated += e => created = e;
-
-        var pipeline = new ProjectionPipeline();
-        pipeline.observers.Add(new Observer { type = ObserverType.Player });
-        pipeline.transport = new LocalTransport { renderworld = world };
-
-        stage.AddBehaviorInfo<ProjectFieldInfo>(1);
-        projector.EndTick();
-        pipeline.Process(projector.packets);
-
-        Assert.NotNull(created);
-        Assert.Equal(1ul, created.actor);
-    }
 }
 
 /// <summary>
 /// 测试用 Component — 对应 ProjectFieldInfo（position index 0, scale index 1）
-/// Phase 1：纯数据，Apply 直接写入
 /// </summary>
 public class TestSpatialComponent : Component
 {
@@ -196,12 +212,17 @@ public class TestSpatialComponent : Component
     public FP scale { get; set; } = FP.One;
 
     /// <summary>
-    /// 按 fieldmask 写入字段，values 按 index 顺序消费
+    /// 应用脏字段 [v1] — 后续迁至 SG 生成
     /// </summary>
-    public override void Apply(ulong fieldmask, object[] values)
+    internal static void ApplyTo(object comp, ulong fieldmask, object[] values)
     {
+        var c = (TestSpatialComponent)comp;
         var i = 0;
-        if (0ul != (fieldmask & (1ul << 0))) { position = (FPVector3)values[i]; i++; }
-        if (0ul != (fieldmask & (1ul << 1))) { scale = (FP)values[i]; i++; }
+
+        // Bit0: position
+        if (0 != (fieldmask & 1)) c.position = (FPVector3)values[i++];
+
+        // Bit1: scale
+        if (0 != (fieldmask & (1ul << 1))) c.scale = (FP)values[i++];
     }
 }

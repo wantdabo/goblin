@@ -4,10 +4,18 @@ using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Debug;
+using Goblin.Gameplay.Logic.BehaviorInfos;
+using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common.Defines;
+using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Rules;
+using Goblin.Gameplay.Projection.Transport;
 using Goblin.Gameplay.Render;
+using Goblin.Gameplay.Render.Components;
+using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Sys.Common;
 using Kowtow.Math;
@@ -29,9 +37,26 @@ public class GameplayProxy : Proxy<GameplayModel>
     /// </summary>
     public ulong selfseat { get; set; }
     /// <summary>
+    /// 数据镜像
+    /// </summary>
+    public Mirror mirror { get; private set; }
+    /// <summary>
+    /// 投影管线
+    /// </summary>
+    private ProjectionPipeline pipeline;
+    /// <summary>
     /// 逻辑 Step 耗时，单位毫秒
     /// </summary>
     public int stepms { get; private set; }
+
+    /// <summary>
+    /// 将管线产出的观察者包应用到 Mirror（调用方须在主线程）
+    /// </summary>
+    public void ApplyProjection()
+    {
+        if (null == pipeline || 0 == pipeline.observerpackets.Length) return;
+        mirror?.ApplyPackets(pipeline.observerpackets);
+    }
     /// <summary>
     /// 时间缩放（代理到 Stage.timescale）
     /// </summary>
@@ -66,6 +91,24 @@ public class GameplayProxy : Proxy<GameplayModel>
         if (null == input) input = new InputSystem();
         selfseat = data.seat;
         stage = new Stage().Initialize(data.sdata);
+
+        // 构建投影管线：ProjectorSystem → Pipeline（只出包，不自动传输）
+        mirror = new Mirror();
+        mirror.Register<SpatialInfo, SpatialComponent>();
+        mirror.Register<HUDInfo, HUDComponent>();
+        mirror.Register<FacadeInfo, FacadeComponent>();
+        pipeline = new ProjectionPipeline();
+        pipeline.crop.AddRule(new GodRule());
+        // 不设 transport，observerpackets 由主线程 ApplyProjection 消费
+
+        // Phase 1：注册 Player Observer，以主角为 AOI 中心
+        var heroActor = stage.seat.GetActor(selfseat);
+        pipeline.observers.Add(new Observer
+        {
+            type = ObserverType.Player,
+            id = selfseat,
+            observedActor = heroActor,
+        });
 
         // 接入调试服务
         engine.debug.Attach(new GameplayStateProvider(stage), stage);
@@ -113,6 +156,8 @@ public class GameplayProxy : Proxy<GameplayModel>
         }
 
         engine.debug.Detach();
+        mirror = null;
+        pipeline = null;
         stage?.Dispose();
         stage = null;
     }
@@ -212,6 +257,14 @@ public class GameplayProxy : Proxy<GameplayModel>
 
         EnemyAutopoilot();
         stage.Step();
+
+        // 投影管线：ProjectorSystem 出包 → 裁剪 → 传输 → Mirror
+        if (null != pipeline
+            && stage.SeekBehavior<ProjectorSystem>(ulong.MaxValue, out var ps)
+            && null != ps.packets)
+        {
+            pipeline.Process(ps.packets);
+        }
     }
 
     /// <summary>

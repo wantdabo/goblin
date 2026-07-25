@@ -1,6 +1,6 @@
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Core;
-using Goblin.Gameplay.Projection;
+using Goblin.Gameplay.Projection.Core;
 using Goblin.Logic.Standalone.TestFixtures;
 using Kowtow.Math;
 

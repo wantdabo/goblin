@@ -880,7 +880,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         {
             sb.AppendLine(u);
         }
-        sb.AppendLine("using Goblin.Gameplay.Projection;");
+        sb.AppendLine("using Goblin.Gameplay.Projection.Core;");
         sb.AppendLine();
         sb.AppendLine($"namespace {data.ns};");
         sb.AppendLine();

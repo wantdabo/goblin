@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Rules;
+using Goblin.Gameplay.Projection.Transport;
 
 namespace Goblin.Gameplay.Projection;
 
