@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Director.Common;
+namespace Goblin.Gameplay.Logic.Core;
 
 /// <summary>
 /// 输入系统 — 管理指令队列和各输入槽状态

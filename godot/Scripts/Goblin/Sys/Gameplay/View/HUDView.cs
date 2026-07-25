@@ -1,5 +1,4 @@
 using Goblin.Common;
-using Goblin.Gameplay.Director;
 using Goblin.Sys.Common;
 using Godot;
 using System.Collections.Generic;
@@ -38,8 +37,7 @@ public class HUDView : UIBaseView
     {
         // Phase 2+：从 renderworld.Entity.Component 读取 Actor 血量信息绘制血条
         // Phase 1：占位
-        var director = engine.proxy.gameplay.director;
-        if (null == director || contentNode == null || barOrgNode == null) return;
+        if (null == engine.proxy.gameplay.stage || contentNode == null || barOrgNode == null) return;
 
         for (int i = 0; i < barpool.Count; i++) barpool[i].bar.Visible = false;
     }

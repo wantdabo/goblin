@@ -1,6 +1,4 @@
 using Goblin.Common;
-using Goblin.Gameplay.Director;
-using Goblin.Gameplay.Director.Common;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
@@ -68,18 +66,17 @@ public class GameplayView : UIBaseView
         if (gameSpeedSlider != null)
             gameSpeedSlider.ValueChanged += (v) =>
             {
-                var local = engine.proxy.gameplay.director as LocalDirector;
-                if (null == local) return;
+                var proxy = engine.proxy.gameplay;
                 var timescale = Mathf.Round((float)v / 0.25f) * 0.25f;
                 var cmd = ObjectPool.Ensure<TimeScaleCommand>();
                 cmd.timescale = (int)(timescale * 1000);
-                local.world.input.EnqueueCommand(cmd);
+                proxy.input.EnqueueCommand(cmd);
                 if (gameSpeedDescText != null) gameSpeedDescText.Text = timescale.ToString();
             };
         AddUIEventListener("GamingCB", () =>
         {
-            if (gamingCBToggle?.ButtonPressed == true) engine.proxy.gameplay.director.ResumeGame();
-            else engine.proxy.gameplay.director.PauseGame();
+            if (gamingCBToggle?.ButtonPressed == true) engine.proxy.gameplay.ResumeGame();
+            else engine.proxy.gameplay.PauseGame();
         });
         AddUIEventListener("PhysDrawerCB", () => { engine.proxy.gameplay.physdraw = physDrawerToggle?.ButtonPressed ?? false; });
         AddUIEventListener("ShowInfoCB", () => { engine.proxy.gameplay.showinfo = showInfoCbToggle?.ButtonPressed ?? false; });
@@ -87,19 +84,19 @@ public class GameplayView : UIBaseView
         AddUIEventListener("EnemyAutopoilotCB", () => { engine.proxy.gameplay.enemyautopilot = enemyAutopoilotToggle?.ButtonPressed ?? false; });
         AddUIEventListener("SwitchSeatBtn", () =>
         {
-            var world = engine.proxy.gameplay.director.world;
-            var seat = world.selfseat == 1 ? 2ul : 1ul;
-            world.SwitchSeat(seat);
+            var proxy = engine.proxy.gameplay;
+            var seat = proxy.selfseat == 1 ? 2ul : 1ul;
+            proxy.SwitchSeat(seat);
             engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = $"切换成功, 座位 {seat}" });
         });
         AddUIEventListener("SnapshotBtn", () =>
         {
-            engine.proxy.gameplay.director.Snapshot();
+            engine.proxy.gameplay.Snapshot();
             engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "快照拍摄成功." });
         });
         AddUIEventListener("RestoreBtn", () =>
         {
-            engine.proxy.gameplay.director.Restore();
+            engine.proxy.gameplay.Restore();
             engine.eventor.Tell(new MessageBlowEvent { type = 1, desc = "快照恢复成功." });
         });
         AddUIEventListener("ExitBtn", () =>
@@ -108,8 +105,8 @@ public class GameplayView : UIBaseView
             engine.gameui.Close<HUDView>();
             engine.gameui.Close<ResultView>();
             engine.gameui.Open<LobbyView>();
-            engine.proxy.gameplay.director.StopGame();
-            engine.proxy.gameplay.director.DestroyGame();
+            engine.proxy.gameplay.StopGame();
+            engine.proxy.gameplay.DestroyGame();
             engine.proxy.gameplay.UnLoad();
         });
     }
@@ -131,15 +128,12 @@ public class GameplayView : UIBaseView
         }
         else mlmbprev = false;
 
-        var director = engine.proxy.gameplay.director;
-        if (null == director) return;
-
-        // Phase 2+：在此从 renderworld.Entity.Component 读取数据绘制 HUD
-        // Phase 1：仅展示 synopsis 基本帧信息
+        var proxy = engine.proxy.gameplay;
+        if (null == proxy.stage) return;
 
         if (null != synopsisText)
             synopsisText.Text =
-                $"单步耗时 (毫秒) : {director.stepms}\n" +
-                $"时间缩放 : {director.timescale}";
+                $"单步耗时 (毫秒) : {proxy.stepms}\n" +
+                $"时间缩放 : {proxy.timescale}";
     }
 }

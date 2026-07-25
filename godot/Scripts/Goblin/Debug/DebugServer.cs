@@ -71,7 +71,7 @@ public class DebugServer : Comp
     }
 
     /// <summary>
-    /// 挂载到 GameplayDirector.onbeforestep。返回 false 则跳过本帧 OnStep。
+    /// 挂载到游戏主循环前。返回 false 则跳过本帧 OnStep。
     /// </summary>
     public bool OnBeforeStep()
     {
@@ -99,7 +99,7 @@ public class DebugServer : Comp
     }
 
     /// <summary>
-    /// 挂载到 GameplayDirector.onbeforetick。返回 false 则跳过本帧 OnTick。
+    /// 挂载到渲染帧前。返回 false 则跳过本帧 OnTick。
     /// </summary>
     public bool OnBeforeTick() => false == renderingpaused;
 

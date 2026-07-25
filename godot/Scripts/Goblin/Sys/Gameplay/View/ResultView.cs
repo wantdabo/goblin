@@ -44,8 +44,8 @@ public class ResultView : UIBaseView
             engine.gameui.Close<HUDView>();
             engine.gameui.Close<GameplayView>();
             engine.gameui.Open<LobbyView>();
-            engine.proxy.gameplay.director.StopGame();
-            engine.proxy.gameplay.director.DestroyGame();
+            engine.proxy.gameplay.StopGame();
+            engine.proxy.gameplay.DestroyGame();
             engine.proxy.gameplay.UnLoad();
         });
     }
@@ -59,7 +59,7 @@ public class ResultView : UIBaseView
                 ? new Color(0.824f, 1f, 0f, 1f)
                 : new Color(0.851f, 0.208f, 0f, 1f));
         }
-        engine.proxy.gameplay.director.PauseGame();
+        engine.proxy.gameplay.PauseGame();
         Input.MouseMode = Input.MouseModeEnum.Visible;
         node.Visible = true;
     }

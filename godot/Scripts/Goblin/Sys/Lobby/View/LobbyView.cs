@@ -1,5 +1,4 @@
 using Goblin.Common;
-using Goblin.Gameplay.Director;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Sys.Common;
 using Goblin.Sys.Gameplay;
@@ -56,8 +55,8 @@ public class LobbyView : UIBaseView
             engine.gameui.Open<GameplayView>();
             engine.gameui.Open<HUDView>();
             engine.gameui.Open<ResultView>();
-            engine.proxy.gameplay.Load<LocalDirector>(data, true);
-            engine.proxy.gameplay.director.StartGame();
+            engine.proxy.gameplay.CreateGame(data, true);
+            engine.proxy.gameplay.StartGame();
         });
     }
 }

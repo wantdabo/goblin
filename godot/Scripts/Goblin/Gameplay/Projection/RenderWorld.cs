@@ -19,6 +19,11 @@ public class RenderWorld
     /// BehaviorInfo 类型 → Component 类型 映射
     /// </summary>
     private Dictionary<Type, Type> behaviortocomp { get; set; }
+    /// <summary>
+    /// 事件去重缓存，同一帧内相同 Actor+BehaviorInfo 只应用一次
+    /// Key: "{actor}_{behaviorinfotype.Name}"，每帧 ApplyPackets 入口清空
+    /// </summary>
+    private HashSet<string> eventframecache { get; set; }
 
     /// <summary>
     /// 实体创建事件
@@ -33,6 +38,7 @@ public class RenderWorld
     {
         entities = ObjectPool.Ensure<Dictionary<ulong, Entity>>();
         behaviortocomp = ObjectPool.Ensure<Dictionary<Type, Type>>();
+        eventframecache = ObjectPool.Ensure<HashSet<string>>();
     }
 
     /// <summary>
@@ -84,8 +90,12 @@ public class RenderWorld
     public void ApplyPackets(ObserverPacket[] packets)
     {
         if (null == packets) return;
+        eventframecache.Clear();
         foreach (var p in packets)
         {
+            // 同一帧内相同 Actor+BehaviorInfo 去重
+            var key = $"{p.actor}_{p.behaviorinfotype.Name}";
+            if (false == eventframecache.Add(key)) continue;
             Apply(p.actor, p.behaviorinfotype, p.fieldmask, p.values);
         }
     }
