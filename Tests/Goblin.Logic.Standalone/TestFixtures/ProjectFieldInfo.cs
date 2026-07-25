@@ -11,8 +11,8 @@ namespace Goblin.Logic.Standalone.TestFixtures;
 /// </summary>
 // 角色世界坐标
 [Projector("position", typeof(FPVector3), 0)]
-// 模型缩放（Reset 时归 FP.One 非 FP.Zero）
-[Projector("scale", typeof(FP), 1, defaultvalue = 1)]
+// 模型缩放
+[Projector("scale", typeof(FP), 1)]
 public partial class ProjectFieldInfo : BehaviorInfo
 {
     public string name { get; set; }

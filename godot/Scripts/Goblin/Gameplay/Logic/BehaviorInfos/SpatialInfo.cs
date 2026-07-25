@@ -6,11 +6,11 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.BehaviorInfos;
 
 // 位置
-[Projector("position", typeof(FPVector3), 0)]
+[Projector("position", typeof(FPVector3))]
 // 旋转
-[Projector("euler", typeof(FPVector3), 1)]
-// 缩放（Reset 时归 FP.One）
-[Projector("scale", typeof(FP), 2, defaultvalue = 1)]
+[Projector("euler", typeof(FPVector3))]
+// 缩放
+[Projector("scale", typeof(FP))]
 /// <summary>
 /// 空间信息
 /// </summary>

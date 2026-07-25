@@ -138,7 +138,6 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         string name,
         string typeText,
         int index,
-        int defaultvalue,
         string? summary
     );
 
@@ -256,6 +255,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         // 提取 Projector 注解（用于 Reset 中重置 backing field）
         var projectorFields = new List<ProjectionFieldData>();
+        var nextAutoIndex = 0;
         var attributeLists = classDecl.AttributeLists;
         foreach (var attrList in attributeLists)
         {
@@ -265,7 +265,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 if (false == ("Projector" == attrName || "ProjectorAttribute" == attrName)) continue;
 
                 var args = attr.ArgumentList?.Arguments;
-                if (false == args.HasValue || args.Value.Count < 3) continue;
+                if (false == args.HasValue || args.Value.Count < 2) continue;
 
                 var name = ExtractStringArg(args.Value[0]);
                 if (null == name) continue;
@@ -273,19 +273,14 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 var typeText = ExtractTypeOfArg(args.Value[1]);
                 if (null == typeText) continue;
 
-                var index = ExtractIntArg(args.Value[2]);
-                if (null == index) continue;
+                // index 可选（第三个非命名参数），不填时自动递增
+                int? index = null;
+                if (args.Value.Count >= 3 && null == args.Value[2].NameEquals)
+                    index = ExtractIntArg(args.Value[2]);
+                if (null == index) index = nextAutoIndex;
+                nextAutoIndex = index.Value + 1;
 
-                var defaultvalue = 0;
-                foreach (var arg in args.Value)
-                {
-                    if ("defaultvalue" == arg.NameEquals?.Name.Identifier.Text)
-                    {
-                        defaultvalue = ExtractIntArg(arg) ?? 0;
-                    }
-                }
-
-                projectorFields.Add(new ProjectionFieldData(name, typeText, index.Value, defaultvalue, null));
+                projectorFields.Add(new ProjectionFieldData(name, typeText, index.Value, null));
             }
         }
 
@@ -641,12 +636,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         // Projector backing field 重置
         foreach (var pf in data.projectorFields)
-        {
-            if (HasImplicitIntConversion(pf.typeText))
-                sb.AppendLine($"        {data.classNameLower}_{pf.name} = {pf.defaultvalue};");
-            else
-                sb.AppendLine($"        {data.classNameLower}_{pf.name} = default;");
-        }
+            sb.AppendLine($"        {data.classNameLower}_{pf.name} = default;");
 
         // 脏标记清零
         if (0 < data.projectorFields.Count)
@@ -839,6 +829,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         if (0 == attributeLists.Count) return null;
 
+        var nextAutoIndex = 0;
         foreach (var attrList in attributeLists)
         {
             foreach (var attr in attrList.Attributes)
@@ -847,7 +838,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 if (false == ("Projector" == attrName || "ProjectorAttribute" == attrName)) continue;
 
                 var args = attr.ArgumentList?.Arguments;
-                if (false == args.HasValue || args.Value.Count < 3) continue;
+                if (false == args.HasValue || args.Value.Count < 2) continue;
 
                 var name = ExtractStringArg(args.Value[0]);
                 if (null == name) continue;
@@ -855,21 +846,16 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 var typeText = ExtractTypeOfArg(args.Value[1]);
                 if (null == typeText) continue;
 
-                var index = ExtractIntArg(args.Value[2]);
-                if (null == index) continue;
-
-                var defaultvalue = 0;
-                foreach (var arg in args.Value)
-                {
-                    if ("defaultvalue" == arg.NameEquals?.Name.Identifier.Text)
-                    {
-                        defaultvalue = ExtractIntArg(arg) ?? 0;
-                    }
-                }
+                // index 可选（第三个非命名参数），不填时自动递增
+                int? index = null;
+                if (args.Value.Count >= 3 && null == args.Value[2].NameEquals)
+                    index = ExtractIntArg(args.Value[2]);
+                if (null == index) index = nextAutoIndex;
+                nextAutoIndex = index.Value + 1;
 
                 var summary = ExtractLeadingComment(attrList);
 
-                fields.Add(new ProjectionFieldData(name, typeText, index.Value, defaultvalue, summary));
+                fields.Add(new ProjectionFieldData(name, typeText, index.Value, summary));
             }
         }
 
@@ -994,15 +980,6 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         context.AddSource(hintName, sb.ToString());
     }
 
-    private static bool HasImplicitIntConversion(string typeText)
-    {
-        return "int" == typeText
-            || "long" == typeText
-            || "float" == typeText
-            || "double" == typeText
-            || "FP" == typeText;
-    }
-
     /// <summary>
     /// 按类型生成序列化表达式
     /// 所有类型直接装箱（Deserialize 端逐类型还原）
@@ -1081,15 +1058,20 @@ public class GoblinSourceGenerator : IIncrementalGenerator
     private static string? ExtractTypeOfArg(AttributeArgumentSyntax arg)
     {
         var expr = arg.Expression;
-        if (expr is TypeOfExpressionSyntax typeOf
-            && typeOf.Type is IdentifierNameSyntax id)
+        if (expr is TypeOfExpressionSyntax typeOf)
         {
-            return id.Identifier.Text;
-        }
-        if (expr is TypeOfExpressionSyntax typeOfQualified
-            && typeOfQualified.Type is QualifiedNameSyntax qn)
-        {
-            return qn.ToString();
+            // 简单类型，如 typeof(FP), typeof(FPVector3)
+            if (typeOf.Type is IdentifierNameSyntax id)
+                return id.Identifier.Text;
+            // 限定类型，如 typeof(System.Action)
+            if (typeOf.Type is QualifiedNameSyntax qn)
+                return qn.ToString();
+            // 泛型类型，如 typeof(GBLDict<uint, EffectInfo>)
+            if (typeOf.Type is GenericNameSyntax gn)
+                return gn.ToString();
+            // 关键字类型，如 typeof(int), typeof(uint), typeof(bool)
+            if (typeOf.Type is PredefinedTypeSyntax pts)
+                return pts.Keyword.ValueText;
         }
         return null;
     }

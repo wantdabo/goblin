@@ -19,15 +19,11 @@ public class ProjectorAttribute : System.Attribute
 
     /// <summary>
     /// 位索引，类内唯一，对应 projectdirtymask 位
+    /// 不填时 SG 按声明顺序自动递增
     /// </summary>
     public int index { get; }
 
-    /// <summary>
-    /// Reset 时的非零缺省值（可选）
-    /// </summary>
-    public int defaultvalue { get; set; }
-
-    public ProjectorAttribute(string name, System.Type type, int index)
+    public ProjectorAttribute(string name, System.Type type, int index = 0)
     {
         this.name = name;
         this.type = type;

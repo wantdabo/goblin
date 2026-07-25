@@ -104,43 +104,24 @@ public partial class AnimationSlot : IGBL
 /// <summary>
 /// 外观信息
 /// </summary>
+// 模型资源 ID
+[Projector("model", typeof(int))]
+// 动画推进模式
+[Projector("animticktype", typeof(byte))]
+// 动画状态
+[Projector("animstate", typeof(byte))]
+// 动画资源哈希
+[Projector("animhash", typeof(uint))]
+// 动画流逝时间
+[Projector("animelapsed", typeof(FP))]
+// 特效版本号
+[Projector("effectincrement", typeof(uint))]
+// 待移除特效列表
+[Projector("rmveffects", typeof(GBLList<uint>))]
+// 特效字典
+[Projector("effectdict", typeof(GBLDict<uint, EffectInfo>))]
+// 动画槽位列表
+[Projector("animslots", typeof(GBLList<AnimationSlot>))]
 public partial class FacadeInfo : BehaviorInfo
 {
-    /// <summary>
-    /// 模型 ID
-    /// </summary>
-    public int model { get; set; }
-    /// <summary>
-    /// 动画更新类型
-    /// </summary>
-    public byte animticktype { get; set; }
-    /// <summary>
-    /// 动画状态
-    /// </summary>
-    public byte animstate { get; set; }
-    /// <summary>
-    /// 动画名称哈希
-    /// </summary>
-    public uint animhash { get; set; }
-    /// <summary>
-    /// 流逝时间
-    /// </summary>
-    public FP animelapsed { get; set; }
-    /// <summary>
-    /// 特效增量 ID
-    /// </summary>
-    public uint effectincrement { get; set; }
-    /// <summary>
-    /// 移除特效列表
-    /// </summary>
-    public GBLList<uint> rmveffects { get; set; }
-    /// <summary>
-    /// 特效字典
-    /// GBLDict 内部维护插入顺序，可直接有序遍历
-    /// </summary>
-    public GBLDict<uint, EffectInfo> effectdict { get; set; }
-    /// <summary>
-    /// 动画槽位列表
-    /// </summary>
-    public GBLList<AnimationSlot> animslots { get; set; }
 }
