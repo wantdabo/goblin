@@ -36,6 +36,7 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
 
         stage.AddBehavior<StateMachine>(actor);
         stage.AddBehavior<Movement>(actor);
+        stage.AddBehavior<HUD>(actor);
 
 		stage.AddBehavior<SkillLauncher>(actor);
 
