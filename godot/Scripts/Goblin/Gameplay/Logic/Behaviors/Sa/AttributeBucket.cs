@@ -162,7 +162,7 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
         if (0 == info.pendings.Count) return;
 
         // 检查 pending 中的 actor 是否还被 Magic 引用，没有则真正回收
-        var done = ObjectCache.Ensure<List<ulong>>();
+        var done = ObjectCache.Ensure<GBLList<ulong>>();
         if (stage.SeekBehaviorInfos(out List<MagicInfo> magics))
         {
             foreach (var pending in info.pendings)
