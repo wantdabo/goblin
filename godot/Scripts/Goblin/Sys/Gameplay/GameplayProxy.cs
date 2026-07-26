@@ -98,7 +98,7 @@ public class GameplayProxy : Proxy<GameplayModel>
         mirror.Register<HUDInfo, HUDComponent>();
         mirror.Register<FacadeInfo, FacadeComponent>();
         pipeline = new ProjectionPipeline();
-        // 不设 transport，observerpackets 由主线程 ApplyProjection 消费
+        pipeline.transport = new LocalTransport { mirror = mirror };
 
         // Phase 1：注册 Player Observer，通过 ObserverFactory 组装裁剪链
         var heroactor = stage.seat.GetActor(selfseat);

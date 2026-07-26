@@ -44,22 +44,23 @@ public partial class FrequencyRule : IProjectionRule, IGBL
     {
         if (0 == currentmask) return 0;
 
+        // behaviorinfotype 可为 null，跳过未设置类型的包
+        if (null == packet.behaviorinfotype) return currentmask;
+
         var result = currentmask;
         for (var i = 0; i < 64; i++)
         {
             var bit = 1ul << i;
             if (0ul == (currentmask & bit)) continue;
 
-            // behaviorinfotype 可为 null，跳过未设置类型的包
-            if (null == packet.behaviorinfotype) continue;
-
-            var key = (packet.behaviorinfotype!, i);
+            var key = (packet.behaviorinfotype, i);
             if (false == intervaltable.TryGetValue(key, out var interval)) continue;
 
             var stateKey = (packet.actor, packet.behaviorinfotype!, i);
             if (lastpushtable.TryGetValue(stateKey, out var lastFrame))
             {
-                if (packet.frame - lastFrame < interval)
+                // 仅帧号递增时做间隔检测，回滚帧（frame <= lastFrame）始终放行
+                if (packet.frame > lastFrame && packet.frame - lastFrame < interval)
                 {
                     // 抑制本次推送，不更新 lastpushtable
                     result &= ~bit;
@@ -79,12 +80,15 @@ public partial class FrequencyRule : IProjectionRule, IGBL
     /// </summary>
     public void Cleanup(long minFrame)
     {
-        var stale = new List<(ulong, System.Type, int)>();
+        // 从对象池取 List 收集过期键，避免每帧 new
+        var stale = ObjectPool.Ensure<List<(ulong, System.Type, int)>>("FREQUENCY_CLEANUP_LIST");
+        stale.Clear();
         foreach (var kv in lastpushtable)
         {
             if (kv.Value < minFrame) stale.Add(kv.Key);
         }
         foreach (var key in stale) lastpushtable.Remove(key);
+        ObjectPool.Set(stale, "FREQUENCY_CLEANUP_LIST");
     }
 
     /// <summary>

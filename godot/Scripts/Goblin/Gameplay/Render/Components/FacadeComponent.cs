@@ -9,7 +9,7 @@ namespace Goblin.Gameplay.Render.Components;
 /// 外观组件 — FacadeInfo 的纯数据投影
 /// </summary>
 [ProjectorTarget(typeof(FacadeInfo))]
-public sealed partial class FacadeComponent : Component, IGBL
+public sealed partial class FacadeComponent : Component
 {
     /// <summary>
     /// 模型资源 ID
@@ -38,13 +38,24 @@ public sealed partial class FacadeComponent : Component, IGBL
     /// <summary>
     /// 待移除特效列表
     /// </summary>
-    public List<uint> rmveffects { get; set; }
+    public List<uint> rmveffects { get; set; } = default!;
     /// <summary>
     /// 特效字典
     /// </summary>
-    public Dictionary<uint, EffectInfo> effectdict { get; set; }
+    public Dictionary<uint, EffectInfo> effectdict { get; set; } = default!;
     /// <summary>
     /// 动画槽位列表
     /// </summary>
-    public List<AnimationSlot> animslots { get; set; }
+    public List<AnimationSlot> animslots { get; set; } = default!;
+
+    /// <summary>
+    /// 重置引用类型字段（对象池回收前调用，防止复用残留脏数据）
+    /// </summary>
+    public override void Reset()
+    {
+        base.Reset();
+        rmveffects = null;
+        effectdict = null;
+        animslots = null;
+    }
 }

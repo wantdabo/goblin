@@ -45,21 +45,43 @@ public partial class ProjectionPipeline : IGBL
     {
         if (null == packets || 0 == packets.Length)
         {
+            RecyclePacketCache();
             observerpackets = Array.Empty<ObserverPacket>();
             return;
         }
 
+        // 回收上帧 ObserverPacket 实例到对象池
+        RecyclePacketCache();
+
         packetcache = Crop.Process(packets, observers);
 
-        // T1.8：裁剪后的数据包交给 Transport 发送
+        // 裁剪后的数据包交给 Transport 发送
         if (null != transport && 0 < observerpackets.Length)
         {
             transport.Send(observerpackets);
+            // Transport 已消费，清空防止 ApplyProjection 双重 apply
+            observerpackets = Array.Empty<ObserverPacket>();
         }
     }
 
     /// <summary>
-    /// 浅拷贝（管线为管理容器，不持有需深拷贝的投影数据）
+    /// 回收当前帧缓存的 ObserverPacket 实例到对象池
+    /// </summary>
+    private void RecyclePacketCache()
+    {
+        if (null == packetcache) return;
+        foreach (var p in packetcache)
+        {
+            if (null == p) continue;
+            p.Reset();
+            ObjectPool.Set(p, ObserverPacket.POOL_KEY);
+        }
+        packetcache = Array.Empty<ObserverPacket>();
+    }
+
+    /// <summary>
+    /// 浅拷贝 — observers List 是共享引用，克隆后修改列表影响双方
+    /// Clone 产物仅供池化回收使用，业务侧不应修改克隆实例
     /// </summary>
     public IGBL Clone()
     {
@@ -71,6 +93,7 @@ public partial class ProjectionPipeline : IGBL
     /// </summary>
     public void Reset()
     {
+        RecyclePacketCache();
         observers.Clear();
         packetcache = Array.Empty<ObserverPacket>();
     }

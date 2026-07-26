@@ -90,15 +90,15 @@ public partial class Crop : IGBL
 
                 var trimmed = TrimValues(p.values, p.fieldmask, mask);
 
-                results.Add(new ObserverPacket
-                {
-                    observer = obs,
-                    actor = p.actor,
-                    behaviorinfotype = p.behaviorinfotype,
-                    fieldmask = mask,
-                    frame = p.frame,
-                    values = trimmed,
-                });
+                // 从对象池取 ObserverPacket 实例，避免每帧 new
+                var op = ObjectPool.Ensure<ObserverPacket>(ObserverPacket.POOL_KEY);
+                op.observer = obs;
+                op.actor = p.actor;
+                op.behaviorinfotype = p.behaviorinfotype;
+                op.fieldmask = mask;
+                op.frame = p.frame;
+                op.values = trimmed;
+                results.Add(op);
             }
         }
         var array = results.ToArray();
@@ -121,6 +121,8 @@ public partial class Crop : IGBL
     /// </summary>
     private static object[] TrimValues(object[] values, ulong originalMask, ulong targetMask)
     {
+        if (null == values || 0 == targetMask) return Array.Empty<object>();
+
         // 从对象池取出 List，清空复用
         var trimmed = ObjectPool.Ensure<List<object>>(CropPoolKey.VALUE_LIST);
         trimmed.Clear();

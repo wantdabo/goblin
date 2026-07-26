@@ -7,6 +7,7 @@ namespace Goblin.Gameplay.Projection.Rules;
 /// <summary>
 /// 权限裁剪规则 — 按 (ObserverType, BehaviorInfoType) 查表，返回允许的 fieldmask
 /// 敌方只能同步位置，队友同步全部字段
+/// Fail-open 设计：未注册权限的组合放行所有字段（更安全，避免因漏注册导致黑屏）
 /// </summary>
 public partial class PermissionRule : IProjectionRule, IGBL
 {
@@ -37,6 +38,7 @@ public partial class PermissionRule : IProjectionRule, IGBL
     public ulong Filter(ProjectorPacket packet, Observer observer, ulong currentmask)
     {
         if (0 == currentmask) return 0;
+        if (null == packet.behaviorinfotype) return currentmask;
 
         var key = (observer.type, packet.behaviorinfotype);
         if (false == permtable.TryGetValue(key, out var allowed)) return currentmask;

@@ -1430,9 +1430,8 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine();
         sb.AppendLine($"internal static class {cn}Apply");
         sb.AppendLine("{");
-        sb.AppendLine("    internal static void ApplyTo(object comp, ulong fieldmask, object[] values)");
+        sb.AppendLine($"    internal static void ApplyTo({cn} comp, ulong fieldmask, object[] values)");
         sb.AppendLine("    {");
-        sb.AppendLine($"        var c = ({cn})comp;");
         sb.AppendLine("        var vi = 0;");
 
         foreach (var field in data.fields)
@@ -1441,11 +1440,11 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             if (null != field.targetTypeText)
             {
                 // GBL 容器 → 原生容器转换
-                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) c.{field.name} = new {field.targetTypeText}(({field.typeText})values[vi++]);");
+                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) comp.{field.name} = new {field.targetTypeText}(({field.typeText})values[vi++]);");
             }
             else
             {
-                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) c.{field.name} = ({field.typeText})values[vi++];");
+                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) comp.{field.name} = ({field.typeText})values[vi++];");
             }
         }
 
@@ -1463,7 +1462,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine();
         sb.AppendLine($"partial class {cn} : Goblin.Gameplay.Render.Components.IComponentApply<{cn}>");
         sb.AppendLine("{");
-        sb.AppendLine($"    static Action<object, ulong, object[]> Goblin.Gameplay.Render.Components.IComponentApply<{cn}>.ApplyTo");
+        sb.AppendLine($"    static Action<{cn}, ulong, object[]> Goblin.Gameplay.Render.Components.IComponentApply<{cn}>.ApplyTo");
         sb.AppendLine($"        => {cn}Apply.ApplyTo;");
         sb.AppendLine("}");
 

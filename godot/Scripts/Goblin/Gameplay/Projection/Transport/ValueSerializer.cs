@@ -109,11 +109,12 @@ public static class ValueSerializer
             case long l:
                 return new SerializedValue { code = ValueTypeCode.INT64, data = new long[] { l } };
             case ulong ul:
-                return new SerializedValue { code = ValueTypeCode.UINT64, data = new long[] { (long)ul } };
+                return new SerializedValue { code = ValueTypeCode.UINT64, data = new long[] { (long)(ul >> 32), (long)(ul & 0xFFFFFFFF) } };
             default:
                 // 未识别的引用类型（GBLDict/GBLList 等）— Phase 2 由 SG 专用序列化器处理
-                // 当前网络模式下这些类型将因 MessagePack 不支持 object[] 而序列化失败
-                // 因此发送端跳过，接收端用 null 占位
+                // 当前网络模式下静默丢弃，避免 MessagePack 序列化 object[] 失败
+                System.Diagnostics.Debug.WriteLine(
+                    $"ValueSerializer: 不支持的类型 '{value.GetType().FullName}'，值被丢弃。Phase 2 请使用 SG 专用序列化器。");
                 return new SerializedValue { code = ValueTypeCode.NULL };
         }
     }
@@ -149,7 +150,7 @@ public static class ValueSerializer
             case ValueTypeCode.INT64:
                 return sv.data[0];
             case ValueTypeCode.UINT64:
-                return (ulong)sv.data[0];
+                return ((ulong)sv.data[0] << 32) | (ulong)(sv.data[1] & 0xFFFFFFFF);
             default:
                 return null;
         }

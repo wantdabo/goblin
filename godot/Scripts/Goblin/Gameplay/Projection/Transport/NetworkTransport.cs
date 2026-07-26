@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Render.Core;
 using MessagePack;
@@ -12,6 +13,11 @@ namespace Goblin.Gameplay.Projection.Transport;
 /// </summary>
 public class NetworkTransport : IPropertyTransport
 {
+    /// <summary>
+    /// 对象池 key（唯一常量）
+    /// </summary>
+    private const string PACKETDATA_LIST_KEY = "NETWORK_PACKETDATA_LIST";
+
     /// <summary>
     /// 类型注册表，序列化用 FullName 为键，反序列化端通过此表解析
     /// </summary>
@@ -38,7 +44,9 @@ public class NetworkTransport : IPropertyTransport
     {
         if (null == packets || 0 == packets.Length) return;
 
-        var list = new List<NetworkPacketData>();
+        // 从对象池取 List，清空复用
+        var list = ObjectPool.Ensure<List<NetworkPacketData>>(PACKETDATA_LIST_KEY);
+        list.Clear();
         foreach (var p in packets)
         {
             list.Add(new NetworkPacketData
@@ -53,6 +61,9 @@ public class NetworkTransport : IPropertyTransport
 
         var bytes = MessagePackSerializer.Serialize(list);
         onsend?.Invoke(bytes);
+
+        // 归还 List 到对象池
+        ObjectPool.Set(list, PACKETDATA_LIST_KEY);
     }
 }
 
@@ -117,16 +128,24 @@ public class RemoteTransport
         for (var i = 0; i < list.Count; i++)
         {
             var d = list[i];
-            packets[i] = new ObserverPacket
-            {
-                actor = d.actor,
-                behaviorinfotype = NetworkTransport.typeregistry.TryGetValue(d.behaviorinfotype, out var t) ? t : null,
-                fieldmask = d.fieldmask,
-                frame = d.frame,
-                values = ValueSerializer.DeserializeValues(d.values),
-            };
+            // 从对象池取 ObserverPacket 实例
+            var p = ObjectPool.Ensure<ObserverPacket>(ObserverPacket.POOL_KEY);
+            p.actor = d.actor;
+            p.behaviorinfotype = NetworkTransport.typeregistry.TryGetValue(d.behaviorinfotype, out var t) ? t : null;
+            p.fieldmask = d.fieldmask;
+            p.frame = d.frame;
+            p.values = ValueSerializer.DeserializeValues(d.values);
+            packets[i] = p;
         }
 
         mirror.ApplyPackets(packets);
+
+        // 归还 ObserverPacket 实例到对象池
+        foreach (var p in packets)
+        {
+            if (null == p) continue;
+            p.Reset();
+            ObjectPool.Set(p, ObserverPacket.POOL_KEY);
+        }
     }
 }

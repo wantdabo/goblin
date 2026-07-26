@@ -215,17 +215,16 @@ public class TestSpatialComponent : Component, IComponentApply<TestSpatialCompon
     /// <summary>
     /// 应用脏字段 — 后续迁至 SG 生成
     /// </summary>
-    internal static void ApplyTo(object comp, ulong fieldmask, object[] values)
+    internal static void ApplyTo(TestSpatialComponent comp, ulong fieldmask, object[] values)
     {
-        var c = (TestSpatialComponent)comp;
         var i = 0;
 
         // Bit0: position
-        if (0 != (fieldmask & 1)) c.position = (FPVector3)values[i++];
+        if (0 != (fieldmask & 1)) comp.position = (FPVector3)values[i++];
 
         // Bit1: scale
-        if (0 != (fieldmask & (1ul << 1))) c.scale = (FP)values[i++];
+        if (0 != (fieldmask & (1ul << 1))) comp.scale = (FP)values[i++];
     }
 
-    static Action<object, ulong, object[]> IComponentApply<TestSpatialComponent>.ApplyTo => ApplyTo;
+    static Action<TestSpatialComponent, ulong, object[]> IComponentApply<TestSpatialComponent>.ApplyTo => ApplyTo;
 }

@@ -15,13 +15,15 @@ public class VisibilityRule : IProjectionRule
 
     /// <summary>
     /// 裁剪：不可见返回 0
+    /// Fail-open：首次同步时 Mirror 尚无该 Actor 数据，放行让数据流入
     /// </summary>
     public ulong Filter(ProjectorPacket packet, Observer observer, ulong currentmask)
     {
         if (0 == currentmask) return 0;
         if (null == visibilitylookup) return currentmask;
 
-        if (false == visibilitylookup(packet.actor)) return 0;
+        // Mirror 中尚无该 Actor → 首帧数据，放行
+        if (false == visibilitylookup(packet.actor)) return currentmask;
 
         return currentmask;
     }

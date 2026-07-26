@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Render.Components;
 using Kowtow.Math;
@@ -15,19 +16,19 @@ public partial class Mirror
     /// <summary>
     /// ActorID → (ComponentType → Component实例)
     /// </summary>
-    private Dictionary<ulong, Dictionary<Type, object>> datas { get; set; }
+    private Dictionary<ulong, Dictionary<Type, Component>> datas { get; set; }
     /// <summary>
     /// BehaviorInfo 类型 → Component 类型 映射
     /// </summary>
     private Dictionary<Type, Type> infotocomp { get; set; }
     /// <summary>
-    /// Component 类型 → ApplyTo 静态委托
+    /// Component 类型 → ApplyTo 静态委托（包装后入参为 object）
     /// </summary>
     private Dictionary<Type, Action<object, ulong, object[]>> applymap { get; set; }
     /// <summary>
     /// Component 类型 → 工厂委托（零反射创建）
     /// </summary>
-    private Dictionary<Type, Func<object>> factorymap { get; set; }
+    private Dictionary<Type, Func<Component>> factorymap { get; set; }
     /// <summary>
     /// 未注册 infotype 去重缓存（避免重复 Warning）
     /// </summary>
@@ -35,22 +36,22 @@ public partial class Mirror
 
     public Mirror()
     {
-        datas = new Dictionary<ulong, Dictionary<Type, object>>();
+        datas = new Dictionary<ulong, Dictionary<Type, Component>>();
         infotocomp = new Dictionary<Type, Type>();
         applymap = new Dictionary<Type, Action<object, ulong, object[]>>();
-        factorymap = new Dictionary<Type, Func<object>>();
+        factorymap = new Dictionary<Type, Func<Component>>();
         missinginfologged = new HashSet<Type>();
     }
 
     /// <summary>
     /// 注册 BehaviorInfo → Component 映射
-    /// ApplyTo 委托通过 IComponentApply 接口直接获取，工厂委托零反射创建
+    /// ApplyTo 委托包装类型转换，工厂委托零反射创建
     /// </summary>
     public void Register<TInfo, TComp>()
         where TComp : Component, IComponentApply<TComp>, new()
     {
         infotocomp[typeof(TInfo)] = typeof(TComp);
-        applymap[typeof(TComp)] = TComp.ApplyTo;
+        applymap[typeof(TComp)] = (obj, mask, vals) => TComp.ApplyTo((TComp)obj, mask, vals);
         factorymap[typeof(TComp)] = () => new TComp();
     }
 
@@ -101,15 +102,18 @@ public partial class Mirror
 
         if (false == datas.TryGetValue(actor, out var compdict))
         {
-            compdict = new Dictionary<Type, object>();
+            compdict = new Dictionary<Type, Component>();
             datas[actor] = compdict;
         }
 
         if (false == compdict.TryGetValue(comptype, out var comp))
         {
-            comp = factorymap.TryGetValue(comptype, out var factory)
-                ? factory()
-                : Activator.CreateInstance(comptype);
+            if (false == factorymap.TryGetValue(comptype, out var factory))
+            {
+                throw new InvalidOperationException(
+                    $"Mirror.Apply: Component 类型 '{comptype.FullName}' 未通过 Register<> 注册。请确保启动时调用了 Mirror.Register<{comptype.Name}, TComp>()。");
+            }
+            comp = factory();
             compdict[comptype] = comp;
         }
 
@@ -132,12 +136,20 @@ public partial class Mirror
     }
 
     /// <summary>
-    /// 移除 Actor 的所有数据
+    /// 移除 Actor 的所有数据，Component 实例归还对象池
     /// </summary>
     public void RmvActor(ulong actor)
     {
         if (datas.TryGetValue(actor, out var compdict))
         {
+            foreach (var val in compdict.Values)
+            {
+                if (val is IGBL gbl)
+                {
+                    gbl.Reset();
+                    ObjectPool.Set(gbl);
+                }
+            }
             compdict.Clear();
             datas.Remove(actor);
         }

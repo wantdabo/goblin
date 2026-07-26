@@ -11,6 +11,7 @@ public interface IComponentApply<T>
 {
     /// <summary>
     /// ApplyTo 委托，将 values 数组应用到 Component 属性
+    /// T 约束为 Component，调用方通过 Register<> 包装为 Action&lt;object,...&gt;
     /// </summary>
-    static abstract Action<object, ulong, object[]> ApplyTo { get; }
+    static abstract Action<T, ulong, object[]> ApplyTo { get; }
 }

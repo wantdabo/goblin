@@ -12,10 +12,12 @@ public static class ObserverFactory
     /// 创建 Observer 及其规则链
     /// </summary>
     /// <param name="type">观察者类型</param>
-    /// <param name="id">观察者 ID</param>
+    /// <param name="id">观察者 ID（预留，当前未使用）</param>
     /// <returns>配置好的 Crop 规则链</returns>
     public static Crop CreateRuleChain(ObserverType type, ulong id = 0)
     {
+        _ = id;
+
         var crop = new Crop();
         switch (type)
         {
@@ -44,6 +46,12 @@ public static class ObserverFactory
                 // AI：AOI + 可见性
                 crop.AddRule(new AOIRule());
                 crop.AddRule(new VisibilityRule());
+                break;
+
+            default:
+                // 未知观察者类型 — 空规则链（全屏蔽）
+                System.Diagnostics.Debug.WriteLine(
+                    $"ObserverFactory: 未识别的 ObserverType '{type}'，返回空规则链。请确保新增 ObserverType 后更新本方法。");
                 break;
         }
 
