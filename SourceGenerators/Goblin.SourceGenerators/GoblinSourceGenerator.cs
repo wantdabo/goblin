@@ -139,6 +139,8 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         bool isBehaviorInfo,
         bool isAbstract,
         bool hasOnReady,
+        bool hasOnReset,
+        bool hasOnClone,
         List<LifecycleFieldData>? parentFields
     );
 
@@ -257,15 +259,44 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         var isAbstract = symbol.IsAbstract;
 
-        // 检测该类是否已有 OnReady 重写（非继承）
+        // 检测该类是否已有 SGReady 重写（非继承）
+        var sgReadyMethod = isBehaviorInfo ? "SGReady" : "OnReady";
         var hasOnReady = false;
-        foreach (var member in symbol.GetMembers("OnReady"))
+        foreach (var member in symbol.GetMembers(sgReadyMethod))
         {
             if (member is IMethodSymbol m
                 && SymbolEqualityComparer.Default.Equals(m.ContainingType, symbol)
                 && false == m.IsStatic)
             {
                 hasOnReady = true;
+                break;
+            }
+        }
+
+        // 检测该类是否已有 SGReset 或 Reset 重写
+        var sgResetMethod = isBehaviorInfo ? "SGReset" : "Reset";
+        var hasOnReset = false;
+        foreach (var member in symbol.GetMembers(sgResetMethod))
+        {
+            if (member is IMethodSymbol m
+                && SymbolEqualityComparer.Default.Equals(m.ContainingType, symbol)
+                && false == m.IsStatic)
+            {
+                hasOnReset = true;
+                break;
+            }
+        }
+
+        // 检测该类是否已有 SGClone 或 Clone 重写
+        var sgCloneMethod = isBehaviorInfo ? "SGClone" : "Clone";
+        var hasOnClone = false;
+        foreach (var member in symbol.GetMembers(sgCloneMethod))
+        {
+            if (member is IMethodSymbol m
+                && SymbolEqualityComparer.Default.Equals(m.ContainingType, symbol)
+                && false == m.IsStatic)
+            {
+                hasOnClone = true;
                 break;
             }
         }
@@ -318,6 +349,8 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             isBehaviorInfo,
             isAbstract,
             hasOnReady,
+            hasOnReset,
+            hasOnClone,
             parentFields
         );
     }
@@ -555,18 +588,41 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine($"partial class {className}");
         sb.AppendLine("{");
 
-        // ---- OnReady() ----
-        // Info 不应重写 OnReady；如有容器字段始终生成
         if (data.isBehaviorInfo)
         {
-            EmitOnReady(sb, data);
+            // ---- SGReady() ----
+            // BehaviorInfo 子类且用户未手动定义时生成
+            if (false == data.hasOnReady)
+            {
+                EmitSGReady(sb, data);
+            }
+
+            // ---- SGReset() ----
+            if (false == data.hasOnReset)
+            {
+                EmitReset(sb, data);
+            }
+
+            // ---- SGClone() ----
+            if (false == data.isAbstract && false == data.hasOnClone)
+            {
+                EmitClone(sb, data);
+            }
         }
+        else
+        {
+            // ---- Reset() ----
+            if (false == data.hasOnReset)
+            {
+                EmitReset(sb, data);
+            }
 
-        // ---- Reset() ----
-        EmitReset(sb, data);
-
-        // ---- Clone() ----
-        EmitClone(sb, data);
+            // ---- Clone() ----
+            if (false == data.isAbstract && false == data.hasOnClone)
+            {
+                EmitClone(sb, data);
+            }
+        }
 
         sb.AppendLine("}");
 
@@ -587,29 +643,14 @@ public class GoblinSourceGenerator : IIncrementalGenerator
     }
 
     /// <summary>
-    /// 生成 OnReady 重写，内联初始化所有容器字段
+    /// 生成 SGReady 重写，初始化所有容器字段
     /// </summary>
-    private static void EmitOnReady(System.Text.StringBuilder sb, LifecycleClassData data)
+    private static void EmitSGReady(System.Text.StringBuilder sb, LifecycleClassData data)
     {
-        // 检查是否有需要初始化的容器字段
-        var hasContainer = false;
-        foreach (var field in data.fields)
-        {
-            if (field.category == FieldCategory.ContainerValue
-                || field.category == FieldCategory.ContainerIGBL
-                || field.category == FieldCategory.ContainerNestedValue
-                || field.category == FieldCategory.ContainerNestedIGBL)
-            {
-                hasContainer = true;
-                break;
-            }
-        }
-        if (false == hasContainer) return;
-
         sb.AppendLine("    /// <summary>");
-        sb.AppendLine("    /// 池对象首次使用回调，初始化所有容器字段");
+        sb.AppendLine("    /// SG 生成的 Ready 初始化，仅初始化容器字段");
         sb.AppendLine("    /// </summary>");
-        sb.AppendLine("    protected override void OnReady()");
+        sb.AppendLine("    protected override void SGReady()");
         sb.AppendLine("    {");
 
         foreach (var field in data.fields)
@@ -626,19 +667,20 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 sb.AppendLine($"        if (null == {field.name}) {field.name} = new {field.typeName}();");
         }
 
-        sb.AppendLine("        base.OnReady();");
+        sb.AppendLine("        base.SGReady();");
         sb.AppendLine("    }");
         sb.AppendLine();
     }
 
     private static void EmitReset(System.Text.StringBuilder sb, LifecycleClassData data)
     {
-        var modifier = data.isBehaviorInfo ? "public override" : "public";
+        var methodName = data.isBehaviorInfo ? "SGReset" : "Reset";
+        var modifier = data.isBehaviorInfo ? "protected override" : "public";
 
         sb.AppendLine("    /// <summary>");
         sb.AppendLine("    /// 重置对象状态，回收前调用");
         sb.AppendLine("    /// </summary>");
-        sb.AppendLine($"    {modifier} void Reset()");
+        sb.AppendLine($"    {modifier} void {methodName}()");
         sb.AppendLine("    {");
 
         // 容器 IGBL 字段：先回收元素再清空
@@ -729,10 +771,10 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             sb.AppendLine("        projectdirtymask = 0;");
         }
 
-        // 尾调基类（仅 BehaviorInfo 子类）
+        // 尾调基类 SGReset（仅 BehaviorInfo 子类）
         if (data.isBehaviorInfo)
         {
-            sb.AppendLine("        base.Reset();");
+            sb.AppendLine("        base.SGReset();");
         }
 
         sb.AppendLine("    }");
@@ -741,21 +783,19 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
     private static void EmitClone(System.Text.StringBuilder sb, LifecycleClassData data)
     {
-        // 抽象类不生成 Clone（Ensure<AbstractType>() 非法）
-        if (data.isAbstract) return;
-
         var className = data.className;
+        var methodName = data.isBehaviorInfo ? "SGClone" : "Clone";
         var returnType = data.isBehaviorInfo ? "BehaviorInfo" : "IGBL";
-        var modifier = data.isBehaviorInfo ? "public override" : "public";
+        var modifier = data.isBehaviorInfo ? "protected override" : "public";
 
         sb.AppendLine("    /// <summary>");
         sb.AppendLine("    /// 深度克隆");
         sb.AppendLine("    /// </summary>");
-        sb.AppendLine($"    {modifier} {returnType} Clone()");
+        sb.AppendLine($"    {modifier} {returnType} {methodName}()");
         sb.AppendLine("    {");
 
         sb.AppendLine($"        var c = ObjectCache.Ensure<{className}>();");
-        // Ready 先于字段拷贝：OnReady/OnReset 初始化，随后字段拷贝覆盖为目标值（仅 BehaviorInfo 子类）
+        // Ready 先于字段拷贝：SGReady/OnReady 初始化容器，随后字段拷贝覆盖为目标值（仅 BehaviorInfo 子类）
         if (data.isBehaviorInfo)
         {
             sb.AppendLine("        c.Ready(actor);");

@@ -158,11 +158,22 @@ public class GameplayView : UIBaseView
                     $"EUL: ({spatial.euler.x:F1},{spatial.euler.y:F1},{spatial.euler.z:F1})\n";
             }
 
+            // Facade 信息
+            var facadeText = "";
+            var facade = proxy.mirror?.GetComp<FacadeComponent>(hero);
+            if (null != facade)
+            {
+                facadeText = $"Model: {facade.model}  Anim: {facade.animstate}/{facade.animhash}@{facade.animelapsed}  " +
+                    $"AnimsSlot: {facade.animslots?.Count ?? 0}  " +
+                    $"Effect: +{facade.effectincrement} ({(facade.effectdict?.Count ?? 0)})\n";
+            }
+
             synopsisText.Text =
                 $"单步耗时 (毫秒) : {proxy.stepms}\n" +
                 $"时间缩放 : {proxy.timescale}\n" +
                 hudText +
-                spatialText;
+                spatialText +
+                facadeText;
         }
     }
 

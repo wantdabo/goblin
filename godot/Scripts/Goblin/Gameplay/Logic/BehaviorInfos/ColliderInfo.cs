@@ -27,9 +27,18 @@ public partial class ColliderInfo : BehaviorInfo
     /// </summary>
     public Sphere sphere { get; set; }
 
+    // layer 默认值为 LAYER_DEFAULT（非 default），首次创建时由此初始化
+    // SG Reset 设 default 后由 OnReset 覆盖，但 OnReady 不会设置值类型字段
+    protected override void OnReady()
+    {
+        base.OnReady();
+        layer = COLLISION_DEFINE.LAYER_DEFAULT;
+    }
+
     // layer Reset 值为 LAYER_DEFAULT（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {
+        base.OnReset();
         layer = COLLISION_DEFINE.LAYER_DEFAULT;
     }
 }

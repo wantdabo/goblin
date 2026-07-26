@@ -25,9 +25,16 @@ public partial class TickerInfo : BehaviorInfo
         }
     }
 
+    protected override void OnReady()
+    {
+        base.OnReady();
+        timescale = FP.One;
+    }
+
     // timescale Reset 值为 FP.One（非 default），SG Reset 设 default 后由此覆盖
     protected override void OnReset()
     {
+        base.OnReset();
         timescale = FP.One;
     }
 }
