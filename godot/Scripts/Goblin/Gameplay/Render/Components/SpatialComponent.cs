@@ -23,4 +23,5 @@ public sealed partial class SpatialComponent : Component
     /// 缩放
     /// </summary>
     public FP scale { get; set; } = FP.One;
+
 }

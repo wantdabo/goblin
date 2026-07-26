@@ -27,4 +27,5 @@ public sealed partial class HUDComponent : Component
     /// 攻击力
     /// </summary>
     public int attack { get; set; }
+
 }
