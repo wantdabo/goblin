@@ -35,7 +35,7 @@ public class Observer
     /// <summary>
     /// 关注的目标 Actor（AOI 中心），null 表示全局
     /// </summary>
-    public ulong? observedActor { get; set; }
+    public ulong? observedactor { get; set; }
 
     /// <summary>
     /// AOI 半径

@@ -98,16 +98,16 @@ public class GameplayProxy : Proxy<GameplayModel>
         mirror.Register<HUDInfo, HUDComponent>();
         mirror.Register<FacadeInfo, FacadeComponent>();
         pipeline = new ProjectionPipeline();
-        pipeline.crop.AddRule(new GodRule());
         // 不设 transport，observerpackets 由主线程 ApplyProjection 消费
 
         // Phase 1：注册 Player Observer，以主角为 AOI 中心
-        var heroActor = stage.seat.GetActor(selfseat);
+        var heroactor = stage.seat.GetActor(selfseat);
         pipeline.observers.Add(new Observer
         {
             type = ObserverType.Player,
             id = selfseat,
-            observedActor = heroActor,
+            observedactor = heroactor,
+            crop = pipeline.crop,
         });
 
         // 接入调试服务
@@ -259,11 +259,10 @@ public class GameplayProxy : Proxy<GameplayModel>
         stage.Step();
 
         // 投影管线：ProjectorSystem 出包 → 裁剪 → 传输 → Mirror
-        if (null != pipeline
-            && stage.SeekBehavior<ProjectorSystem>(ulong.MaxValue, out var ps)
-            && null != ps.packets)
+        var ps = stage.projector;
+        if (null != ps && null != ps.packets)
         {
-            pipeline.Process(ps.packets);
+            pipeline?.Process(ps.packets);
         }
     }
 

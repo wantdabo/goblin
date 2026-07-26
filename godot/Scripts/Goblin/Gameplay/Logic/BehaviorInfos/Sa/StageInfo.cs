@@ -75,10 +75,4 @@ public partial class StageInfo : BehaviorInfo
     /// 行为信息列表, 键为行为类型, 值为该行为类型的所有 BehaviorInfo 列表
     /// </summary>
     public GBLDict<Type, GBLList<BehaviorInfo>> behaviorinfos { get; set; }
-
-    // timescale Reset 值为 FP.One（非 default），SG Reset 设 default 后由此覆盖
-    protected override void OnReset()
-    {
-        timescale = FP.One;
-    }
 }

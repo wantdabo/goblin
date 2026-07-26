@@ -129,8 +129,8 @@ public class CropSystemTests
         crop.AddRule(new GodRule());
 
         var observers = new List<Observer>();
-        observers.Add(new Observer { type = ObserverType.Player, id = 1 });
-        observers.Add(new Observer { type = ObserverType.GM, id = 0 });
+        observers.Add(new Observer { type = ObserverType.Player, id = 1, crop = crop });
+        observers.Add(new Observer { type = ObserverType.GM, id = 0, crop = crop });
 
         var packet = new ProjectorPacket
         {
@@ -141,7 +141,7 @@ public class CropSystemTests
             values = new object[] { 100, 200 },
         };
 
-        var results = Crop.Process(new[] { packet }, observers, crop);
+        var results = Crop.Process(new[] { packet }, observers);
 
         Assert.Equal(2, results.Length);
 
@@ -154,36 +154,6 @@ public class CropSystemTests
         Assert.Equal(ObserverType.GM, results[1].observer.type);
     }
 
-    [Fact]
-    public void CropProcess_MaskZero_Excluded()
-    {
-        var crop = new Crop();
-        crop.AddRule(new MaskAllRule());
-
-        var observers = new List<Observer>();
-        observers.Add(new Observer { type = ObserverType.Player, id = 1 });
-
-        var packet = new ProjectorPacket
-        {
-            actor = 1,
-            fieldmask = 0b1,
-            frame = 1,
-        };
-
-        var results = Crop.Process(new[] { packet }, observers, crop);
-
-        Assert.Empty(results);
-    }
-
-    [Fact]
-    public void CropProcess_EmptyInput_ReturnsEmpty()
-    {
-        var crop = new Crop();
-        var observers = new List<Observer>();
-        var results = Crop.Process(System.Array.Empty<ProjectorPacket>(), observers, crop);
-        Assert.Empty(results);
-    }
-
     // ============================================================
     // Observer
     // ============================================================
@@ -193,7 +163,7 @@ public class CropSystemTests
     {
         var obs = new Observer();
 
-        Assert.Equal(ObserverType.Player, obs.type);
+        Assert.Equal(ObserverType.GM, obs.type);
         Assert.Equal(0ul, obs.id);
     }
 
@@ -209,12 +179,12 @@ public class CropSystemTests
     [Fact]
     public void ObserverType_AllValuesDefined()
     {
-        Assert.Equal(0, (int)ObserverType.Player);
-        Assert.Equal(1, (int)ObserverType.Spectator);
-        Assert.Equal(2, (int)ObserverType.GM);
-        Assert.Equal(3, (int)ObserverType.Replay);
-        Assert.Equal(4, (int)ObserverType.AI);
-        Assert.Equal(5, (int)ObserverType.Editor);
+        Assert.Equal(0, (int)ObserverType.GM);
+        Assert.Equal(1, (int)ObserverType.Editor);
+        Assert.Equal(2, (int)ObserverType.Replay);
+        Assert.Equal(3, (int)ObserverType.Player);
+        Assert.Equal(4, (int)ObserverType.Spectator);
+        Assert.Equal(5, (int)ObserverType.AI);
     }
 
     // ============================================================

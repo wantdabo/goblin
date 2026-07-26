@@ -84,7 +84,7 @@ public class ProjectorSystemTests
 
         stage.AddBehaviorInfo<ProjectFieldInfo>(1);
 
-        // 诊断：直接验证 behaviorinfodict 迭代
+        // 验证 behaviorinfodict 已包含该 BehaviorInfo
         ulong foundActor = ulong.MaxValue;
         foreach (var (actorId, dict) in stage.cache.behaviorinfodict)
         {

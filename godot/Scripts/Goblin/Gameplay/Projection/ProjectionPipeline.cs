@@ -30,24 +30,28 @@ public partial class ProjectionPipeline : IGBL
     public IPropertyTransport transport { get; set; }
 
     /// <summary>
-    /// 本帧裁剪后的 ObserverPacket 数组
+    /// 本帧裁剪后的 ObserverPacket 数组（volatile 保证多线程可见性）
     /// </summary>
-    public ObserverPacket[] observerpackets { get; private set; }
+    private volatile ObserverPacket[] packetcache;
+    public ObserverPacket[] observerpackets { get => packetcache; private set => packetcache = value; }
 
     public ProjectionPipeline()
     {
         observers = new List<Observer>();
         crop = new Crop();
-        observerpackets = Array.Empty<ObserverPacket>();
+        packetcache = Array.Empty<ObserverPacket>();
     }
 
     /// <summary>
     /// 执行投影管线：原始包 → 按 Observer 裁剪 → 传输
+    /// 空包直接返回，不覆盖上一帧的有效 observerpackets
     /// </summary>
     /// <param name="packets">ProjectorSystem 产出的原始投影包</param>
     public void Process(ProjectorPacket[] packets)
     {
-        observerpackets = Crop.Process(packets, observers, crop);
+        if (0 == packets.Length) return;
+
+        packetcache = Crop.Process(packets, observers);
 
         // T1.8：裁剪后的数据包交给 Transport 发送
         if (null != transport && 0 < observerpackets.Length)

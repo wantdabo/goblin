@@ -1344,7 +1344,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             var typeText = typeObj?.ToDisplayString();
             if (null == typeText) continue;
 
-            var index = cargs.Length >= 3 && cargs[2].Value is int intVal
+            var index = cargs.Length >= 3 && cargs[2].Value is int intVal && -1 != intVal
                 ? intVal
                 : nextAutoIndex;
             nextAutoIndex = index + 1;

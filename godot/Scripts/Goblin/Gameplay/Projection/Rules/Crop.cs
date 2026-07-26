@@ -62,9 +62,8 @@ public partial class Crop : IGBL
     /// </summary>
     /// <param name="packets">原始数据包数组</param>
     /// <param name="observers">观察者列表</param>
-    /// <param name="crop">裁剪实例</param>
     /// <returns>裁剪后的 ObserverPacket 数组，mask == 0 的已过滤</returns>
-    public static ObserverPacket[] Process(ProjectorPacket[] packets, List<Observer> observers, Crop crop)
+    public static ObserverPacket[] Process(ProjectorPacket[] packets, List<Observer> observers)
     {
         if (0 == packets.Length || 0 == observers.Count) return Array.Empty<ObserverPacket>();
 
@@ -73,8 +72,12 @@ public partial class Crop : IGBL
         {
             foreach (var obs in observers)
             {
-                var mask = crop.Project(p, obs);
+                // 使用 Observer 自身的裁剪链（若未设则不裁剪）
+                var crop = obs.crop;
+                var mask = null != crop ? crop.Project(p, obs) : p.fieldmask;
                 if (0 == mask) continue;
+
+                var trimmed = TrimValues(p.values, p.fieldmask, mask);
 
                 results.Add(new ObserverPacket
                 {
@@ -83,11 +86,27 @@ public partial class Crop : IGBL
                     behaviorinfotype = p.behaviorinfotype,
                     fieldmask = mask,
                     frame = p.frame,
-                    values = p.values,
+                    values = trimmed,
                 });
             }
         }
         return results.ToArray();
+    }
+
+    /// <summary>
+    /// 按裁剪后 mask 从原始 values 中提取子集
+    /// </summary>
+    private static object[] TrimValues(object[] values, ulong originalMask, ulong targetMask)
+    {
+        var trimmed = new List<object>();
+        var vi = 0;
+        for (int bit = 0; bit < 64; bit++)
+        {
+            if (0 == (originalMask & (1UL << bit))) continue;
+            if (0 != (targetMask & (1UL << bit))) trimmed.Add(values[vi]);
+            vi++;
+        }
+        return trimmed.ToArray();
     }
 }
 

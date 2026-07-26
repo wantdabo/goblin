@@ -23,17 +23,11 @@ public partial class Mirror
     /// Component 类型 → ApplyTo 静态委托
     /// </summary>
     private Dictionary<Type, Action<object, ulong, object[]>> applymap { get; set; }
-    /// <summary>
-    /// 事件去重缓存
-    /// </summary>
-    private HashSet<string> eventframecache { get; set; }
-
     public Mirror()
     {
         datas = new Dictionary<ulong, Dictionary<Type, object>>();
         infotocomp = new Dictionary<Type, Type>();
         applymap = new Dictionary<Type, Action<object, ulong, object[]>>();
-        eventframecache = new HashSet<string>();
     }
 
     /// <summary>
@@ -63,7 +57,10 @@ public partial class Mirror
     /// </summary>
     private void Apply(ulong actor, Type infotype, ulong fieldmask, object[] values)
     {
-        if (false == infotocomp.TryGetValue(infotype, out var comptype)) return;
+        if (false == infotocomp.TryGetValue(infotype, out var comptype))
+        {
+            return;
+        }
 
         if (false == datas.TryGetValue(actor, out var compdict))
         {
@@ -78,20 +75,19 @@ public partial class Mirror
         }
 
         if (applymap.TryGetValue(comptype, out var apply))
+        {
             apply(comp, fieldmask, values);
+        }
     }
 
     /// <summary>
-    /// 批量应用 ObserverPacket
+    /// 批量应用 ObserverPacket（每条 ObserverPacket 独立 Apply，按 Observer 合并）
     /// </summary>
     public void ApplyPackets(ObserverPacket[] packets)
     {
         if (null == packets) return;
-        eventframecache.Clear();
         foreach (var p in packets)
         {
-            var key = $"{p.actor}_{p.behaviorinfotype.Name}";
-            if (false == eventframecache.Add(key)) continue;
             Apply(p.actor, p.behaviorinfotype, p.fieldmask, p.values);
         }
     }

@@ -48,19 +48,33 @@ public class InputSystem
         }
         return state;
     }
+
+    /// <summary>
+    /// 设置输入槽状态
+    /// </summary>
+    public void SetInput(ushort key, bool press, IntVector2 dire)
+    {
+        if (false == inputs.TryGetValue(key, out var state))
+        {
+            state = new InputState();
+            inputs[key] = state;
+        }
+        state.press = press;
+        state.dire = dire;
+    }
 }
 
 /// <summary>
-/// 输入状态
+/// 输入状态（class 引用语义，外部可直接修改字段）
 /// </summary>
-public struct InputState
+public class InputState
 {
     /// <summary>
     /// 是否按下
     /// </summary>
-    public bool press;
+    public bool press { get; set; }
     /// <summary>
     /// 方向
     /// </summary>
-    public IntVector2 dire;
+    public IntVector2 dire { get; set; }
 }

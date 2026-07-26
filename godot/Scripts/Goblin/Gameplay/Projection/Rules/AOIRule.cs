@@ -20,16 +20,18 @@ public class AOIRule : IProjectionRule
     public ulong Filter(ProjectorPacket packet, Observer observer, ulong currentmask)
     {
         if (null == positionlookup) return currentmask;
-        if (null == observer.observedActor) return currentmask;
+        if (null == observer.observedactor) return currentmask;
 
-        var center = positionlookup(observer.observedActor.Value);
+        var center = positionlookup(observer.observedactor.Value);
         if (null == center) return currentmask;
 
         var target = positionlookup(packet.actor);
         if (null == target) return currentmask;
 
-        var sqr = (center.Value - target.Value).sqrMagnitude;
         var rad = observer.radius;
+        if (rad <= FP.Zero) return currentmask;
+
+        var sqr = (center.Value - target.Value).sqrMagnitude;
         if (sqr <= rad * rad) return currentmask;
 
         return 0;

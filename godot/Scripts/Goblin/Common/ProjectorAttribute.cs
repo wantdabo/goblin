@@ -23,7 +23,7 @@ public class ProjectorAttribute : System.Attribute
     /// </summary>
     public int index { get; }
 
-    public ProjectorAttribute(string name, System.Type type, int index = 0)
+    public ProjectorAttribute(string name, System.Type type, int index = -1)
     {
         this.name = name;
         this.type = type;

@@ -172,6 +172,7 @@ public sealed class Stage
 		// 悖论存在, 此处手动添加
 		info = ObjectCache.Ensure<StageInfo>();
 		info.Ready(sa);
+		info.timescale = FP.One;
 		info.state = StageState.Initialized;
 			
 		AddActor(sa);
@@ -339,20 +340,6 @@ public sealed class Stage
 			}
 		}
 
-		// Phase 4：恢复后从 ProjectorSystem 快照恢复投影字段值
-		projector.FlashRestore(snapshot.frame);
-	}
-
-	/// <summary>
-	/// 快照回滚 — 结合 ProjectorSystem 快照恢复投影字段值并重新同步
-	/// 比 Stage.Restore 轻量，仅恢复 Projector 字段，保持 Actor/Behavior 结构不变
-	/// </summary>
-	public void FlashRestore(uint targetframe)
-	{
-		if (false == projector.FlashRestore(targetframe)) return;
-
-		// 将帧号回退到目标帧
-		info.frame = targetframe;
 	}
 
 	/// <summary>
@@ -462,7 +449,8 @@ public sealed class Stage
 			{
 				if (SeekBehaviorInfo(behavior.actor, out TickerInfo ticker))
 				{
-					behavior.Tick(ticker.timescale * tick);
+					var btick = ticker.timescale * tick;
+					behavior.Tick(btick);
 					continue;
 				}
 

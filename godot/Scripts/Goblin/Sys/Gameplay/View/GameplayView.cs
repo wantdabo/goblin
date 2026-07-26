@@ -1,9 +1,11 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands;
+using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Render.Components;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Godot;
+using Kowtow.Math;
 using System.Collections.Generic;
 
 namespace Goblin.Sys.Gameplay.View;
@@ -132,6 +134,9 @@ public class GameplayView : UIBaseView
         var proxy = engine.proxy.gameplay;
         if (null == proxy.stage) return;
 
+        // 捕获键盘输入，写入 InputSystem
+        CaptureInput(proxy);
+
         // 主线程应用投影管线产出的观察者包
         proxy.ApplyProjection();
 
@@ -145,10 +150,47 @@ public class GameplayView : UIBaseView
                 hudText = $"HP: {hud.hp}/{hud.maxhp}  Atk: {hud.attack}  Spd: {hud.movespeed}\n";
             }
 
+            var spatialText = "";
+            var spatial = proxy.mirror?.GetComp<SpatialComponent>(hero);
+            if (null != spatial)
+            {
+                spatialText = $"POS: ({spatial.position.x:F1},{spatial.position.y:F1},{spatial.position.z:F1})  " +
+                    $"EUL: ({spatial.euler.x:F1},{spatial.euler.y:F1},{spatial.euler.z:F1})\n";
+            }
+
             synopsisText.Text =
                 $"单步耗时 (毫秒) : {proxy.stepms}\n" +
                 $"时间缩放 : {proxy.timescale}\n" +
-                hudText;
+                hudText +
+                spatialText;
         }
+    }
+
+    /// <summary>
+    /// 捕获键盘输入，写入 InputSystem 输入槽
+    /// </summary>
+    private void CaptureInput(GameplayProxy proxy)
+    {
+        // 摇杆：WASD → IntVector2 方向
+        var x = 0;
+        var y = 0;
+        if (Input.IsKeyPressed(Key.D)) x += 1;
+        if (Input.IsKeyPressed(Key.A)) x -= 1;
+        if (Input.IsKeyPressed(Key.S)) y += 1;
+        if (Input.IsKeyPressed(Key.W)) y -= 1;
+        var hasDirection = 0 != x || 0 != y;
+        proxy.input.SetInput(INPUT_DEFINE.JOYSTICK, hasDirection, new IntVector2(x * 1000, y * 1000));
+
+        // 攻击：J 键 或 鼠标左键
+        var baPressed = Input.IsKeyPressed(Key.J) || Input.IsMouseButtonPressed(MouseButton.Left);
+        proxy.input.SetInput(INPUT_DEFINE.BA, baPressed, new IntVector2());
+
+        // 技能 1：K 键
+        var bbPressed = Input.IsKeyPressed(Key.K);
+        proxy.input.SetInput(INPUT_DEFINE.BB, bbPressed, new IntVector2());
+
+        // 技能 2：L 键
+        var bcPressed = Input.IsKeyPressed(Key.L);
+        proxy.input.SetInput(INPUT_DEFINE.BC, bcPressed, new IntVector2());
     }
 }

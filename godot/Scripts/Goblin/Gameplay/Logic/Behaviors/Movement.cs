@@ -22,12 +22,13 @@ public class Movement : Behavior<MovementInfo>
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 
         dire.Normalize();
-        var motion = dire * stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED) * tick;
+        var speed = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED);
+        var motion = dire * speed * tick;
         spatial.position += motion;
 
         FP angle = FPMath.Atan2(dire.x, dire.z) * FPMath.Rad2Deg;
         spatial.euler = FPVector3.up * angle;
-            
+
         info.turnmotion = true;
     }
 
