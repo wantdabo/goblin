@@ -45,5 +45,5 @@ public class Observer
     /// <summary>
     /// 裁剪规则链
     /// </summary>
-    public Crop crop { get; set; }
+    public Crop? crop { get; set; }
 }

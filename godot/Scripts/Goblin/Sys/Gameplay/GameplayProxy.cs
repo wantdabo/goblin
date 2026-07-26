@@ -100,15 +100,29 @@ public class GameplayProxy : Proxy<GameplayModel>
         pipeline = new ProjectionPipeline();
         // 不设 transport，observerpackets 由主线程 ApplyProjection 消费
 
-        // Phase 1：注册 Player Observer，以主角为 AOI 中心
+        // Phase 1：注册 Player Observer，通过 ObserverFactory 组装裁剪链
         var heroactor = stage.seat.GetActor(selfseat);
+        var crop = ObserverFactory.CreateRuleChain(ObserverType.Player, selfseat);
+
+        // 注入 AOI 位置查询和可见性查询委托
+        foreach (var rule in crop.GetRules())
+        {
+            if (rule is AOIRule aoi)
+                aoi.positionlookup = mirror.TryGetPosition;
+            else if (rule is VisibilityRule vis)
+                vis.visibilitylookup = mirror.HasActor;
+        }
+
         pipeline.observers.Add(new Observer
         {
             type = ObserverType.Player,
             id = selfseat,
             observedactor = heroactor,
-            crop = pipeline.crop,
+            crop = crop,
         });
+
+        // 网络 Type 注册（为后续 NetworkTransport 做准备）
+        RegisterProjectionTypes();
 
         // 接入调试服务
         engine.debug.Attach(new GameplayStateProvider(stage), stage);
@@ -287,5 +301,15 @@ public class GameplayProxy : Proxy<GameplayModel>
         stepms = (int)(e.tick * 1000);
         if (engine.debug.OnBeforeStep() == false) return;
         OnStep();
+    }
+
+    /// <summary>
+    /// 注册投影类型到 NetworkTransport 类型表（为网络模式做准备）
+    /// </summary>
+    private static void RegisterProjectionTypes()
+    {
+        NetworkTransport.RegisterType(typeof(SpatialInfo));
+        NetworkTransport.RegisterType(typeof(HUDInfo));
+        NetworkTransport.RegisterType(typeof(FacadeInfo));
     }
 }

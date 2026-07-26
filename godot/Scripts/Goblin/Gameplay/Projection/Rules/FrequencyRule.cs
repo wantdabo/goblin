@@ -50,18 +50,24 @@ public partial class FrequencyRule : IProjectionRule, IGBL
             var bit = 1ul << i;
             if (0ul == (currentmask & bit)) continue;
 
-            var key = (packet.behaviorinfotype, i);
+            // behaviorinfotype 可为 null，跳过未设置类型的包
+            if (null == packet.behaviorinfotype) continue;
+
+            var key = (packet.behaviorinfotype!, i);
             if (false == intervaltable.TryGetValue(key, out var interval)) continue;
 
-            var stateKey = (packet.actor, packet.behaviorinfotype, i);
+            var stateKey = (packet.actor, packet.behaviorinfotype!, i);
             if (lastpushtable.TryGetValue(stateKey, out var lastFrame))
             {
                 if (packet.frame - lastFrame < interval)
                 {
+                    // 抑制本次推送，不更新 lastpushtable
                     result &= ~bit;
+                    continue;
                 }
             }
 
+            // 仅在未抑制时记录推送帧号
             lastpushtable[stateKey] = packet.frame;
         }
 
@@ -79,5 +85,25 @@ public partial class FrequencyRule : IProjectionRule, IGBL
             if (kv.Value < minFrame) stale.Add(kv.Key);
         }
         foreach (var key in stale) lastpushtable.Remove(key);
+    }
+
+    /// <summary>
+    /// 浅拷贝
+    /// </summary>
+    public IGBL Clone()
+    {
+        var copy = (FrequencyRule)MemberwiseClone();
+        copy.intervaltable = new Dictionary<(System.Type, int), long>(intervaltable);
+        copy.lastpushtable = new Dictionary<(ulong, System.Type, int), long>(lastpushtable);
+        return copy;
+    }
+
+    /// <summary>
+    /// 重置状态
+    /// </summary>
+    public void Reset()
+    {
+        intervaltable.Clear();
+        lastpushtable.Clear();
     }
 }

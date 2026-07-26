@@ -12,7 +12,7 @@ public class AOIRule : IProjectionRule
     /// <summary>
     /// Actor 位置查询委托（由 Mirror 注入，查找 actor 的 SpatialComponent 位置）
     /// </summary>
-    public Func<ulong, FPVector3?> positionlookup { get; set; }
+    public Func<ulong, FPVector3?>? positionlookup { get; set; }
 
     /// <summary>
     /// 裁剪：超出 Observer 的 AOI 半径返回 0

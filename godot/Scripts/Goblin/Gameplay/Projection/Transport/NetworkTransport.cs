@@ -13,9 +13,23 @@ namespace Goblin.Gameplay.Projection.Transport;
 public class NetworkTransport : IPropertyTransport
 {
     /// <summary>
+    /// 类型注册表，序列化用 FullName 为键，反序列化端通过此表解析
+    /// </summary>
+    internal static readonly Dictionary<string, Type> typeregistry = new();
+
+    /// <summary>
+    /// 注册 BehaviorInfo 类型（启动时调用）
+    /// </summary>
+    public static void RegisterType(Type type)
+    {
+        if (null == type) return;
+        typeregistry[type.FullName!] = type;
+    }
+
+    /// <summary>
     /// 发送回调（注入网络层）
     /// </summary>
-    public Action<byte[]> onsend { get; set; }
+    public Action<byte[]>? onsend { get; set; }
 
     /// <summary>
     /// 序列化并发送 ObserverPacket 数组
@@ -33,7 +47,7 @@ public class NetworkTransport : IPropertyTransport
                 behaviorinfotype = p.behaviorinfotype?.FullName ?? string.Empty,
                 fieldmask = p.fieldmask,
                 frame = p.frame,
-                values = p.values,
+                values = ValueSerializer.SerializeValues(p.values ?? Array.Empty<object>()),
             });
         }
 
@@ -58,7 +72,7 @@ public class NetworkPacketData
     /// BehaviorInfo 类型名（用于反序列化端映射 Component）
     /// </summary>
     [Key(1)]
-    public string behaviorinfotype { get; set; }
+    public string behaviorinfotype { get; set; } = string.Empty;
 
     /// <summary>
     /// 字段掩码
@@ -76,7 +90,7 @@ public class NetworkPacketData
     /// 字段值数组
     /// </summary>
     [Key(4)]
-    public object[] values { get; set; }
+    public List<SerializedValue> values { get; set; } = new List<SerializedValue>();
 }
 
 /// <summary>
@@ -87,7 +101,7 @@ public class RemoteTransport
     /// <summary>
     /// 数据镜像
     /// </summary>
-    public Mirror mirror { get; set; }
+    public Mirror? mirror { get; set; }
 
     /// <summary>
     /// 接收并反序列化网络数据
@@ -106,10 +120,10 @@ public class RemoteTransport
             packets[i] = new ObserverPacket
             {
                 actor = d.actor,
-                behaviorinfotype = Type.GetType(d.behaviorinfotype),
+                behaviorinfotype = NetworkTransport.typeregistry.TryGetValue(d.behaviorinfotype, out var t) ? t : null,
                 fieldmask = d.fieldmask,
                 frame = d.frame,
-                values = d.values,
+                values = ValueSerializer.DeserializeValues(d.values),
             };
         }
 

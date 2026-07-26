@@ -1110,10 +1110,11 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine("    /// </summary>");
         sb.AppendLine("    public void SetProjectValues(object[] values)");
         sb.AppendLine("    {");
+        sb.AppendLine("        var vi = 0;");
         foreach (var field in data.fields)
         {
             var cast = CastExpression(field.typeText);
-            sb.AppendLine($"        {classNameLower}_{field.name} = ({field.typeText}){cast}values[{field.index}];");
+            sb.AppendLine($"        {classNameLower}_{field.name} = ({field.typeText}){cast}values[vi++];");
         }
         sb.AppendLine("    }");
 

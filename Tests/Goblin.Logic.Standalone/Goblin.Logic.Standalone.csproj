@@ -94,6 +94,8 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\FrequencyRule.cs" Link="Projection\Rules\FrequencyRule.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ObserverFactory.cs" Link="Projection\ObserverFactory.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\NetworkTransport.cs" Link="Projection\Transport\NetworkTransport.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\ValueSerializer.cs" Link="Projection\Transport\ValueSerializer.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\GodRule.cs" Link="Projection\Rules\GodRule.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\SpatialComponent.cs" Link="Render\Components\SpatialComponent.cs" />
     </ItemGroup>
 

@@ -10,7 +10,7 @@ namespace Goblin.Gameplay.Projection;
 /// <summary>
 /// 投影管线 — 接收 ProjectorPacket[]，按 Observer 分叉执行 Crop 裁剪
 /// ProjectorSystem 出包后，由外部（Director/Game）将原始包交给 Pipeline 处理
-/// 管线持有 Observers、Crop 规则链、Transport，在 Process 中一次串联
+/// 管线持有 Observers、传输层，在 Process 中一次串联
 /// </summary>
 public partial class ProjectionPipeline : IGBL
 {
@@ -18,11 +18,6 @@ public partial class ProjectionPipeline : IGBL
     /// 当前激活的观察者列表（Phase 1 默认单 Player）
     /// </summary>
     public List<Observer> observers { get; private set; }
-
-    /// <summary>
-    /// 裁剪规则链（Phase 1 默认挂 GodRule）
-    /// </summary>
-    public Crop crop { get; private set; }
 
     /// <summary>
     /// 传输层（T1.8 接入 LocalTransport）
@@ -38,18 +33,21 @@ public partial class ProjectionPipeline : IGBL
     public ProjectionPipeline()
     {
         observers = new List<Observer>();
-        crop = new Crop();
         packetcache = Array.Empty<ObserverPacket>();
     }
 
     /// <summary>
     /// 执行投影管线：原始包 → 按 Observer 裁剪 → 传输
-    /// 空包直接返回，不覆盖上一帧的有效 observerpackets
+    /// 无数据时将 observerpackets 置空，避免主线程重复消费上帧脏数据
     /// </summary>
     /// <param name="packets">ProjectorSystem 产出的原始投影包</param>
     public void Process(ProjectorPacket[] packets)
     {
-        if (0 == packets.Length) return;
+        if (null == packets || 0 == packets.Length)
+        {
+            observerpackets = Array.Empty<ObserverPacket>();
+            return;
+        }
 
         packetcache = Crop.Process(packets, observers);
 
@@ -58,5 +56,22 @@ public partial class ProjectionPipeline : IGBL
         {
             transport.Send(observerpackets);
         }
+    }
+
+    /// <summary>
+    /// 浅拷贝（管线为管理容器，不持有需深拷贝的投影数据）
+    /// </summary>
+    public IGBL Clone()
+    {
+        return (IGBL)MemberwiseClone();
+    }
+
+    /// <summary>
+    /// 重置为空状态（对象池回收用）
+    /// </summary>
+    public void Reset()
+    {
+        observers.Clear();
+        packetcache = Array.Empty<ObserverPacket>();
     }
 }

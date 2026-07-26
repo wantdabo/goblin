@@ -10,7 +10,7 @@ public class ObserverPacket
     /// <summary>
     /// 目标观察者
     /// </summary>
-    public Observer observer { get; set; }
+    public Observer? observer { get; set; }
 
     /// <summary>
     /// ActorID
@@ -20,7 +20,7 @@ public class ObserverPacket
     /// <summary>
     /// BehaviorInfo 类型
     /// </summary>
-    public Type behaviorinfotype { get; set; }
+    public Type? behaviorinfotype { get; set; }
 
     /// <summary>
     /// 裁剪后的字段掩码
@@ -35,5 +35,5 @@ public class ObserverPacket
     /// <summary>
     /// 字段值数组
     /// </summary>
-    public object[] values { get; set; }
+    public object[]? values { get; set; }
 }

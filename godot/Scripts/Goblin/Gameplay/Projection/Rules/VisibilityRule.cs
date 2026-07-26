@@ -11,7 +11,7 @@ public class VisibilityRule : IProjectionRule
     /// 可见性查询委托（由 Mirror/GameLogic 注入）
     /// 返回 false 表示不可见
     /// </summary>
-    public System.Func<ulong, bool> visibilitylookup { get; set; }
+    public System.Func<ulong, bool>? visibilitylookup { get; set; }
 
     /// <summary>
     /// 裁剪：不可见返回 0

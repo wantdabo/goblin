@@ -12,7 +12,7 @@ public class LocalTransport : IPropertyTransport
     /// <summary>
     /// 数据镜像，Send 时直接 ApplyPackets
     /// </summary>
-    public Mirror mirror { get; set; }
+    public Mirror? mirror { get; set; }
 
     /// <summary>
     /// 发送裁剪后的观察者数据包到 Mirror

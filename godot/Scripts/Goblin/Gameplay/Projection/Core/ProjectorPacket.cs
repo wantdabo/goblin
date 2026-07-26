@@ -17,7 +17,7 @@ public class ProjectorPacket : IGBL
     /// <summary>
     /// BehaviorInfo 类型（Render 侧据此映射 Component）
     /// </summary>
-    public Type behaviorinfotype { get; set; }
+    public Type? behaviorinfotype { get; set; }
 
     /// <summary>
     /// 脏字段掩码，位图对应 [Projector(index)] 字段
@@ -37,17 +37,17 @@ public class ProjectorPacket : IGBL
     /// <summary>
     /// 字段值数组，values[i] 对应 [Projector(index: i)] 的当前值
     /// </summary>
-    public object[] values { get; set; }
+    public object[]? values { get; set; }
 
     /// <summary>
     /// 集合类型：新增的 key 列表
     /// </summary>
-    public List<uint> addedkeys { get; set; }
+    public List<uint>? addedkeys { get; set; }
 
     /// <summary>
     /// 集合类型：移除的 key 列表
     /// </summary>
-    public List<uint> removedkeys { get; set; }
+    public List<uint>? removedkeys { get; set; }
 
     /// <summary>
     /// 重置，回收前调用 — 清空字段
@@ -66,7 +66,9 @@ public class ProjectorPacket : IGBL
     }
 
     /// <summary>
-    /// 浅拷贝（当前无需深度克隆场景）
+    /// 浅拷贝 — 注意：违反 IGBL.Clone() 深拷贝契约
+    /// 当前 Clone 产物仅供池化回收使用，values 未深拷贝（见 Crop.SafeCloneValue 单独处理）
+    /// TODO: Phase 3 接入对象池后统一改为深拷贝
     /// </summary>
     public IGBL Clone()
     {

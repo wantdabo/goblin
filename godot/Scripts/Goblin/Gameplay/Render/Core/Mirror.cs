@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Render.Components;
+using Kowtow.Math;
 
 namespace Goblin.Gameplay.Render.Core;
 
@@ -23,22 +24,34 @@ public partial class Mirror
     /// Component 类型 → ApplyTo 静态委托
     /// </summary>
     private Dictionary<Type, Action<object, ulong, object[]>> applymap { get; set; }
+    /// <summary>
+    /// Component 类型 → 工厂委托（零反射创建）
+    /// </summary>
+    private Dictionary<Type, Func<object>> factorymap { get; set; }
+    /// <summary>
+    /// 未注册 infotype 去重缓存（避免重复 Warning）
+    /// </summary>
+    private HashSet<Type> missinginfologged { get; set; }
+
     public Mirror()
     {
         datas = new Dictionary<ulong, Dictionary<Type, object>>();
         infotocomp = new Dictionary<Type, Type>();
         applymap = new Dictionary<Type, Action<object, ulong, object[]>>();
+        factorymap = new Dictionary<Type, Func<object>>();
+        missinginfologged = new HashSet<Type>();
     }
 
     /// <summary>
     /// 注册 BehaviorInfo → Component 映射
-    /// ApplyTo 委托通过 IComponentApply 接口直接获取，零反射
+    /// ApplyTo 委托通过 IComponentApply 接口直接获取，工厂委托零反射创建
     /// </summary>
     public void Register<TInfo, TComp>()
         where TComp : Component, IComponentApply<TComp>, new()
     {
         infotocomp[typeof(TInfo)] = typeof(TComp);
         applymap[typeof(TComp)] = TComp.ApplyTo;
+        factorymap[typeof(TComp)] = () => new TComp();
     }
 
     /// <summary>
@@ -53,12 +66,36 @@ public partial class Mirror
     }
 
     /// <summary>
+    /// 查询 Actor 的 SpatialComponent 位置（用于 AOI 裁剪）
+    /// </summary>
+    public FPVector3? TryGetPosition(ulong actor)
+    {
+        var comp = GetComp<SpatialComponent>(actor);
+        if (null == comp) return null;
+        return comp.position;
+    }
+
+    /// <summary>
+    /// 查询 Actor 是否在当前 Mirror 中有数据（用于可见性裁剪）
+    /// </summary>
+    public bool HasActor(ulong actor)
+    {
+        return datas.ContainsKey(actor);
+    }
+
+    /// <summary>
     /// 应用单条投影数据
     /// </summary>
     private void Apply(ulong actor, Type infotype, ulong fieldmask, object[] values)
     {
         if (false == infotocomp.TryGetValue(infotype, out var comptype))
         {
+            // 未注册的 InfoType 打 Warning（去重）
+            if (false == missinginfologged.Contains(infotype))
+            {
+                missinginfologged.Add(infotype);
+                System.Diagnostics.Debug.WriteLine($"Mirror.Apply: BehaviorInfo 类型 '{infotype.FullName}' 未通过 Register<> 注册，投影数据被丢弃");
+            }
             return;
         }
 
@@ -70,7 +107,9 @@ public partial class Mirror
 
         if (false == compdict.TryGetValue(comptype, out var comp))
         {
-            comp = Activator.CreateInstance(comptype);
+            comp = factorymap.TryGetValue(comptype, out var factory)
+                ? factory()
+                : Activator.CreateInstance(comptype);
             compdict[comptype] = comp;
         }
 

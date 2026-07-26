@@ -6,6 +6,15 @@ using Goblin.Gameplay.Projection.Core;
 namespace Goblin.Gameplay.Projection.Rules;
 
 /// <summary>
+/// 对象池 key（必须唯一常量，供 ObjectPool 区分）
+/// </summary>
+public static class CropPoolKey
+{
+    public const string OBSERVERPACKET_LIST = "CROP_OBSERVERPACKET_LIST";
+    public const string VALUE_LIST = "CROP_VALUE_LIST";
+}
+
+/// <summary>
 /// 裁剪规则链 — 串联多个 IProjectionRule，逐步修剪 fieldmask
 /// mask == 0 时丢弃整条数据包
 /// </summary>
@@ -67,7 +76,9 @@ public partial class Crop : IGBL
     {
         if (0 == packets.Length || 0 == observers.Count) return Array.Empty<ObserverPacket>();
 
-        var results = new List<ObserverPacket>();
+        // 从对象池取出 List，清空复用
+        var results = ObjectPool.Ensure<List<ObserverPacket>>(CropPoolKey.OBSERVERPACKET_LIST);
+        results.Clear();
         foreach (var p in packets)
         {
             foreach (var obs in observers)
@@ -90,36 +101,50 @@ public partial class Crop : IGBL
                 });
             }
         }
-        return results.ToArray();
+        var array = results.ToArray();
+        // 归还 List 容器到对象池
+        ObjectPool.Set(results, CropPoolKey.OBSERVERPACKET_LIST);
+        return array;
+    }
+
+    /// <summary>
+    /// 获取规则链中所有规则（用于注入委托）
+    /// </summary>
+    public IEnumerable<IProjectionRule> GetRules()
+    {
+        return rules;
     }
 
     /// <summary>
     /// 按裁剪后 mask 从原始 values 中提取子集
+    /// 对引用类型值做安全克隆，防止多线程下逻辑层原地修改导致数据竞争
     /// </summary>
     private static object[] TrimValues(object[] values, ulong originalMask, ulong targetMask)
     {
-        var trimmed = new List<object>();
+        // 从对象池取出 List，清空复用
+        var trimmed = ObjectPool.Ensure<List<object>>(CropPoolKey.VALUE_LIST);
+        trimmed.Clear();
         var vi = 0;
         for (int bit = 0; bit < 64; bit++)
         {
             if (0 == (originalMask & (1UL << bit))) continue;
-            if (0 != (targetMask & (1UL << bit))) trimmed.Add(values[vi]);
+            if (0 != (targetMask & (1UL << bit))) trimmed.Add(SafeCloneValue(values[vi]));
             vi++;
         }
-        return trimmed.ToArray();
+        var result = trimmed.ToArray();
+        // 归还 List 容器到对象池
+        ObjectPool.Set(trimmed, CropPoolKey.VALUE_LIST);
+        return result;
     }
-}
 
-/// <summary>
-/// 全通过规则 — Phase 1 所有 Observer 挂此规则（零裁剪）
-/// </summary>
-public class GodRule : IProjectionRule
-{
     /// <summary>
-    /// 全通过，不修剪任何字段
+    /// 安全克隆值：IGBL 类型深拷贝，值类型已通过装箱复制
     /// </summary>
-    public ulong Filter(ProjectorPacket packet, Observer observer, ulong currentmask)
+    private static object SafeCloneValue(object value)
     {
-        return currentmask;
+        if (null == value) return null;
+        if (value.GetType().IsValueType) return value;
+        if (value is IGBL gbl) return gbl.Clone();
+        return value;
     }
 }
