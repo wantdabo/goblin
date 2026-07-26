@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Common;
+namespace Goblin.Gameplay.Logic.Common;
 
 /// <summary>
 /// 池感知 HashSet，遵循 IGBL 生命周期
@@ -21,13 +21,22 @@ public class GBLHashSet<T> : IGBL, IEnumerable<T>
 
 	public GBLHashSet()
 	{
-		inner = ObjectPool.Ensure<HashSet<T>>();
+		inner = ObjectCache.Ensure<HashSet<T>>();
 	}
 
 	public GBLHashSet(int capacity)
 	{
-		inner = ObjectPool.Ensure<HashSet<T>>();
+		inner = ObjectCache.Ensure<HashSet<T>>();
 		inner.EnsureCapacity(capacity);
+	}
+
+	/// <summary>
+	/// 拷贝构造，供 SG Clone 容器值类型使用
+	/// </summary>
+	public GBLHashSet(IEnumerable<T> collection)
+	{
+		inner = ObjectCache.Ensure<HashSet<T>>();
+		foreach (var item in collection) inner.Add(item);
 	}
 
 	public bool Add(T item) => inner.Add(item);
@@ -47,14 +56,14 @@ public class GBLHashSet<T> : IGBL, IEnumerable<T>
 	public void Reset()
 	{
 		inner.Clear();
-		ObjectPool.Set(inner);
-		inner = ObjectPool.Ensure<HashSet<T>>();
+		ObjectCache.Set(inner);
+		inner = ObjectCache.Ensure<HashSet<T>>();
 	}
 
 	public IGBL Clone()
 	{
-		var clone = new GBLHashSet<T>();
-		foreach (var item in inner) clone.Add(item);
-		return clone;
+		var c = ObjectCache.Ensure<GBLHashSet<T>>();
+		foreach (var item in inner) c.Add(item);
+		return c;
 	}
 }

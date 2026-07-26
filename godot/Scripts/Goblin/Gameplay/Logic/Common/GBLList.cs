@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Common;
+namespace Goblin.Gameplay.Logic.Common;
 
 /// <summary>
 /// 池感知列表 — 增删元素时自动处理 IGBL 元素的 Reset + 还池
@@ -14,6 +14,25 @@ public class GBLList<T> : IEnumerable<T>, IGBL
     protected static bool iselementigbl { get; } = typeof(IGBL).IsAssignableFrom(typeof(T));
 
     protected List<T> data { get; set; } = new();
+
+    public GBLList() { }
+
+    /// <summary>
+    /// 容量构造，供 SG Clone 嵌套容器使用
+    /// </summary>
+    public GBLList(int capacity)
+    {
+        if (capacity > data.Capacity)
+            data.Capacity = capacity;
+    }
+
+    /// <summary>
+    /// 拷贝构造，供 SG Clone 容器值类型使用
+    /// </summary>
+    public GBLList(IEnumerable<T> collection)
+    {
+        data.AddRange(collection);
+    }
 
     // ============================================================
     // 属性
@@ -81,7 +100,7 @@ public class GBLList<T> : IEnumerable<T>, IGBL
         {
             var elem = (IGBL)data[index];
             elem.Reset();
-            ObjectPool.Set(elem);
+            ObjectCache.Set(elem);
         }
         data.RemoveAt(index);
     }
@@ -94,7 +113,7 @@ public class GBLList<T> : IEnumerable<T>, IGBL
             {
                 var igbl = (IGBL)item;
                 igbl.Reset();
-                ObjectPool.Set(igbl);
+                ObjectCache.Set(igbl);
             }
         }
         data.Clear();
@@ -112,7 +131,7 @@ public class GBLList<T> : IEnumerable<T>, IGBL
             {
                 var igbl = (IGBL)item;
                 igbl.Reset();
-                ObjectPool.Set(igbl);
+                ObjectCache.Set(igbl);
             }
         }
         data.Clear();
@@ -120,7 +139,7 @@ public class GBLList<T> : IEnumerable<T>, IGBL
 
     public virtual IGBL Clone()
     {
-        var c = ObjectPool.Ensure<GBLList<T>>();
+        var c = ObjectCache.Ensure<GBLList<T>>();
         foreach (var item in data)
         {
             if (item is IGBL igblelem)

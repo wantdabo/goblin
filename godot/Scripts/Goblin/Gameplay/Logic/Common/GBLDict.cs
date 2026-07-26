@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Goblin.Common;
 
-namespace Goblin.Common;
+namespace Goblin.Gameplay.Logic.Common;
 
 /// <summary>
 /// 池感知字典 — 增删元素时自动处理 IGBL 元素的 Reset + 还池
@@ -20,6 +20,25 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
     /// 插入顺序键列表，保证跨平台有序遍历
     /// </summary>
     protected List<K> order { get; set; } = new();
+
+    public GBLDict() { }
+
+    /// <summary>
+    /// 容量构造，供 SG Clone 嵌套容器使用
+    /// </summary>
+    public GBLDict(int capacity)
+    {
+        data.EnsureCapacity(capacity);
+    }
+
+    /// <summary>
+    /// 拷贝构造，供 SG Clone 容器值类型使用
+    /// </summary>
+    public GBLDict(IEnumerable<KeyValuePair<K, V>> collection)
+    {
+        foreach (var kv in collection)
+            Add(kv.Key, kv.Value);
+    }
 
     // ============================================================
     // 属性
@@ -74,7 +93,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
         {
             var igbl = (IGBL)val;
             igbl.Reset();
-            ObjectPool.Set(igbl);
+            ObjectCache.Set(igbl);
         }
         data.Remove(key);
         order.Remove(key);
@@ -95,7 +114,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
             {
                 var igbl = (IGBL)kv.Value;
                 igbl.Reset();
-                ObjectPool.Set(igbl);
+                ObjectCache.Set(igbl);
             }
         }
         data.Clear();
@@ -114,7 +133,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
             {
                 var igbl = (IGBL)kv.Value;
                 igbl.Reset();
-                ObjectPool.Set(igbl);
+                ObjectCache.Set(igbl);
             }
         }
         data.Clear();
@@ -123,7 +142,7 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
 
     public virtual IGBL Clone()
     {
-        var c = ObjectPool.Ensure<GBLDict<K, V>>();
+        var c = ObjectCache.Ensure<GBLDict<K, V>>();
         foreach (var key in order)
         {
             var val = data[key];
