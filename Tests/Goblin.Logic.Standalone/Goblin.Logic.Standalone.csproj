@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
         <RootNamespace>Goblin.Logic.Standalone</RootNamespace>
@@ -10,6 +11,10 @@
 
     <ItemGroup>
         <PackageReference Include="MessagePack" Version="2.5.187" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Goblin.Logic.Tests" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,6 +33,7 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\ObjectCache.cs" Link="Logic\Common\ObjectCache.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLDict.cs" Link="Logic\Common\GBLDict.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLList.cs" Link="Logic\Common\GBLList.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLHashSet.cs" Link="Logic\Common\GBLHashSet.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLDict.cs" Link="Logic\Common\TGBLDict.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLList.cs" Link="Logic\Common\TGBLList.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\AnimHash.cs" Link="Logic\Common\AnimHash.cs" />
@@ -74,7 +80,13 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ProjectionPipeline.cs" Link="Projection\ProjectionPipeline.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Core\Mirror.cs" Link="Render\Core\Mirror.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\Component.cs" Link="Render\Components\Component.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\IComponentApply.cs" Link="Render\Components\IComponentApply.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\ProjectorTargetAttribute.cs" Link="Render\Components\ProjectorTargetAttribute.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\HUDComponent.cs" Link="Render\Components\HUDComponent.cs" />
+
+        <!-- BehaviorInfo 层（Component [ProjectorTarget] 需要引用） -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\BehaviorInfos\SpatialInfo.cs" Link="Logic\BehaviorInfos\SpatialInfo.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\BehaviorInfos\HUDInfo.cs" Link="Logic\BehaviorInfos\HUDInfo.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\AOIRule.cs" Link="Projection\Rules\AOIRule.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\PermissionRule.cs" Link="Projection\Rules\PermissionRule.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\VisibilityRule.cs" Link="Projection\Rules\VisibilityRule.cs" />

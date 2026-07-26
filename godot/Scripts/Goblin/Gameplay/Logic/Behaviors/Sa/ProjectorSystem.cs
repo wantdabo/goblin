@@ -67,7 +67,7 @@ public class ProjectorSystem : Behavior
         GBLList<ProjectorPacket> list = null;
 
         // 自检所有 BehaviorInfo 的脏标记
-        foreach (var actordict in stage.cache.behaviorinfodict.Values)
+        foreach (var (actorId, actordict) in stage.cache.behaviorinfodict)
         {
             foreach (var info in actordict.Values)
             {
@@ -82,7 +82,8 @@ public class ProjectorSystem : Behavior
                 if (null == list) list = ObjectCache.Ensure<GBLList<ProjectorPacket>>();
 
                 var packet = ObjectCache.Ensure<ProjectorPacket>();
-                packet.actor = info.actor;
+                // 从外层 dict key 取 actorId，不依赖 info.actor（可能因对象池复用等原因为 0）
+                packet.actor = actorId;
                 packet.behaviorinfotype = info.GetType();
                 packet.fieldmask = mask;
                 packet.frame = stage.frame;
@@ -155,13 +156,14 @@ public class ProjectorSystem : Behavior
         snapshot.frame = current;
 
         var dict = ObjectCache.Ensure<GBLDict<(ulong actor, Type type), object[]>>();
-        foreach (var actordict in stage.cache.behaviorinfodict.Values)
+        foreach (var (actorId, actordict) in stage.cache.behaviorinfodict)
         {
             foreach (var info in actordict.Values)
             {
                 if (false == info.active) continue;
                 if (info is not IProjectable proj) continue;
-                var key = (info.actor, info.GetType());
+                // 从外层 dict key 取 actorId，不依赖 info.actor
+                var key = (actorId, info.GetType());
                 dict[key] = proj.TakeProjectValues(ulong.MaxValue);
             }
         }

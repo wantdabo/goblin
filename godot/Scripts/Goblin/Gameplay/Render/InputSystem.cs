@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands.Common;
-using Goblin.Gameplay.Logic.Common;
 using Kowtow.Math;
 
 namespace Goblin.Gameplay.Render;
@@ -17,7 +18,7 @@ public class InputSystem
     /// <summary>
     /// 输入槽，key → (press, dire)
     /// </summary>
-    private readonly GBLDict<ushort, InputState> inputs = new();
+    private readonly Dictionary<ushort, InputState> inputs = new();
 
     /// <summary>
     /// 入队指令

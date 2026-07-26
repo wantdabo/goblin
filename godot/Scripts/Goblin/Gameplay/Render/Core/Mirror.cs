@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Render.Components;
 
@@ -10,7 +9,7 @@ namespace Goblin.Gameplay.Render.Core;
 /// 数据镜像 — Logic 层 BehaviorInfo 数据的纯数据主线程副本
 /// ActorID → (ComponentType → Component实例) 扁平组织
 /// </summary>
-public class Mirror
+public partial class Mirror
 {
     /// <summary>
     /// ActorID → (ComponentType → Component实例)
@@ -31,30 +30,21 @@ public class Mirror
 
     public Mirror()
     {
-        datas = ObjectPool.Ensure<Dictionary<ulong, Dictionary<Type, object>>>();
-        infotocomp = ObjectPool.Ensure<Dictionary<Type, Type>>();
-        applymap = ObjectPool.Ensure<Dictionary<Type, Action<object, ulong, object[]>>>();
-        eventframecache = ObjectPool.Ensure<HashSet<string>>();
+        datas = new Dictionary<ulong, Dictionary<Type, object>>();
+        infotocomp = new Dictionary<Type, Type>();
+        applymap = new Dictionary<Type, Action<object, ulong, object[]>>();
+        eventframecache = new HashSet<string>();
     }
 
     /// <summary>
     /// 注册 BehaviorInfo → Component 映射
+    /// ApplyTo 委托通过 IComponentApply 接口直接获取，零反射
     /// </summary>
     public void Register<TInfo, TComp>()
-        where TComp : Component, new()
+        where TComp : Component, IComponentApply<TComp>, new()
     {
-        var infotype = typeof(TInfo);
-        var comptype = typeof(TComp);
-        infotocomp[infotype] = comptype;
-
-        // 通过反射拿 ApplyTo 静态方法
-        var method = comptype.GetMethod("ApplyTo",
-            System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-        if (null != method)
-        {
-            applymap[comptype] = (Action<object, ulong, object[]>)
-                Delegate.CreateDelegate(typeof(Action<object, ulong, object[]>), method);
-        }
+        infotocomp[typeof(TInfo)] = typeof(TComp);
+        applymap[typeof(TComp)] = TComp.ApplyTo;
     }
 
     /// <summary>
@@ -77,7 +67,7 @@ public class Mirror
 
         if (false == datas.TryGetValue(actor, out var compdict))
         {
-            compdict = ObjectPool.Ensure<Dictionary<Type, object>>();
+            compdict = new Dictionary<Type, object>();
             datas[actor] = compdict;
         }
 
@@ -114,7 +104,6 @@ public class Mirror
         if (datas.TryGetValue(actor, out var compdict))
         {
             compdict.Clear();
-            ObjectPool.Set(compdict);
             datas.Remove(actor);
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Projection.Rules;
@@ -127,11 +128,9 @@ public class CropSystemTests
         var crop = new Crop();
         crop.AddRule(new GodRule());
 
-        var observers = new List<Observer>
-        {
-            new Observer { type = ObserverType.Player, id = 1 },
-            new Observer { type = ObserverType.GM, id = 0 },
-        };
+        var observers = new List<Observer>();
+        observers.Add(new Observer { type = ObserverType.Player, id = 1 });
+        observers.Add(new Observer { type = ObserverType.GM, id = 0 });
 
         var packet = new ProjectorPacket
         {
@@ -161,10 +160,8 @@ public class CropSystemTests
         var crop = new Crop();
         crop.AddRule(new MaskAllRule());
 
-        var observers = new List<Observer>
-        {
-            new Observer { type = ObserverType.Player, id = 1 },
-        };
+        var observers = new List<Observer>();
+        observers.Add(new Observer { type = ObserverType.Player, id = 1 });
 
         var packet = new ProjectorPacket
         {

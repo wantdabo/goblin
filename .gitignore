@@ -28,6 +28,15 @@ obj/
 
 # 测试结果
 TestResults/
+
+# 诊断与构建临时文件
+*_diag*.txt
+*_test.txt
+build_*.txt
+build_*.txt
+a_diag.txt
+original_test.txt
+rebuild_standalone.txt
 *.trx
 
 # IDE

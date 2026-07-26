@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 
 namespace Goblin.Gameplay.Projection.Rules;
@@ -7,7 +8,7 @@ namespace Goblin.Gameplay.Projection.Rules;
 /// 频率裁剪规则 — 每个字段独立推送间隔
 /// Phase 1 目前过于激进，此规则后续与 NetworkTransport 配合使用
 /// </summary>
-public class FrequencyRule : IProjectionRule
+public partial class FrequencyRule : IProjectionRule, IGBL
 {
     /// <summary>
     /// 字段推送间隔表：键为 (BehaviorInfoType, fieldIndex)，值为间隔帧数

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection.Core;
@@ -81,6 +83,18 @@ public class ProjectorSystemTests
         projector.Assemble(stage, stage.sa);
 
         stage.AddBehaviorInfo<ProjectFieldInfo>(1);
+
+        // 诊断：直接验证 behaviorinfodict 迭代
+        ulong foundActor = ulong.MaxValue;
+        foreach (var (actorId, dict) in stage.cache.behaviorinfodict)
+        {
+            foundActor = actorId;
+            Assert.True(dict.TryGetValue(typeof(ProjectFieldInfo), out var info));
+            Assert.True(info is IProjectable);
+            var proj = (IProjectable)info;
+            Assert.True(0 != proj.projectdirtymask, $"mask={proj.projectdirtymask}");
+        }
+        Assert.Equal(1ul, foundActor);
 
         projector.EndTick();
 

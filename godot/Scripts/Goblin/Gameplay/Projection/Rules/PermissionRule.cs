@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 
 namespace Goblin.Gameplay.Projection.Rules;
@@ -7,7 +8,7 @@ namespace Goblin.Gameplay.Projection.Rules;
 /// 权限裁剪规则 — 按 (ObserverType, BehaviorInfoType) 查表，返回允许的 fieldmask
 /// 敌方只能同步位置，队友同步全部字段
 /// </summary>
-public class PermissionRule : IProjectionRule
+public partial class PermissionRule : IProjectionRule, IGBL
 {
     /// <summary>
     /// 权限表：键为 (ObserverType, BehaviorInfoType)，值为允许的 fieldmask 位图

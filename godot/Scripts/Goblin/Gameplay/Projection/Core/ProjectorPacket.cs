@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Goblin.Common;
-using Goblin.Gameplay.Logic.Common;
 
 namespace Goblin.Gameplay.Projection.Core;
 
@@ -42,23 +42,19 @@ public class ProjectorPacket : IGBL
     /// <summary>
     /// 集合类型：新增的 key 列表
     /// </summary>
-    public GBLList<uint> addedkeys { get; set; }
+    public List<uint> addedkeys { get; set; }
 
     /// <summary>
     /// 集合类型：移除的 key 列表
     /// </summary>
-    public GBLList<uint> removedkeys { get; set; }
+    public List<uint> removedkeys { get; set; }
 
     /// <summary>
-    /// 重置，回收前调用 — 归还内部 GBLList 并清空字段
+    /// 重置，回收前调用 — 清空字段
     /// </summary>
     public void Reset()
     {
-        addedkeys?.Reset();
-        ObjectCache.Set(addedkeys);
         addedkeys = null;
-        removedkeys?.Reset();
-        ObjectCache.Set(removedkeys);
         removedkeys = null;
 
         actor = 0;

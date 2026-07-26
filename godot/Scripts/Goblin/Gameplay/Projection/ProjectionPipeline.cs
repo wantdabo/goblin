@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Projection.Rules;
 using Goblin.Gameplay.Projection.Transport;
@@ -11,7 +12,7 @@ namespace Goblin.Gameplay.Projection;
 /// ProjectorSystem 出包后，由外部（Director/Game）将原始包交给 Pipeline 处理
 /// 管线持有 Observers、Crop 规则链、Transport，在 Process 中一次串联
 /// </summary>
-public class ProjectionPipeline
+public partial class ProjectionPipeline : IGBL
 {
     /// <summary>
     /// 当前激活的观察者列表（Phase 1 默认单 Player）

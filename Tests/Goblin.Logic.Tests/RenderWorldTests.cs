@@ -1,3 +1,4 @@
+using System;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection;
@@ -200,7 +201,7 @@ public class RenderWorldTests
 /// <summary>
 /// 测试用 Component — 对应 ProjectFieldInfo（position index 0, scale index 1）
 /// </summary>
-public class TestSpatialComponent : Component
+public class TestSpatialComponent : Component, IComponentApply<TestSpatialComponent>
 {
     /// <summary>
     /// 位置
@@ -212,7 +213,7 @@ public class TestSpatialComponent : Component
     public FP scale { get; set; } = FP.One;
 
     /// <summary>
-    /// 应用脏字段 [v1] — 后续迁至 SG 生成
+    /// 应用脏字段 — 后续迁至 SG 生成
     /// </summary>
     internal static void ApplyTo(object comp, ulong fieldmask, object[] values)
     {
@@ -225,4 +226,6 @@ public class TestSpatialComponent : Component
         // Bit1: scale
         if (0 != (fieldmask & (1ul << 1))) c.scale = (FP)values[i++];
     }
+
+    static Action<object, ulong, object[]> IComponentApply<TestSpatialComponent>.ApplyTo => ApplyTo;
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 
 namespace Goblin.Gameplay.Projection.Rules;
@@ -8,7 +9,7 @@ namespace Goblin.Gameplay.Projection.Rules;
 /// 裁剪规则链 — 串联多个 IProjectionRule，逐步修剪 fieldmask
 /// mask == 0 时丢弃整条数据包
 /// </summary>
-public class Crop
+public partial class Crop : IGBL
 {
     /// <summary>
     /// 规则链
