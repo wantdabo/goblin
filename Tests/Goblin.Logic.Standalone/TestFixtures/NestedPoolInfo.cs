@@ -36,8 +36,4 @@ public class PooledItem : IGBL
 public partial class NestedPoolInfo : BehaviorInfo
 {
     public List<PooledItem> items { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

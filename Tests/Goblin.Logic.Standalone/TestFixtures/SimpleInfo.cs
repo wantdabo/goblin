@@ -11,8 +11,4 @@ public partial class SimpleInfo : BehaviorInfo
     public int value { get; set; }
     public FP speed { get; set; }
     public bool active2 { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

@@ -17,10 +17,4 @@ public abstract partial class AbstractBaseInfo : BehaviorInfo
     /// 列表容器
     /// </summary>
     public List<(ulong actor, uint id)> targets { get; set; }
-
-    protected override void OnReady()
-    {
-        records = ObjectCache.Ensure<Dictionary<int, Dictionary<ulong, uint>>>();
-        targets = ObjectCache.Ensure<List<(ulong actor, uint id)>>();
-    }
 }

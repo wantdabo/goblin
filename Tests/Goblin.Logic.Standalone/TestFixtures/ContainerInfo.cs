@@ -11,8 +11,4 @@ public partial class ContainerInfo : BehaviorInfo
 {
     public List<uint> ids { get; set; }
     public Dictionary<int, ulong> dict { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

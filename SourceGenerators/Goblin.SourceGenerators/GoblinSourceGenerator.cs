@@ -37,6 +37,16 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(
             projectorData.Where(static data => null != data && 0 < data.fields.Count),
             static (spc, data) => EmitProjectorCode(spc, data!));
+
+        // 管线 3：Component ApplyTo 生成 — 扫描 [ProjectorTarget] 注解
+        var applyToData = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                predicate: static (node, _) => IsPartialClassWithProjectorTarget(node),
+                transform: static (ctx, _) => ExtractApplyToData(ctx));
+
+        context.RegisterSourceOutput(
+            applyToData.Where(static data => null != data),
+            static (spc, data) => EmitApplyToCode(spc, data));
     }
 
     // ============================================================
@@ -128,6 +138,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         List<ProjectionFieldData> projectorFields,
         bool isBehaviorInfo,
         bool isAbstract,
+        bool hasOnReady,
         List<LifecycleFieldData>? parentFields
     );
 
@@ -246,6 +257,19 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         var isAbstract = symbol.IsAbstract;
 
+        // 检测该类是否已有 OnReady 重写（非继承）
+        var hasOnReady = false;
+        foreach (var member in symbol.GetMembers("OnReady"))
+        {
+            if (member is IMethodSymbol m
+                && SymbolEqualityComparer.Default.Equals(m.ContainingType, symbol)
+                && false == m.IsStatic)
+            {
+                hasOnReady = true;
+                break;
+            }
+        }
+
         // 收集父类字段（用于子类 Clone 深拷贝父类非 BehaviorInfo 的字段）
         var parentFields = new List<LifecycleFieldData>();
         if (isBehaviorInfo && null != symbol.BaseType)
@@ -293,6 +317,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             projectorFields,
             isBehaviorInfo,
             isAbstract,
+            hasOnReady,
             parentFields
         );
     }
@@ -308,10 +333,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         // string 当值类型处理
         if (type.SpecialType == SpecialType.System_String) return FieldCategory.ValueType;
 
-        // IGBL 引用
-        if (IsIGBL(type)) return FieldCategory.IGBL;
-
-        // 容器检查
+        // 容器检查（必须在 IGBL 检查之前，因为 GBL 容器同时实现 IGBL 接口）
         if (type is INamedTypeSymbol namedType && namedType.IsGenericType)
         {
             var originalName = namedType.OriginalDefinition.ToDisplayString();
@@ -335,6 +357,9 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                 return FieldCategory.ContainerValue;
             }
         }
+
+        // IGBL 引用（非容器的纯 IGBL 类型）
+        if (IsIGBL(type)) return FieldCategory.IGBL;
 
         // 其他引用类型
         return FieldCategory.Reference;
@@ -383,18 +408,30 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             || originalDefinitionName == "System.Collections.Generic.Dictionary<TKey, TValue>"
             || originalDefinitionName == "System.Collections.Generic.HashSet<T>"
             || originalDefinitionName == "System.Collections.Generic.Queue<T>"
-            || originalDefinitionName == "System.Collections.Generic.Stack<T>";
+            || originalDefinitionName == "System.Collections.Generic.Stack<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.GBLList<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.GBLDict<K, V>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.GBLHashSet<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.GBLQueue<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.GBLStack<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.TGBLList<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.TGBLDict<K, V>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.TGBLHashSet<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.TGBLQueue<T>"
+            || originalDefinitionName == "Goblin.Gameplay.Logic.Common.TGBLStack<T>";
     }
 
     /// <summary>
-    /// 判断类型名是否为 GBL 容器（GBLList, GBLDict, TGBLList, TGBLDict）
+    /// 判断类型名是否为 GBL 容器（GBLList, GBLDict, GBLHashSet, TGBLList, TGBLDict, TGBLHashSet）
     /// </summary>
     private static bool IsGBLContainerTypeName(string typeName)
     {
         return typeName.Contains("GBLList<")
             || typeName.Contains("GBLDict<")
+            || typeName.Contains("GBLHashSet<")
             || typeName.Contains("TGBLList<")
-            || typeName.Contains("TGBLDict<");
+            || typeName.Contains("TGBLDict<")
+            || typeName.Contains("TGBLHashSet<");
     }
 
     /// <summary>
@@ -518,8 +555,12 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine($"partial class {className}");
         sb.AppendLine("{");
 
-        // ---- OnReady()（仅 BehaviorInfo 子类）----
-        EmitOnReady(sb, data);
+        // ---- OnReady() ----
+        // Info 不应重写 OnReady；如有容器字段始终生成
+        if (data.isBehaviorInfo)
+        {
+            EmitOnReady(sb, data);
+        }
 
         // ---- Reset() ----
         EmitReset(sb, data);
@@ -533,37 +574,59 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         context.AddSource(hintName, sb.ToString());
     }
 
+    /// <summary>
+    /// 判断类型名是否为 GBL 容器（自带元素生命周期管理）
+    /// </summary>
+    private static bool IsGBLContainer(string typeName)
+    {
+        return typeName.StartsWith("Goblin.Gameplay.Logic.Common.GBLDict<")
+            || typeName.StartsWith("Goblin.Gameplay.Logic.Common.GBLList<")
+            || typeName.StartsWith("Goblin.Gameplay.Logic.Common.GBLHashSet<")
+            || typeName.StartsWith("Goblin.Gameplay.Logic.Common.TGBLDict<")
+            || typeName.StartsWith("Goblin.Gameplay.Logic.Common.TGBLList<");
+    }
+
+    /// <summary>
+    /// 生成 OnReady 重写，内联初始化所有容器字段
+    /// </summary>
     private static void EmitOnReady(System.Text.StringBuilder sb, LifecycleClassData data)
     {
-        // 仅 BehaviorInfo 子类生成 OnInitContainers 容器初始化
-        if (false == data.isBehaviorInfo) return;
-
-        var hasGBLContainers = false;
+        // 检查是否有需要初始化的容器字段
+        var hasContainer = false;
         foreach (var field in data.fields)
         {
-            if (IsGBLContainerTypeName(field.typeName))
+            if (field.category == FieldCategory.ContainerValue
+                || field.category == FieldCategory.ContainerIGBL
+                || field.category == FieldCategory.ContainerNestedValue
+                || field.category == FieldCategory.ContainerNestedIGBL)
             {
-                hasGBLContainers = true;
+                hasContainer = true;
                 break;
             }
         }
-        // 无 GBL 容器字段则不生成
-        if (false == hasGBLContainers) return;
+        if (false == hasContainer) return;
 
         sb.AppendLine("    /// <summary>");
-        sb.AppendLine("    /// 初始化 GBL 容器字段");
+        sb.AppendLine("    /// 池对象首次使用回调，初始化所有容器字段");
         sb.AppendLine("    /// </summary>");
-        sb.AppendLine("    protected override void OnInitContainers()");
+        sb.AppendLine("    protected override void OnReady()");
         sb.AppendLine("    {");
 
         foreach (var field in data.fields)
         {
-            if (false == IsGBLContainerTypeName(field.typeName)) continue;
-            var shortName = GetShortTypeName(field.typeName);
-            sb.AppendLine($"        if (null == {field.name}) {field.name} = ObjectCache.Ensure<{shortName}>();");
+            if (field.category != FieldCategory.ContainerValue
+                && field.category != FieldCategory.ContainerIGBL
+                && field.category != FieldCategory.ContainerNestedValue
+                && field.category != FieldCategory.ContainerNestedIGBL)
+                continue;
+
+            if (IsGBLContainer(field.typeName))
+                sb.AppendLine($"        if (null == {field.name}) {field.name} = ObjectCache.Ensure<{field.typeName}>();");
+            else
+                sb.AppendLine($"        if (null == {field.name}) {field.name} = new {field.typeName}();");
         }
 
-        sb.AppendLine("        base.OnInitContainers();");
+        sb.AppendLine("        base.OnReady();");
         sb.AppendLine("    }");
         sb.AppendLine();
     }
@@ -582,22 +645,41 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         foreach (var field in data.fields)
         {
             if (field.category != FieldCategory.ContainerIGBL) continue;
-            sb.AppendLine($"        if (null != {field.name})");
-            sb.AppendLine("        {");
-            sb.AppendLine($"            foreach (var item in {field.name})");
-            sb.AppendLine("            {");
-            sb.AppendLine("                item.Reset();");
-            sb.AppendLine("                ObjectCache.Set(item);");
-            sb.AppendLine("            }");
-            sb.AppendLine($"            {field.name}.Clear();");
-            sb.AppendLine("        }");
+            // GBL 容器：元素生命周期由容器管理，容器本身归还池
+            if (IsGBLContainer(field.typeName))
+            {
+                sb.AppendLine($"        {field.name}?.Reset();");
+                sb.AppendLine($"        ObjectCache.Set({field.name});");
+                sb.AppendLine($"        {field.name} = null;");
+            }
+            else
+            {
+                sb.AppendLine($"        if (null != {field.name})");
+                sb.AppendLine("        {");
+                sb.AppendLine($"            foreach (var item in {field.name})");
+                sb.AppendLine("            {");
+                sb.AppendLine("                item.Reset();");
+                sb.AppendLine("                ObjectCache.Set(item);");
+                sb.AppendLine("            }");
+                sb.AppendLine($"            {field.name}.Clear();");
+                sb.AppendLine("        }");
+            }
         }
 
         // 容器值类型字段
         foreach (var field in data.fields)
         {
             if (field.category != FieldCategory.ContainerValue) continue;
-            sb.AppendLine($"        {field.name}?.Clear();");
+            if (IsGBLContainer(field.typeName))
+            {
+                sb.AppendLine($"        {field.name}?.Reset();");
+                sb.AppendLine($"        ObjectCache.Set({field.name});");
+                sb.AppendLine($"        {field.name} = null;");
+            }
+            else
+            {
+                sb.AppendLine($"        {field.name}?.Clear();");
+            }
         }
 
         // 嵌套容器字段：外层遍历内层 Clear，外层 Clear（容器只清不还）
@@ -697,7 +779,17 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         foreach (var field in data.fields)
         {
             if (field.category != FieldCategory.ContainerValue) continue;
-            sb.AppendLine($"        c.{field.name} = null != this.{field.name} ? new {field.typeName}(this.{field.name}) : null;");
+            // GBL 容器用 Clone()，源 null 时显式分配空容器
+            if (IsGBLContainer(field.typeName))
+            {
+                sb.AppendLine($"        c.{field.name} = null != this.{field.name}");
+                sb.AppendLine($"            ? ({field.typeName})this.{field.name}.Clone()");
+                sb.AppendLine($"            : ObjectCache.Ensure<{field.typeName}>();");
+            }
+            else
+            {
+                sb.AppendLine($"        c.{field.name} = null != this.{field.name} ? new {field.typeName}(this.{field.name}) : null;");
+            }
         }
 
         // ---- 嵌套容器字段（内层值类型）：遍历外层，内层 new 拷贝 ----
@@ -733,12 +825,22 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         {
             if (field.category != FieldCategory.ContainerIGBL) continue;
 
-            sb.AppendLine($"        if (null != this.{field.name})");
-            sb.AppendLine("        {");
-            sb.AppendLine($"            c.{field.name} = new {field.typeName}(this.{field.name}.Count);");
-            sb.AppendLine($"            foreach (var item in this.{field.name})");
-            sb.AppendLine($"                c.{field.name}.Add(({field.elementType})item.Clone());");
-            sb.AppendLine("        }");
+            // GBL 容器用 Clone() 方法，源 null 时显式分配空容器
+            if (IsGBLContainer(field.typeName))
+            {
+                sb.AppendLine($"        c.{field.name} = null != this.{field.name}");
+                sb.AppendLine($"            ? ({field.typeName})this.{field.name}.Clone()");
+                sb.AppendLine($"            : ObjectCache.Ensure<{field.typeName}>();");
+            }
+            else
+            {
+                sb.AppendLine($"        if (null != this.{field.name})");
+                sb.AppendLine("        {");
+                sb.AppendLine($"            c.{field.name} = new {field.typeName}(this.{field.name}.Count);");
+                sb.AppendLine($"            foreach (var item in this.{field.name})");
+                sb.AppendLine($"                c.{field.name}.Add(({field.elementType})item.Clone());");
+                sb.AppendLine("        }");
+            }
         }
 
         // ---- IGBL 引用字段 ----
@@ -776,16 +878,34 @@ public class GoblinSourceGenerator : IIncrementalGenerator
                         break;
 
                     case FieldCategory.ContainerValue:
-                        sb.AppendLine($"        c.{field.name} = null != this.{field.name} ? new {field.typeName}(this.{field.name}) : null;");
+                        if (IsGBLContainer(field.typeName))
+                        {
+                            sb.AppendLine($"        c.{field.name} = null != this.{field.name}");
+                            sb.AppendLine($"            ? ({field.typeName})this.{field.name}.Clone()");
+                            sb.AppendLine($"            : ObjectCache.Ensure<{field.typeName}>();");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"        c.{field.name} = null != this.{field.name} ? new {field.typeName}(this.{field.name}) : null;");
+                        }
                         break;
 
                     case FieldCategory.ContainerIGBL:
-                        sb.AppendLine($"        if (null != this.{field.name})");
-                        sb.AppendLine("        {");
-                        sb.AppendLine($"            c.{field.name} = new {field.typeName}(this.{field.name}.Count);");
-                        sb.AppendLine($"            foreach (var item in this.{field.name})");
-                        sb.AppendLine($"                c.{field.name}.Add(({field.elementType})item.Clone());");
-                        sb.AppendLine("        }");
+                        if (IsGBLContainer(field.typeName))
+                        {
+                            sb.AppendLine($"        c.{field.name} = null != this.{field.name}");
+                            sb.AppendLine($"            ? ({field.typeName})this.{field.name}.Clone()");
+                            sb.AppendLine($"            : ObjectCache.Ensure<{field.typeName}>();");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"        if (null != this.{field.name})");
+                            sb.AppendLine("        {");
+                            sb.AppendLine($"            c.{field.name} = new {field.typeName}(this.{field.name}.Count);");
+                            sb.AppendLine($"            foreach (var item in this.{field.name})");
+                            sb.AppendLine($"                c.{field.name}.Add(({field.elementType})item.Clone());");
+                            sb.AppendLine("        }");
+                        }
                         break;
 
                     case FieldCategory.ContainerNestedValue:
@@ -1122,5 +1242,192 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             }
         }
         return null;
+    }
+
+    // ============================================================
+    // 管线 3：Component ApplyTo 生成
+    // ============================================================
+
+    /// <summary>
+    /// ApplyTo 生成数据
+    /// </summary>
+    private sealed record ApplyToData(
+        string ns,
+        string className,
+        List<ApplyToFieldData> fields
+    );
+
+    /// <summary>
+    /// ApplyTo 字段数据
+    /// </summary>
+    private sealed record ApplyToFieldData(
+        string name,
+        string typeText,
+        int index,
+        string? targetTypeText = null
+    );
+
+    /// <summary>
+    /// 过滤：partial class 带 [ProjectorTarget] 注解
+    /// </summary>
+    private static bool IsPartialClassWithProjectorTarget(SyntaxNode node)
+    {
+        if (node is not ClassDeclarationSyntax classDecl) return false;
+        if (0 == classDecl.AttributeLists.Count) return false;
+
+        var hasPartial = false;
+        foreach (var modifier in classDecl.Modifiers)
+        {
+            if (modifier.IsKind(SyntaxKind.PartialKeyword))
+            {
+                hasPartial = true;
+                break;
+            }
+        }
+        if (false == hasPartial) return false;
+
+        foreach (var attrList in classDecl.AttributeLists)
+        {
+            foreach (var attr in attrList.Attributes)
+            {
+                var name = attr.Name.ToString();
+                if ("ProjectorTarget" == name || "ProjectorTargetAttribute" == name)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 提取 ApplyTo 生成数据：读取 [ProjectorTarget] 中指定的 BehaviorInfo 的 [Projector] 字段
+    /// </summary>
+    private static ApplyToData? ExtractApplyToData(GeneratorSyntaxContext ctx)
+    {
+        var classDecl = (ClassDeclarationSyntax)ctx.Node;
+        var model = ctx.SemanticModel;
+        var symbol = model.GetDeclaredSymbol(classDecl);
+        if (null == symbol) return null;
+
+        var ns = symbol.ContainingNamespace.ToDisplayString();
+        var className = symbol.Name;
+
+        // 查找 [ProjectorTarget] 属性
+        ITypeSymbol? targetInfoType = null;
+        foreach (var attr in symbol.GetAttributes())
+        {
+            if (attr.AttributeClass?.Name is "ProjectorTargetAttribute" or "ProjectorTarget")
+            {
+                if (attr.ConstructorArguments.Length > 0)
+                {
+                    targetInfoType = attr.ConstructorArguments[0].Value as ITypeSymbol;
+                    break;
+                }
+            }
+        }
+        if (null == targetInfoType) return null;
+
+        // 收集目标 BehaviorInfo 的 [Projector] 字段
+        var fields = new List<ApplyToFieldData>();
+        var nextAutoIndex = 0;
+        foreach (var attr in targetInfoType.GetAttributes())
+        {
+            if (attr.AttributeClass?.Name is not "ProjectorAttribute" and not "Projector") continue;
+
+            var cargs = attr.ConstructorArguments;
+            if (cargs.Length < 2) continue;
+
+            var name = cargs[0].Value as string;
+            if (null == name) continue;
+
+            var typeObj = cargs[1].Value as ITypeSymbol;
+            var typeText = typeObj?.ToDisplayString();
+            if (null == typeText) continue;
+
+            var index = cargs.Length >= 3 && cargs[2].Value is int intVal
+                ? intVal
+                : nextAutoIndex;
+            nextAutoIndex = index + 1;
+
+            // 查找 Component 上同名属性的类型，检测 GBL→原生容器转换需求
+            string? targetTypeText = null;
+            foreach (var member in symbol.GetMembers(name))
+            {
+                if (member is IPropertySymbol prop)
+                {
+                    var propTypeText = prop.Type.ToDisplayString();
+                    if (propTypeText != typeText)
+                    {
+                        targetTypeText = propTypeText;
+                    }
+                    break;
+                }
+            }
+
+            fields.Add(new ApplyToFieldData(name, typeText, index, targetTypeText));
+        }
+
+        if (0 == fields.Count) return null;
+
+        return new ApplyToData(ns, className, fields);
+    }
+
+    /// <summary>
+    /// 生成 ApplyTo 静态类 + Component 静态构造函数
+    /// </summary>
+    private static void EmitApplyToCode(SourceProductionContext context, ApplyToData data)
+    {
+        var ns = data.ns;
+        var cn = data.className;
+        var sb = new System.Text.StringBuilder();
+
+        // ---- 文件 1：{Name}Apply 静态类 ----
+        sb.Clear();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine();
+        sb.AppendLine($"namespace {ns};");
+        sb.AppendLine();
+        sb.AppendLine($"internal static class {cn}Apply");
+        sb.AppendLine("{");
+        sb.AppendLine("    internal static void ApplyTo(object comp, ulong fieldmask, object[] values)");
+        sb.AppendLine("    {");
+        sb.AppendLine($"        var c = ({cn})comp;");
+        sb.AppendLine("        var vi = 0;");
+
+        foreach (var field in data.fields)
+        {
+            sb.AppendLine($"        // Bit{field.index}: {field.name}");
+            if (null != field.targetTypeText)
+            {
+                // GBL 容器 → 原生容器转换
+                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) c.{field.name} = new {field.targetTypeText}(({field.typeText})values[vi++]);");
+            }
+            else
+            {
+                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) c.{field.name} = ({field.typeText})values[vi++];");
+            }
+        }
+
+        sb.AppendLine("    }");
+        sb.AppendLine("}");
+
+        context.AddSource($"{ns}.{cn}Apply.g.cs", sb.ToString());
+
+        // ---- 文件 2：Component 静态构造函数（自动注册） ----
+        sb.Clear();
+        sb.AppendLine("// <auto-generated/>");
+        sb.AppendLine("using Goblin.Gameplay.Render.Core;");
+        sb.AppendLine();
+        sb.AppendLine($"namespace {ns};");
+        sb.AppendLine();
+        sb.AppendLine($"partial class {cn}");
+        sb.AppendLine("{");
+        sb.AppendLine($"    static {cn}()");
+        sb.AppendLine("    {");
+        sb.AppendLine($"        Mirror.SetApply<{cn}>({cn}Apply.ApplyTo);");
+        sb.AppendLine("    }");
+        sb.AppendLine("}");
+
+        context.AddSource($"{ns}.{cn}.applyreg.g.cs", sb.ToString());
     }
 }

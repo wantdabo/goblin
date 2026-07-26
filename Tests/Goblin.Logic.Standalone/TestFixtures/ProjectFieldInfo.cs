@@ -16,8 +16,4 @@ namespace Goblin.Logic.Standalone.TestFixtures;
 public partial class ProjectFieldInfo : BehaviorInfo
 {
     public string name { get; set; }
-
-    protected override void OnReady()
-    {
-    }
 }

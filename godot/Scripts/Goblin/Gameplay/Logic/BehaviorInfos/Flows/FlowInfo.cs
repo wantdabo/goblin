@@ -38,11 +38,4 @@ public partial class FlowInfo : BehaviorInfo
     /// 用于 RunPipeline 跳过已过期指令，避免每帧全量扫描
     /// </summary>
     public GBLDict<uint, uint> completedindex { get; set; }
-
-    protected override void OnReady()
-    {
-        // FlowInfo 默认不激活，由 Flow 显式激活
-        active = false;
-        base.OnReady();
-    }
 }
