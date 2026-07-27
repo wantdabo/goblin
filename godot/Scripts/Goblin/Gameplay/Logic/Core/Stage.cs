@@ -330,6 +330,12 @@ public sealed class Stage
                 dict.Add(type, behaviorinfo);
             }
         }
+
+        // 快照回滚后标记全部投影字段为脏（首帧全量同步）
+        foreach (var behaviorinfos in info.behaviorinfos.Values)
+        {
+            foreach (var behaviorinfo in behaviorinfos) MarkProjectableDirty(behaviorinfo);
+        }
             
         foreach (var actor in info.actors)
         {
