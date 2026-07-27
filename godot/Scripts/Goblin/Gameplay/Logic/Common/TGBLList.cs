@@ -21,6 +21,13 @@ public class TGBLList<T> : GBLList<T>
         set
         {
             if (EqualityComparer<T>.Default.Equals(data[index], value)) return;
+            if (iselementigbl)
+            {
+                // 回收被覆写的旧 IGBL 元素
+                var oldigbl = (IGBL)(object)data[index];
+                oldigbl.Reset();
+                ObjectCache.Set(oldigbl);
+            }
             data[index] = value;
             addedindices.Add(index);
         }

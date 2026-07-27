@@ -117,11 +117,11 @@ public partial class AnimationSlot : IGBL
 // 特效版本号
 [Projector("effectincrement", typeof(uint))]
 // 待移除特效列表
-[Projector("rmveffects", typeof(GBLList<uint>))]
+[Projector("rmveffects", typeof(TGBLList<uint>))]
 // 特效字典
-[Projector("effectdict", typeof(GBLDict<uint, EffectInfo>))]
+[Projector("effectdict", typeof(TGBLDict<uint, EffectInfo>))]
 // 动画槽位列表
-[Projector("animslots", typeof(GBLList<AnimationSlot>))]
+[Projector("animslots", typeof(TGBLList<AnimationSlot>))]
 public partial class FacadeInfo : BehaviorInfo
 {
 }

@@ -1257,11 +1257,12 @@ public class GoblinSourceGenerator : IIncrementalGenerator
     }
 
     /// <summary>
-    /// 判断类型是否需要 new() 初始化（class 类型如 GBLList、GBLDict）
+    /// 判断类型是否需要 new() 初始化（class 类型如 GBLList、GBLDict、TGBLList、TGBLDict）
     /// </summary>
     private static bool NeedsInit(string typeText)
     {
-        return typeText.StartsWith("GBLList<") || typeText.StartsWith("GBLDict<");
+        return typeText.StartsWith("GBLList<") || typeText.StartsWith("GBLDict<")
+            || typeText.StartsWith("TGBLList<") || typeText.StartsWith("TGBLDict<");
     }
 
     private static string? ExtractLeadingComment(AttributeListSyntax attrList)

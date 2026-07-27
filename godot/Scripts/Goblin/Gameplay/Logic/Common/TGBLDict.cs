@@ -26,6 +26,13 @@ public class TGBLDict<K, V> : GBLDict<K, V>
             {
                 if (EqualityComparer<V>.Default.Equals(old, value)) return;
                 data[key] = value;
+                if (isvalueigbl)
+                {
+                    // 回收被覆写的旧 IGBL 值
+                    var oldigbl = (IGBL)(object)old;
+                    oldigbl.Reset();
+                    ObjectCache.Set(oldigbl);
+                }
                 if (false == addedkeys.Contains(key))
                     changedkeys.Add(key);
             }

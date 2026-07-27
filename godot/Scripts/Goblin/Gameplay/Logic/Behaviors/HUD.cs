@@ -10,20 +10,20 @@ namespace Goblin.Gameplay.Logic.Behaviors;
 /// </summary>
 public class HUD : Behavior<HUDInfo>
 {
-	/// <summary>
-	/// 组装时同步初始值，避免首帧 HUD 为空
-	/// </summary>
-	protected override void OnAssemble()
-	{
-		base.OnAssemble();
-	}
+    /// <summary>
+    /// 组装时同步初始值，避免首帧 HUD 为空
+    /// </summary>
+    protected override void OnAssemble()
+    {
+        base.OnAssemble();
+    }
 
-	protected override void OnTick(FP tick)
-	{
-		base.OnTick(tick);
-		info.hp = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.HP);
-		info.maxhp = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MAXHP);
-		info.movespeed = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED);
-		info.attack = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK);
-	}
+    protected override void OnTick(FP tick)
+    {
+        base.OnTick(tick);
+        info.hp = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.HP);
+        info.maxhp = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MAXHP);
+        info.movespeed = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.MOVESPEED);
+        info.attack = stage.attrb.GetAttributeValue(actor, ATTRIBUTE_DEFINE.ATTACK);
+    }
 }

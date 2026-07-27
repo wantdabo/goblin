@@ -12,60 +12,60 @@ namespace Goblin.Gameplay.Logic.Flows.Scriptings;
 // 命中时：受击朝向攻击者反方向弹飞 + 顿帧 + 伤害结算
 public class S10020 : Scripting
 {
-	public override uint id => FLOW_DEFINE.S10020;
+    public override uint id => FLOW_DEFINE.S10020;
 
-	protected override void OnScript()
-	{
-		Instruct(0, 0, new SoundInstructData
-		{
-			soundid = 1000002,
-		});
+    protected override void OnScript()
+    {
+        Instruct(0, 0, new SoundInstructData
+        {
+            soundid = 1000002,
+        });
 
-		ScriptMachine.Instruct(0, 600, new SpatialPositionData
-		{
-			type = SPATIAL_DEFINE.POSITION_SELF,
-			position = new IntVector3(0, 0, 80),
-		}, checkonce: false);
+        ScriptMachine.Instruct(0, 600, new SpatialPositionData
+        {
+            type = SPATIAL_DEFINE.POSITION_SELF,
+            position = new IntVector3(0, 0, 80),
+        }, checkonce: false);
 
-		Instruct(200, 500, new CollisionData
-		{
-			et = FLOW_DEFINE.ET_CASTER,
-			type = COLLISION_DEFINE.COLLISION_TYPE_HURT,
-			overlaptype = COLLISION_DEFINE.COLLISION_BOX,
-			count = 5,
-			offset = new IntVector3(0, 0, 500),
-			boxsize = new IntVector3(2000, 1500, 2000),
-			usespark = true,
-			spark = new SparkData
-			{
-				influence = SPARK_INSTR_DEFINE.FLOW,
-				token = SPARK_INSTR_DEFINE.TOKEN_ON_HIT,
-			},
-		});
+        Instruct(200, 500, new CollisionData
+        {
+            et = FLOW_DEFINE.ET_CASTER,
+            type = COLLISION_DEFINE.COLLISION_TYPE_HURT,
+            overlaptype = COLLISION_DEFINE.COLLISION_BOX,
+            count = 5,
+            offset = new IntVector3(0, 0, 500),
+            boxsize = new IntVector3(2000, 1500, 2000),
+            usespark = true,
+            spark = new SparkData
+            {
+                influence = SPARK_INSTR_DEFINE.FLOW,
+                token = SPARK_INSTR_DEFINE.TOKEN_ON_HIT,
+            },
+        });
 
-		// 命中火花指令：受击位移 + 受击硬直 + 顿帧 + 伤害结算（由碰撞 spark 触发，确保在 targets 填充后同步执行）
-		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new BeHitData
-		{
-			uselookatattacker = true,
-			usehitmotion = true,
-			hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
-			hitmotion = new IntVector3(0, 0, 800),
-			hitstunduration = 300,  // 0.3秒（300ms，约 7-8 帧 @ 25fps）
-		});
+        // 命中火花指令：受击位移 + 受击硬直 + 顿帧 + 伤害结算（由碰撞 spark 触发，确保在 targets 填充后同步执行）
+        ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new BeHitData
+        {
+            uselookatattacker = true,
+            usehitmotion = true,
+            hitmotiontype = BEHIT_DEFINE.MOTION_ATTACKER_TO_SELF,
+            hitmotion = new IntVector3(0, 0, 800),
+            hitstunduration = 300,  // 0.3秒（300ms，约 7-8 帧 @ 25fps）
+        });
 
-		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new HitLagData
-		{
-			et = FLOW_DEFINE.ET_HIT_VICTIM,
-			type = HIT_LAG_DEFINE.TYPE_INSTANCE,
-			strength = 300,
-			strengthmax = 300,
-			duration = 120,
-			durationmax = 120,
-		});
+        ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new HitLagData
+        {
+            et = FLOW_DEFINE.ET_HIT_VICTIM,
+            type = HIT_LAG_DEFINE.TYPE_INSTANCE,
+            strength = 300,
+            strengthmax = 300,
+            duration = 120,
+            durationmax = 120,
+        });
 
-		ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new DamageData
-		{
-			strength = 3000,
-		});
-	}
+        ScriptMachine.Instruct(SPARK_INSTR_DEFINE.FLOW, SPARK_INSTR_DEFINE.TOKEN_ON_HIT, new DamageData
+        {
+            strength = 3000,
+        });
+    }
 }

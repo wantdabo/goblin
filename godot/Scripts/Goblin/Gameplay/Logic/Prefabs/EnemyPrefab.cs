@@ -38,7 +38,7 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         stage.AddBehavior<Movement>(actor);
         stage.AddBehavior<HUD>(actor);
 
-		stage.AddBehavior<SkillLauncher>(actor);
+        stage.AddBehavior<SkillLauncher>(actor);
 
         var facade = stage.AddBehavior<Facade>(actor);
         facade.SetModel(enemycfg.Model);
