@@ -45,6 +45,10 @@ public class GameplayProxy : Proxy<GameplayModel>
     /// </summary>
     private ProjectionPipeline pipeline;
     /// <summary>
+    /// 逻辑步数计数器（用于定期清理频率规则等周期任务）
+    /// </summary>
+    private long stepcount;
+    /// <summary>
     /// 逻辑 Step 耗时，单位毫秒
     /// </summary>
     public int stepms { get; private set; }
@@ -110,7 +114,21 @@ public class GameplayProxy : Proxy<GameplayModel>
             if (rule is AOIRule aoi)
                 aoi.positionlookup = mirror.TryGetPosition;
             else if (rule is VisibilityRule vis)
+            {
+                // TODO: Phase 2+ 替换为游戏可见性查询（隐身、战争迷雾等）
+                // 当前用 HasActor 仅检查 Mirror 中是否存在数据
                 vis.visibilitylookup = mirror.HasActor;
+            }
+            else if (rule is PermissionRule perm)
+            {
+                // TODO: Phase 2+ 由配置注册权限规则
+                // 示例：perm.Add(ObserverType.Player, typeof(SpatialInfo), ulong.MaxValue);
+            }
+            else if (rule is FrequencyRule freq)
+            {
+                // TODO: Phase 2+ 由配置注册频率规则
+                // 示例：freq.Add(typeof(SpatialInfo), 0, 3);  // 位置字段每 3 帧推送
+            }
         }
 
         pipeline.observers.Add(new Observer
@@ -278,6 +296,10 @@ public class GameplayProxy : Proxy<GameplayModel>
         {
             pipeline?.Process(ps.packets);
         }
+
+        // 定期清理频率规则过期条目（每 300 帧，约 10 秒 @30fps）
+        stepcount++;
+        if (0 == stepcount % 300) pipeline?.CleanupFrequencyRules(stepcount - 1000);
     }
 
     /// <summary>

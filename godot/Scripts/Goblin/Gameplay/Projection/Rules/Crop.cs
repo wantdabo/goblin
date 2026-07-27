@@ -68,6 +68,7 @@ public partial class Crop : IGBL
 
     /// <summary>
     /// 对一组数据包执行裁剪，产出 ObserverPacket 数组
+    /// 复杂度 O(N×M)，大量实体 + 多观察者场景需考虑空间分区优化
     /// </summary>
     /// <param name="packets">原始数据包数组</param>
     /// <param name="observers">观察者列表</param>
@@ -113,6 +114,17 @@ public partial class Crop : IGBL
     public IEnumerable<IProjectionRule> GetRules()
     {
         return rules;
+    }
+
+    /// <summary>
+    /// 清理频率规则中的过期条目
+    /// </summary>
+    public void CleanupFrequencyRules(long minFrame)
+    {
+        foreach (var rule in rules)
+        {
+            if (rule is FrequencyRule freq) freq.Cleanup(minFrame);
+        }
     }
 
     /// <summary>

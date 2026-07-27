@@ -3,7 +3,9 @@ using Goblin.Gameplay.Projection.Core;
 namespace Goblin.Gameplay.Projection.Rules;
 
 /// <summary>
-/// 可见性裁剪规则 — 不可见实体返回 0
+/// 可见性裁剪规则 — 不可见实体的字段按 visiblefield 掩码裁剪
+/// visibilitylookup 须反映游戏层可见性（隐身、战争迷雾等），而非数据存在性
+/// 当前 Phase 1 用 Mirror.HasActor 做占位实现
 /// </summary>
 public class VisibilityRule : IProjectionRule
 {

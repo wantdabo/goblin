@@ -25,7 +25,9 @@ public partial class ProjectionPipeline : IGBL
     public IPropertyTransport transport { get; set; }
 
     /// <summary>
-    /// 本帧裁剪后的 ObserverPacket 数组（volatile 保证多线程可见性）
+    /// 本帧裁剪后的 ObserverPacket 数组
+    /// 注意：volatile 仅保证引用读写原子性，不保护数组元素内容
+    /// 多线程场景下读取数组元素需额外同步（Interlocked.Exchange 或 lock）
     /// </summary>
     private volatile ObserverPacket[] packetcache;
     public ObserverPacket[] observerpackets { get => packetcache; private set => packetcache = value; }
@@ -59,7 +61,14 @@ public partial class ProjectionPipeline : IGBL
         if (null != transport && 0 < observerpackets.Length)
         {
             transport.Send(observerpackets);
-            // Transport 已消费，清空防止 ApplyProjection 双重 apply
+            // 回收 Transport 已消费的 ObserverPacket 实例，防止对象池泄露
+            for (var i = 0; i < observerpackets.Length; i++)
+            {
+                if (null == observerpackets[i]) continue;
+                observerpackets[i].Reset();
+                ObjectPool.Set(observerpackets[i], ObserverPacket.POOL_KEY);
+            }
+            // 清空防止 ApplyProjection 双重 apply
             observerpackets = Array.Empty<ObserverPacket>();
         }
     }
@@ -77,6 +86,18 @@ public partial class ProjectionPipeline : IGBL
             ObjectPool.Set(p, ObserverPacket.POOL_KEY);
         }
         packetcache = Array.Empty<ObserverPacket>();
+    }
+
+    /// <summary>
+    /// 清理所有 Observer 的频率规则过期条目
+    /// 定期调用以释放不再需要的实体记录，防止 lastpushtable 无限增长
+    /// </summary>
+    public void CleanupFrequencyRules(long minFrame)
+    {
+        foreach (var obs in observers)
+        {
+            obs.crop?.CleanupFrequencyRules(minFrame);
+        }
     }
 
     /// <summary>

@@ -39,6 +39,8 @@ public class NetworkTransport : IPropertyTransport
 
     /// <summary>
     /// 序列化并发送 ObserverPacket 数组
+    /// TODO: Phase 2+ 每帧 new NetworkPacketData 和 SerializedValue 产生 GC 压力
+    /// 高频同步场景需用结构体列化或预分配缓冲区替代 new 分配
     /// </summary>
     public void Send(ObserverPacket[] packets)
     {
