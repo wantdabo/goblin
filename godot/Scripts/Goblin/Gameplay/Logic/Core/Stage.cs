@@ -312,20 +312,26 @@ public sealed class Stage
 	{
 		if (null == snapshot) return;
 		if (snapshot.frame == info.frame) return;
+		// 清理上一步可能残留的待回收列表，防止 Recycle 处理脏数据
 		cache.rmvactorset.Clear();
+		cache.rmvbehaviors.Clear();
+		cache.rmvbehaviorinfos.Clear();
 		foreach (var actor in info.actors) ActorToRecycle(actor);
 		Recycle();
 			
 		info.Reset();
 		ObjectCache.Set(info);
 		info = snapshot.Clone() as StageInfo;
-			
+
 		foreach (var behaviorinfos in info.behaviorinfos.Values)
 		{
 			foreach (var behaviorinfo in behaviorinfos)
 			{
-			if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.actor, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.actor, dict = ObjectCache.Ensure<GBLDict<Type, BehaviorInfo>>());
-			dict.Add(behaviorinfo.GetType(), behaviorinfo);
+				if (false == cache.behaviorinfodict.TryGetValue(behaviorinfo.actor, out var dict)) cache.behaviorinfodict.Add(behaviorinfo.actor, dict = ObjectCache.Ensure<GBLDict<Type, BehaviorInfo>>());
+				var type = behaviorinfo.GetType();
+				// Remove 走 IGBL 生命周期清理残留条目，用 Add 而非 indexer 保证覆盖行为可追踪
+				if (dict.ContainsKey(type)) dict.Remove(type);
+				dict.Add(type, behaviorinfo);
 			}
 		}
 			

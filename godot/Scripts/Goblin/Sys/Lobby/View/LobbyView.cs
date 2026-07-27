@@ -55,7 +55,7 @@ public class LobbyView : UIBaseView
             engine.gameui.Open<GameplayView>();
             engine.gameui.Open<HUDView>();
             engine.gameui.Open<ResultView>();
-            engine.proxy.gameplay.CreateGame(data, true);
+            engine.proxy.gameplay.CreateGame(data, false);
             engine.proxy.gameplay.StartGame();
         });
     }
