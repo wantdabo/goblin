@@ -15,6 +15,11 @@
 - **根因**：SG 生成的 `GBLList`/`GBLDict` backing field 未初始化，`Reset` 设 `= default`（null）
 - **修复**：SG 对 `GBLList<>`/`GBLDict<>` 类型生成 `= new()` 初始化器和 Reset 中的 `new` 重置
 
+## 功能：Godot Pipeline 可视化编辑器
+
+- **状态**：规划中
+- **方向**：Scripting / Timeline / GraphNode 三种编辑方式并存，统一底层 Pipeline 数据结构
+
 ## 清理：删除 OnInitContainers 死代码
 
 - **状态**：待处理

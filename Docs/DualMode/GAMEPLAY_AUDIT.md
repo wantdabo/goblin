@@ -14,7 +14,7 @@
 | `Logic/BehaviorInfos` | 28 | Behavior 数据定义（含 Flows、Sa 子模块） |
 | `Logic/Behaviors` | 22 | Behavior 逻辑实现（含 Sa 全局行为） |
 | `Logic/Flows` | 61 | 流程系统（Executors、Checkers、Scriptings、Pipeline） |
-| `Logic/Translators` | 0 (.cs) + 11 (.uid) | **已删除**（RIL 体系移除后残留 UID 文件） |
+| `Logic/Translators` | 0 | ✅ **已清理**（RIL 体系移除，UID 残留文件已删除） |
 | `Logic/Commands` | 11 | 命令系统（输入指令 + Solider 执行器） |
 | `Logic/Prefabs` | 10 | Actor 预制创建器 |
 | `Logic/Common` | 45 | 公共：BuildDatas、Defines、Math（FPVector3 等）、GBL 容器 |
@@ -289,18 +289,18 @@ var behavior = ObjectCache.Ensure(type) as Behavior;
 
 | # | 路径 | 状态 |
 |---|------|------|
-| R1 | `Logic/Translators/ActorTranslator.cs.uid` | RIL/Translator 体系已删除，仅剩 Godot UID 元数据残留（共 11 个 .uid 文件 + Common/ 空目录） |
-| R2 | `Logic/Translators/AttributeTranslator.cs.uid` | 同上 |
-| R3 | `Logic/Translators/FacadeAnimationTranslator.cs.uid` | 同上 |
-| R4 | `Logic/Translators/FacadeEffectTranslator.cs.uid` | 同上 |
-| R5 | `Logic/Translators/FacadeModelTranslator.cs.uid` | 同上 |
-| R6 | `Logic/Translators/SeatTranslator.cs.uid` | 同上 |
-| R7 | `Logic/Translators/SpatialTranslator.cs.uid` | 同上 |
-| R8 | `Logic/Translators/StageTranslator.cs.uid` | 同上 |
-| R9 | `Logic/Translators/StateMachineTranslator.cs.uid` | 同上 |
-| R10 | `Logic/Translators/TickerTranslator.cs.uid` | 同上 |
-| R11 | `Logic/Translators/Common/Translator.cs.uid` | 同上 |
-| R12 | `Render/Core/RenderWorld.cs` | 空文件，仅含注释 + namespace，无任何类型 |
+| R1 | `Logic/Translators/ActorTranslator.cs.uid` | ✅ 已删除（整个 Translators 目录已移除） |
+| R2 | `Logic/Translators/AttributeTranslator.cs.uid` | ✅ 同上 |
+| R3 | `Logic/Translators/FacadeAnimationTranslator.cs.uid` | ✅ 同上 |
+| R4 | `Logic/Translators/FacadeEffectTranslator.cs.uid` | ✅ 同上 |
+| R5 | `Logic/Translators/FacadeModelTranslator.cs.uid` | ✅ 同上 |
+| R6 | `Logic/Translators/SeatTranslator.cs.uid` | ✅ 同上 |
+| R7 | `Logic/Translators/SpatialTranslator.cs.uid` | ✅ 同上 |
+| R8 | `Logic/Translators/StageTranslator.cs.uid` | ✅ 同上 |
+| R9 | `Logic/Translators/StateMachineTranslator.cs.uid` | ✅ 同上 |
+| R10 | `Logic/Translators/TickerTranslator.cs.uid` | ✅ 同上 |
+| R11 | `Logic/Translators/Common/Translator.cs.uid` | ✅ 同上 |
+| R12 | `Render/Core/RenderWorld.cs` | ✅ 已删除（文件不再存在） |
 
 ---
 
@@ -312,6 +312,21 @@ var behavior = ObjectCache.Ensure(type) as Behavior;
 | **P1** | B4 (SkillLauncher 丢指令)、B5 (Detection 泄漏)、B6 (SilentMercy 未清理) | 数据损坏/内存泄漏 |
 | **P1** | B7 (Stage.Dispose 静默泄漏) | 资源泄漏 |
 | **P2** | B8-B11（可读性/健壮性） | 维护隐患 |
-| **P2** | R1-R11（Translators UID 残留） | 清理无用文件 |
+| **P2** | ~~R1-R11（Translators UID 残留）~~ | ✅ 已清理 |
 | **P3** | S1-S11（风格违规） | 代码一致性 |
-| **P3** | D1-D10（设计改进）、R12 | 可维护性 |
+| **P3** | D1-D10（设计改进）、~~R12~~ | ✅ R12 已删除 |
+
+---
+
+## 八、复查状态（2026-07-27 复查）
+
+| 类别 | 总数 | 已修复 | 未修复 |
+|------|------|--------|--------|
+| 严重 Bug（B1-B6） | 6 | 0 | 6 |
+| 中等 Bug（B7-B11） | 5 | 0 | 5 |
+| 残留文件（R1-R12） | 12 | 12 | 0 |
+| 风格违规（S1-S11） | 11 | 0 | 11 |
+| 设计问题（D1-D10） | 10 | 0 | 10 |
+| **合计** | **44** | **12** | **32** |
+
+> 仅 R1-R12（残留文件清理）在 GBL 容器重构等工作中附带解决，其余 Bug / 风格 / 设计问题均未处理。
