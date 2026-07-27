@@ -89,11 +89,7 @@ public class SilentMercy : Behavior<SilentMercyInfo>
     {
         base.OnEndTick();
         // 清空击杀列表
-        foreach (var kv in info.killrelations)
-        {
-            kv.Value.Clear();
-            ObjectCache.Set(kv.Value);
-        }
+        // GBLDict.Clear() 已遍历子 GBLList 做 Reset+Set
         info.killrelations.Clear();
     }
 }

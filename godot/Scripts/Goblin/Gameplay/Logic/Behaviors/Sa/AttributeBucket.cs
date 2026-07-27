@@ -192,8 +192,7 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
             info.attributes.Remove(actor);
         }
 
-        done.Clear();
-        ObjectCache.Set(done);
+        done.Dispose();
     }
 
     private void OnActorRmv(ActorRmvEvent e)

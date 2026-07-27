@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -23,7 +22,7 @@ public struct BuffPrefabInfo : IPrefabInfo
     /// <summary>
     /// Buff 管线列表
     /// </summary>
-    public List<uint> pipelines { get; set; }
+    public GBLList<uint> pipelines { get; set; }
 }
 
 /// <summary>
@@ -40,7 +39,7 @@ public class BuffPrefab : Prefab<BuffPrefabInfo>
         buff.owner = info.owner;
             
         if (null == info.pipelines) return;
-        var pipelines = ObjectCache.Ensure<List<uint>>();
+        var pipelines = ObjectCache.Ensure<GBLList<uint>>();
         pipelines.AddRange(info.pipelines);
         buff.flow = stage.flow.GenPipeline(actor, pipelines);
     }

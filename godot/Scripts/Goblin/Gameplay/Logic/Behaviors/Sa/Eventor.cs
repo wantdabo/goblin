@@ -29,13 +29,8 @@ public class Eventor : Behavior<EventorInfo>
     {
         base.OnDisassemble();
         if (null == eventdict) return;
-        foreach (var kv in eventdict)
-        {
-            kv.Value.Clear();
-            ObjectCache.Set(kv.Value);
-        }
-        eventdict.Clear();
-        ObjectCache.Set(eventdict);
+        // Dispose() 内部 Reset+Set 所有子列表，再 Set 自身还池
+        eventdict.Dispose();
     }
         
     /// <summary>

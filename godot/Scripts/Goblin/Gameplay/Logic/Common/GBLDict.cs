@@ -140,6 +140,15 @@ public class GBLDict<K, V> : IEnumerable<KeyValuePair<K, V>>, IGBL
         order.Clear();
     }
 
+    /// <summary>
+    /// 内部元素 Reset + 还池，自身也还池
+    /// </summary>
+    public virtual void Dispose()
+    {
+        Reset();
+        ObjectCache.Set(this);
+    }
+
     public virtual IGBL Clone()
     {
         var c = ObjectCache.Ensure<GBLDict<K, V>>();

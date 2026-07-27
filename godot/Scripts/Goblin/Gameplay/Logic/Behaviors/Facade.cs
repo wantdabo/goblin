@@ -181,7 +181,7 @@ public class Facade : Behavior<FacadeInfo>
 
 		// 更新特效时间流逝
 		// 复制键列表，避免在遍历时修改 effectdict
-		var effectKeys = ObjectCache.Ensure<List<uint>>();
+		var effectKeys = ObjectCache.Ensure<GBLList<uint>>();
 		foreach (var kv in info.effectdict) effectKeys.Add(kv.Key);
 		foreach (var id in effectKeys)
 		{
@@ -190,7 +190,6 @@ public class Facade : Behavior<FacadeInfo>
 			info.effectdict[id] = effect;
 			if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
 		}
-		effectKeys.Clear();
-		ObjectCache.Set(effectKeys);
+		effectKeys.Dispose();
 	}
 }

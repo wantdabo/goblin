@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Soliders;
 using Goblin.Gameplay.Logic.Common;
@@ -17,7 +15,7 @@ public class Herald : Behavior
     /// <summary>
     /// 输入指令队列
     /// </summary>
-    private Queue<Command> cmdqueue { get; set; }
+    private GBLQueue<Command> cmdqueue { get; set; }
     /// <summary>
     /// 输入指令执行器列表
     /// </summary>
@@ -27,7 +25,7 @@ public class Herald : Behavior
     {
         base.OnAssemble();
 
-        cmdqueue = ObjectCache.Ensure<Queue<Command>>();
+        cmdqueue = ObjectCache.Ensure<GBLQueue<Command>>();
             
         // 注册输入指令执行器
         soliderdict = ObjectCache.Ensure<GBLDict<ushort, Solider>>();
@@ -43,22 +41,15 @@ public class Herald : Behavior
     protected override void OnDisassemble()
     {
         base.OnDisassemble();
-            
-        while (cmdqueue.TryDequeue(out var command))
-        {
-            command.Reset();
-            ObjectCache.Set(command);
-        }
-        ObjectCache.Set(cmdqueue);
+        cmdqueue.Dispose();
             
         // 卸载输入指令执行器
         foreach (var solider in soliderdict.Values)
         {
             solider.Unload();
-            ObjectCache.Set(solider);
         }
-        soliderdict.Clear();
-        ObjectCache.Set(soliderdict);
+        // Dispose() 内部 Reset+Set 所有 Solider，再 Set 自身还池
+        soliderdict.Dispose();
     }
         
     public void SetCommand(Command command)
@@ -74,9 +65,6 @@ public class Herald : Behavior
         while (cmdqueue.TryDequeue(out var command))
         {
             if (soliderdict.TryGetValue(command.id, out var solider)) solider.Execute(command);
-                
-            command.Reset();
-            ObjectCache.Set(command);
         }
     }
 }

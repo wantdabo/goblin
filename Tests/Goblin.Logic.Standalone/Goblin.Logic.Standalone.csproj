@@ -35,6 +35,7 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLDict.cs" Link="Logic\Common\GBLDict.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLList.cs" Link="Logic\Common\GBLList.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLHashSet.cs" Link="Logic\Common\GBLHashSet.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\GBLQueue.cs" Link="Logic\Common\GBLQueue.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLDict.cs" Link="Logic\Common\TGBLDict.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\TGBLList.cs" Link="Logic\Common\TGBLList.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Common\AnimHash.cs" Link="Logic\Common\AnimHash.cs" />

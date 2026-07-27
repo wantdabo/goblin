@@ -64,6 +64,7 @@ public static class ObjectCache
         {
             if (queue.TryDequeue(out var obj))
             {
+                if (obj is IGBL gbl) gbl.Reset();
                 if (obj is IList list) list.Clear();
                 return (T)obj;
             }
@@ -73,6 +74,9 @@ public static class ObjectCache
         if (type == typeof(List<TValue>)) ins = new List<TValue>(capacity);
         if (type == typeof(HashSet<TValue>)) ins = new HashSet<TValue>(capacity);
         if (type == typeof(Queue<TValue>)) ins = new Queue<TValue>(capacity);
+        if (type == typeof(GBLList<TValue>)) ins = new GBLList<TValue>(capacity);
+        if (type == typeof(GBLHashSet<TValue>)) ins = new GBLHashSet<TValue>(capacity);
+        if (type == typeof(GBLQueue<TValue>)) ins = new GBLQueue<TValue>(capacity);
         if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
             
         capacityidentitys.Add(ins, queue);
@@ -96,6 +100,7 @@ public static class ObjectCache
         {
             if (queue.TryDequeue(out var obj))
             {
+                if (obj is IGBL gbl) gbl.Reset();
                 if (obj is IDictionary dict) dict.Clear();
                 return (T)obj;
             }
@@ -103,6 +108,7 @@ public static class ObjectCache
         object ins = default;
         var type = typeof(T);
         if (type == typeof(Dictionary<TKey, TValue>)) ins = new Dictionary<TKey, TValue>(capacity);
+        if (type == typeof(GBLDict<TKey, TValue>)) ins = new GBLDict<TKey, TValue>(capacity);
         if (null == ins) throw new InvalidOperationException($"unsupported type: {typeof(T)}");
         capacityidentitys.Add(ins, queue);
             

@@ -85,44 +85,19 @@ public class Flow : Behavior
     protected override void OnDisassemble()
     {
         base.OnDisassemble();
-        insidenotexebacks.Clear();
-        ObjectCache.Set(insidenotexebacks);
-            
-        insidenotexefronts.Clear();
-        ObjectCache.Set(insidenotexefronts);
-            
-        foreach (var kv in sparkindex)
-        {
-            foreach (var list in kv.Value.Values)
-            {
-                list.Clear();
-                ObjectCache.Set(list);
-            }
-            kv.Value.Clear();
-            ObjectCache.Set(kv.Value);
-        }
-        sparkindex.Clear();
-        ObjectCache.Set(sparkindex);
-        indexedpipelines.Clear();
-        ObjectCache.Set(indexedpipelines);
+        insidenotexebacks.Dispose();
+        insidenotexefronts.Dispose();
+        sparkindex.Dispose();
+        indexedpipelines.Dispose();
 
         foreach (var kv in checkers)
-        {
             kv.Value.Unload();
-            ObjectCache.Set(kv.Value);
-        }
-        checkers.Clear();
-        ObjectCache.Set(checkers);
+        checkers.Dispose();
             
         foreach (var kv in executors)
-        {
             kv.Value.Unload();
-            ObjectCache.Set(kv.Value);
-        }
-        executors.Clear();
-        ObjectCache.Set(executors);
-        executordict.Clear();
-        ObjectCache.Set(executordict);
+        executors.Dispose();
+        executordict.Dispose();
     }
 
     /// <summary>
@@ -185,8 +160,7 @@ public class Flow : Behavior
                 if (false == data.Query(index, out var instruct)) continue;
                 ExecuteInstruct(ExecuteInstructType.Exit, pipelineid, index, instruct.data, instruct.conditions, flowinfo);
             }
-            indexes.Clear();
-            ObjectCache.Set(indexes);
+            indexes.Dispose();
         }
         // 结束管线
         stage.RmvActor(flowinfo.actor);
@@ -349,7 +323,7 @@ public class Flow : Behavior
     {
         base.OnTick(tick);
         if (false == stage.SeekBehaviorInfos<FlowInfo>(out var flowinfos)) return;
-        var queue = ObjectCache.Ensure<Queue<FlowInfo>, FlowInfo>(CAPACITY_DEFINE.L3);
+        var queue = ObjectCache.Ensure<GBLQueue<FlowInfo>, FlowInfo>(CAPACITY_DEFINE.L3);
         foreach (var flowinfo in flowinfos)
         {
             // 叠加持有者的 timescale
@@ -378,8 +352,7 @@ public class Flow : Behavior
             }
         }
 
-        queue.Clear();
-        ObjectCache.Set(queue);
+        queue.Dispose();
     }
 
     protected override void OnEndTick()

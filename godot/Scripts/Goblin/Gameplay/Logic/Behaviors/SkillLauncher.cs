@@ -56,8 +56,7 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
             pipelines = pipelines,
         });
 
-        pipelines.Clear();
-        ObjectCache.Set(pipelines);
+        pipelines.Dispose();
     }
 
     protected override void OnTick(FP tick)

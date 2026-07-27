@@ -46,10 +46,10 @@ public class Buff : Behavior
         if (null == buffinfo)
         {
             // 读取配置表中 pipelines
-            List<uint> pipelines = default;
+            GBLList<uint> pipelines = default;
             if (0 != buffcfg.Pipelines.Count)
             {
-                pipelines = ObjectCache.Ensure<List<uint>>();
+                pipelines = ObjectCache.Ensure<GBLList<uint>>();
                 foreach (var pipeline in buffcfg.Pipelines) pipelines.Add((uint)pipeline);
             }
             // 创建新的 Buff
@@ -59,11 +59,7 @@ public class Buff : Behavior
                 owner = owner,
                 pipelines = pipelines,
             });
-            if (null != pipelines)
-            {
-                pipelines.Clear();
-                ObjectCache.Set(pipelines);
-            }
+            if (null != pipelines) pipelines.Dispose();
                 
         buffbucket.buffdict.Add(buffid, buff);
             buffinfo = GetBuff(owner, buffid);
@@ -165,7 +161,7 @@ public class Buff : Behavior
             if (stage.SeekBehaviorInfo(buffbucket.actor, out TickerInfo ticker)) bufftick *= ticker.timescale;
                 
         // 从 buffdict 收集所有 Buff ActorID，避免遍历时修改字典
-        var buffs = ObjectCache.Ensure<List<ulong>>();
+        var buffs = ObjectCache.Ensure<GBLList<ulong>>();
         foreach (var kv in buffbucket.buffdict) buffs.Add(kv.Value);
         foreach (var buff in buffs)
             {
@@ -173,8 +169,7 @@ public class Buff : Behavior
                 SetBuff(buffinfo, buffinfo.layer, buffinfo.lifetime - bufftick);
                 if (FP.Zero >= buffinfo.lifetime) RmvBuff(buffbucket.actor, buffinfo.buffid);
             }
-            buffs.Clear();
-            ObjectCache.Set(buffs);
+            buffs.Dispose();
         }
     }
 }
