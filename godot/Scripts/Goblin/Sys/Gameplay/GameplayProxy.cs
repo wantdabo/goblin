@@ -12,10 +12,9 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Projection;
 using Goblin.Gameplay.Projection.Core;
 using Goblin.Gameplay.Projection.Rules;
+using Goblin.Gameplay.Projection.Shadows;
 using Goblin.Gameplay.Projection.Transport;
 using Goblin.Gameplay.Render;
-using Goblin.Gameplay.Render.Components;
-using Goblin.Gameplay.Render.Core;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Sys.Common;
 using Kowtow.Math;
@@ -37,9 +36,9 @@ public class GameplayProxy : Proxy<GameplayModel>
     /// </summary>
     public ulong selfseat { get; set; }
     /// <summary>
-    /// 数据镜像
+    /// 数据画布
     /// </summary>
-    public Mirror mirror { get; private set; }
+    public Canvas canvas { get; private set; }
     /// <summary>
     /// 投影管线
     /// </summary>
@@ -54,12 +53,12 @@ public class GameplayProxy : Proxy<GameplayModel>
     public int stepms { get; private set; }
 
     /// <summary>
-    /// 将管线产出的观察者包应用到 Mirror（调用方须在主线程）
+    /// 将管线产出的观察者包应用到 Canvas（调用方须在主线程）
     /// </summary>
     public void ApplyProjection()
     {
         if (null == pipeline || 0 == pipeline.observerpackets.Length) return;
-        mirror?.ApplyPackets(pipeline.observerpackets);
+        canvas?.ApplyPackets(pipeline.observerpackets);
     }
     /// <summary>
     /// 时间缩放（代理到 Stage.timescale）
@@ -97,12 +96,12 @@ public class GameplayProxy : Proxy<GameplayModel>
         stage = new Stage().Initialize(data.sdata);
 
         // 构建投影管线：ProjectorSystem → Pipeline（只出包，不自动传输）
-        mirror = new Mirror();
-        mirror.Register<SpatialInfo, SpatialComponent>();
-        mirror.Register<HUDInfo, HUDComponent>();
-        mirror.Register<FacadeInfo, FacadeComponent>();
+        canvas = new Canvas();
+        canvas.Register<SpatialInfo, SpatialShadow>();
+        canvas.Register<HUDInfo, HUDShadow>();
+        canvas.Register<FacadeInfo, FacadeShadow>();
         pipeline = new ProjectionPipeline();
-        pipeline.transport = new LocalTransport { mirror = mirror };
+        pipeline.transport = new LocalTransport { canvas = canvas };
 
         // Phase 1：注册 Player Observer，通过 ObserverFactory 组装裁剪链
         var heroactor = stage.seat.GetActor(selfseat);
@@ -112,12 +111,12 @@ public class GameplayProxy : Proxy<GameplayModel>
         foreach (var rule in crop.GetRules())
         {
             if (rule is AOIRule aoi)
-                aoi.positionlookup = mirror.TryGetPosition;
+                aoi.positionlookup = canvas.TryGetPosition;
             else if (rule is VisibilityRule vis)
             {
                 // TODO: Phase 2+ 替换为游戏可见性查询（隐身、战争迷雾等）
-                // 当前用 HasActor 仅检查 Mirror 中是否存在数据
-                vis.visibilitylookup = mirror.HasActor;
+                // 当前用 HasActor 仅检查 Canvas 中是否存在数据
+                vis.visibilitylookup = canvas.HasActor;
             }
             else if (rule is PermissionRule perm)
             {
@@ -188,7 +187,7 @@ public class GameplayProxy : Proxy<GameplayModel>
         }
 
         engine.debug.Detach();
-        mirror = null;
+        canvas = null;
         pipeline = null;
         stage?.Dispose();
         stage = null;
@@ -290,7 +289,7 @@ public class GameplayProxy : Proxy<GameplayModel>
         EnemyAutopoilot();
         stage.Step();
 
-        // 投影管线：ProjectorSystem 出包 → 裁剪 → 传输 → Mirror
+        // 投影管线：ProjectorSystem 出包 → 裁剪 → 传输 → Canvas
         var ps = stage.projector;
         if (null != ps && null != ps.packets)
         {

@@ -1,7 +1,7 @@
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Common.Defines;
-using Goblin.Gameplay.Render.Components;
+using Goblin.Gameplay.Projection.Shadows;
 using Goblin.Sys.Common;
 using Goblin.Sys.Lobby.View;
 using Godot;
@@ -144,14 +144,14 @@ public class GameplayView : UIBaseView
         {
             var hudText = "";
             var hero = proxy.stage.seat.GetActor(proxy.selfseat);
-            var hud = proxy.mirror?.GetComp<HUDComponent>(hero);
+            var hud = proxy.canvas?.GetShadow<HUDShadow>(hero);
             if (null != hud)
             {
                 hudText = $"HP: {hud.hp}/{hud.maxhp}  Atk: {hud.attack}  Spd: {hud.movespeed}\n";
             }
 
             var spatialText = "";
-            var spatial = proxy.mirror?.GetComp<SpatialComponent>(hero);
+            var spatial = proxy.canvas?.GetShadow<SpatialShadow>(hero);
             if (null != spatial)
             {
                 spatialText = $"POS: ({spatial.position.x:F1},{spatial.position.y:F1},{spatial.position.z:F1})  " +
@@ -160,7 +160,7 @@ public class GameplayView : UIBaseView
 
             // Facade 信息
             var facadeText = "";
-            var facade = proxy.mirror?.GetComp<FacadeComponent>(hero);
+            var facade = proxy.canvas?.GetShadow<FacadeShadow>(hero);
             if (null != facade)
             {
                 facadeText = $"Model: {facade.model}  Anim: {facade.animstate}/{facade.animhash}@{facade.animelapsed}  " +

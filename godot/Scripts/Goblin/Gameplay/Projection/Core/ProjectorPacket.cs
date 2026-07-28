@@ -15,7 +15,7 @@ public class ProjectorPacket : IGBL
     public ulong actor { get; set; }
 
     /// <summary>
-    /// BehaviorInfo 类型（Render 侧据此映射 Component）
+    /// BehaviorInfo 类型（Canvas 侧据此映射 Shadow）
     /// </summary>
     public Type? behaviorinfotype { get; set; }
 

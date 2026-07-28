@@ -38,15 +38,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             projectorData.Where(static data => null != data && 0 < data.fields.Count),
             static (spc, data) => EmitProjectorCode(spc, data!));
 
-        // 管线 3：Component ApplyTo 生成 — 扫描 [ProjectorTarget] 注解
-        var applyToData = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (node, _) => IsPartialClassWithProjectorTarget(node),
-                transform: static (ctx, _) => ExtractApplyToData(ctx));
 
-        context.RegisterSourceOutput(
-            applyToData.Where(static data => null != data),
-            static (spc, data) => EmitApplyToCode(spc, data));
     }
 
     // ============================================================
@@ -1146,6 +1138,9 @@ public class GoblinSourceGenerator : IIncrementalGenerator
 
         var hintName = $"{data.ns}.{data.className}.projector.g.cs";
         context.AddSource(hintName, sb.ToString());
+
+        // 同时生成 Shadow 类 + ApplyTo
+        EmitShadowCode(context, data);
     }
 
     /// <summary>
@@ -1287,186 +1282,128 @@ public class GoblinSourceGenerator : IIncrementalGenerator
     }
 
     // ============================================================
-    // 管线 3：Component ApplyTo 生成
+    // 管线 2 扩展：Shadow 类 + ApplyTo 生成
     // ============================================================
 
     /// <summary>
-    /// ApplyTo 生成数据
+    /// 从 Info 类名推导 Shadow 类名：SpatialInfo → SpatialShadow
     /// </summary>
-    private sealed record ApplyToData(
-        string ns,
-        string className,
-        List<ApplyToFieldData> fields
-    );
-
-    /// <summary>
-    /// ApplyTo 字段数据
-    /// </summary>
-    private sealed record ApplyToFieldData(
-        string name,
-        string typeText,
-        int index,
-        string? targetTypeText = null
-    );
-
-    /// <summary>
-    /// 过滤：partial class 带 [ProjectorTarget] 注解
-    /// </summary>
-    private static bool IsPartialClassWithProjectorTarget(SyntaxNode node)
+    private static string DeriveShadowName(string infoClassName)
     {
-        if (node is not ClassDeclarationSyntax classDecl) return false;
-        if (0 == classDecl.AttributeLists.Count) return false;
+        if (infoClassName.EndsWith("Info"))
+            return infoClassName.Substring(0, infoClassName.Length - 4) + "Shadow";
+        return infoClassName + "Shadow";
+    }
 
-        var hasPartial = false;
-        foreach (var modifier in classDecl.Modifiers)
-        {
-            if (modifier.IsKind(SyntaxKind.PartialKeyword))
-            {
-                hasPartial = true;
-                break;
-            }
-        }
-        if (false == hasPartial) return false;
-
-        foreach (var attrList in classDecl.AttributeLists)
-        {
-            foreach (var attr in attrList.Attributes)
-            {
-                var name = attr.Name.ToString();
-                if ("ProjectorTarget" == name || "ProjectorTargetAttribute" == name)
-                    return true;
-            }
-        }
-
+    /// <summary>
+    /// 判断类型文本是否为值类型（用于 Reset 生成）
+    /// </summary>
+    private static bool IsReferenceTypeText(string typeText)
+    {
+        if ("string" == typeText) return true;
+        if (typeText.Contains('<')) return true;
         return false;
     }
 
     /// <summary>
-    /// 提取 ApplyTo 生成数据：读取 [ProjectorTarget] 中指定的 BehaviorInfo 的 [Projector] 字段
+    /// 生成 Shadow partial 类 + ApplyTo 静态类
     /// </summary>
-    private static ApplyToData? ExtractApplyToData(GeneratorSyntaxContext ctx)
+    private static void EmitShadowCode(SourceProductionContext context, ProjectionClassData data)
     {
-        var classDecl = (ClassDeclarationSyntax)ctx.Node;
-        var model = ctx.SemanticModel;
-        var symbol = model.GetDeclaredSymbol(classDecl);
-        if (null == symbol) return null;
-
-        var ns = symbol.ContainingNamespace.ToDisplayString();
-        var className = symbol.Name;
-
-        // 查找 [ProjectorTarget] 属性
-        ITypeSymbol? targetInfoType = null;
-        foreach (var attr in symbol.GetAttributes())
-        {
-            if (attr.AttributeClass?.Name is "ProjectorTargetAttribute" or "ProjectorTarget")
-            {
-                if (attr.ConstructorArguments.Length > 0)
-                {
-                    targetInfoType = attr.ConstructorArguments[0].Value as ITypeSymbol;
-                    break;
-                }
-            }
-        }
-        if (null == targetInfoType) return null;
-
-        // 收集目标 BehaviorInfo 的 [Projector] 字段
-        var fields = new List<ApplyToFieldData>();
-        var nextAutoIndex = 0;
-        foreach (var attr in targetInfoType.GetAttributes())
-        {
-            if (attr.AttributeClass?.Name is not "ProjectorAttribute" and not "Projector") continue;
-
-            var cargs = attr.ConstructorArguments;
-            if (cargs.Length < 2) continue;
-
-            var name = cargs[0].Value as string;
-            if (null == name) continue;
-
-            var typeObj = cargs[1].Value as ITypeSymbol;
-            var typeText = typeObj?.ToDisplayString();
-            if (null == typeText) continue;
-
-            var index = cargs.Length >= 3 && cargs[2].Value is int intVal && -1 != intVal
-                ? intVal
-                : nextAutoIndex;
-            nextAutoIndex = index + 1;
-
-            // 查找 Component 上同名属性的类型，检测 GBL→原生容器转换需求
-            string? targetTypeText = null;
-            foreach (var member in symbol.GetMembers(name))
-            {
-                if (member is IPropertySymbol prop)
-                {
-                    var propTypeText = prop.Type.ToDisplayString();
-                    if (propTypeText != typeText)
-                    {
-                        targetTypeText = propTypeText;
-                    }
-                    break;
-                }
-            }
-
-            fields.Add(new ApplyToFieldData(name, typeText, index, targetTypeText));
-        }
-
-        if (0 == fields.Count) return null;
-
-        return new ApplyToData(ns, className, fields);
-    }
-
-    /// <summary>
-    /// 生成 ApplyTo 静态类 + Component 静态构造函数
-    /// </summary>
-    private static void EmitApplyToCode(SourceProductionContext context, ApplyToData data)
-    {
-        var ns = data.ns;
-        var cn = data.className;
+        var shadowName = DeriveShadowName(data.className);
+        var shadowNs = "Goblin.Gameplay.Projection.Shadows";
         var sb = new System.Text.StringBuilder();
 
-        // ---- 文件 1：{Name}Apply 静态类 ----
+        // ---- 文件 1：Shadow 类定义 ----
+        sb.AppendLine("// <auto-generated/>");
+        foreach (var u in data.usings)
+        {
+            sb.AppendLine(u);
+        }
+        // 追加原 Info 所在命名空间（用于引用 EffectInfo / AnimationSlot 等同命名空间类型）
+        sb.AppendLine($"using {data.ns};");
+        sb.AppendLine("using System;");
+        sb.AppendLine("using Goblin.Gameplay.Projection.Shadows;");
+        sb.AppendLine();
+        sb.AppendLine($"namespace {shadowNs};");
+        sb.AppendLine();
+        sb.AppendLine($"/// <summary>");
+        sb.AppendLine($"/// {shadowName} — {data.className} 的纯数据投影（SG 生成）");
+        sb.AppendLine($"/// </summary>");
+        sb.AppendLine($"partial class {shadowName} : Shadow");
+        sb.AppendLine("{");
+
+        foreach (var field in data.fields)
+        {
+            sb.AppendLine($"    public {field.typeText} {field.name} {{ get; set; }}");
+        }
+
+        // Reset 重置引用类型字段
+        var hasRefFields = data.fields.Any(f => IsReferenceTypeText(f.typeText));
+        if (hasRefFields)
+        {
+            sb.AppendLine();
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine("    /// 重置状态（对象池回收前调用）");
+            sb.AppendLine("    /// </summary>");
+            sb.AppendLine("    public override void Reset()");
+            sb.AppendLine("    {");
+            sb.AppendLine("        base.Reset();");
+            foreach (var field in data.fields)
+            {
+                if (IsReferenceTypeText(field.typeText))
+                    sb.AppendLine($"        {field.name} = null;");
+                else
+                    sb.AppendLine($"        {field.name} = default;");
+            }
+            sb.AppendLine("    }");
+        }
+
+        sb.AppendLine("}");
+
+        context.AddSource($"{shadowNs}.{shadowName}.g.cs", sb.ToString());
+
+        // ---- 文件 2：ApplyTo 静态类 ----
         sb.Clear();
         sb.AppendLine("// <auto-generated/>");
+        foreach (var u in data.usings)
+        {
+            sb.AppendLine(u);
+        }
+        sb.AppendLine($"using {data.ns};");
+        sb.AppendLine("using System;");
         sb.AppendLine();
-        sb.AppendLine($"namespace {ns};");
+        sb.AppendLine($"namespace {shadowNs};");
         sb.AppendLine();
-        sb.AppendLine($"internal static class {cn}Apply");
+        sb.AppendLine($"internal static class {shadowName}Apply");
         sb.AppendLine("{");
-        sb.AppendLine($"    internal static void ApplyTo({cn} comp, ulong fieldmask, object[] values)");
+        sb.AppendLine($"    internal static void ApplyTo({shadowName} shadow, ulong fieldmask, object[] values)");
         sb.AppendLine("    {");
         sb.AppendLine("        var vi = 0;");
 
         foreach (var field in data.fields)
         {
-            sb.AppendLine($"        // Bit{field.index}: {field.name}");
-            if (null != field.targetTypeText)
-            {
-                // GBL 容器 → 原生容器转换
-                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) comp.{field.name} = new {field.targetTypeText}(({field.typeText})values[vi++]);");
-            }
-            else
-            {
-                sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) comp.{field.name} = ({field.typeText})values[vi++];");
-            }
+            sb.AppendLine($"        if (0 != (fieldmask & (1UL << {field.index}))) shadow.{field.name} = ({field.typeText})values[vi++];");
         }
 
         sb.AppendLine("    }");
         sb.AppendLine("}");
 
-        context.AddSource($"{ns}.{cn}Apply.g.cs", sb.ToString());
+        context.AddSource($"{shadowNs}.{shadowName}Apply.g.cs", sb.ToString());
 
-        // ---- 文件 2：Component 接口实现（自动注册 ApplyTo） ----
+        // ---- 文件 3：IShadowApply 接口注册 ----
         sb.Clear();
         sb.AppendLine("// <auto-generated/>");
         sb.AppendLine("using System;");
         sb.AppendLine();
-        sb.AppendLine($"namespace {ns};");
+        sb.AppendLine($"namespace {shadowNs};");
         sb.AppendLine();
-        sb.AppendLine($"partial class {cn} : Goblin.Gameplay.Render.Components.IComponentApply<{cn}>");
+        sb.AppendLine($"partial class {shadowName} : IShadowApply<{shadowName}>");
         sb.AppendLine("{");
-        sb.AppendLine($"    static Action<{cn}, ulong, object[]> Goblin.Gameplay.Render.Components.IComponentApply<{cn}>.ApplyTo");
-        sb.AppendLine($"        => {cn}Apply.ApplyTo;");
+        sb.AppendLine($"    static Action<{shadowName}, ulong, object[]> IShadowApply<{shadowName}>.ApplyTo");
+        sb.AppendLine($"        => {shadowName}Apply.ApplyTo;");
         sb.AppendLine("}");
 
-        context.AddSource($"{ns}.{cn}.applyreg.g.cs", sb.ToString());
+        context.AddSource($"{shadowNs}.{shadowName}.applyreg.g.cs", sb.ToString());
     }
 }

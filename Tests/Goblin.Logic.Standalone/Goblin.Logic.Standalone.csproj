@@ -80,13 +80,12 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\Observer.cs" Link="Projection\Core\Observer.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\ObserverPacket.cs" Link="Projection\Core\ObserverPacket.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\ProjectionPipeline.cs" Link="Projection\ProjectionPipeline.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Core\Mirror.cs" Link="Render\Core\Mirror.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\Component.cs" Link="Render\Components\Component.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\IComponentApply.cs" Link="Render\Components\IComponentApply.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\ProjectorTargetAttribute.cs" Link="Render\Components\ProjectorTargetAttribute.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\HUDComponent.cs" Link="Render\Components\HUDComponent.cs" />
+        <!-- Projection 层 -->
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Canvas.cs" Link="Projection\Canvas.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Shadows\Shadow.cs" Link="Projection\Shadows\Shadow.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Shadows\IShadowApply.cs" Link="Projection\Shadows\IShadowApply.cs" />
 
-        <!-- BehaviorInfo 层（Component [ProjectorTarget] 需要引用） -->
+        <!-- BehaviorInfo 层（Canvas / Shadow 注册需要引用） -->
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\BehaviorInfos\SpatialInfo.cs" Link="Logic\BehaviorInfos\SpatialInfo.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\BehaviorInfos\HUDInfo.cs" Link="Logic\BehaviorInfos\HUDInfo.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\AOIRule.cs" Link="Projection\Rules\AOIRule.cs" />
@@ -97,7 +96,6 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\NetworkTransport.cs" Link="Projection\Transport\NetworkTransport.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Transport\ValueSerializer.cs" Link="Projection\Transport\ValueSerializer.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\GodRule.cs" Link="Projection\Rules\GodRule.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Render\Components\SpatialComponent.cs" Link="Render\Components\SpatialComponent.cs" />
     </ItemGroup>
 
 </Project>

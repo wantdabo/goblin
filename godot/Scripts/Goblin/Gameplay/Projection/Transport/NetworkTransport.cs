@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
-using Goblin.Gameplay.Render.Core;
 using MessagePack;
 
 namespace Goblin.Gameplay.Projection.Transport;
@@ -82,7 +81,7 @@ public class NetworkPacketData
     public ulong actor { get; set; }
 
     /// <summary>
-    /// BehaviorInfo 类型名（用于反序列化端映射 Component）
+    /// BehaviorInfo 类型名（用于反序列化端映射 Shadow）
     /// </summary>
     [Key(1)]
     public string behaviorinfotype { get; set; } = string.Empty;
@@ -107,21 +106,21 @@ public class NetworkPacketData
 }
 
 /// <summary>
-/// 远程传输 — 反序列化接收端，将网络数据包推入 Mirror
+/// 远程传输 — 反序列化接收端，将网络数据包推入 Canvas
 /// </summary>
 public class RemoteTransport
 {
     /// <summary>
-    /// 数据镜像
+    /// 数据画布
     /// </summary>
-    public Mirror? mirror { get; set; }
+    public Canvas? canvas { get; set; }
 
     /// <summary>
     /// 接收并反序列化网络数据
     /// </summary>
     public void Receive(byte[] data)
     {
-        if (null == mirror || null == data || 0 == data.Length) return;
+        if (null == canvas || null == data || 0 == data.Length) return;
 
         var list = MessagePackSerializer.Deserialize<List<NetworkPacketData>>(data);
         if (null == list) return;
@@ -140,7 +139,7 @@ public class RemoteTransport
             packets[i] = p;
         }
 
-        mirror.ApplyPackets(packets);
+        canvas.ApplyPackets(packets);
 
         // 归还 ObserverPacket 实例到对象池
         foreach (var p in packets)

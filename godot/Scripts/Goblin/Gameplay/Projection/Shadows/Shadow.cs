@@ -1,11 +1,11 @@
 using Goblin.Common;
 
-namespace Goblin.Gameplay.Render.Components;
+namespace Goblin.Gameplay.Projection.Shadows;
 
 /// <summary>
-/// 渲染组件标记基类 — 供 Mirror 查询类型约束，实现 IGBL 以支持对象池
+/// 影子标记基类 — 供 Canvas 查询类型约束，实现 IGBL 以支持对象池
 /// </summary>
-public abstract class Component : IGBL
+public abstract class Shadow : IGBL
 {
     /// <summary>
     /// 浅拷贝（子类重写以支持深拷贝）

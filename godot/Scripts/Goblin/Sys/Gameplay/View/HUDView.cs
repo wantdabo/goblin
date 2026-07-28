@@ -35,7 +35,7 @@ public class HUDView : UIBaseView
 
     private void OnLateTick(LateTickEvent e)
     {
-        // Phase 2+：从 mirror.GetComp<T> 读取 Actor 血量信息绘制血条
+        // Phase 2+：从 canvas.GetShadow<T> 读取 Actor 血量信息绘制血条
         // Phase 1：占位
         if (null == engine.proxy.gameplay.stage || contentNode == null || barOrgNode == null) return;
 

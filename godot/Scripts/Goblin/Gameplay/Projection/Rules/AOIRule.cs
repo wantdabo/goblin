@@ -12,7 +12,7 @@ namespace Goblin.Gameplay.Projection.Rules;
 public class AOIRule : IProjectionRule
 {
     /// <summary>
-    /// Actor 位置查询委托（由 Mirror 注入，查找 actor 的 SpatialComponent 位置）
+    /// Actor 位置查询委托（由 Canvas 注入，查找 actor 的 SpatialShadow 位置）
     /// </summary>
     public Func<ulong, FPVector3?>? positionlookup { get; set; }
 

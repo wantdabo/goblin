@@ -3,34 +3,33 @@ using Goblin.Gameplay.Logic.Behaviors.Sa;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection;
 using Goblin.Gameplay.Projection.Core;
+using Goblin.Gameplay.Projection.Shadows;
 using Goblin.Gameplay.Projection.Transport;
-using Goblin.Gameplay.Render.Components;
-using Goblin.Gameplay.Render.Core;
 using Goblin.Logic.Standalone.TestFixtures;
 using Kowtow.Math;
 
 namespace Goblin.Logic.Tests;
 
 /// <summary>
-/// T1.9 Mirror / Component 测试 + 端到端投影链路
+/// T1.9 Canvas / Shadow 测试 + 端到端投影链路
 /// </summary>
 [Collection("GBL")]
 public class RenderWorldTests
 {
     // ============================================================
-    // Mirror / Component
+    // Canvas / Shadow
     // ============================================================
 
     /// <summary>
-    /// ApplyPackets 创建 Component，写入字段
+    /// ApplyPackets 创建 Shadow，写入字段
     /// </summary>
     [Fact]
-    public void Apply_CreatesComponent()
+    public void Apply_CreatesShadow()
     {
-        var mirror = new Mirror();
-        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
+        var canvas = new Canvas();
+        canvas.Register<ProjectFieldInfo, TestSpatialShadow>();
 
-        mirror.ApplyPackets(new ObserverPacket[]
+        canvas.ApplyPackets(new ObserverPacket[]
         {
             new ObserverPacket
             {
@@ -41,21 +40,21 @@ public class RenderWorldTests
             }
         });
 
-        var comp = mirror.GetComp<TestSpatialComponent>(1);
-        Assert.NotNull(comp);
-        Assert.Equal(new FPVector3(1, 2, 3), comp.position);
-        Assert.Equal(new FP(5), comp.scale);
+        var shadow = canvas.GetShadow<TestSpatialShadow>(1);
+        Assert.NotNull(shadow);
+        Assert.Equal(new FPVector3(1, 2, 3), shadow.position);
+        Assert.Equal(new FP(5), shadow.scale);
     }
 
     /// <summary>
-    /// 无映射的 BehaviorInfo 不创建 Component
+    /// 无映射的 BehaviorInfo 不创建 Shadow
     /// </summary>
     [Fact]
-    public void Apply_NoMapping_NoComponent()
+    public void Apply_NoMapping_NoShadow()
     {
-        var mirror = new Mirror();
+        var canvas = new Canvas();
 
-        mirror.ApplyPackets(new ObserverPacket[]
+        canvas.ApplyPackets(new ObserverPacket[]
         {
             new ObserverPacket
             {
@@ -66,7 +65,7 @@ public class RenderWorldTests
             }
         });
 
-        Assert.Null(mirror.GetComp<TestSpatialComponent>(1));
+        Assert.Null(canvas.GetShadow<TestSpatialShadow>(1));
     }
 
     /// <summary>
@@ -75,9 +74,9 @@ public class RenderWorldTests
     [Fact]
     public void RmvActor_RemovesData()
     {
-        var mirror = new Mirror();
-        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
-        mirror.ApplyPackets(new ObserverPacket[]
+        var canvas = new Canvas();
+        canvas.Register<ProjectFieldInfo, TestSpatialShadow>();
+        canvas.ApplyPackets(new ObserverPacket[]
         {
             new ObserverPacket
             {
@@ -88,9 +87,9 @@ public class RenderWorldTests
             }
         });
 
-        mirror.RmvActor(1);
+        canvas.RmvActor(1);
 
-        Assert.Null(mirror.GetComp<TestSpatialComponent>(1));
+        Assert.Null(canvas.GetShadow<TestSpatialShadow>(1));
     }
 
     /// <summary>
@@ -99,9 +98,9 @@ public class RenderWorldTests
     [Fact]
     public void Apply_PartialMask_UpdatesPartial()
     {
-        var mirror = new Mirror();
-        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
-        mirror.ApplyPackets(new ObserverPacket[]
+        var canvas = new Canvas();
+        canvas.Register<ProjectFieldInfo, TestSpatialShadow>();
+        canvas.ApplyPackets(new ObserverPacket[]
         {
             new ObserverPacket
             {
@@ -113,7 +112,7 @@ public class RenderWorldTests
         });
 
         // 只更新 position（位 0）
-        mirror.ApplyPackets(new ObserverPacket[]
+        canvas.ApplyPackets(new ObserverPacket[]
         {
             new ObserverPacket
             {
@@ -124,31 +123,31 @@ public class RenderWorldTests
             }
         });
 
-        var comp = mirror.GetComp<TestSpatialComponent>(1);
-        Assert.Equal(new FPVector3(9, 8, 7), comp.position);
-        Assert.Equal(new FP(5), comp.scale);
+        var shadow = canvas.GetShadow<TestSpatialShadow>(1);
+        Assert.Equal(new FPVector3(9, 8, 7), shadow.position);
+        Assert.Equal(new FP(5), shadow.scale);
     }
 
     // ============================================================
-    // 端到端：ProjectorSystem → Pipeline → Transport → Mirror
+    // 端到端：ProjectorSystem → Pipeline → Transport → Canvas
     // ============================================================
 
     /// <summary>
-    /// 完整链路：Logic 改字段 → Component 自动更新
+    /// 完整链路：Logic 改字段 → Shadow 自动更新
     /// </summary>
     [Fact]
-    public void EndToEnd_LogicChange_UpdatesComponent()
+    public void EndToEnd_LogicChange_UpdatesShadow()
     {
         var stage = new Stage();
         var projector = new ProjectorSystem();
         projector.Assemble(stage, stage.sa);
 
-        var mirror = new Mirror();
-        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
+        var canvas = new Canvas();
+        canvas.Register<ProjectFieldInfo, TestSpatialShadow>();
 
         var pipeline = new ProjectionPipeline();
         pipeline.observers.Add(new Observer { type = ObserverType.Player });
-        pipeline.transport = new LocalTransport { mirror = mirror };
+        pipeline.transport = new LocalTransport { canvas = canvas };
 
         var info = stage.AddBehaviorInfo<ProjectFieldInfo>(1);
         info.position = new FPVector3(1, 2, 3);
@@ -156,9 +155,9 @@ public class RenderWorldTests
         projector.EndTick();
         pipeline.Process(projector.packets);
 
-        var comp = mirror.GetComp<TestSpatialComponent>(1);
-        Assert.NotNull(comp);
-        Assert.Equal(new FPVector3(1, 2, 3), comp.position);
+        var shadow = canvas.GetShadow<TestSpatialShadow>(1);
+        Assert.NotNull(shadow);
+        Assert.Equal(new FPVector3(1, 2, 3), shadow.position);
     }
 
     /// <summary>
@@ -171,19 +170,19 @@ public class RenderWorldTests
         var projector = new ProjectorSystem();
         projector.Assemble(stage, stage.sa);
 
-        var mirror = new Mirror();
-        mirror.Register<ProjectFieldInfo, TestSpatialComponent>();
+        var canvas = new Canvas();
+        canvas.Register<ProjectFieldInfo, TestSpatialShadow>();
 
         var pipeline = new ProjectionPipeline();
         pipeline.observers.Add(new Observer { type = ObserverType.Player });
-        pipeline.transport = new LocalTransport { mirror = mirror };
+        pipeline.transport = new LocalTransport { canvas = canvas };
 
         var info = stage.AddBehaviorInfo<ProjectFieldInfo>(1);
         // 首帧全量
         projector.EndTick();
         pipeline.Process(projector.packets);
-        var comp = mirror.GetComp<TestSpatialComponent>(1);
-        Assert.NotNull(comp);
+        var shadow = canvas.GetShadow<TestSpatialShadow>(1);
+        Assert.NotNull(shadow);
 
         // 第二帧无脏
         projector.EndTick();
@@ -194,14 +193,14 @@ public class RenderWorldTests
         projector.EndTick();
         pipeline.Process(projector.packets);
 
-        Assert.Equal(new FP(7), comp.scale);
+        Assert.Equal(new FP(7), shadow.scale);
     }
 }
 
 /// <summary>
-/// 测试用 Component — 对应 ProjectFieldInfo（position index 0, scale index 1）
+/// 测试用 Shadow — 对应 ProjectFieldInfo（position index 0, scale index 1）
 /// </summary>
-public class TestSpatialComponent : Component, IComponentApply<TestSpatialComponent>
+public class TestSpatialShadow : Shadow, IShadowApply<TestSpatialShadow>
 {
     /// <summary>
     /// 位置
@@ -215,16 +214,16 @@ public class TestSpatialComponent : Component, IComponentApply<TestSpatialCompon
     /// <summary>
     /// 应用脏字段 — 后续迁至 SG 生成
     /// </summary>
-    internal static void ApplyTo(TestSpatialComponent comp, ulong fieldmask, object[] values)
+    internal static void ApplyTo(TestSpatialShadow shadow, ulong fieldmask, object[] values)
     {
         var i = 0;
 
         // Bit0: position
-        if (0 != (fieldmask & 1)) comp.position = (FPVector3)values[i++];
+        if (0 != (fieldmask & 1)) shadow.position = (FPVector3)values[i++];
 
         // Bit1: scale
-        if (0 != (fieldmask & (1ul << 1))) comp.scale = (FP)values[i++];
+        if (0 != (fieldmask & (1ul << 1))) shadow.scale = (FP)values[i++];
     }
 
-    static Action<TestSpatialComponent, ulong, object[]> IComponentApply<TestSpatialComponent>.ApplyTo => ApplyTo;
+    static Action<TestSpatialShadow, ulong, object[]> IShadowApply<TestSpatialShadow>.ApplyTo => ApplyTo;
 }
