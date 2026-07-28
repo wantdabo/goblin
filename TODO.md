@@ -84,14 +84,7 @@ Gameplay/
   - `Render/Components/IComponentApply.cs` → SG 消费
   - `Render/Components/ProjectorTargetAttribute.cs` → 不再需要
 
-## 清理：删除 OnInitContainers 死代码
+## ~~清理：删除 OnInitContainers 死代码~~ ✅ 已完成
 
-- **状态**：待处理
-- **问题**：
-  - SG `EmitOnReady` 生成 `protected override void OnInitContainers()`，但 BehaviorInfo 基类未定义该 virtual 方法
-  - `Reset` 中 GBL 容器只 `Clear()` 不置 null，`OnInitContainers` 的 `if (null == field)` 永不会触发
-  - 无任何调方 —— `Ready()` → `OnReady()`，SG 未生成 `OnReady` override 去调用它
-- **清理内容**：
-  - SG 删除 `EmitOnReady` 方法及 `EmitLifecycleCode` 中的调用
-  - BehaviorInfo 基类如有偷偷定义的 `protected virtual void OnInitContainers()` 一并删除
-  - 容器初始化由 `Reset` 的 `Clear()` 自行保证
+- **状态**：已完成
+- **实际修改**：SG `EmitOnReady` → `EmitSGReady`，`OnInitContainers` 已移除，容器初始化由 `SGReady()` 直接完成
