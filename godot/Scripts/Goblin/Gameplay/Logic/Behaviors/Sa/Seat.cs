@@ -9,16 +9,9 @@ namespace Goblin.Gameplay.Logic.Behaviors.Sa;
 /// </summary>
 public class Seat : Behavior<SeatInfo>
 {
-    protected override void OnAssemble()
+    static Seat()
     {
-        base.OnAssemble();
-        stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
-    }
-
-    protected override void OnDisassemble()
-    {
-        base.OnDisassemble();
-        stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
+        Eventor.Listen<ActorRmvEvent>(OnActorRmv);
     }
 
     /// <summary>
@@ -59,12 +52,12 @@ public class Seat : Behavior<SeatInfo>
         info.asdict.Add(id, seat);
     }
         
-    private void OnActorRmv(ActorRmvEvent e)
+    private static void OnActorRmv(Stage stage, ActorRmvEvent e)
     {
+        var seat = stage.seat;
         // 站起
-        if (false == info.asdict.TryGetValue(e.actor, out var seat)) return;
-            
-        info.asdict.Remove(e.actor);
-        info.sadict.Remove(seat);
+        if (false == seat.info.asdict.TryGetValue(e.actor, out var seatid)) return;
+        seat.info.asdict.Remove(e.actor);
+        seat.info.sadict.Remove(seatid);
     }
 }

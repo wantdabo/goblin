@@ -25,16 +25,9 @@ public struct DamageInfo
 /// </summary>
 public class AttributeBucket : Behavior<AttributeBucketInfo>
 {
-    protected override void OnAssemble()
+    static AttributeBucket()
     {
-        base.OnAssemble();
-        stage.eventor.Listen<ActorRmvEvent>(this, OnActorRmv);
-    }
-
-    protected override void OnDisassemble()
-    {
-        base.OnDisassemble();
-        stage.eventor.UnListen<ActorRmvEvent>(this, OnActorRmv);
+        Eventor.Listen<ActorRmvEvent>(OnActorRmv);
     }
 
     /// <summary>
@@ -195,10 +188,10 @@ public class AttributeBucket : Behavior<AttributeBucketInfo>
         done.Dispose();
     }
 
-    private void OnActorRmv(ActorRmvEvent e)
+    private static void OnActorRmv(Stage stage, ActorRmvEvent e)
     {
-        if (false == info.attributes.ContainsKey(e.actor)) return;
-        if (info.pendings.Contains(e.actor)) return;
-        info.pendings.Add(e.actor);
+        if (false == stage.attrb.info.attributes.ContainsKey(e.actor)) return;
+        if (stage.attrb.info.pendings.Contains(e.actor)) return;
+        stage.attrb.info.pendings.Add(e.actor);
     }
 }

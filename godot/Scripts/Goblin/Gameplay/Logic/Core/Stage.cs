@@ -5,7 +5,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Behaviors.Sa;
-using SaEventor = Goblin.Gameplay.Logic.Behaviors.Sa.Eventor;
 using SaIEvent = Goblin.Gameplay.Logic.Behaviors.Sa.IEvent;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Input;
@@ -103,10 +102,6 @@ public sealed class Stage
     /// 配置
     /// </summary>
     public Config cfg => GetBehavior<Config>(sa, true);
-    /// <summary>
-    /// 事件订阅派发者
-    /// </summary>
-    public SaEventor eventor => GetBehavior<SaEventor>(sa, true);
     /// <summary>
     /// 座位
     /// </summary>
@@ -214,7 +209,6 @@ public sealed class Stage
     {
         GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
         AddBehavior<Config>(sa);
-        AddBehavior<SaEventor>(sa);
         AddBehavior<Seat>(sa);
         AddBehavior<Random>(sa).Initialze(data.seed);
         AddBehavior<AttributeBucket>(sa);
@@ -593,7 +587,7 @@ public sealed class Stage
     {
         if (false == ActorToRecycle(actor)) return;
             
-        eventor.Tell(new ActorRmvEvent { actor = actor });
+        Eventor.Tell(this, new ActorRmvEvent { actor = actor });
     }
 
     /// <summary>
@@ -630,7 +624,7 @@ public sealed class Stage
         // 生成一个 Actor
         var actor = ++info.increment;
         AddActor(actor);
-        eventor.Tell(new ActorBornEvent { actor = actor });
+        Eventor.Tell(this, new ActorBornEvent { actor = actor });
 
         return actor;
     }
