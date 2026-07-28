@@ -133,7 +133,14 @@ ANIM_DEFINE.GetSlotLayer(key)         → byte
 
 ---
 
-## 四、RIL 多层架构
+## 四、数据通路
+
+> ⚠️ **本节描述的 RIL 体系（`RIL_FACADE_ANIMATION`、`AnimationEnchant`、`AnimationAgent`）已在 Projection 重构中删除。**
+> 当前动画数据通过 `FacadeComponent` + `Mirror.ApplyPackets` 传递，详见 [ARCHITECTURE.md](ARCHITECTURE.md) §3.6。
+>
+> 以下为历史架构文档，AnimationSlot 模型、优先级仲裁、槽位管理等核心逻辑保持不变。
+
+### 历史：RIL 多层架构（已删除）
 
 ```
 RIL_FACADE_ANIMATION
@@ -313,30 +320,34 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 ### Logic 层
 
-| 文件 | 职责 |
-|------|------|
-| `Common/Defines/ANIM_DEFINE.cs` | 槽位类型、优先级、层定义 + 复合键辅助 |
-| `Common/Defines/STATE_DEFINE.cs` | 状态枚举 + PASSES 跃迁规则 |
-| `Common/AnimHash.cs` | FNV-1a 动画名称哈希 |
-| `BehaviorInfos/FacadeInfo.cs` | FacadeInfo + AnimationSlot 定义（含 elapsed） |
-| `Behaviors/Facade.cs` | 槽位管理 + SetAnimation + OnTick 递进/过期 + RmvSlotsByType |
-| `Behaviors/StateMachine.cs` | 状态切换 + 限时倒计时 + ChangeStateCore |
-| `Translators/FacadeAnimationTranslator.cs` | 逐层仲裁 + RIL 填充（含逐层 elapsed） |
-| `RIL/RIL_FACADE_ANIMATION.cs` | RIL + LayerAnimEntry（含 elapsed） |
-| `Flows/Executors/Instructs/AnimationData.cs` | 管线动画指令（含 layer） |
-| `Flows/Executors/AnimationExecutor.cs` | 管线动画执行器 |
-| `Flows/Executors/Instructs/BeHitData.cs` | 受击指令数据 |
-| `Flows/Executors/BeHitExecutor.cs` | 受击执行器（SLOT_TYPE_OVERRIDE + 限时状态） |
-| `Flows/Executors/ChangeStateExecutor.cs` | 状态变更执行器 |
+> ⚠️ Translator 和 RIL 体系已在 Projection 重构中删除。
+
+| 文件 | 职责 | 状态 |
+|------|------|------|
+| `Common/Defines/ANIM_DEFINE.cs` | 槽位类型、优先级、层定义 + 复合键辅助 | 当前 |
+| `Common/Defines/STATE_DEFINE.cs` | 状态枚举 + PASSES 跃迁规则 | 当前 |
+| `Common/AnimHash.cs` | FNV-1a 动画名称哈希 | 当前 |
+| `BehaviorInfos/FacadeInfo.cs` | FacadeInfo + AnimationSlot 定义（含 elapsed） | 当前 |
+| `Behaviors/Facade.cs` | 槽位管理 + SetAnimation + OnTick 递进/过期 + RmvSlotsByType | 当前 |
+| `Behaviors/StateMachine.cs` | 状态切换 + 限时倒计时 + ChangeStateCore | 当前 |
+| `Translators/FacadeAnimationTranslator.cs` | 逐层仲裁 + RIL 填充（含逐层 elapsed） | ❌ 已删除 |
+| `RIL/RIL_FACADE_ANIMATION.cs` | RIL + LayerAnimEntry（含 elapsed） | ❌ 已删除 |
+| `Flows/Executors/Instructs/AnimationData.cs` | 管线动画指令（含 layer） | 当前 |
+| `Flows/Executors/AnimationExecutor.cs` | 管线动画执行器 | 当前 |
+| `Flows/Executors/Instructs/BeHitData.cs` | 受击指令数据 | 当前 |
+| `Flows/Executors/BeHitExecutor.cs` | 受击执行器（SLOT_TYPE_OVERRIDE + 限时状态） | 当前 |
+| `Flows/Executors/ChangeStateExecutor.cs` | 状态变更执行器 | 当前 |
 
 ### Render 层
 
-| 文件 | 职责 |
-|------|------|
-| `Common/AnimationConfig.cs` | 配置加载 + 哈希索引 |
-| `Agents/AnimationAgent.cs` | AnimationTree 多层 / AnimationPlayer 回退 |
-| `Agents/PrimitiveAnimAgent.cs` | 程序化 mesh 变形 |
-| `Resolvers/Enchants/AnimationEnchant.cs` | 按模型类型路由 Agent |
+> ⚠️ 以下 Agent/Enchant 体系已在 Projection 重构中删除。当前动画数据通过 `FacadeComponent` 消费。
+
+| 文件 | 职责 | 状态 |
+|------|------|------|
+| `Common/AnimationConfig.cs` | 配置加载 + 哈希索引 | 当前 |
+| `Agents/AnimationAgent.cs` | AnimationTree 多层 / AnimationPlayer 回退 | ❌ 已删除 |
+| `Agents/PrimitiveAnimAgent.cs` | 程序化 mesh 变形 | ❌ 已删除 |
+| `Resolvers/Enchants/AnimationEnchant.cs` | 按模型类型路由 Agent | ❌ 已删除 |
 
 ### Debug
 
@@ -359,7 +370,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 3. name 单轨化废弃 → 双字段归正（animstate + animname 正交）
 4. 砍受击 Behavior → 复用 StateMachine HITSTUN
 5. 术语归位：BeHit 是指令，HitStun 是状态
-6. StateMachine 泛化解耦：timerslotkey + timerfallback
+6. StateMachine 泛化解耦：timerslotkey + timerfallback → 最终实现为 stateduration + timerfallback
 7. 命名对齐：RemoveSlot → RmvSlot
 
 ### 2026-07-22 Phase 2 多层 RIL
@@ -423,11 +434,11 @@ Phase 3 让命名动画支持多层（`AnimationData.layer`），但退出路径
 
 **修复**：`EnsureModel` 里同步重置三个 playname 字段。
 
-### P2 — Hash 与 RIL 的 elapsed 精度不对齐 ✅ 已修复
+### P2 — Hash 与 投影 的 elapsed 精度不对齐 ✅ 已修复
 
-**位置**：`FacadeAnimationTranslator.OnCalcHashCode`
+**位置**：`FacadeAnimationTranslator.OnCalcHashCode`（Translator 已删除，修复逻辑保留在现投影链路中）
 
-`OnCalcHashCode` 直接哈希 FP elapsed，但 `OnRIL` 写入的是 `(elapsed * fp2int).AsUInt()`。不同 FP 值可能产生相同 uint → hash 变了但 RIL 数据没变 → 发多余 RIL。
+`OnCalcHashCode` 直接哈希 FP elapsed，但投影链路写入的是 `(elapsed * fp2int).AsUInt()`。不同 FP 值可能产生相同 uint → hash 变了但投影数据没变 → 发多余数据包。
 
 **修复**：`OnCalcHashCode` 用与 `OnRIL` 相同的 uint 转换后哈希。
 

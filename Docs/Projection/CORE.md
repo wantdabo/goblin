@@ -1,6 +1,8 @@
 # Goblin Runtime - World Projection Vision
 
 > **One Simulation, Multiple Projections.**
+>
+> 本文件为 Projection 体系的设计哲学。当前实现详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
 
 ---
 

@@ -8,12 +8,17 @@
 - MessagePack 协议
 - Luban 配置
 - Pipeline.Timeline 技能编辑器
-- Logic / Render 分层（Agent Chase 模式）
+- Logic / Render 分层（Projection 投影同步）
 - 帧同步 / 状态同步双模式
+- Source Generator 自动生成 Reset/Clone/投影代码
+
+### 文档
+
+详见 [Docs/](Docs/) 目录索引。
 
 ### TODO
 
-详见 [Docs/TODO.md](Docs/TODO.md)。
+详见 [TODO.md](TODO.md)。
 
 ---
 
@@ -30,6 +35,9 @@
 │  ├─Commands/     gen / godot_copy 脚本
 │  ├─Datas/        Excel 源表
 │  └─Cfg/          生成的 CS + Bytes
+├─Docs/            项目文档
+├─SourceGenerators/ SG 生成器项目
+├─Tests/           测试项目
 └─godot/           Godot 4 项目
    ├─GameRes/      动态加载资源（.tscn / .glb / .wav 等）
    ├─Plugins/      第三方库（LiteNetLib / MessagePack / Luban）
@@ -40,7 +48,7 @@
          ├─Phases/     LoginPhase / GamingPhase
          ├─Sys/        UI 系统 / Proxy / Model
          └─Gameplay/
-            ├─Logic/   纯 C# 确定性逻辑层（零 Godot 依赖）
-            ├─Render/  Godot 渲染层（Agent / Batch / Enchant）
-            └─Director/ 连接 Logic ↔ Render
+            ├─Logic/     纯 C# 确定性逻辑层（零 Godot 依赖）
+            ├─Render/    Godot 渲染层（Core / Components）
+            └─Projection/ 投影同步层（Core / Rules / Transport）
 ```

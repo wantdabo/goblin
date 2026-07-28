@@ -2,10 +2,12 @@
 
 > **统筹文档**：汇总三个设计文档的全部任务，拆解为可执行的阶段与子任务。
 >
+> **Phase 1 已基本完成，Phase 2-5 待实施。** 实际实现与设计的差异：Render 层使用 `Mirror` 而非 `Entity`/`RenderWorld`。详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
+>
 > 基线文档：
-> - `CORE.md` — 哲学底座：Simulation → Projection → Presentation
-> - `PROPERTY_SYNC_DESIGN.md` — 完整工程方案
-> - `BEHAVIORINFO_LIFECYCLE_REPORT.md` — 生命周期自动化分析
+> - [CORE.md](CORE.md) — 哲学底座：Simulation → Projection → Presentation
+> - [PROPERTY_SYNC_DESIGN.md](PROPERTY_SYNC_DESIGN.md) — 完整工程方案
+> - [BEHAVIORINFO_LIFECYCLE_REPORT.md](BEHAVIORINFO_LIFECYCLE_REPORT.md) — 生命周期自动化分析
 
 ---
 
@@ -390,12 +392,15 @@ partial class ProjectFieldInfo
 
 ### T1.9 Entity + Component + RenderWorld（1 天）✅
 
-- [x] `Entity`：actor/comps 字典/GetComp/AddComp/RmvComp/Destroy
-- [x] `Component` 基类（纯数据容器，34 行）：entity/actor 属性；`abstract Apply(mask, values)`；`OnCreate/OnDestroy`（protected internal）。无环形缓冲区、无 `PushHistory`、无 `OnExpress` — Component 就是 BehaviorInfo 的纯数据投影
-- [x] `RenderWorld`：entities 字典 + behaviortocomp 映射表；`Apply(actor, type, fieldmask, values)` → Ensure Entity → Ensure Component → `comp.Apply()` 直接写入；`ApplyPackets()` 供 Transport 调用；`RmvEntity()`；无帧历史/回滚
-- [x] `LocalTransport` 接入 RenderWorld（Send → ApplyPackets）
-- [x] 端到端链路验证：ProjectorSystem → ProjectionPipeline → LocalTransport → RenderWorld → Component.Apply（7 测试全绿）
-- [x] 用户手写首批 Component：`SpatialComponent`（SpatialInfo 3 投影字段：position/euler/scale）。Apply 按 fieldmask bit 位匹配，手动实现（后续 SG 生成）
+> ⚠️ **实际实现与设计有差异**：`Entity`/`RenderWorld` 未创建，改为 `Mirror` 统一管理 ActorID→Component 映射和 ApplyPackets 入口。Component 基类通过 `IComponentApply<T>.ApplyTo()` 静态委托消费数据（零反射）。功能等价，架构更精简。
+
+- [x] `Mirror`：datas 字典 + infotocomp/applymap/factorymap 注册表；`ApplyPackets()` 入口；`GetComp<T>()` / `HasActor()` 查询
+- [x] `Component` 基类（纯数据容器，IGBL）：`virtual Clone()` / `virtual Reset()`
+- [x] `IComponentApply<T>` 接口：`static abstract ApplyTo(T, ulong, object[])` — 零反射消费
+- [x] `[ProjectorTarget(typeof(XxxInfo))]` 类级注解标注 BehaviorInfo→Component 映射
+- [x] `LocalTransport` 接入 Mirror（Send → ApplyPackets）
+- [x] 端到端链路验证：ProjectorSystem → ProjectionPipeline → LocalTransport → Mirror → Component.ApplyTo
+- [x] 用户手写首批 Component：`SpatialComponent`（SpatialInfo 3 投影字段：position/euler/scale）、`FacadeComponent`、`HUDComponent`
 - [ ] 用户手写：`TickerComponent`（需先给 TickerInfo 加 [Projector] 注解）
 - [ ] Source Generator 生成 `Apply` 方法（依赖 BehaviorInfo→Component 映射机制，后续）
 

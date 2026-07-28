@@ -252,19 +252,19 @@ var behavior = ObjectCache.Ensure(type) as Behavior;
 
 ## 四、风格违规
 
-| # | 文件 | 行 | 问题 | 规范要求 |
-|---|------|-----|------|----------|
-| S1 | `Behaviors/HUD.cs` | 全文 | Tab 缩进 | 4 空格 |
-| S2 | `Behaviors/Tag.cs` | 全文 | Tab 缩进 | 4 空格 |
-| S3 | `Behaviors/Facade.cs` | 全文 | Tab 缩进 | 4 空格 |
-| S4 | `BehaviorInfos/TickerInfo.cs` | 13 | `private FP mtimescale` — `m` 前缀 | 禁止前缀 |
-| S5 | `BehaviorInfos/Sa/SilentMercyInfo.cs` | 19 | `deadths` 拼写错误 | `deaths` |
-| S6 | `Behaviors/Sa/Flow.cs` | 232 | `null != data` | `null == data` 反转 |
-| S7 | `Behaviors/Sa/Detection.cs` | 207,261,311 | `-1 != layer` | `-1 == layer` 反转 |
-| S8 | `Behaviors/Sa/ProjectorSystem.cs` | 51 | `info is not IProjectable` | 禁止 `not` 模式匹配 |
-| S9 | `Behaviors/StateMachine.cs` | 123 | `info.delaybreak <= FP.Zero` | FP 比较常量在左 |
-| S10 | `BehaviorInfos/Sa/RandomInfo.cs` | 39-40 | `OnReady`/`OnReset` 中 `seed = 0; current = 0;` | 冗余（已是 default） |
-| S11 | `BehaviorInfos/Sa/SilentMercyInfo.cs` | 23 | `killrelations` vs `victimrelations` | 命名不对称，建议 `killerrelations` |
+| # | 文件 | 行 | 问题 | 规范要求 | 状态 |
+|---|------|-----|------|----------|------|
+| S1 | `Behaviors/HUD.cs` | 全文 | Tab 缩进 | 4 空格 | ✅ 已修复 |
+| S2 | `Behaviors/Tag.cs` | 全文 | Tab 缩进 | 4 空格 | ✅ 已修复 |
+| S3 | `Behaviors/Facade.cs` | 全文 | Tab 缩进 | 4 空格 | ✅ 已修复 |
+| S4 | `BehaviorInfos/TickerInfo.cs` | 13 | `private FP mtimescale` — `m` 前缀 | 禁止前缀 | |
+| S5 | `BehaviorInfos/Sa/SilentMercyInfo.cs` | 19 | `deadths` 拼写错误 | `deaths` | |
+| S6 | `Behaviors/Sa/Flow.cs` | 232 | `null != data` | `null == data` 反转 | |
+| S7 | `Behaviors/Sa/Detection.cs` | 207,261,311 | `-1 != layer` | `-1 == layer` 反转 | |
+| S8 | `Behaviors/Sa/ProjectorSystem.cs` | 51 | `info is not IProjectable` | 禁止 `not` 模式匹配 | |
+| S9 | `Behaviors/StateMachine.cs` | 123 | `info.delaybreak <= FP.Zero` | FP 比较常量在左 | |
+| S10 | `BehaviorInfos/Sa/RandomInfo.cs` | 39-40 | `OnReady`/`OnReset` 中 `seed = 0; current = 0;` | 冗余（已是 default） | |
+| S11 | `BehaviorInfos/Sa/SilentMercyInfo.cs` | 23 | `killrelations` vs `victimrelations` | 命名不对称，建议 `killerrelations` | |
 
 ---
 
@@ -318,15 +318,15 @@ var behavior = ObjectCache.Ensure(type) as Behavior;
 
 ---
 
-## 八、复查状态（2026-07-27 复查）
+## 八、复查状态（2026-07-28 复查）
 
 | 类别 | 总数 | 已修复 | 未修复 |
 |------|------|--------|--------|
 | 严重 Bug（B1-B6） | 6 | 0 | 6 |
 | 中等 Bug（B7-B11） | 5 | 0 | 5 |
 | 残留文件（R1-R12） | 12 | 12 | 0 |
-| 风格违规（S1-S11） | 11 | 0 | 11 |
+| 风格违规（S1-S11） | 11 | 3 | 8 |
 | 设计问题（D1-D10） | 10 | 0 | 10 |
-| **合计** | **44** | **12** | **32** |
+| **合计** | **44** | **15** | **29** |
 
-> 仅 R1-R12（残留文件清理）在 GBL 容器重构等工作中附带解决，其余 Bug / 风格 / 设计问题均未处理。
+> 2026-07-28 复查：S1-S3（HUD/Tag/Facade Tab 缩进）已在 GBL 容器重构 + Reset 全线优化中附带修复。其余 Bug / 风格 / 设计问题均未处理。
