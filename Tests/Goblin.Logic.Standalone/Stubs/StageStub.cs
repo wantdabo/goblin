@@ -59,7 +59,11 @@ public sealed class Stage
         info.Ready(id);
 
         // 新对象首帧全量同步
-        if (info is IProjectable proj) proj.MarkAllDirty();
+        if (info is IProjectable proj)
+        {
+            proj.MarkAllDirty();
+            cache.projectables.Add(proj);
+        }
 
         return info;
     }
@@ -73,7 +77,7 @@ public sealed class Stage
 }
 
 /// <summary>
-/// Stage 缓存桩类型，仅提供 ProjectorSystem 自检所需的 behaviorinfodict
+/// Stage 缓存桩类型，提供 ProjectorSystem 自检所需的 behaviorinfodict + projectables
 /// </summary>
 public sealed class StageCache
 {
@@ -81,4 +85,8 @@ public sealed class StageCache
     /// 行为信息列表，键为 ActorID，值为该 Actor 上的所有行为信息
     /// </summary>
     public Dictionary<ulong, Dictionary<Type, BehaviorInfo>> behaviorinfodict { get; set; } = new Dictionary<ulong, Dictionary<Type, BehaviorInfo>>();
+    /// <summary>
+    /// IProjectable BehaviorInfo 索引（桩实现，供 ProjectorSystem 遍历）
+    /// </summary>
+    public List<IProjectable> projectables { get; set; } = new List<IProjectable>();
 }

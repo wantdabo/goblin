@@ -364,6 +364,16 @@ public sealed class Stage
             foreach (var behaviorinfo in behaviorinfos) MarkProjectableDirty(behaviorinfo);
         }
             
+        // 重建 IProjectable 索引
+        cache.projectables.Clear();
+        foreach (var behaviorinfos in info.behaviorinfos.Values)
+        {
+            foreach (var behaviorinfo in behaviorinfos)
+            {
+                if (behaviorinfo is IProjectable proj) cache.projectables.Add(proj);
+            }
+        }
+            
         foreach (var actor in info.actors)
         {
             if (false == info.behaviortypes.TryGetValue(actor, out var types)) continue;
@@ -548,6 +558,9 @@ public sealed class Stage
             {
                 behaviorinfos.RemoveSilent(rmvbehaviorinfo);
             }
+
+            // 清理失效的 IProjectable 索引
+            if (rmvbehaviorinfo is IProjectable proj) cache.projectables.Remove(proj);
         }
             
         // 回收清理
@@ -745,6 +758,8 @@ public sealed class Stage
         list.Add(behaviorinfo);
         behaviorinfo.Ready(id);
         MarkProjectableDirty(behaviorinfo);
+        // 加入 IProjectable 索引，供 OnEndTick 快速遍历
+        if (behaviorinfo is IProjectable proj) cache.projectables.Add(proj);
             
         return behaviorinfo;
     }
@@ -1087,6 +1102,11 @@ public sealed class Stage
         /// </summary>
         public GBLList<BehaviorInfo> rmvbehaviorinfos { get; set; }
         /// <summary>
+        /// IProjectable BehaviorInfo 索引 — OnEndTick 仅遍历此集合，跳过非投影类的 is-check
+        /// AddBehaviorInfo 时加入，Recycle 时清理失效条目，Restore 时全量重建
+        /// </summary>
+        public List<IProjectable> projectables { get; set; }
+        /// <summary>
         /// TickEnd 自动回收 List 列表
         /// </summary>
         public GBLList<IList> tickendrecyclelist { get; set; }
@@ -1103,6 +1123,7 @@ public sealed class Stage
             rmvactorset = ObjectCache.Ensure<GBLHashSet<ulong>>();
             rmvbehaviors = ObjectCache.Ensure<GBLList<Behavior>>();
             rmvbehaviorinfos = ObjectCache.Ensure<GBLList<BehaviorInfo>>();
+            projectables = new List<IProjectable>();
             tickendrecyclelist = ObjectCache.Ensure<GBLList<IList>>();
 
             return this;
@@ -1139,6 +1160,7 @@ public sealed class Stage
             rmvactorset.Dispose();
             rmvbehaviors.Dispose();
             rmvbehaviorinfos.Dispose();
+            projectables.Clear();
 
             foreach (var list in tickendrecyclelist)
             {

@@ -69,37 +69,60 @@ public partial class Crop : IGBL
     /// <summary>
     /// 对一组数据包执行裁剪，产出 ObserverPacket 数组
     /// 复杂度 O(N×M)，大量实体 + 多观察者场景需考虑空间分区优化
+    /// 单 Observer 快路径：mask 未裁剪时直接共享原 values 引用，跳过 TrimValues 分配
     /// </summary>
-    /// <param name="packets">原始数据包数组</param>
+    /// <param name="packets">原始数据包列表</param>
     /// <param name="observers">观察者列表</param>
     /// <returns>裁剪后的 ObserverPacket 数组，mask == 0 的已过滤</returns>
-    public static ObserverPacket[] Process(ProjectorPacket[] packets, List<Observer> observers)
+    public static ObserverPacket[] Process(IReadOnlyList<ProjectorPacket> packets, List<Observer> observers)
     {
-        if (0 == packets.Length || 0 == observers.Count) return Array.Empty<ObserverPacket>();
+        if (0 == packets.Count || 0 == observers.Count) return Array.Empty<ObserverPacket>();
 
         // 从对象池取出 List，清空复用
         var results = ObjectPool.Ensure<List<ObserverPacket>>(CropPoolKey.OBSERVERPACKET_LIST);
         results.Clear();
-        foreach (var p in packets)
+
+        // 单 Observer 快路径：mask 未裁剪时共享原 values 引用，零分配
+        if (1 == observers.Count)
         {
-            foreach (var obs in observers)
+            var obs = observers[0];
+            var crop = obs.crop;
+            foreach (var p in packets)
             {
-                // 使用 Observer 自身的裁剪链（若未设则不裁剪）
-                var crop = obs.crop;
                 var mask = null != crop ? crop.Project(p, obs) : p.fieldmask;
                 if (0 == mask) continue;
-
-                var trimmed = TrimValues(p.values, p.fieldmask, mask);
-
-                // 从对象池取 ObserverPacket 实例，避免每帧 new
                 var op = ObjectPool.Ensure<ObserverPacket>(ObserverPacket.POOL_KEY);
                 op.observer = obs;
                 op.actor = p.actor;
                 op.behaviorinfotype = p.behaviorinfotype;
                 op.fieldmask = mask;
                 op.frame = p.frame;
-                op.values = trimmed;
+                // mask == p.fieldmask 时无裁剪，直接共享原 values 引用
+                // LocalTransport.ApplyPackets 同步消费，下帧 OnEndTick 前 RecyclePackets 回收
+                op.values = (mask == p.fieldmask) ? p.values : TrimValues(p.values, p.fieldmask, mask);
                 results.Add(op);
+            }
+        }
+        else
+        {
+            // 多 Observer 路径：每个 Observer 独立 TrimValues，避免共享引用导致的数据竞争
+            foreach (var p in packets)
+            {
+                foreach (var obs in observers)
+                {
+                    var crop = obs.crop;
+                    var mask = null != crop ? crop.Project(p, obs) : p.fieldmask;
+                    if (0 == mask) continue;
+                    var trimmed = TrimValues(p.values, p.fieldmask, mask);
+                    var op = ObjectPool.Ensure<ObserverPacket>(ObserverPacket.POOL_KEY);
+                    op.observer = obs;
+                    op.actor = p.actor;
+                    op.behaviorinfotype = p.behaviorinfotype;
+                    op.fieldmask = mask;
+                    op.frame = p.frame;
+                    op.values = trimmed;
+                    results.Add(op);
+                }
             }
         }
         var array = results.ToArray();

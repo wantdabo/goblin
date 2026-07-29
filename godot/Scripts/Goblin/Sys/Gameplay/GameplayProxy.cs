@@ -291,7 +291,7 @@ public class GameplayProxy : Proxy<GameplayModel>
 
         // 投影管线：ProjectorSystem 出包 → 裁剪 → 传输 → Canvas
         var ps = stage.projector;
-        if (null != ps && null != ps.packets)
+        if (null != ps && 0 < ps.packets.Count)
         {
             pipeline?.Process(ps.packets);
         }

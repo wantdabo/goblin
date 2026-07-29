@@ -176,13 +176,14 @@ public class ProjectorSystemTests
 
         stage.AddBehaviorInfo<ProjectFieldInfo>(1);
         projector.EndTick();
-        var firstCount = projector.packets.Length;
+        var firstCount = projector.packets.Count;
 
         // 第二帧无脏，回收上帧包
         projector.EndTick();
 
         Assert.Equal(1, firstCount);
         Assert.Empty(projector.packets);
+        // 列表复用，Count 归零但容量保留
     }
 
     /// <summary>
@@ -199,7 +200,7 @@ public class ProjectorSystemTests
         stage.AddBehaviorInfo<ProjectFieldInfo>(2);
         projector.EndTick();
 
-        Assert.Equal(2, projector.packets.Length);
+        Assert.Equal(2, projector.packets.Count);
         Assert.Equal(1ul, projector.packets[0].actor);
         Assert.Equal(2ul, projector.packets[1].actor);
     }

@@ -14,21 +14,33 @@ namespace Goblin.Gameplay.Projection;
 public partial class Canvas
 {
     /// <summary>
+    /// InfoType → Shadow 注册条目（factory + apply + shadowtype 合一，单次查找拿到全部）
+    /// </summary>
+    private struct ShadowEntry
+    {
+        /// <summary>
+        /// Shadow 类型（shadowdict 的 key）
+        /// </summary>
+        public Type shadowtype;
+        /// <summary>
+        /// 工厂委托（零反射创建 Shadow 实例）
+        /// </summary>
+        public Func<Shadow> factory;
+        /// <summary>
+        /// ApplyTo 静态委托（包装后入参为 object）
+        /// </summary>
+        public Action<object, ulong, object[]> apply;
+    }
+
+    /// <summary>
     /// ActorID → (ShadowType → Shadow实例)
     /// </summary>
     private Dictionary<ulong, Dictionary<Type, Shadow>> datas { get; set; }
     /// <summary>
-    /// BehaviorInfo 类型 → Shadow 类型 映射
+    /// BehaviorInfo 类型 → Shadow 注册条目（factory + apply + shadowtype）
+    /// 合并原 infotoshadow/applymap/factorymap 三表，Apply 时字典查找 5→3 次
     /// </summary>
-    private Dictionary<Type, Type> infotoshadow { get; set; }
-    /// <summary>
-    /// Shadow 类型 → ApplyTo 静态委托（包装后入参为 object）
-    /// </summary>
-    private Dictionary<Type, Action<object, ulong, object[]>> applymap { get; set; }
-    /// <summary>
-    /// Shadow 类型 → 工厂委托（零反射创建）
-    /// </summary>
-    private Dictionary<Type, Func<Shadow>> factorymap { get; set; }
+    private Dictionary<Type, ShadowEntry> infomap { get; set; }
     /// <summary>
     /// 未注册 infotype 去重缓存（避免重复 Warning）
     /// </summary>
@@ -37,9 +49,7 @@ public partial class Canvas
     public Canvas()
     {
         datas = new Dictionary<ulong, Dictionary<Type, Shadow>>();
-        infotoshadow = new Dictionary<Type, Type>();
-        applymap = new Dictionary<Type, Action<object, ulong, object[]>>();
-        factorymap = new Dictionary<Type, Func<Shadow>>();
+        infomap = new Dictionary<Type, ShadowEntry>();
         missinginfologged = new HashSet<Type>();
     }
 
@@ -50,9 +60,12 @@ public partial class Canvas
     public void Register<TInfo, TShadow>()
         where TShadow : Shadow, IShadowApply<TShadow>, new()
     {
-        infotoshadow[typeof(TInfo)] = typeof(TShadow);
-        applymap[typeof(TShadow)] = (obj, mask, vals) => TShadow.ApplyTo((TShadow)obj, mask, vals);
-        factorymap[typeof(TShadow)] = () => new TShadow();
+        infomap[typeof(TInfo)] = new ShadowEntry
+        {
+            shadowtype = typeof(TShadow),
+            factory = () => new TShadow(),
+            apply = (obj, mask, vals) => TShadow.ApplyTo((TShadow)obj, mask, vals)
+        };
     }
 
     /// <summary>
@@ -86,10 +99,11 @@ public partial class Canvas
 
     /// <summary>
     /// 应用单条投影数据
+    /// 单次 infomap 查找拿到 shadowtype + factory + apply，省去原 applymap/factorymap 两次查找
     /// </summary>
     private void Apply(ulong actor, Type infotype, ulong fieldmask, object[] values)
     {
-        if (false == infotoshadow.TryGetValue(infotype, out var shadowtype))
+        if (false == infomap.TryGetValue(infotype, out var entry))
         {
             // 未注册的 InfoType 打 Warning（去重）
             if (false == missinginfologged.Contains(infotype))
@@ -106,21 +120,13 @@ public partial class Canvas
             datas[actor] = shadowdict;
         }
 
-        if (false == shadowdict.TryGetValue(shadowtype, out var shadow))
+        if (false == shadowdict.TryGetValue(entry.shadowtype, out var shadow))
         {
-            if (false == factorymap.TryGetValue(shadowtype, out var factory))
-            {
-                throw new InvalidOperationException(
-                    $"Canvas.Apply: Shadow 类型 '{shadowtype.FullName}' 未通过 Register<> 注册。请确保启动时调用了 Canvas.Register<{shadowtype.Name}, TShadow>()。");
-            }
-            shadow = factory();
-            shadowdict[shadowtype] = shadow;
+            shadow = entry.factory();
+            shadowdict[entry.shadowtype] = shadow;
         }
 
-        if (applymap.TryGetValue(shadowtype, out var apply))
-        {
-            apply(shadow, fieldmask, values);
-        }
+        entry.apply(shadow, fieldmask, values);
     }
 
     /// <summary>

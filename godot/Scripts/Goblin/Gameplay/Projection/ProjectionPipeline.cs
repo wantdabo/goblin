@@ -8,7 +8,7 @@ using Goblin.Gameplay.Projection.Transport;
 namespace Goblin.Gameplay.Projection;
 
 /// <summary>
-/// 投影管线 — 接收 ProjectorPacket[]，按 Observer 分叉执行 Crop 裁剪
+/// 投影管线 — 接收 ProjectorPacket 列表，按 Observer 分叉执行 Crop 裁剪
 /// ProjectorSystem 出包后，由外部（Director/Game）将原始包交给 Pipeline 处理
 /// 管线持有 Observers、传输层，在 Process 中一次串联
 /// </summary>
@@ -42,10 +42,10 @@ public partial class ProjectionPipeline : IGBL
     /// 执行投影管线：原始包 → 按 Observer 裁剪 → 传输
     /// 无数据时将 observerpackets 置空，避免主线程重复消费上帧脏数据
     /// </summary>
-    /// <param name="packets">ProjectorSystem 产出的原始投影包</param>
-    public void Process(ProjectorPacket[] packets)
+    /// <param name="packets">ProjectorSystem 产出的原始投影包列表</param>
+    public void Process(IReadOnlyList<ProjectorPacket> packets)
     {
-        if (null == packets || 0 == packets.Length)
+        if (null == packets || 0 == packets.Count)
         {
             RecyclePacketCache();
             observerpackets = Array.Empty<ObserverPacket>();
