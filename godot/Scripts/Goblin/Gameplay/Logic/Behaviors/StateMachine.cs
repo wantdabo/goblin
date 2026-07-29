@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -6,34 +7,27 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
-/// 状态机, 用于管理实体的状态切换
+/// 状态机（Sa 级）
+/// 管理所有 Actor 的状态切换
 /// </summary>
-public class StateMachine : Behavior<StateMachineInfo>
+public class StateMachine : Behavior
 {
-    /// <summary>
-    /// 状态持续时长（FP.Zero = 无限，限时状态到期自动切 fallback）
-    /// </summary>
-    public FP stateduration { get; set; }
-    /// <summary>
-    /// duration 到期后切换的目标状态
-    /// </summary>
-    public byte timerfallback { get; set; }
-
     /// <summary>
     /// 中断状态
     /// </summary>
-    public void Break()
+    public void Break(ulong actor)
     {
-        stateduration = FP.Zero;
-        ChangeState(STATE_DEFINE.NONE);
+        if (false == stage.SeekBehaviorInfo(actor, out StateMachineInfo info)) return;
+        info.stateduration = FP.Zero;
+        ChangeState(actor, STATE_DEFINE.NONE);
     }
-        
+
     /// <summary>
     /// 延迟中断状态
     /// </summary>
-    /// <param name="delay">延迟时间</param>
-    public void Break(FP delay)
+    public void Break(ulong actor, FP delay)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out StateMachineInfo info)) return;
         info.usedelaybreak = true;
         info.delaybreak = delay;
     }
@@ -41,97 +35,90 @@ public class StateMachine : Behavior<StateMachineInfo>
     /// <summary>
     /// 尝试切换状态
     /// </summary>
-    /// <param name="state">状态</param>
-    /// <returns>YES/NO</returns>
-    public bool TryChangeState(byte state)
+    public bool TryChangeState(ulong actor, byte state)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out StateMachineInfo info)) return false;
         if (info.current == state) return true;
-        if (false == QueryPassState(state)) return false;
+        if (false == QueryPassState(info, state)) return false;
 
-        ChangeState(state);
+        ChangeState(actor, state);
 
         return true;
     }
-        
+
     /// <summary>
     /// 切换到指定状态
     /// </summary>
-    /// <param name="state">状态</param>
-    public void ChangeState(byte state)
+    public void ChangeState(ulong actor, byte state)
     {
-        stateduration = FP.Zero;
-        ChangeStateCore(state);
+        if (false == stage.SeekBehaviorInfo(actor, out StateMachineInfo info)) return;
+        info.stateduration = FP.Zero;
+        ChangeStateCore(actor, info, state);
     }
 
     /// <summary>
-    /// 切换到限时状态（duration > 0 才启用计时器）
+    /// 切换到限时状态
     /// </summary>
-    /// <param name="state">状态</param>
-    /// <param name="duration">状态持续时长</param>
-    /// <param name="fallback">到期后切回的状态</param>
-    public void ChangeState(byte state, FP duration, byte fallback = STATE_DEFINE.IDLE)
+    public void ChangeState(ulong actor, byte state, FP duration, byte fallback = STATE_DEFINE.IDLE)
     {
-        ChangeStateCore(state);
-        stateduration = duration;
-        timerfallback = fallback;
+        if (false == stage.SeekBehaviorInfo(actor, out StateMachineInfo info)) return;
+        ChangeStateCore(actor, info, state);
+        info.stateduration = duration;
+        info.timerfallback = fallback;
     }
 
-    /// <summary>
-    /// 状态切换核心（不操作计时器）
-    /// </summary>
-    private void ChangeStateCore(byte state)
+    private void ChangeStateCore(ulong actor, StateMachineInfo info, byte state)
     {
         info.last = info.current;
         info.current = state;
         info.usedelaybreak = false;
         info.delaybreak = FP.Zero;
 
-        if (false == stage.SeekBehavior(actor, out Facade facade)) return;
-
         // 离开 CASTING 时清理命名动画槽位
         if (STATE_DEFINE.CASTING == info.last)
         {
-            facade.RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_NAMED);
+            stage.facade.RmvSlotsByType(actor, ANIM_DEFINE.SLOT_TYPE_NAMED);
         }
 
         if (STATE_DEFINE.CASTING == info.current)
         {
-            facade.SetAnimation(STATE_DEFINE.CASTING);
+            stage.facade.SetAnimation(actor, STATE_DEFINE.CASTING);
             return;
         }
 
-        facade.SetAnimation(info.current);
+        stage.facade.SetAnimation(actor, info.current);
     }
 
     protected override void OnTick(FP tick)
     {
-        base.OnTick(tick);
-
-        // 限时状态倒计时（通用，不硬编码任何具体状态）
-        if (FP.Zero < stateduration)
+        if (false == stage.SeekBehaviorInfos(out List<StateMachineInfo> infos)) return;
+        foreach (var info in infos)
         {
-            stateduration -= tick;
-            if (FP.Zero >= stateduration)
-            {
-                stateduration = FP.Zero;
-                ChangeState(timerfallback);
-            }
-        }
+            if (false == info.active) continue;
+            var actor = info.actor;
 
-        if (false == info.usedelaybreak) return;
-        info.delaybreak -= tick;
-        if (info.delaybreak <= FP.Zero) Break();
+            // 限时状态倒计时
+            if (FP.Zero < info.stateduration)
+            {
+                info.stateduration -= tick;
+                if (FP.Zero >= info.stateduration)
+                {
+                    info.stateduration = FP.Zero;
+                    ChangeState(actor, info.timerfallback);
+                }
+            }
+
+            if (false == info.usedelaybreak) continue;
+            info.delaybreak -= tick;
+            if (info.delaybreak <= FP.Zero) Break(actor);
+        }
     }
 
-    /// <summary>
-    /// 查询当前状态是否可以切换到指定状态
-    /// </summary>
-    /// <param name="state">状态</param>
-    /// <returns>YES/NO</returns>
-    private bool QueryPassState(byte state)
+    private bool QueryPassState(StateMachineInfo info, byte state)
     {
         if (STATE_DEFINE.NONE == info.current) return true;
-        if (STATE_DEFINE.PASSES.TryGetValue(info.current, out var passes) && passes.Contains(state))
+        if (STATE_DEFINE.PASSES.TryGetValue(info.current, out var passes)
+            && passes.Contains(state))
         {
             return true;
         }

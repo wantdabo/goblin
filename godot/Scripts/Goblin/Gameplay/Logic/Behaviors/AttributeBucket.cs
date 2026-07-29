@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
@@ -8,7 +8,7 @@ using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 伤害的数据结构

@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 事件标记接口

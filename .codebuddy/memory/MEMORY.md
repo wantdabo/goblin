@@ -20,6 +20,11 @@
 ## 架构分层
 
 - Logic 层：零 Godot 依赖，定点数 `FPVector3/FPQuaternion/FP`
+- **全部 Behavior 已提升至 Sa 级**（2026-07），每个 Behavior 类型全局仅一个实例，per-actor 数据由 BehaviorInfo 承载
+- Behavior 公开方法首参为 `ulong actor`，跨 Behavior 调用使用 `stage.xxx.Method(actor, ...)` 快捷属性
+- Stage 快捷属性：`stage.movement/statemachine/gamepad/tag/facade/hud/skilllauncher`
+- Prefix/Prefab 使用 `AddBehaviorInfo<T>(actor)` 替代 `AddBehavior<T>(actor)`
+- Behavior 文件放 `Behaviors/` 根目录（不再区分子目录）；BehaviorInfo 保持 `BehaviorInfos/` 和 `BehaviorInfos/Sa/` 分目录
 - Projection 层：纯 C# 数据消费，Canvas + Shadow 体系
 - Render 层：Godot 依赖 (VisualNode 等)
 - SourceGenerators：`[Projector]` 扫描生成 IProjectable + Shadow + ApplyTo

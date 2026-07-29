@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 碰撞结果

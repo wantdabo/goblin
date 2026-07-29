@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Goblin.Common;
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
@@ -8,32 +7,63 @@ using Goblin.Gameplay.Logic.Core;
 namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
-/// 输入中枢 — 按类型分槽存储本帧输入，OnEndTick Reset 后归还池（per-actor）
+/// 输入中枢（Sa 级）
+/// 管理所有 Actor 的输入帧
 /// </summary>
-public class Gamepad : Behavior<GamepadInfo>
+public class Gamepad : Behavior
 {
-    public void PushFrame(InputFrame frame)
+    /// <summary>
+    /// 压入移动帧
+    /// </summary>
+    public void PushFrame(ulong actor, MoveFrame frame)
     {
-        switch (frame)
-        {
-            case MoveFrame m: info.move = m; break;
-            case KeyFrame k: info.keys.Add(k); break;
-            case SkillFrame s: info.skills.Add(s); break;
-        }
+        var info = stage.GetBehaviorInfo<GamepadInfo>(actor, true);
+        info.move = frame;
     }
 
-    public MoveFrame move => info.move;
-    public GBLList<KeyFrame> keys => info.keys;
-    public GBLList<SkillFrame> skills => info.skills;
+    /// <summary>
+    /// 压入技能帧
+    /// </summary>
+    public void PushSkillFrame(ulong actor, SkillFrame frame)
+    {
+        var info = stage.GetBehaviorInfo<GamepadInfo>(actor, true);
+        info.skills.Add(frame);
+    }
+
+    /// <summary>
+    /// 压入按键帧
+    /// </summary>
+    public void PushKeyFrame(ulong actor, KeyFrame frame)
+    {
+        var info = stage.GetBehaviorInfo<GamepadInfo>(actor, true);
+        info.keys.Add(frame);
+    }
 
     protected override void OnEndTick()
     {
-        base.OnEndTick();
+        if (false == stage.SeekBehaviorInfos(out List<GamepadInfo> infos, true)) return;
+        foreach (var info in infos)
+        {
+            if (false == info.active) continue;
 
-        if (null != info.move) { info.move.Reset(); ObjectCache.Set(info.move); info.move = null; }
-        foreach (var k in info.keys) { k.Reset(); ObjectCache.Set(k); }
-        info.keys.Clear();
-        foreach (var s in info.skills) { s.Reset(); ObjectCache.Set(s); }
-        info.skills.Clear();
+            if (null != info.move)
+            {
+                info.move.Reset();
+                ObjectCache.Set(info.move);
+                info.move = null;
+            }
+            foreach (var k in info.keys)
+            {
+                k.Reset();
+                ObjectCache.Set(k);
+            }
+            info.keys.Clear();
+            foreach (var s in info.skills)
+            {
+                s.Reset();
+                ObjectCache.Set(s);
+            }
+            info.skills.Clear();
+        }
     }
 }

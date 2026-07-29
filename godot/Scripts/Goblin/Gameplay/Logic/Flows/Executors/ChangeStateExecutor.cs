@@ -1,5 +1,4 @@
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Flows.Executors.Instructs;
 using Kowtow.Math;
@@ -14,26 +13,24 @@ public class ChangeStateExecutor : Executor<ChangeStateData>
     protected override void OnEnter((uint pipelineid, uint index) identity, ChangeStateData data, FlowInfo flowinfo, ulong target)
     {
         base.OnEnter(identity, data, flowinfo, target);
-        if (false == stage.SeekBehavior(target, out StateMachine statemachine)) return;
-
         if (data.breakable)
         {
-            statemachine.Break();
+            stage.statemachine.Break(target);
             return;
         }
 
         if (data.force)
         {
-            statemachine.ChangeState(data.state);
+            stage.statemachine.ChangeState(target, data.state);
         }
         else
         {
-            statemachine.TryChangeState(data.state);
+            stage.statemachine.TryChangeState(target, data.state);
         }
-            
+
         if (data.usedelaybreak)
         {
-            statemachine.Break(data.delaybreak * FP.EN3);
+            stage.statemachine.Break(target, data.delaybreak * FP.EN3);
         }
     }
 }

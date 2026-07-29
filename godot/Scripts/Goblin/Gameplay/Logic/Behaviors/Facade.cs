@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.Common;
@@ -9,57 +9,64 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
-/// 外观行为
+/// 外观行为（Sa 级）
+/// 管理所有 Actor 的模型、动画、特效
 /// </summary>
-public class Facade : Behavior<FacadeInfo>
+public class Facade : Behavior
 {
     /// <summary>
     /// 设置模型
     /// </summary>
-    /// <param name="model">模型 ID</param>
-    public void SetModel(int model)
+    public void SetModel(ulong actor, int model)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
         info.model = model;
     }
 
     /// <summary>
     /// 设置动画状态
     /// </summary>
-    /// <param name="state">动画状态</param>
-    public void SetAnimation(byte state)
+    public void SetAnimation(ulong actor, byte state)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
         info.animstate = state;
         info.animhash = 0;
         info.animelapsed = 0;
         var priority = STATE_DEFINE.DEATH == state || STATE_DEFINE.BORN == state
             ? ANIM_DEFINE.SLOT_PRIORITY_LIFESTATE
             : ANIM_DEFINE.SLOT_PRIORITY_LOCOMOTION;
-        AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_STATE, priority, state: state);
-        RmvSlotsByType(ANIM_DEFINE.SLOT_TYPE_OVERRIDE);
+        AddOrUpdateSlot(info, ANIM_DEFINE.SLOT_TYPE_STATE, priority, state: state);
+        RmvSlotsByType(actor, ANIM_DEFINE.SLOT_TYPE_OVERRIDE);
     }
-        
+
     /// <summary>
     /// 设置动画名称
     /// </summary>
-    /// <param name="animname">动画名称</param>
-    public void SetAnimation(string animname, byte ticktype = ANIM_DEFINE.TICK_AUTOMATIC, byte layer = ANIM_DEFINE.LAYER_FULLBODY)
+    public void SetAnimation(ulong actor, string animname, byte ticktype = ANIM_DEFINE.TICK_AUTOMATIC, byte layer = ANIM_DEFINE.LAYER_FULLBODY)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
         info.animticktype = ticktype;
         info.animhash = AnimHash.Hash(animname);
         info.animelapsed = 0;
         if (null != animname)
-            AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
+            AddOrUpdateSlot(info, ANIM_DEFINE.SLOT_TYPE_NAMED, ANIM_DEFINE.SLOT_PRIORITY_ACTION, namehash: info.animhash, layer: layer);
         else
-            RmvSlot(ANIM_DEFINE.GenKey(ANIM_DEFINE.SLOT_TYPE_NAMED, layer));
+            RmvSlot(actor, ANIM_DEFINE.GenKey(ANIM_DEFINE.SLOT_TYPE_NAMED, layer));
     }
 
     /// <summary>
     /// 添加或更新槽位
     /// </summary>
-    public void AddOrUpdateSlot(byte slottype, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
+    public void AddOrUpdateSlot(ulong actor, byte slottype, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
+    {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
+        AddOrUpdateSlot(info, slottype, priority, state, namehash, layer, duration);
+    }
+
+    private void AddOrUpdateSlot(FacadeInfo info, byte slottype, int priority, byte state = 0, uint namehash = 0, byte layer = ANIM_DEFINE.LAYER_FULLBODY, FP duration = default)
     {
         var key = ANIM_DEFINE.GenKey(slottype, layer);
-        var slot = GetSlot(key);
+        var slot = GetSlot(info, key);
         if (null == slot)
         {
             slot = ObjectCache.Ensure<AnimationSlot>();
@@ -74,34 +81,33 @@ public class Facade : Behavior<FacadeInfo>
         slot.elapsed = FP.Zero;
         if (FP.Zero < duration) { slot.istransient = true; slot.duration = duration; }
         else { slot.istransient = false; slot.duration = FP.Zero; }
-        EnsureSort();
+        EnsureSort(info);
     }
 
     /// <summary>
     /// 移除槽位
     /// </summary>
-    public void RmvSlot(ushort key)
+    public void RmvSlot(ulong actor, ushort key)
     {
-        var slot = GetSlot(key);
-        if (null != slot) ReleaseSlot(slot);
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
+        var slot = GetSlot(info, key);
+        if (null != slot) ReleaseSlot(info, slot);
     }
 
     /// <summary>
     /// 按槽位类型移除所有匹配槽位
     /// </summary>
-    public void RmvSlotsByType(byte slottype)
+    public void RmvSlotsByType(ulong actor, byte slottype)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return;
         for (int i = info.animslots.Count - 1; i >= 0; i--)
         {
             if (ANIM_DEFINE.GetSlotType(info.animslots[i].key) != slottype) continue;
-            ReleaseSlot(info.animslots[i]);
+            ReleaseSlot(info, info.animslots[i]);
         }
     }
 
-    /// <summary>
-    /// 内部释放槽位（移出列表 + 重置字段 + 回池）
-    /// </summary>
-    private void ReleaseSlot(AnimationSlot slot)
+    private void ReleaseSlot(FacadeInfo info, AnimationSlot slot)
     {
         info.animslots.Remove(slot);
         slot.active = false;
@@ -114,15 +120,9 @@ public class Facade : Behavior<FacadeInfo>
         ObjectCache.Set(slot);
     }
 
-    /// <summary>
-    /// 按优先级降序排序
-    /// </summary>
-    private void EnsureSort() => info.animslots.Sort((a, b) => b.priority.CompareTo(a.priority));
+    private void EnsureSort(FacadeInfo info) => info.animslots.Sort((a, b) => b.priority.CompareTo(a.priority));
 
-    /// <summary>
-    /// 查找槽位
-    /// </summary>
-    private AnimationSlot GetSlot(ushort key)
+    private AnimationSlot GetSlot(FacadeInfo info, ushort key)
     {
         foreach (var slot in info.animslots)
             if (slot.key == key) return slot;
@@ -132,64 +132,70 @@ public class Facade : Behavior<FacadeInfo>
     /// <summary>
     /// 播放特效
     /// </summary>
-    /// <param name="effect">特效</param>
-    public uint CreateEffect(EffectInfo effect)
+    public uint CreateEffect(ulong actor, EffectInfo effect)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out FacadeInfo info)) return 0;
         var increment = info.effectincrement++;
         effect.id = increment;
         effect.elapsed = 0;
         info.effectdict.Add(effect.id, effect);
-            
+
         return increment;
     }
 
     protected override void OnTick(FP tick)
     {
-        base.OnTick(tick);
-        if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
-
-        // 逐槽位递进 elapsed（瞬时与非瞬时均需推进动画进度）
-        for (int i = info.animslots.Count - 1; i >= 0; i--)
+        if (false == stage.SeekBehaviorInfos(out List<FacadeInfo> infos)) return;
+        foreach (var info in infos)
         {
-            var slot = info.animslots[i];
-            if (slot.active) slot.elapsed += tick;
+            if (false == info.active) continue;
 
-            if (false == slot.istransient) continue;
-            slot.duration -= tick;
-            if (FP.Zero >= slot.duration)
+            if (info.animticktype == ANIM_DEFINE.TICK_AUTOMATIC) info.animelapsed += tick;
+
+            // 逐槽位递进 elapsed
+            for (int i = info.animslots.Count - 1; i >= 0; i--)
             {
-                ReleaseSlot(slot);
-            }
-        }
+                var slot = info.animslots[i];
+                if (slot.active) slot.elapsed += tick;
 
-        // 移除已结束的管线特效
-        if (stage.SeekBehaviorInfos(out List<FlowEffectInfo> floweffects, true))
-        {
-            foreach (var floweffect in floweffects)
+                if (false == slot.istransient) continue;
+                slot.duration -= tick;
+                if (FP.Zero >= slot.duration)
+                {
+                    ReleaseSlot(info, slot);
+                }
+            }
+
+            // 移除已结束的管线特效
+            if (stage.SeekBehaviorInfos(out List<FlowEffectInfo> floweffects, true))
             {
-                if (floweffect.active) continue;
-                info.rmveffects.AddRange(floweffect.effects);
+                foreach (var floweffect in floweffects)
+                {
+                    if (floweffect.active) continue;
+                    info.rmveffects.AddRange(floweffect.effects);
+                }
             }
-        }
 
-        // 移除过期的特效
-        foreach (var rmveffect in info.rmveffects)
-        {
-            info.effectdict.Remove(rmveffect);
-        }
-        info.rmveffects.Clear();
+            // 移除过期的特效
+            foreach (var rmveffect in info.rmveffects)
+            {
+                info.effectdict.Remove(rmveffect);
+            }
+            info.rmveffects.Clear();
 
-        // 更新特效时间流逝
-        // 复制键列表，避免在遍历时修改 effectdict
-        var effectKeys = ObjectCache.Ensure<GBLList<uint>>();
-        foreach (var kv in info.effectdict) effectKeys.Add(kv.Key);
-        foreach (var id in effectKeys)
-        {
-            if (false == info.effectdict.TryGetValue(id, out var effect)) continue;
-            effect.elapsed += tick;
-            info.effectdict[id] = effect;
-            if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
+            // 更新特效时间流逝
+            var effectKeys = ObjectCache.Ensure<GBLList<uint>>();
+            foreach (var kv in info.effectdict) effectKeys.Add(kv.Key);
+            foreach (var id in effectKeys)
+            {
+                if (false == info.effectdict.TryGetValue(id, out var effect)) continue;
+                effect.elapsed += tick;
+                info.effectdict[id] = effect;
+                if (effect.elapsed >= effect.duration) info.rmveffects.Add(id);
+            }
+            effectKeys.Dispose();
         }
-        effectKeys.Dispose();
     }
+
+    protected override void OnEndTick() { }
 }

@@ -2,7 +2,6 @@ using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
 using Goblin.Gameplay.Logic.Flows.Executors.Common;
@@ -19,8 +18,6 @@ public class EffectExecutor : Executor<EffectData>
     protected override void OnEnter((uint pipelineid, uint index) identity, EffectData data, FlowInfo flowinfo, ulong target)
     {
         base.OnEnter(identity, data, flowinfo, target);
-        if (false == stage.SeekBehavior(target, out Facade facade)) return;
-            
         FP duration = FP.Zero;
         switch (data.durationtype)
         {
@@ -36,7 +33,7 @@ public class EffectExecutor : Executor<EffectData>
                 break;
         }
 
-        uint effect = facade.CreateEffect(new EffectInfo
+        uint effect = stage.facade.CreateEffect(target, new EffectInfo
         {
             effect = data.effect,
             type = data.type,
@@ -47,7 +44,7 @@ public class EffectExecutor : Executor<EffectData>
             euler = data.euler.ToFPVector3(),
             scale = data.scale * FP.EN3,
         });
-            
+
         if (false == data.recywithflow) return;
         if (false == stage.SeekBehaviorInfo(flowinfo.actor, out FlowEffectInfo floweffectinfo)) floweffectinfo = stage.AddBehaviorInfo<FlowEffectInfo>(flowinfo.actor);
         floweffectinfo.effects.Add(effect);

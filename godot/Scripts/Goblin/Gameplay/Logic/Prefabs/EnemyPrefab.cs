@@ -1,5 +1,4 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Logic.Prefabs.Common;
@@ -34,14 +33,12 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         if (false == stage.cfg.location.EnemyInfos.TryGetValue(info.enemy, out var enemycfg)) return;
         if (false == stage.cfg.location.AttributeInfos.TryGetValue(enemycfg.Attribute, out var attrbfg)) return;
 
-        stage.AddBehavior<StateMachine>(actor);
-        stage.AddBehavior<Movement>(actor);
-        stage.AddBehavior<HUD>(actor);
-
-        stage.AddBehavior<SkillLauncher>(actor);
-
-        var facade = stage.AddBehavior<Facade>(actor);
-        facade.SetModel(enemycfg.Model);
+        stage.AddBehaviorInfo<StateMachineInfo>(actor);
+        stage.AddBehaviorInfo<MovementInfo>(actor);
+        stage.AddBehaviorInfo<HUDInfo>(actor);
+        stage.AddBehaviorInfo<SkillLauncherInfo>(actor);
+        stage.AddBehaviorInfo<FacadeInfo>(actor);
+        stage.facade.SetModel(actor, enemycfg.Model);
 
         stage.AddBehaviorInfo<TickerInfo>(actor);
         stage.attrb.Attach(actor);
@@ -53,7 +50,7 @@ public class EnemyPrefab : Prefab<EnemyPrefabInfo>
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.MAGIC_RESIST, attrbfg.MagicResist);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.CRIT_RATE, attrbfg.CritRate);
         stage.attrb.SetAttributeValue(actor, ATTRIBUTE_DEFINE.DODGE_RATE, attrbfg.DodgeRate);
-        
+
         var spatial = stage.AddBehaviorInfo<SpatialInfo>(actor);
         spatial.position = info.spatial.position;
         spatial.euler = info.spatial.euler;

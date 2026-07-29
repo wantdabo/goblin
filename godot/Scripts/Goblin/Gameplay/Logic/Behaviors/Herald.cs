@@ -1,11 +1,11 @@
-using Goblin.Gameplay.Logic.Commands.Common;
+﻿using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Soliders;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 传令官 — 接收全局指令，分发给 Solider 执行

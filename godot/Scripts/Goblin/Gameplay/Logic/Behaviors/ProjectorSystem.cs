@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection.Core;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 投影收集器 — 仅负责脏 BehaviorInfo → ProjectorPacket[]

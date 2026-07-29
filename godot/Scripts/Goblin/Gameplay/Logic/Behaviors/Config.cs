@@ -1,8 +1,8 @@
-using Goblin.Core;
+﻿using Goblin.Core;
 using Goblin.Gameplay.Logic.Core;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 public class Config : Behavior
 {

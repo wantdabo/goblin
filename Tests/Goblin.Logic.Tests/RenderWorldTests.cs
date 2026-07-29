@@ -1,5 +1,5 @@
-using System;
-using Goblin.Gameplay.Logic.Behaviors.Sa;
+﻿using System;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Core;
 using Goblin.Gameplay.Projection;
 using Goblin.Gameplay.Projection.Core;

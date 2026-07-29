@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -85,7 +84,7 @@ public abstract class Prefab<T> : Prefab where T : IPrefabInfo
 
     protected override void OnProcessing(ulong actor, PrefabInfoState state)
     {
-        if (stage.SeekBehavior(actor, out Tag tag)) tag.Set(TAG_DEFINE.ACTOR_TYPE, type);
+        stage.tag.Set(actor, TAG_DEFINE.ACTOR_TYPE, type);
         OnProcessing(actor, (state as PrefabInfoState<T>).info);
     }
 

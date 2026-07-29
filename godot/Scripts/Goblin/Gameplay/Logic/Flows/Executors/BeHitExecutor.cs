@@ -1,6 +1,5 @@
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Flows;
-using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Common.Extensions;
@@ -27,7 +26,7 @@ public class BeHitExecutor : Executor<BeHitData>
         stage.SeekBehaviorInfo(target, out SpatialInfo spatial);
         var caster = stage.flow.SeekETTarget(flowinfo, FLOW_DEFINE.ET_CASTER);
         stage.SeekBehaviorInfo(caster, out SpatialInfo atkspatial);
-            
+
         if (data.uselookatattacker && null != spatial && null != atkspatial)
         {
             var dire = (atkspatial.position - spatial.position).normalized;
@@ -71,13 +70,11 @@ public class BeHitExecutor : Executor<BeHitData>
         }
 
         // 受击硬直动画（直接操作 Facade 槽位 + StateMachine）
-        if (0 < data.hitstunduration && stage.SeekBehavior(target, out StateMachine sm))
+        if (0 < data.hitstunduration)
         {
-            if (stage.SeekBehavior(target, out Facade facade))
-                facade.AddOrUpdateSlot(ANIM_DEFINE.SLOT_TYPE_OVERRIDE, ANIM_DEFINE.SLOT_PRIORITY_REACTION,
-                    state: STATE_DEFINE.HITSTUN);
-
-            sm.ChangeState(STATE_DEFINE.HITSTUN, data.hitstunduration * FP.EN3,
+            stage.facade.AddOrUpdateSlot(target, ANIM_DEFINE.SLOT_TYPE_OVERRIDE, ANIM_DEFINE.SLOT_PRIORITY_REACTION,
+                state: STATE_DEFINE.HITSTUN);
+            stage.statemachine.ChangeState(target, STATE_DEFINE.HITSTUN, data.hitstunduration * FP.EN3,
                 fallback: STATE_DEFINE.IDLE);
         }
     }

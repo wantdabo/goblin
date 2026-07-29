@@ -26,4 +26,12 @@ public partial class StateMachineInfo : BehaviorInfo
     /// 延迟中断时间
     /// </summary>
     public FP delaybreak { get; set; }
+    /// <summary>
+    /// 状态已持续时间
+    /// </summary>
+    public FP stateduration { get; set; }
+    /// <summary>
+    /// 限时状态结束后的回退状态
+    /// </summary>
+    public byte timerfallback { get; set; }
 }

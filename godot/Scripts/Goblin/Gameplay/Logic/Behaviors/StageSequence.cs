@@ -1,10 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 关卡序列，解析 StageSequenceData，监控胜负条件并派发结果事件
@@ -44,12 +45,12 @@ public class StageSequence : Behavior
 
     private int CountActorType(long type)
     {
-        if (false == stage.SeekBehaviors(out List<Tag> tags)) return 0;
+        if (false == stage.SeekBehaviorInfos(out List<TagInfo> infos)) return 0;
         int count = 0;
-        foreach (var tag in tags)
+        foreach (var info in infos)
         {
-            if (tag.actor == stage.sa) continue;
-            if (false == tag.Get(TAG_DEFINE.ACTOR_TYPE, out long t)) continue;
+            if (info.actor == stage.sa) continue;
+            var t = stage.tag.Get(info.actor, TAG_DEFINE.ACTOR_TYPE);
             if (t == type) count++;
         }
         return count;

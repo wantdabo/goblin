@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Goblin.Common;
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -11,15 +10,17 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
-/// 技能释放器
+/// 技能释放器（Sa 级）
+/// 管理所有 Actor 的技能释放
 /// </summary>
-public class SkillLauncher : Behavior<SkillLauncherInfo>
+public class SkillLauncher : Behavior
 {
     /// <summary>
-    /// 打断技能（移除当前 Magic Actor）
+    /// 打断技能
     /// </summary>
-    public void Break()
+    public void Break(ulong actor)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out SkillLauncherInfo info)) return;
         if (false == info.casting) return;
         info.casting = false;
         if (info.magicid != 0 && stage.cache.Valid(info.magicid))
@@ -30,13 +31,14 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
     }
 
     /// <summary>
-    /// 释放技能（生成 Magic Actor）
+    /// 释放技能
     /// </summary>
-    public void Launch(uint skill)
+    public void Launch(ulong actor, uint skill)
     {
+        if (false == stage.SeekBehaviorInfo(actor, out SkillLauncherInfo info)) return;
         if (info.casting) return;
         if (false == stage.cfg.location.SkillInfos.TryGetValue((int)skill, out var skillcfg)) return;
-        if (false == stage.SeekBehavior(actor, out StateMachine statemachine) || false == statemachine.TryChangeState(STATE_DEFINE.CASTING)) return;
+        if (false == stage.statemachine.TryChangeState(actor, STATE_DEFINE.CASTING)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 
         var pipelines = ObjectCache.Ensure<GBLList<uint>>();
@@ -61,34 +63,41 @@ public class SkillLauncher : Behavior<SkillLauncherInfo>
 
     protected override void OnTick(FP tick)
     {
-        base.OnTick(tick);
-
-        // 消费技能指令
-        if (false == info.casting && stage.SeekBehavior(actor, out Gamepad gamepad))
+        if (false == stage.SeekBehaviorInfos(out List<SkillLauncherInfo> infos)) return;
+        foreach (var info in infos)
         {
-            foreach (var skillcmd in gamepad.skills)
+            if (false == info.active) continue;
+            var actor = info.actor;
+
+            // 消费技能指令
+            if (false == info.casting)
             {
-                Launch(skillcmd.skillid);
-                break;
+                if (stage.SeekBehaviorInfo(actor, out GamepadInfo gamepadinfo)
+                    && null != gamepadinfo.skills
+                    && gamepadinfo.skills.Count > 0)
+                {
+                    Launch(actor, gamepadinfo.skills[0].skillid);
+                }
             }
-        }
 
-        if (false == info.casting) return;
+            if (false == info.casting) continue;
 
-        // Magic Actor 消亡则技能结束
-        if (info.magicid == 0 || false == stage.cache.Valid(info.magicid))
-        {
-            info.skill = 0;
-            info.magicid = 0;
-            info.casting = false;
-        }
-
-        if (stage.SeekBehavior(actor, out StateMachine statemachine))
-        {
-            if (false == info.casting && STATE_DEFINE.CASTING == statemachine.info.current)
+            // Magic Actor 消亡则技能结束
+            if (info.magicid == 0 || false == stage.cache.Valid(info.magicid))
             {
-                statemachine.ChangeState(STATE_DEFINE.NONE);
+                info.skill = 0;
+                info.magicid = 0;
+                info.casting = false;
+            }
+
+            if (false == info.casting
+                && stage.SeekBehaviorInfo(actor, out StateMachineInfo sminfo)
+                && STATE_DEFINE.CASTING == sminfo.current)
+            {
+                stage.statemachine.ChangeState(actor, STATE_DEFINE.NONE);
             }
         }
     }
+
+    protected override void OnEndTick() { }
 }

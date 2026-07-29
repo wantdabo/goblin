@@ -1,4 +1,4 @@
-using Goblin.Common;
+﻿using Goblin.Common;
 using Goblin.Gameplay.Logic.Commands;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Projection.Shadows;

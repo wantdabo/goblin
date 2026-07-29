@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Goblin.Common;
 using Goblin.Gameplay.Logic.BehaviorInfos;
@@ -16,7 +16,7 @@ using Goblin.Gameplay.Logic.Flows.Executors.Common;
 using Goblin.Gameplay.Logic.Prefabs;
 using Kowtow.Math;
 
-namespace Goblin.Gameplay.Logic.Behaviors.Sa;
+namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 管线流
@@ -428,11 +428,9 @@ public class Flow : Behavior
                 var current = flowinfo.owner;
                 for (var depth = 0; depth < FLOW_DEFINE.MAX_CASTER_SEARCH_DEPTH; depth++)
                 {
-                    if (stage.SeekBehavior(current, out Tag tag) && tag.Get(TAG_DEFINE.ACTOR_TYPE, out var actortype))
-                    {
-                        if (ACTOR_DEFINE.CASTER_TYPES.Contains((byte)actortype)) return current;
-                        if (ACTOR_DEFINE.NONE == actortype || ACTOR_DEFINE.STAGE == actortype) return 0;
-                    }
+                    var actortype = stage.tag.Get(current, TAG_DEFINE.ACTOR_TYPE);
+                    if (ACTOR_DEFINE.CASTER_TYPES.Contains((byte)actortype)) return current;
+                    if (ACTOR_DEFINE.NONE == actortype || ACTOR_DEFINE.STAGE == actortype) return 0;
                     if (stage.SeekBehaviorInfo(current, out MagicInfo magic)) { current = magic.owner; continue; }
                     if (stage.SeekBehaviorInfo(current, out BuffInfo buff)) { current = buff.owner; continue; }
                     return 0;

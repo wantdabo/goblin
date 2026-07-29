@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.Common.Defines;
 using Goblin.Gameplay.Logic.Core;
@@ -6,19 +7,18 @@ using Kowtow.Math;
 namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
-/// 运动行为
+/// 运动系统（Sa 级）
+/// 管理所有 Actor 的移动
 /// </summary>
-public class Movement : Behavior<MovementInfo>
+public class Movement : Behavior
 {
     /// <summary>
     /// 移动
     /// </summary>
-    /// <param name="dire">方向</param>
-    /// <param name="tick">步长</param>
-    public void Move(FPVector3 dire, FP tick)
+    public void Move(ulong actor, FPVector3 dire, FP tick)
     {
-        if (false == stage.SeekBehavior(actor, out StateMachine machine)) return;
-        if (false == machine.TryChangeState(STATE_DEFINE.MOVE)) return;
+        if (false == stage.statemachine.TryChangeState(actor, STATE_DEFINE.MOVE)) return;
+        if (false == stage.SeekBehaviorInfo(actor, out MovementInfo info)) return;
         if (false == stage.SeekBehaviorInfo(actor, out SpatialInfo spatial)) return;
 
         dire.Normalize();
@@ -34,20 +34,32 @@ public class Movement : Behavior<MovementInfo>
 
     protected override void OnTick(FP tick)
     {
-        base.OnTick(tick);
+        if (false == stage.SeekBehaviorInfos(out List<MovementInfo> infos)) return;
+        foreach (var info in infos)
+        {
+            if (false == info.active) continue;
+            var actor = info.actor;
 
-        if (false == stage.SeekBehavior(actor, out Gamepad gamepad) || null == gamepad.move) return;
-        Move(new FPVector3(gamepad.move.dire.x, 0, gamepad.move.dire.y), tick);
+            if (false == stage.SeekBehaviorInfo(actor, out GamepadInfo gamepadinfo)) continue;
+            if (null == gamepadinfo.move) continue;
+
+            Move(actor, new FPVector3(gamepadinfo.move.dire.x, 0, gamepadinfo.move.dire.y), tick);
+        }
     }
 
     protected override void OnEndTick()
     {
-        base.OnEndTick();
-        // 如果没有在移动状态, 则尝试切换到 Idle 状态
-        if (false == info.turnmotion && stage.SeekBehavior(actor, out StateMachine machine))
+        if (false == stage.SeekBehaviorInfos(out List<MovementInfo> infos)) return;
+        foreach (var info in infos)
         {
-            machine.TryChangeState(STATE_DEFINE.IDLE);
+            if (false == info.active) continue;
+            var actor = info.actor;
+
+            if (false == info.turnmotion)
+            {
+                stage.statemachine.TryChangeState(actor, STATE_DEFINE.IDLE);
+            }
+            info.turnmotion = false;
         }
-        info.turnmotion = false;
     }
 }

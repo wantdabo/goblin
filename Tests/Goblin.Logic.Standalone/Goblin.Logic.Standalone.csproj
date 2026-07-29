@@ -70,7 +70,7 @@
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Core\Behavior.cs" Link="Logic\Core\Behavior.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Core\BehaviorInfo.cs" Link="Logic\Core\BehaviorInfo.cs" />
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Core\ProjectorPacket.cs" Link="Projection\Core\ProjectorPacket.cs" />
-        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Behaviors\Sa\ProjectorSystem.cs" Link="Logic\Behaviors\Sa\ProjectorSystem.cs" />
+        <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Logic\Behaviors\ProjectorSystem.cs" Link="Logic\Behaviors\ProjectorSystem.cs" />
 
         <!-- Projection 层 -->
         <Compile Include="..\..\godot\Scripts\Goblin\Gameplay\Projection\Rules\Crop.cs" Link="Projection\Rules\Crop.cs" />

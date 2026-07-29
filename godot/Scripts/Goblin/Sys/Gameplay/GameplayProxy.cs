@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using Goblin.Common;
 using Goblin.Core;
 using Goblin.Debug;
 using Goblin.Gameplay.Logic.BehaviorInfos;
-using Goblin.Gameplay.Logic.Behaviors.Sa;
+using Goblin.Gameplay.Logic.Behaviors;
 using Goblin.Gameplay.Logic.Common.BuildDatas;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Common.Defines;

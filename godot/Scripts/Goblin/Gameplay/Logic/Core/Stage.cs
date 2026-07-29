@@ -1,11 +1,10 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Goblin.Gameplay.Logic.BehaviorInfos;
 using Goblin.Gameplay.Logic.BehaviorInfos.Sa;
 using Goblin.Gameplay.Logic.Behaviors;
-using Goblin.Gameplay.Logic.Behaviors.Sa;
-using SaIEvent = Goblin.Gameplay.Logic.Behaviors.Sa.IEvent;
+using SaIEvent = Goblin.Gameplay.Logic.Behaviors.IEvent;
 using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Input;
 using Goblin.Gameplay.Logic.Common;
@@ -16,8 +15,8 @@ using Goblin.Gameplay.Logic.Prefabs;
 using Goblin.Gameplay.Logic.Prefabs.Common;
 using Goblin.Gameplay.Projection.Core;
 using Kowtow.Math;
-using Config = Goblin.Gameplay.Logic.Behaviors.Sa.Config;
-using Random = Goblin.Gameplay.Logic.Behaviors.Sa.Random;
+using Config = Goblin.Gameplay.Logic.Behaviors.Config;
+using Random = Goblin.Gameplay.Logic.Behaviors.Random;
 
 namespace Goblin.Gameplay.Logic.Core;
 
@@ -146,6 +145,34 @@ public sealed class Stage
     /// 投影系统
     /// </summary>
     public ProjectorSystem projector => GetBehavior<ProjectorSystem>(sa, true);
+    /// <summary>
+    /// 运动
+    /// </summary>
+    public Movement movement => GetBehavior<Movement>(sa, true);
+    /// <summary>
+    /// 状态机
+    /// </summary>
+    public StateMachine statemachine => GetBehavior<StateMachine>(sa, true);
+    /// <summary>
+    /// 输入
+    /// </summary>
+    public Gamepad gamepad => GetBehavior<Gamepad>(sa, true);
+    /// <summary>
+    /// 标签
+    /// </summary>
+    public Tag tag => GetBehavior<Tag>(sa, true);
+    /// <summary>
+    /// 外观
+    /// </summary>
+    public Facade facade => GetBehavior<Facade>(sa, true);
+    /// <summary>
+    /// HUD
+    /// </summary>
+    public HUD hud => GetBehavior<HUD>(sa, true);
+    /// <summary>
+    /// 技能释放
+    /// </summary>
+    public SkillLauncher skilllauncher => GetBehavior<SkillLauncher>(sa, true);
 
     /// <summary>
     /// 初始化 Stage
@@ -207,7 +234,6 @@ public sealed class Stage
     /// </summary>
     private void Behaviors()
     {
-        GetBehavior<Tag>(sa).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
         AddBehavior<Config>(sa);
         AddBehavior<Seat>(sa);
         AddBehavior<Random>(sa).Initialze(data.seed);
@@ -221,6 +247,14 @@ public sealed class Stage
         AddBehavior<Buff>(sa);
         AddBehavior<StepEnd>(sa);
         AddBehavior<ProjectorSystem>(sa);
+        AddBehavior<Tag>(sa);
+        AddBehavior<Movement>(sa);
+        AddBehavior<StateMachine>(sa);
+        AddBehavior<Gamepad>(sa);
+        AddBehavior<Facade>(sa);
+        AddBehavior<HUD>(sa);
+        AddBehavior<SkillLauncher>(sa);
+        tag.Set(sa, TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.STAGE);
     }
 
     /// <summary>
@@ -258,7 +292,6 @@ public sealed class Stage
                     scale = player.scale * cfg.int2fp,
                 }
             });
-            AddBehavior<Gamepad>(hero);
             // 入座
             seat.Sitdown(player.seat, hero);
         }
@@ -385,7 +418,6 @@ public sealed class Stage
     public void PushInput(ulong id, ushort type, bool pressed, IntVector2 dire)
     {
         var actor = seat.GetActor(id);
-        if (false == SeekBehavior(actor, out Gamepad gamepad)) return;
 
         switch (type)
         {
@@ -394,7 +426,7 @@ public sealed class Stage
                 {
                     var m = ObjectCache.Ensure<MoveFrame>();
                     m.dire = dire.ToFPVector2();
-                    gamepad.PushFrame(m);
+                    gamepad.PushFrame(actor, m);
                 }
                 break;
 
@@ -405,7 +437,7 @@ public sealed class Stage
                 var key = ObjectCache.Ensure<KeyFrame>();
                 key.key = type;
                 key.action = pressed ? KeyAction.Press : KeyAction.Release;
-                gamepad.PushFrame(key);
+                gamepad.PushKeyFrame(actor, key);
                 break;
         }
     }
@@ -416,10 +448,9 @@ public sealed class Stage
     public void PushSkillFrame(ulong id, uint skillid)
     {
         var actor = seat.GetActor(id);
-        if (false == SeekBehavior(actor, out Gamepad gamepad)) return;
         var s = ObjectCache.Ensure<SkillFrame>();
         s.skillid = skillid;
-        gamepad.PushFrame(s);
+        gamepad.PushSkillFrame(actor, s);
     }
         
     /// <summary>
@@ -638,8 +669,8 @@ public sealed class Stage
     private void AddActor(ulong actor)
     {
         info.actors.Add(actor);
-        // 默认携带 Tag 行为. 写入 ActorType 为 NONE
-        AddBehavior<Tag>(actor).Set(TAG_DEFINE.ACTOR_TYPE, ACTOR_DEFINE.NONE);
+        // 确保 TagInfo 存在，后续由 Prefab 设置 ActorType
+        AddBehaviorInfo<TagInfo>(actor);
     }
         
     /// <summary>
