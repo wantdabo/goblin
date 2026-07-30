@@ -1,5 +1,9 @@
 # BehaviorInfo 生命周期分析报告
 
+> 状态：`Historical`
+>
+> 本报告记录迁移前的生命周期基线；其中的数量、手写方法统计和问题描述不代表当前源码状态。当前生命周期和对象池边界以 [../ARCHITECTURE.md](../ARCHITECTURE.md) 与 [../../TODO.md](../../TODO.md) 为准。
+>
 > **问题**：逻辑层 24 个 BehaviorInfo 子类的手写 Reset/Clone/Ready 样板代码量过大，字段增删易遗漏，已发现多个 Bug。
 
 ---

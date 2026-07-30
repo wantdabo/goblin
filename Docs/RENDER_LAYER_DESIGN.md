@@ -1,10 +1,10 @@
 # 渲染层设计方案
 
+> 状态：`Design`
+>
 > 2026-07-28
 >
-> ⚠️ **本文为设计方案（proposal），描述 Mirror/VisualNode pull 模型。**
-> 实际实现采用 **Mirror/Component push 模型**（Component 为被动数据容器，数据由 `Mirror.ApplyPackets` 推送）。
-> 当前架构详见 [ARCHITECTURE.md](ARCHITECTURE.md) §3.6。
+> 本文保留 Render 层设计草案，描述的是历史的 `Mirror/VisualNode` pull 模型。当前实现已采用 `Canvas/Shadow` 数据推送链路，详见 [ARCHITECTURE.md](ARCHITECTURE.md) §3.6；本文不作为当前 API 说明。
 
 ---
 

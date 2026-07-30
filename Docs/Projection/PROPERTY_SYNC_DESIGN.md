@@ -1,8 +1,10 @@
 # Property Sync 体系设计
 
+> 状态：`Design`
+>
 > **删 RIL，标 Projector，Entity/Component 镜像。** Logic 几乎不动。
 >
-> ⚠️ **本文为完整设计方案。** 实际实现中 `Entity`/`RenderWorld` 层由 `Mirror` 替代，Component 为被动数据容器（非自驱）。当前实现详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
+> 本文保留完整设计方案。文中的 `Entity`/`RenderWorld`/`Component` 是设计阶段名称，当前实现对应 `Canvas`/`Shadow`；当前实现详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
 
 ---
 

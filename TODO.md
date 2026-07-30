@@ -20,15 +20,17 @@
 - **状态**：规划中
 - **方向**：Scripting / Timeline / GraphNode 三种编辑方式并存，统一底层 Pipeline 数据结构
 
-## Bug：修改 Stage Timescale 导致 Tick 异常
+## Bug：TimeScaleCommand 数据被重置
 
-- **状态**：待排查
-- **现象**：修改 Stage Timescale 后 tick 出问题
-- **涉及代码**：
-  - `Stage.timescale` → `StageInfo.timescale`（line 73-77）
-  - `Step()` line 446：`var tick = info.timescale * GAME_DEFINE.LOGIC_TICK;`
-  - `TimeScaleSolider.OnExecute`：直接写 `stage.timescale`
-  - 行为 Tick：`ticker.timescale * tick`（双层乘法）
+- **状态**：已修复（2026-07-31）
+- **根因**：Sys 层 `ObjectPool` 对象直接进入 Logic 层队列；`GBLQueue.Dequeue/TryDequeue` 曾在出队时自动 `Reset`，导致 `timescale` 回到默认值 `1`
+- **修复**：`Stage.SetCommand` 使用 `ObjectCache.Ensure + Command.Clone` 隔离跨层所有权；`GameplayProxy` 回收 Sys 原始命令；Logic 消费完成后显式 `Reset + ObjectCache.Set`
+- **规则**：Logic 只使用 `ObjectCache`，Sys/Render/Projection 使用 `ObjectPool`，跨层传递必须 Clone
+
+## 风险：Stage 与 Actor 双层 Timescale
+
+- **状态**：当前实现，待专项验证
+- **说明**：`StageInfo.timescale` 控制逻辑步长，Actor 的 `TickerInfo.timescale` 参与单个 Behavior Tick。两者是不同作用域，修改时需要分别验证，不应把它们当作同一字段
 
 ## 重构：Projection 层命名与职责重整
 

@@ -154,8 +154,8 @@ if (null == comps)
 ## 13. 架构速查
 
 - Logic 层零 Godot 依赖，用自研定点数（FPVector3/FPQuaternion/FP），Render 层依赖 Godot API
-- Projection 投影同步：Logic 层 `[Projector]` 字段变更 → `ProjectorSystem` 脏标记出包 → `Crop` 规则链裁剪 → `Transport` → `Mirror.ApplyPackets` → `Component` 更新
-- Render 层：`Mirror`（数据镜像）+ `Component` 子类（`SpatialComponent`/`FacadeComponent`/`HUDComponent`），零反射 `ApplyTo` 消费
+- Projection 投影同步：Logic 层 `[Projector]` 字段变更 → `ProjectorSystem` 脏标记出包 → `Crop` 规则链裁剪 → `Transport` → `Canvas.ApplyPackets` → `Shadow` 更新
+- Projection 层：`Canvas`（数据画布）+ `Shadow` 子类（`SpatialShadow`/`FacadeShadow`/`HUDShadow`），零反射 `ApplyTo` 消费；Render 层 View 读取 Shadow 驱动 Godot 节点
 - SA（System Actor，actor=ulong.MaxValue）挂全局 Behavior
 - Source Generator：`partial class + IGBL` 自动生成 `Reset()`/`Clone()`；`[Projector]` 类级注解生成 backing field + `IProjectable` 实现
 - 详细架构见 [ARCHITECTURE.md](ARCHITECTURE.md)

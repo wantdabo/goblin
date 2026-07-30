@@ -1,7 +1,9 @@
 # 投影系统审计报告
 
+> 状态：`Audit`
+>
 > 审计范围：`godot/Scripts/Goblin/Gameplay/Projection` + `godot/Scripts/Goblin/Gameplay/Render`
-> 审计日期：2026-07-27
+> 审计日期：2026-07-27。本文是阶段性审计记录，当前命名和职责以 [../ARCHITECTURE.md](../ARCHITECTURE.md) 为准。
 
 ## 架构概览
 

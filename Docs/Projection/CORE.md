@@ -1,8 +1,10 @@
 # Goblin Runtime - World Projection Vision
 
+> 状态：`Design`
+>
 > **One Simulation, Multiple Projections.**
 >
-> 本文件为 Projection 体系的设计哲学。当前实现详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
+> 本文件描述 Projection 体系的设计哲学；当前实现详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
 
 ---
 

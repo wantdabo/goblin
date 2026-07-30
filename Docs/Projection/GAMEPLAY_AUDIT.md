@@ -1,8 +1,10 @@
 # Gameplay 模块全面审计
 
+> 状态：`Audit`
+>
 > 审计日期：2026-07-27
 > 范围：`godot/Scripts/Goblin/Gameplay/` 全量
-> 背景：RIL 改造已完成 MVP，对 Logic/Render 全模块做代码审查
+> 背景：RIL 改造阶段对 Logic/Render 全模块做代码审查；本文是阶段性记录，当前实现以 [../ARCHITECTURE.md](../ARCHITECTURE.md) 为准。
 
 ---
 

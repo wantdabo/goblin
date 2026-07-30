@@ -1,6 +1,8 @@
 # Goblin 架构文档
 
-> 2026-07-28 | 基于源码分析
+> 状态：`Current`
+>
+> 更新日期：2026-07-31 | 基于源码分析。本文件是当前实现的唯一架构权威；其他设计、计划和审计文档中的旧术语或目标架构不代表现状。
 
 ---
 
@@ -41,8 +43,8 @@ Logic Layer (确定性、定点数)          Render Layer (表现、浮点数)
 │ BehaviorInfo.属性 setter  │         │                          │
 │   → projectdirtymask 位标记 │        │                          │
 │                          │         │                          │
-│ ProjectorSystem.OnEndTick│  Projection  │ Mirror.ApplyPackets      │
-│   → 自检脏mask            │  Pipeline │   → Component.ApplyTo()  │
+│ ProjectorSystem.OnEndTick│  Projection  │ Canvas.ApplyPackets       │
+│   → 自检脏mask            │  Pipeline │   → Shadow.ApplyTo()     │
 │   → ProjectorPacket[]    │ ────────→│     (Spatial/Facade/HUD) │
 │                          │         │                          │
 └──────────────────────────┘         └──────────────────────────┘
@@ -51,8 +53,8 @@ Logic Layer (确定性、定点数)          Render Layer (表现、浮点数)
 - 含 `[Projector]` 特性的 BehaviorInfo 属性 setter 由 SG 自动写入 `projectdirtymask` 位标记
 - `ProjectorSystem` 帧末自检所有 `IProjectable` 实例 → 打包 `ProjectorPacket[]`
 - `ProjectionPipeline` 按 Observer 裁剪（AOI/频率/权限/可见性）→ `ObserverPacket[]`
-- `Mirror` 消费投影数据，调用对应 `Component.ApplyTo()` 更新表现层数据
-- 表现层**绝不写回逻辑层数据**
+- `Canvas` 消费投影数据，调用对应 `Shadow.ApplyTo()` 更新表现数据
+- Render 层 View 读取 Shadow 并驱动 Godot 节点，**绝不写回逻辑层数据**
 
 ---
 
@@ -82,10 +84,11 @@ Logic Layer (确定性、定点数)          Render Layer (表现、浮点数)
 │                  Projection Layer                  │
 │  ProjectorPacket → Crop Rules → ObserverPacket    │
 │  Transport (Local / Network)                       │
+│  Canvas → Shadows (Spatial / Facade / HUD)        │
 ├──────────────────────────────────────────────────┤
 │                  Render Layer (Godot)              │
-│  Mirror → Components (Spatial / Facade / HUD)     │
-│  消费投影数据 → 更新 Transform/Animation/VFX/UI    │
+│  View → 读取 Shadow，更新 Transform/Animation/VFX/UI│
+│  Projection 层本身不依赖 Godot API                 │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -100,7 +103,7 @@ Logic Layer (确定性、定点数)          Render Layer (表现、浮点数)
 | **Prefab** | Actor 的工厂方法（装配 Behavior + BehaviorInfo 组合） | 运行时逻辑 |
 | **ProjectorSystem** | 帧末自检脏 BehaviorInfo → 打包 ProjectorPacket[] | 裁剪、网络传输 |
 | **ProjectionPipeline** | 裁剪规则链 + Transport 分发 | 数据收集 |
-| **Mirror** | Render 侧数据镜像，ActorID → Component 映射，零反射消费 | 表现逻辑 |
+| **Canvas** | Projection 侧数据画布，ActorID → Shadow 映射，零反射消费 | 表现逻辑、Godot 节点操作 |
 | **Config** | 配置表定位（不可变引用） | 数据修改 |
 | **Commands** | 外部输入/GM 指令 | 游戏内逻辑 |
 
@@ -372,47 +375,49 @@ ProjectorPacket[]
 | `AOIRule` | 距离裁剪，超出 Observer.radius 返回 0 | 位置不可用时放行 |
 | `FrequencyRule` | 按字段独立推送间隔，抑制高频推送 | 未注册间隔的字段放行 |
 | `PermissionRule` | 按 (ObserverType, InfoType) 查表，允许部分字段 | 未注册权限的组合放行 |
-| `VisibilityRule` | 不可见实体裁剪 | Mirror 无数据时放行（首帧同步） |
+| `VisibilityRule` | 不可见实体裁剪 | Canvas 无数据时放行（首帧同步） |
 
-**Fail-Open 设计哲学**：裁剪规则在数据不足时（位置不可查、权限未注册、Mirror 无数据）默放行，避免因漏注册导致黑屏/数据断流。
+**Fail-Open 设计哲学**：裁剪规则在数据不足时（位置不可查、权限未注册、Canvas 无数据）默放行，避免因漏注册导致黑屏/数据断流。
 
 #### 传输层（Transport）
 
 | Transport | 适用场景 |
 |-----------|----------|
-| `LocalTransport` | 帧同步/单机模式，直接写入 Mirror（不序列化） |
+| `LocalTransport` | 帧同步/单机模式，直接写入 Canvas（不序列化） |
 | `NetworkTransport` | 网络模式，序列化 ObserverPacket 后走网络 |
 
-#### 数据消费端（Render 层）
+#### 数据消费端（Projection 层）
 
 ```
-Mirror（数据镜像）
-  ├── datas: ActorID → (ComponentType → Component)
-  ├── infotocomp: BehaviorInfo 类型 → Component 类型 映射
-  ├── applymap: Component 类型 → ApplyTo 静态委托（零反射）
-  └── factorymap: Component 类型 → 工厂委托（零反射创建）
+Canvas（数据画布）
+  ├── datas: ActorID → (ShadowType → Shadow)
+  ├── infotoshadow: BehaviorInfo 类型 → Shadow 类型映射
+  ├── applymap: Shadow 类型 → ApplyTo 静态委托（零反射）
+  └── factorymap: Shadow 类型 → 工厂委托（对象池创建）
 
-Mirror.ApplyPackets(ObserverPacket[])
+Canvas.ApplyPackets(ObserverPacket[])
   → 对每条 ObserverPacket
-    → 查询 infotocomp 获取 Component 类型
-    → 工厂创建或复用已有 Component
-    → 调用 ApplyTo(values, fieldmask)
+    → 查询 infotoshadow 获取 Shadow 类型
+    → 工厂创建或复用已有 Shadow
+    → 调用 Shadow.ApplyTo(values, fieldmask)
 ```
 
-**Component 清单**：
+`Canvas` 是纯 C# 数据副本；`Shadow` 是被动数据容器；Render 层的 View 读取 Shadow 并驱动 Godot 节点。
 
-| Component | 映射源 Info | 数据 |
-|-----------|------------|------|
-| `SpatialComponent` | `SpatialInfo` | position, euler, scale |
-| `FacadeComponent` | `FacadeInfo` | model, anim*, effect* |
-| `HUDComponent` | `HUDInfo` | hp, maxhp, movespeed, attack |
+**Shadow 清单**：
+
+| Shadow | 映射源 Info | 数据 |
+|--------|------------|------|
+| `SpatialShadow` | `SpatialInfo` | position, euler, scale |
+| `FacadeShadow` | `FacadeInfo` | model, anim*, effect* |
+| `HUDShadow` | `HUDInfo` | hp, maxhp, movespeed, attack |
 
 **注册方式**：
 ```csharp
-mirror.Register<SpatialInfo, SpatialComponent>();  // App 启动时注册
+canvas.Register<SpatialInfo, SpatialShadow>();
 ```
 
-Component 上的 `[ProjectorTarget(typeof(XxxInfo))]` 注解标注映射关系，SG 生成 `IComponentApply<T>` 静态 `ApplyTo` 方法。
+`[Projector]` 描述 Logic 字段；Source Generator 生成 Shadow、映射和 `ApplyTo` 消费代码。
 
 #### Observer 类型
 
@@ -494,10 +499,10 @@ ProjectionPipeline.Process()
   → Transport.Send()
   │
   ▼
-Mirror.ApplyPackets()       // → 更新 Component 数据
+Canvas.ApplyPackets()        // → 更新 Shadow 数据
   │
   ▼
-Render Layer (Godot)        // 消费 Component → 更新 Transform/Animation/VFX/UI
+Render Layer (Godot)        // View 消费 Shadow → 更新 Transform/Animation/VFX/UI
 ```
 
 ---
@@ -515,7 +520,7 @@ Render Layer (Godot)        // 消费 Component → 更新 Transform/Animation/V
 | Sa 级全局 Behavior | 跨 Actor 共享逻辑集中管理 |
 | Actor 延迟回收（AttributeBucket.pendings） | 等待 Magic 引用解除，避免悬垂引用 |
 | PASSES 表控制状态 | 有限状态机，防止非法跳转导致逻辑错误 |
-| Mirror 零反射 Component 创建 | 工厂委托 + ApplyTo 静态委托，避免运行期反射开销 |
+| Canvas 零反射 Shadow 创建 | 工厂委托 + ApplyTo 静态委托，避免运行期反射开销 |
 
 ---
 
@@ -535,7 +540,7 @@ Render Layer (Godot)        // 消费 Component → 更新 Transform/Animation/V
 | 文档 | 内容 |
 |------|------|
 | [CODING_STYLE.md](CODING_STYLE.md) | 编码规范 |
-| [RENDER_LAYER_DESIGN.md](RENDER_LAYER_DESIGN.md) | 渲染层设计方案（proposal） |
+| [RENDER_LAYER_DESIGN.md](RENDER_LAYER_DESIGN.md) | Render 层设计草案（Design，部分术语过时） |
 | [ANIMATION_PROPOSAL.md](ANIMATION_PROPOSAL.md) | 动画槽位优先级系统 |
 | [Projection/CORE.md](Projection/CORE.md) | Projection 设计哲学 |
 | [Projection/PROPERTY_SYNC_DESIGN.md](Projection/PROPERTY_SYNC_DESIGN.md) | 属性同步完整设计 |

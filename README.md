@@ -24,9 +24,12 @@
 
 ### 快速开始
 
-1. 安装 [.NET 8+](https://dotnet.microsoft.com/zh-cn/download)
+1. 安装 [.NET 8 SDK](https://dotnet.microsoft.com/zh-cn/download)；测试和 Standalone 项目当前使用 `net10.0`，需要对应 SDK
 2. 安装 [Godot 4.x (C# / Mono 版)](https://godotengine.org/)
-3. 用 Godot 打开 `godot/` 目录即可
+3. 进入 `Config/Commands/` 按项目脚本说明生成或复制配置资源
+4. 用 Godot 打开 `godot/` 目录；标准测试可在仓库根目录执行 `dotnet test goblin.sln`
+
+C# 文件建议使用 VS Code 或 Rider 编辑。Godot 内置 C# 编辑器可能将空格转换为 Tab，项目规范要求 4 个空格缩进。
 
 ### 项目结构
 

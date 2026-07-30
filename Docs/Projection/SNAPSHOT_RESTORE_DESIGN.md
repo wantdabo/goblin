@@ -1,7 +1,9 @@
 # Snapshot / Restore 机制与投影脏标记设计说明
 
+> 状态：`Design`
+>
 > 文档日期：2026-07-28
-> 相关代码：`Stage.Snapshot()` / `Stage.Restore()` (Stage.cs)、`ProjectorSystem` (ProjectorSystem.cs)、`IProjectable` (IProjectable.cs)
+> 相关代码：`Stage.Snapshot()` / `Stage.Restore()` (Stage.cs)、`ProjectorSystem` (ProjectorSystem.cs)、`IProjectable` (IProjectable.cs)。具体行为以当前源码为准。
 
 ---
 

@@ -1,8 +1,10 @@
 # Property Sync 实施计划
 
+> 状态：`Plan`
+>
 > **统筹文档**：汇总三个设计文档的全部任务，拆解为可执行的阶段与子任务。
 >
-> **Phase 1 已基本完成，Phase 2-5 待实施。** 实际实现与设计的差异：Render 层使用 `Mirror` 而非 `Entity`/`RenderWorld`。详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6。
+> 本计划记录迁移时的目标和历史进度，不是当前完成度报告。计划中的 `Entity`/`Component` 等名称对应当前的 `Canvas`/`Shadow` 实现；实际状态详见 [ARCHITECTURE.md](../ARCHITECTURE.md) §3.6 和 [../README.md](../README.md)。
 >
 > 基线文档：
 > - [CORE.md](CORE.md) — 哲学底座：Simulation → Projection → Presentation

@@ -1,6 +1,8 @@
 # 动画槽位优先级系统
 
-> 2026-07-19 初稿 | 2026-07-22 Phase 1+2+2.5+3 落地，更新为架构文档
+> 状态：`Current`
+>
+> 2026-07-19 初稿 | 2026-07-22 Phase 1+2+2.5+3 落地。具体实现和字段名以源码为准。
 
 ---
 
@@ -136,7 +138,7 @@ ANIM_DEFINE.GetSlotLayer(key)         → byte
 ## 四、数据通路
 
 > ⚠️ **本节描述的 RIL 体系（`RIL_FACADE_ANIMATION`、`AnimationEnchant`、`AnimationAgent`）已在 Projection 重构中删除。**
-> 当前动画数据通过 `FacadeComponent` + `Mirror.ApplyPackets` 传递，详见 [ARCHITECTURE.md](ARCHITECTURE.md) §3.6。
+> 当前动画数据通过 `FacadeInfo` → `ProjectorSystem` → `Canvas/FacadeShadow` 传递，详见 [ARCHITECTURE.md](ARCHITECTURE.md) §3.6。
 >
 > 以下为历史架构文档，AnimationSlot 模型、优先级仲裁、槽位管理等核心逻辑保持不变。
 
@@ -340,7 +342,7 @@ HITSTUN 是 StateMachine 已有状态。BeHitExecutor 直接操作 Facade 槽位
 
 ### Render 层
 
-> ⚠️ 以下 Agent/Enchant 体系已在 Projection 重构中删除。当前动画数据通过 `FacadeComponent` 消费。
+> ⚠️ 以下 Agent/Enchant 体系已在 Projection 重构中删除。当前动画数据通过 `FacadeInfo` → `Canvas/FacadeShadow` 消费。
 
 | 文件 | 职责 | 状态 |
 |------|------|------|
