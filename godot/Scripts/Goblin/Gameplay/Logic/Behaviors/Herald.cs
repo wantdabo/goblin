@@ -1,4 +1,5 @@
-﻿using Goblin.Gameplay.Logic.Commands.Common;
+﻿using System.Collections.Generic;
+using Goblin.Gameplay.Logic.Commands.Common;
 using Goblin.Gameplay.Logic.Commands.Soliders;
 using Goblin.Gameplay.Logic.Common;
 using Goblin.Gameplay.Logic.Common.Defines;
@@ -9,6 +10,7 @@ namespace Goblin.Gameplay.Logic.Behaviors;
 
 /// <summary>
 /// 传令官 — 接收全局指令，分发给 Solider 执行
+/// 使用 GBLQueue 管理指令生命周期，OnTick 消费后手动 Reset+Set 还池
 /// </summary>
 public class Herald : Behavior
 {
@@ -25,7 +27,7 @@ public class Herald : Behavior
     {
         base.OnAssemble();
 
-        cmdqueue = ObjectCache.Ensure<GBLQueue<Command>>();
+        cmdqueue = new GBLQueue<Command>();
             
         // 注册输入指令执行器
         soliderdict = ObjectCache.Ensure<GBLDict<ushort, Solider>>();
@@ -41,7 +43,12 @@ public class Herald : Behavior
     protected override void OnDisassemble()
     {
         base.OnDisassemble();
-        cmdqueue.Dispose();
+        // 清空残留命令：Reset + 还池
+        while (cmdqueue.TryDequeue(out var command))
+        {
+            command.Reset();
+            ObjectCache.Set(command);
+        }
             
         // 卸载输入指令执行器
         foreach (var solider in soliderdict.Values)
@@ -65,6 +72,9 @@ public class Herald : Behavior
         while (cmdqueue.TryDequeue(out var command))
         {
             if (soliderdict.TryGetValue(command.id, out var solider)) solider.Execute(command);
+            // Solider 消费后回收
+            command.Reset();
+            ObjectCache.Set(command);
         }
     }
 }

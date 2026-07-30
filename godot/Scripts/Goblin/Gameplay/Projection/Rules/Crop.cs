@@ -1,18 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Goblin.Common;
 using Goblin.Gameplay.Projection.Core;
 
 namespace Goblin.Gameplay.Projection.Rules;
-
-/// <summary>
-/// 对象池 key（必须唯一常量，供 ObjectPool 区分）
-/// </summary>
-public static class CropPoolKey
-{
-    public const string OBSERVERPACKET_LIST = "CROP_OBSERVERPACKET_LIST";
-    public const string VALUE_LIST = "CROP_VALUE_LIST";
-}
 
 /// <summary>
 /// 裁剪规则链 — 串联多个 IProjectionRule，逐步修剪 fieldmask
@@ -78,15 +70,14 @@ public partial class Crop : IGBL
     {
         if (0 == packets.Count || 0 == observers.Count) return Array.Empty<ObserverPacket>();
 
-        // 从对象池取出 List，清空复用
-        var results = ObjectPool.Ensure<List<ObserverPacket>>(CropPoolKey.OBSERVERPACKET_LIST);
-        results.Clear();
-
         // 单 Observer 快路径：mask 未裁剪时共享原 values 引用，零分配
         if (1 == observers.Count)
         {
             var obs = observers[0];
             var crop = obs.crop;
+            // 预分配最大可能大小的数组，避免 List 中间容器 + ToArray 分配
+            var resultsArray = new ObserverPacket[packets.Count];
+            int ri = 0;
             foreach (var p in packets)
             {
                 var mask = null != crop ? crop.Project(p, obs) : p.fieldmask;
@@ -100,12 +91,17 @@ public partial class Crop : IGBL
                 // mask == p.fieldmask 时无裁剪，直接共享原 values 引用
                 // LocalTransport.ApplyPackets 同步消费，下帧 OnEndTick 前 RecyclePackets 回收
                 op.values = (mask == p.fieldmask) ? p.values : TrimValues(p.values, p.fieldmask, mask);
-                results.Add(op);
+                resultsArray[ri++] = op;
             }
+            // 无过滤时直接返回，有过滤时截取
+            return ri == packets.Count ? resultsArray : resultsArray[..ri];
         }
         else
         {
             // 多 Observer 路径：每个 Observer 独立 TrimValues，避免共享引用导致的数据竞争
+            var maxResults = packets.Count * observers.Count;
+            var resultsArray = new ObserverPacket[maxResults];
+            int ri = 0;
             foreach (var p in packets)
             {
                 foreach (var obs in observers)
@@ -121,14 +117,11 @@ public partial class Crop : IGBL
                     op.fieldmask = mask;
                     op.frame = p.frame;
                     op.values = trimmed;
-                    results.Add(op);
+                    resultsArray[ri++] = op;
                 }
             }
+            return ri == maxResults ? resultsArray : resultsArray[..ri];
         }
-        var array = results.ToArray();
-        // 归还 List 容器到对象池
-        ObjectPool.Set(results, CropPoolKey.OBSERVERPACKET_LIST);
-        return array;
     }
 
     /// <summary>
@@ -152,25 +145,25 @@ public partial class Crop : IGBL
 
     /// <summary>
     /// 按裁剪后 mask 从原始 values 中提取子集
+    /// 使用 BitOperations.TrailingZeroCount + PopCount 只遍历 targetMask 中已设置的位
     /// 对引用类型值做安全克隆，防止多线程下逻辑层原地修改导致数据竞争
     /// </summary>
     private static object[] TrimValues(object[] values, ulong originalMask, ulong targetMask)
     {
         if (null == values || 0 == targetMask) return Array.Empty<object>();
 
-        // 从对象池取出 List，清空复用
-        var trimmed = ObjectPool.Ensure<List<object>>(CropPoolKey.VALUE_LIST);
-        trimmed.Clear();
-        var vi = 0;
-        for (int bit = 0; bit < 64; bit++)
+        int count = BitOperations.PopCount(targetMask);
+        var result = new object[count];
+        int ri = 0;
+        var remaining = targetMask;
+        while (remaining != 0)
         {
-            if (0 == (originalMask & (1UL << bit))) continue;
-            if (0 != (targetMask & (1UL << bit))) trimmed.Add(SafeCloneValue(values[vi]));
-            vi++;
+            int bit = BitOperations.TrailingZeroCount(remaining);
+            remaining &= remaining - 1;
+            // 该 bit 在 originalMask 中对应的 values 索引 = bit 之前 originalMask 的 popcount
+            int vi = BitOperations.PopCount(originalMask & ((1UL << bit) - 1));
+            result[ri++] = SafeCloneValue(values[vi]);
         }
-        var result = trimmed.ToArray();
-        // 归还 List 容器到对象池
-        ObjectPool.Set(trimmed, CropPoolKey.VALUE_LIST);
         return result;
     }
 

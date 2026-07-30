@@ -1033,6 +1033,7 @@ public class GoblinSourceGenerator : IIncrementalGenerator
             sb.AppendLine(u);
         }
         sb.AppendLine("using Goblin.Gameplay.Projection.Core;");
+        sb.AppendLine("using System.Numerics;");
         sb.AppendLine();
         sb.AppendLine($"namespace {data.ns};");
         sb.AppendLine();
@@ -1083,14 +1084,16 @@ public class GoblinSourceGenerator : IIncrementalGenerator
         sb.AppendLine("    /// </summary>");
         sb.AppendLine("    public object[] TakeProjectValues(ulong mask)");
         sb.AppendLine("    {");
-        sb.AppendLine("        var list = new System.Collections.Generic.List<object>();");
+        sb.AppendLine("        int count = BitOperations.PopCount(mask);");
+        sb.AppendLine("        var values = new object[count];");
+        sb.AppendLine("        int i = 0;");
         foreach (var field in data.fields)
         {
             var ser = SerExpression(classNameLower, field.name, field.typeText);
             sb.AppendLine($"        if (0ul != (mask & (1ul << {field.index})))");
-            sb.AppendLine($"            list.Add({ser});");
+            sb.AppendLine($"            values[i++] = {ser};");
         }
-        sb.AppendLine("        return list.ToArray();");
+        sb.AppendLine("        return values;");
         sb.AppendLine("    }");
 
         sb.AppendLine();

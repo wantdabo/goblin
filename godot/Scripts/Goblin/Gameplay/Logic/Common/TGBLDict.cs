@@ -86,19 +86,13 @@ public class TGBLDict<K, V> : GBLDict<K, V>
 
     public override void Clear()
     {
+        // 先收集移除差量（必须在 base.Clear 清空 data 之前）
         foreach (var kv in data)
         {
-            if (isvalueigbl)
-            {
-                var igbl = (IGBL)kv.Value;
-                igbl.Reset();
-                ObjectCache.Set(igbl);
-            }
             if (false == addedkeys.Contains(kv.Key))
                 removedkeys.Add(kv.Key);
         }
-        data.Clear();
-        order.Clear();
+        base.Clear();
         addedkeys.Clear();
         changedkeys.Clear();
     }

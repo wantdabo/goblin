@@ -10,11 +10,24 @@
   - `"files.eol": "\r\n"` — Windows CRLF 行尾
   - `"[csharp]": { "editor.insertSpaces": true, "editor.tabSize": 4, "editor.detectIndentation": false }` — C# 强制 4 空格，禁止 Tab，不自动检测缩进风格
   - `detectIndentation: false` 可防止 VS Code 因读到含 Tab 的文件而自动切换到 Tab 模式
+- **Godot 编辑器是 Tab 污染的根因**（2026-07-31 确认）：
+  - Godot 内置 C# 编辑器可能自动将空格转 Tab
+  - 建议：C# 文件只用 VS Code / Rider 编辑，Godot 只做场景/资源
+  - 或在 Godot 设置：Editor → Text Editor → Indent → Type=Spaces, Size=4
 - **replace_in_file 操作协议（2026-07-30，零容忍）**：
   1. 每次调用 `replace_in_file` 后，**立即**用命令自检目标文件是否含 `\t`
   2. 一旦发现 Tab → 当场 `git restore` 该文件 + 重做该次编辑
   3. **绝不批量做多个 replace 再统一检查**——污染会扩散
   4. 多文件编辑时，每编辑一个文件就验证一个，通过后再编辑下一个
+
+## 对象池规则（2026-07-31）
+
+- Logic 层（`Goblin.Gameplay.Logic.*`）→ `ObjectCache`（`Goblin.Gameplay.Logic.Common`）
+- Sys/Render 层（`Goblin.Sys.*`, `Goblin.Gameplay.Render.*`）→ `ObjectPool`（`Goblin.Common`）
+- Projection 层（`Goblin.Gameplay.Projection.*`）→ `ObjectPool`
+- **两套池互不相通**，跨层数据传递必须 Clone 隔离
+- GBLQueue.TryDequeue/Dequeue **不自动 Reset**，调用方手动管理生命周期
+- GBLList/GBLDict.Remove 和 GBLHashSet.Rmv **自动 Reset+Set**，注意语义差异
 
 ## 编码规范核心
 

@@ -77,16 +77,7 @@ public class TGBLList<T> : GBLList<T>
 
     public override void Clear()
     {
-        foreach (var item in data)
-        {
-            if (iselementigbl)
-            {
-                var igbl = (IGBL)item;
-                igbl.Reset();
-                ObjectCache.Set(igbl);
-            }
-        }
-        data.Clear();
+        base.Clear();
         addedindices.Clear();
         removedindices.Clear();
     }

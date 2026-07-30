@@ -89,8 +89,6 @@ public class GBLHashSet<T> : IGBL, IEnumerable<T>
             }
         }
         inner.Clear();
-        ObjectCache.Set(inner);
-        inner = ObjectCache.Ensure<HashSet<T>>();
     }
 
     /// <summary>

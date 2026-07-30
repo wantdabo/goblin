@@ -258,7 +258,7 @@ public class GameplayProxy : Proxy<GameplayModel>
         if (null == stage || StageState.Ticking != stage.state) return;
         if (null == input) return;
 
-        // 消费渲染层输入
+        // 消费渲染层输入 — Stage 内部 Clone，调用方回收原始 command
         while (input.TryDequeueCommand(out var command))
         {
             stage.SetCommand(command);

@@ -41,32 +41,20 @@ public class GBLQueue<T> : IGBL, IEnumerable<T>
 
     /// <summary>
     /// 出队 — 抛出异常若队列为空
+    /// 不自动 Reset，由调用方消费后手动管理生命周期
     /// </summary>
     public T Dequeue()
     {
-        var item = inner.Dequeue();
-        if (iselementigbl)
-        {
-            var igbl = (IGBL)item;
-            igbl.Reset();
-            ObjectCache.Set(igbl);
-        }
-        return item;
+        return inner.Dequeue();
     }
 
     /// <summary>
     /// 尝试出队
+    /// 不自动 Reset，由调用方消费后手动管理生命周期
     /// </summary>
     public bool TryDequeue(out T result)
     {
-        if (false == inner.TryDequeue(out result)) return false;
-        if (iselementigbl)
-        {
-            var igbl = (IGBL)result;
-            igbl.Reset();
-            ObjectCache.Set(igbl);
-        }
-        return true;
+        return inner.TryDequeue(out result);
     }
 
     /// <summary>

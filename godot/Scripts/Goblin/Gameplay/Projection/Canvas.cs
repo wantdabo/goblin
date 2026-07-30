@@ -63,7 +63,7 @@ public partial class Canvas
         infomap[typeof(TInfo)] = new ShadowEntry
         {
             shadowtype = typeof(TShadow),
-            factory = () => new TShadow(),
+            factory = () => ObjectPool.Ensure<TShadow>(),
             apply = (obj, mask, vals) => TShadow.ApplyTo((TShadow)obj, mask, vals)
         };
     }
